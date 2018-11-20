@@ -10,25 +10,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class QuestionOptionsRepository : IQuestionOptionsRepository
     {
-        private IOptionsRepository optionsRepository;
+        private readonly IOptionsRepository optionsRepository;
 
         public QuestionOptionsRepository(IOptionsRepository optionsRepository)
         {
-            if(optionsRepository == null)
-                throw new ArgumentException(nameof(optionsRepository));
-
-            this.optionsRepository = optionsRepository;
+            this.optionsRepository = optionsRepository ?? throw new ArgumentException(nameof(optionsRepository));
         }
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity,
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity questionnaireIdentity,
             Guid questionId, int? parentQuestionValue, string filter, Translation translation)
         {
-            return this.optionsRepository.GetFilteredQuestionOptions(qestionnaireIdentity, questionId, parentQuestionValue, filter, translation?.Id);
-        }
-
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
-        {
-            return this.optionsRepository.GetQuestionOption(qestionnaireIdentity, questionId, optionText, parentQuestionValue, translation?.Id);
+            return this.optionsRepository.GetFilteredQuestionOptions(questionnaireIdentity, questionId, parentQuestionValue, filter, translation?.Id);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,

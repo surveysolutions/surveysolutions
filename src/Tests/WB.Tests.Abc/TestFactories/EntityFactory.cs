@@ -784,7 +784,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
-            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
+            ISubstitutionService substitutionService = null)
         {
             if (document != null)
             {
@@ -793,7 +793,7 @@ namespace WB.Tests.Abc.TestFactories
                     ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+            return new PlainQuestionnaire(document, version, 
                 substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
         }
 

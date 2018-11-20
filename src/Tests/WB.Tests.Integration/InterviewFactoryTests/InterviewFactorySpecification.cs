@@ -73,7 +73,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
+                this.questionnaireItemsRepository,
                 Mock.Of<ISubstitutionService>());
         }
 
@@ -109,7 +109,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 
                 var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                     Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                    questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
+                    questionnaireItemsRepositoryLocal,
                     Mock.Of<ISubstitutionService>());
 
                 document.Id = document.PublicKey.FormatGuid();

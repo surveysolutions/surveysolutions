@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -25,8 +24,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
     public class PlainQuestionnaire : IQuestionnaire
     {
         public ISubstitutionService SubstitutionService { get; }
-
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
 
@@ -199,7 +196,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public PlainQuestionnaire(QuestionnaireDocument document,
             long version,
-            IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService,
             Translation translation = null)
         {
@@ -207,7 +203,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             
             this.Version = version;
             this.translation = translation;
-            this.questionOptionsRepository = questionOptionsRepository;
             this.SubstitutionService = substitutionService;
 
             this.QuestionnaireIdentity = new QuestionnaireIdentity(this.QuestionnaireId, Version);
@@ -372,8 +367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             //filtered and cascadings
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionsForQuestion(this.QuestionnaireIdentity,
-                    questionId, parentQuestionValue, searchFor, this.translation);
+                return GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor);
             }
 
             //regular options
@@ -387,12 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionText(
-                    this.QuestionnaireIdentity,
-                    questionId,
-                    optionText, 
-                    parentQuestionValue,
-                    this.translation);
+                return this.GetOptionForQuestionByOptionTextFromStructure(questionId, optionText, parentQuestionValue);
             }
 
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
@@ -450,8 +439,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this.QuestionnaireIdentity,
-                    questionId, optionValue, this.translation);
+                return this.GetOptionForQuestionByOptionValue(questionId, optionValue);
             }
 
             return AnswerUtils.GetOptionForQuestionByOptionValue(question, optionValue);

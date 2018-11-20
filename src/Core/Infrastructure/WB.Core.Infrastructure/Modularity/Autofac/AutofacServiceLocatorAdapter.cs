@@ -16,6 +16,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             this.rootScope = kernel;
         }
 
+        public override void InjectProperties(object instance)
+        {
+            this.rootScope.InjectProperties(instance);
+        }
+
         protected override object DoGetInstance(Type serviceType, string key)
         {
             if (serviceType == null)

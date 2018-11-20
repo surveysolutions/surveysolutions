@@ -11,27 +11,19 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {
-        //has reference from cache and can't have link to scoped IQuestionnaireStorage
-        //should not be bind in global scope
-        private IQuestionnaireStorage questionnaireRepository => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
-        public QuestionnaireQuestionOptionsRepository(/*IQuestionnaireStorage questionnaireRepository*/)
+        public QuestionnaireQuestionOptionsRepository(IQuestionnaireStorage questionnaireRepository)
         {
-            //this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
-        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity qestionnaireIdentity, 
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(QuestionnaireIdentity questionnaireIdentity, 
             Guid questionId, int? parentQuestionValue, string searchFor, Translation translation)
         {
-            var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
+            var questionnaire = questionnaireRepository.GetQuestionnaire(questionnaireIdentity, translation?.Name);
             
             return questionnaire.GetOptionsForQuestionFromStructure(questionId, parentQuestionValue, searchFor);
-        }
-
-        public CategoricalOption GetOptionForQuestionByOptionText(QuestionnaireIdentity qestionnaireIdentity, Guid questionId, string optionText, int? parentQuestionValue, Translation translation)
-        {
-            var questionnaire = questionnaireRepository.GetQuestionnaire(qestionnaireIdentity, translation?.Name);
-            return questionnaire.GetOptionForQuestionByOptionTextFromStructure(questionId, optionText, parentQuestionValue);
         }
 
         public CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity,
