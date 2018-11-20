@@ -893,7 +893,20 @@ namespace WB.Tests.Abc.TestFactories
                                                      new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
                 new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
-        
+
+        public AttachmentContentStorage AttachmentContentStorage(
+            IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository = null,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository = null,
+            IPathUtils pathUtils = null,
+            IFileSystemAccessor files = null)
+        {
+            return new AttachmentContentStorage(
+                attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
+                attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
+                pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
+                files ?? Mock.Of<IFileSystemAccessor>());
+        }
+
         public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(
             IMapService mapService = null,
             IOnlineSynchronizationService synchronizationService = null,
