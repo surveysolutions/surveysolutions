@@ -1960,6 +1960,7 @@
     <Compile Include="API\WebInterview\Services\Overview\OverviewWebGroupNode.cs" />
     <Compile Include="API\WebInterview\Services\Overview\OverviewWebQuestionNode.cs" />
     <Compile Include="API\WebInterview\Services\Overview\OverviewWebSectionNode.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebStaticTextNode.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
