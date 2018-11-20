@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
 
             Setup.InstanceToMockedServiceLocator<ISystemMailer>(systemMailer.Object);
 
-            recipientNotifier = new MailNotifier(new Mock<ILogger>().Object);
+            recipientNotifier = new MailNotifier(new Mock<ILogger>().Object, Mock.Of<ISystemMailer>());
             BecauseOf();
         }
 
