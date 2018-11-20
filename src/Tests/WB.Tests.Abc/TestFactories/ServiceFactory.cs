@@ -644,7 +644,8 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewUniqueKeyGenerator uniqueKeyGenerator = null,
             SyncSettings syncSettings = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null,
-            IUserRepository userRepository = null)
+            IUserRepository userRepository = null,
+            ISessionFactory sessionFactory = null)
         {
             InterviewKey generatedInterviewKey = new InterviewKey(5533);
 
@@ -664,7 +665,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                sessionFactory: Mock.Of<ISessionFactory>());
+                sessionFactory: sessionFactory ?? Mock.Of<ISessionFactory>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
