@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -14,15 +15,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     {
         private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
         private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IPathUtils pathUtils;
         private readonly IFileSystemAccessor files;
 
         public AttachmentContentStorage(
             IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
             IPlainStorage<AttachmentContentData> attachmentContentDataRepository,
+            IPathUtils pathUtils,
             IFileSystemAccessor files)
         {
             this.attachmentContentMetadataRepository = attachmentContentMetadataRepository;
             this.attachmentContentDataRepository = attachmentContentDataRepository;
+            this.pathUtils = pathUtils;
             this.files = files;
         }
 
@@ -97,10 +101,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         }
 
         private string FileCacheDirectory =>
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "_attachments");
+            Path.Combine(pathUtils.GetRootDirectory(), "_attachments");
 
         public string GetFileCacheLocation(string attachmentId)
-            => Path.Combine(FileCacheDirectory, attachmentId);
+            => Path.Combine(FileCacheDirectory, attachmentId + ".attachment");
 
         public IEnumerable<string> EnumerateCache()
         {
@@ -108,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             {
                 foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
                 {
-                    yield return Path.GetFileName(file);
+                    yield return Path.GetFileNameWithoutExtension(file);
                 }
             }
         }

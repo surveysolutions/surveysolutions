@@ -126,7 +126,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
 
             return new AttachmentsCleanupService(questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 metadata,
-                new AttachmentContentStorage(metadata, content, files),
+                Create.Service.AttachmentContentStorage(metadata, content, files: files),
                 Mock.Of<ILogger>());
         }
     }
