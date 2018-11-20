@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.API
         {
             public string GlobalNotice { get; set; }
             public bool InterviewerAutoUpdatesEnabled { get; set; }
+            public int? HowManyMajorReleaseDontNeedUpdate { get; set; }
         }
 
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
@@ -28,11 +29,16 @@ namespace WB.UI.Headquarters.API
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
         }
 
-        public HttpResponseMessage Get() => Request.CreateResponse(new SettingsModel
+        public HttpResponseMessage Get()
         {
-            GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
-            InterviewerAutoUpdatesEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)?.AutoUpdateEnabled ?? true
-        });
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return Request.CreateResponse(new SettingsModel
+            {
+                GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
+                InterviewerAutoUpdatesEnabled = interviewerSettings?.AutoUpdateEnabled ?? true,
+                HowManyMajorReleaseDontNeedUpdate = interviewerSettings?.HowManyMajorReleaseDontNeedUpdate
+            });
+        }
 
         public HttpResponseMessage Post([FromBody] SettingsModel message)
         {
@@ -48,7 +54,11 @@ namespace WB.UI.Headquarters.API
             }
 
             this.interviewerSettingsStorage.Store(
-                new InterviewerSettings {AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled},
+                new InterviewerSettings
+                {
+                    AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
+                    HowManyMajorReleaseDontNeedUpdate = message.HowManyMajorReleaseDontNeedUpdate
+                },
                 AppSetting.InterviewerSettings);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});

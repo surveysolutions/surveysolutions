@@ -9,11 +9,14 @@ using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
@@ -22,7 +25,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    public class SupervisorApiController : ApiController
+    public class SupervisorApiController : AppApiControllerBase
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAndroidPackageReader androidPackageReader;
@@ -39,7 +42,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             ISupervisorSyncProtocolVersionProvider syncVersionProvider,
             IProductVersion productVersion,
             IUserViewFactory userViewFactory, 
-            HqSignInManager signInManager)
+            HqSignInManager signInManager,
+            IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
+            : base(settingsStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.androidPackageReader = androidPackageReader;
@@ -109,6 +114,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var supervisorVersion = GetSupervisorVersionFromUserAgent(this.Request);
+
+            if (IsNeedUpdateAppBySettings(supervisorVersion, currentVersion))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
 
             if (supervisorVersion != null && supervisorVersion > currentVersion)
             {

@@ -10,12 +10,15 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
@@ -24,7 +27,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 {
-    public class InterviewerApiController : ApiController
+    public class InterviewerApiController : AppApiControllerBase
     {
         private const string RESPONSEAPPLICATIONFILENAME = "interviewer.apk";
         private const string PHYSICALAPPLICATIONFILENAME = "wbcapi.apk";
@@ -59,7 +62,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             IProductVersion productVersion,
             HqSignInManager signInManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IAssignmentsService assignmentsService)
+            IAssignmentsService assignmentsService,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
+            : base(interviewerSettingsStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
@@ -227,6 +232,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
             var currentVersion = new Version(this.productVersion.ToString().Split(' ')[0]);
             var interviewerVersion = GetInterviewerVersionFromUserAgent(this.Request);
+
+            if (IsNeedUpdateAppBySettings(interviewerVersion, currentVersion))
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
 
             if (interviewerVersion != null && interviewerVersion > currentVersion)
             {

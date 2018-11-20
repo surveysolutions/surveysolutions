@@ -1686,7 +1686,7 @@
     <Content Include="Scripts\pages\batch-user-creation.js" />
     <Content Include="Scripts\pages\exportdata.js" />
     <Content Include="Scripts\pages\chart.js" />
-    <Content Include="Scripts\pages\export-settings.js" />
+    <Content Include="Scripts\pages\site-settings.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
     <Content Include="Scripts\popover-extra-placements.js" />
     <Content Include="Scripts\query-string.js" />
@@ -1897,6 +1897,7 @@
     <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
     <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
+    <Compile Include="API\DataCollection\AppApiControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />

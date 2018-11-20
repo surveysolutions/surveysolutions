@@ -1,0 +1,35 @@
+﻿using System;
+using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.Infrastructure.PlainStorage;
+
+
+namespace WB.UI.Headquarters.API.DataCollection
+{
+    public class AppApiControllerBase : ApiController
+    {
+        private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
+
+        public AppApiControllerBase(IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
+        {
+            this.settingsStorage = settingsStorage;
+        }
+
+        protected bool IsNeedUpdateAppBySettings(Version appVersion, Version hqVersion)
+        {
+            var interviewerSettings = settingsStorage.GetById(AppSetting.InterviewerSettings);
+            var majorUpdatesToUpdate = interviewerSettings?.HowManyMajorReleaseDontNeedUpdate;
+            if (majorUpdatesToUpdate.HasValue)
+            {
+                var acceptedInterviewerVersion = hqVersion.Major - majorUpdatesToUpdate.Value;
+                if (appVersion.Major < acceptedInterviewerVersion)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+}

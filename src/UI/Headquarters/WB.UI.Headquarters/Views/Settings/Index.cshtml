@@ -1,11 +1,13 @@
-﻿@{
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.Infrastructure.Versions
+@{
     ViewBag.Title = Settings.Settings_Title;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 @section scripts
 {
-    @Scripts.Render("~/js/export-settings")
+    @Scripts.Render("~/js/site-settings")
 
     <script type="text/javascript">
         var $dataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "ExportSettings" })';
@@ -15,7 +17,7 @@
 
         $(function () {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.ExportSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
+            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -113,6 +115,14 @@
                         </label>
                     </div>
                 </div>
+                <div class="block-filter">
+                    <label for="allowed-to-sync">@Settings.AllowedToSync</label>
+                    <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, onchange: updateMessage" class="selectpicker">
+                        <option value="null">@Settings.Any</option>
+                        <option value='4'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(4))</option>
+                        <option value='8'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(8))</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="row extra-margin-bottom contain-input">
@@ -165,3 +175,12 @@
 
     </div>
 </main>
+
+@{
+    string GetVersionForReleasesAgo(int releasesAgo)
+    {
+        var productVersion = DependencyResolver.Current.GetService<IProductVersion>();
+        var version = productVersion.GetVersion();
+        return new Version(version.Major, version.Minor - releasesAgo, 0).ToString();
+    }
+}
