@@ -18,8 +18,6 @@ namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             systemMailer.Setup(x => x.GetOwnerShareChangeNotificationEmail(it.IsAny<SharingNotificationModel>())).Returns(message.Object);
 
-            Setup.InstanceToMockedServiceLocator<ISystemMailer>(systemMailer.Object);
-
             recipientNotifier = new MailNotifier(new Mock<ILogger>().Object, systemMailer.Object);
             BecauseOf();
         }
