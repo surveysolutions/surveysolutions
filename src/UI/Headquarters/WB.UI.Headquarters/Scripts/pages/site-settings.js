@@ -90,6 +90,11 @@
         } 
     }
 
+    self.updateIsInterviewerAutomaticUpdatesEnabled = function (obj, event) {
+        self.updateAutoUpdateSettings();
+        return true;
+    }
+
     self.updateAutoUpdateSettings = function() {
         ajax.sendRequest($autoUpdateSettingsUrl, "POST",
             {
@@ -98,7 +103,7 @@
             }, false,
             //onSuccess
             function() {
-                self.loadAutoUpdateSettings();
+                //self.loadAutoUpdateSettings();
             });
     };
 
