@@ -239,6 +239,7 @@
     <value>Начиная с</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Средняя продолжительность заполнения интервью с момента ответа на первый вопрос до его завершения.</value>
+    <value>Средняя продолжительность времени затраченного на заполнение интервью по каждому супервизору.
+</value>
   </data>
 </root>

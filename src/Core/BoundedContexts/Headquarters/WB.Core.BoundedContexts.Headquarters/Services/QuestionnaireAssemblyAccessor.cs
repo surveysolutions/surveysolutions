@@ -13,13 +13,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     internal class QuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private readonly IAssemblyService assemblyService;
+        private readonly ILogger logger;
         private static readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
 
-        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyAccessor>();
-
-        public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService)
+        public QuestionnaireAssemblyAccessor(IAssemblyService assemblyService, ILogger logger)
         {
             this.assemblyService = assemblyService;
+            this.logger = logger;
         }
 
 
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             
-            Logger.Info($"Trying to delete assembly for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
+            logger.Info($"Trying to delete assembly for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
             
             try
             {
@@ -114,8 +114,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             }
             catch (IOException e)
             {
-                Logger.Error($"Error on assembly deletion for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
-                Logger.Error(e.Message, e);
+                logger.Error($"Error on assembly deletion for questionnaire {new QuestionnaireIdentity(questionnaireId, questionnaireVersion)}");
+                logger.Error(e.Message, e);
             }
         }
 

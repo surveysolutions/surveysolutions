@@ -17,15 +17,13 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.WebTester.Hub;
-using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
-using WB.UI.WebTester.Services.Implementation;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
 namespace WB.UI.WebTester
 {
-    public partial class Startup
+    public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
@@ -46,7 +44,6 @@ namespace WB.UI.WebTester
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-            InScopeExecutor.Init(new NoScopeInScopeExecutor(container));
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
             WebInterviewModule.Configure(app, WebTesterModule.HubPipelineModules);
             
@@ -56,11 +53,7 @@ namespace WB.UI.WebTester
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
             MetricsService.Start(logger);
-
-            evictionService = ServiceLocator.Current.GetInstance<EvictionService>();
         }
-
-        private EvictionService evictionService;
 
         private void EnsureJsonStorageForErrorsExists()
         {

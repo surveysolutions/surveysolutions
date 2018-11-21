@@ -212,15 +212,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
         }
 
-        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtentionsFilter)
+        private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtensionsFilter)
         {
             var sourceFileName = this.GetFileName(sourcePath);
             if (sourceFileName == null)
                 return;
 
-            if (fileExtentionsFilter != null)
+            if (fileExtensionsFilter != null)
             {
-                if(!fileExtentionsFilter.Contains(Path.GetExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
+                if(!fileExtensionsFilter.Contains(Path.GetExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
                     return;                
             }
 

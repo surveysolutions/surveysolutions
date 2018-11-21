@@ -150,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue)
                 .RequireQuestionEnabled()
-                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, questionnaireIdentity, this.Questionnaire.Translation);
+                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.Questionnaire.Translation);
 
         public void RequireLinkedToListSingleOptionAnswerAllowed(int selectedValue)
             => this
@@ -711,14 +711,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        private InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
+        private InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, Translation translation)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsCascading)
                 return this;
 
-            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(this.Questionnaire,
                 this.QuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)

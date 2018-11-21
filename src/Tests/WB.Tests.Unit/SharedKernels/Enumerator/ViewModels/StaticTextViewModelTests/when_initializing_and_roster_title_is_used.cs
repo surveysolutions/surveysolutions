@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         }
 
         public void BecauseOf() => 
-            viewModel.Init("interview", Create.Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
+            viewModel.Init("interview", Create.Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_substitute_roster_title_value () => 
             viewModel.Text.PlainText.Should().Be($"uses {rosterTitleAnswerValue}");

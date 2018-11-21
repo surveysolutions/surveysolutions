@@ -29,6 +29,7 @@ using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.API.PublicApi.Models.Statistics;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {

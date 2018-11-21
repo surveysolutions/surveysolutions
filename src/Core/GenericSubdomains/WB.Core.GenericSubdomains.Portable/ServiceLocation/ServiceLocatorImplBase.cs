@@ -120,6 +120,8 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
             }
         }
 
+        public abstract void InjectProperties(object instance);
+
         /// <summary>
         /// When implemented by inheriting classes, this method will do the actual work of resolving
         /// the requested service instance.

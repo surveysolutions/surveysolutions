@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,8 +13,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -43,15 +41,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public QuestionnaireDownloadViewModel(
             IPrincipal principal,
-            IDesignerApiService designerApiService, 
-            ICommandService commandService, 
+            IDesignerApiService designerApiService,
+            ICommandService commandService,
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
             IExecutedCommandsStorage executedCommandsStorage,
-            IAttachmentContentStorage attachmentContentStorage, 
+            IAttachmentContentStorage attachmentContentStorage,
             IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;
@@ -101,7 +99,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
 
                     var interviewId = Guid.NewGuid();
-                    
+
                     var existingInterviewCommands = this.executedCommandsStorage.Get(interview.Id);
                     foreach (var existingInterviewCommand in existingInterviewCommands)
                     {
@@ -119,7 +117,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
                     else
                     {
-                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
+                            NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup));
                     }
                 }
                 catch (Exception e)
@@ -130,7 +129,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
                 }
                 finally
-                { 
+                {
                     this.executedCommandsStorage.Clear(interview.Id);
                 }
             }
@@ -210,8 +209,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireId: questionnaireIdentity,
-                answers: new List<InterviewAnswer>(), 
-                protectedVariables: new List<string>(), 
+                answers: new List<InterviewAnswer>(),
+                protectedVariables: new List<string>(),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
@@ -252,6 +251,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var attachments = questionnaire.Document.Attachments;
 
+            var requiredAttachments = new HashSet<string>();
+
             foreach (var attachment in attachments)
             {
                 var attachmentContentId = attachment.ContentId;
@@ -261,13 +262,23 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
                         attachmentContentId,
-                        new Progress<TransferProgress>(downloadProgress 
+                        new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(
                                 TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress))),
                         token: cancellationToken);
 
                     this.attachmentContentStorage.Store(attachmentContent);
                 }
+
+                requiredAttachments.Add(attachment.ContentId);
+            }
+
+            var attachmentsPath = this.attachmentContentStorage.GetFileCacheLocation(string.Empty);
+
+            foreach (var contentId in this.attachmentContentStorage.EnumerateCache())
+            {
+                if (!requiredAttachments.Contains(contentId))
+                    this.attachmentContentStorage.Remove(contentId);
             }
         }
     }

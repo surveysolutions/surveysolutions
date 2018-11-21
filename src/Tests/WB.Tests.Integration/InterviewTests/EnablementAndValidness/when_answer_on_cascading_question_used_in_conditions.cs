@@ -6,6 +6,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -49,13 +50,13 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             );
 
             var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
-                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingQuestionId, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,
                     Title = "1"
                 }
-                && x.GetOptionsForQuestion(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
+                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingQuestionId, 1, "", Moq.It.IsAny<Core.SharedKernels.SurveySolutions.Documents.Translation>()) == new CategoricalOption
                 {
                     Value = 1,
                     ParentValue = 1,

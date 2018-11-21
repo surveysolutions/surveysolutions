@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-        public void SaveAttachmentContent(string contentHash, string contentType, byte[] content)
+        public void SaveAttachmentContent(string contentHash, string contentType, string fileName, byte[] content)
         {
             var existingAttachment = this.attachmentContentStorage.GetById(contentHash);
             if (existingAttachment == null)
@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     ContentHash = contentHash,
                     ContentType = contentType,
-                    Content = content
+                    Content = content,
+                    FileName = fileName
                 }, contentHash);
             }
         }

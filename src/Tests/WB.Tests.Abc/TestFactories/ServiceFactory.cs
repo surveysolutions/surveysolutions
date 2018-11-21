@@ -644,7 +644,8 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewUniqueKeyGenerator uniqueKeyGenerator = null,
             SyncSettings syncSettings = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null,
-            IUserRepository userRepository = null)
+            IUserRepository userRepository = null,
+            ISessionFactory sessionFactory = null)
         {
             InterviewKey generatedInterviewKey = new InterviewKey(5533);
 
@@ -663,7 +664,8 @@ namespace WB.Tests.Abc.TestFactories
                 logger: logger ?? Mock.Of<ILogger>(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
+                sessionFactory: sessionFactory ?? Mock.Of<ISessionFactory>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
@@ -891,7 +893,20 @@ namespace WB.Tests.Abc.TestFactories
                                                      new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
                 new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
-        
+
+        public AttachmentContentStorage AttachmentContentStorage(
+            IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository = null,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository = null,
+            IPathUtils pathUtils = null,
+            IFileSystemAccessor files = null)
+        {
+            return new AttachmentContentStorage(
+                attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
+                attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
+                pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
+                files ?? Mock.Of<IFileSystemAccessor>());
+        }
+
         public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(
             IMapService mapService = null,
             IOnlineSynchronizationService synchronizationService = null,

@@ -11,12 +11,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 {
     public class AutofacServiceLocatorAdapterWithLifeScopeResolver : AutofacServiceLocatorAdapter
     {
-        //protected readonly ILifetimeScope rootScope;
         protected AsyncLocal<List<ILifetimeScope>> containers = new AsyncLocal<List<ILifetimeScope>>();
 
         public AutofacServiceLocatorAdapterWithLifeScopeResolver(ILifetimeScope rootScope):base(rootScope)
         {
-            //this.rootScope = rootScope;
             this.rootScope.ChildLifetimeScopeBeginning += Scope_ChildLifetimeScopeBeginning;
             this.rootScope.CurrentScopeEnding += Scope_OnCurrentScopeEnding;
         }
