@@ -32,8 +32,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public void Store(AttachmentContent attachmentContent)
         {
-            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
+            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
+            {
+                ContentType = attachmentContent.ContentType,
+                Id = attachmentContent.Id,
+                Size = attachmentContent.Size,
+            });
 
+            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
             if (!storeInFileSystem)
             {
                 this.attachmentContentDataRepository.Store(new AttachmentContentData
@@ -56,13 +62,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     files.WriteAllBytes(fileCache, attachmentContent.Content);
                 }
             }
-
-            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
-            {
-                ContentType = attachmentContent.ContentType,
-                Id = attachmentContent.Id,
-                Size = attachmentContent.Size,
-            });
         }
 
         private bool IsStoredInFileSystem(AttachmentContent attachmentContent)
@@ -104,7 +103,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             Path.Combine(pathUtils.GetRootDirectory(), "_attachments");
 
         public string GetFileCacheLocation(string attachmentId)
-            => Path.Combine(FileCacheDirectory, attachmentId + ".attachment");
+        {
+            var attachmentContentMeta = this.GetMetadata(attachmentId);
+
+            return Path.Combine(FileCacheDirectory, $"{attachmentId}{GetFileExtensionByMimeType(attachmentContentMeta.ContentType)}");
+        }
+
+        private static string GetFileExtensionByMimeType(string contentType)
+        {
+            switch (contentType)
+            {
+                case "application/pdf":
+                    return ".pdf";
+                default:
+                    return ".attachment";
+            }
+        }
 
         public IEnumerable<string> EnumerateCache()
         {

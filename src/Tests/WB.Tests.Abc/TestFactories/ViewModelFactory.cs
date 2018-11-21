@@ -44,8 +44,11 @@ namespace WB.Tests.Abc.TestFactories
         public AttachmentViewModel AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
-            => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
+            IAttachmentContentStorage attachmentContentStorage,
+            IEnumeratorSettings enumeratorSettings = null,
+            IExternalAppLauncher externalAppLauncher = null)
+            => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage,
+                enumeratorSettings, externalAppLauncher);
 
         public DynamicTextViewModel DynamicTextViewModel(
             ILiteEventRegistry eventRegistry = null, 
