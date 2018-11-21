@@ -56,7 +56,8 @@ namespace WB.Tests.Abc.TestFactories
             IProductVersion productVersion = null,
             HqSignInManager signInManager = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
-            IAssignmentsService assignmentsService = null)
+            IAssignmentsService assignmentsService = null,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettings = null)
         {
             {
                 var result = new InterviewerApiController(
@@ -70,7 +71,7 @@ namespace WB.Tests.Abc.TestFactories
                     signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                     assignmentsService ?? Mock.Of<IAssignmentsService>(),
-                    Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
+                    interviewerSettings ?? Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
                 );
                 result.Request = new HttpRequestMessage();
                 result.Request.SetConfiguration(new HttpConfiguration());
