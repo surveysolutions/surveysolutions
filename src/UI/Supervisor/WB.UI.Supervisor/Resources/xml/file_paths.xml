@@ -2,5 +2,10 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
   <external-path name="my_images" path="Android/data/org.worldbank.solutions.supervisor/files/Pictures" />
   <external-path name="my_movies" path="Android/data/org.worldbank.solutions.supervisor/files/Movies" />
+  <external-path name="external" path="." />
+  <external-files-path name="external_files" path="." />
+  <cache-path name="cache" path="." />
+  <external-cache-path name="external_cache" path="." />
+  <files-path name="files" path="." />
   <files-path name="share"/>
 </paths>
