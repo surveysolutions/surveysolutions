@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             var attachmentContentMeta = this.GetMetadata(attachmentId);
 
-            return Path.Combine(FileCacheDirectory, $"{attachmentId}{GetFileExtensionByMimeType(attachmentContentMeta.ContentType)}");
+            return Path.Combine(FileCacheDirectory, $"{attachmentId}{GetFileExtensionByMimeType(attachmentContentMeta?.ContentType)}");
         }
 
         private static string GetFileExtensionByMimeType(string contentType)
