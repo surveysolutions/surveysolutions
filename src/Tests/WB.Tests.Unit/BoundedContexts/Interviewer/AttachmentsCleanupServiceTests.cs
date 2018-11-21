@@ -3,9 +3,9 @@ using Main.Core.Documents;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -70,8 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var contentId = "meta";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "application/json", Size = 4 });
             contentStorage.Store(new AttachmentContentData { Content = new byte[] { 1, 2, 3 }, Id = contentId });
-
-
+            
             var service = this.CreateAttachmentsCleanupService(metadataStorage: metadataStorage,
                 contentStorage: contentStorage,
                 questionnairesAccessor: interviewerQuestionnaireAccessor);
@@ -85,13 +84,50 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             Assert.That(dbDataAfterRemoval, Is.Not.Null);
         }
 
-        AttachmentsCleanupService CreateAttachmentsCleanupService(IPlainStorage<AttachmentContentMetadata> metadataStorage = null,
-            IPlainStorage<AttachmentContentData> contentStorage = null,
-            IInterviewerQuestionnaireAccessor questionnairesAccessor = null)
+        [Test]
+        public void when_questionnaire_has_stored_file_it_should_be_removed()
         {
+            var contentId = "meta";
+            var contentFile = contentId + ".attachment";
+            metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "video/data", Size = 4 });
+            contentStorage.Store(new AttachmentContentData { Content = new byte[] { 1, 2, 3 }, Id = contentId });
+
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+        
+            fileSystemAccessor.Setup(fs => fs.IsFileExists(It.Is<string>(f => f.EndsWith(contentFile)))).Returns(true);
+            
+            var service = this.CreateAttachmentsCleanupService(
+                metadataStorage: metadataStorage,
+                contentStorage: contentStorage,
+                questionnairesAccessor: interviewerQuestionnaireAccessor,
+                fileSystemAccessor.Object);
+
+            // act
+            service.RemovedOrphanedAttachments();
+
+            // assert
+            fileSystemAccessor.Verify(fs => fs.DeleteFile(It.Is<string>(f => f.EndsWith(contentFile))), Times.Once);
+
+            var dbMetaAfterRemoval = metadataStorage.GetById(contentId);
+            var dbDataAfterRemoval = contentStorage.GetById(contentId);
+
+            Assert.That(dbMetaAfterRemoval, Is.Null);
+            Assert.That(dbDataAfterRemoval, Is.Null);
+        }
+
+        AttachmentsCleanupService CreateAttachmentsCleanupService(
+            IPlainStorage<AttachmentContentMetadata> metadataStorage = null,
+            IPlainStorage<AttachmentContentData> contentStorage = null,
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
+            IFileSystemAccessor fileSystemAccessor = null)
+        {
+            var metadata = metadataStorage ?? new SqliteInmemoryStorage<AttachmentContentMetadata>();
+            var content = contentStorage ?? new SqliteInmemoryStorage<AttachmentContentData>();
+            var files = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
+
             return new AttachmentsCleanupService(questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                metadataStorage ?? new SqliteInmemoryStorage<AttachmentContentMetadata>(),
-                contentStorage ?? new SqliteInmemoryStorage<AttachmentContentData>(),
+                metadata,
+                Create.Service.AttachmentContentStorage(metadata, content, files: files),
                 Mock.Of<ILogger>());
         }
     }

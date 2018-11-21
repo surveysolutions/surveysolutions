@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using NHibernate;
 using NHibernate.Impl;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
@@ -11,18 +10,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     [DebuggerDisplay("Id = {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
+        private readonly ILogger logger;
         private ISession session;
         private ITransaction transaction;
         private bool isDisposed = false;
         private static int Counter = 0;
         public Guid? SessionId;
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-
-        public UnitOfWork(ISessionFactory sessionFactory)
+        public UnitOfWork(ISessionFactory sessionFactory, ILogger logger)
         {
             if (session != null) throw new InvalidOperationException("Unit of work already started");
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
+            this.logger = logger;
 
             session = sessionFactory.OpenSession();
             transaction = session.BeginTransaction();

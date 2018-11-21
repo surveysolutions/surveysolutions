@@ -372,7 +372,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             //filtered and cascadings
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionsForQuestion(this.QuestionnaireIdentity,
+                return questionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation);
             }
 
@@ -388,7 +388,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionText(
-                    this.QuestionnaireIdentity,
+                    this,
                     questionId,
                     optionText, 
                     parentQuestionValue,
@@ -450,7 +450,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this.QuestionnaireIdentity,
+                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, this.translation);
             }
 

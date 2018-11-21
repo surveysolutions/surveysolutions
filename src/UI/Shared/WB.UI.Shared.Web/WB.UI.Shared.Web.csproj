@@ -130,6 +130,7 @@
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
+    <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
+    <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />

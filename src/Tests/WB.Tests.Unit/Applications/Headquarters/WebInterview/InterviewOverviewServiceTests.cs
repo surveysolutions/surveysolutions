@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, true).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, null, true).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(5));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(Id.g9.FormatGuid()));
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, false).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, null, false).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(1));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(interviewerQuestionIdentity.ToString()));

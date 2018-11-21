@@ -87,14 +87,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             InScopeExecutor.Init(executor.Object);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<ISessionFactory>())
-                .Returns(sessionFactory)
-                .Callback(() =>
-                {
-                    var t = 1;
-                });
-
             var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true },
                 logger: Mock.Of<ILogger>(),
@@ -103,7 +95,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 brokenInterviewPackageStorage: brokenPackagesStorage,
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>());
+                interviews: new TestInMemoryWriter<InterviewSummary>(),
+                sessionFactory: sessionFactory);
 
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(

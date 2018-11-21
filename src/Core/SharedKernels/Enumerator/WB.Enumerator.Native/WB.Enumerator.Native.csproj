@@ -23,12 +23,16 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Antlr" Version="3.5.0.2" />
+        <PackageReference Include="Autofac.Owin" Version="4.2.0" />
         <PackageReference Include="AutoMapper" Version="7.0.1" />
         <PackageReference Include="CSCore" Version="1.2.1.2" />
         <PackageReference Include="Dapper" Version="1.50.4" />
         <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
         <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.3.0" />
+        <PackageReference Include="Microsoft.AspNet.SignalR.SystemWeb" Version="2.3.0" />
+        <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.3" />
         <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.1.0" />
         <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
         <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
         <PackageReference Include="Owin" Version="1.0" />
