@@ -16,7 +16,7 @@ namespace WB.Services.Export.Services.Implementation
             serviceLabels.Add(interviewErrorsExporter.GetFileName(), 
                 interviewErrorsExporter.GetHeader().ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType)));
             serviceLabels.Add(interviewActionsExporter.InterviewActionsFileName, 
-                interviewActionsExporter.ActionFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType)));
+                interviewActionsExporter.ActionFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
             serviceLabels.Add(commentsExporter.CommentsFileName, 
                 commentsExporter.CommentsFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType)));
         }
