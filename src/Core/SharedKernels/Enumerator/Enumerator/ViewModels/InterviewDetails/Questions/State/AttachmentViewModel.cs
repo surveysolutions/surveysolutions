@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -14,7 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-        
+        private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IExternalAppLauncher externalAppLauncher;
+
         private AttachmentContentMetadata attachmentContentMetadata;
         private NavigationState navigationState;
         public Identity Identity { get; private set; }
@@ -27,11 +31,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage,
+            IEnumeratorSettings enumeratorSettings,
+            IExternalAppLauncher externalAppLauncher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.enumeratorSettings = enumeratorSettings;
+            this.externalAppLauncher = externalAppLauncher;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -57,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(() => Content);
                 }
 
-                if (IsVideo || IsAudio)
+                if (IsVideo || IsAudio || IsPdf)
                 {
                     var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
                     
@@ -83,7 +91,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
 
         public IMvxAsyncCommand ShowPdf =>
-            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity)));
+            new MvxAsyncCommand(NavigateToPdfAsync);
+
+        private async Task NavigateToPdfAsync()
+        {
+            if (this.enumeratorSettings.IsSupportedWebViewer)
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity));
+            else
+                this.externalAppLauncher.OpenPdf(this.ContentPath);
+        }
 
         public byte[] Content { get; private set; }
 
