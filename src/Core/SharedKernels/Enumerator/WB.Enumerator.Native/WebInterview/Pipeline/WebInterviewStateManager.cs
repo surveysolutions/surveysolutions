@@ -1,4 +1,8 @@
 using System;
+using System.Web;
+using Autofac;
+using Autofac.Integration.Owin;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
@@ -11,13 +15,10 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     public class WebInterviewStateManager : HubPipelineModule
     {
         private readonly IProductVersion productVersion;
-        private readonly IStatefulInterviewRepository interviewRepository;
 
-        public WebInterviewStateManager(IProductVersion productVersion, 
-            IStatefulInterviewRepository interviewRepository)
+        public WebInterviewStateManager(IProductVersion productVersion)
         {
             this.productVersion = productVersion;
-            this.interviewRepository = interviewRepository;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
@@ -29,9 +30,12 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
-            IStatefulInterview interview = null;
 
-            interview = interviewRepository.Get(interviewId);
+            var autofacLifetimeScope = hub.Context.Request.GetHttpContext().GetOwinContext().GetAutofacLifetimeScope();
+            var interviewRepository = autofacLifetimeScope
+                .Resolve<IStatefulInterviewRepository>();
+
+            IStatefulInterview interview = interviewRepository.Get(interviewId);
 
             if (interview == null)
             {
