@@ -27,7 +27,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             CommonHeaderItems.InterviewId,
             new DoExportFileHeader("date", "Date when the action was taken", ExportValueType.String),
             new DoExportFileHeader("time", "Time when the action was taken", ExportValueType.String),
-            new DoExportFileHeader("action", "Type of action taken", ExportValueType.String),
+            new DoExportFileHeader("action", "Type of action taken", ExportValueType.NumericInt, 
+                Enum.GetValues(typeof(InterviewExportedAction))
+                .Cast<InterviewExportedAction>().
+                    Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
             new DoExportFileHeader("originator", "Login name of the person performing the action", ExportValueType.String),
             new DoExportFileHeader("role", "System role of the person performing the action", ExportValueType.String),
             new DoExportFileHeader("responsible__name", "Login name of the person now responsible for the interview", ExportValueType.String),
@@ -83,6 +86,12 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             foreach (var actionFileColumn in ActionFileColumns)
             {
+                if (actionFileColumn.VariableValueLabels.Any())
+                {
+                    doContent.AppendLabel(actionFileColumn.Title, actionFileColumn.VariableValueLabels);
+                    doContent.AppendLabelToValuesMatching(actionFileColumn.Title, actionFileColumn.Title);
+                }
+
                 doContent.AppendLabelToVariableMatching(actionFileColumn.Title, actionFileColumn.Description);
             }
 
@@ -106,7 +115,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     interview.InterviewId.FormatGuid(),
                     interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture),
-                    interview.Status.ToString(),
+                    ((int)interview.Status).ToString(),
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
