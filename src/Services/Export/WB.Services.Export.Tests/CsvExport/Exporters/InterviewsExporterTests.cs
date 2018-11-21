@@ -14,6 +14,7 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -77,8 +78,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length),
                 "Length of header columns should be equal to data columns length");
 
-            Assert.That(dataInCsvFile[0].Data[0][2], Is.EqualTo(ServiceColumns.Key));
-            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo(interviewKey));
+            Assert.That(dataInCsvFile[0].Data[0][0], Is.EqualTo(ServiceColumns.Key));
+            Assert.That(dataInCsvFile[1].Data[0][0], Is.EqualTo(interviewKey));
+            
+
+            Assert.That(dataInCsvFile[0].Data[0][2], Is.EqualTo(ServiceColumns.InterviewRandom));
+            Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("1"));
@@ -135,16 +140,22 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("2"));
 
             Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
-            Assert.That(result.Levels[2].Records[0].ParentRecordIds[0], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
+            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("1"));
+
 
             Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("2"));
-            Assert.That(result.Levels[2].Records[1].ParentRecordIds[0], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[1].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
+            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("1"));
 
             Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("1"));
-            Assert.That(result.Levels[2].Records[2].ParentRecordIds[0], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[2].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
+            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("2"));
+
 
             Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("2"));
-            Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
+            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("2"));
         }
 
         [Test]

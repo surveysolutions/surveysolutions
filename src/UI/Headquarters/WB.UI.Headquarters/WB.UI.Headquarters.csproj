@@ -547,6 +547,7 @@
     </Content>
     <Content Include="App_GlobalResources\Maps.fr.resx">
       <DependentUpon>Maps.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Maps.ru.resx">
       <SubType>Designer</SubType>
@@ -554,6 +555,7 @@
     </Content>
     <Content Include="App_GlobalResources\Maps.zh.resx">
       <DependentUpon>Maps.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.es.resx">
       <DependentUpon>QuestionnaireClonning.resx</DependentUpon>
@@ -785,6 +787,7 @@
     <Content Include="App_GlobalResources\Maps.ar.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.ar.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.ar.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -845,6 +848,7 @@
     <Content Include="App_GlobalResources\Maps.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.ro.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
