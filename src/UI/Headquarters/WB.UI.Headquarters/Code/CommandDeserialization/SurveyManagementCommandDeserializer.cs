@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -8,6 +9,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
 {
     internal class SurveyManagementCommandDeserializer : CommandDeserializer
     {
+        public SurveyManagementCommandDeserializer(ILogger logger) : base(logger)
+        {
+        }
+
         protected override Dictionary<string, Type> KnownCommandTypes
         {
             get

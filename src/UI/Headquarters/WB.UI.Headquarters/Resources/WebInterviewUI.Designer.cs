@@ -630,6 +630,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Multimedia playback is not supported by your browser. You can download it instead..
+        /// </summary>
+        internal static string MultimediaNotSupported {
+            get {
+                return ResourceManager.GetString("MultimediaNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Network.
         /// </summary>
         internal static string Network {

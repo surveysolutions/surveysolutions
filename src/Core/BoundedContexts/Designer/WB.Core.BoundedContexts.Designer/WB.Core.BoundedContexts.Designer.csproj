@@ -56,6 +56,9 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="WB.Core.SharedKernels.Questionnaire">
+      <HintPath>..\..\..\..\UI\Headquarters\WB.UI.Headquarters\Bin\WB.Core.SharedKernels.Questionnaire.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">

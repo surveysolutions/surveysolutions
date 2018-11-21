@@ -38,28 +38,22 @@ namespace WB.Tests.Abc.TestFactories
 
             var textFactoryMock = new Mock<ISubstitutionTextFactory> {DefaultValue = DefaultValue.Mock};
 
-            var qRepository = questionnaireRepository ?? questionnaireDefaultRepository;
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
-                .Returns(qRepository);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IQuestionnaireStorage>())
+                .Returns(questionnaireRepository ?? questionnaireDefaultRepository);
 
-            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? CreateDefaultInterviewExpressionStateProvider(null);
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
+            serviceLocator.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns( expressionProcessorStatePrototypeProvider ?? CreateDefaultInterviewExpressionStateProvider(null));
 
-            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(optionsRepository);
+            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
+                .Returns(Mock.Of<IQuestionOptionsRepository>);
 
             var interview = new Interview(
-                //questionnaireRepository ?? questionnaireDefaultRepository,
-                //expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
                 textFactory ?? textFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder()
-                //,Mock.Of<IQuestionOptionsRepository>()
                 );
+
+            interview.ServiceLocatorInstance = serviceLocator.Object;
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
@@ -120,29 +114,22 @@ namespace WB.Tests.Abc.TestFactories
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
-            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
-                .Returns(qRepository);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IQuestionnaireStorage>())
+                .Returns(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
 
-            var expressionsProvider = CreateDefaultInterviewExpressionStateProvider(setupLevel);
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
+            serviceLocator.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
-            var optionsRepository = Mock.Of<IQuestionOptionsRepository>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(optionsRepository);
+            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
+                .Returns(Mock.Of<IQuestionOptionsRepository>);
 
 
             var statefulInterview = new StatefulInterview(
-                //questionnaireRepository,
-                //CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder()
-                //,Mock.Of<IQuestionOptionsRepository>()
                 );
+            statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
             if (shouldBeInitialized)
             {
@@ -165,29 +152,21 @@ namespace WB.Tests.Abc.TestFactories
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
-            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
-                .Returns(qRepository);
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<IQuestionnaireStorage>())
+                .Returns(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
 
-            var expressionsProvider = CreateDefaultInterviewExpressionStateProvider(setupLevel);
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(expressionsProvider);
+            serviceLocator.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
-            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(optionsRepository);
-
+            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
+                .Returns(questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
             var statefulInterview = new StatefulInterview(
-                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                //CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder()
-                //,questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>()
                 );
+            statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
             if (shouldBeInitialized)
             {

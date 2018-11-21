@@ -15,8 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual double YMinVal { set; get; }
         public virtual int Wkid { set; get; }
 
-        //public virtual string WkText { set; get; }
-
         public virtual double MaxScale { set; get; }
         public virtual double MinScale { set; get; }
     }

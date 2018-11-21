@@ -90,8 +90,6 @@ namespace WB.UI.Headquarters
             autofacKernel.Init().Wait();
             var container = autofacKernel.Container;
 
-            UnitOfWorkScopeManager.SetScopeAdapter(container);
-
             InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(container));
 
             var resolver = new AutofacWebApiDependencyResolver(container);
@@ -106,7 +104,7 @@ namespace WB.UI.Headquarters
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-            var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(container);
+            var scopeResolver = new AutofacServiceLocatorAdapter(container);
             ServiceLocator.SetLocatorProvider(() => scopeResolver);
 
             app.UseAutofacMiddleware(container);

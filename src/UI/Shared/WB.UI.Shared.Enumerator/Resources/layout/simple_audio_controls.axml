@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/applicationBackground">
+
+  <FrameLayout
+      android:id="@+id/control_buttons"
+      android:layout_width="@dimen/exo_player_button_size"
+      android:layout_height="@dimen/exo_player_button_size"
+      android:layout_gravity="left"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent"  >
+    <ImageButton
+        android:id="@id/exo_play"
+        style="@style/ExoMediaButton.Play"
+        android:tint="@color/exo_player_button_tint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ImageButton
+        android:id="@id/exo_pause"
+        style="@style/ExoMediaButton.Pause"
+        android:tint="@color/exo_player_button_tint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+  </FrameLayout>
+
+  <TextView android:id="@id/exo_position"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textColor="@color/exo_player_text"
+      android:textSize="@dimen/exo_player_text_size"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toRightOf="@id/control_buttons"
+      app:layout_constraintTop_toTopOf="parent"
+      android:includeFontPadding="false" />
+
+    <com.google.android.exoplayer2.ui.DefaultTimeBar
+        android:id="@id/exo_progress"
+        android:layout_width="@dimen/zero"
+        android:layout_weight="@dimen/one"
+        android:layout_height="@dimen/exo_player_seek_height"
+        
+        app:scrubber_color="@color/exo_player_seek_scrubber"
+        app:played_color="@color/exo_player_seek_played"
+        app:unplayed_color="@color/exo_player_seek_unplayed"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/exo_position"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/exo_duration" />
+
+  <TextView
+      android:id="@id/exo_duration"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right"
+      android:textSize="@dimen/exo_player_text_size"
+      android:textColor="@color/exo_player_text"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toRightOf="@id/exo_progress"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintRight_toRightOf="parent"  />
+
+</android.support.constraint.ConstraintLayout>
