@@ -27,7 +27,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             CommonHeaderItems.Id4,
             new DoExportFileHeader("variable", "Variable name for the question, where validation error occurred", ExportValueType.String),
             new DoExportFileHeader("type", "Type of the variable where the validation error occurred", ExportValueType.String),
-            new DoExportFileHeader("message__number", "Numeric index of the validation rule that has fired", ExportValueType.String),
+            new DoExportFileHeader("message__number", "Numeric index of the validation rule that has fired", ExportValueType.NumericInt),
             new DoExportFileHeader("message", "Text of the error message", ExportValueType.String)
         };
 
