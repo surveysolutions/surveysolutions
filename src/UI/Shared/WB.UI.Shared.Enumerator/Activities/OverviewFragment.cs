@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
                 else if (node is OverviewStaticText staticText)
                 {
-                    return staticText.ErrorMessages.Count > 0 || staticText.HasWarnings;
+                    return staticText.HasErrors || staticText.HasWarnings;
                 }
 
                 return false;
