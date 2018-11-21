@@ -64,11 +64,11 @@
             },
             contentId: {
                 type: String,
-                required: true
+                required: false
             },
             interviewId: {
                 type: String,
-                required: true
+                required: false
             },
             cache: {
                 type: Number
@@ -146,8 +146,13 @@
         },
         methods: {
             async fetchContentType() {
-                const response = await axios.head(this.contentUrl)
-                this.contentType = response.headers["content-type"]
+                if(this.thumb || this.filename) {
+                    this.contentType = "image";
+                }
+                else {
+                    const response = await axios.head(this.contentUrl)
+                    this.contentType = response.headers["content-type"]
+                }
             },
             appendCache(uri) {
                 return appendSearchParam(uri, 'cache', this.cache)
