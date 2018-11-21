@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -2284,6 +2285,15 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewId = interviewId,
                 Latitude = latitude,
                 Longitude = longitude
+            };
+        }
+
+        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false, int? howManyMajorReleaseDontNeedUpdate = 0)
+        {
+            return new InterviewerSettings()
+            {
+                AutoUpdateEnabled = autoUpdateEnabled,
+                HowManyMajorReleaseDontNeedUpdate =  howManyMajorReleaseDontNeedUpdate
             };
         }
     }

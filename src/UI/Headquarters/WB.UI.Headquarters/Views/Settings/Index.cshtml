@@ -182,6 +182,10 @@
     {
         var productVersion = DependencyResolver.Current.GetService<IProductVersion>();
         var version = productVersion.GetVersion();
-        return new Version(version.Major, version.Minor - releasesAgo, 0).ToString();
+        if (version.Minor - releasesAgo > 0)
+        {
+            return new Version(version.Major, version.Minor - releasesAgo, 0).ToString();
+        }
+        return new Version(version.Major - 1, (version.Minor + 12) - releasesAgo, 0).ToString();
     }
 }

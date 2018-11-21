@@ -22,11 +22,21 @@ namespace WB.UI.Headquarters.API.DataCollection
             var majorUpdatesToUpdate = interviewerSettings?.HowManyMajorReleaseDontNeedUpdate;
             if (majorUpdatesToUpdate.HasValue)
             {
-                var acceptedInterviewerVersion = hqVersion.Major - majorUpdatesToUpdate.Value;
-                if (appVersion.Major < acceptedInterviewerVersion)
+                var acceptedInterviewerVersion = hqVersion.Minor - majorUpdatesToUpdate.Value;
+                if (appVersion.Major == hqVersion.Major && appVersion.Minor < acceptedInterviewerVersion)
                 {
                     return true;
                 }
+
+                if (appVersion.Major == hqVersion.Major - 1)
+                {
+                    var acceptedInterviewerVersionForOldMajorVersion = (hqVersion.Minor + 12) - majorUpdatesToUpdate.Value;
+                    if (appVersion.Minor < acceptedInterviewerVersionForOldMajorVersion)
+                    {
+                        return true;
+                    }
+                }
+
             }
 
             return false;
