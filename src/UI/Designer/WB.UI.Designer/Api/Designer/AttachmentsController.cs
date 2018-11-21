@@ -84,14 +84,14 @@ namespace WB.UI.Designer.Api
 
                     if (attachmentContent.IsAudio())
                     {
-                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.svg"));
-                        contentType = @"image/svg+xml";
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.png"));
+                        contentType = @"image/png";
                     }
 
                     if (attachmentContent.IsPdf())
                     {
-                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.svg"));
-                        contentType = @"image/svg+xml";
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.png"));
+                        contentType = @"image/png";
                     }
                 }
                 else
