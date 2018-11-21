@@ -1,5 +1,6 @@
 ﻿@using WB.Core.BoundedContexts.Designer.Resources
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Code
 @using WB.UI.Designer.Utils
 @model Main.Core.Entities.SubEntities.IStaticText
 @{
@@ -50,7 +51,7 @@
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>
-                <img src="@Url.HttpRouteUrl("AttachmentThumbnailWithSize", new {id = questionnaire.GetAttachmentId(staticText), size = questionnaire.Settings.AttachmentSize})" alt="">
+                <img src="@Url.HttpRouteUrlAbsolute("AttachmentThumbnailWithSize", new {id = questionnaire.GetAttachmentId(staticText), size = questionnaire.Settings.AttachmentSize})" alt="" />
             </figure>
         }
     </div>
