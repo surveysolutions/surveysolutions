@@ -1,7 +1,6 @@
 using System;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,10 +11,13 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     public class WebInterviewStateManager : HubPipelineModule
     {
         private readonly IProductVersion productVersion;
-        
-        public WebInterviewStateManager(IProductVersion productVersion)
+        private readonly IStatefulInterviewRepository interviewRepository;
+
+        public WebInterviewStateManager(IProductVersion productVersion, 
+            IStatefulInterviewRepository interviewRepository)
         {
             this.productVersion = productVersion;
+            this.interviewRepository = interviewRepository;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
@@ -29,12 +31,8 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             var interviewId = hub.Context.QueryString[@"interviewId"];
             IStatefulInterview interview = null;
 
-            InScopeExecutor.Current.ExecuteActionInScope((locator) =>
-            {
-                IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
-                interview = statefulInterviewRepository.Get(interviewId);
-            });
-            
+            interview = interviewRepository.Get(interviewId);
+
             if (interview == null)
             {
                 hub.Clients.Caller.shutDown();
