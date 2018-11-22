@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer/Supervisor app is allowed to synchronize:.
+        ///   Looks up a localized string similar to Allowed Interviewer/Supervisor application versions:.
         /// </summary>
         internal static string AllowedToSync {
             get {
@@ -304,7 +304,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} or newer.
+        ///   Looks up a localized string similar to Allow to use {0} or newer.
         /// </summary>
         internal static string VersionOrNewer {
             get {

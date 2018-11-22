@@ -193,12 +193,12 @@
     <value>Are you sure you want to delete global note?</value>
   </data>
   <data name="AllowedToSync" xml:space="preserve">
-    <value>Interviewer/Supervisor app is allowed to synchronize:</value>
+    <value>Allowed Interviewer/Supervisor application versions:</value>
   </data>
   <data name="Any" xml:space="preserve">
     <value>Any</value>
   </data>
   <data name="VersionOrNewer" xml:space="preserve">
-    <value>{0} or newer</value>
+    <value>Allow to use {0} or newer</value>
   </data>
 </root>
