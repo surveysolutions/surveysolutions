@@ -165,8 +165,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
-            registry.RegisterCustomBindingFactory<PlayerView>("VideoPath", player => new ExoPlayerBinding(player));
-            registry.RegisterCustomBindingFactory<PlayerView>("AudioPath", player => new ExoPlayerAudioAttachmentBinding(player));
+            registry.RegisterCustomBindingFactory<PlayerView>("Video", player => new ExoPlayerBinding(player));
+            registry.RegisterCustomBindingFactory<PlayerView>("Audio", player => new ExoPlayerAudioAttachmentBinding(player));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
