@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Caching;
 using GeoJSON.Net.Feature;
@@ -50,9 +51,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             
             if (cacheLine == null)
             {
+                var sw = Stopwatch.StartNew();
                 cacheLine = InitializeSuperCluster(input);
+                sw.Stop();
 
-                Cache?.Add(key, cacheLine, null, DateTime.UtcNow.AddMinutes(10), Cache.NoSlidingExpiration,
+                var cacheTimeMinutes = Math.Max(10 , Math.Pow(sw.Elapsed.Seconds, 3) / 60.0);
+
+                Cache?.Add(key, cacheLine, null, DateTime.UtcNow.AddMinutes(cacheTimeMinutes), Cache.NoSlidingExpiration,
                     CacheItemPriority.Default, null);
             }
 
