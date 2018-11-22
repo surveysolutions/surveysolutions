@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Preferences;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -136,5 +137,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
     }
 }

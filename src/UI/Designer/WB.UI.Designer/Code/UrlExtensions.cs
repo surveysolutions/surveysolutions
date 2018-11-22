@@ -9,8 +9,18 @@ namespace WB.UI.Designer.Code
         public static string ContentAbsolute(this UrlHelper urlHelper, string contentPath)
         {
             var path = urlHelper.Content(contentPath);
-            var url = new Uri(HttpContext.Current.Request.Url, path);
+            return ConvertToAbsoluteUrl(path);
+        }
 
+        public static string HttpRouteUrlAbsolute(this UrlHelper urlHelper, string routeName, object routeValues)
+        {
+            var path = urlHelper.HttpRouteUrl(routeName, routeValues);
+            return ConvertToAbsoluteUrl(path);
+        }
+
+        private static string ConvertToAbsoluteUrl(string path)
+        {
+            var url = new Uri(HttpContext.Current.Request.Url, path);
             return url.AbsoluteUri;
         }
     }
