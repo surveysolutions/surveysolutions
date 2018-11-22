@@ -80,9 +80,10 @@ namespace WB.UI.Shared.Web.Modules
             where T : System.Web.Mvc.ActionFilterAttribute
             where TAttribute : Attribute
         {
-            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest().PropertiesAutowired();
             containerBuilder.Register(c => new MvcActionFilterWhenControllerOrActionHasNoAttribute(c.Resolve<T>(), typeof(TAttribute)))
                 .AsActionFilterFor<Controller>(order)
+                .PropertiesAutowired()
                 .InstancePerRequest();
         }
 
