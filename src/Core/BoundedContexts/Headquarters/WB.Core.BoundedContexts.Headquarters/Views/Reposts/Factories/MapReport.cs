@@ -41,10 +41,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
 
         protected static Cache Cache => System.Web.HttpContext.Current?.Cache;
-
+        
         public MapReportView Load(MapReportInputModel input)
         {
-            var key = $"{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
+            var key = $"MapReport;{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
 
             var cacheLine = Cache?.Get(key);
             
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 cacheLine = InitializeSuperCluster(input);
 
-                Cache?.Add(key, cacheLine, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(15),
+                Cache?.Add(key, cacheLine, null, DateTime.UtcNow.AddMinutes(10), Cache.NoSlidingExpiration,
                     CacheItemPriority.Default, null);
             }
 
