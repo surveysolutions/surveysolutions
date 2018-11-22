@@ -246,10 +246,7 @@
                                 click here
                             </a>
                         </p>
-                        <p>
-                            <span class="variable-name" ng-i18next="VariableName"></span>
-                            {{'SideBarAttachmentsEmptyLine3' | i18next}}
-                        </p>
+                        <p ng-bind-html="emptyAttachmentsDescription"/>
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
                         <div class="attachment-list">
