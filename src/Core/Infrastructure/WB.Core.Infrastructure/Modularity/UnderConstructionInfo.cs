@@ -16,6 +16,13 @@ namespace WB.Core.Infrastructure.Modularity
             tsc.SetResult(true);
         }
 
+        public void Error(string message)
+        {
+            Status = UnderConstructionStatus.Error;
+
+            tsc.SetResult(true);
+        }
+
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;
         public string Message { get; set; }
 
@@ -32,6 +39,7 @@ namespace WB.Core.Infrastructure.Modularity
     {
         NotStarted = 1,
         Running,
-        Finished
+        Finished,
+        Error
     }
 }
