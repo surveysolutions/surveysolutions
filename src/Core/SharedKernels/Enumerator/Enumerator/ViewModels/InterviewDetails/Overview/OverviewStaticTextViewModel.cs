@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 userInteractionService.ShowToast(error);
             }
-        }, () => ErrorMessages.Count > 0);
+        }, () => HasErrors);
 
        
     }

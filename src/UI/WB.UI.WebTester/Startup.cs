@@ -40,6 +40,7 @@ namespace WB.UI.WebTester
             builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
 
             var container = builder.Build();
+            app.UseAutofacMiddleware(container);
             GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
@@ -49,7 +50,6 @@ namespace WB.UI.WebTester
             
             WebApiConfig.Register(config);
 
-            app.UseAutofacMiddleware(container);
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
             MetricsService.Start(logger);
