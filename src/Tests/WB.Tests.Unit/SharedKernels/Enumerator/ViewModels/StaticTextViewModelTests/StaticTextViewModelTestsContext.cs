@@ -2,6 +2,7 @@
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                                    new EnablementViewModel(statefulInterviewRepository, liteEventRegistry, plainQuestionnaireRepository),
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository, Create.Fake.MvxMainThreadDispatcher(), Create.ViewModel.ErrorMessagesViewModel()),
                                    new WarningsViewModel(liteEventRegistry, statefulInterviewRepository, Create.Fake.MvxMainThreadDispatcher(), Create.ViewModel.ErrorMessagesViewModel())),
-                attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>()),
+                attachmentViewModel: attachmentViewModel ?? new AttachmentViewModel(plainQuestionnaireRepository, statefulInterviewRepository, Mock.Of<IAttachmentContentStorage>(), Mock.Of<IEnumeratorSettings>(), Mock.Of<IExternalAppLauncher>()),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: liteEventRegistry,
                     interviewRepository: statefulInterviewRepository));
