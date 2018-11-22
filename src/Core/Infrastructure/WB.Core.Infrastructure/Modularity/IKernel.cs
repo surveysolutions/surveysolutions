@@ -6,6 +6,6 @@ namespace WB.Core.Infrastructure.Modularity
     {
         void Load<T>(params IModule<T>[] modules) where T : IIocRegistry;
 
-        Task Init();
+        Task InitAsync();
     }
 }
