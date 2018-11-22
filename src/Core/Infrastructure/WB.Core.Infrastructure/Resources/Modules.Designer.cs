@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.Infrastructure.Native.Resources {
+namespace WB.Core.Infrastructure.Resources {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Native.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Modules {
+    public class Modules {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace WB.Infrastructure.Native.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Infrastructure.Native.Resources.Modules", typeof(Modules).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.Infrastructure.Resources.Modules", typeof(Modules).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WB.Infrastructure.Native.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,27 @@ namespace WB.Infrastructure.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error during updating database. Please contact support..
+        /// </summary>
+        public static string ErrorDuringRunningMigrations {
+            get {
+                return ResourceManager.GetString("ErrorDuringRunningMigrations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error during site initialization. Please contact support..
+        /// </summary>
+        public static string ErrorDuringSiteInitialization {
+            get {
+                return ResourceManager.GetString("ErrorDuringSiteInitialization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initializing the database.
         /// </summary>
-        internal static string InitializingDb {
+        public static string InitializingDb {
             get {
                 return ResourceManager.GetString("InitializingDb", resourceCulture);
             }
@@ -72,7 +90,7 @@ namespace WB.Infrastructure.Native.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Migrating the database to the latest version.
         /// </summary>
-        internal static string MigrateDb {
+        public static string MigrateDb {
             get {
                 return ResourceManager.GetString("MigrateDb", resourceCulture);
             }
