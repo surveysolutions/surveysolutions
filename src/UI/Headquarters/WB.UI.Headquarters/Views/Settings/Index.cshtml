@@ -117,12 +117,18 @@
                     </div>
                 </div>
                 <div class="block-filter">
-                    <label for="allowed-to-sync">@Settings.AllowedToSync</label>
-                    <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, event:{ change: updateHowManyMajorReleaseDontNeedUpdate}" class="selectpicker">
-                        <option value="null">@Settings.Any</option>
-                        <option value='4'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(4))</option>
-                        <option value='8'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(8))</option>
-                    </select>
+                    <div class="form-group">
+                        <label for="allowed-to-sync">@Settings.AllowedToSync</label>
+                        <div class="input-group">
+                            <div>
+                                <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, event:{ change: updateHowManyMajorReleaseDontNeedUpdate}" class="selectpicker">
+                                    <option value="null">@Settings.Any</option>
+                                    <option value='4'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(4))</option>
+                                    <option value='8'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(8))</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

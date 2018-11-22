@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         protected bool IsNeedUpdateAppBySettings(Version appVersion, Version hqVersion)
         {
             var interviewerSettings = settingsStorage.GetById(AppSetting.InterviewerSettings);
-            var majorUpdatesToUpdate = interviewerSettings?.HowManyMajorReleaseDontNeedUpdate;
+            var majorUpdatesToUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue;
             if (majorUpdatesToUpdate.HasValue)
             {
                 var acceptedInterviewerVersion = hqVersion.Minor - majorUpdatesToUpdate.Value;
