@@ -53,18 +53,19 @@ export default () => {
         })
 
         group("Sending interviews", () => {
-            data.interviewId = uuid();
-            data.dunumber = Math.floor(Math.random() * 1000);
-            data.interviewKey = Math.floor(Math.random() * 100000000);
+            data.interviewId = uuid()
+            data.dunumber = Math.floor(Math.random() * 1000)
+            data.interviewKey = Math.floor(Math.random() * 100000000)
+            data.firstEventId = uuid()
 
             var r = post("interviews/" + data.interviewId, interviewTemplate(data), {
                 "interview": "upload"
             })
 
-            statsPackageUpload.add(r.timings.duration);
+            statsPackageUpload.add(r.timings.duration)
 
             if (r.status == 200) {
-                statsPackageUploaded.add(1);
+                statsPackageUploaded.add(1)
             }
 
             check(r, {
