@@ -87,7 +87,8 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            autofacKernel.Init().Wait();
+            autofacKernel.InitAsync().Wait(TimeSpan.FromSeconds(10));
+
             var container = autofacKernel.Container;
 
             InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(container));

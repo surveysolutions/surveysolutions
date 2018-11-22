@@ -47,7 +47,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
         
-        public Task Init()
+        public Task InitAsync()
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
@@ -60,10 +60,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            Thread thread = new Thread(() => InitModules(status, Container).Wait()) { IsBackground = false };
-            thread.Start();
-
-            return Task.CompletedTask;
+            var initTask = Task.Run(async () => await InitModules(status, Container));
+            return initTask;
         }
 
         private async Task InitModules(UnderConstructionInfo status, IContainer container)

@@ -108,7 +108,7 @@ namespace WB.UI.Designer.App_Start
             //kernel.ContainerBuilder.RegisterModule<LogRequestModule>();
 
             // init
-            kernel.Init().Wait();
+            kernel.InitAsync().Wait(TimeSpan.FromSeconds(10));
 
             var serviceLocatorFactory = new AutofacServiceLocatorFactory();
             ServiceLocator.SetLocatorProvider(() => serviceLocatorFactory.GetServiceLocator());
