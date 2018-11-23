@@ -32,6 +32,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             }
         }, () => HasErrors);
 
-       
+        public override void Dispose()
+        {
+            Attachment?.ViewDestroy();
+        }
     }
 }

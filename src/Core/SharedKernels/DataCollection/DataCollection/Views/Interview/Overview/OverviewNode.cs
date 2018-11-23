@@ -1,8 +1,9 @@
-﻿using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
-    public abstract class OverviewNode
+    public abstract class OverviewNode : IDisposable
     {
         protected OverviewNode(IInterviewTreeNode treeNode)
         {
@@ -17,5 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public bool SupportsComments { get; set; } = false;
 
         public abstract OverviewNodeState State { get; set; }
+
+        public virtual void Dispose() { }
     }
 }
