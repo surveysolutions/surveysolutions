@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using NHibernate;
-using Ninject;
 using Npgsql;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -15,6 +14,7 @@ namespace WB.UI.Headquarters.Services
 {
     public class MetricsService
     {
+        public const string SessionFactoryName = "PlainSessionFactory";
         public static bool IsEnabled => System.Configuration.ConfigurationManager.AppSettings.GetBool(@"Metrics.Enable", true);
 
         [Localizable(false)]
@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Services
             }
             try
             {
-                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName);
+                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
                 MetricsRegistry.Instance.RegisterOnDemandCollectors(new BrokenPackagesStatsCollector(sessionFactory));
 
                 // getting instance name from connection string information

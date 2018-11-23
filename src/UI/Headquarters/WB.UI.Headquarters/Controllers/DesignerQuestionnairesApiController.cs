@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using Humanizer;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +10,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers

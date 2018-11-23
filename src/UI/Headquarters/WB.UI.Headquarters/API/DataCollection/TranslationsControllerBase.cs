@@ -2,11 +2,9 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {

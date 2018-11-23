@@ -96,11 +96,16 @@ namespace WB.Services.Export.Questionnaire
                 new HeaderColumn()
                 {
                     Name = variable.Name,
-                    Title = variable.Label,
+                    Title = GetVariableLabel(variable),
                     ExportType = GetStorageType(variable)
                 }};
 
             return exportedHeaderItem;
+        }
+
+        private string GetVariableLabel(Variable variable)
+        {
+            return !string.IsNullOrEmpty(variable.Label) ? variable.Label : $"Calculated variable of type {Enum.GetName(typeof(VariableType), variable.Type)}";
         }
 
         private ExportValueType GetStorageType(Variable variable)
@@ -379,6 +384,16 @@ namespace WB.Services.Export.Questionnaire
                 headerStructureForLevel.LevelLabels =
                     @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Value.ToString(CultureInfo.InvariantCulture), Title = title.Title })
                         .ToArray();
+            }
+            else if (@group.IsRoster && headerStructureForLevel.LevelLabels == null)
+            {
+                var trigger = questionnaire.FirstOrDefault<Question>(x => x.PublicKey == @group.RosterSizeQuestionId);
+                if (trigger.QuestionType == QuestionType.MultyOption)
+                {
+                    headerStructureForLevel.LevelLabels =
+                        trigger.Answers.Select(title => new LabelItem() { Caption = title.AnswerValue, Title = title.AnswerText})
+                            .ToArray();
+                }
             }
 
             foreach (var groupChild in @group.Children)

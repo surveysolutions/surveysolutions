@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
@@ -28,18 +27,18 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             };
 
             var repository = CreateInterviewSummaryRepository();
-            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
+            interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid()));
 
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
 
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel
+        public void BecauseOf() => report = reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
-        }));
+        });
 
         [NUnit.Framework.Test] public void should_count_statuses_by_questionnaire () => report.Items.First().CompletedCount.Should().Be(2);
 

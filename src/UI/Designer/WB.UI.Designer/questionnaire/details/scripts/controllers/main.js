@@ -1,6 +1,10 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, webTesterService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+    function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, webTesterService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+
+            var variableNameHtml = "<span class=\"variable-name\">" + $i18next.t('VariableName') + "</span>";
+            $scope.emptyAttachmentsDescription = $sce.trustAsHtml($i18next.t('SideBarAttachmentsEmptyLine3', { name: variableNameHtml }));
+
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,

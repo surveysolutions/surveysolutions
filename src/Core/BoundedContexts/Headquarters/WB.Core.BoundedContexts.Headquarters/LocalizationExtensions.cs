@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Web;
+﻿using System.Web;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 

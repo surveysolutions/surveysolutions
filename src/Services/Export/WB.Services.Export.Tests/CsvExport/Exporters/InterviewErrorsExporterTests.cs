@@ -68,13 +68,13 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(export[0],
                 Is.EqualTo(new[]
                 {
-                    "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), "10-20-30-40", 1.ToString(),
+                    "10-20-30-40", interviewId.FormatGuid(), "numeric1", EntityType.Question.ToString(), 1.ToString(),
                     messageForQuestion
                 }));
             Assert.That(export[1],
                 Is.EqualTo(new[]
                 {
-                    "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), "10-20-30-40", 2.ToString(),
+                    "10-20-30-40", interviewId.FormatGuid(), "", EntityType.StaticText.ToString(), 2.ToString(),
                     message1ForStaticText
                 }));
         }
@@ -147,13 +147,13 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(export[0],
                 Is.EqualTo(new[]
                 {
-                    "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), "10-20-30-40", 1.ToString(),
+                    "10-20-30-40", interviewId.FormatGuid(), "numeric1", EntityType.Question.ToString(), 1.ToString(),
                     messageForQuestion
                 }));
             Assert.That(export[1],
                 Is.EqualTo(new[]
                 {
-                    "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), "10-20-30-40", 2.ToString(),
+                    "10-20-30-40", interviewId.FormatGuid(), "", EntityType.StaticText.ToString(), 2.ToString(),
                     message1ForStaticText
                 }));
         }
@@ -211,14 +211,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(export[0],
                 Is.EqualTo(new[]
                 {
-                    "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "10-20-30-40", "0",
-                    "", "1", staticTextInvalid
+                    "10-20-30-40", interviewId.FormatGuid(), "fixed_roster1", "0", "", 
+                    "", EntityType.StaticText.ToString(), "1", staticTextInvalid
                 }));
             Assert.That(export[1],
                 Is.EqualTo(new[]
                 {
-                    "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(),
-                    "10-20-30-40", "0", "1", "2", questionMsg
+                    "10-20-30-40", interviewId.FormatGuid(), "fixed_roster_2", "0", "1",
+                    "numeric1", EntityType.Question.ToString(), "2", questionMsg
                 }));
         }
 

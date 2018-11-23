@@ -677,4 +677,7 @@
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
     <value>Текущий ростер удален или выключен. Пожалуйста, перейдите в следующую активную секцию или ростер используя панель навигации.</value>
   </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Показать PDF</value>
+  </data>
 </root>

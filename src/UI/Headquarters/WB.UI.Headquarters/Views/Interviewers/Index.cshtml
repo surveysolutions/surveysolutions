@@ -1,14 +1,10 @@
-﻿@using WB.Core.BoundedContexts.Headquarters
-@using WB.Core.BoundedContexts.Headquarters.Resources
-@using WB.Core.BoundedContexts.Headquarters.Services
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.User
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Pages.Interviewers_Title;
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var authorizedUser = DependencyResolver.Current.GetService<IAuthorizedUser>();
 
     bool isAdminOrHQ = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator;
     bool isAdmin = authorizedUser.IsAdministrator;
@@ -316,9 +312,10 @@
     <script type="text/html" id="move-interviewer-to-another-team-template">
         <div class="btn-group ">
             <div class="input-group">
-                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: UpdateCounter }, valueupdate:'afterkeydown'" type="text" />
+                <input class="form-control with-clear-btn" id="txtNewSupervisorSearch" 
+                       placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: UpdateCounter }, valueupdate:'afterkeydown'" type="text" />
                 <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                <div class="input-group-btn" data-bind="click: ClearSelectedSupervisor">
+                <div class="input-group-btn" data-bind="click: ClearSelectedSupervisor" id="btnSupervisorSearchCancel">
                     <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                 </div>
             </div>
@@ -333,8 +330,8 @@
         </div>
 
         <div class="radio" data-bind="visible: InterviewersToMove().length > 0">
-            <input id="reassigntToOriginalSupervisor" data-bind="checked: WhatToDoWithAssignments" name="whatToDoWithAssignments" value="ReassigntToOriginalSupervisor" type="radio" class="wb-radio">
-            <label for="reassigntToOriginalSupervisor">
+            <input id="reassignToOriginalSupervisor" data-bind="checked: WhatToDoWithAssignments" name="whatToDoWithAssignments" value="ReassigntToOriginalSupervisor" type="radio" class="wb-radio">
+            <label for="reassignToOriginalSupervisor">
                 <span class="tick"></span>
                 @Pages.Interviewers_ReassigntToOriginalSupervisor
             </label>

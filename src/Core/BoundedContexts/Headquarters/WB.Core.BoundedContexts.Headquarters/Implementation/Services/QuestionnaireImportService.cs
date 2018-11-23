@@ -100,11 +100,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             continue;
 
                         var attachmentContent = await this.restService.DownloadFileAsync(
-                            url: $"{this.apiPrefix}/attachment/{questionnaireAttachment.ContentId}",
+                            url: $"{this.apiPrefix}/attachment/{questionnaireAttachment.ContentId}?attachmentId={questionnaireAttachment.AttachmentId}",
                             credentials: credentials);
 
                         this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
-                            attachmentContent.ContentType, attachmentContent.Content);
+                            attachmentContent.ContentType, attachmentContent.FileName, attachmentContent.Content);
                     }
                 }
 

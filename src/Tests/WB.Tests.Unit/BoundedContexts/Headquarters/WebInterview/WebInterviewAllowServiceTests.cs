@@ -4,8 +4,6 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -26,10 +24,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private WebInterviewAllowService webInterviewAllowService;
         private Guid interviewId;
 
-        private ITransactionManagerProvider transactionManagerProvider;
         private Mock<IQueryableReadSideRepositoryReader<InterviewSummary>> interviewSummaryRepoMock;
         private IWebInterviewConfigProvider webInterviewConfigProvider;
-        private IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
         private EventBusSettings eventBusSettings;
@@ -38,12 +34,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [SetUp]
         public void Setup()
         {
-            var transactionManager = Mock.Of<ITransactionManager>();
-            transactionManagerProvider = Mock.Of<ITransactionManagerProvider>(tmp => tmp.GetTransactionManager() == transactionManager);
-
-            var plainTransactionManager = Mock.Of<IPlainTransactionManager>();
-            this.plainTransactionManagerProvider = Mock.Of<IPlainTransactionManagerProvider>(tmp => tmp.GetPlainTransactionManager() == plainTransactionManager);
-
             interviewSummaryRepoMock = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
 
             webInterviewConfig = new WebInterviewConfig();
@@ -51,8 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             authorizedUserMock = new Mock<IAuthorizedUser>();
             eventBusSettings = new EventBusSettings();
 
-            webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
-                plainTransactionManagerProvider,
+            webInterviewAllowService = new WebInterviewAllowService(
                 interviewSummaryRepoMock.Object, 
                 webInterviewConfigProvider,
                 authorizedUserMock.Object,

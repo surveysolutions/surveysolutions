@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         {
             // arrange
             Guid questionnaireId = Guid.NewGuid();
-            var command = new UpdateQuestionnaire(questionnaireId, "title", "questionnaire", true, Guid.NewGuid(), false);
+            var command = new UpdateQuestionnaire(questionnaireId, "title", "questionnaire", false, true, Guid.NewGuid(), false);
 
             AssemblyContext.SetupServiceLocator();
             var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();

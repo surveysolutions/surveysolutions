@@ -111,7 +111,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover || navigationIdentity.TargetScreen == ScreenType.Identifying)
+            if (navigationIdentity.TargetScreen == ScreenType.Complete || 
+                navigationIdentity.TargetScreen == ScreenType.Cover || 
+                navigationIdentity.TargetScreen == ScreenType.Identifying ||
+                navigationIdentity.TargetScreen == ScreenType.Overview
+                )
+
                 return true;
 
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);

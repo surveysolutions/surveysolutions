@@ -6,11 +6,11 @@
     <TextView
       android:id="@+id/Diagnostics_BackupTitle"
       style="@style/Diagnostics_Section_Title"
-      local:MvxBind="Text  Localization('Diagnostics_Backup_Title'); Click BackupRestore.BackupCommand; UnderlinePressed ." />
+      local:MvxBind="Text  Localization('Diagnostics_Support_Package_Title'); Click BackupRestore.BackupCommand; UnderlinePressed ." />
     <TextView
               android:id="@+id/Diagnostics_BackupDescription"
               style="@style/Diagnostics_Section_Description"
-              local:MvxBind="Text Localization('Diagnostics_Backup_Description'); Click BackupRestore.IncreaseClicksCountOnDescriptionPanelCommand" />
+              local:MvxBind="Text Localization('Diagnostics_Support_Package_Description'); Click BackupRestore.IncreaseClicksCountOnDescriptionPanelCommand" />
   </LinearLayout>
 
 

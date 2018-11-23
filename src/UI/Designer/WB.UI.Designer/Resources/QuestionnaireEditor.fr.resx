@@ -702,9 +702,6 @@
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
     <value>Pour éviter une synchronisation lente, nous recommandons que la taille combinée de tous les fichiers joints ne dépasse pas 2 Mo. Pour les types de fichiers pris en charge, les formats et les dimensions</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>peut être utilisé pour utiliser une pièce jointe dans le questionnaire ajouter un élément de texte statique et spécifier le nom dans sa propriété de pièce jointe</value>
-  </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Est. temps de chargement: {{timeString}} à {{downloadSpeed}} Kb / s (EDGE)</value>
   </data>

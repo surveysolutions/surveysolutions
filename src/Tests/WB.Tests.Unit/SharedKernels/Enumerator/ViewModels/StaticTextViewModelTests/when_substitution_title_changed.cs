@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             eventRegistry = Create.Service.LiteEventRegistry();
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository, eventRegistry);
-            viewModel.Init(interviewId.FormatGuid(), substitutionIdentity, null);
+            viewModel.Init(interviewId.FormatGuid(), substitutionIdentity, Create.Other.NavigationState());
         
             interview.AnswerNumericRealQuestion(interviewerId, substitedQuestionIdentity.Id,
                 substitedQuestionIdentity.RosterVector, DateTime.UtcNow, answerOnDoubleQuestion);

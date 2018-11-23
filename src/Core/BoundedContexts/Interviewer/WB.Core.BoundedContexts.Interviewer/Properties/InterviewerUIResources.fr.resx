@@ -506,12 +506,6 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} entertien(s)</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Toutes les données receuillies sur cet appareil seront stockées dans un fichier de sauvegarde.</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Sauvegarder toutes les informations collectées</value>
-  </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>Date :</value>
   </data>

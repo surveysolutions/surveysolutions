@@ -666,4 +666,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Validity_QuestionDoesntExist" xml:space="preserve">
     <value>The current roster does not exist anymore. Please navigate to the next available section or roster using the navigation menu.</value>
   </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Show PDF </value>
+  </data>
 </root>

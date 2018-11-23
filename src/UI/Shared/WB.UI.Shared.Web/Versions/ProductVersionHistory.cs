@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Shared.Web.Versions
@@ -11,15 +10,12 @@ namespace WB.UI.Shared.Web.Versions
     {
         private readonly IProductVersion productVersion;
         private readonly IPlainStorageAccessor<ProductVersionChange> historyStorage;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public ProductVersionHistory(IProductVersion productVersion, 
-            IPlainStorageAccessor<ProductVersionChange> historyStorage,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IPlainStorageAccessor<ProductVersionChange> historyStorage)
         {
             this.productVersion = productVersion;
             this.historyStorage = historyStorage;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         private string CurrentVersion => this.productVersion.ToString();
@@ -31,23 +27,18 @@ namespace WB.UI.Shared.Web.Versions
 
             var versionChange = new ProductVersionChange(this.CurrentVersion, DateTime.UtcNow);
 
-            this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(() =>
-            {
-                this.historyStorage.Store(versionChange, versionChange.UpdateTimeUtc);
-            });
+            this.historyStorage.Store(versionChange, versionChange.UpdateTimeUtc);
         }
 
         private string GetLastRegisteredVersion()
-            => this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(()
-                => this.historyStorage.Query(_
+               => this.historyStorage.Query(_
                     => _.OrderByDescending(change => change.UpdateTimeUtc)
                         .FirstOrDefault()?
-                        .ProductVersion));
+                        .ProductVersion);
 
         public IEnumerable<ProductVersionChange> GetHistory()
-            => this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInPlainTransaction(()
                 => this.historyStorage.Query(_
                     => _.OrderByDescending(change => change.UpdateTimeUtc)
-                        .ToList()));
+                        .ToList());
     }
 }

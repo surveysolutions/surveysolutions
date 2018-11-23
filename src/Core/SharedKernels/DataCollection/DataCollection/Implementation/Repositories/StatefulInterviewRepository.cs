@@ -12,6 +12,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
         private readonly IEventSourcedAggregateRootRepository aggregateRootRepository;
+        
+        /*
+         *IQuestionnaireStorage questionnaireRepository,
+                                         IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+                                         ISubstitutionTextFactory substitutionTextFactory,
+                                         IInterviewTreeBuilder treeBuilder,
+                                         IQuestionOptionsRepository questionOptionsRepository
+         *
+         */
 
         public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository)
         {
@@ -33,8 +42,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             var interviewAggregateRootId = Guid.Parse(interviewId);
 
-            return (StatefulInterview)this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId, progress,
-                        cancellationToken);
+            var interview = (StatefulInterview)this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId, 
+                progress, cancellationToken);
+            
+            return interview;
         }
     }
 }

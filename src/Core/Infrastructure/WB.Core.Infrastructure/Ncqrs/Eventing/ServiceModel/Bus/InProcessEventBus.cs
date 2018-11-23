@@ -57,6 +57,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
+        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+
+            return this.eventStore.Store(eventStream);
+        }
+
         public bool CanHandleEvent(IPublishableEvent eventMessage)
         {
             if (eventMessage?.Payload == null) return false;
@@ -75,13 +82,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
                 this.Publish(eventMessage);
             }
-        }
-
-        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
-        {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-
-            return this.eventStore.Store(eventStream);
         }
 
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);

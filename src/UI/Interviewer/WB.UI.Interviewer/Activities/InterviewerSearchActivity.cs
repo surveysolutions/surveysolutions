@@ -11,7 +11,8 @@ namespace WB.UI.Interviewer.Activities
         Theme = "@style/GrayAppTheme", 
         WindowSoftInputMode = SoftInput.StateVisible,
         HardwareAccelerated = true,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class InterviewerSearchActivity : SearchActivity
     {
         protected override void OnCreate(Bundle bundle)
