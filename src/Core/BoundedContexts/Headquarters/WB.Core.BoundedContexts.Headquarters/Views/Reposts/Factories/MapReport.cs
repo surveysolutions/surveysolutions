@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 cacheLine = InitializeSuperCluster(input);
                 sw.Stop();
 
-                var cacheTimeMinutes = Math.Max(10 , Math.Pow(sw.Elapsed.Seconds, 3) / 60.0);
+                var cacheTimeMinutes = Math.Min(10 , Math.Pow(sw.Elapsed.Seconds, 3) / 60.0);
 
                 Cache?.Add(key, cacheLine, null, DateTime.UtcNow.AddMinutes(cacheTimeMinutes), Cache.NoSlidingExpiration,
                     CacheItemPriority.Default, null);
