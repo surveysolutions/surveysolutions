@@ -12,22 +12,15 @@ namespace WB.Core.Infrastructure.Modularity
         public void Finish()
         {
             Status = UnderConstructionStatus.Finished;
-
-            tsc.SetResult(true);
         }
 
         public void Error(string message)
         {
             Status = UnderConstructionStatus.Error;
-
-            tsc.SetResult(true);
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;
         public string Message { get; set; }
-
-        private readonly TaskCompletionSource<bool> tsc = new TaskCompletionSource<bool>();
-        public Task Completed => tsc.Task;
 
         public void ClearMessage()
         {
