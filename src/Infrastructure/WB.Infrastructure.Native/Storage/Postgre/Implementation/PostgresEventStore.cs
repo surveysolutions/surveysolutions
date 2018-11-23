@@ -24,15 +24,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static long lastUsedGlobalSequence = -1;
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
-        private readonly ISessionProvider sessionProvider;
+        
         private static int BatchSize = 4096;
         private static string tableNameWithSchema;
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
+        private readonly IUnitOfWork sessionProvider; 
+
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
             IEventTypeResolver eventTypeResolver,
-            ISessionProvider sessionProvider)
+            IUnitOfWork sessionProvider)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
@@ -109,7 +111,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             if (eventStream.IsNotEmpty)
             {
-                return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, this.sessionProvider.GetSession()));
+                return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, this.sessionProvider.Session));
             }
 
             return new CommittedEventStream(eventStream.SourceId);
@@ -270,7 +272,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
         {
-            var rawEventsData = await this.sessionProvider.GetSession().Connection
+
+            var rawEventsData = await this.sessionProvider.Session.Connection
                 .QueryAsync<RawEvent>
                  ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
                    FROM {tableNameWithSchema} 

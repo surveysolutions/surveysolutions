@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -12,7 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePro
     {
         protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor)
         {
-            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, new InterviewExpressionStateUpgrader());
+            return new InterviewExpressionStatePrototypeProvider(questionnareAssemblyFileAccessor, 
+                new InterviewExpressionStateUpgrader(),
+                Mock.Of<ILoggerProvider>());
         }
 
         protected static Mock<IQuestionnaireAssemblyAccessor> CreateIQuestionnareAssemblyFileAccessorMock(string path)

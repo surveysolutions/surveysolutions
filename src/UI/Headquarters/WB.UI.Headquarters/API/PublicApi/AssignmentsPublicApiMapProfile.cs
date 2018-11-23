@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Net.Http;
+using System.Web;
 using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -60,16 +62,28 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         private IQuestionnaire GetQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaierStorage = context.Resolve<IQuestionnaireStorage>();
-            return questionnaierStorage.GetQuestionnaire(questionnaireIdentity, null);
+            if (HttpContext.Current != null)
+            {
+                // https://stackoverflow.com/a/24509451/72174
+                var httpRequestMessage = HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
+                var currentDependencyScope = httpRequestMessage.GetDependencyScope();
+                var questionnaireStorage =
+                    (IQuestionnaireStorage) currentDependencyScope.GetService(typeof(IQuestionnaireStorage));
+                return questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            }
+            else
+            {
+                var storage = context.Resolve<IQuestionnaireStorage>();
+                return storage.GetQuestionnaire(questionnaireIdentity, null);
+            }
         }
 
         private string GetVariableName(ResolutionContext ctx, Guid? questionId)
         {
             if (questionId == null) return null;
 
-            var questionnaier = ctx.Get<IQuestionnaire>();
-            return questionnaier.GetQuestionVariableName(questionId.Value);
+            var questionnaire = ctx.Get<IQuestionnaire>();
+            return questionnaire.GetQuestionVariableName(questionId.Value);
         }
     }
 }

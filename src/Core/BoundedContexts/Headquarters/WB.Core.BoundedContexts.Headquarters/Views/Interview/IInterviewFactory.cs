@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Supercluster;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -17,8 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
         
         InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
-            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? supervisorId);
+            Guid gpsQuestionId, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId);
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);

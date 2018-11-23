@@ -10,7 +10,10 @@ using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Activities
 {
-    [Activity(Label = "Preferences activity", NoHistory = false, Name = "org.worldbank.solutions.Vtester.PrefsActivity")]
+    [Activity(Label = "Preferences activity", 
+        NoHistory = false, 
+        Name = "org.worldbank.solutions.Vtester.PrefsActivity",
+        Exported = false)]
     public class PrefsActivity : PreferenceActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -21,7 +24,7 @@ namespace WB.UI.Tester.Activities
 
         protected override bool IsValidFragment(string fragmentName)
         {
-            return false;
+            return typeof(PrefsFragment).Name.Equals(fragmentName);
         }
 
         public class PrefsFragment : PreferenceFragment

@@ -9,7 +9,7 @@
 <div class="group">
     <div class="group_container">
         <div class="breacrumbs">@questionnaire.GetBreadcrumbsForGroup(group.PublicKey)</div>
-        <div class="sub_section">@questionnaire.GetGroupTitle(group)</div>
+        <div class="sub_section" id="@questionnaire.GetItemRef(group.PublicKey)">@questionnaire.GetGroupTitle(group)</div>
         @if (questionnaire.GroupHasEnablementCondition(group))
         {
             <div class="common-info">

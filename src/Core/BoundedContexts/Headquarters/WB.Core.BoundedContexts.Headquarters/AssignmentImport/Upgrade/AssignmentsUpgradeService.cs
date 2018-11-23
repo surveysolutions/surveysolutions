@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Media.Animation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -28,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IAuditLog auditLog;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
-        private readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
+        private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
         private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
         public AssignmentsUpgradeService(IAuditLog auditLog, IQuestionnaireStorage questionnaireStorage)
@@ -43,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version);
 
-            this.upgradeQueue.Enqueue(new QueuedUpgrade(processId, migrateFrom, migrateTo));
+            upgradeQueue.Enqueue(new QueuedUpgrade(processId, migrateFrom, migrateTo));
             this.progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
         }
 
@@ -54,9 +53,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 
         public QueuedUpgrade DequeueUpgrade()
         {
-            if (!this.upgradeQueue.IsEmpty)
+            if (!upgradeQueue.IsEmpty)
             {
-                if(this.upgradeQueue.TryDequeue(out QueuedUpgrade request))
+                if(upgradeQueue.TryDequeue(out QueuedUpgrade request))
                 {
                     return request;
                 }

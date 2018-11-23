@@ -1,6 +1,5 @@
 using Mvc.Mailer;
 using WB.Core.BoundedContexts.Designer.Views;
-using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 

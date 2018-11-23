@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
@@ -15,17 +14,16 @@ using NLog;
 using Owin;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Services;
-using WB.UI.WebTester.Services.Implementation;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
 namespace WB.UI.WebTester
 {
-    public partial class Startup
+    public class Startup
     {
         public void Configuration(IAppBuilder app)
         {
@@ -42,6 +40,7 @@ namespace WB.UI.WebTester
             builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
 
             var container = builder.Build();
+            app.UseAutofacMiddleware(container);
             GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
@@ -51,15 +50,10 @@ namespace WB.UI.WebTester
             
             WebApiConfig.Register(config);
 
-            app.UseAutofacMiddleware(container);
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
             MetricsService.Start(logger);
-
-            evictionService = ServiceLocator.Current.GetInstance<EvictionService>();
         }
-
-        private EvictionService evictionService;
 
         private void EnsureJsonStorageForErrorsExists()
         {

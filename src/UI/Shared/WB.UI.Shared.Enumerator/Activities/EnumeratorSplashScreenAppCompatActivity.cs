@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             foreach (var interviewFile in fileAccessor.GetFilesInDirectory(eventsSettings.PathToInterviewsDirectory))
             {
-                var sqConnection = new SQLiteConnectionString(interviewFile, true);
+                var sqConnection = new SQLiteConnectionString(interviewFile, true, null);
                 var connection = new SQLiteConnectionWithLock(sqConnection,
                     openFlags: SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 

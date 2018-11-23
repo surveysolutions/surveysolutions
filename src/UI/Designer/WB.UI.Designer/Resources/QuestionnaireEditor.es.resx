@@ -723,9 +723,6 @@
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
     <value>Para evitar una sincronización lenta, recomendamos que el tamaño combinado de todos los archivos adjuntos no exceda los 2MB. Para conocer los tipos de archivos compatibles, formatos y dimensiones</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>puede ser usado para manejar un archivo adjunto en el cuestionario agregar un elemento de texto estático y especificar el nombre en su propiedad de archivo adjunto</value>
-  </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Tiempo estimado de carga: {{timeString}} a {{downloadSpeed}}Kb/s (EDGE)</value>
   </data>

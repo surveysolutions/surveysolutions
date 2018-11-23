@@ -151,6 +151,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show heatmap overlay.
+        /// </summary>
+        internal static string HeatMapView {
+            get {
+                return ResourceManager.GetString("HeatMapView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Heat Radius.
+        /// </summary>
+        internal static string HeatRadius {
+            get {
+                return ResourceManager.GetString("HeatRadius", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import users template.
         /// </summary>
         internal static string ImportUsersTemplate {
@@ -192,6 +210,15 @@ namespace Resources {
         internal static string LastUpdatedDate {
             get {
                 return ResourceManager.GetString("LastUpdatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map data is loading.
+        /// </summary>
+        internal static string MapDataLoading {
+            get {
+                return ResourceManager.GetString("MapDataLoading", resourceCulture);
             }
         }
         

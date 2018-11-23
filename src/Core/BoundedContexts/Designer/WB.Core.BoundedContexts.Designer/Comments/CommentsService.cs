@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         {
             return new CommentView
             {
-                Id = x.Id,
+                Id = x.Id.FormatGuid(),
                 UserName = x.UserName,
                 UserEmail = x.UserEmail,
                 Date =x.Date,

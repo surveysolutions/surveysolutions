@@ -8,7 +8,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         [NUnit.Framework.Test] public void should_exception_be_null () {
             attribute = CreateInstallationAttribute();
-            attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null, null)));
+            attribute.OnActionExecuting(
+                CreateFilterContext(new InstallController(null, null, null, null, null)));
         }
 
         private static InstallationAttribute attribute;

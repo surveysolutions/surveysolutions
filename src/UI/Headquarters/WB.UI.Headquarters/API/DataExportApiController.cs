@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -32,6 +34,7 @@ namespace WB.UI.Headquarters.API
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IAuditLog auditLog;
         private readonly ISerializer serializer;
+        private readonly ExternalStoragesSettings externalStoragesSettings;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -41,7 +44,7 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IExportFileNameService exportFileNameService,
             IExportServiceApi exportServiceApi,
-            IAuditLog auditLog)
+            IAuditLog auditLog, ExternalStoragesSettings externalStoragesSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -50,6 +53,7 @@ namespace WB.UI.Headquarters.API
             this.exportFileNameService = exportFileNameService;
             this.exportServiceApi = exportServiceApi;
             this.auditLog = auditLog;
+            this.externalStoragesSettings = externalStoragesSettings;
             this.serializer = serializer;
         }
         
@@ -61,10 +65,12 @@ namespace WB.UI.Headquarters.API
             DateTime? from = null, 
             DateTime? to = null)
         {
-            var result = await this.dataExportStatusReader.GetDataArchive(
-                new QuestionnaireIdentity(id, version), format, status, from , to);
-
-            if (result.Redirect != null)
+            var result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from , to);
+            if (result == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else if (result.Redirect != null)
             {
                 var response = Request.CreateResponse(HttpStatusCode.Redirect);
                 response.Headers.Location = new Uri(result.Redirect);
@@ -167,9 +173,28 @@ namespace WB.UI.Headquarters.API
                 fromDate: @from?.ToUniversalTime(), 
                 toDate: to?.ToUniversalTime());
 
+        /// <summary>
+        /// Handle CORS preflight request
+        /// </summary>
+        /// <returns></returns>
+        [HttpOptions]
+        [AllowAnonymous]
+        [Localizable(false)]
+        public HttpResponseMessage ExportToExternalStorage()
+        {
+            var uri = new Uri(externalStoragesSettings.OAuth2.RedirectUri);
+
+            var response = new HttpResponseMessage {StatusCode = HttpStatusCode.OK};
+            // Define and add values to variables: origins, headers, methods (can be global)               
+            response.Headers.Add("Access-Control-Allow-Origin", $"{uri.Scheme}://{uri.Host}");
+            response.Headers.Add("Access-Control-Allow-Methods", "POST");
+
+            return response;
+        }
+
         [HttpPost]
         [AllowAnonymous]
-        public async Task ExportToExternalStorage(ExportToExternalStorageModel model)
+        public async Task<HttpResponseMessage> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
             if(state == null)
@@ -184,6 +209,8 @@ namespace WB.UI.Headquarters.API
                 state.FromDate?.ToUniversalTime(),
                 state.ToDate?.ToUniversalTime(),
                 model.Access_token, state.Type);
+
+            return ExportToExternalStorage();
         }
 
         private string GetPasswordFromSettings()

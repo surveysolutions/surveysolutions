@@ -25,5 +25,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         EnumeratorApplicationType ApplicationType { get; }
         bool Encrypted { get; }
         void SetEncrypted(bool encrypted);
+        bool IsSupportedWebViewer { get; }
     }
 }

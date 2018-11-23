@@ -9,7 +9,10 @@ using WB.UI.Supervisor.SharedPreferences;
 
 namespace WB.UI.Supervisor.Activities
 {
-    [Activity(Label = "Preferences activity", NoHistory = false, Theme = "@style/GrayAppTheme")]
+    [Activity(Label = "Preferences activity", 
+        NoHistory = false, 
+        Theme = "@style/GrayAppTheme",
+        Exported = false)]
     public class PrefsActivity : PreferenceActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -20,7 +23,7 @@ namespace WB.UI.Supervisor.Activities
 
         protected override bool IsValidFragment(string fragmentName)
         {
-            return false;
+            return typeof(PrefsFragment).Name.Equals(fragmentName);
         }
 
         public class PrefsFragment : PreferenceFragment

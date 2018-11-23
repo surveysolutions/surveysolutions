@@ -24,15 +24,17 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IInterviewFactory _interviewFactory;
+        private ICommandTransformator commandTransformator;
         private const string DefaultErrorMessage = "Unexpected error occurred";
 
         public CommandApiController(
             ICommandService commandService, ICommandDeserializer commandDeserializer, ILogger logger,
-            IInterviewFactory interviewFactory)
+            IInterviewFactory interviewFactory, ICommandTransformator commandTransformator)
             : base(commandService, logger)
         {
             this.commandDeserializer = commandDeserializer;
             _interviewFactory = interviewFactory;
+            this.commandTransformator = commandTransformator;
         }
 
         [HttpPost]
@@ -63,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
                 try
                 {
                     ICommand concreteCommand = this.commandDeserializer.Deserialize(request.Type, request.Command);
-                    ICommand transformedCommand = new CommandTransformator().TransformCommnadIfNeeded(concreteCommand);
+                    ICommand transformedCommand = this.commandTransformator.TransformCommnadIfNeeded(concreteCommand);
 
                     switch (transformedCommand)
                     {

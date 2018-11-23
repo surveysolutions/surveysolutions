@@ -1,6 +1,4 @@
-﻿using WB.UI.Headquarters.Utils;
-
-namespace WB.UI.Headquarters.Models.Reports
+﻿namespace WB.UI.Headquarters.Models.Reports
 {
     public class DevicesInterviewersModel
     {
