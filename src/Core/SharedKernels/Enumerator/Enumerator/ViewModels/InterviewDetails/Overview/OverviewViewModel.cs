@@ -121,6 +121,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             audioService?.Dispose();
             nameViewModel?.Dispose();
             Name?.Dispose();
+
+            foreach (var item in Items ?? new List<OverviewNode>())
+            {
+                item?.Dispose();
+            }
         }
     }
 }

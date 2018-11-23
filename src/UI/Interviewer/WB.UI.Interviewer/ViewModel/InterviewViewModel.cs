@@ -62,6 +62,7 @@ namespace WB.UI.Interviewer.ViewModel
             else
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                this.Dispose();
             }
         }
 
