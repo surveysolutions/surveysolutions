@@ -224,12 +224,7 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>მთლიანი შეგროვებული მონაცემები შეინახება ამ მოწყობილობის არქივაციის ფაილში</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>დავაარქივოთ ყველა მიღებული ინფორმაცია</value>
-  </data>
+
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>როდის არის შენახული:</value>
   </data>

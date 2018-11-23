@@ -237,7 +237,4 @@
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
     <value>从平板电脑上记录第一个答案到点击完成之间的时间。</value>
   </data>
-  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>从调查员在平板电脑上记录第一个答案到点击“完成”按钮的平均时间。</value>
-  </data>
 </root>

@@ -20,12 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 {
     public class StatusDurationReport : IStatusDurationReport
     {
-        private readonly PostgresPlainStorageSettings plainStorageSettings;
+        private readonly UnitOfWorkConnectionSettings plainStorageSettings;
 
         private const string InterviewsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportInterviews.sql";
         private const string AssignmentsScriptName = "WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.StatusDurationReportAssignments.sql";
 
-        public StatusDurationReport(PostgresPlainStorageSettings plainStorageSettings)
+        public StatusDurationReport(UnitOfWorkConnectionSettings plainStorageSettings)
         {
             this.plainStorageSettings = plainStorageSettings;
         }

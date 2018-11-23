@@ -431,7 +431,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         private UserImportService CreateUserImportServiceWithRepositories(
             IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository = null,
             IPlainStorageAccessor<UserToImport> importUsersRepository = null, IAuthorizedUser authorizedUser = null,
-            ISessionProvider sessionProvider = null, HqUser[] dbUsers = null, UsersImportTask usersImportTask = null, params UserToImport[] usersToImport)
+            HqUser[] dbUsers = null, UsersImportTask usersImportTask = null, params UserToImport[] usersToImport)
         {
             var csvReader = Create.Service.CsvReader(new[]
             {

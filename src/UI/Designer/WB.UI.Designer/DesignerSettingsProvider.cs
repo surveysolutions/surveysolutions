@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Net.Configuration;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer

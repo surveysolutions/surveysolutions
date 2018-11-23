@@ -1,10 +1,9 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+
 @{
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
-    var isCurrentUserObserver = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsObserver;
+    var isCurrentUserObserver = DependencyResolver.Current.GetService<IAuthorizedUser>().IsObserver;
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || 

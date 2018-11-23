@@ -9,7 +9,10 @@ using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(Label = "Preferences activity", NoHistory = false, Theme = "@style/GrayAppTheme")]
+    [Activity(Label = "Preferences activity", 
+        NoHistory = false, 
+        Theme = "@style/GrayAppTheme",
+        Exported = false)]
     public class PrefsActivity : PreferenceActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -20,7 +23,7 @@ namespace WB.UI.Interviewer.Activities
 
         protected override bool IsValidFragment(string fragmentName)
         {
-            return false;
+            return typeof(PrefsFragment).Name.Equals(fragmentName);
         }
 
         public class PrefsFragment : PreferenceFragment

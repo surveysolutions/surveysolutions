@@ -14,24 +14,27 @@ using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Filters
 {
+    public static class HttpActionContextExtensions
+    {
+        public static T Resolve<T>(this HttpActionContext actionContext) where T : class
+        {
+            var requestScope = actionContext.Request.GetDependencyScope();
+            return requestScope.GetService(typeof(T)) as T;
+        }
+    }
+
     public class UnderConstructionHttpFilter : System.Web.Http.Filters.ActionFilterAttribute
     {
         public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
+            var status = actionContext.Resolve<UnderConstructionInfo>();
+
             if (status.Status != UnderConstructionStatus.Finished)
             {
-                if (CoreSettings.IsDevelopmentEnvironment)
+                actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
                 {
-                    status.Completed.Wait(cancellationToken);
-                }
-                else
-                {
-                    actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
-                    {
-                        Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
-                    };
-                }
+                    Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
+                };
                 return Task.CompletedTask;
             }
 
@@ -45,14 +48,11 @@ namespace WB.UI.Shared.Web.Filters
         {
             if (filterContext.Controller.GetType() != typeof(UnderConstructionController))
             {
-                var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
+                var status = DependencyResolver.Current.GetService<UnderConstructionInfo>();
 
                 if (status.Status != UnderConstructionStatus.Finished)
                 {
-                    if (CoreSettings.IsDevelopmentEnvironment)
-                        status.Completed.Wait();
-                    else
-                        filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
+                    filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
                     return;
                 }
             }

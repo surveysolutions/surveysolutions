@@ -9,7 +9,7 @@ namespace WB.Tests.Abc.Storage
     internal class SqliteInmemoryStorage<TEntity, TKey> : SqlitePlainStorage<TEntity, TKey> where TEntity : class, IPlainStorageEntity<TKey>, new()
     {
         public SqliteInmemoryStorage() : base(
-            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true), openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex),
+            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true, null), openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex),
             Substitute.For<ILogger>())
         {
         }

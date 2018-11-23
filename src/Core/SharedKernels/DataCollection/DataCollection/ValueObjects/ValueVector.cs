@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 {
@@ -136,25 +134,17 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 
             var result = (IEnumerable<T>) values.Select(v =>
             {
-                try
-                {
+                
                     if (typeof (T) == typeof (Guid))
                         return Guid.Parse(v);
 
                     throw new Exception("Not supported type");
-                }
-                catch (Exception e)
-                {
-                    Logger.Error("parse exception", e);
-                    throw;
-                }
+                
             }).ToList();
 
             return new ValueVector<T>(result);
         }
 
         private const string Empty = "Empty";
-
-        static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ValueVector<T>>();
     }
 }

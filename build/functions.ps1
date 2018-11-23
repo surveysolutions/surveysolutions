@@ -354,6 +354,10 @@ function GetVersionString([string]$Project) {
     $file = get-childitem $Project
     $file = Join-Path $file.directoryname ".version"
     $ret = Get-Content $file
+    $ver = [Version]$ret # will fail if invalid string
+    if ($ver.Build -eq 0) { # we don't want trailing zero in the third position
+        $ret = "{0}.{1}" -f $ver.Major, $ver.Minor
+    }
     return $ret
 }
 

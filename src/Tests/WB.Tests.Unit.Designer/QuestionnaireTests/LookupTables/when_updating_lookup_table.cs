@@ -1,8 +1,9 @@
 using System;
+using System.Linq;
 using FluentAssertions;
-using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             questionnaire.QuestionnaireDocument.LookupTables.Keys.Should().Contain(lookupTableId);
 
         [NUnit.Framework.Test] public void should_contain_lookuptable_with_tablename_specified () =>
-            questionnaire.QuestionnaireDocument.LookupTables.ToEnumerable().Should().Contain(t => t.Key == lookupTableId && t.Value.TableName == "newtable");
+            questionnaire.QuestionnaireDocument.LookupTables.SingleOrDefault(t => t.Key == lookupTableId && t.Value.TableName == "newtable").Should().NotBeNull();
 
         private static UpdateLookupTable updateLookupTable;
         private static Questionnaire questionnaire;

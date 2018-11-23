@@ -31,7 +31,6 @@
 
     <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                  local:MvxBind="ShowProgress IsInProgress; Visible IsInProgress;" />
-
     <FrameLayout
       android:animateLayoutChanges="false"
       android:id="@+id/interviewCurrentStepFrame"

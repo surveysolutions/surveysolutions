@@ -25,5 +25,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             //assert 
             Assert.That(rosterId, Is.Null);
         }
+
+        [Test]
+        public void when_questionnaire_is_configured_to_hide_disabled_members__Should_hide()
+        {
+            // arrange
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Entity.Group(groupId: Id.gA),
+                Create.Entity.Question(questionId: Id.gB),
+                Create.Entity.StaticText(publicKey: Id.gC)
+            });
+            questionnaireDocument.HideIfDisabled = true;
+
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
+
+            // act
+            var groupIsHidden = plainQuestionnaire.ShouldBeHiddenIfDisabled(Id.gA);
+            var questionIsHidden = plainQuestionnaire.ShouldBeHiddenIfDisabled(Id.gB);
+            var staticTextHidden = plainQuestionnaire.ShouldBeHiddenIfDisabled(Id.gC);
+
+            //assert 
+            Assert.That(groupIsHidden);
+            Assert.That(questionIsHidden);
+            Assert.That(staticTextHidden);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -56,8 +57,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
             {
                 writer.WriteField("interview__id");
-                writer.WriteField("#");
-                writer.WriteField("action");
+                writer.WriteField("order");
+                writer.WriteField("event");
                 writer.WriteField("responsible");
                 writer.WriteField("role");
                 writer.WriteField("timestamp");
@@ -100,7 +101,29 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                
             }
 
+            WriteDoFile();
+
             logger.LogInformation("Completed paradata export for " + settings);
+        }
+
+        private void WriteDoFile()
+        {
+            var doFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.do");
+            var doFileContent = new StringBuilder();
+
+            doFileContent.Append("insheet using \"paradata.tab\", tab case names");
+
+            doFileContent.Append("label variable interview__id `\"Unique 32-character long identifier of the interview\"'");
+            doFileContent.Append("label variable order `\"Sequential event number within each interview\"'");
+            doFileContent.Append("label variable event `\"Type of event happened\"'");
+            doFileContent.Append("label variable responsible `\"Login name of the person who initiated the event\"'");
+            doFileContent.Append("label variable role `\"System role of the person who initiated the event\"'");
+            doFileContent.Append("label variable timestamp `\"Date and time when the event happened\"'");
+            doFileContent.Append("label variable offset `\"Timezone offset relative to UTC\"'");
+            doFileContent.Append("label variable parameters `\"Event-specific parameters\"'");
+            doFileContent.Append("");
+
+            this.fileSystemAccessor.WriteAllText(doFilePath, doFileContent.ToString());
         }
 
         void WriteParadata(ICsvWriterService writer, InterviewHistoryView paradata)
@@ -111,7 +134,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 {
                     var record = paradata.Records[i];
 
-                    writer.WriteField(paradata.InterviewId);
+                    writer.WriteField(paradata.InterviewId.FormatGuid());
                     writer.WriteField(i + 1);
                     writer.WriteField(record.Action);
                     writer.WriteField(record.OriginatorName);
