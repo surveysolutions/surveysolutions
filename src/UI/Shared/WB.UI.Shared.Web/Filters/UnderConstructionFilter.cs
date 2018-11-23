@@ -31,17 +31,10 @@ namespace WB.UI.Shared.Web.Filters
 
             if (status.Status != UnderConstructionStatus.Finished)
             {
-                if (CoreSettings.IsDevelopmentEnvironment)
+                actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
                 {
-                    status.Completed.Wait(cancellationToken);
-                }
-                else
-                {
-                    actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
-                    {
-                        Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
-                    };
-                }
+                    Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
+                };
                 return Task.CompletedTask;
             }
 
@@ -59,10 +52,7 @@ namespace WB.UI.Shared.Web.Filters
 
                 if (status.Status != UnderConstructionStatus.Finished)
                 {
-                    if (CoreSettings.IsDevelopmentEnvironment)
-                        status.Completed.Wait();
-                    else
-                        filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
+                    filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
                     return;
                 }
             }
