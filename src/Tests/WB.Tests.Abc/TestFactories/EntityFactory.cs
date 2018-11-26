@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -2000,7 +2001,24 @@ namespace WB.Tests.Abc.TestFactories
                 RAMFreeInBytes = 50 * 1024 * 1024,
                 RAMTotalInBytes = 1024 * 1024 * 1024,
                 StorageFreeInBytes = 5 * 1024 * 1024,
-                StorageTotalInBytes = 2000 * 1024 * 1024
+                StorageTotalInBytes = 2000 * 1024 * 1024,
+                Statistics = new SyncStatistics
+                {
+                    UploadedInterviewsCount = 0,
+                    DownloadedInterviewsCount = 0,
+                    DownloadedQuestionnairesCount = 0,
+                    RejectedInterviewsOnDeviceCount  = 0,
+                    NewInterviewsOnDeviceCount  = 0,
+                    NewAssignmentsCount = 0,
+                    RemovedAssignmentsCount = 0,
+                    RemovedInterviewsCount  = 0,
+                    AssignmentsOnDeviceCount  = 0,
+                    TotalUploadedBytes  = 0,
+                    TotalDownloadedBytes = 0,
+                    TotalConnectionSpeed = 0,
+                    TotalSyncDuration  = TimeSpan.FromSeconds(5),
+                    SyncFinishDate = DateTime.UtcNow
+                }
             };
         }
 
@@ -2285,6 +2303,23 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewId = interviewId,
                 Latitude = latitude,
                 Longitude = longitude
+            };
+        }
+
+        public InterviewerDailyTrafficUsage InterviewerDailyTrafficUsage(
+            int uploadedBytes = 0,
+            int downloadedBytes = 0,
+            int year = 0,
+            int month = 0,
+            int day = 0)
+        {
+            return new InterviewerDailyTrafficUsage
+            {
+                UploadedBytes = uploadedBytes,
+                DownloadedBytes = downloadedBytes,
+                Year = year,
+                Month = month,
+                Day = day
             };
         }
 
