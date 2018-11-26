@@ -1,0 +1,23 @@
+<Project>
+   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+   <PropertyGroup>
+      <!-- Reading version from .version file into ProductVersion -->
+      <WBVersionInfoFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)../'))</WBVersionInfoFile>
+      <ProductVersion>$([System.IO.File]::ReadAllText($(WBVersionInfoFile)))</ProductVersion>
+
+      <!-- Setting default build number to zero for local dev builds -->
+      <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
+      
+      <!-- Cleaning up branch name into more readable version info, removing ticket number from version
+      i.e, output will be like `18.12.0-remove-transaction.22345` -->
+      <_suffixCleanupRegex>(?:(?:k|K)(?:p|P)-\d+(?:-|_))?(?&lt;suffix&gt;[-_\w\d]+)</_suffixCleanupRegex>
+      <CleanSuffix>$([System.Text.RegularExpressions.Regex]::Match($(VersionSuffix), $(_suffixCleanupRegex)).Groups['suffix'].Value)</CleanSuffix>      
+      <CleanSuffix Condition=" '$(CleanSuffix)' == '' ">$(VersionSuffix)</CleanSuffix>
+
+      <!-- Combine version property. Leaving clean version for release branch -->
+      <Version>$(ProductVersion)-$(CleanSuffix).$(BuildNumber)</Version>
+      <Version Condition=" '$(CleanSuffix)' == '' ">$(ProductVersion)-dev.$(BuildNumber)</Version>
+      <Version Condition=" '$(CleanSuffix)' == 'release' ">$(ProductVersion).$(BuildNumber)</Version>
+   </PropertyGroup>
+</Project>
