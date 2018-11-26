@@ -5,6 +5,7 @@ using System.Reflection;
 using Android.Support.V4.Widget;
 using Android.Widget;
 using Autofac;
+using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
@@ -90,7 +91,7 @@ namespace WB.UI.Supervisor
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
