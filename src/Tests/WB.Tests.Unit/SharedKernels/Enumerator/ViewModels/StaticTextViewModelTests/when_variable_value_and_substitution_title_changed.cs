@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository, registry);
-            viewModel.Init(statefullInterview.EventSourceId.FormatGuid(), staticTextIdentity, null);
+            viewModel.Init(statefullInterview.EventSourceId.FormatGuid(), staticTextIdentity, Create.Other.NavigationState());
 
             statefullInterview.AnswerNumericRealQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty,
                 DateTime.UtcNow, 2);

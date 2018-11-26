@@ -15,7 +15,7 @@
               HideKeyboardOnClick .; 
               Text Answer; 
               Watermark Localization('DateQuestion_Hint'); 
-              DateChange AnswerCommand;
+              DateChange .;
               Tag Format('Answer_{0}', Identity)" />
 
       <include layout="@layout/interview_question__remove_button_input" />

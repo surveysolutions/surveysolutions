@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     internal class when_authorizing_non_existant_user : ApiBasicAuthAttributeTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            attribute = CreateApiBasicAuthAttribute((userName, password)=> false);
+            attribute = CreateApiBasicAuthAttribute();
 
-            actionContext = CreateActionContext();
+            actionContext = CreateActionContext((userName, password) => false);
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
             BecauseOf();
         }

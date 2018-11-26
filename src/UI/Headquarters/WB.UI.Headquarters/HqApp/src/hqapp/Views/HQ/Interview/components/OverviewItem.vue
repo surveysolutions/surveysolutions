@@ -100,12 +100,7 @@ export default {
         },
         parseGps(str)
         {
-            const regex = new RegExp('^(?<lat>[0-9\.-]*),(?<lon>[0-9\.-]*)\[.+\].*', 'gis');
-            let matches = regex.exec(str);
-            return {
-                latitude: matches["groups"].lat,
-                longitude: matches["groups"].lon,
-            };            
+            return JSON.parse(str || "{ latitude: 0, longitude: 0 }");
         }
     },
     computed: {
@@ -118,7 +113,7 @@ export default {
         googleMapPosition() {
             let coords = this.parseGps(this.item.Answer);
             return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
-                + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
+                + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
                 + `&key=${this.$config.googleApiKey}`
         },
         audioRecordPath() {

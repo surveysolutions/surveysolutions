@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {

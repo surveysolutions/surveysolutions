@@ -13,5 +13,7 @@
         public double MinScale { set; get; }
 
         public int Wkid { set; get; }
+
+        public string WkText { set; get; }
     }
 }

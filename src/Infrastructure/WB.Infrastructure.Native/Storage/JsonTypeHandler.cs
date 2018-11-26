@@ -12,7 +12,7 @@ namespace WB.Infrastructure.Native.Storage
     {
         public override T Parse(object value) => value == null || value == DBNull.Value
             ? default(T)
-            : ServiceLocator.Current.GetInstance<IEntitySerializer<T>>().Deserialize(value as string);
+            : new EntitySerializer<T>().Deserialize(value as string);
 
         public override void SetValue(IDbDataParameter parameter, T value)
         {
@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Native.Storage
                 parameter.Value = DBNull.Value;
             else
             {
-                parameter.Value = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>().Serialize(value);
+                parameter.Value = new EntitySerializer<T>().Serialize(value);
                 ((NpgsqlParameter)parameter).NpgsqlDbType = NpgsqlDbType.Jsonb;
             }
         }

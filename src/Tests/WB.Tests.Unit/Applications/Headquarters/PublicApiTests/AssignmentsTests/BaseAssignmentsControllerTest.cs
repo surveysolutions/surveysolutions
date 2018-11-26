@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
@@ -47,7 +48,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.questionnaireStorage.Object,
                 Mock.Of<IAuditLog>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
-                this.interviewImportService.Object);
+                this.interviewImportService.Object,
+                Mock.Of<ICommandTransformator>());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();

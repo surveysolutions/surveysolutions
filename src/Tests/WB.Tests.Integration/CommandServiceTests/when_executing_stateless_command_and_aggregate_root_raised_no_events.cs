@@ -4,6 +4,7 @@ using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -39,14 +40,44 @@ namespace WB.Tests.Integration.CommandServiceTests
             repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetStateless(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
-            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object);
+            eventStore = new Mock<IEventStore>();
+            eventStore.Setup(x => x.Store(Moq.It.IsAny<UncommittedEventStream>())).Returns(
+                (UncommittedEventStream eventStream) =>
+                {
+                    if (eventStream.IsNotEmpty)
+                    {
+                        List<CommittedEvent> result = new List<CommittedEvent>();
+
+                        var events = new Queue<CommittedEvent>();
+
+                        foreach (var evnt in eventStream)
+                        {
+                            var committedEvent = new CommittedEvent(eventStream.CommitId,
+                                evnt.Origin,
+                                evnt.EventIdentifier,
+                                eventStream.SourceId,
+                                evnt.EventSequence,
+                                evnt.EventTimeStamp,
+                                events.Count,
+                                evnt.Payload);
+                            events.Enqueue(committedEvent);
+                            result.Add(committedEvent);
+                        }
+
+                        return new CommittedEventStream(eventStream.SourceId, result);
+                    }
+
+                    return new CommittedEventStream(eventStream.SourceId);
+                });
+
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, eventStore:eventStore.Object);
             BecauseOf();
         }
 
         private void BecauseOf() =>
             commandService.Execute(new DoNothingCommand(), null);
 
-        [NUnit.Framework.Test] public void should_commit_events () =>
+        [NUnit.Framework.Test] public void should_store_events () =>
             eventBusMock.Verify(
                 bus => bus.CommitUncommittedEvents(aggregateFromRepository, null),
                 Times.Once);
@@ -66,5 +97,6 @@ namespace WB.Tests.Integration.CommandServiceTests
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static Aggregate aggregateFromRepository;
         private static Mock<IEventBus> eventBusMock = new Mock<IEventBus>();
+        private static Mock<IEventStore> eventStore;
     }
 }

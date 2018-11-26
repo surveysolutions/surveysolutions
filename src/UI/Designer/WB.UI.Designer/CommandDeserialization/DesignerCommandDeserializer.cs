@@ -9,12 +9,17 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.CommandDeserialization
 {
     internal class DesignerCommandDeserializer : CommandDeserializer
     {
+        public DesignerCommandDeserializer(ILogger logger) : base(logger)
+        {
+        }
+
         protected override Dictionary<string, Type> KnownCommandTypes
         {
             get

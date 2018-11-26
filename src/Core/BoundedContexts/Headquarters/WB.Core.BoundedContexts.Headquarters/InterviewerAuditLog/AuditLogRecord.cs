@@ -1,9 +1,7 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {

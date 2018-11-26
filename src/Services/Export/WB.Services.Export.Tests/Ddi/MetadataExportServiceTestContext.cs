@@ -33,7 +33,7 @@ namespace WB.Services.Export.Tests.Ddi
 
             var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();
             questionnaireExportStructureFactory.Setup(x =>
-                    x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireDocument>()))
+                    x.CreateQuestionnaireExportStructure(It.IsAny<QuestionnaireDocument>()))
                 .Returns(new QuestionnaireExportStructure());
 
             questionnaireExportStructureFactory.Setup(x =>

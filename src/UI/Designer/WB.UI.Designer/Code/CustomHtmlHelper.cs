@@ -2,8 +2,6 @@
 
 namespace WB.UI.Designer
 {
-    using System;
-    using System.Security.Policy;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
