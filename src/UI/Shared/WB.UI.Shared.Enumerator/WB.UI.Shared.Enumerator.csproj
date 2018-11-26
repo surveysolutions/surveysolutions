@@ -48,6 +48,9 @@
       <HintPath>..\..\..\..\packages\Autofac.4.8.1\lib\netstandard1.1\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Extras.MvvmCross, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Autofac.Extras.MvvmCross.5.0.0\lib\netstandard2.0\Autofac.Extras.MvvmCross.dll</HintPath>
+    </Reference>
     <Reference Include="ExoPlayer.Core, Version=2.8.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Xam.Plugins.Android.ExoPlayer.Core.2.8.8\lib\monoandroid81\ExoPlayer.Core.dll</HintPath>
     </Reference>
@@ -390,7 +393,6 @@
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="CustomServices\VibrationService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
-    <Compile Include="Autofac\MvxIoCProvider.cs" />
     <Compile Include="OfflineSync\Services\Entities\Payload.cs" />
     <Compile Include="OfflineSync\Services\Implementation\ConnectionsApiLimits.cs" />
     <Compile Include="OfflineSync\Services\Implementation\GoogleApiClientFactory.cs" />
