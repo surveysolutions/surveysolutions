@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -62,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
 
-        private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
+        private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> entityTypeToViewModelMap =
             new Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>>
             {
                 { InterviewEntityType.StaticTextModel, Load<StaticTextViewModel> },
@@ -94,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel> },
             };
 
-        private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
+        private static T Load<T>() where T : class => Mvx.IoCProvider.IoCConstruct<T>();
 
         public InterviewViewModelFactory(
             IQuestionnaireStorage questionnaireRepository,
@@ -252,14 +253,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             string interviewId,
             NavigationState navigationState)
         {
-            if (!this.EntityTypeToViewModelMap.ContainsKey(entityModelType))
+            if (!this.entityTypeToViewModelMap.ContainsKey(entityModelType))
             {
-                var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[InterviewEntityType.StaticTextModel].Invoke();
+                var text = (StaticTextViewModel)this.entityTypeToViewModelMap[InterviewEntityType.StaticTextModel].Invoke();
                 text.Text.PlainText = entityModelType.ToString();
                 return text;
             }
 
-            Func<IInterviewEntityViewModel> viewModelActivator = this.EntityTypeToViewModelMap[entityModelType];
+            Func<IInterviewEntityViewModel> viewModelActivator = this.entityTypeToViewModelMap[entityModelType];
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);

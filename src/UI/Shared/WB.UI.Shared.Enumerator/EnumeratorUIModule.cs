@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -63,7 +64,7 @@ namespace WB.UI.Shared.Enumerator
             
             registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();
-            registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
+            registry.Bind<IServiceLocator, AutofacServiceLocatorAdapter>();
             registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(
                 typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                 typeof(EnumeratorSharedKernelModule).Assembly));
