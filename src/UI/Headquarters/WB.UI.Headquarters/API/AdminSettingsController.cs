@@ -12,10 +12,15 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : ApiController
     {
-        public class SettingsModel
+        public class GlobalNoticeModel
         {
             public string GlobalNotice { get; set; }
+        }
+
+        public class AutoUpdateModel
+        {
             public bool InterviewerAutoUpdatesEnabled { get; set; }
+            public int? HowManyMajorReleaseDontNeedUpdate { get; set; }
         }
 
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
@@ -28,13 +33,18 @@ namespace WB.UI.Headquarters.API
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
         }
 
-        public HttpResponseMessage Get() => Request.CreateResponse(new SettingsModel
+        [HttpGet]
+        public HttpResponseMessage GlobalNoticeSettings()
         {
-            GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
-            InterviewerAutoUpdatesEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)?.AutoUpdateEnabled ?? true
-        });
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return Request.CreateResponse(new GlobalNoticeModel
+            {
+                GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
+            });
+        }
 
-        public HttpResponseMessage Post([FromBody] SettingsModel message)
+        [HttpPost]
+        public HttpResponseMessage GlobalNoticeSettings([FromBody] GlobalNoticeModel message)
         {
             if (string.IsNullOrEmpty(message?.GlobalNotice))
             {
@@ -47,8 +57,29 @@ namespace WB.UI.Headquarters.API
                 this.appSettingsStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
+            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+        }
+
+        [HttpGet]
+        public HttpResponseMessage AutoUpdateSettings()
+        {
+            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
+            return Request.CreateResponse(new AutoUpdateModel
+            {
+                InterviewerAutoUpdatesEnabled = interviewerSettings?.AutoUpdateEnabled ?? true,
+                HowManyMajorReleaseDontNeedUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue
+            });
+        }
+
+        [HttpPost]
+        public HttpResponseMessage AutoUpdateSettings([FromBody] AutoUpdateModel message)
+        {
             this.interviewerSettingsStorage.Store(
-                new InterviewerSettings {AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled},
+                new InterviewerSettings
+                {
+                    AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
+                    HowManyMajorReleaseDontNeedUpdate = message.HowManyMajorReleaseDontNeedUpdate
+                },
                 AppSetting.InterviewerSettings);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});

@@ -130,7 +130,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<UsersImportTask>().Run();
             serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
-            serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Configure();
+            serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
