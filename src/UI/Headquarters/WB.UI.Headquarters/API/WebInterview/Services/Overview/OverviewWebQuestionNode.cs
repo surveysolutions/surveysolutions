@@ -13,7 +13,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services.Overview
             if (treeQuestion.IsArea)
                 ControlType = "area";
             if (treeQuestion.IsGps)
+            {
                 ControlType = "map";
+                var gps = treeQuestion.GetAsInterviewTreeGpsQuestion()?.GetAnswer()?.Value;
+                if (gps != null)
+                {
+                    this.Answer = $@"{{ ""latitude"": {gps.Latitude}, ""longitude"": {gps.Longitude} }}";
+                }
+            }
+
             if (treeQuestion.IsMultimedia)
             {
                 ControlType = "image";
