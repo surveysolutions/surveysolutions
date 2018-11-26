@@ -42,7 +42,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
     /// </summary>
     public class MvxIoCProvider : MvxSingleton<IMvxIoCProvider>, IMvxIoCProvider
     {
-        readonly IContainer _container;
+        readonly IContainer container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacMvxIocProvider"/> class.
@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
             if (container == null)
                 throw new ArgumentNullException("container");
 
-            _container = container;
+            this.container = container;
         }
 
         public object IoCConstruct(Type type, params object[] arguments)
@@ -103,7 +103,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
             if (action == null)
                 throw new ArgumentNullException("action");
 
-            _container.ComponentRegistry.Registered += (sender, args) =>
+            container.ComponentRegistry.Registered += (sender, args) =>
             {
                 if (args.ComponentRegistration.Services.OfType<TypedService>().Any(x => x.ServiceType == type))
                     action();
@@ -164,7 +164,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            return _container.IsRegistered(type);
+            return container.IsRegistered(type);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var service = new TypedService(type);
             IComponentRegistration registration;
-            if (!_container.ComponentRegistry.TryGetRegistration(service, out registration))
+            if (!container.ComponentRegistry.TryGetRegistration(service, out registration))
                 throw new ComponentNotRegisteredException(service);
 
             if (registration.Sharing != InstanceSharing.Shared || !(registration.Lifetime is RootScopeLifetime))
@@ -244,15 +244,6 @@ namespace WB.UI.Shared.Enumerator.Autofac
             return Resolve(type);
         }
 
-        /// <summary>
-        /// Resolves a service instance of a specified type.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The <see cref="System.Type"/> of the service to resolve.
-        /// </typeparam>
-        /// <returns>
-        /// The resolved instance of type <typeparamref name="T"/>.
-        /// </returns>
         public T IoCConstruct<T>() where T : class
         {
             return (T)IoCConstruct(typeof(T));
@@ -356,7 +347,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var cb = new ContainerBuilder();
             cb.RegisterInstance(theObject).As(tInterface).AsSelf().SingleInstance();
-            cb.Update(_container);
+            cb.Update(container);
         }
 
         /// <summary>
@@ -382,7 +373,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var cb = new ContainerBuilder();
             cb.Register(cc => theConstructor()).As(tInterface).AsSelf().SingleInstance();
-            cb.Update(_container);
+            cb.Update(container);
         }
 
         /// <summary>
@@ -428,7 +419,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var cb = new ContainerBuilder();
             cb.Register(c => constructor()).AsSelf();
-            cb.Update(_container);
+            cb.Update(container);
         }
 
         /// <summary>
@@ -454,7 +445,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var cb = new ContainerBuilder();
             cb.Register(c => constructor()).As(t).AsSelf();
-            cb.Update(_container);
+            cb.Update(container);
         }
 
         /// <summary>
@@ -486,7 +477,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
 
             var cb = new ContainerBuilder();
             cb.RegisterType(tTo).As(tFrom).AsSelf();
-            cb.Update(_container);
+            cb.Update(container);
         }
 
         /// <summary>
@@ -520,7 +511,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            return _container.Resolve(type);
+            return container.Resolve(type);
         }
 
         /// <summary>
@@ -537,7 +528,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
         /// </returns>
         public bool TryResolve<T>(out T resolved) where T : class
         {
-            return _container.TryResolve(out resolved);
+            return container.TryResolve(out resolved);
         }
 
         /// <summary>
@@ -557,7 +548,7 @@ namespace WB.UI.Shared.Enumerator.Autofac
             if (type == null)
                 throw new ArgumentNullException("type");
 
-            return _container.TryResolve(type, out resolved);
+            return container.TryResolve(type, out resolved);
         }
     }
 }
