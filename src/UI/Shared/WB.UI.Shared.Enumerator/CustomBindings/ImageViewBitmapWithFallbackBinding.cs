@@ -4,6 +4,7 @@ using Android.Util;
 using Android.Widget;
 using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -17,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (value != null)
             {
-                var displayMetrics = GetDisplayMetrics();
+                var displayMetrics = GetDisplayMetrics(control);
                 var minSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
 
                 // Calculate inSampleSize
@@ -83,10 +84,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             control.LayoutParameters = lp;
         }
 
-        private static DisplayMetrics GetDisplayMetrics()
+        private static DisplayMetrics GetDisplayMetrics(ImageView control)
         {
-            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-            var defaultDisplay = mvxAndroidCurrentTopActivity.Activity.WindowManager.DefaultDisplay;
+            var defaultDisplay = control.GetActivity().WindowManager.DefaultDisplay;
             DisplayMetrics displayMetrics = new DisplayMetrics();
             defaultDisplay.GetMetrics(displayMetrics);
             return displayMetrics;
