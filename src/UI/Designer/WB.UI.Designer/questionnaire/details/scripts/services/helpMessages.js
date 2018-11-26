@@ -21,7 +21,8 @@
                 isTimestamp: $i18next.t('HelpIsTimestamp'),
                 variableDescription: $i18next.t('HelpVariableDescription'),
                 newComment: $i18next.t('HelpNewComment'),
-                combobox:  $i18next.t('HelpCombobox')
+                combobox: $i18next.t('HelpCombobox'),
+                defaultDate: $i18next.t('HelpDefaultDate')
             };
 
             helpService.getHelpMessage = function(key) {

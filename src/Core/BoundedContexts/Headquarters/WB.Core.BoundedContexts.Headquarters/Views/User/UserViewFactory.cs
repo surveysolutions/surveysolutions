@@ -17,18 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     internal class UserViewFactory : IUserViewFactory
     {
         private readonly IUserRepository userRepository;
-        private readonly IInterviewerProfileFactory interviewerProfileFactory;
-
-        protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
-
-        protected IInterviewerProfileFactory InterviewerProfileFactory => this.interviewerProfileFactory ?? ServiceLocator.Current.GetInstance<IInterviewerProfileFactory>();
-
+        
         public UserViewFactory(
-            IUserRepository userRepository, 
-            IInterviewerProfileFactory interviewerProfileFactory)
+            IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-            this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         public UserViewFactory()
@@ -37,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         
         public UserView GetUser(UserViewInputModel input)
         {
-            var repository = this.UserRepository;
+            var repository = this.userRepository;
             var query = repository.Users.Select(user => new UserQueryItem
             {
                 PublicKey = user.Id,
@@ -94,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var supervisorRoleId = UserRoles.Supervisor.ToUserId();
 
-            return this.UserRepository.Users
+            return this.userRepository.Users
                 .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
                 .Select(x => new UserToVerify
                 {
@@ -125,14 +118,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.UserRepository.Users)
+                .Invoke(this.userRepository.Users)
                 .ToList();
 
             return new UserListView
             {
                 Page = pageIndex,
                 PageSize = pageSize,
-                TotalCount = query.Invoke(this.UserRepository.Users).Count(),
+                TotalCount = query.Invoke(this.userRepository.Users).Count(),
                 Items = filteredUsers.ToList()
             };
         }
@@ -152,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
-                .Invoke(this.UserRepository.Users)
+                .Invoke(this.userRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
                 {
@@ -163,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var result = new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
+                TotalCountByQuery = query.Invoke(this.userRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
 
@@ -172,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public IEnumerable<InterviewerFullApiView> GetInterviewers(Guid supervisorId)
         {
-            var repository = this.UserRepository;
+            var repository = this.userRepository;
 
             Func<IQueryable<HqUser>, IQueryable<InterviewerFullApiView>> query = allUsers =>
             {
@@ -206,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             bool archived, int? apkBuildVersion, Guid? supervisorId,
             InterviewerFacet facet = InterviewerFacet.None)
         {
-            var repository = this.UserRepository;
+            var repository = this.userRepository;
 
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query = allUsers =>
             {
@@ -253,7 +246,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         public Guid[] GetInterviewersIds(string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None)
         {
-            var repository = this.UserRepository;
+            var repository = this.userRepository;
 
             Func<IQueryable<HqUser>, IQueryable<Guid>> query = allUsers =>
             {
@@ -359,12 +352,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
-                .Invoke(this.UserRepository.Users)
+                .Invoke(this.userRepository.Users)
                 .ToList();
 
             return new ResponsibleView
             {
-                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
+                TotalCountByQuery = query.Invoke(this.userRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
         }
@@ -377,7 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             var filteredUsers = query
                 .PagedAndOrderedQuery(nameof(HqUser.UserName), 1, pageSize)
-                .Invoke(this.UserRepository.Users)
+                .Invoke(this.userRepository.Users)
                 .ToList()
                 .Select(x => new UsersViewItem
                 {
@@ -387,7 +380,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new UsersView
             {
-                TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
+                TotalCountByQuery = query.Invoke(this.userRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
         }
@@ -410,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             orderBy = string.IsNullOrWhiteSpace(orderBy) ? nameof(HqUser.UserName) : orderBy;
 
             List<SupervisorsQueryItem> usersPage = query.PagedAndOrderedQuery(orderBy, pageIndex, pageSize)
-                .Invoke(this.UserRepository.Users)
+                .Invoke(this.userRepository.Users)
                 .ToList();
 
             var filteredUsers = usersPage.Select(x => new SupervisorsItem
@@ -426,7 +419,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
             return new SupervisorsView
             {
-                TotalCount = query.Invoke(this.UserRepository.Users).Count(),
+                TotalCount = query.Invoke(this.userRepository.Users).Count(),
                 Items = filteredUsers
             };
         }

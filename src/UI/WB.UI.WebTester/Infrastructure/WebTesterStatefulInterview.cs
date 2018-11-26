@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.WebTester.Services;
 
@@ -14,14 +13,18 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
 
         public WebTesterStatefulInterview(
-            IQuestionnaireStorage questionnaireRepository, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
             ISubstitutionTextFactory substitutionTextFactory,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
-            IInterviewTreeBuilder treeBuilder) 
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
+            IInterviewTreeBuilder treeBuilder,
+            IServiceLocator serviceLocator
+            ) 
+            : base(
+                substitutionTextFactory, 
+                treeBuilder
+                )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
+            base.ServiceLocatorInstance = serviceLocator;
         }
 
         public override List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
-using Esri.ArcGISRuntime.UI.Controls;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -36,18 +36,9 @@ namespace WB.UI.Headquarters.Implementation.Maps
                     ArcGISTiledLayer layer = new ArcGISTiledLayer(titleCache);
 
                     await layer.LoadAsync();
-                    var properties = new MapProperties()
-                    {
-                        Wkid = titleCache.TileInfo.SpatialReference.Wkid,
-                        XMax = titleCache.FullExtent.XMax,
-                        XMin = titleCache.FullExtent.XMin,
-
-                        YMax = titleCache.FullExtent.YMax,
-                        YMin = titleCache.FullExtent.YMin,
-
-                        MaxScale = layer.MaxScale,
-                        MinScale = layer.MinScale
-                    };
+                    var properties = GetProperties(titleCache.FullExtent);
+                    properties.MaxScale = layer.MaxScale;
+                    properties.MinScale = layer.MinScale;
 
                     return properties;
                 }
@@ -60,18 +51,9 @@ namespace WB.UI.Headquarters.Implementation.Maps
                         var map =  package.Maps.First();
                         await map.LoadAsync();
 
-                        var properties = new MapProperties()
-                        {
-                            Wkid = package.Item.Extent.SpatialReference.Wkid,
-                            XMax = package.Item.Extent.XMax,
-                            XMin = package.Item.Extent.XMin,
-
-                            YMax = package.Item.Extent.YMax,
-                            YMin = package.Item.Extent.YMin,
-
-                            MaxScale = map.MaxScale,
-                            MinScale = map.MinScale
-                        };
+                        var properties = GetProperties(package.Item.Extent);
+                        properties.MaxScale = map.MaxScale;
+                        properties.MinScale = map.MinScale;
 
                         return properties;
                     }
@@ -87,22 +69,17 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
                         //add error display
                         if (!newRasterLayer.SpatialReference.IsProjected)
-                            throw new ArgumentException($"Geotif is not projected. {pathToMap}");
-
-                        var properties = new MapProperties()
+                            throw new ArgumentException($"Geotiff is not projected. {this.fileSystemAccessor.GetFileName(pathToMap)}");
+                        
+                        if (newRasterLayer.FullExtent.SpatialReference.Wkid == 0)
                         {
-                            Wkid = newRasterLayer.SpatialReference.Wkid,
-                            XMax = newRasterLayer.FullExtent.XMax,
-                            XMin = newRasterLayer.FullExtent.XMin,
-
-                            YMax = newRasterLayer.FullExtent.YMax,
-                            YMin = newRasterLayer.FullExtent.YMin,
-
-                            MaxScale = newRasterLayer.MaxScale,
-                            MinScale = newRasterLayer.MinScale
-                        };
-
-                        return properties;
+                            SpatialReference reference = new SpatialReference(102100);
+                            var projectedExtent = GeometryEngine.Project(newRasterLayer.FullExtent, reference);
+                                
+                            return GetProperties(projectedExtent.Extent);
+                        }
+                        else
+                            return GetProperties(newRasterLayer.FullExtent);
                     }
                     finally
                     {
@@ -123,6 +100,21 @@ namespace WB.UI.Headquarters.Implementation.Maps
                     throw new ArgumentException("Unsupported map type");
             }
             
+        }
+
+        private MapProperties GetProperties(Envelope envelope)
+        {
+            return new MapProperties()
+            {
+                Wkid = envelope.SpatialReference.Wkid,
+                //WkText = envelope.SpatialReference.WkText,
+
+                XMax = envelope.XMax,
+                XMin = envelope.XMin,
+
+                YMax = envelope.YMax,
+                YMin = envelope.YMin
+            };
         }
 
         public bool IsEngineEnabled()

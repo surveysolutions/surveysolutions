@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
+    android:layout_width="match_parent"
     local:MvxBind="HideKeyboardOnClick .">
 
+    <include layout="@layout/interview__attachment_multimedia" />
 
-  <ImageView style="@style/Interview_Attachment_Picture"
-          android:scaleType="centerCrop"
-          android:adjustViewBounds="true"
-          local:MvxBind="BitmapWithFallback Attachment.Content; 
-                         Visible Attachment.IsImage;"/>
-  
+    <TextView style="@style/Interview_Question_Show_Pdf"
+              local:MvxBind="Text Localization('Interview_ShowPdf'); 
+                     Click Attachment.ShowPdf; 
+                     Visible Attachment.IsPdf;
+                     Tag Format('Show_Pdf_{0}', Identity)"/>
 </LinearLayout>

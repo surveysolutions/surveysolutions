@@ -13,6 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected override void Context()
         {
             this.SetupInterviwer(Create.Entity.HqUser(role: UserRoles.Interviewer, passwordHashSha1: "open sesame"));
+
             this.HashCompatibilityProvider.Setup(h => h.IsInSha1CompatibilityMode()).Returns(true);
 
             this.attribute = this.CreateApiBasicAuthAttribute();

@@ -11,6 +11,9 @@
                 <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
                 </template>
             </h4>
+            <div class="answer" v-if="hasAttachment">
+                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true" customCssClass="static-text-image"></wb-attachment>
+            </div>
             <div class="answer" v-if="item.State != 3">
                 <div v-if="item.controlType === 'image'">
                     <wb-attachment :filename="item.Answer" :previewOnly="true"></wb-attachment>
@@ -149,6 +152,12 @@ export default {
             if (!this.hasDate) return;
             let local = moment.utc(this.item.AnswerTimeUtc).local();
             return local.format("HH:mm");
+        },
+        attachmentContentId(){
+            return this.item.attachmentContentId;
+        },
+        hasAttachment(){
+            return this.attachmentContentId != null;
         }
     },
     components: {

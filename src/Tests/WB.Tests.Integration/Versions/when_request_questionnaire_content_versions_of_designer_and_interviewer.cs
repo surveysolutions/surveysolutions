@@ -1,6 +1,7 @@
 using FluentAssertions;
+using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Tests.Integration.Versions
@@ -8,7 +9,7 @@ namespace WB.Tests.Integration.Versions
     internal class when_request_questionnaire_content_versions_of_designer_and_interviewer
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            designerEngineVersionService = new DesignerEngineVersionService();
+            designerEngineVersionService = new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
             questionnaireContentVersionProvider = new QuestionnaireContentVersionProvider();
             BecauseOf();
         }

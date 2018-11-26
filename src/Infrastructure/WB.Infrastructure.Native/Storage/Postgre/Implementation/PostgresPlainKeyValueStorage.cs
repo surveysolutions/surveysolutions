@@ -8,17 +8,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     internal class PostgresPlainKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
         IPlainKeyValueStorage<TEntity>, IDisposable where TEntity : class
     {
-        private readonly IPlainSessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
 
-        public PostgresPlainKeyValueStorage(IPlainSessionProvider sessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> serializer)
-            : base(connectionSettings.ConnectionString, connectionSettings.SchemaName, logger, serializer)
+        public PostgresPlainKeyValueStorage(IUnitOfWork sessionProvider, UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> serializer)
+            : base(connectionSettings.ConnectionString, connectionSettings.PlainStorageSchemaName, logger, serializer)
         {
             this.sessionProvider = sessionProvider;
         }
 
         protected override object ExecuteScalar(DbCommand command)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.sessionProvider.Session;
             command.Connection = session.Connection; 
             session.Transaction.Enlist(command);
             return command.ExecuteScalar();
@@ -26,7 +26,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         protected override int ExecuteNonQuery(DbCommand command)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.sessionProvider.Session;
             command.Connection = session.Connection;
             session.Transaction.Enlist(command);
             return command.ExecuteNonQuery();

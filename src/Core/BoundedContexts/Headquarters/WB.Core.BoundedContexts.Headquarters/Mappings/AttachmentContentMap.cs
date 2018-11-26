@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             this.Property(x => x.ContentType);
             this.Property(x => x.Content);
+            this.Property(x => x.FileName);
         }
     }
 }

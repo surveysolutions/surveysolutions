@@ -1,12 +1,12 @@
 ﻿using System;
 using Moq;
-using NHibernate;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 {
     internal class TeamInterviewsFactoryTestContext 
     {
-        public static ITeamInterviewsFactory CreateTeamInterviewsFactory(
+        public ITeamInterviewsFactory CreateTeamInterviewsFactory(
             out PostgreReadSideStorage<InterviewSummary> reader,
             out PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader)
         {
@@ -25,66 +25,29 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
                 typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap)
             }, true, schemaName: "readside");
 
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+                
+            reader = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
-            pgSqlConnection = new NpgsqlConnection(connectionString);
-            pgSqlConnection.Open();
-
-            reader = new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
-            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
-
-            return new TeamInterviewsFactory(
-                reader ?? CreateInterviewSummaryRepository());
+            return new TeamInterviewsFactory(reader);
         }
-        protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
-        {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
-
-            pgSqlConnection = new NpgsqlConnection(connectionString);
-            pgSqlConnection.Open();
-
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
-        }
-
-        protected static PostgreReadSideStorage<QuestionAnswer> CreateQuestionAnswerRepository()
-        {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
-
-            pgSqlConnection = new NpgsqlConnection(connectionString);
-            pgSqlConnection.Open();
-
-            return new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
-        }
-
+        
         protected static void ExecuteInCommandTransaction(Action action)
         {
-            try
-            {
-                postgresTransactionManager.BeginCommandTransaction();
-
-                action();
-
-                postgresTransactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                postgresTransactionManager.RollbackCommandTransaction();
-                throw;
-            }
+            action();
         }
 
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.AcceptChanges();
+            UnitOfWork.Dispose();
             DatabaseTestInitializer.DropDb(connectionString);
         }
 
-        protected static NpgsqlConnection pgSqlConnection;
-        protected static CqrsPostgresTransactionManager postgresTransactionManager;
-        private static string connectionString;
+        private string connectionString;
+        protected IUnitOfWork UnitOfWork;
     }
 }

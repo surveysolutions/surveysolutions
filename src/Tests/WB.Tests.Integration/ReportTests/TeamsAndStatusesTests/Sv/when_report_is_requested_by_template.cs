@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
@@ -35,11 +34,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
+        public void BecauseOf() => report = reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
-        }));
+        });
 
         [NUnit.Framework.Test] public void should_count_statuses_by_questionnaire () => report.Items.First().CompletedCount.Should().Be(2);
 

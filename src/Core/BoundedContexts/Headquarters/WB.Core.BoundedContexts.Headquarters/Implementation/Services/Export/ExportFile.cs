@@ -1,4 +1,3 @@
-using System.IO;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export

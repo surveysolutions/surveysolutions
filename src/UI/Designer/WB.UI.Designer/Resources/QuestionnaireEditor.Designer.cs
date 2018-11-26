@@ -709,6 +709,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This date will be shown as started date for selection on a tablet.
+        /// </summary>
+        public static string HelpDefaultDate {
+            get {
+                return ResourceManager.GetString("HelpDefaultDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A logical expression that is calculated depending on the answers on the other questions..
         /// </summary>
         public static string HelpExpression {
@@ -1168,6 +1177,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected file is not supported as attachment.
+        /// </summary>
+        public static string NotSupportedAttachment {
+            get {
+                return ResourceManager.GetString("NotSupportedAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {
@@ -1353,6 +1371,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionDecimalPlaces {
             get {
                 return ResourceManager.GetString("QuestionDecimalPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default date.
+        /// </summary>
+        public static string QuestionDefaultDate {
+            get {
+                return ResourceManager.GetString("QuestionDefaultDate", resourceCulture);
             }
         }
         
@@ -2104,7 +2131,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to can be used to use an attachment in the questionnaire add a static text element and specify the name in its attachment property.
+        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{name}} in its attachment property.
         /// </summary>
         public static string SideBarAttachmentsEmptyLine3 {
             get {

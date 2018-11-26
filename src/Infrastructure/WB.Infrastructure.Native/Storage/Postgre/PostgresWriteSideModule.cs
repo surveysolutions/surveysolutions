@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
-using WB.Infrastructure.Native.Resources;
+using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -23,8 +24,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
-            registry.BindToMethod<IEventStore>(context => context.Get<IHeadquartersEventStore>());
+            registry.BindWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindWithConstructorArgument<IEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -36,11 +37,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 status.Message = Modules.MigrateDb;
                 DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
+
+                status.ClearMessage();
             }
             catch (Exception exc)
             {
+                status.Error(Modules.ErrorDuringRunningMigrations);
+
                 LogManager.GetLogger("migration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
-                throw;
+                throw new InitializationException(Subsystem.Database, null, exc);
             }
 
             return Task.CompletedTask;

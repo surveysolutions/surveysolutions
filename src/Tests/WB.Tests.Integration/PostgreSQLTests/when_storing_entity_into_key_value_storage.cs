@@ -1,8 +1,6 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
-using Moq;
-using NHibernate;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -21,31 +19,42 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [NUnit.Framework.OneTimeSetUp]
         public void context()
         {
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
+                new List<Type>()
+                {
+                    typeof(TestPersistedClass)
+                },
+                true, null);
 
-            var sessionProvider = Mock.Of<ISessionProvider>(x => x.GetSession() == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+            
             storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestPersistedClass>(
-                sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
+                sessionProvider: UnitOfWork, 
+                postgreConnectionSettings: new UnitOfWorkConnectionSettings
+                {
+                    ConnectionString = ConnectionStringBuilder.ConnectionString,
+                    ReadSideSchemaName = null
+                });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
+
             BecauseOf();
         }
 
-        public void BecauseOf() { storage.Store(new TestPersistedClass { Date = storedDate }, usedId); }
+        public void BecauseOf() => storage.Store(new TestPersistedClass { Date = storedDate }, usedId); 
 
         [NUnit.Framework.Test] public void should_read_item_that_was_stored() => storage.GetById(usedId).Date.Should().Be(storedDate);
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.Dispose();
         }
 
         static PostgresReadSideKeyValueStorage<TestPersistedClass> storage;
         static DateTime storedDate;
         static string usedId;
-        static NpgsqlConnection pgSqlConnection;
+        protected IUnitOfWork UnitOfWork;
     }
 }
 

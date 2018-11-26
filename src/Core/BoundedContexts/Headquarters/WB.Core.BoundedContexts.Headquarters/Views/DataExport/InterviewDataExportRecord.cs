@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport

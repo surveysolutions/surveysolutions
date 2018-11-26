@@ -4,10 +4,8 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Api.Attributes;
-using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
