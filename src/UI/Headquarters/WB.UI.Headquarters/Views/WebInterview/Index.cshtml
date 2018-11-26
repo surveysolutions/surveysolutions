@@ -1,6 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.UI.Headquarters.Controllers
-@{ Layout = null; }
+﻿@{ Layout = null; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +34,7 @@
         signalrPath: '@Url.Content(@"~/signalr/hubs")',
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
-        appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
+        appVersion: '@(DependencyResolver.Current.GetService<WB.Core.Infrastructure.Versions.IProductVersion>())',
 		googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
         googleMapsApiBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
 		googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',

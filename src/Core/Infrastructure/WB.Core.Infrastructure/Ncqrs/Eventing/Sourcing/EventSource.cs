@@ -150,7 +150,7 @@ namespace Ncqrs.Eventing.Sourcing
         private int GetNextSequence()
         {
             // 628426 31 Feb 2011 - the following absolutely needed to ensure correct sequencing, as incorrect versions were being passed to event store
-            // TODO: I don't think this should stay here
+            // I don't think this should stay here
             if (_initialVersion > 0 && _currentVersion == 0)
             {
                 _currentVersion = _initialVersion;

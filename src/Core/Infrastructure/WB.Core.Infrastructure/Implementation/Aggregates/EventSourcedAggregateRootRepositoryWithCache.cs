@@ -12,9 +12,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     internal class EventSourcedAggregateRootRepositoryWithCache : EventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache
     {
         private readonly IAggregateLock aggregateLock;
-        private readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
+        private static readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> MemoryCache 
+            = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
 
-        public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, IAggregateLock aggregateLock)
+        public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, 
+            IDomainRepository repository, IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
             this.aggregateLock = aggregateLock;
@@ -33,7 +35,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
                 if (aggregateRoot != null)
                 {
-                    this.memoryCache[aggregateType] = aggregateRoot;
+                    MemoryCache[aggregateType] = aggregateRoot;
                 }
 
                 return aggregateRoot;
@@ -42,7 +44,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         private IEventSourcedAggregateRoot GetFromCache(Type aggregateType, Guid aggregateId)
         {
-            bool foundInCache = this.memoryCache.TryGetValue(aggregateType, out var cachedAggregate);
+            bool foundInCache = MemoryCache.TryGetValue(aggregateType, out var cachedAggregate);
             if (!foundInCache)
                 return null;
 
@@ -59,7 +61,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         public void CleanCache()
         {
-            this.memoryCache.Clear();
+            MemoryCache.Clear();
         }
     }
 }

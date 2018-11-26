@@ -5,7 +5,7 @@
 @using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Extensions
 @{
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var authorizedUser = DependencyResolver.Current.GetService<IAuthorizedUser>();
 }
 @functions{
     public string TokenHeaderValue()
@@ -116,7 +116,7 @@
 				&copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
 			</div>
 			<div class="text-right">
-				@(ServiceLocator.Current.GetInstance<IProductVersion>
+				@(DependencyResolver.Current.GetService<IProductVersion>
 					())
 					@if (AppSettings.IsDebugBuilded)
 					{
@@ -129,11 +129,11 @@
 					}
 					<span>|</span>
 					<a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
-					@if (ServiceLocator.Current.GetInstance<IVersionCheckService>
+					@if (DependencyResolver.Current.GetService<IVersionCheckService>
 						().DoesNewVersionExist())
 						{
 						<div>
-							<span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+							<span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
 						</div>
 						}
 			</div>

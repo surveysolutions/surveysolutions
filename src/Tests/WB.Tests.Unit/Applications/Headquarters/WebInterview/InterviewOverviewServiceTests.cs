@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 {
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, true).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, null, true).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(5));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(Id.g9.FormatGuid()));
@@ -60,10 +61,48 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, false).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, null, false).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(1));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(interviewerQuestionIdentity.ToString()));
+        }
+
+        [Test]
+        public void when_creating_gps_overview_node_with_answer()
+        {
+            // arrange
+            var identity = Identity.Create(Id.g1, RosterVector.Empty);
+
+            var statefulInterview = Setup.StatefulInterview(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.GpsCoordinateQuestion(identity.Id)));
+
+            statefulInterview.AnswerGeoLocationQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, 11.11, 22.22, 5, 6, DateTimeOffset.Now);
+
+            // act
+            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview);
+
+            // assert
+            Assert.That(overviewNode.Answer, Is.EqualTo(@"{ ""latitude"": 11.11, ""longitude"": 22.22 }"));
+            Assert.That(overviewNode.ControlType, Is.EqualTo("map"));
+        }
+
+        [Test]
+        public void when_creating_multimedia_overview_node_with_answer()
+        {
+            // arrange
+            var identity = Identity.Create(Id.g1, RosterVector.Empty);
+
+            var statefulInterview = Setup.StatefulInterview(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.MultimediaQuestion(identity.Id)));
+
+            statefulInterview.AnswerPictureQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, "file.name");
+
+            // act
+            var overviewNode = new OverviewWebQuestionNode(statefulInterview.GetQuestion(identity), statefulInterview);
+
+            // assert
+            Assert.That(overviewNode.Answer, Is.EqualTo($@"?interviewId={statefulInterview.Id}&questionId=11111111111111111111111111111111&filename=file.name"));
+            Assert.That(overviewNode.ControlType, Is.EqualTo("image"));
         }
 
         private static InterviewOverviewService CreateInterviewOverviewService() => new InterviewOverviewService();

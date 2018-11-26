@@ -7,6 +7,7 @@ using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -42,11 +43,11 @@ namespace WB.Tests.Integration.CommandServiceTests
             var eventBusMock = Mock.Get(eventBus);
 
             eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()))
-                        .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
-                        {
-                            constructedAggregateId = aggregate.EventSourceId;
-                            return IntegrationCreate.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
-                        });
+                .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
+                {
+                    constructedAggregateId = aggregate.EventSourceId;
+                    return IntegrationCreate.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
+                });
 
             eventBusMock
                 .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
@@ -60,7 +61,41 @@ namespace WB.Tests.Integration.CommandServiceTests
             IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
-            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
+            var eventStore = new Mock<IEventStore>();
+            eventStore.Setup(x => x.Store(Moq.It.IsAny<UncommittedEventStream>())).Returns(
+                (UncommittedEventStream eventStream) =>
+                {
+                    if (eventStream.IsNotEmpty)
+                    {
+                        List<CommittedEvent> result = new List<CommittedEvent>();
+
+                        var events = new Queue<CommittedEvent>();
+
+                        foreach (var evnt in eventStream)
+                        {
+                            var committedEvent = new CommittedEvent(eventStream.CommitId,
+                                evnt.Origin,
+                                evnt.EventIdentifier,
+                                eventStream.SourceId,
+                                evnt.EventSequence,
+                                evnt.EventTimeStamp,
+                                events.Count,
+                                evnt.Payload);
+                            events.Enqueue(committedEvent);
+                            result.Add(committedEvent);
+                        }
+
+                        constructedAggregateId = eventStream.SourceId;
+
+                        return new CommittedEventStream(eventStream.SourceId, result);
+                    }
+
+                    return new CommittedEventStream(eventStream.SourceId);
+                });
+
+
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, 
+                snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator, eventStore : eventStore.Object);
 
             BecauseOf();
         }

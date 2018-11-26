@@ -52,7 +52,7 @@
                     @ajaxComlpete="isLoading = false"
                     @page="resetSelection"
                     :selectable="showSelectors">
-            <div class="panel panel-table"
+            <div class="panel panel-table" id="pnlAssignmentsContextActions"
                  v-if="selectedRows.length">
                 <div class="panel-body">
                     <input class="double-checkbox-white"
@@ -64,15 +64,15 @@
                         {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
                     </label>
 
-                    <button class="btn btn-lg btn-primary"
+                    <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
                             v-if="showArchive && config.isHeadquarter"
                             @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
 
-                    <button class="btn btn-lg btn-primary"
+                    <button class="btn btn-lg btn-primary" id="btnAssignSelected"
                             v-if="!showArchive"
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
-                    <button class="btn btn-lg btn-danger"
+                    <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                             v-if="!showArchive && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
                 </div>

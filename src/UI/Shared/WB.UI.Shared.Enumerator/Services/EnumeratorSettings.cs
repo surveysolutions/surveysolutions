@@ -88,6 +88,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
         public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
+        public bool IsSupportedWebViewer => Build.VERSION.SdkInt > BuildVersionCodes.Kitkat;
 
         public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 

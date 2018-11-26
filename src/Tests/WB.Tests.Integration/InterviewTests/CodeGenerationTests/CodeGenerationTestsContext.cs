@@ -187,7 +187,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             };
         }
 
-        public static int LatestQuestionnaireVersion() => new DesignerEngineVersionService().LatestSupportedVersion;
+        public static int LatestQuestionnaireVersion() => new DesignerEngineVersionService(Mock.Of<IAttachmentService>()).LatestSupportedVersion;
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(Guid questionId, Guid questionInRosterId)
         {

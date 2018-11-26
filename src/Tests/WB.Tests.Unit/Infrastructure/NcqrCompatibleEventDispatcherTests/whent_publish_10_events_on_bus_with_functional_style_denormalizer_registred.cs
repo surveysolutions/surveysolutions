@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -12,11 +13,16 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred : NcqrCompatibleEventDispatcherTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
             var ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
             functionalStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IFunctionalEventHandler>();
 
-            ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance(Moq.It.IsAny<Type>())).Returns(functionalStyleEventHandlerMock.Object);
+
+            ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(serviceLocator:serviceLocator.Object);
             ncqrCompatibleEventDispatcher.Register(ncqrsStyleDenormalizerMock.Object);
 
             eventSourceId = Guid.NewGuid();
@@ -26,7 +32,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         public void BecauseOf() => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
 
-        [NUnit.Framework.Test] public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream () =>
+        [NUnit.Framework.Test]
+        public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream() =>
             functionalStyleEventHandlerMock.Verify(
                 handler => handler.Handle(Moq.It.Is<IEnumerable<IPublishableEvent>>(events => events.SequenceEqual(eventsToPublish)), eventSourceId),
                 Times.Once());

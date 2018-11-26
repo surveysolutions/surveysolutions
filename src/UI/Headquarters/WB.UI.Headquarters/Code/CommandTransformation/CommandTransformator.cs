@@ -18,10 +18,19 @@ using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.UI.Headquarters.Code.CommandTransformation
 {
-    public class CommandTransformator
+    public class CommandTransformator : ICommandTransformator
     {
-        private static IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-        private static IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
+        private readonly IAuthorizedUser authorizedUser;
+        private readonly IQuestionnaireStorage questionnaireStorage;
+        private IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator;
+
+        public CommandTransformator(IAuthorizedUser authorizedUser, IQuestionnaireStorage questionnaireStorage, 
+            IInterviewUniqueKeyGenerator interviewUniqueKeyGenerator)
+        {
+            this.authorizedUser = authorizedUser;
+            this.questionnaireStorage = questionnaireStorage;
+            this.interviewUniqueKeyGenerator = interviewUniqueKeyGenerator;
+        }
 
         public ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null)
         {
@@ -78,7 +87,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 .ToList();
 
             Guid interviewId = Guid.NewGuid();
-            var interviewKey = ServiceLocator.Current.GetInstance<IInterviewUniqueKeyGenerator>().Get();
+            var interviewKey = interviewUniqueKeyGenerator.Get();
 
             var resultCommand = new CreateInterview(interviewId,
                 authorizedUser.Id,
@@ -93,7 +102,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return resultCommand;
         }
 
-        public static KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer, IQuestionnaire questionnaire)
+        public KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer, IQuestionnaire questionnaire)
         {
             string answerAsString = answer.Answer.ToString();
             AbstractAnswer answerValue = null;

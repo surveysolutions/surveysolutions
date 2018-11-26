@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Web.Modules
 {
     public static class ApiControllerExtensions
     {
-        public static HttpResponseMessage BinaryResponseMessageWithEtag(this ApiController controller, byte[] resultFile)
+        public static HttpResponseMessage BinaryResponseMessageWithEtag(this ApiController controller, byte[] resultFile, string contentType = "image/png")
         {
             var stringEtag = GetEtagValue(resultFile);
             var etag = $"\"{stringEtag}\"";
@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Web.Modules
                 Content = new ByteArrayContent(resultFile)
             };
 
-            response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(@"image/png");
+            response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
             response.Headers.ETag = new EntityTagHeaderValue(etag);
             return response;
         }

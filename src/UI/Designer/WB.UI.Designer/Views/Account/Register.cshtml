@@ -1,5 +1,4 @@
-﻿@using Recaptcha
-@using WB.UI.Designer
+﻿@using WB.UI.Designer
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
@@ -42,7 +41,7 @@
     if (AppSettings.Instance.IsReCaptchaEnabled)
     {
         <div style="line-height: 0">
-            @Html.RenderCaptcha()
+            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
         </div>
     }
 

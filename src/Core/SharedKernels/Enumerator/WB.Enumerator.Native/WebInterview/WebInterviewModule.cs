@@ -18,7 +18,7 @@ namespace WB.Enumerator.Native.WebInterview
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
-            registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
+            registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
@@ -54,7 +54,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
 
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true, Resolver = resolver });
         }
 
         internal class SignalRHubMinifier : IJavaScriptMinifier

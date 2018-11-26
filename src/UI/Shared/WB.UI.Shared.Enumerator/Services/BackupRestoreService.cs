@@ -89,8 +89,8 @@ namespace WB.UI.Shared.Enumerator.Services
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
-                    new[] {".log", ".dll", ".back", ".info", ".dat"});
-
+                    new[] {".log", ".dll", ".back", ".info", ".dat", ".attachment"});
+                
                 var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
 
                 this.EncryptKeyStore(backupFolderFilesPath);

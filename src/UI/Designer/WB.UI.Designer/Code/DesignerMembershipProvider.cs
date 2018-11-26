@@ -1,7 +1,7 @@
 ﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 
-namespace WB.UI.Designer
+namespace WB.UI.Designer.Code
 {
     /// <summary>
     ///     The designer membership provider.

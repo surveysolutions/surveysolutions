@@ -46,7 +46,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnLowMemory()
         {
-            this.TryWriteMemoryInformationToLog("LowMemory natification");
+            this.TryWriteMemoryInformationToLog("LowMemory notification");
             base.OnLowMemory();
         }
 

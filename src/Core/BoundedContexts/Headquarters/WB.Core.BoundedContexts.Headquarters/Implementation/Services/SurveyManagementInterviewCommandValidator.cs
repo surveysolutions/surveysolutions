@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,8 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
-
-        private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
 
         public SurveyManagementInterviewCommandValidator(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, 
@@ -47,23 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !this.TransactionManagerProvider.GetTransactionManager().TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-            }
-            try
-            {
-                return this.interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                }
-            }
+            return this.interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
         }
 
         public void Validate(StatefulInterview aggregate, SynchronizeInterviewEventsCommand command)

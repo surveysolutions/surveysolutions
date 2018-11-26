@@ -186,6 +186,22 @@ namespace WB.Services.Export.Services
                 };
 
                 meta.Variables[index].VarLabel = variableLabels.Label;
+
+
+                if (variableLabels.VariableValueLabels.Any())
+                {
+                    var valueSet = new ValueSet();
+
+                    foreach (var variableValueLabel in variableLabels.VariableValueLabels)
+                    {
+                        double value;
+                        if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
+                            out value))
+                            valueSet.Add(value, variableValueLabel.Label);
+                    }
+
+                    meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
+                }
             }
         }
 
