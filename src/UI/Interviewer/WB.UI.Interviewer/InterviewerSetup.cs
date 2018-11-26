@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using Android.Widget;
 using Autofac;
+using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -38,9 +38,7 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer
@@ -92,7 +90,7 @@ namespace WB.UI.Interviewer
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
