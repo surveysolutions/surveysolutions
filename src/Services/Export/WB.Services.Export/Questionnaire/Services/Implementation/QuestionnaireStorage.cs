@@ -27,7 +27,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId)
         {
-            return await this.memoryCache.GetOrCreateAsync(tenant + "/" + questionnaireId,
+            return await this.memoryCache.GetOrCreateAsync($"{nameof(QuestionnaireStorage)}:{tenant}:{questionnaireId}",
                 async entry =>
                 {
                     var questionnaireDocument = await this.tenantApi.For(tenant).GetQuestionnaireAsync(questionnaireId);

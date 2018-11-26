@@ -99,7 +99,7 @@
                                     if (this.Model.RequireCaptcha)
                                     {
                                         <div class="form-group">
-                                            @Html.RenderCaptcha()
+                                            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
                                         </div>
                                     }
                                     <div class="form-actions">
@@ -133,7 +133,7 @@
                 <div class="interviewer-app">
                     <a href="@Url.Action("Index", "Download")" class="get-interviewer-app">
                         <span>@Pages.GetLatestApp</span>
-                        <span class="version">Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                        <span class="version">Version @(DependencyResolver.Current.GetService<IProductVersion>())</span>
                     </a>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                 &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
             </div>
             <div class="text-left">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+                @(DependencyResolver.Current.GetService<IProductVersion>())
                 @if (AppSettings.IsDebugBuilded)
                 {
                     <span id="build-config">[.NET Debug]</span>

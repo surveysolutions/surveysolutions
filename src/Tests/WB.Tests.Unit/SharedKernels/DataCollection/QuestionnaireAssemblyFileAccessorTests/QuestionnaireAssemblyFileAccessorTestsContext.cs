@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
     {
         protected static QuestionnaireAssemblyAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)
         {
-            return new QuestionnaireAssemblyAccessor(assemblyService ?? CreateIAssemblyService().Object);
+            return new QuestionnaireAssemblyAccessor(assemblyService ?? CreateIAssemblyService().Object, Mock.Of<ILogger>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

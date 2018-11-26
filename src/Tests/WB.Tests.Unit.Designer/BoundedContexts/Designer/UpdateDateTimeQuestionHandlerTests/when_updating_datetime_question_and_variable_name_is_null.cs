@@ -38,21 +38,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         private static string enablementCondition = null;
 
         private static readonly UpdateDateTimeQuestion command = new UpdateDateTimeQuestion(
-           questionnaireId: Guid.Parse("22222222222222222222222222222222"),
-           questionId: questionId,
-           isPreFilled: isPreFilled,
-           scope: scope,
-           responsibleId: responsibleId,
-           validationConditions: new List<ValidationCondition>(),
-           commonQuestionParameters: new CommonQuestionParameters
-           {
-               Title = title,
-               VariableName = null,
-               VariableLabel = null,
-               EnablementCondition = enablementCondition,
-               HideIfDisabled = false,
-               Instructions = instructions
-           },
-           isTimestamp: false);
+            questionnaireId: Guid.Parse("22222222222222222222222222222222"),
+            questionId: questionId,
+            isPreFilled: isPreFilled,
+            scope: scope,
+            responsibleId: responsibleId,
+            validationConditions: new List<ValidationCondition>(),
+            commonQuestionParameters: new CommonQuestionParameters
+            {
+                Title = title,
+                VariableName = null,
+                VariableLabel = null,
+                EnablementCondition = enablementCondition,
+                HideIfDisabled = false,
+                Instructions = instructions
+            },
+            isTimestamp: false,
+            defaultDate: null);
     }
 }

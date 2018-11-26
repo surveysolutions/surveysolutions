@@ -138,6 +138,20 @@ export default {
         };
     },
 
+    watch: {
+        questionnaireId(to) {
+            if (to == null) {
+                this.showHeatmap = false;
+            }
+        },
+
+        gpsQuestionId(to) {
+            if (to == null) {
+                this.showHeatmap = false;
+            }
+        }
+    },
+
     computed: {
         model() {
             return this.$config.model;
@@ -146,13 +160,16 @@ export default {
             return this.model.questionnaires;
         }
     },
+
     mounted() {
         this.setMapCanvasStyle();
         this.initializeMap();
 
-        if (this.questionnaires.length > 0)
+        if (this.questionnaires.length > 0) {
             this.selectQuestionnaire(this.questionnaires[0]);
+        }
     },
+
     methods: {
         setMapCanvasStyle() {
             $("body").addClass("map-report");
@@ -177,7 +194,7 @@ export default {
             this.reloadMarkersInBounds();
         },
 
-        selectQuestionnaire(value) {
+        async selectQuestionnaire(value) {
             this.questionnaireId = value;
 
             this.selectGpsQuestion(null);
@@ -185,30 +202,24 @@ export default {
 
             if (_.isNull(value)) return;
 
-            const self = this;
-            this.$http
-                .get(
-                    this.model.api.gpsQuestionsByQuestionnaireUrl +
-                        "/" +
-                        this.questionnaireId.key
-                )
-                .then(response => {
-                    self.gpsQuestions = response.data;
-                    if (self.gpsQuestions.length > 0) {
-                        if (self.gpsQuestions.length === 1) {
-                            self.selectGpsQuestion(self.gpsQuestions[0]);
-                        }
-                    } else {
-                        toastr.info(
-                            this.$t("MapReport.NoGpsQuestionsByQuestionnaire")
-                        );
-                    }
-                });
+            var response = await this.$http.get(
+                this.model.api.gpsQuestionsByQuestionnaireUrl +
+                    "/" +
+                    this.questionnaireId.key
+            );
+
+            this.gpsQuestions = response.data;
+            if (this.gpsQuestions.length > 0) {
+                if (this.gpsQuestions.length === 1) {
+                    this.selectGpsQuestion(this.gpsQuestions[0]);
+                }
+            } else {
+                toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
+            }
         },
 
         selectGpsQuestion(value) {
             this.gpsQuestionId = value;
-
             if (_.isNull(value)) {
                 this.readyToUpdate = false;
                 return;
@@ -259,7 +270,10 @@ export default {
                 if (this.gpsQuestionId != null) delayedReload();
             });
 
-            const delayedReload = _.debounce(() => this.reloadMarkersInBounds(), 50);
+            const delayedReload = _.debounce(
+                () => this.reloadMarkersInBounds(),
+                50
+            );
 
             this.map.addListener("bounds_changed", () => {
                 if (this.gpsQuestionId != null) delayedReload();
@@ -284,7 +298,10 @@ export default {
                     const extend = 20;
                     const radius = 60 + index * extend * ratio;
                     style.scaledSize = new google.maps.Size(radius, radius);
-                    style.anchor = new google.maps.Point(radius / 2, radius / 2);
+                    style.anchor = new google.maps.Point(
+                        radius / 2,
+                        radius / 2
+                    );
 
                     return {
                         label: {
@@ -304,8 +321,10 @@ export default {
                     self.map.setZoom(expand);
                     self.map.panTo(event.latLng);
                 } else {
-                    const interviewId = event.feature.getProperty("interviewId");
-                    
+                    const interviewId = event.feature.getProperty(
+                        "interviewId"
+                    );
+
                     self.$http
                         .post(self.model.api.interiewSummaryUrl, {
                             InterviewId: interviewId
@@ -376,12 +395,18 @@ export default {
         showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom();
 
+            if (this.questionnaireId == null || this.gpsQuestionId == null)
+                return;
+
             var request = {
                 Variable: this.gpsQuestionId.key,
                 QuestionnaireId: this.questionnaireId.key,
-                Zoom: (this.showHeatmap && zoom != -1) ? zoom + 3 : zoom,
-                east, north, west, south,
-                clientMapWidth:  this.map.getDiv().clientWidth
+                Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
+                east,
+                north,
+                west,
+                south,
+                clientMapWidth: this.map.getDiv().clientWidth
             };
 
             const self = this;
@@ -446,14 +471,26 @@ export default {
                         self.map.data.remove(toRemove[key]);
                     });
 
-                    if (extendBounds) {                    
-                        const bounds = response.data.InitialBounds;
+                    if (extendBounds) {
+                        if (this.totalAnswers === 0) {
+                            self.map.setZoom(1);
+                        } else {
+                            const bounds = response.data.InitialBounds;
 
-                        const sw = new google.maps.LatLng(bounds.South, bounds.West);
-                        const ne = new google.maps.LatLng(bounds.North, bounds.East);
-                        const latlngBounds = new google.maps.LatLngBounds(sw, ne);
-
-                        self.map.fitBounds(latlngBounds);
+                            const sw = new google.maps.LatLng(
+                                bounds.South,
+                                bounds.West
+                            );
+                            const ne = new google.maps.LatLng(
+                                bounds.North,
+                                bounds.East
+                            );
+                            const latlngBounds = new google.maps.LatLngBounds(
+                                sw,
+                                ne
+                            );
+                            self.map.fitBounds(latlngBounds);
+                        }
                     }
                 });
         }

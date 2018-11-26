@@ -58,6 +58,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -251,7 +252,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService();
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
         }
 
         public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
@@ -1215,7 +1216,7 @@ namespace WB.Tests.Unit.Designer
             IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
-                attachmentMetaStorage: attachmentMetaStorage);
+                attachmentMetaStorage: attachmentMetaStorage, videoConverter: Mock.Of<IVideoConverter>());
         }
 
         public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(
@@ -1396,7 +1397,7 @@ namespace WB.Tests.Unit.Designer
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
-                new DesignerEngineVersionService(),
+                new DesignerEngineVersionService(Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,

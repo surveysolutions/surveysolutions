@@ -1,5 +1,4 @@
-﻿@using Main.Core.Entities.SubEntities
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
 <script type="text/html" id="CreatedCountTemplate">
     <span data-bind="template: { name : 'statusTemplate', data: { Template : QuestionnaireId(), Version : QuestionnaireVersion(), Responsible: Responsible(), Count : CreatedCount(), Status : '@InterviewStatus.Created.ToString()' }}"></span>

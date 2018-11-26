@@ -35,7 +35,7 @@
                 },
                 config: {
                     syncQueue: {
-                        enabled: @(ServiceLocator.Current.GetInstance<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true" : "false"),
+                        enabled: @(DependencyResolver.Current.GetService<SyncSettings>().UseBackgroundJobForProcessingPackages ? "true" : "false"),
                         lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
                     },
                     basePath: '@Url.Content("~/")',
@@ -56,7 +56,7 @@
         basePath: '@Url.Content(@"~/")',
         imageGetBase: '@Url.Content("~/api/WebInterviewResources")',
         audioGet: '@Url.Content("~/Resource/AudioRecord")',
-        appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
+        appVersion: '@(DependencyResolver.Current.GetService<WB.Core.Infrastructure.Versions.IProductVersion>())',
         dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
         signalrPath: '@Url.Content("~/signalr/hubs")',
         supportedTransports: ["webSockets", "longPolling"]

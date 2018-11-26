@@ -1,6 +1,10 @@
 ﻿using Moq;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -21,18 +25,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            ICommandService commandService = null, 
            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null, 
            IQuestionnaireStorage questionnaireStorage = null,
-           IAssignmentsImportService interviewImportService = null)
+           IAssignmentsImportService interviewImportService = null,
+            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null)
         {
-            IInterviewsToDeleteFactory Factory() => interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>();
-
             Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
                 new DeleteQuestionnaireService(
-                    Factory,
+                    interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>(),
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
-                    Mock.Of<IAuditLog>());
+                    Mock.Of<IAuditLog>(),
+                    questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                    Mock.Of<IAssignmetnsDeletionService>(),
+                    lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
+                    questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                    new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()));
         }
     }
 }

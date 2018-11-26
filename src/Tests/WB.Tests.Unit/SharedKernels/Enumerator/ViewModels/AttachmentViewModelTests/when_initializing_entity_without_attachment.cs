@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         }
 
-        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
+        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
 
 
         [NUnit.Framework.Test] public void should_dont_call_attachment_content () =>
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel.IsImage.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_be_empty_attachment_content () => 
-            viewModel.Content.Should().BeNull();
+            viewModel.Image.Should().BeNull();
 
 
         static AttachmentViewModel viewModel;

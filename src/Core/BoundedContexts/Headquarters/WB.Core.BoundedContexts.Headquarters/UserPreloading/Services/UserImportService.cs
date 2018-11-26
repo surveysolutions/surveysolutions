@@ -16,7 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly IUserRepository userStorage;
         private readonly IUserImportVerifier userImportVerifier;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly ISessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
         private readonly UsersImportTask usersImportTask;
 
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             IUserRepository userStorage,
             IUserImportVerifier userImportVerifier,
             IAuthorizedUser authorizedUser,
-            ISessionProvider sessionProvider,
+            IUnitOfWork sessionProvider,
             UsersImportTask usersImportTask)
         {
             this.userPreloadingSettings = userPreloadingSettings;
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void SaveUsers(IList<UserToImport> usersToImport)
         {
-            var npgsqlConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
+            var npgsqlConnection = this.sessionProvider.Session.Connection as NpgsqlConnection;
 
             using (var writer = npgsqlConnection.BeginBinaryImport($"COPY  {UserToImportTableName} (login, email, fullname, password, phonenumber, role, supervisor) " +
                                                                    "FROM STDIN BINARY;"))
@@ -228,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             };
         }
 
-        public void RemoveAllUsersToImport() => this.sessionProvider.GetSession().Connection.Execute(
+        public void RemoveAllUsersToImport() => this.sessionProvider.Session.Connection.Execute(
             $"DELETE FROM {UserToImportTableName};" +
             $"DELETE FROM {UsersImportProcessTableName};");
 

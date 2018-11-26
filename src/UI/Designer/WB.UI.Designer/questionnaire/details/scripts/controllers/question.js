@@ -80,6 +80,7 @@
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
                 $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
                 $scope.activeQuestion.geometryType = question.geometryType;
+                $scope.activeQuestion.defaultDate = question.defaultDate;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -201,7 +202,8 @@
                             hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
                             yesNoView: $scope.activeQuestion.yesNoView,
                             isInteger: $scope.activeQuestion.isInteger,
-                            linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type
+                            linkedToType: $scope.activeQuestion.linkedToEntity == null ? null : $scope.activeQuestion.linkedToEntity.type,
+                            defaultDate: $scope.activeQuestion.defaultDate
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;

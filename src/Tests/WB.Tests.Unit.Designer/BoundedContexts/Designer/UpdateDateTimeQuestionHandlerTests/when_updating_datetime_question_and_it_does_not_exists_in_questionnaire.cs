@@ -60,6 +60,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 HideIfDisabled = false,
                 Instructions = instructions
             },
-            isTimestamp: false);
+            isTimestamp: false,
+            defaultDate: null);
     }
 }

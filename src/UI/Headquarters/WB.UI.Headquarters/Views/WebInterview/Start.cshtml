@@ -1,5 +1,4 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.WebInterview
-@using WB.Enumerator.Native.Resources
 @using WB.UI.Headquarters.Models.WebInterview
 @using WB.UI.Shared.Web.Captcha
 @model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
@@ -36,7 +35,7 @@
             </div>
         }
         <div class="form-group">
-            @Html.RenderCaptcha()
+            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
         </div>
     }
 

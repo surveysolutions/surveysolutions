@@ -25,7 +25,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
-        private IQuestionnaire GetCallerQuestionnaire()
+        protected IQuestionnaire GetCallerQuestionnaire()
         {
             var interview = this.GetCallerInterview();
             return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
