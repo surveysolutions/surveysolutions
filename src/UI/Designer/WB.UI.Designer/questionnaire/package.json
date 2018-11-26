@@ -8,10 +8,10 @@
     "test": "test"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
     "gulp-angular-embed-templates": "^2.3.0",
     "gulp-angular-templatecache": "^2.2.5",
     "gulp-append-prepend": "^1.0.4",
-    "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.0.0",
     "gulp-concat": "^2.6.1",
@@ -72,7 +72,7 @@
     "jquery-contextmenu": "^2.6.3",
     "jquery-mousewheel": "^3.1.13",
     "jquery-placeholder": "^2.3.1",
-    "jquery-validation": "^1.17.0",
+    "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "^3.2.6",
     "jquery.fancytree": "^2.24.0",
     "jquery.scrollto": "^2.1.2",
