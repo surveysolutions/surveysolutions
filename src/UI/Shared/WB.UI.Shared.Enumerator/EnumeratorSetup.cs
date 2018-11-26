@@ -17,12 +17,9 @@ using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Logging;
-using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -32,7 +29,6 @@ using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.ValueCombiners;
 using Xamarin.Controls;
 using BindingFlags = System.Reflection.BindingFlags;
@@ -78,8 +74,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            Mvx.Resolve<IMvxLogProvider>().GetLogFor("EnumeratorSetup").Error(exception, "UncaughtExceptionHandler");
-            Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
+            NLog.LogManager.GetCurrentClassLogger().Error(exception);
         }
 
         protected override void InitializeViewLookup()

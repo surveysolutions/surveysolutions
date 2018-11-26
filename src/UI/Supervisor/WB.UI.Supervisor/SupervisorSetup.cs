@@ -129,14 +129,12 @@ namespace WB.UI.Supervisor
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            var serviceLocator = ServiceLocator.Current;
-
             var status = new UnderConstructionInfo();
             status.Run();
 
             foreach (var module in modules)
             {
-                module.Init(serviceLocator, status).Wait();
+                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
             }
 
             status.Finish();

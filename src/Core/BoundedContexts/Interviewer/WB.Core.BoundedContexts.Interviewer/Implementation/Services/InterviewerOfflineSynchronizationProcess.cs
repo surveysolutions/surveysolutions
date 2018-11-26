@@ -32,11 +32,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAssignmentDocumentsStorage assignmentsStorage,
             IAuditLogService auditLogService, 
             IInterviewerSettings interviewerSettings, 
+            IDeviceInformationService deviceInformationService,
             IServiceLocator serviceLocator,
             IUserInteractionService userInteractionService) :
             base(synchronizationService, logger, httpStatistician, principal,
                 interviewViewRepository, auditLogService, interviewerSettings,
-                serviceLocator, userInteractionService, assignmentsStorage)
+                serviceLocator, deviceInformationService, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;

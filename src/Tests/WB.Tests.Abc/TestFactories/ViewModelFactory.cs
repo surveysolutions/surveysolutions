@@ -437,9 +437,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public WaitingForSupervisorActionViewModel WaitingForSupervisorActionViewModel(
             IDashboardItemsAccessor dashboardItemsAccessor = null,
-            IInterviewViewModelFactory viewModelFactory = null)
+            IInterviewViewModelFactory viewModelFactory = null,
+            IMvxMessenger messenger = null)
             => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
-                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
+                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory(),
+                messenger ?? Mock.Of<IMvxMessenger>());
 
         public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
             IPrincipal principal = null,

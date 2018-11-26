@@ -303,20 +303,24 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IEnumeratorSettings settings)
+            IEnumeratorSettings settings,
+            IServiceLocator serviceLocator = null)
         {
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<IEnumeratorSettings>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IEnumeratorSettings settings = null)
+            IEnumeratorSettings settings = null,
+            IServiceLocator serviceLocator = null)
         {
             return new SupervisorInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<IEnumeratorSettings>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public AllInterviewsFactory AllInterviewsFactory(
@@ -426,6 +430,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogService>(),
+                Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>());
         }
@@ -451,6 +456,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IInterviewerSettings>(),
+                Mock.Of<IDeviceInformationService>(),
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IUserInteractionService>());
         }
@@ -933,6 +939,7 @@ namespace WB.Tests.Abc.TestFactories
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>(),
+                Mock.Of<IDeviceInformationService>(),
                 Mock.Of<IAssignmentDocumentsStorage>());
         }
 
