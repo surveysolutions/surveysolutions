@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Base;
@@ -24,7 +23,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
     {
         private NavigationView navigationView;
         private IMenuItem previousMenuItem;
-        private DrawerLayout drawerLayout;
 
         private IMvxNavigationService mvxNavigationService =>
             ServiceLocator.Current.GetInstance<IMvxNavigationService>();

@@ -284,13 +284,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         public void OnConnected(Bundle connectionHint)
         {
-            //if (!this.GoogleApi.IsConnected)
-            //{
-            //    this.GoogleApi.Connect();
-            //    return;
-            //}
-
-            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from OnConnected");
             this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 
@@ -308,7 +301,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             {
                 this.GoogleApi?.Dispose();
                 this.GoogleApi = null;
-                ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>().GoogleApiClient = null;
                 this.ViewModel.OnOfflineSynchronizationStarted -= this.OnOfflineSynchronizationStarted;
             }
 
