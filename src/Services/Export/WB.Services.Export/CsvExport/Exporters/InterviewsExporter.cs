@@ -415,14 +415,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                     
                     if (systemVariableValues.Count > 0) // main file?
                     {
-                        /*var interviewKeyIndex = ServiceColumns.SystemVariables[ServiceVariableType.InterviewKey].Index;
-
-                        if (systemVariableValues.Count < interviewKeyIndex + 1)
-                            systemVariableValues.Add(interviewId.Key);
-
-                        if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
-                            systemVariableValues[interviewKeyIndex] = interviewId.Key;*/
-
                         void InsertOrSetAt(ServiceVariableType type, string value)
                         {
                             var index = ServiceColumns.SystemVariables[type].Index;
@@ -438,7 +430,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
 
                         InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
-                        InsertOrSetAt(ServiceVariableType.InterviewStatus, interviewId.Status.ToString());
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);
