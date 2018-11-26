@@ -21,7 +21,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         private IMvxMessenger messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
         private IEnumeratorSettings enumeratorSettings => ServiceLocator.Current.GetInstance<IEnumeratorSettings>();
-        private MvxSubscriptionToken answerAcceptedSubsribtion;
+        private MvxSubscriptionToken answerAcceptedSubscription;
 
         #region Subclasses
 
@@ -77,20 +77,16 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            if (this.answerAcceptedSubsribtion != null)
-            {
-                messenger.Unsubscribe<AnswerAcceptedMessage>(this.answerAcceptedSubsribtion);
-                this.answerAcceptedSubsribtion.Dispose();
-                this.answerAcceptedSubsribtion = null;
 
-            }
+            this.answerAcceptedSubscription?.Dispose();
+            this.answerAcceptedSubscription = null;
         }
 
         private void SetupAnswerTimeMeasurement()
         {
-            if (this.answerAcceptedSubsribtion != null) return;
+            if (this.answerAcceptedSubscription != null) return;
 
-            this.answerAcceptedSubsribtion = messenger.SubscribeOnMainThread<AnswerAcceptedMessage>(ShowAnswerTime);
+            this.answerAcceptedSubscription = messenger.SubscribeOnMainThread<AnswerAcceptedMessage>(ShowAnswerTime);
         }
 
         private Toast toast;
@@ -101,10 +97,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var message = string.Format(UIResources.AnswerRecordedMsg,
                 msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
 
-            if (this.toast != null)
-            {
-                this.toast.Cancel();
-            }
+            toast?.Cancel();
 
             this.toast = Toast.MakeText(this, message, ToastLength.Short);
             toast.Show();

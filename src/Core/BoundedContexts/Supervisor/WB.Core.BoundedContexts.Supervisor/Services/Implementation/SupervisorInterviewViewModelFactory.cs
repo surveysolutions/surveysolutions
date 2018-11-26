@@ -16,8 +16,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SupervisorInterviewViewModelFactory : InterviewViewModelFactory
     {
-        public SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository interviewRepository, IEnumeratorSettings settings) : base(questionnaireRepository, interviewRepository, settings)
+        private readonly IServiceLocator serviceLocator;
+
+        public SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository, 
+            IEnumeratorSettings settings,
+            IServiceLocator serviceLocator) : base(questionnaireRepository, interviewRepository, settings)
         {
+            this.serviceLocator = serviceLocator;
         }
 
         public override IReadOnlyList<Guid> GetUnderlyingInterviewerEntities(Identity groupIdentity, IQuestionnaire questionnaire)
@@ -28,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public override IDashboardItem GetDashboardAssignment(AssignmentDocument assignment)
         {
             SupervisorAssignmentDashboardItemViewModel result =
-                ServiceLocator.Current.GetInstance<SupervisorAssignmentDashboardItemViewModel>();
+                this.serviceLocator.GetInstance<SupervisorAssignmentDashboardItemViewModel>();
             result.Init(assignment);
             return result;
         }
