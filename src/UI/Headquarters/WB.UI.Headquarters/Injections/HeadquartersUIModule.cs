@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
