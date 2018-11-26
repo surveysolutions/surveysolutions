@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Caching;
 using GeoJSON.Net.Feature;
@@ -41,18 +42,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
 
         protected static Cache Cache => System.Web.HttpContext.Current?.Cache;
-
+        
         public MapReportView Load(MapReportInputModel input)
         {
-            var key = $"{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
+            var key = $"MapReport;{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
 
             var cacheLine = Cache?.Get(key);
             
             if (cacheLine == null)
             {
+                var sw = Stopwatch.StartNew();
                 cacheLine = InitializeSuperCluster(input);
+                sw.Stop();
 
-                Cache?.Add(key, cacheLine, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(15),
+                var cacheTimeMinutes = Math.Min(10 , Math.Pow(sw.Elapsed.Seconds, 3) / 60.0);
+
+                Cache?.Add(key, cacheLine, null, DateTime.UtcNow.AddMinutes(cacheTimeMinutes), Cache.NoSlidingExpiration,
                     CacheItemPriority.Default, null);
             }
 

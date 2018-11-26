@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
                 this.State = OverviewNodeState.Answered;
             }
 
+            this.HasErrors = interview.GetFailedValidationMessages(treeNode.Identity, "").Any();
             this.ErrorMessages = interview.GetFailedValidationMessages(treeNode.Identity, "")
                 .Where(x => !string.IsNullOrEmpty(x)).ToList();
             this.HasWarnings = interview.GetFailedWarningMessages(treeNode.Identity, "").Any();
@@ -26,6 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public List<string> ErrorMessages { get; set; }
 
         public sealed override OverviewNodeState State { get; set; }
+
+        public bool HasErrors { get; set; }
 
         public bool HasWarnings { get; set; }
     }

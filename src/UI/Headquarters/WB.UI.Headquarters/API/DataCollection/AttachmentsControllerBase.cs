@@ -4,8 +4,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {

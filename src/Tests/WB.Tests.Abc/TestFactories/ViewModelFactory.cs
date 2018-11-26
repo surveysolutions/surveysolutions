@@ -41,11 +41,27 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class ViewModelFactory
     {
+        internal class MediaAttachment : IMediaAttachment
+        {
+            public string ContentPath { get; set; }
+
+            public void Release()
+            {
+                
+            }
+        }
+
         public AttachmentViewModel AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
-            => new AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
+            IAttachmentContentStorage attachmentContentStorage = null,
+            IEnumeratorSettings enumeratorSettings = null,
+            IExternalAppLauncher externalAppLauncher = null)
+            => new AttachmentViewModel(questionnaireRepository, 
+                interviewRepository, 
+                attachmentContentStorage,
+                enumeratorSettings, 
+                externalAppLauncher, () => new MediaAttachment());
 
         public DynamicTextViewModel DynamicTextViewModel(
             ILiteEventRegistry eventRegistry = null, 

@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using ImageResizer;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -12,7 +10,6 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Services;
 

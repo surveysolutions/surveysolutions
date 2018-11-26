@@ -1080,6 +1080,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show PDF .
+        /// </summary>
+        public static string Interview_ShowPdf {
+            get {
+                return ResourceManager.GetString("Interview_ShowPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string Interview_SignatureClear {

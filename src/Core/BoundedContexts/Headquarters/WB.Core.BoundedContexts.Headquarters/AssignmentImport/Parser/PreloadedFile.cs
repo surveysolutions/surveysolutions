@@ -1,7 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {

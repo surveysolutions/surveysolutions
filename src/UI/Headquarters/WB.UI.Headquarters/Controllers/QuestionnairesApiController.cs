@@ -96,9 +96,9 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator")]
         public JsonCommandResponse DeleteQuestionnaire(DeleteQuestionnaireRequestModel request)
         {
-            deleteQuestionnaireService.DeleteQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
+            deleteQuestionnaireService.DisableQuestionnaire(request.QuestionnaireId, request.Version, this.authorizedUser.Id);
             
-            return new JsonCommandResponse() { IsSuccess = true };
+            return new JsonCommandResponse { IsSuccess = true };
         }
 
         [HttpGet]

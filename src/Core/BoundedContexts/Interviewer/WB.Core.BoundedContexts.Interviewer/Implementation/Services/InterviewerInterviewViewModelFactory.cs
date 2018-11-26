@@ -10,7 +10,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerInterviewViewModelFactory : InterviewViewModelFactory
     {
-        public InterviewerInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository interviewRepository, IEnumeratorSettings settings) : base(questionnaireRepository, interviewRepository, settings)
+        public InterviewerInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository, 
+            IStatefulInterviewRepository interviewRepository,
+            IEnumeratorSettings settings) : base(questionnaireRepository, interviewRepository, settings)
         {
         }
 

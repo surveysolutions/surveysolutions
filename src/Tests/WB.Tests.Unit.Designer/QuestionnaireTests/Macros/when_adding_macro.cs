@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
-using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
         private void BecauseOf() => questionnaire.AddMacro(addMacro);
 
         [NUnit.Framework.Test] public void should_contains_Macro_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.ToEnumerable().Should().Contain(t => t.Key == macroId);
+            questionnaire.QuestionnaireDocument.Macros.ContainsKey(macroId).Should().BeTrue();
 
         private static AddMacro addMacro;
         private static Questionnaire questionnaire;

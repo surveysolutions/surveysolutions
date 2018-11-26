@@ -33,6 +33,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 DisableCaching = true,
                 AutomaticDecompression = DecompressionMethods.None,
                 AllowAutoRedirect = true,
+                Proxy = WebRequest.GetSystemWebProxy()
             };
 
             return messageHandler;
