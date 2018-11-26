@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.UI.Headquarters.Models.ComponentModels;
-using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Models
 {

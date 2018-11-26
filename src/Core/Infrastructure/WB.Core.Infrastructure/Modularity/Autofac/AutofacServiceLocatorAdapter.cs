@@ -5,15 +5,20 @@ using System.Linq;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
-namespace WB.UI.Shared.Enumerator.Services.Internals
+namespace WB.Core.Infrastructure.Modularity.Autofac
 {
     public class AutofacServiceLocatorAdapter : ServiceLocatorImplBase
     {
-        private readonly IContainer container;
+        protected readonly ILifetimeScope rootScope;
 
-        public AutofacServiceLocatorAdapter(IContainer kernel)
+        public AutofacServiceLocatorAdapter(ILifetimeScope kernel)
         {
-            this.container = kernel;
+            this.rootScope = kernel;
+        }
+
+        public override void InjectProperties(object instance)
+        {
+            this.rootScope.InjectProperties(instance);
         }
 
         protected override object DoGetInstance(Type serviceType, string key)
@@ -22,7 +27,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
-            return key != null ? container.ResolveNamed(key, serviceType) : container.Resolve(serviceType);
+            return key != null ? rootScope.ResolveNamed(key, serviceType) : rootScope.Resolve(serviceType);
         }
 
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
@@ -34,13 +39,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             var enumerableType = typeof(IEnumerable<>).MakeGenericType(serviceType);
 
-            object instance = container.Resolve(enumerableType);
+            object instance = rootScope.Resolve(enumerableType);
             return ((IEnumerable) instance).Cast<object>();
         }
-
-        public ILifetimeScope CreateChildContainer(Action<ContainerBuilder> @override)
-        {
-            return this.container.BeginLifetimeScope(@override);
-        }
     }
+
 }

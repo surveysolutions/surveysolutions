@@ -508,7 +508,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Folder Include="Assets\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>

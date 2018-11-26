@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
+using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
@@ -95,6 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interview == null)
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
+                this.Dispose();
                 return;
             }
 
@@ -192,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
                     this.answerNotifier.Init(this.InterviewId, questionsToListen.ToArray());
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
-                    break;
+                break;
             }
 
             this.targetNavigationIdentity = new NavigationIdentity
@@ -271,8 +274,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return activeStageViewModel;
                 case ScreenType.Overview:
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
-                    overviewViewModel.Configure(this.InterviewId);
+                    overviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return overviewViewModel;
+                case ScreenType.PdfView:
+                    var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
+                    pdfViewModel.Configure(this.InterviewId, eventArgs.AnchoredElementIdentity);
+                    return pdfViewModel;
                 default:
                     return null;
             }
@@ -287,7 +294,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private GroupStatus status;
         public GroupStatus Status
         {
-            get { return this.status; }
+            get => this.status;
             private set
             {
                 if (this.status != value)
@@ -326,9 +333,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         });
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            this.Dispose();
+        });
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 

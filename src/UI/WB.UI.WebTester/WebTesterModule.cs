@@ -72,7 +72,7 @@ namespace WB.UI.WebTester
 
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
-            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindAsSingleton<IEventBus, InProcessEventBus>();
@@ -83,7 +83,6 @@ namespace WB.UI.WebTester
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
-            registry.BindAsSingleton<IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
 
             #if DEBUG
 

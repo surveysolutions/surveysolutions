@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.Views.Reports.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
 {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Net.Http;
-using System.Web;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Designer.Code

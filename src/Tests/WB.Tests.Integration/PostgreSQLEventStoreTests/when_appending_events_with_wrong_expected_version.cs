@@ -19,10 +19,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            var sessionProvider = new Mock<ISessionProvider>();
+            var sessionProvider = new Mock<IUnitOfWork>();
             dbConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             dbConnection.Open();
-            sessionProvider.Setup(x => x.GetSession())
+            sessionProvider.Setup(x => x.Session)
                 .Returns(Mock.Of<ISession>(i => i.Connection == dbConnection));
 
             var eventTypeResolver = new EventTypeResolver();

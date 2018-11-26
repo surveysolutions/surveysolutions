@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository, registry);
-            viewModel.Init(interview.EventSourceId.FormatGuid(), staticTextIdentity, null);
+            viewModel.Init(interview.EventSourceId.FormatGuid(), staticTextIdentity, Create.Other.NavigationState());
             BecauseOf();
         }
 

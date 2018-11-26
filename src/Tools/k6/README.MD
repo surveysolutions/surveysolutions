@@ -2,9 +2,6 @@ K6 is a stress tool for devs
 ===========
 Homepage: https://github.com/loadimpact/k6
 
-Latest win64 version can found here
-https://github.com/loadimpact/k6/releases/download/v0.18.2/k6-v0.18.2-win64.zip
-
 Installing
 ==========
 
