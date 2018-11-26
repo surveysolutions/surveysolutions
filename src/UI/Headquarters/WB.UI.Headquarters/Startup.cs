@@ -46,6 +46,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Headquarters
 {
@@ -87,7 +88,13 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
-            autofacKernel.Init().Wait();
+            var initTask = autofacKernel.InitAsync();
+
+            if (CoreSettings.IsDevelopmentEnvironment)
+                initTask.Wait();
+            else
+                initTask.Wait(TimeSpan.FromSeconds(10));
+
             var container = autofacKernel.Container;
 
             InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(container));

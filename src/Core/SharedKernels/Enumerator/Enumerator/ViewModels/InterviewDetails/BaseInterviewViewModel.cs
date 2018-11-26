@@ -97,6 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interview == null)
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
+                this.Dispose();
                 return;
             }
 
@@ -332,9 +333,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
         });
 
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            this.Dispose();
+        });
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 

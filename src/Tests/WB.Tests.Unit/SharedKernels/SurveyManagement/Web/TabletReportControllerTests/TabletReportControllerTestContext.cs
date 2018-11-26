@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControllerTests
@@ -19,7 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControlle
                     Mock.Of<ITabletInformationService>(
                         _ =>
                             _.GetFullPathToContentFile(It.IsAny<string>()) == "result" &&
-                                _.GetAllTabletInformationPackages() == new List<TabletInformationView>()));
+                                _.GetAllTabletInformationPackages() == new List<TabletInformationView>()),
+                Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IUserViewFactory>());
         }
 
         protected static void SetControllerContextWithStream(Controller controller, Stream stream)

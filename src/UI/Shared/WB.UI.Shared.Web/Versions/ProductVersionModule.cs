@@ -30,11 +30,10 @@ namespace WB.UI.Shared.Web.Versions
         {
             if (shouldStoreVersionToDb)
             {
-                using (var unitOfWork = new UnitOfWork(serviceLocator.GetInstance<ISessionFactory>(), serviceLocator.GetInstance<ILogger>()))
-                {
-                    serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
-                    unitOfWork.AcceptChanges();
-                }
+                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
+                serviceLocator.GetInstance<IProductVersionHistory>()
+                              .RegisterCurrentVersion();
+                unitOfWork.AcceptChanges();
             }
 
             return Task.CompletedTask;

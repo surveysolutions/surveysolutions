@@ -29,25 +29,7 @@ namespace WB.Services.Export.Questionnaire
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
             if (questionnaire == null) return null;
-            return GetQuestionnaireExportStructure(tenant, questionnaire);
-        }
-
-        public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
-            QuestionnaireDocument questionnaire)
-        {
-            return this.cache.GetOrCreate(tenant + "/" + questionnaire.Id, entry =>
-            {
-                var cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
-
-                if (cachedQuestionnaireExportStructure == null)
-                {
-                    return null;
-                }
-
-                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
-
-                return cachedQuestionnaireExportStructure;
-            });
+            return CreateQuestionnaireExportStructure(questionnaire);
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
