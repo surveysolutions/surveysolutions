@@ -285,6 +285,7 @@
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
+    <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
     <Compile Include="CustomBindings\ExoPlayerBinding.cs" />
     <Compile Include="CustomBindings\WebViewPdfFilePathBinding.cs" />
@@ -2356,7 +2357,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\layout\simple_video_controls.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -2367,7 +2368,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

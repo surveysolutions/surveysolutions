@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel.IsImage.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_be_empty_attachment_content () => 
-            viewModel.Content.Should().BeNull();
+            viewModel.Image.Should().BeNull();
 
 
         static AttachmentViewModel viewModel;

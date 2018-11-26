@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Exceptions;
+using WB.Core.Infrastructure.Resources;
+using WB.Infrastructure.Native;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
@@ -43,7 +47,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
         
-        public Task Init()
+        public Task InitAsync()
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
@@ -56,10 +60,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            Thread thread = new Thread(() => InitModules(status, Container).Wait()) { IsBackground = false };
-            thread.Start();
-
-            return Task.CompletedTask;
+            var initTask = Task.Run(async () => await InitModules(status, Container));
+            return initTask;
         }
 
         private async Task InitModules(UnderConstructionInfo status, IContainer container)
@@ -77,10 +79,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                         await module.Init(serviceLocatorLocal, status);
                     }
                 }
-            }
-            finally
-            {
+
                 status.Finish();
+            }
+            catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
+            {
+                status.Error(Modules.ErrorDuringRunningMigrations);
+                container.Resolve<ILogger>().Error("Exception during running migrations", ie);
+                throw;
+            }
+            catch(Exception e)
+            {
+                status.Error(Modules.ErrorDuringSiteInitialization);
+                container.Resolve<ILogger>().Error("Exception during site inizialization", e);
+                throw;
             }
         }
     }

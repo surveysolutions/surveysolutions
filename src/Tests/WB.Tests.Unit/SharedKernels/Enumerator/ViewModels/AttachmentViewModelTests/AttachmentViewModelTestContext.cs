@@ -3,11 +3,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
     [NUnit.Framework.TestOf(typeof(AttachmentViewModel))]
-
     public class AttachmentViewModelTestContext
     {
         public static AttachmentViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,
@@ -16,12 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             IEnumeratorSettings enumeratorSettings = null,
             IExternalAppLauncher externalAppLauncher = null)
         {
-            return new AttachmentViewModel(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            return Create.ViewModel.AttachmentViewModel(
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
                 externalAppLauncher ?? Mock.Of<IExternalAppLauncher>());
         }
-
     }
 }
