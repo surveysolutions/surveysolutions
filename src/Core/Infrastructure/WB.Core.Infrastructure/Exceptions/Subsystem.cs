@@ -1,4 +1,4 @@
-﻿namespace WB.Infrastructure.Native
+﻿namespace WB.Core.Infrastructure.Exceptions
 {
     public enum Subsystem
     {

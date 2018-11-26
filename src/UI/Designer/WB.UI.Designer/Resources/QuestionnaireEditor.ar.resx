@@ -696,9 +696,6 @@
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
     <value>لتجنب تزامن بطيء نوصي بألا يتجاوز اجمالي حجم جميع الملفات المرفقة  2MB. بالنسبة لأنواع الملفات المدعومة والتنسيقات والأبعاد</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>يمكن استخدامها كمرفق في الاستبيان إضافة عنصر نص ثابت وتحديد الاسم في خاصية المرفق الخاص بها</value>
-  </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>مرفقات</value>
   </data>

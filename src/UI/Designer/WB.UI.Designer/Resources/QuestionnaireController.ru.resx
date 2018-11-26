@@ -329,4 +329,10 @@
     <value>Экспорт Html</value>
     <comment>Экспорт Html</comment>
   </data>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>Используется не поддерживаемый браузер</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>Вы используете Internet Explorer который не поддерживается. Некоторые функции могут работать не правильно.</value>
+  </data>
 </root>

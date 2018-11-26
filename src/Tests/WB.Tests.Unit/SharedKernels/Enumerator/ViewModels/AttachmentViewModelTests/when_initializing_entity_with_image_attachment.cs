@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
         [Test] public void should_initialize_attachment_as_image() => viewModel.IsImage.Should().BeTrue();
 
-        [Test] public void should_initialize_image_content() => viewModel.Content.Should().BeEquivalentTo(attachmentContentData.Content);
+        [Test] public void should_initialize_image_content() => viewModel.Image.Should().BeEquivalentTo(attachmentContentData.Content);
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;

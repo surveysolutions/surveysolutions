@@ -43,10 +43,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
 
         [Test] public void should_initialize_attachment_as_video() => viewModel.IsVideo.Should().BeTrue();
+        [Test] public void should_initialize_attachment_video_property() => viewModel.Video.Should().NotBe(null);
         [Test] public void should_not_initialize_attachment_as_image() => viewModel.IsImage.Should().BeFalse();
 
         [Test] public void should_initialize_video_contentPath() 
-            => viewModel.ContentPath.Should()
+            => viewModel.Video.ContentPath.Should()
                 .BeEquivalentTo("cache");
 
         static AttachmentViewModel viewModel;

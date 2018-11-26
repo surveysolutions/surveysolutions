@@ -8,15 +8,6 @@
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
 
-<!--[if lt IE 9]>
-    <div class="hero-unit">
-        <h1>
-            @AccountResources.OutdatedBrowserMessage
-        </h1>
-        <p>@Html.Raw(AccountResources.UpgradeYourBrowser)</p>
-    </div>
-<![endif]-->
-
 @using (Html.BeginForm("login", "account", null, FormMethod.Post, new { @id = "start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()

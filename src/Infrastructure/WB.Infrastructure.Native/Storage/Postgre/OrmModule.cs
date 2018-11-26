@@ -16,11 +16,12 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native.Monitoring;
-using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -48,11 +49,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                     this.connectionSettings.PlainStorageSchemaName,
                     this.connectionSettings.PlainStoreUpgradeSettings);
+
+                status.ClearMessage();
             }
             catch (Exception exc)
             {
+                status.Error(Modules.ErrorDuringRunningMigrations);
+
                 LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
-                throw;
+                throw new InitializationException(Subsystem.Database, null, exc);
             }
 
             if (this.connectionSettings.ReadSideUpgradeSettings != null)
@@ -66,9 +71,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
                         this.connectionSettings.ReadSideSchemaName, this.connectionSettings.ReadSideUpgradeSettings);
+
+                    status.ClearMessage();
                 }
                 catch (Exception exc)
                 {
+                    status.Error(Modules.ErrorDuringRunningMigrations);
+
                     LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
                     throw new InitializationException(Subsystem.Database, null, exc);
                 }

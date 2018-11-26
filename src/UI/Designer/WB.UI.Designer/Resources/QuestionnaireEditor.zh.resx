@@ -717,9 +717,6 @@
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
     <value>为了避免同步速度较慢，我们推荐小于2M的文件。对于被支持文件的类型、格式和大小</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>可以用来--用一个附件来增加静态文本，并用附件属性来明确静态文本的名称</value>
-  </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>东部标准时间：导入时间：{{timeString}}速度为{{downloadSpeed}}Kb/s (EDGE)</value>
   </data>

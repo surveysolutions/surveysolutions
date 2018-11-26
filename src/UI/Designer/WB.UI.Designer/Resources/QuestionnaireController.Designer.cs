@@ -496,6 +496,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not supported browser used.
+        /// </summary>
+        public static string NotSupportedBrowserUsed {
+            get {
+                return ResourceManager.GetString("NotSupportedBrowserUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using Internet Explorer browser that is not supported. Some features might not work properly..
+        /// </summary>
+        public static string NotSupportedBrowserUsedDescr {
+            get {
+                return ResourceManager.GetString("NotSupportedBrowserUsedDescr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
