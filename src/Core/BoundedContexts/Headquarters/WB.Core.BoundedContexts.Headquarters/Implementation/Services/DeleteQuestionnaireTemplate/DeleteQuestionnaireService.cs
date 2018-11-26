@@ -4,6 +4,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IAssignmetnsDeletionService assignmetnsDeletionService;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
 
         public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory, 
             ICommandService commandService,
@@ -45,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader,
             IAssignmetnsDeletionService assignmetnsDeletionService,
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            DeleteQuestionnaireJobScheduler deleteQuestionnaireTask)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -57,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.assignmetnsDeletionService = assignmetnsDeletionService;
             this.lookupTablesStorage = lookupTablesStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.deleteQuestionnaireTask = deleteQuestionnaireTask;
         }
 
         public void DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -73,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                         userId));
+                    this.deleteQuestionnaireTask.Run(0);
                 }
             }
         }

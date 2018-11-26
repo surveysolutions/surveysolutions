@@ -2,7 +2,7 @@
 using System.Linq;
 using Quartz;
 
-namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
+namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public abstract class BaseTask
     {
