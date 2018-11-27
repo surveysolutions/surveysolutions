@@ -23,7 +23,15 @@
                         </perfect-scrollbar>
                     </div>
                 </div><!-- /btn-group -->
-                <input type="text" ng-model="searchText" placeholder="{{'SearchClassification' | i18next}}" class="form-control" id="searchFor" aria-label="classification-search">
+                <div class="search">
+                    <input type="text" ng-model="searchText" placeholder="{{'SearchClassification' | i18next}}" class="form-control" id="searchFor" aria-label="classification-search">
+                </div>
+                <div class="input-group-btn input-group-btn-right">
+                    <span class="search-icon" aria-hidden="true"></span>
+                    <button type="button" class="btn btn-link btn-clear">
+                        <span></span>
+                    </button>
+                </div>   
             </div><!-- /input-group -->
         </form>
         <span class="group-summary pull-right">{{ totalResults }} classifications</span>
@@ -36,15 +44,17 @@
                     <button class="btn btn-link show-answers" ng-class="{'collapsed': classification.categoriesAreOpen == false}" ng-click="toggleCategories(classification)">
                         {{'ClassificationShowCategories' | i18next}} ({{classification.categoriesCount}})
                     </button>
-                    <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}"  ng-show="classification.categoriesAreOpen" >
-                        <ul>
-                            <li  ng-repeat="category in classification.categories">{{category.title}}</li>
-                        </ul>
+                    <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
+                        <perfect-scrollbar class="scroller">
+                            <ul>
+                                <li ng-repeat="category in classification.categories">{{category.value}} {{category.title}}</li>
+                            </ul>
+                        </perfect-scrollbar>
                     </div>
-                    <div class="classification-group-tag">
+                    <div class="classification-group-tag clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
+                        <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
-                    <button class="btn btn-link" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                 </div>
             </div>
             <div class="tile-column">
@@ -54,14 +64,16 @@
                         {{'ClassificationShowCategories' | i18next}} ({{classification.categoriesCount}})
                     </button>
                     <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
-                        <ul>
-                            <li ng-repeat="category in classification.categories">{{category.title}}</li>
-                        </ul>
+                        <perfect-scrollbar class="scroller">
+                            <ul>
+                                <li ng-repeat="category in classification.categories">{{category.value}} {{category.title}}</li>
+                            </ul>
+                        </perfect-scrollbar>
                     </div>
-                    <div class="classification-group-tag">
+                    <div class="classification-group-tag clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
+                        <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
-                    <button class="btn btn-link" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                 </div>
             </div>
         </div>

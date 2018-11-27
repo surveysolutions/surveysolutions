@@ -17,7 +17,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -263,6 +263,7 @@
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
     <Compile Include="Code\UrlExtensions.cs" />
+    <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Api\Designer\TranslationsController.cs" />
     <Compile Include="Api\Designer\AttachmentsController.cs" />
@@ -948,6 +949,7 @@
     <Content Include="Views\Account\_ChangePassword.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-classifications.less" />
     <Content Include="Views\Shared\_IE11Modal.cshtml" />
+    <Content Include="Views\Classifications\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1017,7 +1019,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Classifications\" />
     <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
