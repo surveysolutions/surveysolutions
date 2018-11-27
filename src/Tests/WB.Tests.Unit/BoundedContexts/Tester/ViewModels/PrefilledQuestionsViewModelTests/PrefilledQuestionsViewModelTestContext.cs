@@ -32,6 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<IEnumeratorSettings>(),
                 logger ?? Mock.Of<ILogger>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 Mock.Of<ICommandService>(),
