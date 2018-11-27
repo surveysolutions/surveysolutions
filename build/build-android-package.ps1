@@ -238,7 +238,7 @@ function PathToFinalCapi($CapiProject) {
 $ErrorActionPreference = "Stop"
 
 if([string]::IsNullOrWhiteSpace($VersionName)){
-	$VersionName = (GetVersionString 'src\core')
+	$VersionName = (GetVersionString 'src')
 }
 
 if($ExcludeExtra)
