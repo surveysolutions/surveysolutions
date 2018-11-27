@@ -1,0 +1,33 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build dev version",
+            "command": "dotnet",
+            "type": "shell",
+            "group":{
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always"
+            },
+            "args": ["build"],            
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build release version",
+            "command": "dotnet",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "args": ["build", "--version-suffix", "release", "/p:BuildNumber=12345"],            
+            "problemMatcher": "$msCompile"
+        }
+
+    ]
+}
