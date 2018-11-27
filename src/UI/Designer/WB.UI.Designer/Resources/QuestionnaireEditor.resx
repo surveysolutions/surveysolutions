@@ -847,7 +847,7 @@
   <data name="HelpIsTimestamp" xml:space="preserve">
     <value>This option allows the user to stamp the current time on tablet</value>
   </data>
-    <data name="HelpDefaultDate" xml:space="preserve">
+  <data name="HelpDefaultDate" xml:space="preserve">
     <value>This date will be shown as started date for selection on a tablet</value>
   </data>
   <data name="HelpMask" xml:space="preserve">
@@ -1146,5 +1146,23 @@
   </data>
   <data name="HideIfDisabledNested" xml:space="preserve">
     <value>Nested from questionnaire</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>All classifications</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Show categories</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Question Bank. Classifications</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Search for classification</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Search classification</value>
   </data>
 </root>
