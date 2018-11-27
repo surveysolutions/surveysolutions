@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public StartedInterviewsViewModel StartedInterviews { get; }
         public CompletedInterviewsViewModel CompletedInterviews { get; }
         public RejectedInterviewsViewModel RejectedInterviews { get; }
+        public IUserInteractionService UserInteractionService { get; }
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IInterviewerPrincipal principal,
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
             IRestService restService,
+            IUserInteractionService userInteractionService,
             IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
@@ -75,6 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.StartedInterviews = startedInterviewsViewModel;
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
+            UserInteractionService = userInteractionService;
 
             SubscribeOnMessages();
 

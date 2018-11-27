@@ -9,8 +9,6 @@ using Android.Views;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -51,7 +49,7 @@ namespace WB.UI.Supervisor.Activities
             {
                 if (this.ViewModel.LastVisitedInterviewId.HasValue)
                 {
-                    var dashboardItemAccessor = ServiceLocator.Current.GetInstance<IDashboardItemsAccessor>();
+                    var dashboardItemAccessor = this.ViewModel.DashboardItemsAccessor;
 
                     var interviewId = this.ViewModel.LastVisitedInterviewId.Value;
                     if (dashboardItemAccessor.IsOutboxInterview(interviewId))

@@ -21,8 +21,6 @@ namespace WB.UI.Interviewer.Activities
         public override async Task InitializationComplete()
         {
             await base.InitializationComplete();
-            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
-            auditLogService.Write(new OpenApplicationAuditLogEntity());
         }
     }
 }
