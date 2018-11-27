@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer
 {
@@ -19,14 +20,17 @@ namespace WB.UI.Interviewer
     {
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
+        private readonly IApplicationCypher applicationCypher;
 
         public InterviewerAppStart(IMvxApplication application, 
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
-            IServiceLocator serviceLocator) : base(application, navigationService)
+            IServiceLocator serviceLocator,
+            IApplicationCypher applicationCypher) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
             this.serviceLocator = serviceLocator;
+            this.applicationCypher = applicationCypher;
         }
 
         public override void ResetStart()
@@ -36,7 +40,7 @@ namespace WB.UI.Interviewer
             //base.ResetStart();
         }
 
-        protected override async Task<object> ApplicationStartup(object hint = null)
+        protected override Task<object> ApplicationStartup(object hint = null)
         {
             auditLogService.Write(new OpenApplicationAuditLogEntity());
             this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
@@ -44,9 +48,11 @@ namespace WB.UI.Interviewer
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<InterviewerAppStart>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
+            applicationCypher.EncryptAppData();
+
             this.BackwardCompatibility();
            
-            return await base.ApplicationStartup(hint);
+            return base.ApplicationStartup(hint);
         }
 
         protected override async Task NavigateToFirstViewModel(object hint = null)
