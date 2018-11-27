@@ -89,7 +89,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("1"));
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
-            Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(InterviewStatus.Completed.ToString()));
+            Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));
         }
 
         private List<Create.CsvData> dataInCsvFile;
