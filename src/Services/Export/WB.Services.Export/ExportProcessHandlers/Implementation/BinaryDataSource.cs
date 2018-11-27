@@ -103,7 +103,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     }
                     catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                     {
-                        logger.LogWarning($"[{e.StatusCode}] Cannot download file for {answer.InterviewId} - {answer.Answer}");
+                        logger.LogWarning("[{statusCode}] Cannot download file for {interviewId} - {answer}", e.StatusCode, answer.InterviewId, answer.Answer);
                     }
                 }
 
