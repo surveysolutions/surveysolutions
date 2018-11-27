@@ -29,7 +29,10 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             CommonHeaderItems.InterviewKey,
             CommonHeaderItems.InterviewId,
-            new DoExportFileHeader("interview__status", "Last status of interview", ExportValueType.String),
+            new DoExportFileHeader("interview__status", "Last status of interview", ExportValueType.NumericInt,
+                Enum.GetValues(typeof(InterviewStatus))
+                    .Cast<InterviewStatus>().
+                    Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray()),
             new DoExportFileHeader("responsible", "Last responsible person", ExportValueType.String),
             new DoExportFileHeader("interviewers", "Number of interviewers who worked on this interview", ExportValueType.String),
             new DoExportFileHeader("rejections__sup", "How many times this interview was rejected by supervisors", ExportValueType.String),
@@ -79,7 +82,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         diagInfo.InterviewKey,
                         diagInfo.InterviewId.ToString(),
-                        diagInfo.Status.ToString(),
+                        ((int)diagInfo.Status).ToString(),
                         diagInfo.ResponsibleName,
                         diagInfo.NumberOfInterviewers.ToString(),
                         diagInfo.NumberRejectionsBySupervisor.ToString(),
@@ -116,7 +119,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                 if (exportFileHeader.AddCaption)
                     doContent.AppendCaptionLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                 else
+                {
+                    if (exportFileHeader.VariableValueLabels.Any())
+                    {
+                        doContent.AppendLabel(exportFileHeader.Title, exportFileHeader.VariableValueLabels);
+                        doContent.AppendLabelToValuesMatching(exportFileHeader.Title, exportFileHeader.Title);
+                    }
+
                     doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                }
             }
 
             var fileName = $"{DiagnosticsFileName}.{DoFile.ContentFileNameExtension}";
