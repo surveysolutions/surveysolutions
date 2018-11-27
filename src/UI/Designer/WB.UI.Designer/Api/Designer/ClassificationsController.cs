@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.UI.Designer.Filters;
@@ -72,9 +73,10 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [Route("classifications")]
-        public async Task<IEnumerable<Classification>> GetClassifications()
+        [ResponseType(typeof(IEnumerable<Classification>))]
+        public async Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
         {
-            return await classificationsStorage.GetClassifications();
+            return await classificationsStorage.GetClassifications(groupId);
         }
 
         [HttpGet]
