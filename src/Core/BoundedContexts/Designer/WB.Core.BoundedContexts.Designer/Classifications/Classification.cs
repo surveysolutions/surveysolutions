@@ -89,9 +89,18 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(groups);
         }
 
-        public Task<IEnumerable<Classification>> GetClassifications()
+        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
         {
-            var dbEntities = classificationsStorage.Query(_ => _.Where(x => x.Type == ClassificationEntityType.Classification).ToList());
+            var dbEntities = classificationsStorage.Query(_ =>
+            {
+                var query = _.Where(x => x.Type == ClassificationEntityType.Classification);
+                if (groupId.HasValue)
+                {
+                    query = query.Where(x => x.Parent == groupId);
+                }
+
+                return query.ToList();
+            });
 
             var classifications = dbEntities.Select(x => new Classification
             {
@@ -200,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     public interface IClassificationsStorage
     {
         Task<IEnumerable<ClassificationGroup>> GetClassificationGroups();
-        Task<IEnumerable<Classification>> GetClassifications();
+        Task<IEnumerable<Classification>> GetClassifications(Guid? groupId);
         Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId);
         void Store(ClassificationEntity[] bdEntities);
         Task<List<Category>> GetCategories(Guid classificationId);
