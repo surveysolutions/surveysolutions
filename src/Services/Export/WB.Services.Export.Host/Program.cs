@@ -100,7 +100,7 @@ namespace WB.Services.Export.Host
             if (!string.IsNullOrWhiteSpace(seqConfig["Uri"]))
             {
                 var apiKey = seqConfig["ApiKey"];
-                logConfig.WriteTo.Seq(seqConfig["Uri"], apiKey: apiKey);
+                logConfig.WriteTo.Seq(seqConfig["Uri"], apiKey: apiKey, restrictedToMinimumLevel: LogEventLevel.Verbose);
             }
         }
 
@@ -126,7 +126,7 @@ namespace WB.Services.Export.Host
 
                 if (hosting.HostingEnvironment.IsDevelopment())
                 {
-                    logConfig.WriteTo.Console();
+                    logConfig.WriteTo.Console(LogEventLevel.Information);
                 }
 
                 Log.Logger = logConfig.CreateLogger();
