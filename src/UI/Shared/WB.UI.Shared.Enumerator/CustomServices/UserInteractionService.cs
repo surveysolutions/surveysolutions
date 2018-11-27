@@ -10,23 +10,25 @@ using Android.Text;
 using Android.Widget;
 using Java.Lang;
 using Java.Lang.Reflect;
-using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
-using String = System.String;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     internal class UserInteractionService : IUserInteractionService
     {
-        private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
+        private readonly IMvxAndroidCurrentTopActivity mvxCurrentTopActivity;
+        private static readonly HashSet<Guid> UserInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter;
 
-        private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+        public UserInteractionService(IMvxAndroidCurrentTopActivity mvxCurrentTopActivity)
+        {
+            this.mvxCurrentTopActivity = mvxCurrentTopActivity;
+        }
 
         public Task<bool> ConfirmAsync(
             string message,
@@ -54,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             okButton = okButton ?? UIResources.Ok;
             cancelButton = cancelButton ?? UIResources.Cancel;
 
-            this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? String.Empty),
+            this.ConfirmWithTextInputImpl(message, k => tcs.TrySetResult(k ?? string.Empty),
                 () => tcs.TrySetResult(null), title,
                 okButton, cancelButton, isTextInputPassword);
             return tcs.Task;
@@ -65,7 +67,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             var tcs = new TaskCompletionSource<string>();
 
-            var builder = new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity);
+            var builder = new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity);
 
             builder.SetTitle(message);
             builder.SetItems(options, (sender, args) =>
@@ -94,7 +96,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (UserInteractionsLock)
             {
-                if (userInteractions.Count == 0)
+                if (UserInteractions.Count == 0)
                     return Task.FromResult(null as object);
 
                 if (userInteractionsAwaiter == null)
@@ -108,10 +110,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void ShowToast(string message)
         {
-            this.CurrentActivity.RunOnUiThread(() => Toast.MakeText(this.CurrentActivity, message, ToastLength.Short).Show());
+            this.mvxCurrentTopActivity.Activity.RunOnUiThread(() => Toast.MakeText(this.mvxCurrentTopActivity.Activity, message, ToastLength.Short).Show());
         }
 
-        public bool HasPendingUserInterations => userInteractions.Count > 0;
+        public bool HasPendingUserInteractions => UserInteractions.Count > 0;
 
         private void Confirm(
             string message,
@@ -142,13 +144,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 Application.SynchronizationContext.Post(
                     ignored =>
                     {
-                        if (this.CurrentActivity == null)
+                        if (this.mvxCurrentTopActivity.Activity == null)
                         {
                             HandleDialogClose(userInteractionId);
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(isHtml ? message.ToAndroidSpanned(): new SpannedString(message))
                             .SetTitle(isHtml ? title.ToAndroidSpanned() : new SpannedString(title))
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () => callback?.Invoke(true)); })
@@ -182,19 +184,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 Application.SynchronizationContext.Post(
                     ignored =>
                     {
-                        if (this.CurrentActivity == null)
+                        if (this.mvxCurrentTopActivity.Activity == null)
                         {
                             HandleDialogClose(userInteractionId);
                             return;
                         }
 
-                        var inflatedView = (LinearLayout)this.CurrentActivity.LayoutInflater.Inflate(Resource.Layout.confirmation_edit_text, null);
+                        var inflatedView = (LinearLayout)this.mvxCurrentTopActivity.Activity.LayoutInflater.Inflate(Resource.Layout.confirmation_edit_text, null);
                         EditText editText = inflatedView.FindViewById<EditText>(Resource.Id.confirmationEditText);
                         if (isTextInputPassword)
                         {
                             editText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         }
-                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton,
@@ -205,7 +207,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                         okCallback?.Invoke(editText.Text);
                                     });
 
-                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                    this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
                                 })
                             .SetNegativeButton(cancelButton,
                                 delegate
@@ -215,7 +217,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                                         {
                                             cancelCallBack?.Invoke();
                                         });
-                                    this.CurrentActivity.HideKeyboard(inflatedView.WindowToken);
+                                    this.mvxCurrentTopActivity.Activity.HideKeyboard(inflatedView.WindowToken);
                                 })
                             .SetCancelable(false)
                             .Show();
@@ -240,13 +242,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 Application.SynchronizationContext.Post(
                     ignored =>
                     {
-                        if (this.CurrentActivity == null)
+                        if (this.mvxCurrentTopActivity.Activity == null)
                         {
                             HandleDialogClose(userInteractionId);
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned())
                             .SetPositiveButton(okButton, delegate { HandleDialogClose(userInteractionId, () =>
@@ -269,7 +271,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (UserInteractionsLock)
             {
-                userInteractions.Add(userInteractionId);
+                UserInteractions.Add(userInteractionId);
             }
         }
 
@@ -277,9 +279,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             lock (UserInteractionsLock)
             {
-                userInteractions.Remove(userInteractionId);
+                UserInteractions.Remove(userInteractionId);
 
-                if (userInteractions.Count == 0)
+                if (UserInteractions.Count == 0)
                 {
                     if (userInteractionsAwaiter != null)
                     {
@@ -293,14 +295,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void ShowGoogleApiErrorDialog(int errorCode, int requestCode, Action onCancel = null)
         {
-            Field GetAccessibleField(Class clazz, String fieldName)
+            Field GetAccessibleField(Class clazz, string fieldName)
             {
                 Field field = clazz.GetDeclaredField(fieldName);
                 AccessibleObject.SetAccessible(new AccessibleObject[] { field }, true);
                 return field;
             }
 
-            Dialog defaultDialog = GoogleApiAvailability.Instance.GetErrorDialog(this.CurrentActivity, errorCode, requestCode);
+            Dialog defaultDialog = GoogleApiAvailability.Instance.GetErrorDialog(this.mvxCurrentTopActivity.Activity, errorCode, requestCode);
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop) // Remove this check if custom dialog theme is used
             {
                 defaultDialog.Show();
@@ -345,13 +347,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 Application.SynchronizationContext.Post(
                     ignored =>
                     {
-                        if (this.CurrentActivity == null)
+                        if (this.mvxCurrentTopActivity.Activity == null)
                         {
                             HandleDialogClose(userInteractionId);
                             return;
                         }
 
-                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                        new Android.Support.V7.App.AlertDialog.Builder(this.mvxCurrentTopActivity.Activity)
                             .SetTitle(title)
                             .SetMessage(message)
                             .SetPositiveButton(buttonPositiveText, onClickListener)

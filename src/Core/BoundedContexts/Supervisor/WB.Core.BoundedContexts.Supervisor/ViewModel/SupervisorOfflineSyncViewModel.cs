@@ -20,8 +20,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel<object>, IOfflineSyncViewModel
     {
+        public IUserInteractionService UserInteractionService { get; }
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly IUserInteractionService userInteractionService;
 
         private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
 
@@ -37,11 +37,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IRestService restService)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
+            UserInteractionService = userInteractionService;
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
             devicesSubscribtion = deviceSynchronizationProgress.SyncStats.Subscribe(OnDeviceProgressReported);
-            this.userInteractionService = userInteractionService;
         }
 
         private string title;

@@ -9,9 +9,7 @@ using Humanizer.Localisation;
 using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 
@@ -19,8 +17,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 {
     public abstract class SingleInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : SingleInterviewViewModel
     {
-        private IMvxMessenger messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
-        private IEnumeratorSettings enumeratorSettings => ServiceLocator.Current.GetInstance<IEnumeratorSettings>();
+        private IMvxMessenger messenger => Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
         private MvxSubscriptionToken answerAcceptedSubscription;
 
         #region Subclasses
@@ -56,8 +53,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         #endregion
 
-        protected Toolbar toolbar;
-
         protected abstract int LanguagesMenuGroupId { get; }
         protected abstract int OriginalLanguageMenuItemId { get; }
         protected abstract int LanguagesMenuItemId { get; }
@@ -68,11 +63,13 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnCreate(bundle);
 
-            this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            this.SetSupportActionBar(this.toolbar);
+            this.Toolbar = this.FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
+            this.SetSupportActionBar(this.Toolbar);
 
             SetupAnswerTimeMeasurement();
         }
+
+        public Toolbar Toolbar { get; private set; }
 
         protected override void OnDestroy()
         {
@@ -92,7 +89,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private Toast toast;
         private void ShowAnswerTime(AnswerAcceptedMessage msg)
         {
-            if (!enumeratorSettings.ShowAnswerTime) return;
+            if (!ViewModel.EnumeratorSettings.ShowAnswerTime) return;
 
             var message = string.Format(UIResources.AnswerRecordedMsg,
                 msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));

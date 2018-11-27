@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ICommandService commandService,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings)
-            : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
+            : base(principal, viewModelNavigationService, commandService, enumeratorSettings, vibrationViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
