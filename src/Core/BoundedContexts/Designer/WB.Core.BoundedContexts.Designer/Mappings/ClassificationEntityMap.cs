@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.Type);
             Property(x => x.Value);
             Property(x => x.Index);
-
+            Property(x => x.ClassificationId);
         }
     }
 }
