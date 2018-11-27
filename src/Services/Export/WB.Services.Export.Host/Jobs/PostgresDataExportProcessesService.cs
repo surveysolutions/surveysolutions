@@ -70,7 +70,7 @@ namespace WB.Services.Export.Host.Jobs
         
         public void UpdateDataExportProgress(long processId, int progressInPercents)
         {
-            logger.LogTrace($"Update progress: {processId} - {progressInPercents}%");
+            logger.LogTrace("Update progress: {processId} - {progressInPercents}%", processId, progressInPercents);
             jobProgressReporter.UpdateJobData(processId, ProgressField, progressInPercents.ToString());
         }
 
