@@ -1,0 +1,7 @@
+<Project>
+   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+   <PropertyGroup>
+      <Product>Survey Solutions Export Service</Product>
+   </PropertyGroup>
+</Project>
