@@ -86,13 +86,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 status.Error(Modules.ErrorDuringRunningMigrations);
                 container.Resolve<ILogger>().Error("Exception during running migrations", ie);
-                throw;
             }
             catch(Exception e)
             {
                 status.Error(Modules.ErrorDuringSiteInitialization);
                 container.Resolve<ILogger>().Error("Exception during site inizialization", e);
-                throw;
             }
         }
     }

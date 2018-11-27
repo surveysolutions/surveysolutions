@@ -12,7 +12,7 @@ namespace WB.Services.Export.Services.Implementation
             ICommentsExporter commentsExporter)
         {
             serviceLabels.Add(diagnosticsExporter.DiagnosticsFileName, 
-                diagnosticsExporter.DiagnosticsFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType)));
+                diagnosticsExporter.DiagnosticsFileColumns.ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType, x.VariableValueLabels)));
             serviceLabels.Add(interviewErrorsExporter.GetFileName(), 
                 interviewErrorsExporter.GetHeader().ToDictionary(x => x.Title, x => new HeaderItemDescription(x.Description, x.ValueType)));
             serviceLabels.Add(interviewActionsExporter.InterviewActionsFileName, 
