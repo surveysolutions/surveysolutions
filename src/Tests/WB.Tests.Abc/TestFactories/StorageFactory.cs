@@ -5,7 +5,7 @@ using Amazon.S3.Transfer;
 using Microsoft.AspNet.Identity;
 using Moq;
 using SQLite;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;

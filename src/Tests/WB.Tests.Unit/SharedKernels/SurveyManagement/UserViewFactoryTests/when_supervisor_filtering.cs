@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(
                 supervisor1, supervisor2, 
                 interviewer11, interviewer12,
-                interviewer21);
+                interviewer21)
+                .WithDeviceInfo();
 
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
             BecauseOf();

@@ -301,9 +301,9 @@ namespace WB.UI.Headquarters
                 "~/Scripts/pages/batch-user-creation.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/js/export-settings").Include(
+            bundles.Add(new ScriptBundle("~/js/site-settings").Include(
                 "~/Dependencies/js/ajax.js",
-                "~/Scripts/pages/export-settings.js"
+                "~/Scripts/pages/site-settings.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/new-ui").Include(

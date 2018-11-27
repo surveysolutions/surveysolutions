@@ -9,8 +9,9 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -24,7 +25,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
@@ -119,7 +119,8 @@ namespace WB.UI.Headquarters.Controllers
                     DeviceId = x.DeviceId,
                     IsArchived = x.IsArchived,
                     EnumeratorVersion = x.EnumeratorVersion,
-                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild
+                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild,
+                    TrafficUsed = x.TrafficUsed.InKb()
                 })
             };
         }
@@ -167,6 +168,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string EnumeratorVersion { get; set; }
             public bool IsUpToDate { get; set; }
             public virtual Guid? SupervisorId { get; set; }
+            public virtual long TrafficUsed { get; set; }
         }
 
         [HttpPost]
