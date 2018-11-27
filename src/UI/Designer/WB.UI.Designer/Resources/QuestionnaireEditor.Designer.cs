@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {
@@ -124,6 +133,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All classifications.
+        /// </summary>
+        public static string AllClassifications {
+            get {
+                return ResourceManager.GetString("AllClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment preview.
         /// </summary>
         public static string AttachmentPreview {
@@ -156,6 +174,24 @@ namespace WB.UI.Designer.Resources {
         public static string ChangePassword {
             get {
                 return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show categories.
+        /// </summary>
+        public static string ClassificationShowCategories {
+            get {
+                return ResourceManager.GetString("ClassificationShowCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank. Classifications.
+        /// </summary>
+        public static string ClassificationsTitle {
+            get {
+                return ResourceManager.GetString("ClassificationsTitle", resourceCulture);
             }
         }
         
@@ -1303,6 +1339,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for classification.
+        /// </summary>
+        public static string QuestionAddClassification {
+            get {
+                return ResourceManager.GetString("QuestionAddClassification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Interviewer Instruction.
         /// </summary>
         public static string QuestionAddInstruction {
@@ -1771,6 +1816,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search classification.
+        /// </summary>
+        public static string SearchClassification {
+            get {
+                return ResourceManager.GetString("SearchClassification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select country.
         /// </summary>
         public static string SelectCountry {
@@ -2131,7 +2185,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{name}} in its attachment property.
+        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{-name}} in its attachment property.
         /// </summary>
         public static string SideBarAttachmentsEmptyLine3 {
             get {
