@@ -19,6 +19,7 @@
       <Version>$(ProductVersion)-$(CleanSuffix).$(BuildNumber)</Version>
       <Version Condition=" '$(CleanSuffix)' == '' ">$(ProductVersion)-dev.$(BuildNumber)</Version>
       <Version Condition=" '$(CleanSuffix)' == 'release' ">$(ProductVersion).$(BuildNumber)</Version>
+      <FileVersion>$(ProductVersion).$(BuildNumber)</FileVersion>
    </PropertyGroup>
 
     <ItemGroup>
