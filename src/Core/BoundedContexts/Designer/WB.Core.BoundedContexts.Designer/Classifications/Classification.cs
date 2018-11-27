@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public ClassificationEntityType Type { get; set; }
         public int? Value { get; set; }
         public int? Order { get; set; }
+        public Guid? ClassificationId { get; set; }
     }
 
     public class ClassificationEntity : IClassificationEntity
@@ -56,6 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public virtual ClassificationEntityType Type { get; set; }
         public virtual int? Value { get; set; }
         public virtual int? Index { get; set; }
+        public virtual Guid? ClassificationId { get; set; }
     }
 
     public enum ClassificationEntityType
@@ -105,9 +107,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             {
                 var searchQuery = ApplySearchFilter(_, query, groupId);
 
-                var ids = searchQuery.Select(x => x.Type == ClassificationEntityType.Classification ? x.Id : x.Parent)
-                    .GroupBy(x => x)
-                    .Select(x => x.Key)
+                var ids = searchQuery.Select(x => x.ClassificationId)
+                    .Distinct()
                     .Take(20)
                     .ToList();
 
@@ -144,8 +145,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 }).ToList();
 
             var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId)
-                .Select(x => x.Type == ClassificationEntityType.Classification ? x.Id : x.Parent)
-                .GroupBy(x => x)
+                .Select(x => x.ClassificationId)
+                .Distinct()
                 .Count());
 
             return await Task.FromResult(new ClassificationsSearchResult

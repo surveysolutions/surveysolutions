@@ -46,10 +46,12 @@ namespace WB.UI.Designer.Api.Designer
                     case ClassificationEntityType.Classification:
                         var parenGroup = entities.FirstOrDefault(x => x.Id == entity.Parent.Value && x.Type == ClassificationEntityType.Group);
                         entity.ParentGuid = parenGroup?.IdGuid;
+                        entity.ClassificationId = entity.IdGuid;
                         break;
                     case ClassificationEntityType.Category:
                         var parenClassification = entities.FirstOrDefault(x => x.Id == entity.Parent.Value && x.Type == ClassificationEntityType.Classification);
                         entity.ParentGuid = parenClassification?.IdGuid;
+                        entity.ClassificationId = entity.ParentGuid;
                         break;
                 }
             }
@@ -61,7 +63,8 @@ namespace WB.UI.Designer.Api.Designer
                 Title = x.Title,
                 Type = x.Type,
                 Index = x.Order,
-                Parent = x.ParentGuid
+                Parent = x.ParentGuid,
+                ClassificationId = x.ClassificationId
             }).ToArray();
 
             classificationsStorage.Store(bdEntities);
