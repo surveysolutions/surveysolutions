@@ -32,12 +32,12 @@ namespace WB.Services.Export.Host.Infra
         {
             this.logger = logger;
             id = Interlocked.Increment(ref _counter);
-            logger.LogTrace($"Creating new TenantApi<{typeof(T).Name}> #{id}");
+            logger.LogTrace("Creating new TenantApi<{name}> #{id}", typeof(T).Name, id);
         }
 
         public void Dispose()
         {
-            logger.LogTrace($"Disposing TenantApi<{typeof(T).Name}> #{id}");
+            logger.LogTrace("Disposing TenantApi<{name}> #{id}", typeof(T).Name, id);
         }
 
         readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
@@ -104,8 +104,8 @@ namespace WB.Services.Export.Host.Infra
                     sw.Elapsed.TotalSeconds,
                     size);
 
-                logger.LogDebug("Got {size} in {elapsed} ms: {uri}...",
-                    size.Bytes().Humanize("#.##"), sw.ElapsedMilliseconds, uri.Substring(0, 80));
+                logger.LogTrace("TenantApi response size {size} in {elapsed} ms: {uri}...",
+                    size, sw.ElapsedMilliseconds, uri.Substring(0, 80));
 
                 return result;
             }

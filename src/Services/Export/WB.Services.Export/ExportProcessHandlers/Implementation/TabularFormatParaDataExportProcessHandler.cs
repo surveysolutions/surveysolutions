@@ -43,7 +43,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            logger.LogInformation("Start paradata export for " + settings);
+            logger.LogInformation("Start paradata export for {settings}", settings);
             var api = this.tenantApi.For(settings.Tenant);
             var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
             
@@ -69,7 +69,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
                     var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
-                    logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items with {historyItems.Sum(h => h.Records.Count)} records");
+                    logger.LogTrace("Query headquarters for interviews history. Got {historyItemsCount} items with {historyItemsSum} records",
+                        historyItems.Count, historyItems.Sum(h => h.Records.Count));
 
                     foreach (InterviewHistoryView paradata in historyItems)
                     {
@@ -103,7 +104,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             WriteDoFile();
 
-            logger.LogInformation("Completed paradata export for " + settings);
+            logger.LogInformation("Completed paradata export for {settings}", settings);
         }
 
         private void WriteDoFile()
