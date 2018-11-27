@@ -112,17 +112,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             var doFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.do");
             var doFileContent = new StringBuilder();
 
-            doFileContent.Append("insheet using \"paradata.tab\", tab case names");
+            doFileContent.AppendLine("insheet using \"paradata.tab\", tab case names");
 
-            doFileContent.Append("label variable interview__id `\"Unique 32-character long identifier of the interview\"'");
-            doFileContent.Append("label variable order `\"Sequential event number within each interview\"'");
-            doFileContent.Append("label variable event `\"Type of event happened\"'");
-            doFileContent.Append("label variable responsible `\"Login name of the person who initiated the event\"'");
-            doFileContent.Append("label variable role `\"System role of the person who initiated the event\"'");
-            doFileContent.Append("label variable timestamp `\"Date and time when the event happened\"'");
-            doFileContent.Append("label variable offset `\"Timezone offset relative to UTC\"'");
-            doFileContent.Append("label variable parameters `\"Event-specific parameters\"'");
-            doFileContent.Append("");
+            doFileContent.AppendLine("label variable interview__id `\"Unique 32-character long identifier of the interview\"'");
+            doFileContent.AppendLine("label variable order `\"Sequential event number within each interview\"'");
+            doFileContent.AppendLine("label variable event `\"Type of event happened\"'");
+            doFileContent.AppendLine("label variable responsible `\"Login name of the person who initiated the event\"'");
+            doFileContent.AppendLine("label variable role `\"System role of the person who initiated the event\"'");
+            doFileContent.AppendLine("label variable timestamp `\"Date and time when the event happened\"'");
+            doFileContent.AppendLine("label variable offset `\"Timezone offset relative to UTC\"'");
+            doFileContent.AppendLine("label variable parameters `\"Event-specific parameters\"'");
+            doFileContent.AppendLine("");
 
             this.fileSystemAccessor.WriteAllText(doFilePath, doFileContent.ToString());
         }
