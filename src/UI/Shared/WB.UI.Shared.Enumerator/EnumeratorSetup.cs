@@ -80,7 +80,7 @@ namespace WB.UI.Shared.Enumerator
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
-            var viewModelViewLookup = new Dictionary<Type, Type>()
+            var viewModelViewLookup = new Dictionary<Type, Type>
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
@@ -90,7 +90,7 @@ namespace WB.UI.Shared.Enumerator
                 {typeof(SelectResponsibleForAssignmentViewModel), typeof(SelectResponsibleForAssignmentFragment)},
             };
 
-            var container = ServiceLocator.Current.GetInstance<IMvxViewsContainer>();
+            var container = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
         }
 

@@ -199,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
-            if (this.userInteraction.HasPendingUserInterations)
+            if (this.userInteraction.HasPendingUserInteractions)
             {
                 await this.userInteraction.WaitPendingUserInteractionsAsync();
                 ResetUiOptions();

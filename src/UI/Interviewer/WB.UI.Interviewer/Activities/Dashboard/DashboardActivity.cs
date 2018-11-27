@@ -8,19 +8,16 @@ using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Support.Design.Widget;
-using Android.Support.Graphics.Drawable;
 using Android.Support.V4.View;
 using Android.Views;
-using Android.Widget;
+using MvvmCross;
 using MvvmCross.Droid.Support.V4;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -342,7 +339,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (apiAvailability.IsUserResolvableError(resultCode))
             {
                 this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_InstallPlayServices);
-                ServiceLocator.Current.GetInstance<IUserInteractionService>().ShowGoogleApiErrorDialog(resultCode,
+                this.ViewModel.UserInteractionService.ShowGoogleApiErrorDialog(resultCode,
                     RequestCodeRecoverPlayServices);
             }
             else
@@ -361,8 +358,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     .AddApi(NearbyClass.CONNECTIONS_API)
                     .Build();
 
-                this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
-                var apiClientFactory = ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>();
+                this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
+                var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
                 apiClientFactory.GoogleApiClient = this.GoogleApi;
             }
 
