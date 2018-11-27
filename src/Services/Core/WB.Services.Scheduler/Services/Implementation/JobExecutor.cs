@@ -31,7 +31,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task ExecuteAsync(JobItem job, CancellationToken token)
         {
-            logger.LogInformation($"Executing job: [{job.Type}] {job.Tenant} {job.Args}");
+            logger.LogInformation("Executing job: [{Type}] {Tenant} {Args}", job.Type, job.Tenant, job.Args);
             var linkedCancellation = CancellationTokenSource.CreateLinkedTokenSource(token);
 
             jobCancellation.Subscribe(cancelled =>
@@ -69,12 +69,12 @@ namespace WB.Services.Scheduler.Services.Implementation
             }
             catch (OperationCanceledException oce)
             {
-                logger.LogWarning($"Job cancelled: [{job.Type}] {job.Tenant} {job.Args}");
+                logger.LogWarning("Job cancelled: [{Type}] {Tenant} {Args}", job.Type, job.Tenant, job.Args);
                 progressReporter.CancelJob(job.Id, oce.Message);
             }
             catch (Exception e)
             {
-                logger.LogError(e, $"Error during job run: [{job.Type}] {job.Tenant} {job.Args}");
+                logger.LogError(e, "Error during job run: [{Type}] {Tenant} {Args}", job.Type, job.Tenant, job.Args);
                 progressReporter.FailJob(job.Id, e);
             }
 

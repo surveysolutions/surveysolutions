@@ -25,7 +25,7 @@ namespace WB.Services.Export.Host
                 {
                     Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
-                    Log.Logger.Fatal("Unhandled exception occur " + eventArgs.ExceptionObject.ToString());
+                    Log.Logger.Fatal("Unhandled exception occur {exception}", new [] { eventArgs.ExceptionObject.ToString() });
                 };
 
                 var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -81,7 +81,7 @@ namespace WB.Services.Export.Host
             var fileLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
 
             logConfig
-                .MinimumLevel.Debug()
+                .MinimumLevel.Verbose()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("AppType", "ExportService")
