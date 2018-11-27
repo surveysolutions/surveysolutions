@@ -9,5 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters
         {
             return string.IsNullOrEmpty(value) ? string.Empty : RemoveNewLineRegEx.Replace(value, " ");
         }
+        
+        public static long InKb(this long bytes)
+        {
+            return bytes / 1024;
+        }
     }
 }

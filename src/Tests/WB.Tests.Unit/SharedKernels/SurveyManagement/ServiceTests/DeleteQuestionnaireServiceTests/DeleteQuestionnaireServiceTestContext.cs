@@ -1,8 +1,10 @@
 ﻿using Moq;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -37,7 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                     Mock.Of<IAssignmetnsDeletionService>(),
                     lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                    questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                    questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                    new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()));
         }
     }
 }
