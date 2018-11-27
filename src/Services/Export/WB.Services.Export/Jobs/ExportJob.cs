@@ -21,7 +21,7 @@ namespace WB.Services.Export.Jobs
         public ExportJob(IServiceProvider serviceProvider,
             ILogger<ExportJob> logger)
         {
-            logger.LogTrace("Constructed instance");
+            logger.LogTrace("Constructed instance of ExportJob");
             this.serviceProvider = serviceProvider;
             this.logger = logger;
         }
