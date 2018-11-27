@@ -11,9 +11,6 @@
                 <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
                 </template>
             </h4>
-            <div class="answer" v-if="hasAttachment">
-                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true" customCssClass="static-text-image"></wb-attachment>
-            </div>
             <div class="answer" v-if="item.State != 3">
                 <div v-if="item.controlType === 'image'">
                     <wb-attachment :filename="item.Answer" :previewOnly="true"></wb-attachment>
@@ -103,12 +100,7 @@ export default {
         },
         parseGps(str)
         {
-            const regex = new RegExp('^(?<lat>[0-9\.-]*),(?<lon>[0-9\.-]*)\[.+\].*', 'gis');
-            let matches = regex.exec(str);
-            return {
-                latitude: matches["groups"].lat,
-                longitude: matches["groups"].lon,
-            };            
+            return JSON.parse(str || "{ latitude: 0, longitude: 0 }");
         }
     },
     computed: {
@@ -121,7 +113,7 @@ export default {
         googleMapPosition() {
             let coords = this.parseGps(this.item.Answer);
             return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${coords.latitude},${coords.longitude}`
-                + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
+                + `&zoom=14&scale=0&size=340x177&markers=color:blue|label:O|${coords.latitude},${coords.longitude}`
                 + `&key=${this.$config.googleApiKey}`
         },
         audioRecordPath() {
@@ -152,12 +144,6 @@ export default {
             if (!this.hasDate) return;
             let local = moment.utc(this.item.AnswerTimeUtc).local();
             return local.format("HH:mm");
-        },
-        attachmentContentId(){
-            return this.item.attachmentContentId;
-        },
-        hasAttachment(){
-            return this.attachmentContentId != null;
         }
     },
     components: {

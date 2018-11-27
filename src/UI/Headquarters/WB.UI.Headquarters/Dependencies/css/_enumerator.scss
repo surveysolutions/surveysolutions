@@ -273,6 +273,99 @@
         height: auto;
     }
 }
+// traffic usage
+.t-monthly-usage{
+    border-left: 2px solid #f0f0f0;
+    height: 100%;
+    display: flex;
+    position: relative;
+}
+.t-month{
+    position: absolute;
+    top: calc(100% - 24px);
+    left: 2px;
+    font: 12px/14px "Trebuchet MS", Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+.t-daily-usage{
+    height: 80%;
+    position: relative;
+    border-right: 1px solid #f0f0f0;
+    &:last-of-type{
+        border-right: none;
+    }
+}
+.t-unit-wrapper{
+    width: 20px;
+    height: 85%;
+    border-bottom: 2px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.t-day{
+    position: absolute;
+    bottom: 0;
+    left: 2px;
+    font: 12px/14px "Trebuchet MS", Helvetica, sans-serif;
+    text-transform: uppercase;
+    &.t-no-sync{
+        color: #d8d8d8;
+    }
+}
+.t-up, .t-down{
+    width: 100%;
+    font: 12px/14px "Trebuchet MS", Helvetica, sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+.t-up{
+    background-color: rgba(60,162,26,0.7);
+}
+.t-down{
+    background-color: rgba(42, 129, 203, 0.7);
+}
+.traffic-usage{
+    .total{
+        padding-left: 40px;
+    }
+} 
+.legend-block{
+    height: 80%;
+    padding-bottom: 0;
+    margin-left: 0;
+    .legend{
+        height: 85%;
+        border-bottom: 2px solid #f0f0f0;
+        padding-left: 20px;
+        padding-bottom: 20px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+}
+.legend-unit span{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 10px;
+    /* border-radius: 100%; */
+}
+.up-unit span{
+    background-color: rgba(60,162,26,0.7);
+}
+.down-unit span{
+    background-color: rgba(42, 129, 203, 0.7);
+}
+.total span{
+    font-size: 22px;
+    line-height: 24px;
+}
 @media (max-width: $screen-md-min){
     .enumerators{
         .table-wrapper{
