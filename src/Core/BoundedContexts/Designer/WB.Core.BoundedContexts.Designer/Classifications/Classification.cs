@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -58,6 +59,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public virtual int? Value { get; set; }
         public virtual int? Index { get; set; }
         public virtual Guid? ClassificationId { get; set; }
+        public virtual Guid? UserId { get; set; }
+
     }
 
     public enum ClassificationEntityType
@@ -70,15 +73,23 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     public class ClassificationsStorage : IClassificationsStorage
     {
         private readonly IPlainStorageAccessor<ClassificationEntity> classificationsStorage;
+        private readonly IMembershipUserService membershipUserService;
 
-        public ClassificationsStorage(IPlainStorageAccessor<ClassificationEntity> classificationsStorage)
+        public ClassificationsStorage(
+            IPlainStorageAccessor<ClassificationEntity> classificationsStorage, 
+            IMembershipUserService membershipUserService)
         {
             this.classificationsStorage = classificationsStorage;
+            this.membershipUserService = membershipUserService;
         }
 
         public Task<IEnumerable<ClassificationGroup>> GetClassificationGroups()
         {
-            var dbEntities = classificationsStorage.Query(_ => _.Where(x => x.Type == ClassificationEntityType.Group).ToList());
+            var userId = membershipUserService.WebUser.UserId;
+            var dbEntities = classificationsStorage.Query(_ => _
+                .Where(x => x.Type == ClassificationEntityType.Group)
+                .Where(x => x.UserId == null || x.UserId == userId)
+                .ToList());
 
             var groups = dbEntities.Select(x => new ClassificationGroup
             {
@@ -91,9 +102,12 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
         {
+            var userId = membershipUserService.WebUser.UserId;
             var dbEntities = classificationsStorage.Query(_ =>
             {
-                var query = _.Where(x => x.Type == ClassificationEntityType.Classification);
+                var query = _
+                    .Where(x => x.Type == ClassificationEntityType.Classification)
+                    .Where(x => x.UserId == null || x.UserId == userId);
                 if (groupId.HasValue)
                 {
                     query = query.Where(x => x.Parent == groupId);
@@ -112,6 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId)
         {
+            
             var dbEntities = classificationsStorage.Query(_ =>
             {
                 var searchQuery = ApplySearchFilter(_, query, groupId);
@@ -168,7 +183,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
             string query, Guid? groupId)
         {
-            var searchQuery = entities;
+            var userId = membershipUserService.WebUser.UserId;
+            var searchQuery = entities.Where(x => x.UserId == null || x.UserId == userId);
             var lowercaseQuery = (query?? string.Empty).ToLower().Trim();
             if (!string.IsNullOrWhiteSpace(lowercaseQuery))
             {

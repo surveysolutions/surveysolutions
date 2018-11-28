@@ -109,6 +109,16 @@
                 };
             };
 
+            utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup = function (title, count) {
+                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
+                var message = $i18next.t('OnlyFirstOptionsWillBeTakenConfirmation',  {trimmedTitle: trimmedTitle, count: count });
+                return {
+                    title: message,
+                    okButtonTitle: $i18next.t("Yes"),
+                    cancelButtonTitle: $i18next.t("No")
+                };
+            };
+
             utilityService.createEmptyGroup = function (parent) {
                 var newId = utilityService.guid();
                 var emptyGroup = {

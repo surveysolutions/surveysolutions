@@ -1231,6 +1231,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only the first {{count}} categories will be taken for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string OnlyFirstOptionsWillBeTakenConfirmation {
+            get {
+                return ResourceManager.GetString("OnlyFirstOptionsWillBeTakenConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
@@ -1695,6 +1704,15 @@ namespace WB.UI.Designer.Resources {
         public static string Recompile {
             get {
                 return ResourceManager.GetString("Recompile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to replace existing categories for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string ReplaceOptionsConfirmation {
+            get {
+                return ResourceManager.GetString("ReplaceOptionsConfirmation", resourceCulture);
             }
         }
         
