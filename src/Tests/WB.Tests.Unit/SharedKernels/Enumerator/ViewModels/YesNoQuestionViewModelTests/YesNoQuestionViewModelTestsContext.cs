@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using MvvmCross.Tests;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,7 +14,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     [NUnit.Framework.TestOf(typeof(YesNoQuestionViewModel))]
-    public class YesNoQuestionViewModelTestsContext
+    public class YesNoQuestionViewModelTestsContext: MvxIoCSupportingTest
     {
         protected static YesNoQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null,
            IQuestionnaireStorage questionnaireStorage = null,
@@ -22,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
            IPrincipal principal = null,
            AnsweringViewModel answeringViewModel = null,
            QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null,
-           FilteredOptionsViewModel filteredOptionsViewModel = null)
+           FilteredOptionsViewModel filteredOptionsViewModel = null,
+           ThrottlingViewModel throttlingModel = null)
         {
             return new YesNoQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
@@ -35,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
-                Create.ViewModel.ThrottlingViewModel());
+                throttlingModel ?? Create.ViewModel.ThrottlingViewModel());
         }
     }
 }
