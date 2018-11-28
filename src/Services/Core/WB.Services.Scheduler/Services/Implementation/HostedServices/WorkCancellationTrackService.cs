@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
@@ -12,14 +13,18 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         private readonly IConfiguration configuration;
         private readonly IOptions<JobSettings> options;
         private readonly IJobCancellationNotifier cancellationNotification;
+        private readonly ILogger<WorkCancellationTrackService> logger;
 
         public WorkCancellationTrackService(
             IConfiguration configuration, 
-            IOptions<JobSettings> options, IJobCancellationNotifier cancellationNotification)
+            IOptions<JobSettings> options, 
+            IJobCancellationNotifier cancellationNotification,
+            ILogger<WorkCancellationTrackService> logger )
         {
             this.configuration = configuration;
             this.options = options;
             this.cancellationNotification = cancellationNotification;
+            this.logger = logger;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -38,6 +43,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                         {
                             if (long.TryParse(arg.AdditionalInformation, out var jobId))
                             {
+                                logger.LogDebug("Job cancellation acquired from DB. JobId: {jobId}", jobId);
                                 cancellationNotification.JobCancelled(jobId);
                             }
                         };
