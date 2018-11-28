@@ -10,20 +10,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerInterviewViewModelFactory : InterviewViewModelFactory
     {
-        private readonly IServiceLocator serviceLocator;
 
         public InterviewerInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository, 
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings,
-            IServiceLocator serviceLocator) : base(questionnaireRepository, interviewRepository, settings)
+            IServiceLocator serviceLocator) : base(questionnaireRepository, interviewRepository, settings, serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
         }
 
         public override IDashboardItem GetDashboardAssignment(AssignmentDocument assignment)
         {
             InterviewerAssignmentDashboardItemViewModel result =
-                serviceLocator.GetInstance<InterviewerAssignmentDashboardItemViewModel>();
+                ServiceLocator.GetInstance<InterviewerAssignmentDashboardItemViewModel>();
             result.Init(assignment);
             return result;
         }
