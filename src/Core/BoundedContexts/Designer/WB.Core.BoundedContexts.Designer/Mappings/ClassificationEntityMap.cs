@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.Value);
             Property(x => x.Index);
             Property(x => x.ClassificationId);
+            Property(x => x.UserId);
         }
     }
 }
