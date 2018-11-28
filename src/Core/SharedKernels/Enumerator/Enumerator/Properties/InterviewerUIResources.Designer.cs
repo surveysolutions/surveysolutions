@@ -966,7 +966,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating interview.
+        ///   Looks up a localized string similar to Creating Interview.
         /// </summary>
         public static string Interview_Creating {
             get {
@@ -975,7 +975,17 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading.
+        ///   Looks up a localized string similar to This can take a couple of minutes, 
+        ///do not exit this application.
+        /// </summary>
+        public static string Interview_Creating_Description {
+            get {
+                return ResourceManager.GetString("Interview_Creating_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading interview data.
         /// </summary>
         public static string Interview_Loading {
             get {
@@ -984,7 +994,16 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading... {0}%.
+        ///   Looks up a localized string similar to Interview will start shortly.
+        /// </summary>
+        public static string Interview_Loading_Description {
+            get {
+                return ResourceManager.GetString("Interview_Loading_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading interview data   {0}%.
         /// </summary>
         public static string Interview_Loading_With_Percents {
             get {

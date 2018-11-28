@@ -18,5 +18,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             get => this.progressDescription;
             set => SetProperty(ref this.progressDescription, value);
         }
+
+        private string operationDescription;
+
+        public string OperationDescription
+        {
+            get => this.operationDescription;
+            set => SetProperty(ref this.operationDescription, value);
+        }
+
+        private string questionnaireTitle;
+
+        public string QuestionnaireTitle
+        {
+            get => this.questionnaireTitle;
+            set => SetProperty(ref this.questionnaireTitle, value);
+        }
     }
 }
