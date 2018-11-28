@@ -13,6 +13,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
@@ -20,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
     {
         protected Guid interviewId;
         private readonly IInterviewerInterviewAccessor interviewFactory;
+        private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ICommandService commandService;
@@ -34,7 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             ILogger logger,
             IUserInteractionService interactionService,
             IQuestionnaireStorage questionnaireRepository,
-            IInterviewerInterviewAccessor interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory,
+            IPlainStorage<InterviewView> interviewsRepository)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
@@ -43,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interactionService = interactionService;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewFactory = interviewFactory;
+            this.interviewsRepository = interviewsRepository;
         }
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
@@ -58,6 +63,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             await base.Initialize();
             if (interviewId == Guid.Empty) throw new ArgumentException(nameof(interviewId));
             this.ProgressDescription = InterviewerUIResources.Interview_Loading;
+            this.OperationDescription = InterviewerUIResources.Interview_Loading_Description;
+
+            var interview = this.interviewsRepository.GetById(this.interviewId.FormatGuid());
+            this.QuestionnaireTitle = interview.QuestionnaireTitle;
         }
 
         public override void ViewAppeared()
@@ -102,6 +111,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                             this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                         await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                     }
+
+                    await Task.Delay(TimeSpan.FromSeconds(15));
 
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 

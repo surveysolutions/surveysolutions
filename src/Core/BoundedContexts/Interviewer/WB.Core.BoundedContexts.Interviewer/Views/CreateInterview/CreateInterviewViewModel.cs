@@ -74,6 +74,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             if (AssignmentId == 0) throw new ArgumentException(nameof(AssignmentId));
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
             this.ProgressDescription = InterviewerUIResources.Interview_Creating;
+            this.OperationDescription = InterviewerUIResources.Interview_Creating_Description;
+
+            var assignmentDocument = assignmentsRepository.GetById(AssignmentId);
+            QuestionnaireTitle = assignmentDocument.Title;
         }
 
         public override void ViewAppeared()
