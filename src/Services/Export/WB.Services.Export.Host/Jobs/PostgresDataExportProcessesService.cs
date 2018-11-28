@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Services;
@@ -29,20 +30,23 @@ namespace WB.Services.Export.Host.Jobs
 
         public async Task<long> AddDataExport(DataExportProcessArgs args)
         {
-            var job = await this.jobService.AddNewJobAsync(new JobItem
+            using (LoggingHelpers.LogContext(("tenantName", args.ExportSettings.Tenant.Name)))
             {
-                Tenant = args.ExportSettings.Tenant.ToString(),
-                TenantName = args.ExportSettings.Tenant.Name,
-                Args = JsonConvert.SerializeObject(args),
-                Tag = args.NaturalId,
-                Type = ExportJobRunner.Name,
-                Data =
+                var job = await this.jobService.AddNewJobAsync(new JobItem
                 {
-                    [StatusField] = DataExportStatus.Queued.ToString()
-                }
-            });
+                    Tenant = args.ExportSettings.Tenant.ToString(),
+                    TenantName = args.ExportSettings.Tenant.Name,
+                    Args = JsonConvert.SerializeObject(args),
+                    Tag = args.NaturalId,
+                    Type = ExportJobRunner.Name,
+                    Data =
+                    {
+                        [StatusField] = DataExportStatus.Queued.ToString()
+                    }
+                });
 
-            return job.Id;
+                return job.Id;
+            }
         }
 
         private DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
@@ -68,10 +72,10 @@ namespace WB.Services.Export.Host.Jobs
             return jobs;
         }
         
-        public void UpdateDataExportProgress(long processId, int progressInPercents)
+        public void UpdateDataExportProgress(DataExportProcessArgs process, int progressInPercents)
         {
-            logger.LogTrace("Update progress: {processId} - {progressInPercents}%", processId, progressInPercents);
-            jobProgressReporter.UpdateJobData(processId, ProgressField, progressInPercents.ToString());
+            logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);
+            jobProgressReporter.UpdateJobData(process.ProcessId, ProgressField, progressInPercents.ToString());
         }
 
         public void DeleteDataExport(long processId, string reason)
