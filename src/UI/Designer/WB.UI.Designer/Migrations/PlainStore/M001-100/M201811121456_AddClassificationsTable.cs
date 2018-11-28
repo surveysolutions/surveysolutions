@@ -18,7 +18,8 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     .WithColumn("type").AsInt16()
                     .WithColumn("value").AsInt32().Nullable()
                     .WithColumn("index").AsInt32().Nullable()
-                    .WithColumn("classificationid").AsGuid().Nullable();
+                    .WithColumn("classificationid").AsGuid().Nullable()
+                    .WithColumn("userid").AsGuid().Nullable();
 
                 this.Create.Index($"parent_{tableName}_idx")
                     .OnTable(tableName)
@@ -27,6 +28,10 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 this.Create.Index($"classificationid_{tableName}_idx")
                     .OnTable(tableName)
                     .OnColumn("classificationid");
+
+                this.Create.Index($"userid_{tableName}_idx")
+                    .OnTable(tableName)
+                    .OnColumn("userid");
             }
         }
 

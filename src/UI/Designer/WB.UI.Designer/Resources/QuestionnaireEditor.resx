@@ -1165,4 +1165,10 @@
   <data name="SearchClassification" xml:space="preserve">
     <value>Search classification</value>
   </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Are you sure you want to replace existing categories for question "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Only the first {{count}} categories will be taken for question "{{trimmedTitle}}"?</value>
+  </data>
 </root>

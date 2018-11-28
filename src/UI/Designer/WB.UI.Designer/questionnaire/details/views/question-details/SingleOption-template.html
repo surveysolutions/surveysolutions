@@ -12,6 +12,11 @@
        class="btn btn-link"
        ng-click="editFilteredComboboxOptions()" ng-i18next="QuestionUploadOptions">
     </a>
+    <a ng-if="activeQuestion.isFilteredCombobox"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification">
+    </a>
     <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
        href="javascript:void(0);"
        class="btn btn-link"
