@@ -9,7 +9,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -133,13 +132,6 @@ namespace WB.Tests.Abc
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
             return Setup.InterviewForQuestionnaire(Create.Entity.PlainQuestionnaire(document: questionnaireDocument));
-        }
-
-        public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
-        {
-            return Mock.Of<IDesignerEngineVersionService>(_ 
-                => _.IsClientVersionSupported(Moq.It.IsAny<int>()) == isClientVersionSupported
-                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == questionnaireContentVersion);
         }
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
@@ -284,11 +276,6 @@ namespace WB.Tests.Abc
         public static Mock<T> GetMock<T>(this IFixture fixture) where T : class
         {
             return fixture.Freeze<Mock<T>>();
-        }
-
-        public static IPrincipal Principal(string name, string pass)
-        {
-            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.Name == "name" && i.PasswordHash == "pass"));
         }
 
         public static IPlainStorageAccessor<QuestionnaireBrowseItem> QuestionnaireBrowseItemRepository(params QuestionnaireBrowseItem[] questionnaireBrowseItem)
