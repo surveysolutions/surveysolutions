@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/VerticalFullWidthWrappingLayout">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+            style="@style/LoadingToolbarTitle"
+            local:MvxBind="Text QuestionnaireTitle" />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+        <TextView
+            style="@style/LoadingOperationTitle"
+            local:MvxBind="Text ProgressDescription;" />
+        <ProgressBar
+            android:indeterminateOnly="true"
+            android:visibility="visible"
+            style="@style/LoadingProgressIndicator" />
+        <TextView
+            style="@style/LoadingOperationDescription"
+            local:MvxBind="Text OperationDescription;" />
+    </LinearLayout>
+</LinearLayout>

@@ -14,7 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelTests
 {
@@ -111,7 +113,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
           IStatefulInterviewRepository interviewRepository = null,
           ICommandService commandService = null,
           IPrincipal principal = null,
-          IInterviewerInterviewAccessor interviewFactory = null)
+          IInterviewerInterviewAccessor interviewFactory = null,
+          IPlainStorage<InterviewView> interviewsRepository = null)
         {
             var loadingViewModel = new LoadingViewModel(
                 principal ?? Substitute.For<IPrincipal>(),
@@ -121,7 +124,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 questionnaireRepository: Substitute.For<IQuestionnaireStorage>(),
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>(),
-                interviewFactory : interviewFactory ?? Substitute.For<IInterviewerInterviewAccessor>());
+                interviewFactory : interviewFactory ?? Substitute.For<IInterviewerInterviewAccessor>(),
+                interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
 
             return loadingViewModel;
         }

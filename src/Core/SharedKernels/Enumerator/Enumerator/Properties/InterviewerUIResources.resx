@@ -671,13 +671,20 @@ for further instructions</value>
     <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Loading interview data</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Interview will start shortly</value>
   </data>
   <data name="Interview_Creating" xml:space="preserve">
-    <value>Creating interview</value>
+    <value>Creating Interview</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>This can take a couple of minutes, 
+do not exit this application</value>
   </data>
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
-    <value>Loading... {0}%</value>
+    <value>Loading interview data   {0}%</value>
   </data>
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
     <value>{0} interview(s) failed to synchronize</value>
