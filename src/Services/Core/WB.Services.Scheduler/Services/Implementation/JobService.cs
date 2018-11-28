@@ -31,7 +31,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task<JobItem> AddNewJobAsync(JobItem job)
         {
-            logger.LogTrace("Adding new job: {tag}", job.Tag);
+            logger.LogTrace("Adding new job {jobTag}", job.Tag);
 
             using (var tr = await db.Database.BeginTransactionAsync())
             {
@@ -50,7 +50,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                 var newItem = await db.Jobs.AddAsync(job);
                 await db.SaveChangesAsync();
-                logger.LogTrace("Added new job with id: {id} - {tag}", newItem.Entity.Id,  job.Tag);
+                logger.LogTrace("Added new job with id: {jobId}- {jobTag}", newItem.Entity.Id,  job.Tag);
 
                 tr.Commit();
 
