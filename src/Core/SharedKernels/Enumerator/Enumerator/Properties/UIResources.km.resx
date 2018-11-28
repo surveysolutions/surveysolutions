@@ -304,9 +304,6 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>យករូបbarcode</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>តើអ្នកប្រាកដទេដែលអ្នកចង់លុប {0} ជួរដេកពីបញ្ជីរាយនាម?</value>
-  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>អ្នកសម្ភាសន៍ Survey Solutions</value>
   </data>
