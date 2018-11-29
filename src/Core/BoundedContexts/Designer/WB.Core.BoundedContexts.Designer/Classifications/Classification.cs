@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.Infrastructure.PlainStorage;
@@ -28,7 +29,6 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public string Title { get;set; }
         public ClassificationGroup Group { get; set; }
         public int CategoriesCount { get; set; }
-
     }
 
     public class ClassificationGroup : IClassificationEntity
@@ -220,6 +220,79 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             return Task.FromResult(categories);
         }
+
+        public Task CreateClassification()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateClassification(Guid classificationId)
+        {
+            var classification = this.classificationsStorage.GetById(classificationId);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
+
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteClassification(Guid classificationId)
+        {
+            var classification = this.classificationsStorage.GetById(classificationId);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
+            return Task.CompletedTask;
+        }
+
+        public Task CreateClassificationGroup(ClassificationGroup group)
+        {
+            this.classificationsStorage.Store(new ClassificationEntity
+            {
+                Id = group.Id,
+                Title = group.Title,
+                Type = ClassificationEntityType.Group
+            }, group.Id);
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateClassificationGroup(ClassificationGroup group)
+        {
+            if (!membershipUserService.WebServiceUser.IsAdmin)
+                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change public records");
+
+            var entity = this.classificationsStorage.GetById(group.Id);
+            entity.Title = group.Title;
+            this.classificationsStorage.Store(entity, entity.Id);
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteClassificationGroup(Guid groupId)
+        {
+            if (!membershipUserService.WebServiceUser.IsAdmin)
+                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change public records");
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateCategories(Guid classificationId)
+        {
+            if (!membershipUserService.WebServiceUser.IsAdmin)
+                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change public records");
+            return Task.CompletedTask;
+        }
+
+        private void ThrowIfUserDoesNotHaveAccessToPublicEntity(ClassificationEntity entity)
+        {
+            if (!entity.UserId.HasValue && !membershipUserService.WebServiceUser.IsAdmin)
+            {
+                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change public records");
+            }
+        }
+        private void ThrowIfUserDoesNotHaveAccessToPrivate(ClassificationEntity entity)
+        {
+            if (entity.UserId.HasValue && entity.UserId != membershipUserService.WebServiceUser.UserId)
+            {
+                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change private records");
+            }
+        }
     }
 
     public interface IClassificationsStorage
@@ -229,6 +302,13 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId);
         void Store(ClassificationEntity[] bdEntities);
         Task<List<Category>> GetCategories(Guid classificationId);
+        Task CreateClassification();
+        Task UpdateClassification(Guid classificationId);
+        Task DeleteClassification(Guid classificationId);
+        Task CreateClassificationGroup(ClassificationGroup group);
+        Task UpdateClassificationGroup(ClassificationGroup group);
+        Task DeleteClassificationGroup(Guid groupId);
+        Task UpdateCategories(Guid classificationId);
     }
 
     public class ClassificationsSearchResult

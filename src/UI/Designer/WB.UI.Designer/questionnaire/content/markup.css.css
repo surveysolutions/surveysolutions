@@ -10405,7 +10405,7 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   position: absolute;
   right: 0px;
   top: 0px;
-  background-image: url(i/search-glyph.png);
+  background-image: url(content/i/search-glyph.png);
   width: 42px;
   height: 42px;
   z-index: 5;
@@ -10504,11 +10504,21 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
 .add-classification-modal ul li {
   margin: 5px 0;
   word-break: break-word;
+  position: relative;
+  padding-left: 85px;
 }
-.add-classification-modal .classification-group-tag {
+.add-classification-modal ul li .option-value {
+  position: absolute;
+  left: 0;
+  text-align: right;
+  display: block;
+  font-weight: bold;
+  width: 80px;
+}
+.add-classification-modal .tile-footer {
   margin-bottom: 5px;
 }
-.add-classification-modal .classification-group-tag a {
+.add-classification-modal .tile-footer a {
   font-size: 12px;
   line-height: 14px;
   display: inline-block;
@@ -10517,8 +10527,8 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   border-radius: 3px;
   word-break: break-word;
 }
-.add-classification-modal .classification-group-tag a:hover,
-.add-classification-modal .classification-group-tag a:focus {
+.add-classification-modal .tile-footer a:hover,
+.add-classification-modal .tile-footer a:focus {
   text-decoration: none;
 }
 .add-classification-modal .add-button {

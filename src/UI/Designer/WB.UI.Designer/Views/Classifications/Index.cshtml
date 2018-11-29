@@ -6,9 +6,85 @@
     IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
+@section Modal
+{
+    <script type="x/template" id="group-editor-template">
+        <div>
+            <form v-if="isEditMode">
+                <button v-if="isNew || admin" @@click="deleteItem" type="button" class="btn btn-default">Delete</button>
+                <div class="form-group">
+                    <input type="text" required v-model="title" class="form-control" placeholder="Group title">
+                </div>
+                <button type="button" @@click="isEditMode = false" class="btn btn-default">Cancel</button>
+                <button type="button" @@click="save" class="btn btn-default">Save</button>
+            </form>
+            <div v-else>
+                <a @@click="select()"> {{ group.title }}</a>
+                <button @@click="isEditMode = true" type="button" class="btn btn-default">Edit</button>
+            </div>
+        </div>
+    </script>
+    <script type="x/template" id="classification-editor-template">
+        <div>
+            <form v-if="isEditMode">
+                <button v-if="isNew || admin" @@click="deleteItem" type="button" class="btn btn-default">Delete</button>
+                <div class="form-group">
+                    <input type="text" required v-model="title" class="form-control" placeholder="Classification title">
+                </div>
+                <button type="button" @@click="isEditMode = false" class="btn btn-default">Cancel</button>
+                <button type="button" @@click="save" class="btn btn-default">Save</button>
+            </form>
+            <div v-else>
+                <a @@click="select()"> {{ title }}</a>
+                <button @@click="isEditMode = true" type="button" class="btn btn-default">Edit</button>
+            </div>
+        </div>
+    </script>
+}
+
 @section Scripts {
+    @Scripts.Render("~/list")
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style type="text/css">
+        .slider {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            overflow-x: hidden;
+        }
+
+        .line {
+            position: absolute;
+            opacity: 0.4;
+            background: #4a8df8;
+            width: 150%;
+            height: 5px;
+        }
+
+        .subline {
+            position: absolute;
+            background: #4a8df8;
+            height: 5px;
+        }
+        .inc {
+            animation: increase 2s infinite;
+        }
+        .dec {
+            animation: decrease 2s 0.5s infinite;
+        }
+
+        @@keyframes increase {
+            from { left: -5%; width: 5%; }
+            to { left: 130%; width: 100%;}
+        }
+        @@keyframes decrease {
+            from { left: -80%; width: 80%; }
+            to { left: 110%; width: 10%;}
+        }
+
         .classifications-wrapper {
             margin-top: -0.1px;
             height: 100%;
@@ -16,16 +92,16 @@
             border-left: 13px solid #bcc3c8;
         }
 
-            .classifications-wrapper .column {
-                height: 100%;
-            }
-
-                .classifications-wrapper .column h3 {
-                    color: #7e898f;
-                }
-
-        .classifications-block {
+        .classifications-wrapper .column {
             height: 100%;
+        }
+
+        .classifications-wrapper .column h3 {
+            color: #7e898f;
+        }
+
+        .classifications-blcok {
+            height: calc(100% - 52px);
         }
 
         .search-row {
@@ -35,14 +111,107 @@
 
         .classification-groups {
             background-color: #c9cfd3;
+            padding-right: 0;
         }
 
         .classifications {
             background-color: #e4e7e9;
+            padding-right: 0;
         }
 
         .categories-groups {
             background-color: #f8f9f9;
+        }
+
+        .classification-list {
+            padding-top: 10px;
+        }
+
+        .classification-list li {
+            padding-right: 15px;
+            margin-bottom: 2px;
+        }
+
+        .classification-list li a {
+            display: block;
+            word-break: break-word;
+            padding: 10px;
+            border-radius: 5px;
+            color: #4d4d4d;
+        }
+
+        .classification-list li a:hover,
+        .classification-list li a:focus,
+        .classification-list li a:active {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .classification-groups .classification-list li a:hover,
+        .classification-groups .classification-list li a:focus,
+        .classification-groups .classification-list li a:active {
+            background-color: #f8f9f9;
+        }
+
+        .classification-groups .active a {
+            background-color: #e4e7e9;
+            box-shadow: 17px 0px 0 0 #e4e7e9;
+            position: relative;
+        }
+
+        .classification-list .active a:before {
+            display: block;
+            content: "";
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            border-radius: 100%;
+            box-shadow: 8px 7px 0px -3px #e4e7e9;
+            right: -15px;
+            top: -20px;
+        }
+
+        .classification-list .active a:after {
+            display: block;
+            content: "";
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            border-radius: 100%;
+            box-shadow: 7px -8px 0px -3px #e4e7e9;
+            right: -15px;
+            bottom: -20px;
+        }
+
+        .scroller {
+            height: 100%;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .classification-list-wrapper {
+            height: calc(100% - 52px);
+            padding-bottom: 20px;
+        }
+
+        .classifications .classification-list li a:hover,
+        .classifications .classification-list li a:focus,
+        .classifications .classification-list li a:active {
+            background-color: #fff;
+        }
+
+        .classifications .active a {
+            background-color: #f8f9f9;
+            box-shadow: 17px 0px 0 0 #f8f9f9;
+            position: relative;
+        }
+
+        .classifications .active a:before {
+            box-shadow: 8px 7px 0px -3px #f8f9f9;
+        }
+
+        .classifications .active a:after {
+            box-shadow: 7px -8px 0px -3px #f8f9f9;
         }
     </style>
     <script type="text/javascript">
@@ -59,182 +228,351 @@
             };
         }
 
-        var classificationClient = (function() {
-            var defaultOnSuccess = function(result) { console.log(result); };
-            var defaultOnFail = function(exception, reason) { console.log(exception, reason); };
+        var routes = {
+            groups: './api/groups',
+            createGroup: './api/group',
+            updateGroup: './api/group/{0}',
+            deleteGroup: './api/group/{0}',
+            classifications: './api/classifications',
+            createClassifications: './api/classification',
+            updateClassifications: './api/classification/{0}',
+            deleteClassifications: './api/classification/{0}',
+            categories: './api/classification/{0}/categories',
+            updateCategories: './api/classification/{0}/categories'
+        }
 
-            var routes = {
-                groups: './api/classifications/groups',
-                classifications: './api/classifications',
-                categories: './api/classification/{0}/categories',
-            }
-
-            function HttpException(message, status, response) {
-                this.message = message;
-                this.status = status;
-                this.response = response;
-            }
-
-            var processResponse = function(xhr) {
-                var status = xhr.status;
-                if (status === 200) {
-                    return JSON.parse(xhr.responseText);
-                } else if (status !== 200 && status !== 204) {
-                    throw new HttpException("An unexpected server error occurred.", status, xhr.responseText);
+        var store = new Vuex.Store({
+            state: {
+                isLoading: false,
+                groups: [],
+                classifications: [],
+                categories: [],
+                activeGroup: {},
+                activeClassification: {}
+            },
+            mutations: {
+                start_loading: function(state) { state.isLoading = true; },
+                finish_loading: function(state) { state.isLoading = false; },
+                groups_loaded: function(state, groups) {
+                    state.groups = groups;
+                    state.classifications = [];
+                    state.categories = [];
+                },
+                classifications_loaded: function(state, classifications) {
+                    state.classifications = classifications;
+                    state.categories = [];
+                },
+                categories_loaded: function(state, categories) {
+                    state.categories = categories;
+                },
+                addGroup: function(state, group) {
+                    state.groups.push(group);
+                },
+                updateGroup: function(state, group) {
+                },
+                deleteGroup: function(state, index) {
+                    state.groups.splice(index, 1);
+                },
+                selectGroup: function(state, index) {
+                    state.activeGroup.isActive = false;
+                    state.activeGroup = state.groups[index];
+                    state.activeGroup.isActive = true;
+                    state.activeClassification.isActive = false;
+                    state.activeClassification = {};
+                },
+                selectClassification: function(state, index) {
+                    state.activeClassification.isActive = false;
+                    state.activeClassification = state.classifications[index];
+                    state.activeClassification.isActive = true;
+                },
+                addClassification: function(state, classification) {
+                    state.classifications.push(classification);
+                },
+                addCategory: function(state, category) {
+                    state.categories.push(category);
                 }
-                return null;
-            }
-
-            var processResponseWithCallbacks = function(url, xhr, onSuccess, onFail) {
-                try {
-                    var result = processResponse(xhr);
-                    if (onSuccess !== undefined)
-                        onSuccess(result);
-                } catch (e) {
-                    if (onFail !== undefined)
-                        onFail(e, "http_service_exception");
-                }
-            }
-
-            return {
-                groups: function(onSuccess, onFail) {
+            },
+            actions: {
+                addGroup(context, group) {
+                    context.commit('addGroup', group);
+                },
+                updateGroup(context, group) {
+                    (group.isNew
+                            ? axios.post(routes.createGroup, group)
+                            : axios.patch(routes.updateGroup.format(group.id), group))
+                        .then(function() {
+                            context.commit('updateGroup', group);
+                        });
+                },
+                deleteGroup(context, index) {
+                    var group = context.state.groups[index];
+                    if ((group || {}).isNew)
+                        context.commit('deleteGroup', index);
+                    else {
+                        axios.delete(routes.deleteGroup.format(group.id))
+                            .then(function() {
+                                context.commit('deleteGroup', index);
+                            });
+                    }
+                },
+                selectGroup(context, index) {
+                    context.commit('selectGroup', index);
+                    context.dispatch('loadClassifications', context.state.groups[index].id);
+                },
+                addClassification(context, classification) {
+                    context.commit();
+                },
+                updateClassification(context, classification) {
+                    context.commit();
+                },
+                deleteClassification(context, classification) {
+                    context.commit();
+                },
+                selectClassification(context, index) {
+                    context.commit('selectClassification', index);
+                    context.dispatch('loadCategories', context.state.classifications[0].id);
+                },
+                addCategory(context, category) {
+                    context.commit();
+                },
+                updateCategory(context, category) {
+                    context.commit();
+                },
+                deleteCategory(context, category) {
+                    context.commit();
+                },
+                loadGroups: function(context) {
                     var url = routes.groups;
-                    jQuery.ajax({
-                        url: url,
-                        type: "get",
-                        dataType: "text",
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    }).done((_data, _textStatus, xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    }).fail((xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    });
-                },
-                classifications: function(groupId, onSuccess, onFail) {
-                    var url = routes.classifications;
-                    jQuery.ajax({
-                        url: url,
-                        data: { groupId: groupId },
-                        type: "get",
-                        dataType: "text",
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    }).done((_data, _textStatus, xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    }).fail((xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    });
-                },
-                categories: function(classificationId, onSuccess, onFail) {
-                    var url = routes.categories.format(classificationId);
-                    jQuery.ajax({
-                        url: url,
-                        type: "get",
-                        dataType: "text",
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    }).done((_data, _textStatus, xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    }).fail((xhr) => {
-                        processResponseWithCallbacks(url, xhr, onSuccess || defaultOnSuccess, onFail || defaultOnFail);
-                    });
-                }
-            }
-        })();
-
-        $(function() {
-            var app = new Vue({
-                el: '#designer-list',
-                data: {
-                    groups: [],
-                    classifications: [],
-                    categories: [],
-                    activeGroup: {},
-                    activeClassification: {},
-                    isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin)
-                },
-                created() {
-                    this.loadGroups();
-                },
-                methods: {
-                    loadGroups: function() {
-                        var self = this;
-                        classificationClient.groups(function(groups) {
-                            self.groups = groups || [];
-                            if (self.groups.length > 0) {
-                                self.loadClassifications(self.groups[0]);
+                    return axios.get(url, {})
+                        .then(function(response) {
+                            context.commit('groups_loaded', response.data);
+                            if (context.state.groups.length > 0) {
+                                context.dispatch('selectGroup', 0);
                             }
                         });
+                },
+                loadClassifications: function(context, groupId) {
+                    var url = routes.classifications;
+
+                    return axios.get(url, { params: { groupId: groupId } })
+                        .then(function(response) {
+                            context.commit('classifications_loaded', response.data);
+                            if (context.state.classifications.length > 0) {
+                                context.dispatch('selectClassification', 0);
+                            }
+                        });
+                },
+                loadCategories: function(context, classificationId) {
+                    var url = routes.categories.format(classificationId);
+                    return axios.get(url, {})
+                        .then(function(response) {
+                            context.commit('categories_loaded', response.data);
+                        });
+                }
+            }
+        });
+
+
+        // Add a request interceptor
+        axios.interceptors.request.use(function(config) {
+                store.commit('start_loading');
+                return config;
+            },
+            function(error) {
+                store.commit('finish_loading');
+                console.log(error);
+                return Promise.reject(error);
+            });
+
+        // Add a response interceptor
+        axios.interceptors.response.use(function(response) {
+                store.commit('finish_loading');
+                return response;
+            },
+            function(error) {
+                store.commit('finish_loading');
+                console.log(error);
+                return Promise.reject(error);
+            });
+
+        $(function() {
+            var guid = function() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+
+                return s4() +
+                    s4() +
+                    s4() +
+                    s4() +
+                    s4() +
+                    s4() +
+                    s4() +
+                    s4();
+            };
+
+            Vue.component('GroupEditor',
+                {
+                    template: '#group-editor-template',
+                    data: function() {
+                        return {
+                            isNew: this.group.isNew,
+                            isEditMode: this.group.isNew,
+                            title: this.group.title,
+                            id: this.group.id
+                        }
                     },
-                    loadClassifications: function(group) {
-                        this.activeGroup = group;
-                        this.activeClassification = {};
-                        var self = this;
-                        classificationClient.classifications(group.id,
-                            function(classifications) {
-                                self.classifications = classifications || [];
-                                if (self.classifications.length > 0) {
-                                    self.loadCategories(self.classifications[0]);
-                                }
-                            });
+                    props: ['group', 'index', 'admin'],
+                    methods: {
+                        select() {
+                            store.dispatch('selectGroup', this.index);
+                        },
+                        deleteItem() {
+                            store.dispatch('deleteGroup', this.index);
+                        },
+                        save() {
+                            var self = this;
+                            var group = { isNew: this.isNew, id: this.id, title: this.title, index: this.index };
+                            store.dispatch('updateGroup', group);
+                        }
+                    }
+                });
+
+            Vue.component('ClassificationEditor',
+                {
+                    template: '#classification-editor-template',
+                    data: function() {
+                        return {
+                            isNew: this.classification.isNew,
+                            isEditMode: this.classification.isNew,
+                            title: this.classification.title,
+                            id: this.classification.id
+                        }
                     },
-                    loadCategories: function(classification) {
-                        this.activeClassification = classification;
-                        var self = this;
-                        classificationClient.categories(classification.id,
-                            function(categories) {
-                                self.categories = categories || [];
-                            });
+                    props: ['classification', 'index', 'admin'],
+                    methods: {
+                        select() {
+                            store.dispatch('selectClassification', this.index);
+                        },
+                        deleteItem() {
+                            store.dispatch('deleteClassification', this.index);
+                        },
+                        save() {
+                            var self = this;
+                            var classification = {
+                                isNew: this.isNew,
+                                id: this.id,
+                                title: this.title,
+                                index: this.index
+                            };
+                            store.dispatch('updateClassification', classification)
+                                .then(function() {
+                                    self.isEditMode = false;
+                                });
+                        }
+                    }
+                });
+
+
+            var app = new Vue({
+                store: store,
+                el: '#designer-list',
+                data: {
+                    isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin),
+                },
+                created() {
+                    this.$store.dispatch('loadGroups');
+                    Vue.nextTick(function() {
+                        $('.scroller').perfectScrollbar();
+                    });
+                },
+                computed: {
+                    isLoading () {
+                        return this.$store.state.isLoading;
+                    },
+                    groups() {
+                        return this.$store.state.groups;
+                    },
+                    classifications() {
+                        return this.$store.state.classifications;
+                    },
+                    categories() {
+                        return this.$store.state.categories;
+                    },
+                    activeGroup() {
+                        return this.$store.state.activeGroup;
+                    },
+                    activeClassification() {
+                        return this.$store.state.activeClassification;
+                    }
+                },
+                methods: {
+                    addGroup() {
+                        this.$store.dispatch('addGroup', { id: guid(), isNew: true, title: '' });
+                    },
+                    addClassification() {
+                        this.$store.dispatch('addClassification', { id: guid(), isNew: true, title: '' });
                     }
                 }
             });
         });
     </script>
 }
+<div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
+<div class="classifications-wrapper">
+    <div class="row search-row">
+        <form id="frmSearch" class="form-inline">
+            <div class="input-group">
+                <input id="txtFilter" type="text" class="form-control" name="f" value="">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" onclick="$('#frmSearch').submit()">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="13px" height="12px">
+                        <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" fill="#b2b2b2"></path>
+                        </svg>
 
-
-<div class="wrapper-questionnaire-table clearfix">
-    <div class="classifications-wrapper">
-        <div class="row search-row">
-            <form id="frmSearch" class="form-inline">
-                <div class="input-group">
-                    <input id="txtFilter" type="text" class="form-control" name="f" value="">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" onclick="$('#frmSearch').submit()">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="13px" height="12px">
-                            <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" fill="#b2b2b2"></path>
-                            </svg>
-                        </button>
-                    </span>
+                    </button>
+                </span>
+            </div>
+            <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
+        </form>
+    </div>
+    <div class="row classifications-blcok">
+        <div class="col-xs-3 column classification-groups">
+            <h3>Classification groups</h3>
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(group, index) in groups" :key="group.id" :class="{'active': group.isActive }">
+                            <group-editor :group="group" :index="index" :admin="isAdmin"></group-editor>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn lighter-hover" @@click="addGroup()">Add group</button>
                 </div>
-                <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
-            </form>
+            </div>
         </div>
-        <div class="row classifications-block">
-            <div class="col-xs-3 column classification-groups">
-                <h3>Classification groups</h3>
-                <ul>
-                    <li v-for="group in groups" :key="group.id"><a v-on:click="loadClassifications(group)"> {{ group.title }}</a></li>
-                </ul>
-                <button>Add classification group</button>
+        <div class="col-xs-4 column classifications tab-content">
+            <h3>{{activeGroup.title}}</h3>
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(classification, index) in classifications" :key="classification.id" :class="{'active': classification.isActive }">
+                            <classification-editor :classification="classification" :index="index" :admin="isAdmin"></classification-editor>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn lighter-hover">Add classification</button>
+                </div>
             </div>
-            <div class="col-xs-4 column classifications tab-content">
-                <h3>{{activeGroup.title}}</h3>
-                <ul>
-                    <li v-for="classifications in classifications" :key="classifications.id"><a v-on:click="loadCategories(classifications)"> {{ classifications.title }}</a></li>
-                </ul>
-                <button>Add classification</button>
-            </div>
-            <div class="col-xs-5 column categories-groups tab-content">
-                <h3>{{activeClassification.title}}</h3>
-                <ul>
-                    <li v-for="category in categories" :key="category.id"><a>{{ category.value }} {{ category.title }}</a></li>
+        </div>
+        <div class="col-xs-5 column categories-groups tab-content">
+            <h3>{{activeClassification.title}}</h3>
+            <div class="scroller">
+                <ul class="list-unstyled classification-list">
+                    <li v-for="category in categories" :key="category.id">{{ category.value }} {{ category.title }}</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+
