@@ -303,9 +303,6 @@ Pode criar ou editar seus questionários em Survey Solutions Designer</value>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Toque para tirar o código de barras</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Tem certeza que deseja remover {0} linha(s) de cada lista relacionada?</value>
-  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Entrevistador de Survey Solutions</value>
   </data>

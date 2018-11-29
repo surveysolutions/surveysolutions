@@ -101,8 +101,10 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             exportWatch.Stop();
 
-            this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
-                             $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
+            this.logger.LogInformation("Export with all steps finished for questionnaire {questionnaireIdentity}. " +
+                                       "Took {elapsed:c} to export {interviewIds} interviews",
+                questionnaireIdentity, exportWatch.Elapsed, interviewIdsToExport.Count
+                );
         }
         
         public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
@@ -110,8 +112,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
             var descriptionBuilder = new StringBuilder();
-            descriptionBuilder.AppendLine(
-                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
+            descriptionBuilder.AppendLine($"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
 
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {

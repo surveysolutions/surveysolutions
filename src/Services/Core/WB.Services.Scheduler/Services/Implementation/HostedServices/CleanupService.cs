@@ -39,8 +39,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
                     try
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds),
-                            cancellationToken);
+                        await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds), cancellationToken);
                     }
                     catch (TaskCanceledException)
                     {

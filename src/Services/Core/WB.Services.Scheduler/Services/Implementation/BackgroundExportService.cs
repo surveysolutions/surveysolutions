@@ -35,7 +35,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             foreach (var backgroundService in backgroundServices)
             {
                 await backgroundService.StartAsync(cts.Token);
-                logger.LogInformation("Started background service: " + backgroundService.GetType().Name);
+                logger.LogInformation("Started background service: {name}", backgroundService.GetType().Name);
             }
         }
 
@@ -46,7 +46,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             foreach (var backgroundService in backgroundServices)
             {
                 await backgroundService.StopAsync(cancellationToken);
-                logger.LogInformation("Stopped background service: " + backgroundService.GetType().Name);
+                logger.LogInformation("Stopped background service: {name}", backgroundService.GetType().Name);
             }
 
             cts.Dispose();
