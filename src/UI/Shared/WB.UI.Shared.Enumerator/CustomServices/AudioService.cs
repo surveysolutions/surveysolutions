@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using Android.Media;
 using Android.Webkit;
-using Java.IO;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -253,7 +251,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             if (disposed) return;
             
             this.ReleaseAudioRecorder();
-            this.mediaPlayer.Dispose();
+
+            // audio service is a singleton and can be disposed by activity lifecycle
+            // this is a temp fix. Either AudioService shouldn't be a singleton, either should not be disposed or affected by elements with short lifecycle       
+            //this.mediaPlayer.Dispose();
 
             this.disposed = true;
         }
