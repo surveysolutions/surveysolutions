@@ -44,14 +44,6 @@ namespace WB.Tests.Abc
                 .Returns(instance);
         }
 
-        public static void StubToMockedServiceLocator<T>()
-            where T : class
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<T>())
-                .Returns(Mock.Of<T>());
-        }
-
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
