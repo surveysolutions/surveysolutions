@@ -5,7 +5,6 @@ using System.Web.Http.Hosting;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -16,7 +15,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.API.PublicApi;
@@ -86,21 +84,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             return controller;
         }
 
-        protected static HealthCheckApiController CreateHealthCheckApiController(
-            /*KP-4929    IDatabaseHealthCheck databaseHealthCheck,
-              IEventStoreHealthCheck eventStoreHealthCheck, 
-              IBrokenSyncPackagesStorage brokenSyncPackagesStorage, 
-            IChunkReader chunkReader, 
-              IFolderPermissionChecker folderPermissionChecker,*/
-            IHealthCheckService healthCheckService)
-        {
-            return new HealthCheckApiController(
-                /*KP-4929    databaseHealthCheck ?? Mock.Of<IDatabaseHealthCheck>(),
-                  eventStoreHealthCheck ?? Mock.Of<IEventStoreHealthCheck>(),
-                  brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
-                chunkReader ?? Mock.Of<IChunkReader>(),
-                folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>()*/healthCheckService ?? Mock.Of<IHealthCheckService>());
-        }
         protected static AttachmentsApiV2Controller CreateAttachmentsApiV2Controller(
             IAttachmentContentService attachmentContentService)
         {
