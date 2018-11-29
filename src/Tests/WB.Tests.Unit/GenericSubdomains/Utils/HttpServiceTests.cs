@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
         [Test]
         public async Task should_pass_user_agent_from_rest_service_settings()
         {
-            var testUserAgent = "surveysolutions/11";
+            var testUserAgent = "SurveySolutions/11";
             var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq" && x.UserAgent == testUserAgent && x.Timeout == TimeSpan.FromMinutes(1));
 
             var testMessageHandler = new TestMessageHandler();
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
 
             // assert
             var httpRequestMessage = testMessageHandler.ExecutedRequests.First();
-            Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Name, Is.EqualTo("surveysolutions"));
+            Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Name, Is.EqualTo("SurveySolutions"));
             Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Version, Is.EqualTo("11"));
         }
 
