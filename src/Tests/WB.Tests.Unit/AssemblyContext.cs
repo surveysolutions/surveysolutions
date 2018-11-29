@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,6 +21,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: Localizable(false)]
 
 namespace WB.Tests.Unit
 {
