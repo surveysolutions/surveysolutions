@@ -57,6 +57,7 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -957,6 +958,25 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+        }
+
+        public RestService RestService(IRestServiceSettings restServiceSettings = null,
+            INetworkService networkService = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
+            IStringCompressor stringCompressor = null,
+            IRestServicePointManager restServicePointManager = null,
+            IHttpStatistician httpStatistician = null,
+            IHttpClientFactory httpClientFactory = null)
+        {
+            return new RestService(
+                restServiceSettings ?? Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost"),
+                networkService ?? Mock.Of<INetworkService>(x => x.IsHostReachable(It.IsAny<string>()) == true && x.IsNetworkEnabled() == true),
+                synchronizationSerializer ?? new JsonAllTypesSerializer(),
+                stringCompressor ?? Mock.Of<IStringCompressor>(),
+                restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>(),
+                httpClientFactory ?? Mock.Of<IHttpClientFactory>()
+            );
         }
     }
 

@@ -85,7 +85,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var requestTimeoutToken = new CancellationTokenSource(this.restServiceSettings.Timeout).Token;
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
-                userCancellationToken ?? default(CancellationToken));
+                userCancellationToken ?? default);
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
