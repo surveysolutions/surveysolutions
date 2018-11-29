@@ -1785,7 +1785,6 @@
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
-    <Content Include="Views\HealthCheck\Index.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
@@ -2145,7 +2144,6 @@
     <Compile Include="API\ControlPanelApiController.cs" />
     <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\ExportSettingsApiController.cs" />
-    <Compile Include="API\HealthCheckApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
     <Compile Include="API\DataCollection\DevicesControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerApiController.cs" />
