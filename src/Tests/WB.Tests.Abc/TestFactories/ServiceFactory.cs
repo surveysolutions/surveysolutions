@@ -525,14 +525,6 @@ namespace WB.Tests.Abc.TestFactories
             IExpressionProcessor expressionProcessor = null,
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
-            if (expressionProcessor == null && !ServiceLocator.IsLocationProviderSet)
-            {
-                var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
-
-                ServiceLocator.SetLocatorProvider(() => serviceLocator);
-                Setup.StubToMockedServiceLocator<IExpressionProcessor>();
-            }
-
             return new ExpressionsPlayOrderProvider(
                 new ExpressionsGraphProvider(
                     expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
