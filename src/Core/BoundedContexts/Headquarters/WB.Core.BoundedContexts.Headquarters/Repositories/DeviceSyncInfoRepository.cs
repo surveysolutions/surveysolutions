@@ -119,6 +119,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                         TotalDownloadedBytes = statistics.TotalDownloadedBytes
                     })
                 .GroupBy(x => DbFunctions.TruncateTime(x.Date))
+                .OrderByDescending(x => x.Key)
+                .Take(30)
+                .OrderBy(x => x.Key)
                 .Select(x => new InterviewerDailyTrafficUsage
                 {
                     DownloadedBytes = x.Sum(s => s.TotalDownloadedBytes),
@@ -127,7 +130,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     Month = x.Key.Value.Month,
                     Day = x.Key.Value.Day
                 })
-                .Take(30)
                 .ToList();
             return trafficUsageForUser;
         }
