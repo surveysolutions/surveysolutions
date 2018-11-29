@@ -26,7 +26,7 @@ AS $function$
 	 		and v2.entity_id in (select id from varb)
 			and (_teamleadid is null or _teamleadid = s.teamleadid)
 	)
-	select  a1, a2, count(distinct interview_id)
+	select  a1, a2, count(interview_id)
 	from agg
 	group by 1, 2
 	order by 1, 2
