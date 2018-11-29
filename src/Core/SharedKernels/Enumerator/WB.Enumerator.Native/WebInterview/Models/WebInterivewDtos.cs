@@ -55,7 +55,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Mask { get; set; }
         public string Answer { get; set; }
-        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class InterviewIntegerQuestion : GenericQuestion
@@ -202,6 +201,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsForSupervisor { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
+        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class Validity
