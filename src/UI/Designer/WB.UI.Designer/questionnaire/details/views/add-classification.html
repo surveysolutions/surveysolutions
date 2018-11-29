@@ -1,4 +1,4 @@
-﻿<div class="modal-header blue-strip">
+﻿<div class="modal-header blue-strip handle">
     <button type="button" class="close" aria-hidden="true" ng-click="$close()"></button>
     <h3 class="modal-title">
         {{'ClassificationsTitle' | i18next}}
@@ -46,12 +46,12 @@
                     </button>
                     <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
                         <perfect-scrollbar class="scroller">
-                            <ul>
-                                <li ng-repeat="category in classification.categories">{{category.value}} {{category.title}}</li>
+                            <ul class="list-unstyled">
+                                <li ng-repeat="category in classification.categories"><span class="option-value">{{category.value}}</span> {{category.title}}</li>
                             </ul>
                         </perfect-scrollbar>
                     </div>
-                    <div class="classification-group-tag clearfix">
+                    <div class="tile-footer clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
                         <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
@@ -65,12 +65,12 @@
                     </button>
                     <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
                         <perfect-scrollbar class="scroller">
-                            <ul>
-                                <li ng-repeat="category in classification.categories">{{category.value}} {{category.title}}</li>
+                            <ul class="list-unstyled">
+                                <li ng-repeat="category in classification.categories"><span class="option-value">{{category.value}}</span> {{category.title}}</li>
                             </ul>
                         </perfect-scrollbar>
                     </div>
-                    <div class="classification-group-tag clearfix">
+                    <div class="tile-footer clearfix">
                         <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
                         <button class="btn btn-link add-button" ng-click="replaceOptions(classification)">{{'Add' | i18next}}</button>
                     </div>
