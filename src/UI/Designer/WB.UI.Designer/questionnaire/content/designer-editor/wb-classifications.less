@@ -106,7 +106,7 @@
             position: absolute;
             right: 0px;
             top: 0px;
-            background-image: url(../i/search-glyph.png);
+            background-image: url(../content/i/search-glyph.png);
             width: 42px;
             height: 42px;
             z-index: 5;
@@ -219,10 +219,21 @@
         li {
             margin: 5px 0;
             word-break: break-word;
+            position: relative;
+            padding-left: 85px;
+
+            .option-value {
+                position: absolute;
+                left: 0;
+                text-align: right;
+                display: block;
+                font-weight: bold;
+                width: 80px;
+            }
         }
     }
 
-    .classification-group-tag {
+    .tile-footer {
         margin-bottom: 5px;
 
         a {
