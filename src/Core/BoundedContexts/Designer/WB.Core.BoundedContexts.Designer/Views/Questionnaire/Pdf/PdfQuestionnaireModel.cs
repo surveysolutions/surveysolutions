@@ -462,5 +462,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
 
         public char SpecialValuesAppendixIndex => IsVariablesAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
+        public int TimezoneOffsetMinutes { get; set; }
     }
 }
