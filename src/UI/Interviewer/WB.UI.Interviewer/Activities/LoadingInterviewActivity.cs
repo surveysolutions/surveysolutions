@@ -10,7 +10,7 @@ namespace WB.UI.Interviewer.Activities
         NoHistory = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class LoadingInterviewActivity : ProgressInterviewActivity<LoadingInterviewViewModel, LoadingViewModelArg>
+    public class LoadingInterviewActivity : ProgressInterviewActivity<LoadingInterviewViewModel>
     {
         public override bool IsSupportMenu => true;
     }

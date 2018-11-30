@@ -10,7 +10,7 @@ namespace WB.UI.Interviewer.Activities
         NoHistory = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class CreateAndLoadInterviewActivity : ProgressInterviewActivity<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>
+    public class CreateAndLoadInterviewActivity : ProgressInterviewActivity<CreateAndLoadInterviewViewModel>
     {
         public override bool IsSupportMenu => false;
     }
