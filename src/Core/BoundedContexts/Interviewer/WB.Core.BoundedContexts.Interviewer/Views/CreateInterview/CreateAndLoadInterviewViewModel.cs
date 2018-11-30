@@ -102,6 +102,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         protected async Task CreateInterviewAndNavigateThereAsync()
         {
             IsIndeterminate = true;
+            this.ProgressDescription = InterviewerUIResources.Interview_Creating;
+            this.OperationDescription = InterviewerUIResources.Interview_Creating_Description;
 
             try
             {
@@ -153,6 +155,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         public async Task RestoreInterviewAndNavigateThereAsync()
         {
+            this.ProgressDescription = InterviewerUIResources.Interview_Loading;
+            this.OperationDescription = InterviewerUIResources.Interview_Loading_Description;
             IsIndeterminate = false;
 
             this.loadingCancellationTokenSource = new CancellationTokenSource();
