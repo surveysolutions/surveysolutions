@@ -161,4 +161,6 @@
     <color name="exo_player_seek_unplayed">#2a81cb</color>
     <color name="exo_player_text">#333333</color>
 
+    <color name="loading_title">#000000</color>
+
 </resources>
