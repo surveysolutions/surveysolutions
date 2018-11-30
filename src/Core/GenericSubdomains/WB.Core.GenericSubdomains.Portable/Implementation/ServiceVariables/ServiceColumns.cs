@@ -18,7 +18,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
     {
         public const string ColumnDelimiter = "__";
         //Id of the row
-        public static readonly string InterviewRandom = "ssSys_IRnd";
+        public static readonly string InterviewRandom = "sssys_irnd";
         public static readonly string HasAnyError = $"has{ColumnDelimiter}errors";
         public static readonly string Key = $"interview{ColumnDelimiter}key";
         public static readonly string InterviewId = $"interview{ColumnDelimiter}id";

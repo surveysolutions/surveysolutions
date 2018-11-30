@@ -303,9 +303,6 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>แตะเพื่อสแกนบาร์โค้ด</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>คุณต้องการลบจำนวน {0} สมาชิกใช่ไหม</value>
-  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>

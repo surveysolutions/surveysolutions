@@ -682,15 +682,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Health Check Page.
-        /// </summary>
-        public static string HealthCheck_IndexTitle {
-            get {
-                return ResourceManager.GetString("HealthCheck_IndexTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Hide filter.
         /// </summary>
         public static string HideFilter {

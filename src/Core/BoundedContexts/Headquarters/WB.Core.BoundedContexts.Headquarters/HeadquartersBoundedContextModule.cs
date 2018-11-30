@@ -1,5 +1,4 @@
 ﻿using Ncqrs.Eventing.Storage;
-using System;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -10,18 +9,14 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
-using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
@@ -43,7 +38,6 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -236,12 +230,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
             registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
-            registry.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>, EventStoreHealthChecker>();
-            registry.BindWithConstructorArgument<IAtomicHealthCheck<FolderPermissionCheckResult>, FolderPermissionChecker>("folderPath", this.currentFolderPath);
-            registry.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>, NumberOfUnhandledPackagesChecker>();
-            registry.Bind<IAtomicHealthCheck<ReadSideHealthCheckResult>, ReadSideHealthChecker>();
-
-            registry.Bind<IHealthCheckService, HealthCheckService>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
