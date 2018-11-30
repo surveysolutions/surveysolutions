@@ -9,12 +9,6 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(Label = "",
-        Theme = "@style/GrayAppTheme",
-        WindowSoftInputMode = SoftInput.StateHidden,
-        NoHistory = true,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
-        Exported = false)]
     public abstract class ProgressInterviewActivity<T, TArg> : BaseActivity<T> where T : ProgressViewModel<TArg>
     {
         public abstract bool IsSupportMenu { get; }
