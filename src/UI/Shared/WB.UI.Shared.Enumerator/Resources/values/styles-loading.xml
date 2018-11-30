@@ -41,9 +41,7 @@
         <item name="android:layout_marginTop">22dp</item>
         <item name="android:keepScreenOn">false</item>
         <item name="android:indeterminateDrawable">@drawable/progress_bar_loading_indeterminate</item>
-<!--
         <item name="android:progressDrawable">@drawable/progress_bar_loading</item>
--->
     </style>
 
 </resources>

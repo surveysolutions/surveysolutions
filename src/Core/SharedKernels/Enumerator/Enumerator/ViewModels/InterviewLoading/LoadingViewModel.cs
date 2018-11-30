@@ -112,8 +112,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                         await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                     }
 
-                    await Task.Delay(TimeSpan.FromSeconds(15));
-
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                     if (interview.HasEditableIdentifyingQuestions)
@@ -149,6 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         {
             var percent = e.Current.PercentOf(e.Maximum);
             this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, percent);
+            this.Progress = percent;
         }
 
         public void CancelLoading()
