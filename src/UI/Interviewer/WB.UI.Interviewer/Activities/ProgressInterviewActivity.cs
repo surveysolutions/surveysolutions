@@ -9,7 +9,7 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    public abstract class ProgressInterviewActivity<T, TArg> : BaseActivity<T> where T : ProgressViewModel<TArg>
+    public abstract class ProgressInterviewActivity<T> : BaseActivity<T> where T : ProgressViewModel
     {
         public abstract bool IsSupportMenu { get; }
 
