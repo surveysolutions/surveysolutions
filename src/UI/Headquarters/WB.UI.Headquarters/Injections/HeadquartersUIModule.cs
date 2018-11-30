@@ -82,15 +82,10 @@ namespace WB.UI.Headquarters.Injections
 
             registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
             registry.BindWebApiFilter<UnderConstructionHttpFilter>();
+            registry.BindMvcActionFilter<GlobalNotificationAttribute>();
 
             registry.BindMvcActionFilterWhenControllerOrActionHasNoAttribute<TransactionFilter, NoTransactionAttribute>(1);
             registry.BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>();
-            
-            //registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
-            //registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-            //registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
-            //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
-            //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
             registry.Bind<ICommandTransformator, CommandTransformator>();
