@@ -146,6 +146,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("Progress", (view) => new ProgressBarProgressBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>("IndeterminateMode", (view) => new ProgressBarIndeterminateModeBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
