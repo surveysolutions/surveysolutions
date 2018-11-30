@@ -231,10 +231,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Monitor de verificação de integridade</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Página de verificação de integridade</value>
-  </data>
-  <data name="HideFilter" xml:space="preserve">
+    <data name="HideFilter" xml:space="preserve">
     <value>Esconder o filtro</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
