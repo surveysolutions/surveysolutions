@@ -674,7 +674,7 @@
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
             <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" ng-i18next="[title]SideBarAttachmentsTitle"></a></li>
-            <li><a class="left-menu-comments" ng-class="{unfolded: isUnfoldedComments }" ng-click="unfoldComments();" ng-i18next="[title]SideBarCommentsTitle"></a></li>
+            <li><a class="left-menu-comments" ng-if="!questionnaire.isReadOnlyForUser" ng-class="{unfolded: isUnfoldedComments }" ng-click="unfoldComments();" ng-i18next="[title]SideBarCommentsTitle"></a></li>
         </ul>
     </div>
     <div class="questionnaire-tree" ui-view></div>
