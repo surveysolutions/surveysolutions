@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.Enumerator.Services;
+﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
@@ -34,5 +35,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             get => this.questionnaireTitle;
             set => SetProperty(ref this.questionnaireTitle, value);
         }
+
+        private int progress = 0;
+
+        public int Progress
+        {
+            get => this.progress;
+            set => SetProperty(ref this.progress, value);
+        }
+
+        public GroupStatus Status => GroupStatus.Started;
+
+        public bool IsIndeterminate { get; set; } = true;
     }
 }
