@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
     {
         private readonly IAuditLog auditLog;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
+        private static readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private static readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
         private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
@@ -43,12 +43,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.auditLog.AssignmentsUpgradeStarted(questionnaire.Title, migrateFrom.Version, migrateTo.Version);
 
             upgradeQueue.Enqueue(new QueuedUpgrade(processId, migrateFrom, migrateTo));
-            this.progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
+            progressReporting[processId] = new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, 0, 0, new List<AssignmentUpgradeError>(), AssignmentUpgradeStatus.Queued);
         }
 
         public void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails)
         {
-            this.progressReporting[processId] = progressDetails;
+            progressReporting[processId] = progressDetails;
         }
 
         public QueuedUpgrade DequeueUpgrade()
