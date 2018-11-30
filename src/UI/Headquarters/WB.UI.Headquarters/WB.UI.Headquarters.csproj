@@ -1688,7 +1688,6 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
-    <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
     <Content Include="Scripts\viewmodels\pages\mapusers.js" />
     <Content Include="Scripts\viewmodels\pages\maps.js" />
     <Content Include="Scripts\viewmodels\pages\questionnaires.js" />
@@ -2254,7 +2253,6 @@
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\Profile\ApiUserController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\InterviewApiController.cs" />
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\Profile\InterviewerController.cs" />
