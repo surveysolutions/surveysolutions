@@ -8188,8 +8188,7 @@ body > .ui-pnotify {
     border: none;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
-    padding: 20px 20px 0;
-    margin-bottom: 25px; }
+    padding: 20px 20px 0; }
   .modal-content .close {
     position: relative;
     opacity: 0.5;
@@ -8224,7 +8223,7 @@ body > .ui-pnotify {
       .modal-content .close span:hover:before, .modal-content .close span:hover:after, .modal-content .close span:focus:before, .modal-content .close span:focus:after, .modal-content .close span:active:before, .modal-content .close span:active:after {
         background-color: #595c5d; }
   .modal-content .modal-body {
-    padding: 0 20px 10px; }
+    padding: 20px 20px 10px; }
     .modal-content .modal-body .bootbox-body h3 {
       font: 18px/20px RobotoRegular; }
     .modal-content .modal-body .bootbox-body p:last-child {
@@ -8282,13 +8281,12 @@ body > .ui-pnotify {
 .audio-question .modal .modal-dialog {
   max-width: 450px; }
 
-.audio-question .modal .modal-header {
-  margin-bottom: 10px; }
-  .audio-question .modal .modal-header h5, .audio-question .modal .modal-header .preset-filters-container a, .preset-filters-container .audio-question .modal .modal-header a, .audio-question .modal .modal-header .preset-filters-container .export-queue, .preset-filters-container .audio-question .modal .modal-header .export-queue {
-    padding: 0;
-    line-height: 18px; }
-  .audio-question .modal .modal-header .modal-title {
-    margin-bottom: 5px; }
+.audio-question .modal .modal-header h5, .audio-question .modal .modal-header .preset-filters-container a, .preset-filters-container .audio-question .modal .modal-header a, .audio-question .modal .modal-header .preset-filters-container .export-queue, .preset-filters-container .audio-question .modal .modal-header .export-queue {
+  padding: 0;
+  line-height: 18px; }
+
+.audio-question .modal .modal-header .modal-title {
+  margin-bottom: 5px; }
 
 .audio-question .modal .modal-body canvas {
   display: block;
@@ -8319,8 +8317,7 @@ body > .ui-pnotify {
 #overview .modal-header {
   background-color: #6b6b6b;
   color: #fff;
-  padding: 20px;
-  margin-bottom: 10px; }
+  padding: 20px; }
   #overview .modal-header h3 {
     margin-bottom: 0;
     font-size: 18px;

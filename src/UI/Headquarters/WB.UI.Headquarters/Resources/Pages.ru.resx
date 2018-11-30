@@ -225,10 +225,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Монитор проверки работоспособности</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Страница проверки работоспособности</value>
-  </data>
-  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Кем</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">

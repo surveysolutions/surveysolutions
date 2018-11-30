@@ -65,5 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Id = id,
             RosterVector = rosterVector
         };
+
+        public static InterviewStateIdentity Create(Guid id, params int[] rosterVector) => Create(id, (RosterVector) rosterVector);
     }
 }

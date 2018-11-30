@@ -26,9 +26,9 @@ namespace WB.Services.Export.Questionnaire
                 yield return ServiceColumns.InterviewId;
             }
 
-            for (int i = 1; i < levelScopeVector.Length; i++)
+            for (int i = levelScopeVector.Length; i > 1; i--)
             {
-                var parentLevelScopeVector = ValueVector.Create(levelScopeVector.Take(levelScopeVector.Length - i).ToArray());
+                var parentLevelScopeVector = ValueVector.Create(levelScopeVector.Take(levelScopeVector.Length - i + 1).ToArray());
 
                 var parentLevel = this.HeaderToLevelMap.TryGetValue(parentLevelScopeVector, out var value) ? value : null;
 
