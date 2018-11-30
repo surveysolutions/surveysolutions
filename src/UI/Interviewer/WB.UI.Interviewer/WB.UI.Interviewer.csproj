@@ -302,8 +302,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\ProgressInterviewActivity.cs" />
-    <Compile Include="Activities\CreateInterviewActivity.cs" />
+    <Compile Include="Activities\CreateAndLoadInterviewActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
@@ -314,10 +313,11 @@
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\InterviewerSearchActivity.cs" />
-    <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\LoadingInterviewActivity.cs" />
     <Compile Include="Activities\MapsActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\ProgressInterviewActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />

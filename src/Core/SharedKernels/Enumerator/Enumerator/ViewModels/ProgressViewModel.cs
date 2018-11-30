@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+﻿using MvvmCross.Commands;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -44,8 +45,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.progress, value);
         }
 
-        public GroupStatus Status => GroupStatus.Started;
-
         private bool isIndeterminate = true;
 
         public bool IsIndeterminate
@@ -54,5 +53,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isIndeterminate, value);
         }
 
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
+
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+
+        public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
+
+        public virtual void CancelLoading()
+        {
+        }
     }
 }
