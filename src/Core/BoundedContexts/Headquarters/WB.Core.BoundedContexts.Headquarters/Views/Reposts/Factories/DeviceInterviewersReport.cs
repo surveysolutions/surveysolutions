@@ -90,11 +90,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
                                           SUM(report.LowStorageCount) as LowStorageCount,
-                                          -- SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
                                           SUM(report.OldAndroidCount) as OldAndroidCount,
                                           SUM(report.NeverUploadedCount) as NeverUploadedCount,
                                           SUM(report.ReassignedCount) as ReassignedCount,
-                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount
+                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount,
+                                          SUM(report.TeamSize) as TeamSize
                                    FROM ({sql}) as report";
 
             var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
