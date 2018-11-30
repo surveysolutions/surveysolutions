@@ -5,4 +5,7 @@
     <dimen name="Loading_Progress_font_size">24sp</dimen>
     <dimen name="Loading_Progress_Description_font_size">18sp</dimen>
     <dimen name="Loading_Title_margin_top">177dp</dimen>
+    <dimen name="Loading_margin_between_titles">22dp</dimen>
+    <dimen name="LoadingProgressIndicator_width">439dp</dimen>
+    <dimen name="LoadingProgressIndicator_height">14dp</dimen>
 </resources>
