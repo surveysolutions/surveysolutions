@@ -18,7 +18,15 @@ AS $function$
   	agg as (
 		select v1.interview_id, v1.answer as a1, v2.answer as a2 
 		from readside.report_tabulate_data v1
-		join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id and v1.rostervector = v2.rostervector
+		join readside.report_tabulate_data v2 on v1.interview_id = v2.interview_id
+			and 
+				(v1.rostervector = v2.rostervector -- compare answers from same roster or same roster tree leaf
+                    -- postfix '-' is needed to prevent match of rosters ['1', '11']
+                    -- if rostervector is empty then postfix '-' is not needed
+                    -- || - is concat
+					or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
+					or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
+				)
 		join readside.interviews_id id on id.id = v1.interview_id
 		join readside.interviewsummaries s on s.interviewid = id.interviewid
 		where 
@@ -56,7 +64,14 @@ AS $function$
                         case when detailed then s.responsiblename else null end as responsiblename, 
                         v1.interview_id, v1.answer 
                     from readside.report_tabulate_data v1
-                    join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id  and v1.rostervector = v2.rostervector
+                    join readside.report_tabulate_data v2 on v1.interview_id = v2.interview_id
+			            and (v1.rostervector = v2.rostervector -- compare answers from same roster or same roster tree leaf
+                            -- postfix '-' is needed to prevent match of rosters ['1', '11']
+                            -- if rostervector is empty then postfix '-' is not needed
+                            -- || - is concat
+					        or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
+					        or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
+				        )
                     join readside.interviews_id id on id.id = v1.interview_id
                     join readside.interviewsummaries s on s.interviewid = id.interviewid
                     join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
