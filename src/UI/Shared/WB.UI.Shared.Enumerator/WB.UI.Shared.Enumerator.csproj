@@ -356,7 +356,6 @@
     <Compile Include="CustomBindings\NumericValueBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
-    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\TextViewWatermarkBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />

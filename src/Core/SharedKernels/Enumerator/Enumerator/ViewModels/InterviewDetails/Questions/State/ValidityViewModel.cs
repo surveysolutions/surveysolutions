@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var validationMessages = interview.GetFailedValidationMessages(this.Identity, UIResources.Error);
 
-                    this.Error.Caption = UIResources.Validity_Answered_Invalid_ErrorCaption;
+                    this.Error.Caption = String.Empty;
                     this.Error.ChangeValidationErrors(validationMessages);
                 }
                 else if (wasError)
