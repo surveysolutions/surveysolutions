@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
-    public class LoadingViewModel : ProgressViewModel<LoadingViewModelArg>
+    public class LoadingInterviewViewModel : ProgressViewModel<LoadingViewModelArg>
     {
         protected Guid interviewId;
         private readonly IInterviewerInterviewAccessor interviewFactory;
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         private readonly IUserInteractionService interactionService;
         private CancellationTokenSource loadingCancellationTokenSource;
 
-        public LoadingViewModel(IPrincipal principal,
+        public LoadingInterviewViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
@@ -49,8 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interviewFactory = interviewFactory;
             this.interviewsRepository = interviewsRepository;
         }
-
-        public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
 
         public override void Prepare(LoadingViewModelArg arg)
         {
@@ -150,16 +148,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.Progress = percent;
         }
 
-        public void CancelLoading()
+        public override void CancelLoading()
         {
             if (this.loadingCancellationTokenSource != null && !this.loadingCancellationTokenSource.IsCancellationRequested)
             {
                 this.loadingCancellationTokenSource.Cancel();
             }
         }
-
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
-
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
     }
 }

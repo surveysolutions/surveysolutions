@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -23,7 +27,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 {
-    public class CreateInterviewViewModel : ProgressViewModel<CreateInterviewViewModelArg>
+    public class CreateAndLoadInterviewViewModel : ProgressViewModel<CreateInterviewViewModelArg>
     {
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IInterviewerPrincipal interviewerPrincipal;
@@ -34,8 +38,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         private readonly IAuditLogService auditLogService;
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
-        public CreateInterviewViewModel(IPrincipal principal, 
+        public CreateAndLoadInterviewViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IInterviewerPrincipal interviewerPrincipal,
@@ -45,7 +51,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             ILogger logger,
             IAuditLogService auditLogService,
             IInterviewAnswerSerializer answerSerializer,
-            IUserInteractionService userInteractionService) 
+            IUserInteractionService userInteractionService,
+            IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireRepository) 
             : base(principal, viewModelNavigationService)
         {
             this.assignmentsRepository = assignmentsRepository;
@@ -57,6 +65,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             this.auditLogService = auditLogService;
             this.answerSerializer = answerSerializer;
             this.userInteractionService = userInteractionService;
+            this.interviewRepository = interviewRepository;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         protected int AssignmentId { get; set; }
@@ -82,11 +92,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         public override void ViewAppeared()
         {
-            Task.Run(CreateInterviewAndNavigateThereAsync);
+            Task.Run(async () =>
+            {
+                await CreateInterviewAndNavigateThereAsync();
+                await RestoreInterviewAndNavigateThereAsync();
+            });
         }
 
-        private async Task CreateInterviewAndNavigateThereAsync()
+        protected async Task CreateInterviewAndNavigateThereAsync()
         {
+            IsIndeterminate = true;
+
             try
             {
                 var assignment = this.assignmentsRepository.GetById(AssignmentId);
@@ -125,12 +141,60 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {InterviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
                 auditLogService.Write(new CreateInterviewAuditLogEntity(InterviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
-                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg { InterviewId = InterviewId });
             }
             catch (InterviewException e)
             {
                 logger.Error(e.Message, e);
                 await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
+            }
+        }
+
+        private CancellationTokenSource loadingCancellationTokenSource;
+
+        public async Task RestoreInterviewAndNavigateThereAsync()
+        {
+            IsIndeterminate = false;
+
+            this.loadingCancellationTokenSource = new CancellationTokenSource();
+            var interviewIdString = this.InterviewId.FormatGuid();
+
+            var progress = new Progress<EventReadingProgress>();
+            progress.ProgressChanged += Progress_ProgressChanged;
+            try
+            {
+                this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
+                                                                             .ConfigureAwait(false);
+
+
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+                this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                if (interview.HasEditableIdentifyingQuestions)
+                {
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                }
+                else
+                {
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString,
+                        navigationIdentity: null);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            catch (Exception exception)
+            {
+                await this.userInteractionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
+                this.logger.Error($"Failed to load interview {this.InterviewId}. {exception.ToString()}", exception);
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
+            }
+            finally
+            {
+                progress.ProgressChanged -= Progress_ProgressChanged;
             }
         }
 
@@ -146,6 +210,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 .ToList();
 
             return elements;
+        }
+
+        private void Progress_ProgressChanged(object sender, EventReadingProgress e)
+        {
+            var percent = e.Current.PercentOf(e.Maximum);
+            this.ProgressDescription = string.Format(InterviewerUIResources.Interview_Loading_With_Percents, percent);
+            this.Progress = percent;
         }
     }
 }

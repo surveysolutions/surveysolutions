@@ -15,7 +15,7 @@
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
         <TextView
             style="@style/LoadingToolbarTitle"
-            local:MvxBind="Text QuestionnaireTitle; ColorByInterviewStatus Status;"/>
+            local:MvxBind="Text QuestionnaireTitle;"/>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
