@@ -1,11 +1,10 @@
 ﻿using MvvmCross.Commands;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public abstract class ProgressViewModel<T> : BaseViewModel<T>
+    public abstract class ProgressViewModel : BaseViewModel
     {
         protected ProgressViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService) 
