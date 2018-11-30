@@ -54,6 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         {
             this.interviewId = arg.InterviewId;
             this.shouldReopen = arg.ShouldReopen;
+
+            this.IsIndeterminate = false;
         }
 
         public override async Task Initialize()
