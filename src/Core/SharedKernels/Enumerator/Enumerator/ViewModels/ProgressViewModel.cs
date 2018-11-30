@@ -46,6 +46,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public GroupStatus Status => GroupStatus.Started;
 
-        public bool IsIndeterminate { get; set; } = true;
+        private bool isIndeterminate = true;
+
+        public bool IsIndeterminate
+        {
+            get => this.isIndeterminate;
+            set => SetProperty(ref this.isIndeterminate, value);
+        }
+
     }
 }
