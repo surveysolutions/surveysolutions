@@ -108,7 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToDashboardAsync();
         }
 
-        protected static LoadingViewModel CreateLoadingViewModel(
+        protected static LoadingInterviewViewModel CreateLoadingViewModel(
           IViewModelNavigationService viewModelNavigationService = null,
           IStatefulInterviewRepository interviewRepository = null,
           ICommandService commandService = null,
@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
           IInterviewerInterviewAccessor interviewFactory = null,
           IPlainStorage<InterviewView> interviewsRepository = null)
         {
-            var loadingViewModel = new LoadingViewModel(
+            var loadingViewModel = new LoadingInterviewViewModel(
                 principal ?? Substitute.For<IPrincipal>(),
                 viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(), 
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),

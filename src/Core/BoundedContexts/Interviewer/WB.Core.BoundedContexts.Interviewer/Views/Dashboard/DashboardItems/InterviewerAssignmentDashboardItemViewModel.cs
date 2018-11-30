@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => viewModelNavigationService.NavigateToAsync<CreateInterviewViewModel, CreateInterviewViewModelArg>(
+                    () => viewModelNavigationService.NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
                         new CreateInterviewViewModelArg()
                         {
                             AssignmentId = Assignment.Id,
