@@ -23,5 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
         public int ReassignedCount { get; set; }
 
         public int NoQuestionnairesCount { get; set; }
+
+        public int TeamSize { get; set; }
     }
 }
