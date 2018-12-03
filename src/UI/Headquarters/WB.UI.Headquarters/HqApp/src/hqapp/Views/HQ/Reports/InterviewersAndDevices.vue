@@ -107,7 +107,7 @@ export default {
                             return self.renderCell(data, row, 'OutdatedApp');
                         }
                     },
-                     {
+                    {
                         data: "oldAndroidCount",
                         name: "OldAndroidCount",
                         "class": "type-numeric",
@@ -116,26 +116,13 @@ export default {
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'OldAndroid');
                         }
-                     },
-                    // {
-                    //     data: "wrongDateOnTabletCount",
-                    //     name: "WrongDateOnTabletCount",
-                    //     "class": "type-numeric",
-                    //     orderable: true,
-                    //     title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
-                    //     render: function(data, type, row) {
-                    //         return self.renderCell(data, row, 'WrongTime');
-                    //     }
-                    // },
+                    },
                     {
-                        data: "lowStorageCount",
-                        name: "LowStorageCount",
+                        data: "teamSize",
+                        name: "TeamSize",
                         "class": "type-numeric",
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.LowStorage"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'LowStorage');
-                        }
+                        title: this.$t("DevicesInterviewers.TeamSize")
                     }
                 ],
                 ajax: {
