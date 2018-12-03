@@ -9,12 +9,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId)
+            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId, bool isPlainMode)
             : base(questionnaireId, groupId, responsibleId)
         {
             this.VariableName = CommandUtils.SanitizeHtml(variableName, removeAllTags: true);
             this.Title = CommandUtils.SanitizeHtml(title, removeAllTags: true);
             this.IsRoster = isRoster;
+            this.IsPlainMode = isPlainMode;
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
             this.Condition = condition;
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string Title { get; private set; }
         public string VariableName { get; private set; }
         public bool IsRoster { get; private set; }
+        public bool IsPlainMode { get; private set; }
         public Guid? RosterSizeQuestionId { get; private set; }
         public RosterSizeSourceType RosterSizeSource { get; private set; }
         public FixedRosterTitleItem[] FixedRosterTitles { get; private set; }

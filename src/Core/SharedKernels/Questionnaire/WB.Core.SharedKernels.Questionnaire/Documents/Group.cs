@@ -50,7 +50,7 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HideIfDisabled { get; set; }
 
-        public bool IsPlainRoster { get; set; }
+        public bool IsPlainMode { get; set; }
 
         public bool Enabled { get; set; }
 
@@ -160,7 +160,7 @@ namespace Main.Core.Entities.SubEntities
                 VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
                 HideIfDisabled = this.HideIfDisabled,
-                IsPlainRoster = this.IsPlainRoster,
+                IsPlainMode = this.IsPlainMode,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,
