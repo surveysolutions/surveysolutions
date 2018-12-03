@@ -127,6 +127,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
                     .ConfigureAwait(false);
 
+                //DB has no events
+                //state is broken
+                //remove from storage and return to dashboard
+                if (interview == null)
+                {
+                    this.logger.Error($"Failed to load interview {interviewId}. Stream is empty. Removing interview.");
+                    this.interviewFactory.RemoveInterview(interviewId);
+                }
+
                 return interview;
             }
             catch (OperationCanceledException)
