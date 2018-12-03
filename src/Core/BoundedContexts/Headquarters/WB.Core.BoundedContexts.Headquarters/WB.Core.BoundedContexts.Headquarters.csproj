@@ -17,6 +17,12 @@
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Reposts\Factories\DevicesInterviewersForSupervisor.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportAssignments.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\StatusDurationReportInterviews.sql" />
     <EmbeddedResource Include="Views\Reposts\Factories\DeviceInterviewersReport.sql" />

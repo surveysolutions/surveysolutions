@@ -23,12 +23,8 @@ export default {
                     return `<span>${formatedNumber}</span>`;
                 }
             }
-            if(facet) {
-                return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${formatedNumber}</a>`;
-            }
-            else {
-                 return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}'>${formatedNumber}</a>`;
-            }
+         
+            return `<a href='${window.location}/${row.teamId}'>${formatedNumber}</a>`;
         }        ,
         formatNumber(value) {
             if (value == null || value == undefined)
@@ -43,6 +39,10 @@ export default {
         config() {
             return this.$config.model;
         },
+        supervisorId() {
+            return this.$route.params.supervisorId
+        },
+
         tableOptions() {
             var self = this;
             return {
@@ -54,6 +54,11 @@ export default {
                         title: this.$t("DevicesInterviewers.Teams"),
                         orderable: true,
                         render: function(data, type, row) {
+                            if(self.supervisorId) {
+                                const formatedNumber = self.formatNumber(data);
+                                return `<a href='${self.$config.model.interviewerProfileUrl}/${row.teamId}'>${formatedNumber}</a>`;
+                            }
+
                             return self.renderCell(data, row, null);
                         }
                     },
@@ -126,7 +131,7 @@ export default {
                     }
                 ],
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: this.supervisorId ? this.$config.model.dataUrl + '/' + this.supervisorId : this.$config.model.dataUrl,
                     type: "GET",
                     contentType: 'application/json'
                 },
