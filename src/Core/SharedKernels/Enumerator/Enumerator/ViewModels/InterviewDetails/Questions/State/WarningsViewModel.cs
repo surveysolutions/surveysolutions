@@ -73,8 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (isInvalidEntity)
                 {
                     var validationMessages = interview.GetFailedWarningMessages(this.Identity, UIResources.Warning);
-
-                    this.Warning.Caption = UIResources.Warnings;
+                    
                     this.Warning.ChangeValidationErrors(validationMessages);
                 }
 
