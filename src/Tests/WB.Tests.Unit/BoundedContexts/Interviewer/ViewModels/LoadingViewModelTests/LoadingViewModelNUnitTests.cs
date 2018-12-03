@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using MvvmCross.Tests;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using NUnit.Framework;
@@ -21,7 +22,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelTests
 {
     [TestFixture]
-    internal class LoadingViewModelNUnitTests
+    internal class LoadingViewModelNUnitTests : MvxTestFixture
     {
         [Test]
         public async Task LoadingViewModel_when_interview_is_created_on_client_should_open_prefilled_questions_section()
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository);
 
-            await loadingViewModel.LoadAndNavigateToInterviewAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
         }
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository);
 
-            await loadingViewModel.LoadAndNavigateToInterviewAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
         }
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 ShouldReopen = true
             });
 
-            await loadingViewModel.LoadAndNavigateToInterviewAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(It.IsAny<RestartInterviewCommand>());
@@ -101,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository, interviewFactory: interviewFactory);
 
-            await loadingViewModel.LoadAndNavigateToInterviewAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
             interviewFactory.ReceivedWithAnyArgs().RemoveInterview(It.IsAny<Guid>());
 
