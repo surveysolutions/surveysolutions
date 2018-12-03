@@ -89,12 +89,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
-                                          SUM(report.LowStorageCount) as LowStorageCount,
-                                          -- SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
                                           SUM(report.OldAndroidCount) as OldAndroidCount,
                                           SUM(report.NeverUploadedCount) as NeverUploadedCount,
                                           SUM(report.ReassignedCount) as ReassignedCount,
-                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount
+                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount,
+                                          SUM(report.TeamSize) as TeamSize
                                    FROM ({sql}) as report";
 
             var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
@@ -142,9 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_NEVER_UPLOADED,
                     Report.COLUMN_TABLET_REASSIGNED,
                     Report.COLUMN_OLD_VERSION,
-                    Report.COLUMN_ANDROID_4_4_OR_LOWER,
-                    // Report.COLUMN_WRONG_TIME_ON_TABLET,
-                    Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
+                    Report.COLUMN_ANDROID_4_4_OR_LOWER
                 },
                 Data = new[]
                 {
@@ -157,8 +154,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         view.TotalRow.ReassignedCount,
                         view.TotalRow.OutdatedCount,
                         view.TotalRow.OldAndroidCount,
-                        // view.TotalRow.WrongDateOnTabletCount,
-                        view.TotalRow.LowStorageCount
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
@@ -169,8 +164,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     x.ReassignedCount,
                     x.OutdatedCount,
                     x.OldAndroidCount,
-                    // x.WrongDateOnTabletCount,
-                    x.LowStorageCount
                 })).ToArray()
             };
         }

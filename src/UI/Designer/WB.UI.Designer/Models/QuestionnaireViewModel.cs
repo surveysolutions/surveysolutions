@@ -10,6 +10,9 @@ namespace WB.UI.Designer.Models
         [AllowHtml]
         public string Title { get; set; }
 
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireVariable_required")]
+        public string Variable { get; set; }
+
         public bool IsPublic { get; set; }
     }
 }

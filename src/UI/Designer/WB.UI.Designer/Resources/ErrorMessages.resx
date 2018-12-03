@@ -252,4 +252,7 @@
   <data name="FullNameMaxLengthError" xml:space="preserve">
     <value>Full name cannot contain more than {1} characters</value>
   </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>Questionnaire variable is required</value>
+  </data>
 </root>

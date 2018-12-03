@@ -19,8 +19,6 @@
                 Tag Format('Group_{0}', Identity)
               "/>
     </LinearLayout>
-    <TextView style="@style/Interview_Group_Description"
-              local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
   </LinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"
