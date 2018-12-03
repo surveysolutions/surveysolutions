@@ -260,11 +260,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variable names and roster IDs may be from 1 to 32 characters long.
+        /// </summary>
+        internal static string QuestionnaireVariable_MaxLength {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariable_MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire variable is required.
         /// </summary>
         internal static string QuestionnaireVariable_required {
             get {
                 return ResourceManager.GetString("QuestionnaireVariable_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
+        /// </summary>
+        internal static string QuestionnaireVariable_rules {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariable_rules", resourceCulture);
             }
         }
         
