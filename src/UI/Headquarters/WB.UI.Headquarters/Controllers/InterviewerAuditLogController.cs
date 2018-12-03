@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     Time = r.Time,
                     Type = r.Type,
-                    Message = GetUserMessage(r),
+                    Message = GetUserMessage(r, showErrorMessage),
                     Description = GetMessageDescription(r)
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
@@ -127,7 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                     foreach (var record in records)
                     {
                         csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
-                        var message = GetUserMessage(record);
+                        var message = GetUserMessage(record, showErrorMessage);
                         if (authorizedUser.IsAdministrator)
                         {
                             message += "\r\n" + GetMessageDescription(record);
@@ -145,7 +145,7 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private string GetUserMessage(AuditLogRecord record)
+        private string GetUserMessage(AuditLogRecord record, bool showErrorMessage)
         {
             switch (record.Type)
             {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Controllers
                         : string.Join(", ", statusMessages);
                     return $"{InterviewerAuditRecord.SynchronizationCompleted} {statusMessage}";
                 case AuditLogEntityType.SynchronizationFailed:
-                    if (authorizedUser?.IsAdministrator ?? false)
+                    if (showErrorMessage && (authorizedUser?.IsAdministrator ?? false))
                     {
                         var synchronizationFailedAuditLogEntity = record.GetEntity<SynchronizationFailedAuditLogEntity>();
                         return InterviewerAuditRecord.SynchronizationFailed + @" : " + (synchronizationFailedAuditLogEntity.ExceptionMessage ?? @"<empty>");
