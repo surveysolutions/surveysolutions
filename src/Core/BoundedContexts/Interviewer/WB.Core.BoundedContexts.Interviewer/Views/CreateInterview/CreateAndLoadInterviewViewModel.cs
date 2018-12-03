@@ -65,7 +65,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         }
 
         protected int AssignmentId { get; set; }
-        protected Guid InterviewId { get; set; }
 
         public void Prepare(CreateInterviewViewModelArg parameter)
         {
@@ -78,9 +77,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             if (AssignmentId == 0) throw new ArgumentException(nameof(AssignmentId));
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
 
-            this.ProgressDescription = InterviewerUIResources.Interview_Creating;
-            this.OperationDescription = InterviewerUIResources.Interview_Creating_Description;
-
             var assignmentDocument = assignmentsRepository.GetById(AssignmentId);
             QuestionnaireTitle = assignmentDocument.Title;
 
@@ -89,36 +85,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 
         public override void ViewAppeared()
         {
-            Task.Run(CreateAndNavigateToInterview);
+            Task.Run(CreateAndNavigateToInterviewAsync);
         }
 
-        private async Task CreateAndNavigateToInterview()
+        private async Task CreateAndNavigateToInterviewAsync()
         {
-            var interviewId = await CreateInterviewAndNavigateThereAsync(this.AssignmentId, this.InterviewId);
+            var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
             if (!interviewId.HasValue)
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
                 return;
             }
 
-            var interview = await LoadInterviewAsync(interviewId.Value);
-            if (interview == null)
-            {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
-                return;
-            }
-
-            if (interview.HasEditableIdentifyingQuestions)
-            {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.Value.FormatGuid());
-            }
-            else
-            {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.Value.FormatGuid(), navigationIdentity: null);
-            }
+            await LoadAndNavigateToInterviewAsync(interviewId.Value);
         }
 
-        protected async Task<Guid?> CreateInterviewAndNavigateThereAsync(int assignmentId, Guid interviewId)
+        protected async Task<Guid?> CreateInterviewAsync(int assignmentId, Guid interviewId)
         {
             IsIndeterminate = true;
             this.ProgressDescription = InterviewerUIResources.Interview_Creating;

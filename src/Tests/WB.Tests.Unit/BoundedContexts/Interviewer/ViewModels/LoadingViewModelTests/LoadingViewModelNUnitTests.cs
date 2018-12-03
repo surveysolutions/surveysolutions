@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository);
 
-            await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync();
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
         }
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository);
 
-            await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync();
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
         }
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 ShouldReopen = true
             });
 
-            await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync();
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(It.IsAny<RestartInterviewCommand>());
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
                 interviewRepository: statefulInterviewRepository, interviewFactory: interviewFactory);
 
-            await loadingViewModel.RestoreInterviewAndNavigateThereAsync();
+            await loadingViewModel.LoadAndNavigateToInterviewAsync();
 
             interviewFactory.ReceivedWithAnyArgs().RemoveInterview(It.IsAny<Guid>());
 

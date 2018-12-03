@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interviewsRepository = interviewsRepository;
         }
 
-        private Guid InterviewId { get; set; }
+        protected Guid InterviewId { get; set; }
         private bool ShouldReopen { get; set; }
 
 
@@ -66,9 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         {
             if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
 
-            this.ProgressDescription = InterviewerUIResources.Interview_Loading;
-            this.OperationDescription = InterviewerUIResources.Interview_Loading_Description;
-
             var interview = this.interviewsRepository.GetById(this.InterviewId.FormatGuid());
             this.QuestionnaireTitle = interview.QuestionnaireTitle;
 
@@ -77,19 +74,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
         public override void ViewAppeared()
         {
-            Task.Run(RestoreInterviewAndNavigateThereAsync);
+            Task.Run(() => LoadAndNavigateToInterviewAsync(this.InterviewId));
         }
 
-        public async Task RestoreInterviewAndNavigateThereAsync()
+        public async Task LoadAndNavigateToInterviewAsync(Guid interviewId)
         {
-            var interview = await LoadInterviewAsync(InterviewId);
+            var interview = await LoadInterviewAsync(interviewId);
             if (interview == null)
             {
-                await this.interactionService.AlertAsync(InterviewerUIResources.FailedToLoadInterviewDescription, InterviewerUIResources.FailedToLoadInterview);
-
-                this.logger.Error($"Failed to load interview {this.InterviewId}. Stream is empty. Removing interview.");
-                this.interviewFactory.RemoveInterview(this.InterviewId);
-
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
                 return;
             }
@@ -97,18 +89,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             if (interview.Status == InterviewStatus.Completed && this.ShouldReopen)
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId,
+                var restartInterviewCommand = new RestartInterviewCommand(interviewId,
                     this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                 await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
             }
 
             if (interview.HasEditableIdentifyingQuestions)
             {
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(InterviewId.FormatGuid());
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
             }
             else
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(InterviewId.FormatGuid(), navigationIdentity: null);
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
             }
         }
 
@@ -135,9 +127,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
                     .ConfigureAwait(false);
 
-                // loading for caching
-                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
                 return interview;
             }
             catch (OperationCanceledException)
@@ -146,8 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             }
             catch (Exception exception)
             {
-                await this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
                 this.logger.Error($"Failed to load interview {interviewId}. {exception.ToString()}", exception);
+                await this.interactionService.AlertAsync(InterviewerUIResources.FailedToLoadInterviewDescription, InterviewerUIResources.FailedToLoadInterview);
             }
 
             return null;

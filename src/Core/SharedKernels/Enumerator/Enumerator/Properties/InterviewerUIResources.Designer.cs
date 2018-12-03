@@ -921,7 +921,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview is in invalid state and will be removed. Please synchronize to get correct state..
+        ///   Looks up a localized string similar to Interview is in invalid state and сan&apos;t be open. Please contact support or try to synchronize to get correct state..
         /// </summary>
         public static string FailedToLoadInterviewDescription {
             get {
