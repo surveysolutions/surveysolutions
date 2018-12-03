@@ -118,16 +118,6 @@ export default {
                         }
                     },
                     {
-                        data: "lowStorageCount",
-                        name: "LowStorageCount",
-                        "class": "type-numeric",
-                        orderable: true,
-                        title: this.$t("DevicesInterviewers.LowStorage"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'LowStorage');
-                        }
-                    },
-                    {
                         data: "teamSize",
                         name: "TeamSize",
                         "class": "type-numeric",
