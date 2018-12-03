@@ -22,6 +22,8 @@ namespace Main.Core.Entities.SubEntities
 
         Guid? RosterTitleQuestionId { get; }
 
+        bool IsPlainRoster { get; }
+
         void ReplaceChildEntityById(Guid id, IComposite newEntity);
     }
 }

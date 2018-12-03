@@ -406,6 +406,7 @@
                     condition: incomingRoster.enablementCondition,
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
+                    plainRoster: incomingRoster.plainRoster,
                     isRoster: true
                 };
 
