@@ -12,10 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 
         public int OutdatedCount { get; set; }
 
-        public int LowStorageCount { get; set; }
-
-        // public int WrongDateOnTabletCount { get; set; }
-
         public int OldAndroidCount { get; set; }
 
         public int NeverUploadedCount { get; set; }
