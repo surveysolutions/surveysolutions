@@ -329,6 +329,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: true,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "FixedTitles",
                     fixedRosterTitles: [{ value: 1, title: "First Title" }, { value: 2, title: "Second Title" }],
@@ -406,7 +407,7 @@
                     condition: incomingRoster.enablementCondition,
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
-                    plainRoster: incomingRoster.plainRoster,
+                    isPlainMode: incomingRoster.isPlainMode,
                     isRoster: true
                 };
 

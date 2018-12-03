@@ -22,7 +22,8 @@
                 variableDescription: $i18next.t('HelpVariableDescription'),
                 newComment: $i18next.t('HelpNewComment'),
                 combobox: $i18next.t('HelpCombobox'),
-                defaultDate: $i18next.t('HelpDefaultDate')
+                defaultDate: $i18next.t('HelpDefaultDate'),
+                plainRoster : $i18next.t('HelpPlainRoster')
             };
 
             helpService.getHelpMessage = function(key) {
