@@ -1081,10 +1081,10 @@ namespace WB.Tests.Unit.Designer
                 string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
                 string condition = null, bool hideIfDisabled = false, bool isRoster = false,
                 RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null)
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, bool isPlainMode = false)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, isPlainMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {

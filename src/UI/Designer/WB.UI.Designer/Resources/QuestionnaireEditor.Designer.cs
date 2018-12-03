@@ -790,7 +790,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By default, a roster instanse item is group. Checking this option will show on roster level question or section from roster instance on a tablet..
+        ///   Looks up a localized string similar to By default, a roster instance item is group. Checking this option will show on roster level question or section from roster instance on a tablet..
         /// </summary>
         public static string HelpPlainRoster {
             get {

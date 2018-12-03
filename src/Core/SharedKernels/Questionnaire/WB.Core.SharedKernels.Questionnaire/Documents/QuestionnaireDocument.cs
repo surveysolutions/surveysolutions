@@ -108,7 +108,7 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
-        public bool IsPlainRoster => false;
+        public bool IsPlainMode => false;
 
         public Guid? RosterSizeQuestionId => null;
 
