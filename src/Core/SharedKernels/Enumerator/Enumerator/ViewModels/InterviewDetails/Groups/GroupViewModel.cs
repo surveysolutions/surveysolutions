@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -22,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
+        private readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
 
         private string interviewId;
         private bool isRoster;
@@ -44,10 +46,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         }
 
         private readonly ILiteEventRegistry eventRegistry;
+        
+        private GroupStatus status;
+        public GroupStatus Status
+        {
+            get => this.status;
+            protected set => this.RaiseAndSetIfChanged(ref this.status, value);
+        }
 
-        public GroupStateViewModel GroupState { get; }
+        private SimpleGroupStatus simpleStatus;
 
-        public bool IsStarted => this.GroupState.Status > GroupStatus.NotStarted;
+        public SimpleGroupStatus SimpleStatus
+        {
+            get => this.simpleStatus;
+            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
+        }
 
         public Identity Identity => this.groupIdentity;
 
@@ -62,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             IQuestionnaireStorage questionnaireRepository,
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
-            GroupStateViewModel groupState,
+            IGroupStateCalculationStrategy groupStateCalculationStrategy,
             DynamicTextViewModel dynamicTextViewModel,
             ILiteEventRegistry eventRegistry)
         {
@@ -70,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
             this.answerNotifier = answerNotifier;
-            this.GroupState = groupState;
+            this.groupStateCalculationStrategy = groupStateCalculationStrategy;
             this.GroupTitle = dynamicTextViewModel;
             this.eventRegistry = eventRegistry;
         }
@@ -97,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
 
             this.Enablement.Init(interviewId, entityIdentity);
-            this.GroupState.Init(interviewId, entityIdentity);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            this.SimpleStatus = CalculateSimpleStatus(Status);
 
             this.GroupTitle.Init(interviewId, entityIdentity);
             this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
@@ -112,8 +126,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void QuestionAnswered(object sender, EventArgs e)
         {
-            this.GroupState.UpdateFromGroupModel();
-            this.RaisePropertyChanged(() => this.GroupState);
+            var statefulInterview = this.interviewRepository.Get(interviewId);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            this.SimpleStatus = CalculateSimpleStatus(Status);
         }
 
         private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
@@ -136,6 +151,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.answerNotifier.Dispose();
             this.GroupTitle.Dispose();
             this.Enablement.Dispose();
+        }
+
+        private SimpleGroupStatus CalculateSimpleStatus(GroupStatus status)
+        {
+            switch (status)
+            {
+                case GroupStatus.Completed:
+                    return SimpleGroupStatus.Completed;
+                case GroupStatus.StartedInvalid:
+                case GroupStatus.CompletedInvalid:
+                    return SimpleGroupStatus.Invalid;
+                default:
+                    return SimpleGroupStatus.Other;
+            }
         }
     }
 }

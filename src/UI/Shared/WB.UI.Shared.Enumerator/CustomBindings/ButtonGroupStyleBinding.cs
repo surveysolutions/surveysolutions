@@ -1,11 +1,10 @@
 ﻿using Android.Widget;
 using MvvmCross.Binding;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupStateViewModel>
+    public class ButtonGroupStyleBinding : BaseBinding<Button, SimpleGroupStatus>
     {
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
@@ -16,9 +15,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             get { return MvxBindingMode.OneWay; }
         } 
 
-        protected override void SetValueToView(Button control, GroupStateViewModel value)
+        protected override void SetValueToView(Button control, SimpleGroupStatus value)
         {
-            SimpleGroupStatus status = value?.SimpleStatus ?? SimpleGroupStatus.Other;
+            SimpleGroupStatus status = value;
 
             var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(status);
 
@@ -39,5 +38,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     return Resource.Drawable.group_started;
             }
         }
+        
     }
 }

@@ -7,6 +7,6 @@
     local:MvxBind="
       HideKeyboardOnClick .; 
       Click NavigateCommand; 
-      ButtonGroupStyle NavigateToGroupState; 
+      ButtonGroupStyle NavigateToGroupState.SimpleStatus; 
       Html SpannableGroupTitle(Title.PlainText, RosterInstanceTitle)"/>
 </LinearLayout>
