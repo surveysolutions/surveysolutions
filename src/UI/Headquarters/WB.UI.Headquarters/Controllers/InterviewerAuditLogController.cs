@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Controllers
                     Time = r.Time,
                     Type = r.Type,
                     Message = GetUserMessage(r, showErrorMessage),
-                    Description = GetMessageDescription(r)
+                    Description = GetMessageDescription(r, showErrorMessage)
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
 
@@ -128,9 +128,9 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
                         var message = GetUserMessage(record, showErrorMessage);
-                        if (authorizedUser.IsAdministrator)
+                        if (showErrorMessage && authorizedUser.IsAdministrator)
                         {
-                            message += "\r\n" + GetMessageDescription(record);
+                            message += "\r\n" + GetMessageDescription(record, showErrorMessage);
                         }
                         csvWriter.WriteField(message);
                         csvWriter.NextRecord();
@@ -225,8 +225,11 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private string GetMessageDescription(AuditLogRecord record)
+        private string GetMessageDescription(AuditLogRecord record, bool showErrorMessage)
         {
+            if (!showErrorMessage)
+                return null;
+
             switch (record.Type)
             {
                 case AuditLogEntityType.SynchronizationFailed:
