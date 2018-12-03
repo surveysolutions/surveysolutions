@@ -108,6 +108,8 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
+        public bool IsPlainRoster => false;
+
         public Guid? RosterSizeQuestionId => null;
 
         public RosterSizeSourceType RosterSizeSource => RosterSizeSourceType.Question;
@@ -117,6 +119,7 @@ namespace Main.Core.Documents
         public FixedRosterTitle[] FixedRosterTitles => new FixedRosterTitle[0];
 
         public Guid? RosterTitleQuestionId => null;
+
         public void ReplaceChildEntityById(Guid id, IComposite newEntity)
         {
             int indexOfEntity = this.children.FindIndex(child => child.PublicKey == id);

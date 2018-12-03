@@ -989,6 +989,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
+        public bool IsPlainRoster(Guid entityId)
+        {
+            IGroup group = this.GetGroup(entityId);
+            if (group?.IsRoster ?? false)
+            {
+                return group.IsPlainRoster;
+            }
+
+            return false;
+        }
+
         public string GetValidationMessage(Guid questionId, int conditionIndex)
         {
             if (IsQuestion(questionId))

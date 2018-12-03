@@ -790,6 +790,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By default, a roster instanse item is group. Checking this option will show on roster level question or section from roster instance on a tablet..
+        /// </summary>
+        public static string HelpPlainRoster {
+            get {
+                return ResourceManager.GetString("HelpPlainRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
         /// </summary>
         public static string HelpQuestionnaireVarible {
@@ -1281,6 +1290,15 @@ namespace WB.UI.Designer.Resources {
         public static string PasteAfter {
             get {
                 return ResourceManager.GetString("PasteAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain mode.
+        /// </summary>
+        public static string PlainRoster {
+            get {
+                return ResourceManager.GetString("PlainRoster", resourceCulture);
             }
         }
         
@@ -2131,7 +2149,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{name}} in its attachment property.
+        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{-name}} in its attachment property.
         /// </summary>
         public static string SideBarAttachmentsEmptyLine3 {
             get {
