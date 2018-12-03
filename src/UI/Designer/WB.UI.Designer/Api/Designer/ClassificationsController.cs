@@ -123,15 +123,15 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpPatch]
         [Route("classification/{id}")]
-        public async Task UpdateClassification([FromUri] Guid id)
+        public async Task UpdateClassification(Classification classification)
         {
-            await classificationsStorage.UpdateClassification(id);
+            await classificationsStorage.UpdateClassification(classification);
         }
         [HttpPost]
         [Route("classification")]
-        public async Task CreateClassification()
+        public async Task CreateClassification(Classification classification)
         {
-            await classificationsStorage.CreateClassification();
+            await classificationsStorage.CreateClassification(classification);
         }
 
         [HttpDelete]
