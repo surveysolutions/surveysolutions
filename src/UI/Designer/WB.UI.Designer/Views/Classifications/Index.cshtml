@@ -8,35 +8,73 @@
 
 @section Modal
 {
+    
+    <script type="x/template" id="categories-editor-template">
+        <form>
+            <div class="categories-holder">
+                <div class="categories-holder-body">
+                    <div class="options-editor">
+                        <div class="option-line" v-for="(category, index) in categories" :key="category.id" >
+                            <div class="input-group">
+                                <div class="option-cell">
+                                    <input type="number" v-model="category.value" class="form-control" placeholder="Value">
+                                </div>
+                                <div class="option-cell">
+                                    <input type="text" v-model="category.title" class="form-control" placeholder="Title">
+                                </div>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-link btn-delete">
+                                        <svg width="20" height="20">
+                                            <polyline points="0,0 20,20"></polyline>
+                                            <polyline points="20,0 0,20"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" v-if="false">
+                        <textarea class="form-control " placeholder="Enter categories"></textarea>
+                    </div>
+                </div>
+                <div class="categories-holder-footer clearfix">
+                    <button class="btn btn-link pull-left">Add option</button>
+                    <button class="btn btn-link pull-right">Show strings</button>
+                </div>
+            </div>
+        </form>
+    </script>
     <script type="x/template" id="group-editor-template">
         <div>
-            <form v-if="isEditMode">
-                <button v-if="isNew || admin" @@click="deleteItem" type="button" class="btn btn-default">Delete</button>
-                <div class="form-group">
-                    <input type="text" required v-model="title" class="form-control" placeholder="Group title">
-                </div>
-                <button type="button" @@click="isEditMode = false" class="btn btn-default">Cancel</button>
-                <button type="button" @@click="save" class="btn btn-default">Save</button>
-            </form>
-            <div v-else>
-                <a @@click="select()"> {{ group.title }}</a>
-                <button @@click="isEditMode = true" type="button" class="btn btn-default">Edit</button>
+            <div v-if="isEditMode" class="edit-classification-group-name">
+                <form>
+                    <div class="form-group">
+                        <textarea type="text" required v-model="title" class="form-control" placeholder="Group title"></textarea>
+                    </div>
+                    <button type="button" @@click="save" class="btn btn-success">Save</button>
+                    <button type="button" @@click="isEditMode = false" class="btn btn-link">Cancel</button>
+
+                </form>
+            </div>
+            <div v-else class="line-wrapper">
+                <a @@click="select()">{{ group.title }}</a>
             </div>
         </div>
     </script>
     <script type="x/template" id="classification-editor-template">
         <div>
-            <form v-if="isEditMode">
-                <button v-if="isNew || admin" @@click="deleteItem" type="button" class="btn btn-default">Delete</button>
-                <div class="form-group">
-                    <input type="text" required v-model="title" class="form-control" placeholder="Classification title">
-                </div>
-                <button type="button" @@click="isEditMode = false" class="btn btn-default">Cancel</button>
-                <button type="button" @@click="save" class="btn btn-default">Save</button>
-            </form>
-            <div v-else>
+            <div v-if="isEditMode" class="edit-classification-group-name">
+                <form>
+                    <div class="form-group">
+                        <textarea type="text" required v-model="title" class="form-control" placeholder="Classification title"></textarea>
+                    </div>
+                    <button type="button" @@click="save" class="btn btn-success">Save</button>
+                    <button type="button" @@click="isEditMode = false" class="btn btn-link">Cancel</button>
+
+                </form>
+            </div>
+            <div v-else class="line-wrapper">
                 <a @@click="select()"> {{ title }}</a>
-                <button @@click="isEditMode = true" type="button" class="btn btn-default">Edit</button>
             </div>
         </div>
     </script>
@@ -48,6 +86,10 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script src="https://unpkg.com/vuex"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
     <style type="text/css">
         .slider {
             position: absolute;
@@ -69,22 +111,41 @@
             background: #4a8df8;
             height: 5px;
         }
+
         .inc {
             animation: increase 2s infinite;
         }
+
         .dec {
             animation: decrease 2s 0.5s infinite;
         }
 
         @@keyframes increase {
-            from { left: -5%; width: 5%; }
-            to { left: 130%; width: 100%;}
-        }
-        @@keyframes decrease {
-            from { left: -80%; width: 80%; }
-            to { left: 110%; width: 10%;}
+            from {
+                left: -5%;
+                width: 5%;
+            }
+
+            to {
+                left: 130%;
+                width: 100%;
+            }
         }
 
+        @@keyframes decrease {
+            from {
+                left: -80%;
+                width: 80%;
+            }
+
+            to {
+                left: 110%;
+                width: 10%;
+            }
+        }
+
+
+        /* common styles */
         .classifications-wrapper {
             margin-top: -0.1px;
             height: 100%;
@@ -92,15 +153,15 @@
             border-left: 13px solid #bcc3c8;
         }
 
-        .classifications-wrapper .column {
-            height: 100%;
-        }
+            .classifications-wrapper .column {
+                height: 100%;
+            }
 
-        .classifications-wrapper .column h3 {
-            color: #7e898f;
-        }
+                .classifications-wrapper .column h3 {
+                    color: #7e898f;
+                }
 
-        .classifications-blcok {
+        .classifications-block {
             height: calc(100% - 52px);
         }
 
@@ -123,22 +184,62 @@
             background-color: #f8f9f9;
         }
 
+        .classifications-block .form-control {
+            border: 2px solid #cccccc;
+            box-shadow: none;
+            font-size: 14px;
+            min-height: 40px;
+            line-height: 24px;
+            resize: none;
+            max-height: 400px;
+        }
+
+            .classifications-block .form-control:focus,
+            .classifications-block .option-line .form-control:focus,
+            .classifications-block .edit-classification-group-name .form-control:focus {
+                border-color: #66afe9;
+                outline: 0;
+                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+
+        .classifications-block .has-error {
+            border-color: #c44919;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(196, 73, 25, 0.6) !important;
+        }
+
+        .classifications-block .has-warning {
+            border-color: #8a6d3b;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(138, 109, 59, 0.6) !important;
+        }
+
+        /* classifications columns */
         .classification-list {
             padding-top: 10px;
         }
 
-        .classification-list li {
-            padding-right: 15px;
-            margin-bottom: 2px;
+            .classification-list li {
+                padding-right: 15px;
+                margin-bottom: 2px;
+            }
+
+                .classification-list li a {
+                    display: block;
+                    word-break: break-word;
+                    padding: 10px;
+                    position: relative;
+                    color: #4d4d4d;
+                    padding-right: 40px;
+                }
+
+        .line-wrapper {
+            border-radius: 5px;
+            transition: all 0.3s linear;
+            position: relative;
         }
 
-        .classification-list li a {
-            display: block;
-            word-break: break-word;
-            padding: 10px;
-            border-radius: 5px;
-            color: #4d4d4d;
-        }
+            .line-wrapper a {
+                margin-right: 40px;
+            }
 
         .classification-list li a:hover,
         .classification-list li a:focus,
@@ -147,19 +248,100 @@
             cursor: pointer;
         }
 
-        .classification-groups .classification-list li a:hover,
-        .classification-groups .classification-list li a:focus,
-        .classification-groups .classification-list li a:active {
+        .classification-list li:hover .btn-edit,
+        .classification-list li:focus .btn-edit,
+        .classification-list li:active .btn-edit {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .btn-edit {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 0;
+            background-color: transparent;
+            transition: all 0.3s linear;
+        }
+
+            .btn-edit polygon {
+                fill: transparent;
+                stroke: #727d84;
+                transition: all 0.3s linear;
+            }
+
+            .btn-edit .pancel-tip {
+                fill: #727d84;
+            }
+
+            .btn-edit:hover polygon,
+            .btn-edit:focus polygon,
+            .btn-edit:active polygon {
+                stroke: #393e42;
+            }
+
+            .btn-edit:hover .pancel-tip,
+            .btn-edit:focus .pancel-tip,
+            .btn-edit:active .pancel-tip {
+                fill: #393e42;
+            }
+
+        .classification-list .btn-clear {
+            padding: 0;
+            background-color: transparent;
+            width: 40px;
+        }
+
+        .classification-list .btn-delete {
+            background-color: transparent;
+            padding: 0;
+            position: absolute;
+            right: -20px;
+            top: 3px;
+            outline: none;
+        }
+
+        .classification-list .btn polyline {
+            stroke: #393e42;
+            fill: transparent;
+            stroke-width: 1;
+            opacity: 0.6;
+        }
+
+        .classification-list .btn-delete polyline {
+            stroke: #c44919;
+        }
+
+        .classification-list .btn:hover polyline,
+        .classification-list .btn:focus polyline,
+        .classification-list .btn:active polyline {
+            stroke-width: 2;
+            opacity: 1;
+        }
+
+        .classification-groups .classification-list li:hover .line-wrapper,
+        .classification-groups .classification-list li:focus .line-wrapper,
+        .classification-groups .classification-list li:active .line-wrapper {
             background-color: #f8f9f9;
         }
 
-        .classification-groups .active a {
+        .classification-groups .active .line-wrapper,
+        .classification-groups .active .edit-classification-group-name {
             background-color: #e4e7e9;
             box-shadow: 17px 0px 0 0 #e4e7e9;
             position: relative;
         }
 
-        .classification-list .active a:before {
+        .classification-groups .active .edit-classification-group-name {
+            box-shadow: 40px 0px 0 0 #e4e7e9;
+        }
+
+        .classification-list .active .line-wrapper:before,
+        .classification-list .active .line-wrapper:after,
+        .classification-list .active .edit-classification-group-name:before,
+        .classification-list .active .edit-classification-group-name:after {
             display: block;
             content: "";
             width: 20px;
@@ -171,16 +353,16 @@
             top: -20px;
         }
 
-        .classification-list .active a:after {
-            display: block;
-            content: "";
-            width: 20px;
-            height: 20px;
-            position: absolute;
-            border-radius: 100%;
+        .classification-list .active .edit-classification-group-name:before,
+        .classification-list .active .edit-classification-group-name:after {
+            right: -35px;
+        }
+
+        .classification-list .active .edit-classification-group-name:after,
+        .classification-list .active .line-wrapper:after {
             box-shadow: 7px -8px 0px -3px #e4e7e9;
-            right: -15px;
             bottom: -20px;
+            top: auto;
         }
 
         .scroller {
@@ -194,25 +376,115 @@
             padding-bottom: 20px;
         }
 
-        .classifications .classification-list li a:hover,
-        .classifications .classification-list li a:focus,
-        .classifications .classification-list li a:active {
+        .classifications .classification-list li:hover .line-wrapper,
+        .classifications .classification-list li:focus .line-wrapper,
+        .classifications .classification-list li:active .line-wrapper {
             background-color: #fff;
         }
 
-        .classifications .active a {
+        .classifications .active .line-wrapper,
+        .classifications .active .edit-classification-group-name {
             background-color: #f8f9f9;
             box-shadow: 17px 0px 0 0 #f8f9f9;
             position: relative;
         }
 
-        .classifications .active a:before {
-            box-shadow: 8px 7px 0px -3px #f8f9f9;
+        .classifications .active .edit-classification-group-name {
+            box-shadow: 40px 0px 0 0 #f8f9f9;
         }
 
-        .classifications .active a:after {
-            box-shadow: 7px -8px 0px -3px #f8f9f9;
+            .classifications .active .line-wrapper:before,
+            .classifications .active .edit-classification-group-name:before {
+                box-shadow: 8px 7px 0px -3px #f8f9f9;
+            }
+
+            .classifications .active .line-wrapper:after,
+            .classifications .active .edit-classification-group-name:after {
+                box-shadow: 7px -8px 0px -3px #f8f9f9;
+            }
+
+        .edit-classification-group-name {
+            padding: 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            margin-right: 20px;
+            position: relative;
         }
+
+            .edit-classification-group-name .input-group {
+                margin-bottom: 10px;
+            }
+
+
+
+
+        /* edit classification column */
+
+        .categories-groups form {
+            padding-top: 10px;
+        }
+
+            .categories-groups form label {
+                font-family: "Lucida Console", Monaco, monospace;
+                font-size: 14px;
+                color: #5d5d5d;
+                font-weight: normal;
+            }
+
+        .categories-holder {
+            background-color: #f1f2f3;
+            padding: 20px 25px;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .categories-holder-footer button {
+            padding: 0;
+        }
+
+        .margin-bottom-0 {
+            margin-bottom: 0;
+        }
+
+        .option-line input[type="number"] {
+            border-radius: 4px 0 0 4px;
+            border-right-color: #f1f2f3;
+            color: #3da802;
+        }
+
+        .option-line input {
+            height: 34px;
+            border: 2px solid #fff;
+            box-shadow: none;
+            border-radius: 0 4px 4px 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+            .option-line input[type=number]::-webkit-inner-spin-button,
+            .option-line input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+        .option-line .input-group-btn {
+            width: 35px;
+            background-color: red;
+        }
+
+        .option-line .input-group {
+            width: 100%;
+        }
+
+        .option-line-holder {
+            display: table-row;
+        }
+
+        .option-cell {
+            display: table-cell;
+        }
+
+            .option-cell:first-of-type {
+                width: 100px;
+            }
     </style>
     <script type="text/javascript">
         if (!String.prototype.format) {
@@ -234,9 +506,9 @@
             updateGroup: './api/group/{0}',
             deleteGroup: './api/group/{0}',
             classifications: './api/classifications',
-            createClassifications: './api/classification',
-            updateClassifications: './api/classification/{0}',
-            deleteClassifications: './api/classification/{0}',
+            createClassification: './api/classification',
+            updateClassification: './api/classification/{0}',
+            deleteClassification: './api/classification/{0}',
             categories: './api/classification/{0}/categories',
             updateCategories: './api/classification/{0}/categories'
         }
@@ -269,6 +541,9 @@
                     state.groups.push(group);
                 },
                 updateGroup: function(state, group) {
+                    var g = state.groups[group.index];
+                    g.title = group.title;
+                    g.isNew = false;
                 },
                 deleteGroup: function(state, index) {
                     state.groups.splice(index, 1);
@@ -290,9 +565,26 @@
                 },
                 addCategory: function(state, category) {
                     state.categories.push(category);
+                },
+                updateClassification: function(state, classification) {
+                    var g = state.classifications[classification.index];
+                    g.title = classification.title;
+                    g.isNew = false;
+                },
+                deleteClassification: function(state, index) {
+                    state.classifications.splice(index, 1);
                 }
             },
             actions: {
+                addCategory(context, category) {
+                    context.commit('addCategory', category);
+                },
+                updateCategories(context, classificationId, categories) {
+                    axios.patch(routes.updateCategories.format(classificationId), updateCategories)
+                        .then(function() {
+                            context.commit('updateCategories', updateCategories);
+                        });
+                },
                 addGroup(context, group) {
                     context.commit('addGroup', group);
                 },
@@ -305,42 +597,51 @@
                         });
                 },
                 deleteGroup(context, index) {
-                    var group = context.state.groups[index];
-                    if ((group || {}).isNew)
+                    var group = context.state.groups[index] || {};
+                    if (group.isNew) {
                         context.commit('deleteGroup', index);
-                    else {
+                        context.dispatch('selectGroup', 0);
+                    } else {
                         axios.delete(routes.deleteGroup.format(group.id))
                             .then(function() {
                                 context.commit('deleteGroup', index);
+                                context.dispatch('selectGroup', 0);
                             });
                     }
                 },
                 selectGroup(context, index) {
                     context.commit('selectGroup', index);
-                    context.dispatch('loadClassifications', context.state.groups[index].id);
+                    return context.dispatch('loadClassifications', context.state.groups[index].id);
                 },
                 addClassification(context, classification) {
-                    context.commit();
+                    context.commit('addClassification', classification);
                 },
                 updateClassification(context, classification) {
-                    context.commit();
+                    (classification.isNew
+                            ? axios.post(routes.createClassification, classification)
+                            : axios.patch(routes.updateClassification.format(classification.id), classification))
+                        .then(function() {
+                            context.commit('updateClassification', classification);
+                        });
                 },
-                deleteClassification(context, classification) {
-                    context.commit();
+                deleteClassification(context, index) {
+                    var classification = context.state.classifications[index] || {};
+                    if (classification.isNew) {
+                        context.commit('deleteClassification', index);
+                        context.dispatch('selectClassification', 0);
+                    } else {
+                        axios.delete(routes.deleteClassification.format(classification.id))
+                            .then(function() {
+                                context.commit('deleteClassification', index);
+                                context.dispatch('selectClassification', 0);
+                            });
+                    }
                 },
                 selectClassification(context, index) {
                     context.commit('selectClassification', index);
-                    context.dispatch('loadCategories', context.state.classifications[0].id);
+                    return context.dispatch('loadCategories', context.state.classifications[index].id);
                 },
-                addCategory(context, category) {
-                    context.commit();
-                },
-                updateCategory(context, category) {
-                    context.commit();
-                },
-                deleteCategory(context, category) {
-                    context.commit();
-                },
+
                 loadGroups: function(context) {
                     var url = routes.groups;
                     return axios.get(url, {})
@@ -413,6 +714,23 @@
                     s4();
             };
 
+            Vue.component('CategoriesEditor',
+            {
+                template: '#categories-editor-template',
+                data: function() {
+                    return {
+                    }
+                },
+                computed: {
+                    categories() {
+                        return this.$store.state.categories;
+                    }
+                },
+                methods: {
+
+                }
+            });
+
             Vue.component('GroupEditor',
                 {
                     template: '#group-editor-template',
@@ -426,17 +744,40 @@
                     },
                     props: ['group', 'index', 'admin'],
                     methods: {
+                        edit() {
+                            this.isEditMode = true;
+                        },
                         select() {
                             store.dispatch('selectGroup', this.index);
                         },
                         deleteItem() {
-                            store.dispatch('deleteGroup', this.index);
+                            if (confirm(`Are you sure you want to delete classification group '${this.title}'?`)) {
+                                store.dispatch('deleteGroup', this.index);
+                            }
                         },
                         save() {
                             var self = this;
                             var group = { isNew: this.isNew, id: this.id, title: this.title, index: this.index };
-                            store.dispatch('updateGroup', group);
+                            store.dispatch('updateGroup', group).then(function() {
+                                self.isEditMode = false;
+                            });;
                         }
+                    },
+                    mounted: function() {
+                        var self = this;
+                        this.$nextTick(function() {
+                            $(this.$el).contextMenu({
+                                selector: 'a',
+                                callback: function(key, options) {
+                                    self[key]();
+                                },
+                                items: {
+                                    "edit": { name: "Edit", icon: "edit" },
+                                    "sep1": "---------",
+                                    "deleteItem": { name: "Delete", icon: "delete" }
+                                }
+                            });
+                        });
                     }
                 });
 
@@ -448,16 +789,23 @@
                             isNew: this.classification.isNew,
                             isEditMode: this.classification.isNew,
                             title: this.classification.title,
-                            id: this.classification.id
+                            id: this.classification.id,
+                            parent: this.classification.parent,
                         }
                     },
                     props: ['classification', 'index', 'admin'],
                     methods: {
+                        edit() {
+                            this.isEditMode = true;
+                        },
                         select() {
                             store.dispatch('selectClassification', this.index);
                         },
                         deleteItem() {
-                            store.dispatch('deleteClassification', this.index);
+                            if (confirm(`Are you sure you want to delete classification '${this.title}'?`)) {
+                                store.dispatch('deleteClassification', this.index);
+                            }
+
                         },
                         save() {
                             var self = this;
@@ -465,13 +813,30 @@
                                 isNew: this.isNew,
                                 id: this.id,
                                 title: this.title,
-                                index: this.index
+                                index: this.index,
+                                parent: this.parent
                             };
                             store.dispatch('updateClassification', classification)
                                 .then(function() {
                                     self.isEditMode = false;
                                 });
                         }
+                    },
+                    mounted: function () {
+                        var self = this;
+                        this.$nextTick(function () {
+                            $(this.$el).contextMenu({
+                                selector: 'a',
+                                callback: function (key, options) {
+                                    self[key]();
+                                },
+                                items: {
+                                    "edit": { name: "Edit", icon: "edit" },
+                                    "sep1": "---------",
+                                    "deleteItem": { name: "Delete", icon: "delete" }
+                                }
+                            });
+                        });
                     }
                 });
 
@@ -513,7 +878,8 @@
                         this.$store.dispatch('addGroup', { id: guid(), isNew: true, title: '' });
                     },
                     addClassification() {
-                        this.$store.dispatch('addClassification', { id: guid(), isNew: true, title: '' });
+                        this.$store.dispatch('addClassification',
+                            { id: guid(), isNew: true, title: '', parent: this.activeGroup.id });
                     }
                 }
             });
@@ -522,7 +888,7 @@
 }
 <div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
 <div class="classifications-wrapper">
-    <div class="row search-row">
+    <div class="search-row">
         <form id="frmSearch" class="form-inline">
             <div class="input-group">
                 <input id="txtFilter" type="text" class="form-control" name="f" value="">
@@ -538,7 +904,7 @@
             <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
         </form>
     </div>
-    <div class="row classifications-blcok">
+    <div class="classifications-block">
         <div class="col-xs-3 column classification-groups">
             <h3>Classification groups</h3>
             <div class="classification-list-wrapper">
@@ -552,7 +918,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-4 column classifications tab-content">
+        <div class="col-xs-4 column classifications">
             <h3>{{activeGroup.title}}</h3>
             <div class="classification-list-wrapper">
                 <div class="scroller">
@@ -561,16 +927,14 @@
                             <classification-editor :classification="classification" :index="index" :admin="isAdmin"></classification-editor>
                         </li>
                     </ul>
-                    <button type="button" class="btn lighter-hover">Add classification</button>
+                    <button type="button" class="btn lighter-hover" @@click="addClassification()">Add classification</button>
                 </div>
             </div>
         </div>
         <div class="col-xs-5 column categories-groups tab-content">
             <h3>{{activeClassification.title}}</h3>
             <div class="scroller">
-                <ul class="list-unstyled classification-list">
-                    <li v-for="category in categories" :key="category.id">{{ category.value }} {{ category.title }}</li>
-                </ul>
+                <categories-editor></categories-editor>
             </div>
         </div>
     </div>
