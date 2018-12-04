@@ -1869,5 +1869,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain mode don&apos;t allow to use nested rosters..
+        /// </summary>
+        public static string WB0279_PlainModeGroupContainsNestedGroup {
+            get {
+                return ResourceManager.GetString("WB0279_PlainModeGroupContainsNestedGroup", resourceCulture);
+            }
+        }
     }
 }

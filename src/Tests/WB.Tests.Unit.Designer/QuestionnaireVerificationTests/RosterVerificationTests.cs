@@ -77,7 +77,22 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.Question(),
                     })
             ) 
-            .ExpectError("WB0278");
+            .ExpectWarning("WB0278");
+        }
+
+        [Test]
+        public void should_reject_nested_roster_in_plain_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(id: Id.g1),
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                    children: new IComposite[]
+                    {
+                        Create.Question(),
+                        Create.Roster(),
+                    })
+            ) 
+            .ExpectError("WB0279");
         }
     }
 }
