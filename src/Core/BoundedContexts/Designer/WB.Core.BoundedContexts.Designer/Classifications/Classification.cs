@@ -21,13 +21,15 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public int Value { get; set; }
         public string Title { get;set; }
         public int Order { get; set; }
+        public Guid? Parent{ get;set; }
     }
 
     public class Classification : IClassificationEntity
     {
         public Guid Id { get; set;}
         public string Title { get;set; }
-        public Guid? Parent{ get;set; }
+        public Guid? Parent { get;set; }
+        public Guid? UserId { get;set; }
         public ClassificationGroup Group { get; set; }
         public int CategoriesCount { get; set; }
     }
@@ -122,7 +124,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             {
                 Id = x.Id,
                 Title = x.Title,
-                Parent = x.Parent
+                Parent = x.Parent,
+                UserId = x.UserId
             });
             return Task.FromResult(classifications);
         }
@@ -216,7 +219,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                     Id = x.Id,
                     Value = x.Value ?? 0,
                     Title = x.Title,
-                    Order = x.Index ?? 0
+                    Order = x.Index ?? 0,
+                    Parent = x.Parent
                 })
                 .OrderBy(x => x.Order).ThenBy(x => x.Value)
                 .ToList();
@@ -309,10 +313,38 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             this.classificationsStorage.Remove(classificationEntity.Id);
         }
 
-        public Task UpdateCategories(Guid classificationId)
+        public Task UpdateCategories(Guid classificationId, Category[] categories)
         {
-            if (!membershipUserService.WebUser.IsAdmin)
-                throw new ClassificationException(ClassificationExceptionType.NoAccess, "Can not change public records");
+            var classification = this.classificationsStorage.GetById(classificationId);
+
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
+            ThrowIfUserDoesNotHaveAccessToPrivate(classification);
+
+            var a = categories.Select(x => x.Id).ToList();
+
+            var categoriesInClassification = this.classificationsStorage.Query(_ =>
+                _.Where(x => x.Parent == classificationId && !a.Contains(x.Id)).ToList());
+
+            var categoryEntities = categories.Select((x, index) => new ClassificationEntity
+            {
+                Id = x.Id,
+                ClassificationId = classificationId,
+                Parent = classificationId,
+                Title = x.Title,
+                Value = x.Value,
+                Type = ClassificationEntityType.Category,
+                Index = index
+            }).ToArray();
+
+            var categoriesToDelete = categoriesInClassification.Where(x => categories.All(c => c.Id != x.Id)).ToList();
+
+            Store(categoryEntities);
+
+            if (categoriesToDelete.Any())
+            {
+                this.classificationsStorage.Remove(categoriesToDelete);
+            }
+
             return Task.CompletedTask;
         }
 
@@ -345,7 +377,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         Task CreateClassificationGroup(ClassificationGroup group);
         Task UpdateClassificationGroup(ClassificationGroup group);
         Task DeleteClassificationGroup(Guid groupId);
-        Task UpdateCategories(Guid classificationId);
+        Task UpdateCategories(Guid classificationId, Category[] categories);
     }
 
     public class ClassificationsSearchResult
