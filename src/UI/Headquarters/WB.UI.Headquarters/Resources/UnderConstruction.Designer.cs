@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This server is under construction or undergoing scheduled maintenance..
+        ///   Looks up a localized string similar to Server initialization is in progress. Please wait....
         /// </summary>
         public static string PageTitle {
             get {

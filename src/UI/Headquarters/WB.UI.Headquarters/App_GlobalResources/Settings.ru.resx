@@ -200,4 +200,16 @@
     <data name="InterviewerSettings_Description" xml:space="preserve">
     <value>Расширенные настройки для андроид версии Interviewer приложения</value>
   </data>
+    <data name="AllowedToSync" xml:space="preserve">
+    <value>Разрешить синхронизироваться приложениям версии:</value>
+    <comment>Разрешить синхронизироваться приложениям версии:</comment>
+  </data>
+    <data name="Any" xml:space="preserve">
+    <value>Любой</value>
+    <comment>Любой</comment>
+  </data>
+    <data name="VersionOrNewer" xml:space="preserve">
+    <value>{0} или новее</value>
+    <comment>{0} или новее</comment>
+  </data>
 </root>

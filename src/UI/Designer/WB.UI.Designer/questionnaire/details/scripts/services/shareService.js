@@ -24,11 +24,12 @@
                 });
             };
 
-            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, isPublic) {
+            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, hideifDisabled, isPublic) {
                 return commandService.execute("UpdateQuestionnaire", {
                     title: title,
                     variable: variable,
                     questionnaireId: questionnaireId,
+                    hideifDisabled: hideifDisabled, 
                     isPublic: isPublic
                 });
             };

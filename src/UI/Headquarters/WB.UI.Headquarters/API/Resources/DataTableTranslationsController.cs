@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Web.Http;
 using WB.UI.Headquarters.Resources;
 

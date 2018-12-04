@@ -516,24 +516,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All collected data will be saved to backup file on this device..
-        /// </summary>
-        public static string Diagnostics_Backup_Description {
-            get {
-                return ResourceManager.GetString("Diagnostics_Backup_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Backup all gathered information.
-        /// </summary>
-        public static string Diagnostics_Backup_Title {
-            get {
-                return ResourceManager.GetString("Diagnostics_Backup_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to When Saved:.
         /// </summary>
         public static string Diagnostics_BackupDate_Title {
@@ -773,6 +755,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Diagnostics_Share_Title {
             get {
                 return ResourceManager.GetString("Diagnostics_Share_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save all relevant information to the file on this device..
+        /// </summary>
+        public static string Diagnostics_Support_Package_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Support_Package_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate support package.
+        /// </summary>
+        public static string Diagnostics_Support_Package_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Support_Package_Title", resourceCulture);
             }
         }
         

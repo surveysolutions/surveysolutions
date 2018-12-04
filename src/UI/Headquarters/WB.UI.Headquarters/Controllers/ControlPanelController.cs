@@ -23,13 +23,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Models.Admin;
-using WB.UI.Headquarters.Services;
-using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -177,9 +174,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
-            => this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>();
-
         public ActionResult Index() => this.View();
 
         public ActionResult NConfig() => this.View();
@@ -248,33 +242,6 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult RevalidateInterviews()
         {
             return this.View();
-        }
-
-        [HttpPost]
-        public ActionResult RevalidateAllInterviewsWithErrors(RevalidateModel model)
-        {
-            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-
-            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(
-                authorizedUser.Id,
-                model.FromDate,
-                model.ToDate?.AddDays(1)
-            );
-
-            return this.RedirectToAction("RevalidateInterviews");
-        }
-
-        public ActionResult StopInterviewRevalidating()
-        {
-            this.RevalidateInterviewsAdministrationService.StopInterviewsRevalidating();
-
-            return this.RedirectToAction("RevalidateInterviews");
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public string GetRevalidateInterviewStatus()
-        {
-            return this.RevalidateInterviewsAdministrationService.GetReadableStatus();
         }
 
         #endregion

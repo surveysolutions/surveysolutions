@@ -18,7 +18,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Pdf;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
@@ -15,17 +14,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     public class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
-        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
+        private readonly ILogger logger;
 
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
         public InterviewExpressionStatePrototypeProvider(
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
-            IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
+            IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader,
+            ILoggerProvider loggerProvider)
         {
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
+            logger = loggerProvider.GetFor<InterviewExpressionStatePrototypeProvider>();
         }
 
         public ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
             if (!assemblyExists)
             {
-                Logger.Error($"Assembly was not found. Questionnaire={questionnaireId}, version={questionnaireVersion}");
+                logger.Error($"Assembly was not found. Questionnaire={questionnaireId}, version={questionnaireVersion}");
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
 
@@ -61,13 +62,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.Error("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
+                    logger.Error("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
                     return null;
                 }
             }
             catch (Exception exception)
             {
-                Logger.Error($"Error on assembly loading for id={questionnaireId} version={questionnaireVersion}", exception);
+                logger.Error($"Error on assembly loading for id={questionnaireId} version={questionnaireVersion}", exception);
                 
                 var exceptions = new List<Exception> { exception };
 
@@ -78,14 +79,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     foreach (var loaderException in loaderExceptions)
                     {
                         exceptions.Add(loaderException);
-                        Logger.Error("LoaderEcxeption found", loaderException);
+                        logger.Error("LoaderEcxeption found", loaderException);
                     }
                 }
 
                 if (exception.InnerException != null)
                 {
                     exceptions.Add(exception.InnerException);
-                    Logger.Error("Error on assembly loading (inner)", exception.InnerException);
+                    logger.Error("Error on assembly loading (inner)", exception.InnerException);
                 }
 
                 //hide original one
@@ -99,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 
             if (!assemblyExists)
             {
-                Logger.Error($"Assembly was not found. Questionnaire={questionnaireIdentity}");
+                logger.Error($"Assembly was not found. Questionnaire={questionnaireIdentity}");
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
 
@@ -121,13 +122,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Error on activating interview expression state. Cannot cast to created object to {nameof(IInterviewExpressionState)}", e);
+                    logger.Error($"Error on activating interview expression state. Cannot cast to created object to {nameof(IInterviewExpressionState)}", e);
                     return null;
                 }
             }
             catch (Exception exception)
             {
-                Logger.Error($"Error on assembly loading for id={questionnaireIdentity}", exception);
+                logger.Error($"Error on assembly loading for id={questionnaireIdentity}", exception);
 
                 var exceptions = new List<Exception> { exception };
 
@@ -138,14 +139,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     foreach (var loaderException in loaderExceptions)
                     {
                         exceptions.Add(loaderException);
-                        Logger.Error("LoaderEcxeption found", loaderException);
+                        logger.Error("LoaderEcxeption found", loaderException);
                     }
                 }
 
                 if (exception.InnerException != null)
                 {
                     exceptions.Add(exception.InnerException);
-                    Logger.Error("Error on assembly loading (inner)", exception.InnerException);
+                    logger.Error("Error on assembly loading (inner)", exception.InnerException);
                 }
 
                 //hide original one

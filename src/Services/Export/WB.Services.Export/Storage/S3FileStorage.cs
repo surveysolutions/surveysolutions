@@ -46,7 +46,7 @@ namespace WB.Services.Export.Storage
                     Key = GetKey(key)
                 };
 
-                log.LogDebug($"GetBinary: {S3Settings.BucketName}/{getObject.Key}");
+                log.LogTrace("GetBinary: {bucketName}/{key}", S3Settings.BucketName, getObject.Key);
                 using (var response = await client.GetObjectAsync(getObject))
                 {
                     using (var ms = new MemoryStream())
@@ -58,12 +58,12 @@ namespace WB.Services.Export.Storage
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.LogTrace($"Cannot get object from S3. [{e.StatusCode.ToString()}] {GetKey(key)}");
+                log.LogTrace("Cannot get object from S3. [{statusCode}] {key}", e.StatusCode, GetKey(key));
                 return null;
             }
             catch (Exception e)
             {
-                LogError($"Unable to get binary from {key}", e);
+                LogError("Unable to get binary from {key}", e, key);
                 throw;
             }
         }
@@ -89,19 +89,21 @@ namespace WB.Services.Export.Storage
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.LogTrace($"Cannot list objects from S3. [{e.StatusCode.ToString()}] {GetKey(prefix)}");
+                log.LogTrace("Cannot list objects from S3. [{statusCode}] {prefix}", e.StatusCode, GetKey(prefix));
                 return null;
             }
             catch (Exception e)
             {
-                LogError($"Unable to get list of object from S3 by prefix: {prefix}", e);
+                LogError("Unable to get list of object from S3 by prefix: {prefix}", e, prefix);
                 throw;
             }
         }
 
-        private void LogError(string message, Exception exception)
+        private void LogError(string message, Exception exception, params object[] args)
         {
-            log.LogError(exception, $"{message}. Bucket: {S3Settings.BucketName}. BasePath: {S3Settings.BasePath} EndPoint: {client.Config.ServiceURL} ");
+            log.LogError(exception, message + 
+                ". Bucket: {bucketName}. BasePath: {S3BasePath}",
+                args.Union(new []{S3Settings.BucketName, S3Settings.BasePath}).ToArray());
         }
 
         public bool IsEnabled() => true;
@@ -115,7 +117,7 @@ namespace WB.Services.Export.Storage
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 
-            log.LogDebug($"GetDirectLink: {S3Settings.BucketName}/{key}");
+            log.LogTrace("GetDirectLink: {bucketName}/{key}", S3Settings.BucketName, key);
 
             var preSignedUrlRequest = new GetPreSignedUrlRequest
             {
@@ -138,7 +140,7 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                log.LogDebug($"Store: {S3Settings.BucketName}/{key} [{contentType}]");
+                log.LogDebug("Storing: {bucketName}/{key} [{contentType}]", S3Settings.BucketName, key, contentType);
 
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
@@ -166,7 +168,7 @@ namespace WB.Services.Export.Storage
             }
             catch (Exception e)
             {
-                LogError($"Unable to store object in S3. Path: {key}", e);
+                LogError("Unable to store object in S3. Path: {key}", e, key);
                 throw;
             }
         }
@@ -188,12 +190,12 @@ namespace WB.Services.Export.Storage
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                log.LogTrace($"Cannot get object metadata from S3. [{e.StatusCode.ToString()}] {GetKey(key)}");
+                log.LogTrace("Cannot get object metadata from S3. [{statusCode}] {key}", e.StatusCode, GetKey(key));
                 return null;
             }
             catch (Exception e)
             {
-                LogError($"Unable to remove object in S3. Path: {key}", e);
+                LogError("Unable to remove object in S3. Path: {key}", e, key);
                 throw;
             }
 
@@ -228,22 +230,9 @@ namespace WB.Services.Export.Storage
             }
             catch (Exception e)
             {
-                LogError($"Unable to remove object in S3. Path: {path}", e);
+                LogError("Unable to remove object in S3. Path: {path}", e, path);
                 throw;
             }
-        }
-
-        private bool IsKeyNameContainsSpecialChars(string key)
-        {
-            const int MaxAnsiCode = 255;
-
-            if (string.IsNullOrWhiteSpace(key)) return false;
-
-            foreach (var c in key)
-            {
-                if (c > MaxAnsiCode) return true;
-            }
-            return false;
         }
     }
 }

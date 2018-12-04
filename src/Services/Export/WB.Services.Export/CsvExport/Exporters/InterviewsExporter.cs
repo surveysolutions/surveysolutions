@@ -59,8 +59,9 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
             stopwatch.Stop();
-            this.logger.Log(LogLevel.Information, $"Export of {interviewsToExport.Count:N0} interview datas for questionnaire" +
-                                                  $" {questionnaireExportStructure.QuestionnaireId} finised. Took {stopwatch.Elapsed:c} to complete");
+            this.logger.LogInformation("Export of {interviewsCount:N0} interview datas for questionnaire" +
+                    " {questionnaireId} finised. Took {elapsed:c} to complete",
+                interviewsToExport.Count, questionnaireExportStructure.QuestionnaireId, stopwatch.Elapsed);
         }
 
         private Task DoExportAsync(TenantInfo tenant,
@@ -82,7 +83,14 @@ namespace WB.Services.Export.CsvExport.Exporters
                 string fileName = this.CreateFormatDataFileName(level.LevelName);
                 string filePath = Path.Combine(basePath, fileName);
 
-                List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
+                List<string> interviewLevelHeader = new List<string>();
+                //Interview Key in all files does first
+                interviewLevelHeader.Add(ServiceColumns.InterviewKey.VariableExportColumnName);
+                //Parent Ids if exists go as second part
+                //starting from root
+                interviewLevelHeader.AddRange(questionnaireExportStructure.GetAllParentColumnNamesForLevel(level.LevelScopeVector));
+                //Record id goes last
+                interviewLevelHeader.Add(level.LevelIdColumnName);
 
                 if (level.IsTextListScope)
                 {
@@ -98,8 +106,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Values.Select(systemVariable => systemVariable.VariableExportColumnName));
                 }
-
-                interviewLevelHeader.AddRange(questionnaireExportStructure.GetAllParentColumnNamesForLevel(level.LevelScopeVector));
 
                 this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
@@ -131,7 +137,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
 
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to query {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
                 
                 Parallel.ForEach(batch, interviewToExport =>
@@ -151,11 +158,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                     progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
                 });
 
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to process {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
 
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to write {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
             }
 
             progress.Report(100);
@@ -278,7 +287,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAdjustment[i]).ToString(CultureInfo.InvariantCulture);
                     }
 
-                    parentRecordIds = parentRecordIds.Reverse().ToArray();
+                    parentRecordIds = parentRecordIds.ToArray();
                 }
 
                 string[] referenceValues = Array.Empty<string>();
@@ -392,8 +401,12 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var recordsByLevel = new List<string>();
                 foreach (var interviewDataExportRecord in interviewDataExportLevelView.Records)
                 {
-                    var parametersToConcatenate = new List<string> { interviewDataExportRecord.RecordId };
-
+                    var parametersToConcatenate = new List<string>();
+                    var systemVariableValues = new List<string>(interviewDataExportRecord.SystemVariableValues);
+                    
+                    parametersToConcatenate.Add(interviewId.Key);
+                    parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
+                    parametersToConcatenate.Add(interviewDataExportRecord.RecordId);
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
 
                     for (int i = 0; i < interviewDataExportRecord.Answers.Length; i++)
@@ -403,16 +416,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                             parametersToConcatenate.Add(interviewDataExportRecord.Answers[i][j] == null ? "" : interviewDataExportRecord.Answers[i][j]);
                         }
                     }
-
-                    var systemVariableValues = new List<string>(interviewDataExportRecord.SystemVariableValues);
+                    
                     if (systemVariableValues.Count > 0) // main file?
                     {
-                        var interviewKeyIndex = ServiceColumns.SystemVariables[ServiceVariableType.InterviewKey].Index;
-                        if (systemVariableValues.Count < interviewKeyIndex + 1)
-                            systemVariableValues.Add(interviewId.Key);
-                        if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
-                            systemVariableValues[interviewKeyIndex] = interviewId.Key;
-
                         void InsertOrSetAt(ServiceVariableType type, string value)
                         {
                             var index = ServiceColumns.SystemVariables[type].Index;
@@ -428,16 +434,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
 
                         InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
-                        InsertOrSetAt(ServiceVariableType.InterviewStatus, interviewId.Status.ToString());
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);
-                    parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
-
-                    if (systemVariableValues.Count == 0)
-                    {
-                        parametersToConcatenate.Add(interviewId.Key);
-                    }
 
                     recordsByLevel.Add(string.Join(stringSeparator,
                         parametersToConcatenate.Select(v => v?.Replace(stringSeparator, ""))));
@@ -469,9 +469,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 values.Add(this.GetSystemValue(interview, header));
             }
             return values.ToArray();
-
         }
-
 
         private string GetSystemValue(InterviewData interview, ServiceVariable serviceVariable)
         {

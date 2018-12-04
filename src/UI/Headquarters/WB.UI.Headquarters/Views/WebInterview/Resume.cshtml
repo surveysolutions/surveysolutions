@@ -43,7 +43,7 @@
             }
 
             <div class="form-group">
-                @Html.RenderCaptcha()
+                @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
             </div>
         }
         <div class="form-actions">

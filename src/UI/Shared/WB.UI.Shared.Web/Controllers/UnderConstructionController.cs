@@ -1,34 +1,41 @@
 ﻿using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
-using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Resources;
 
 namespace WB.UI.Shared.Web.Controllers
 {
-    [NoTransaction]
     public class UnderConstructionController : Controller
     {
+        public UnderConstructionInfo underConstructionInfo;
+
+        public UnderConstructionController(UnderConstructionInfo underConstructionInfo)
+        {
+            this.underConstructionInfo = underConstructionInfo;
+        }
+
         public class UnderConstructionModel
         {
             public string Title { get; set; }
-            public string Message { get; set; }
+            public string MainMessage { get; set; }
+            public string SubMessage { get; set; }
         }
-
-        [NoTransaction]
+        
         public ActionResult Index()
         {
-            var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
+            var status = underConstructionInfo;
 
             if (status.Status == UnderConstructionStatus.Finished)
             {
                 return Redirect(Url.Content("~/"));
             }
 
+            var isError = status.Status == UnderConstructionStatus.Error;
+
             var model = new UnderConstructionModel()
             {
                 Title = UnderConstruction.UnderConstructionTitle,
-                Message = status.Message ?? UnderConstruction.ServerInitializing
+                MainMessage = isError ? status.Message : UnderConstruction.ServerInitializing,
+                SubMessage = isError ? null : status.Message
             };
 
             return View(model);

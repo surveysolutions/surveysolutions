@@ -34,7 +34,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(processArgs.ProcessId, 0);
+            this.dataExportProcessesService.UpdateDataExportProgress(processArgs, 0);
 
             this.dataExportProcessesService.ChangeStatusType(
                 processArgs.ProcessId, DataExportStatus.Compressing);

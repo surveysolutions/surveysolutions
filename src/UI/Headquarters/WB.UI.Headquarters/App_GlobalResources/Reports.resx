@@ -327,4 +327,13 @@
   <data name="Supervisor" xml:space="preserve">
     <value>Supervisor</value>
   </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Show heatmap overlay</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Heat Radius</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Map data is loading</value>
+  </data>
 </root>

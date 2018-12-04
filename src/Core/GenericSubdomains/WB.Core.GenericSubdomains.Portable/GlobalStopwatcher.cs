@@ -207,7 +207,6 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             SortedValues = sortedValues;
 
-            // TODO: Collect all in one call?
             P0 = Percentile(0);
             P25 = Percentile(25);
             P50 = Percentile(50);

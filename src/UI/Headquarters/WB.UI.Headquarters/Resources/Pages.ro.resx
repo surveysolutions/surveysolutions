@@ -315,10 +315,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Health check monitor</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Health Check Page</value>
-  </data>
-  <data name="HideFilter" xml:space="preserve">
+    <data name="HideFilter" xml:space="preserve">
     <value>Ascundeți filtrul</value>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">

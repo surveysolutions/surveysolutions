@@ -16,7 +16,8 @@ namespace WB.UI.Tester.Activities
     [Activity(Label = "",
         Theme = "@style/GrayAppTheme", 
         WindowSoftInputMode = SoftInput.StateHidden, 
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;

@@ -32,6 +32,13 @@
         moment.locale(lng);
     });
 
+    if (!String.prototype.startsWith) {
+        String.prototype.startsWith = function(searchString, position) {
+          position = position || 0;
+          return this.indexOf(searchString, position) === position;
+        };
+      }
+
     angular.module('designerApp', [
         'ngCookies',
         'ngSanitize',
@@ -57,8 +64,10 @@
         'jm.i18next'
     ]);
 
-    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', '$locationProvider',
-        function ($stateProvider, $urlRouterProvider, $rootScopeProvider, $locationProvider) {
+    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', '$locationProvider', '$compileProvider',
+        function ($stateProvider, $urlRouterProvider, $rootScopeProvider, $locationProvider, $compileProvider) {
+
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
 
         $rootScopeProvider.digestTtl(12);
 

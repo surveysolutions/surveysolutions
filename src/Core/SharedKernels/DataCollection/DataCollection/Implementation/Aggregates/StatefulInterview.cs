@@ -12,20 +12,30 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
+    //stored in global cache
+    //references to repositories should be resolved on demand 
     public class StatefulInterview : Interview, IStatefulInterview
     {
-        public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
-                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                 ISubstitutionTextFactory substitutionTextFactory,
-                                 IInterviewTreeBuilder treeBuilder)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
+        public StatefulInterview(
+            //IQuestionnaireStorage questionnaireRepository,
+            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+            ISubstitutionTextFactory substitutionTextFactory,
+            IInterviewTreeBuilder treeBuilder
+            //,IQuestionOptionsRepository questionOptionsRepository
+            )
+            : base(
+                //questionnaireRepository, 
+                //expressionProcessorStatePrototypeProvider, 
+                substitutionTextFactory, 
+                treeBuilder
+                //,questionOptionsRepository
+                )
         {
         }
 

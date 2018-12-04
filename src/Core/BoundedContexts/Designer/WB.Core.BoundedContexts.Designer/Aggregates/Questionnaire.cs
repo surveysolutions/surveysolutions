@@ -209,7 +209,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateQuestionnaire(UpdateQuestionnaire command)
-#warning CRUD
         {
             if (!command.IsResponsibleAdmin) 
                 this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
@@ -219,6 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(command.Title);
             this.innerDocument.VariableName = System.Web.HttpUtility.HtmlDecode(command.Variable);
             this.innerDocument.IsPublic = command.IsPublic;
+            this.innerDocument.HideIfDisabled = command.HideIfDisabled;
         }
 
         public void DeleteQuestionnaire()

@@ -1,5 +1,4 @@
-﻿using System;
-using Main.Core.Entities.SubEntities;
+﻿using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
