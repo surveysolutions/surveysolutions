@@ -27,10 +27,10 @@
             
             var dataBind = function (group) {
                 $scope.activeGroup = group;
-
+                
                 $scope.activeGroup.isChapter = ($state.params.itemId === $state.params.chapterId);
                 $scope.activeGroup.itemId = $state.params.itemId;
-                $scope.activeGroup.variableName = $state.params.variableName;
+                $scope.activeGroup.variableName = group.variableName;
 
                 if (!_.isNull($scope.groupForm) && !_.isUndefined($scope.groupForm)) {
                     $scope.groupForm.$setPristine();
@@ -68,6 +68,7 @@
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,
+                            variable: $scope.activeGroup.variableName,
                             title: $scope.activeGroup.title,
                             hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition))
                         });
