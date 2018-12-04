@@ -1,9 +1,17 @@
-﻿<form role="form" name="groupForm" unsaved-warning-form  ng-show="activeGroup">
+﻿<form role="form" id="roster-editor" name="groupForm" unsaved-warning-form  ng-show="activeGroup">
     <div class="form-holder">
         <div class="breadcrumbs-container">
             <div data-item-breadcrumbs data-crumbs="activeGroup.breadcrumbs"></div>
         </div>
-            <div class="form-group">
+        
+        <div class="row">
+            <div class="form-group input-variable-name col-xs-5 pull-right">
+                <label for="edit-group-variableName" class="wb-label">{{'SectionVariableName' | i18next}} <help key="variableName" placement="left" /></label><br>
+                <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeGroup.variableName" maxlength="32" spellcheck="false">
+            </div>
+        </div>
+
+        <div class="form-group">
                 <label for="edit-group-title-highlight" class="wb-label">{{'GroupTitle' | i18next}}</label><br>
                 <div class="pseudo-form-control">
                     <div id="edit-group-title-highlight"
