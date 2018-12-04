@@ -50,4 +50,8 @@
     <dimen name="Interview_Overview_Answer_margin_top">6dp</dimen>
     <dimen name="Interview_Overview_left_margin">42dp</dimen>
     <dimen name="Interview_Overview_top_margin">15dp</dimen>
+
+    <dimen name="exo_player_text_size">16sp</dimen>
+    <dimen name="exo_player_seek_height">26dp</dimen>
+    <dimen name="exo_player_button_size">48dp</dimen>
 </resources>

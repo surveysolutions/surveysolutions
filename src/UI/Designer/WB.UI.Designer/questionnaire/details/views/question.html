@@ -90,8 +90,11 @@
             <div class="enabling-group-marker"></div>
             <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
-            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>{{'HideIfDisabled' | i18next}} <help key="hideIfDisabled" /></label>
+            <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked" ng-if="questionnaire.hideIfDisabled"
+                    title="{{ 'HideIfDisabledNested' | i18next }}" />
+                    
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" ng-if="!questionnaire.hideIfDisabled"/>
+            <label for="cb-hideIfDisabled"><span title="{{questionnaire.hideIfDisabled ? ('HideIfDisabledNested' | i18next) : ''}}"></span>{{'HideIfDisabled' | i18next}} <help key="hideIfDisabled" /></label>
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" 

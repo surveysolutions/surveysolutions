@@ -24,7 +24,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             Id = Interlocked.Increment(ref _instanceCounter);
         }
 
-        private void Info(string message) => logger.LogInformation($"[{Id}] {message}");
+        private void Info(string message) => logger.LogInformation("[{Id}] {message}", Id, message);
 
         public async Task StartAsync(CancellationToken token)
         {

@@ -225,10 +225,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Монитор проверки работоспособности</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Страница проверки работоспособности</value>
-  </data>
-  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Кем</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
@@ -1251,5 +1248,23 @@
   </data>
   <data name="InterviewOverview" xml:space="preserve">
     <value>Обзор интервью</value>
+  </data>
+  <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
+    <value>Входящий трафик</value>
+  </data>
+  <data name="InterviewerProfile_OutgoingTraffic" xml:space="preserve">
+    <value>Исходящий трафик</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
+    <value>Всего иcпользовано трафика</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
+    <value>Общая сумма входящего и исходящего трафика по пользователю на всех устройствах</value>
+  </data>
+  <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
+    <value>Использования трафика</value>
+  </data>
+  <data name="Kb" xml:space="preserve">
+    <value>Кб</value>
   </data>
 </root>

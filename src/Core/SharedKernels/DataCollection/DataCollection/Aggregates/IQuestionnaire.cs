@@ -279,5 +279,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId);
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
+        DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
     }
 }

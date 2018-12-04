@@ -12,7 +12,12 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
     public class SignalrErrorHandler : HubPipelineModule
     {
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SignalrErrorHandler>();
+        private readonly ILogger logger;
+
+        public SignalrErrorHandler(ILogger logger)
+        {
+            this.logger = logger;
+        }
 
         [Localizable(false)]
         protected override void OnIncomingError(ExceptionContext exceptionContext, IHubIncomingInvokerContext invokerContext)

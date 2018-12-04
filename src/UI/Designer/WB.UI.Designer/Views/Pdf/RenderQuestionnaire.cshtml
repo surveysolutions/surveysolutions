@@ -330,10 +330,33 @@
 		@foreach (var sectionId in questionnaire.SectionIds)
 		{
 		<section class="section">
-			<div class="section_header">
-				<h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
-			</div>
-			@Html.Partial("_RenderChildren", sectionId)
+            <div class="section_header">
+                <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
+                
+                @{ var group = questionnaire.Find<Group>(sectionId);}
+                
+                @if (questionnaire.GroupHasEnablementCondition(group))
+                    {
+                        <div class="common-info">
+                            <div class="condition">
+                                <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
+                                @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
+                                {
+                                    <div class="more">
+                                        <a href="#@questionnaire.GetConditionRef(group.PublicKey)">
+                                            @Pdf.Format(PdfStrings.AppendixLink, group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E"))
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+            </div>
+            
+            
+
+		    @Html.Partial("_RenderChildren", sectionId)
 		</section>
 		}
 	</article>

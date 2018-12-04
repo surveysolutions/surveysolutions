@@ -1,5 +1,3 @@
-using Main.Core.Entities.SubEntities;
-
 namespace WB.UI.Headquarters.Models.User
 {
     public class ResponsibleComboboxOptionModel

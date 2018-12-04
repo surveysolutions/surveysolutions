@@ -33,6 +33,10 @@ namespace WB.Services.Scheduler
         }
     }
 
+    /// <summary>
+    /// This class only needed for local development. It's not used in runtime.
+    /// This class required for `Add-Migration` to work from Package Manager Console
+    /// </summary>
     public class JobContextFactory : IDesignTimeDbContextFactory<JobContext>
     {
         public JobContext CreateDbContext(string[] args)

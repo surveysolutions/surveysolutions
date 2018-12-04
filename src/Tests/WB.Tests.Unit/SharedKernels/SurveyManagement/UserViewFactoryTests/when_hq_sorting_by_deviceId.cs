@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
                 supervisor1, supervisor2, supervisor3,
                 interviewer11, interviewer12,
                 interviewer21,
-                interviewer31, interviewer32, interviewer33, interviewer34);
+                interviewer31, interviewer32, interviewer33, interviewer34)
+                .WithDeviceInfo();
 
             var interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
 

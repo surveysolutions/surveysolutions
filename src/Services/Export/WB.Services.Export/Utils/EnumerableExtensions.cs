@@ -110,7 +110,7 @@ namespace WB.Services.Export.Utils
                     {
                         var elapsed = sw.Elapsed.TotalSeconds;
                         var oldBatchSize = batchSize;
-                        logger.LogTrace($"Took {sw.Elapsed.TotalSeconds:F} seconds to process {batchSize} items");
+                        logger.LogTrace("Took {elapsed:F} seconds to process {batchSize} items", sw.Elapsed.TotalSeconds, batchSize);
 
                         // delta need just to make batch size to end up in some stable position, and don't change every iteration
                         if (elapsed - options.TargetSeconds > options.TargetSeconds * options.TargetDelta)
@@ -119,7 +119,8 @@ namespace WB.Services.Export.Utils
                             if (batchSize == oldBatchSize) batchSize -= 1;
                             batchSize = Math.Max(options.Min, batchSize);
 
-                            logger?.LogDebug($"Changed batch size to {batchSize}. Too slow execution ({elapsed - options.TargetSeconds:F}s)");
+                            logger?.LogTrace("Changed batch size to {batchSize}. Too slow execution ({diff:F}s)", 
+                                batchSize, elapsed - options.TargetSeconds);
                         }
                         else if (elapsed - options.TargetSeconds < -options.TargetSeconds * options.TargetDelta)
                         {
@@ -127,7 +128,8 @@ namespace WB.Services.Export.Utils
                             if (batchSize == oldBatchSize) batchSize += 1;
                             batchSize = Math.Min(batchSize, options.Max);
 
-                            logger?.LogDebug($"Changed batch size to {batchSize}. Can go faster ({elapsed - options.TargetSeconds:F}s)");
+                            logger?.LogTrace("Changed batch size to {batchSize}. Can go faster ({diff:F}s)", 
+                                batchSize, elapsed - options.TargetSeconds);
                         }
                         
                         sw.Restart();

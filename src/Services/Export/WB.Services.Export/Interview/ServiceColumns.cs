@@ -7,7 +7,7 @@ namespace WB.Services.Export.Interview
     {
         public const string ColumnDelimiter = "__";
         //Id of the row
-        public static readonly string InterviewRandom = "ssSys_IRnd";
+        public static readonly string InterviewRandom = "sssys_irnd";
         public static readonly string HasAnyError = $"has{ColumnDelimiter}errors";
         public static readonly string Key = $"interview{ColumnDelimiter}key";
         public static readonly string InterviewId = $"interview{ColumnDelimiter}id";
@@ -17,21 +17,17 @@ namespace WB.Services.Export.Interview
         public static readonly string IdSuffixFormat = $"{{0}}{ColumnDelimiter}id";
 
         //prefix to identify parent record
-        public const string ParentId = "ParentId";
-
-        public const string ResponsibleColumnName = "_responsible";
-        public const string AssignmentsCountColumnName = "_quantity";
-
+        public const string ParentId = "parentId";
+        
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
         {
             { ServiceVariableType.InterviewRandom,  new ServiceVariable(ServiceVariableType.InterviewRandom, InterviewRandom, 0)},
-            { ServiceVariableType.InterviewKey,  new ServiceVariable(ServiceVariableType.InterviewKey, Key, 1)},
-            { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, HasAnyError, 2)},
-            { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, InterviewStatus, 3)},
+            { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, HasAnyError, 1)},
+            { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, InterviewStatus, 2)},
         };
 
-        public static readonly string[] AllSystemVariables = SystemVariables.Values
-            .Select(x => x.VariableExportColumnName).Select(x => x.ToLower()).ToArray();
+        public static readonly ServiceVariable InterviewKey = new ServiceVariable(ServiceVariableType.InterviewKey, Key, 0);
+        
     }
 }

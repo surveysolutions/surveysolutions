@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace support
 {
     /// <summary>
-    /// Create spinning console busy animation runnning on a background thread
+    /// Create spinning console busy animation running on a background thread
     /// </summary>
 
     public static class SpinAnimation

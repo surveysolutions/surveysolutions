@@ -5,9 +5,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -21,7 +21,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewSummaryDenormalizer : 
+    public class InterviewSummaryDenormalizer :
+        //BaseDenormalizer,
         ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
@@ -427,5 +428,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var audioAnswer = AudioAnswer.FromString(@event.Payload.FileName, @event.Payload.Length);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, audioAnswer, @event.EventTimeStamp);
         }
+
+        public string Name => "Interview Summary Denormalizer";
+        public object[] Readers => new object[0];
+        //public override object[] Writers => new object[0];
     }
 }

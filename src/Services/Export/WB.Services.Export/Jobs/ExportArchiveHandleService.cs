@@ -38,7 +38,7 @@ namespace WB.Services.Export.Jobs
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
                 var items = await this.externalFileStorage.ListAsync(externalStoragePath);
-                logger.LogInformation("Deleting export archives for tenant: " + tenant + $" - there is {items.Count} files");
+                logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
 
                 foreach (var file in items)
                 {

@@ -32,12 +32,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Identity = entityIdentity;
 
             this.Text.Init(interviewId, entityIdentity);
-            this.Attachment.Init(interviewId, entityIdentity);
+            this.Attachment.Init(interviewId, entityIdentity, navigationState);
             this.QuestionState.Init(interviewId, entityIdentity);
         }
 
         public void Dispose()
         {
+            this.Attachment.ViewDestroy();
             this.QuestionState.Dispose();
             this.Text.Dispose();
         }

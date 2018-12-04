@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -13,18 +12,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     internal class ExportExportFileNameService : IExportFileNameService
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private IPlainTransactionManager transactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
-
-
         public ExportExportFileNameService(
-            IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IFileSystemAccessor fileSystemAccessor)
         {
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaires = questionnaires;
             this.fileSystemAccessor = fileSystemAccessor;
         }
@@ -66,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
-            var questionnaire = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString()));
+            var questionnaire = this.questionnaires.GetById(identity.ToString());
             if (questionnaire == null) return identity.QuestionnaireId.FormatGuid();
 
             var questionnaireTitle = questionnaire.Variable ?? questionnaire.Title;

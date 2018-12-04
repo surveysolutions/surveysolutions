@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
 
-            var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase, true);
+            var sqliteConnectionString = new SQLiteConnectionString(pathToDatabase, true, null);
             this.connection = new SQLiteConnectionWithLock(sqliteConnectionString,
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
@@ -113,13 +113,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual void OnStore(TableQuery<TEntity> query, TEntity entity) { }
         public virtual void OnRemove(TableQuery<TEntity> query, TKey entityId) { }
-        
+
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
             => this.RunInTransaction(table => ToModifiedCollection(table.Where(predicate)).ToReadOnlyCollection());
 
         public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
             Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
-            => this.RunInTransaction(table => table.Where(wherePredicate).Select(selectPredicate).ToReadOnlyCollection());
+        {
+            return this.RunInTransaction(
+                           table => table
+                               .Where(wherePredicate).AsQueryable()
+                               .Select(selectPredicate)
+                               .ToReadOnlyCollection());
+        }
 
         public int Count(Expression<Func<TEntity, bool>> predicate)
           => this.RunInTransaction(table => table.Count(predicate));
@@ -137,15 +143,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.RunInTransaction(table => ToModifiedCollection(table.Connection.Table<TEntity>()).ToReadOnlyCollection());
         }
 
-        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
-            => this.RunInTransaction(table => ToModifiedCollection(table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount)).ToReadOnlyCollection());
+        public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, 
+            Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
+            => this.RunInTransaction(
+                table => ToModifiedCollection(table.Where(wherePredicate)
+                    .OrderBy(orderPredicate)
+                    .Skip(skip)
+                    .Take(takeCount))
+                    .ToReadOnlyCollection());
 
         public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
-            Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
+            Expression<Func<TEntity, bool>> wherePredicate, 
+            Expression<Func<TEntity, int>> orderPredicate,
             Expression<Func<TEntity, TResult>> selectPredicate,
             int takeCount, int skip = 0) where TResult : class
-            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate)
-                .Select(selectPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
+            => this.RunInTransaction(
+                table => table.Where(wherePredicate)
+                    .OrderBy(orderPredicate)
+                    .Skip(skip)
+                    .Take(takeCount)
+                    .AsQueryable()
+                    .Select(selectPredicate)
+                    .ToReadOnlyCollection()
+                );
 
         public virtual void RemoveAll()
         {

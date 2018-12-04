@@ -197,7 +197,7 @@
     <value>Для избежания медленной синхронизации рекомендовано не превышать 2МБ общего объёма вложений. Для информации о поддерживаемых типах файлов, форматов и размеров </value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>для использования вложения в опроснике добавьте статический текст и укажите имя в его свойстве Имя вложения.</value>
+    <value>Чтобы сослаться на вложение в опроснике добавьте статический текст и укажите {{-name}} в его свойстве Имя вложения.</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Оценка времени скачивания: {{timeString}} используя {{downloadSpeed}}Кб/сек (EDGE)</value>
@@ -1139,5 +1139,20 @@
   </data>
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
+  </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>Дата по умолчанию</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>Выбранный файл не поддерживается во вложениях</value>
+  </data>    
+    <data name="HelpDefaultDate" xml:space="preserve">
+    <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
+    </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Скрывать элемент когда он выключен</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Унаследовано от опросника</value>
   </data>
 </root>
