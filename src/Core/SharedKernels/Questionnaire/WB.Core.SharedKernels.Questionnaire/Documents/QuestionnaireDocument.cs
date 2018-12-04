@@ -235,7 +235,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, bool IsPlainMode)
         {
             this.UpdateGroup(groupId, group =>
             {
@@ -244,6 +244,7 @@ namespace Main.Core.Documents
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);
+                @group.IsPlainMode = IsPlainMode;
             });
         }
 

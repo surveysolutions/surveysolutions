@@ -991,13 +991,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPlainMode(Guid entityId)
         {
-            IGroup group = this.GetGroup(entityId);
-            if (group?.IsRoster ?? false)
-            {
-                return group.IsPlainMode;
-            }
-
-            return false;
+            return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)
