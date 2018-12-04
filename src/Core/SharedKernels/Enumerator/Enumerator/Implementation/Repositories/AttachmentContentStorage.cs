@@ -90,13 +90,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         public bool Exists(string attachmentContentId)
         {
             var fileCache = GetFileCacheLocation(attachmentContentId);
-            if (files.IsFileExists(fileCache))
-            {
-                return true;
-            }
+            var attachmentContentData = this.attachmentContentDataRepository.GetById(attachmentContentId);
 
-            var attachmentContent = this.attachmentContentMetadataRepository.Count(x => x.Id == attachmentContentId);
-            return attachmentContent > 0;
+            if (attachmentContentData?.Content != null) return true;
+
+            return files.IsFileExists(fileCache);
         }
 
         public byte[] GetContent(string attachmentContentId)
