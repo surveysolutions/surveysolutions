@@ -480,6 +480,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\classifications.css" />
     <Content Include="Content\images\icons-files-audio.png" />
     <Content Include="Content\images\icons-files-audio.svg" />
     <Content Include="Content\images\icons-files-pdf.png" />
@@ -542,6 +543,14 @@
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
     <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
+    <Content Include="Scripts\classifications\components\CategoriesEditor.js" />
+    <Content Include="Scripts\classifications\components\CategoryEditor.js" />
+    <Content Include="Scripts\classifications\components\ClassificationEditor.js" />
+    <Content Include="Scripts\classifications\components\GroupEditor.js" />
+    <Content Include="Scripts\classifications\config.js" />
+    <Content Include="Scripts\classifications\main.js" />
+    <Content Include="Scripts\classifications\routes.js" />
+    <Content Include="Scripts\classifications\store.js" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <EmbeddedResource Include="Resources\AccountResources.ar.resx" />
