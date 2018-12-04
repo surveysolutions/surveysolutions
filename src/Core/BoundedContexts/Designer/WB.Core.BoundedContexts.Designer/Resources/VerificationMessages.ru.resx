@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -720,5 +720,8 @@
     <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements" xml:space="preserve">
     <value>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</value>
     <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
+  </data>
+    <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Плоский режим запрещает использовать внутри ростеры.</value>
   </data>
 </root>
