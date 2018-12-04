@@ -21,10 +21,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
     public class LoadingInterviewViewModel : ProgressViewModel, IMvxViewModel<LoadingViewModelArg>
     {
-        private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IUserInteractionService interactionService;
@@ -36,8 +34,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             ICommandService commandService,
             ILogger logger,
             IUserInteractionService interactionService,
-            IQuestionnaireStorage questionnaireRepository,
-            IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewView> interviewsRepository)
             : base(principal, viewModelNavigationService)
         {
@@ -45,8 +41,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.commandService = commandService;
             this.logger = logger;
             this.interactionService = interactionService;
-            this.questionnaireRepository = questionnaireRepository;
-            this.interviewFactory = interviewFactory;
             this.interviewsRepository = interviewsRepository;
         }
 
@@ -129,11 +123,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
                 //DB has no events
                 //state is broken
-                //remove from storage and return to dashboard
+                //remove from dashboard storage and return to dashboard
                 if (interview == null)
                 {
                     this.logger.Error($"Failed to load interview {interviewId}. Stream is empty. Removing interview.");
-                    this.interviewFactory.RemoveInterview(interviewId);
+                    this.interviewsRepository.Remove(interviewId.FormatGuid());
                 }
 
                 return interview;
