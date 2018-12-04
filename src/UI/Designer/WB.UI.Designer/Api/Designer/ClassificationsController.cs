@@ -162,11 +162,11 @@ namespace WB.UI.Designer.Api.Designer
             await classificationsStorage.DeleteClassificationGroup(id);
         }
 
-        [HttpPatch]
+        [HttpPost]
         [Route("classification/{id}/categories")]
-        public async Task UpdateCategories([FromUri] Guid id)
+        public async Task UpdateCategories([FromUri] Guid id, Category[] categories)
         {
-            await classificationsStorage.UpdateCategories(id);
+            await classificationsStorage.UpdateCategories(id, categories);
         }
     }
 
