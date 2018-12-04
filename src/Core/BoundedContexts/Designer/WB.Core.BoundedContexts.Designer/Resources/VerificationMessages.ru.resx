@@ -717,4 +717,8 @@
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
   </data>
+    <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements" xml:space="preserve">
+    <value>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</value>
+    <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
+  </data>
 </root>

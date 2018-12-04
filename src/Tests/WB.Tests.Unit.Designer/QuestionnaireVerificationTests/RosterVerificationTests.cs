@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
@@ -53,6 +54,30 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, title: "title %rostertitle%")
             )
             .ExpectError("WB0059");
+        }
+
+        [Test]
+        public void should_allow_only_10_elements_in_plain_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(id: Id.g1),
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, isPlainMode: true, 
+                    children: new IComposite[]
+                    {
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                        Create.Question(),
+                    })
+            ) 
+            .ExpectError("WB0278");
         }
     }
 }

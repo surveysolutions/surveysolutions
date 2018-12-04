@@ -1860,5 +1860,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain mode allowed only for rosters with no more then {0} elements..
+        /// </summary>
+        public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements {
+            get {
+                return ResourceManager.GetString("WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements", resourceCulture);
+            }
+        }
     }
 }
