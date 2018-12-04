@@ -1771,6 +1771,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section name.
+        /// </summary>
+        public static string SectionVariableName {
+            get {
+                return ResourceManager.GetString("SectionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select country.
         /// </summary>
         public static string SelectCountry {
@@ -2131,7 +2140,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{name}} in its attachment property.
+        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{-name}} in its attachment property.
         /// </summary>
         public static string SideBarAttachmentsEmptyLine3 {
             get {
