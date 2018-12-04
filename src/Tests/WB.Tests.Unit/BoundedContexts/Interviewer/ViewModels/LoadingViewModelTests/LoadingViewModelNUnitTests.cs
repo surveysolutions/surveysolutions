@@ -7,6 +7,7 @@ using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -88,6 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
         [Test]
         public async Task LoadingViewModel_when_stateful_repository_has_no_interview_should_remove_interview()
         {
+            var interviewId = Guid.NewGuid();
             var interview = Substitute.For<IStatefulInterview>();
             interview.HasEditableIdentifyingQuestions.Returns(true);
 
@@ -97,14 +99,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             var navigationServiceMock = Substitute.For<IViewModelNavigationService>();
 
-            var interviewFactory = Substitute.For<IInterviewerInterviewAccessor>();
+            var interviewsRepository = Substitute.For<IPlainStorage<InterviewView>>();
 
             var loadingViewModel = CreateLoadingViewModel(viewModelNavigationService: navigationServiceMock,
-                interviewRepository: statefulInterviewRepository, interviewFactory: interviewFactory);
+                interviewRepository: statefulInterviewRepository, interviewsRepository: interviewsRepository);
 
-            await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
+            await loadingViewModel.LoadAndNavigateToInterviewAsync(interviewId);
 
-            interviewFactory.ReceivedWithAnyArgs().RemoveInterview(It.IsAny<Guid>());
+            interviewsRepository.Received().Remove(interviewId.FormatGuid());
 
             await navigationServiceMock.ReceivedWithAnyArgs().NavigateToDashboardAsync();
         }
@@ -114,7 +116,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
           IStatefulInterviewRepository interviewRepository = null,
           ICommandService commandService = null,
           IPrincipal principal = null,
-          IInterviewerInterviewAccessor interviewFactory = null,
           IPlainStorage<InterviewView> interviewsRepository = null)
         {
             var loadingViewModel = new LoadingInterviewViewModel(
@@ -122,10 +123,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
                 viewModelNavigationService ?? Substitute.For<IViewModelNavigationService>(), 
                 interviewRepository ?? Substitute.For<IStatefulInterviewRepository>(),
                 commandService ?? Substitute.For<ICommandService>(),
-                questionnaireRepository: Substitute.For<IQuestionnaireStorage>(),
                 logger: Mock.Of<ILogger>(),
                 interactionService: Mock.Of<IUserInteractionService>(),
-                interviewFactory : interviewFactory ?? Substitute.For<IInterviewerInterviewAccessor>(),
                 interviewsRepository: interviewsRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
 
             return loadingViewModel;

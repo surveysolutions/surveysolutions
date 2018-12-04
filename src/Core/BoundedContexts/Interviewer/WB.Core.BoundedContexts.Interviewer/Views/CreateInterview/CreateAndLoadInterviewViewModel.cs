@@ -40,8 +40,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IStatefulInterviewRepository interviewRepository, 
             ICommandService commandService, 
             ILogger logger, 
-            IQuestionnaireStorage questionnaireRepository, 
-            IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<InterviewView> interviewsRepository, 
             IAssignmentDocumentsStorage assignmentsRepository, 
             IInterviewerPrincipal interviewerPrincipal, 
@@ -51,7 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             IInterviewAnswerSerializer answerSerializer, 
             IUserInteractionService userInteractionService) 
             : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
-                userInteractionService, questionnaireRepository, interviewFactory, interviewsRepository)
+                userInteractionService, interviewsRepository)
         {
             this.assignmentsRepository = assignmentsRepository;
             this.interviewerPrincipal = interviewerPrincipal;
