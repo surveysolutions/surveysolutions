@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 questionnaire.UpdateGroup(
                     groupId, responsibleId, "title",null, rosterSizeQuestionId, "description", null, hideIfDisabled: false,
                     isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: new FixedRosterTitleItem[0], 
-                    rosterTitleQuestionId: null));
+                    rosterTitleQuestionId: null, isPlainMode: false));
         }
 
         private static Questionnaire questionnaire;
