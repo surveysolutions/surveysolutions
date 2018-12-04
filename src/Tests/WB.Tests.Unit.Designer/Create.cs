@@ -795,7 +795,8 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             IEnumerable<IComposite> children = null,
             Guid? rosterSizeQuestionId = null,
-            Guid? rosterTitleQuestionId = null)
+            Guid? rosterTitleQuestionId = null,
+            bool isPlainMode = false)
         {
             Group roster = Create.Group(
                 groupId: rosterId,
@@ -805,6 +806,7 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             roster.IsRoster = true;
+            roster.IsPlainMode = isPlainMode;
             roster.RosterSizeSource = RosterSizeSourceType.Question;
             roster.RosterSizeQuestionId = rosterSizeQuestionId;
             roster.RosterTitleQuestionId = rosterTitleQuestionId;
