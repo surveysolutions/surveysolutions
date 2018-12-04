@@ -14,10 +14,16 @@ using NConfig;
 using System.Web.Hosting;
 using System.Reflection;
 using MultipartDataMediaFormatter;
+using NLog;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
+using WB.UI.Shared.Web.Kernel;
+using WB.UI.Shared.Web.Versions;
+
 
 namespace WB.UI.Designer
 {
@@ -28,15 +34,19 @@ namespace WB.UI.Designer
             SetupNConfig();
         }
 
+        public MvcApplication()
+        {
+            logger = LogManager.GetLogger(typeof(MvcApplication).ToString());
+        }
+
         const int TimedOutExceptionCode = -2147467259;
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
-
-        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
+        private readonly Logger logger;
 
         protected void Application_Start()
         {
-            this.logger.Info($"Starting Designer {ProductVersion}");
+            string productVersion = new ProductVersion(Assembly.GetAssembly(typeof(MvcApplication))).ToString();
+            this.logger.Info($"Starting Designer {productVersion}");
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
@@ -186,6 +196,14 @@ namespace WB.UI.Designer
                 this.logger.Info("ShutDownMessage: " + shutDownMessage);
                 this.logger.Info("ShutDownStack: " + shutDownStack);
             }
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+        }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
         }
 
         private void EnsureJsonStorageForErrorsExists()

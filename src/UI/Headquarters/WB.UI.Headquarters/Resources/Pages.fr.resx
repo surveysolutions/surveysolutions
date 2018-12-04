@@ -231,10 +231,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Surveillance du bilan de santé</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Page du bilan de santé</value>
-  </data>
-  <data name="HideFilter" xml:space="preserve">
+    <data name="HideFilter" xml:space="preserve">
     <value>Masquer le filtre</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">

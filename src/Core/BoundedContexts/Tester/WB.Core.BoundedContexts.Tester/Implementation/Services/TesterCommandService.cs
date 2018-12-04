@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -22,8 +23,7 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IExecutedCommandsStorage executedCommandsStorage
-            ) : 
+            IExecutedCommandsStorage executedCommandsStorage) : 
                 base(eventSourcedRepository, eventBus, snapshooter,
                      serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner)
         {

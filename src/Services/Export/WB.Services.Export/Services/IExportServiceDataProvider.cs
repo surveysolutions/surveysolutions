@@ -4,6 +4,6 @@ namespace WB.Services.Export.Services
 {
     public interface IExportServiceDataProvider
     {
-        Dictionary<string, Dictionary<string,string>> GetServiceDataLabels();
+        Dictionary<string, Dictionary<string, HeaderItemDescription>> GetServiceDataLabels();
     }
 }

@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Models.CompanyLogo;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.API.Resources

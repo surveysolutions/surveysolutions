@@ -88,9 +88,9 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.SPSS)).Returns(datasetWriter.Object);
 
-            var extraLabels = new Dictionary<string, Dictionary<string, string>>
+            var extraLabels = new Dictionary<string, Dictionary<string, HeaderItemDescription>>
             {
-                {"extra", new Dictionary<string, string>() {{"test", "test label"}}}
+                {"extra", new Dictionary<string, HeaderItemDescription>() {{"test", new HeaderItemDescription("test label", ExportValueType.String)}}}
             };
 
             var exportSeviceDataProvider = new Mock<IExportServiceDataProvider>();

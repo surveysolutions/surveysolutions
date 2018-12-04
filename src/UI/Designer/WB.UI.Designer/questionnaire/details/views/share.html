@@ -1,101 +1,114 @@
 ﻿<div class="modal-header blue-strip">
-    <button type="button" class="close" aria-hidden="true" ng-click="cancel()"><!--&times;--></button>
+    <button type="button" class="close" aria-hidden="true" ng-click="cancel()">
+        <!--&times;--></button>
     <h1 ng-i18next="SettingsTitle"></h1>
 </div>
 
 <div class="modal-body share-question-dialog">
-    <div class="container-fluid">
 
-        <div class="row">
-            <form role="form" name="questionnaireForm">
-                <h2 ng-i18next="QuestionnaireSettings"></h2>
-                <div class="form-group">
-                    <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
-                    <textarea id="questionnaireTitle" type="text" class="form-control questionaire-title msd-elastic" ng-model="questionnaire.editedTitle"></textarea>
-                </div>
-                <div class="row">
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a role="tab" href="#questionnaireSettingsTab" data-toggle="tab">{{'QuestionnaireSettings' | i18next }}</a>
+        </li>
+        <li role="presentation"><a href="#shareTab" role="tab" data-toggle="tab">{{'CollaboratorsSettings' | i18next }}</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="questionnaireSettingsTab">
+            <div class="well-sm">
+                <form role="form" name="questionnaireForm">
+                    <div class="form-group">
+                        <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label>
+                        <textarea id="questionnaireTitle" type="text" class="form-control questionaire-title msd-elastic" ng-model="questionnaire.editedTitle"></textarea>
+                    </div>
+                
+                    <div class="form-group input-variable-name">
+                        <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }}
+                            <help key="questionnaireVariableName" />
+                        </label>
+                        <input id="questionnaireVariable" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable"
+                            maxlength="32" spellcheck="false">
+                    </div>
+                
+                    <!--i know this is horrible, but i cannot remove paddings from checkbox image so that visually they inputs are aligned-->
+                    <div class="form-group" style="margin-left: -8px;">
+                        <input id="questionnaireHideIdDisabled" type="checkbox" class="wb-checkbox"  ng-model="questionnaire.editedHideIfDisabled">
+                        <label for="questionnaireHideIdDisabled"><span></span>{{'SettingsHideIfDisabled' | i18next}}</label>
+                        <help key="hideIfDisabled" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-lg update-button" ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
+                            unsaved-warning-clear ng-disabled="!questionnaireForm.$dirty" ng-click="updateTitle()" ng-i18next>
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="shareTab">
+            <div class="well-sm">
+                <h2 ng-i18next="SettingsWhoHasAccess"> </h2>
+                <ul class="accounts">
+                    <li ng-repeat="s in questionnaire.sharedPersons">
+                        <a href="mailto:{{s.email}}">{{s.email}}</a> ({{s.login}}) -
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
+                                {{ 'SettingsCan' | i18next }} {{ getShareType(s.shareType).text}}<span class="caret"></span>
+                            </button>
+                            <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i ng-i18next="SettingsOwner"></i></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a ng-click="revokeAccess(s)" href="javascript:void(0)" ng-i18next="SettingsRevokeAccess"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <form role="form" class="row" name="viewModel.shareForm" novalidate>
                     <div class="col-xs-7">
-                        <div class="form-group input-variable-name">
-                            <label class="control-label" for="questionnaireTitle">{{'SettingsQuestionnaireVariable' | i18next }} <help key="questionnaireVariableName" placement="left" /></label>
-                            <input id="questionnaireVariable" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable" maxlength="32" spellcheck="false">
+                        <div class=" form-group" ng-class="{'has-error': viewModel.doesUserExist == false  }">
+                            <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsInviteCollaborators"></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="shareWithInput" ng-model="viewModel.shareWith" />
+                                <div class="input-group-btn dropup share-type">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        name="shareType" id="Share-type">
+                                        {{viewModel.shareType.text}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation" ng-repeat="shareType in shareTypeOptions">
+                                            <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
+                                                {{shareType.text}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false" ng-i18next="SettingsProvideExistingEmail"></p>
                         </div>
                     </div>
                     <div class="col-xs-5">
                         <div class="form-group pull-right">
-                            <button type="submit" class="btn btn-lg update-button"
-                                    ng-class="{ 'btn-primary': questionnaireForm.$dirty }"
-                                    unsaved-warning-clear 
-                                    ng-disabled="!questionnaireForm.$dirty"
-                                    ng-click="updateTitle()" ng-i18next>
-                                Update
-                            </button>
+                            <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith"
+                                ng-i18next>SettingsInvite</button>
                         </div>
                     </div>
-                </div>
-            </form>
-        </div>
-        <hr />
-        <div class="row">
-            <h2>{{'CollaboratorsSettings' | i18next }} <small ng-i18next="SettingsWhoHasAccess"></small></h2>
-            <ul class="accounts">
-                <li ng-repeat="s in questionnaire.sharedPersons">
-                    <a href="mailto:{{s.email}}">{{s.email}}</a> ({{s.login}}) -
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
-                            {{ 'SettingsCan' | i18next }} {{ getShareType(s.shareType).text}}<span class="caret"></span>
-                        </button>
-                        <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i ng-i18next="SettingsOwner"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a ng-click="revokeAccess(s)" href="javascript:void(0)" ng-i18next="SettingsRevokeAccess"></a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <form role="form" class="row" name="viewModel.shareForm" novalidate>
-            <div class="row">
-                <div class="col-xs-7">
-                    <div class=" form-group" ng-class="{'has-error': viewModel.doesUserExist == false  }">
-                        <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsInviteCollaborators"></label>
-                        <div class="input-group">
-                            <input type="text"
-                                   class="form-control"
-                                   name="shareWithInput"
-                                   ng-model="viewModel.shareWith" />
-                            <div class="input-group-btn dropup share-type">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" name="shareType" id="Share-type">
-                                    {{viewModel.shareType.text}}
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
-                                    <li role="presentation" ng-repeat="shareType in shareTypeOptions">
-                                        <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
-                                            {{shareType.text}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false" ng-i18next="SettingsProvideExistingEmail"></p>
-                    </div>
-                </div>
-                <div class="col-xs-5">
-                    <div class="form-group pull-right">
-                        <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith" ng-i18next>SettingsInvite</button>
-                    </div>
+                </form>
+                <hr />
+                <div ng-if="questionnaire.hasViewerAdminRights">
+                    <h2 ng-i18next="PublicAccessSettings"></h2>
+                    <button class="btn btn-link answer" ng-click="togglePublicity()">
+                        {{'SettingsQuestionnaireSharing' | i18next }}
+                        {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
+                    </button>
+                    <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' :
+                        'SettingsVisibleToEveryone') | i18next}})</i>
                 </div>
             </div>
-        </form>
-        <hr />
-        <div class="row" ng-if="questionnaire.hasViewerAdminRights">
-            <h2 ng-i18next="PublicAccessSettings"></h2>
-            <button class="btn btn-link answer" ng-click="togglePublicity()">
-                {{'SettingsQuestionnaireSharing' | i18next }}
-                {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
-            </button>
-            <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' : 'SettingsVisibleToEveryone') | i18next}})</i>
         </div>
     </div>
 </div>

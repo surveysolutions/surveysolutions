@@ -12,7 +12,10 @@ using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/AppTheme", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        Theme = "@style/AppTheme", 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        Exported = false)]
     public class AreaEditorActivity : BaseActivity<AreaEditorViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;

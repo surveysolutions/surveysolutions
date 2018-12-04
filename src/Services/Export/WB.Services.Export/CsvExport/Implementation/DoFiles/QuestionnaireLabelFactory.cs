@@ -26,21 +26,26 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             if (levelRosterVector.Count == 0 && level.LevelIdColumnName == ServiceColumns.InterviewId) // main file
             {
-                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Numeric));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.NumericInt));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null,
+                    Enum.GetValues(typeof(InterviewStatus))
+                        .Cast<InterviewStatus>().
+                        Select(x => new VariableValueLabel(((int)x).ToString(), x.ToString())).ToArray(), 
+                    ExportValueType.NumericInt));
             }
             else
             {
-                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, string.Empty, null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, "Roster instance identifier", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, levelVariableValueLabel, ExportValueType.String));
             }
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && ((ExportedQuestionHeaderItem)headerItem).QuestionType != QuestionType.MultyOption;
+                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 
+                                 && ((ExportedQuestionHeaderItem)headerItem).QuestionType != QuestionType.MultyOption;
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
@@ -48,10 +53,15 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
                     if (hasLabels)
                     {
-                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
+                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
+                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
+                            .ToArray();
                     }
 
-                    variableLabels.Add(new DataExportVariable(headerColumn.Name, headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
+                    variableLabels.Add(
+                        new DataExportVariable(headerColumn.Name, 
+                            headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, 
+                            headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
                 }
             }
 

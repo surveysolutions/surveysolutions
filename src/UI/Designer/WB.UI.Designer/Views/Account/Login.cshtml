@@ -8,15 +8,6 @@
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
 
-<!--[if lt IE 9]>
-    <div class="hero-unit">
-        <h1>
-            @AccountResources.OutdatedBrowserMessage
-        </h1>
-        <p>@Html.Raw(AccountResources.UpgradeYourBrowser)</p>
-    </div>
-<![endif]-->
-
 @using (Html.BeginForm("login", "account", null, FormMethod.Post, new { @id = "start-log-in", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
@@ -58,7 +49,7 @@
     if (this.Model.ShouldShowCaptcha)
     {
         <div class="recaptcha">
-            @Html.RenderCaptcha()
+            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
         </div>
     }
     <div class="form-actions">

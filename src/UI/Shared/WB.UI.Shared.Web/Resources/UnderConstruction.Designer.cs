@@ -61,7 +61,7 @@ namespace WB.UI.Shared.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server is initializing. Please wait..
+        ///   Looks up a localized string similar to Server initialization is in progress. Please wait....
         /// </summary>
         internal static string ServerInitializing {
             get {

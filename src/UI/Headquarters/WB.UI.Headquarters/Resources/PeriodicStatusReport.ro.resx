@@ -138,9 +138,6 @@
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
     <value>Durata medie în care interviul a fost activ pe ecranul tabletei anchetatorului înainte de finalizare</value>
   </data>
-  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Durata medie de când un anchetator înregistrează primul răspuns pe o tabletă până când anchetatorul apasă butonul Finalizare</value>
-  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Durata medie de procesare globală a cazurilor</value>
   </data>

@@ -1,6 +1,4 @@
-﻿using WB.UI.Headquarters.Controllers;
-
-namespace WB.UI.Headquarters.Models.User
+﻿namespace WB.UI.Headquarters.Models.User
 {
     public class ResponsibleComboboxModel
     {

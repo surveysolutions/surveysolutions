@@ -1,39 +1,57 @@
 ﻿using System;
+using System.Threading.Tasks;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class AttachmentViewModel : MvxNotifyPropertyChanged
+    public class AttachmentViewModel : MvxViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAttachmentContentStorage attachmentContentStorage;
+        private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IExternalAppLauncher externalAppLauncher;
+        private readonly Func<IMediaAttachment> attachmentFactory;
 
         private AttachmentContentMetadata attachmentContentMetadata;
+        private NavigationState navigationState;
+        public Identity Identity { get; private set; }
 
-        private readonly string imageMimeType = "image";
+        public string Tag => Identity.ToString();
+
+        private const string ImageMimeType = "image/";
+        private const string VideoMimeType = "video/";
+        private const string AudioMimeType = "audio/";
+        private const string PdfMimeType = "application/pdf";
 
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage,
+            IEnumeratorSettings enumeratorSettings,
+            IExternalAppLauncher externalAppLauncher,
+            Func<IMediaAttachment> attachmentFactory)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.enumeratorSettings = enumeratorSettings;
+            this.externalAppLauncher = externalAppLauncher;
+            this.attachmentFactory = attachmentFactory;
         }
 
-
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
 
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -46,15 +64,77 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (IsImage)
                 {
-                    this.Content = this.attachmentContentStorage.GetContent(attachment.ContentId);
-                    this.RaisePropertyChanged(() => Content);
+                    this.Image = this.attachmentContentStorage.GetContent(attachment.ContentId);
+                    this.RaisePropertyChanged(() => Image);
+                    return;
+                }
+
+                var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+                if (string.IsNullOrWhiteSpace(backingFile)) return;
+
+
+                if (IsVideo || IsAudio)
+                {
+                    var media = this.attachmentFactory();
+                    media.ContentPath = backingFile;
+
+                    if (IsVideo)
+                    {
+                        this.Video = media;
+                        this.RaisePropertyChanged(() => Video);
+                    }
+
+                    if (IsAudio)
+                    {
+                        this.Audio = media;
+                        this.RaisePropertyChanged(() => Audio);
+                    }
+
+                    return;
+                }
+
+                if (IsPdf)
+                {
+                    this.ContentPath = backingFile;
+                    this.RaisePropertyChanged(() => ContentPath);
                 }
             }
         }
 
-        public bool IsImage => this.attachmentContentMetadata != null 
-            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageMimeType);
+        public IMediaAttachment Audio { get; private set; }
+        public IMediaAttachment Video { get; private set; }
+        public byte[] Image { get; private set; }
 
-        public byte[] Content { get; private set; }
+        public string ContentPath { get; set; }
+
+        public bool IsImage => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(ImageMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public bool IsVideo => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(VideoMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public bool IsAudio => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(AudioMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public bool IsPdf => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public IMvxAsyncCommand ShowPdf => new MvxAsyncCommand(NavigateToPdfAsync);
+
+        private async Task NavigateToPdfAsync()
+        {
+            if (this.enumeratorSettings.IsSupportedWebViewer)
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity));
+            else
+                this.externalAppLauncher.OpenPdf(this.ContentPath);
+        }
+
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            this.Video?.Release();
+            this.Audio?.Release();
+            this.ContentPath = null;
+            base.ViewDestroy(viewFinishing);
+        }
     }
 }

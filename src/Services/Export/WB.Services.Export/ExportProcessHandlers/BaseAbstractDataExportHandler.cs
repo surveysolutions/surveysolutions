@@ -31,7 +31,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        private void HandleProgress(long processId, Progress<int> exportProgress)
+        private void HandleProgress(DataExportProcessArgs process, Progress<int> exportProgress)
         {
             int lastPercent = 0;
             var sw = Stopwatch.StartNew();
@@ -41,7 +41,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 // throttle progress changed events 
                 if (donePercent != lastPercent || sw.Elapsed > TimeSpan.FromSeconds(1))
                 {
-                    this.dataExportProcessesService.UpdateDataExportProgress(processId, donePercent);
+                    this.dataExportProcessesService.UpdateDataExportProgress(process, donePercent);
 
                     lastPercent = donePercent;
                     sw.Restart();
@@ -64,7 +64,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
                 var exportProgress = new Progress<int>();
 
-                HandleProgress(dataExportProcessArgs.ProcessId, exportProgress);
+                HandleProgress(dataExportProcessArgs, exportProgress);
 
                 var archiveName = this.FileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
 
