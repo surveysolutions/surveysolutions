@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
-        public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(List<IInterviewEntityViewModel> newGroupItems)
+        public CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(IEnumerable<IInterviewEntityViewModel> newGroupItems)
         {
             var allVisibleGroupItems = new CompositeCollection<ICompositeEntity>();
 
@@ -32,40 +32,46 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 var rosterViewModel = interviewEntityViewModel as RosterViewModel;
                 if (compositeQuestion != null)
                 {
-                    var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
-
-                    compositeQuestionParts.Add(CompositeItemType.Title,  new CompositeCollection<ICompositeEntity>());
-
-                    if (compositeQuestion.InstructionViewModel.HasInstructions)
-                        compositeQuestionParts.Add(CompositeItemType.Instruction, new CompositeCollection<ICompositeEntity>());
-
-                    compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
-
-                    if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
-                        compositeQuestionParts.Add(CompositeItemType.Children, new CompositeCollection<ICompositeEntity>());
-
-                    compositeQuestionParts.Add(CompositeItemType.Validity, new CompositeCollection<ICompositeEntity>());
-                    compositeQuestionParts.Add(CompositeItemType.Warnings, new CompositeCollection<ICompositeEntity>());
-                    compositeQuestionParts.Add(CompositeItemType.Comments, new CompositeCollection<ICompositeEntity>());
-                    compositeQuestionParts.Add(CompositeItemType.AnsweringProgress, new CompositeCollection<ICompositeEntity>());
-
-                    compositeQuestionParts.Select(compositeItemPart => new { Type = compositeItemPart.Key, CompositeCollection = compositeItemPart.Value })
-                        .OrderBy(x => x.Type)
-                        .ForEach(x => allVisibleGroupItems.AddCollection(x.CompositeCollection));
-
-                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
-
-                    compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
-                    {
-                        if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
-                        
-                    };
-
+                    InflateOneQuestion(compositeQuestion, allVisibleGroupItems);
                 }
                 else if (rosterViewModel != null)
                 {
-                    allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
+                    if (rosterViewModel.IsPlainRoster)
+                    {
+                        CompositeCollection<ICompositeEntity> plainRoster = new CompositeCollection<ICompositeEntity>();
+
+                        void UpdateRosterInstances()
+                        {
+                            foreach (var rosterInstance in rosterViewModel.RosterInstances)
+                            {
+                                if (rosterInstance is ICompositeQuestion compositePlainQuestion)
+                                {
+                                    InflateOneQuestion(compositePlainQuestion, plainRoster);
+                                }
+                                else
+                                {
+                                    plainRoster.Add(rosterInstance);
+                                }
+                            }
+                        }
+
+                        UpdateRosterInstances();
+
+                        rosterViewModel.RosterInstances.CollectionChanged += async (sender, args) =>
+                        {
+                            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                            {
+                                plainRoster.Clear();
+                                UpdateRosterInstances();
+                            });
+                        };
+
+                        allVisibleGroupItems.AddCollection(plainRoster);
+                    }
+                    else
+                    {
+                        allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
+                    }
                 }
                 else
                 {
@@ -74,6 +80,39 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
 
             return allVisibleGroupItems;
+        }
+
+        private void InflateOneQuestion(ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems)
+        {
+            var compositeQuestionParts = new Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>>();
+
+            compositeQuestionParts.Add(CompositeItemType.Title, new CompositeCollection<ICompositeEntity>());
+
+            if (compositeQuestion.InstructionViewModel.HasInstructions)
+                compositeQuestionParts.Add(CompositeItemType.Instruction, new CompositeCollection<ICompositeEntity>());
+
+            compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
+
+            if (compositeQuestion is ICompositeQuestionWithChildren)
+                compositeQuestionParts.Add(CompositeItemType.Children, new CompositeCollection<ICompositeEntity>());
+
+            compositeQuestionParts.Add(CompositeItemType.Validity, new CompositeCollection<ICompositeEntity>());
+            compositeQuestionParts.Add(CompositeItemType.Warnings, new CompositeCollection<ICompositeEntity>());
+            compositeQuestionParts.Add(CompositeItemType.Comments, new CompositeCollection<ICompositeEntity>());
+            compositeQuestionParts.Add(CompositeItemType.AnsweringProgress, new CompositeCollection<ICompositeEntity>());
+
+            compositeQuestionParts.Select(compositeItemPart =>
+                    new {Type = compositeItemPart.Key, CompositeCollection = compositeItemPart.Value})
+                .OrderBy(x => x.Type)
+                .ForEach(x => allVisibleGroupItems.AddCollection(x.CompositeCollection));
+
+            this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+
+            compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
+                OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+            };
         }
 
         private void OnEnablementChanged(

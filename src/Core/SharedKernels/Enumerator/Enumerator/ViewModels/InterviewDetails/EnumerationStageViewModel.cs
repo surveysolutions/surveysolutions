@@ -26,12 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private CompositeCollection<ICompositeEntity> items;
         public CompositeCollection<ICompositeEntity> Items
         {
-            get { return this.items; }
-            set
-            {
-                this.items = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.items;
+            set => base.SetProperty(ref items, value);
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;

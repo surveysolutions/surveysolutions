@@ -1,13 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
+using Moq;
 using MvvmCross;
 using MvvmCross.Core;
 using MvvmCross.Tests;
 using NUnit.Framework;
+using ReflectionMagic;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInflationServiceTests
@@ -262,6 +277,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Assert
             Assert.That(inflatedViewModels, Contains.Item(questionWithoutProgressViewModel.Answering));
             Assert.That(inflatedViewModels, Contains.Item(questionWithProgressQuestionViewModel.Answering));
+        }
+
+        [Test]
+        public void should_handle_plain_rosters()
+        {
+            var rosterViewModel = Create.ViewModel.RosterViewModel();
+            var nestedRoster = Create.ViewModel.RosterViewModel();
+            rosterViewModel.AsDynamic().IsPlainRoster = true;
+            rosterViewModel.RosterInstances.Add(Create.ViewModel.TextQuestionViewModel());
+            rosterViewModel.RosterInstances.Add(nestedRoster);
+
+            var service = CreateCompositeCollectionInflationService();
+            var viewModels = new List<IInterviewEntityViewModel>{rosterViewModel};
+
+            // Act
+            CompositeCollection<ICompositeEntity> inflatedCompositeCollection = service.GetInflatedCompositeCollection(viewModels);
+            
+            // Assert
+            inflatedCompositeCollection.Should().NotContain(x => x.Equals(rosterViewModel));
+            inflatedCompositeCollection.Should().Contain(x => x.Equals(nestedRoster));
         }
 
         private static CompositeCollectionInflationService CreateCompositeCollectionInflationService()

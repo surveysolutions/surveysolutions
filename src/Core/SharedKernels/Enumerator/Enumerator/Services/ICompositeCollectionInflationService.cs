@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface ICompositeCollectionInflationService
     {
-        CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(List<IInterviewEntityViewModel> newGroupItems);
+        CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(
+            IEnumerable<IInterviewEntityViewModel> newGroupItems);
     }
 }
