@@ -7,7 +7,7 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public interface IWebInterviewInterviewEntityFactory
     {
-        Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, string[] sectionIds, bool isReviewMode);
+        Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, IQuestionnaire questionnaire, string[] sectionIds, bool isReviewMode);
         InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, bool isReviewMode);
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview);
         GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode);
