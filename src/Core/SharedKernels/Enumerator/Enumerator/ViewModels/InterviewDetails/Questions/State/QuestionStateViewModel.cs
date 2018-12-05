@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsAnswered = interview.WasAnswered(entityIdentity);
 
             this.answersRemovedNotifier.Init(interviewId, entityIdentity);
-            this.Header.Init(interviewId, entityIdentity);
+            this.Header.Init(interviewId, entityIdentity, navigationState);
             this.Validity.Init(interviewId, entityIdentity);
             this.Warnings.Init(interviewId, entityIdentity);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
