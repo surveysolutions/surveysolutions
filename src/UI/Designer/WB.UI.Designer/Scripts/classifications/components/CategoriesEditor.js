@@ -15,6 +15,17 @@
             isEditMode() {
                 return Vue.$config.isAdmin || Vue.$config.userId === this.$store.state.activeClassification.userId;
             },
+            activeGroup() {
+                return this.$store.state.activeGroup;
+            },
+            activeClassification() {
+                return this.$store.state.activeClassification;
+            }
+        },
+        watch: {
+            activeClassification: function(val) {
+                this.optionsMode = true;
+            }
         },
         methods: {
             validateOptionAsText(option) {
@@ -36,7 +47,7 @@
             parseOptions() {
                 var self = this;
                 var optionsStringList = (this.stringifiedOptions || "").split("\n");
-                _.filter(optionsStringList, _.isEmpty);
+                optionsStringList = _.filter(optionsStringList, function (line) { return !_.isEmpty(line); });
 
                 var options = _.map(optionsStringList, function(item) {
                     var matches = item.match(self.regex);
@@ -59,7 +70,7 @@
                 }
             },
             deleteCategory(index) {
-                store.dispatch('deleteCategory', index);
+                this.$store.dispatch('deleteCategory', index);
             },
             showStrings() {
                 this.stringifyCategories();
@@ -68,7 +79,37 @@
             showList() {
                 var parsedCategories = this.parseOptions();
                 console.log(parsedCategories);
-                this.optionsMode = false;
+
+                var commonLength = Math.min(this.categories.length, parsedCategories.length);
+                for (var i = 0; i < commonLength; i++) {
+                    this.$store.dispatch('updateCategory',
+                        {
+                            index: i,
+                            title: parsedCategories[i].title,
+                            value: parsedCategories[i].value
+                        });
+                }
+
+                if (this.categories.length < parsedCategories.length) {
+                    // need to add
+                    for (var i = commonLength - 1; i < parsedCategories.length; i++) {
+                        this.$store.dispatch('addCategory',
+                            {
+                                id: guid(),
+                                isNew: true,
+                                title: parsedCategories[i].title,
+                                value: parsedCategories[i].value,
+                                parent: this.$store.state.activeClassification.id
+                            });
+                    }
+                } else if (this.categories.length > parsedCategories.length) {
+                    //  need to remove
+                    for (var i = commonLength - 1; i < this.categories.length; i++) {
+                        this.$store.dispatch('deleteCategory', i);
+                    }
+                }
+
+                this.optionsMode = true;
             },
             save() {
                 var self = this;
@@ -80,8 +121,6 @@
                             });
                     }
                 });
-            },
-            cancel() {
             },
             addCategory() {
                 store.dispatch('addCategory',
