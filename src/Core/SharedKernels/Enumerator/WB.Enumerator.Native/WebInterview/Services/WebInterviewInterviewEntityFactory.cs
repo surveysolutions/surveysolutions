@@ -31,6 +31,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
             IStatefulInterview interview, 
+            IQuestionnaire questionnaire, 
             string[] sectionIds, 
             bool isReviewMode)
         {
@@ -56,6 +57,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
+                children = children.Where(e => !questionnaire.IsPlainMode(e.Identity.Id));
+
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
@@ -70,6 +73,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainMode(c.Identity.Id));
                     });
                 }
             }
