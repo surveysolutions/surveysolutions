@@ -53,7 +53,8 @@ namespace WB.Tests.Abc.TestFactories
         public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
         {
             return new NavigationState(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), Substitute.For<IViewModelNavigationService>());
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                Substitute.For<IViewModelNavigationService>());
         }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)

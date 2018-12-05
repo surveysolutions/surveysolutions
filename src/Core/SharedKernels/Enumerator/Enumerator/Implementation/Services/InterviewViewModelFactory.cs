@@ -246,6 +246,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             throw new ArgumentException("Don't found type for entity : " + entityId);
         }
 
+        public IInterviewEntityViewModel GetEntity(Identity identity,
+            string interviewid, 
+            NavigationState navigationState)
+        {
+            var interview = this.interviewRepository.Get(interviewid);
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            var modelType = GetEntityModelType(identity, questionnaire, interview);
+
+            return CreateInterviewEntityViewModel(identity, modelType, interviewid, navigationState);
+        }
+
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(
             Identity identity,
             InterviewEntityType entityModelType,
