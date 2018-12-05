@@ -25,8 +25,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+                return;
+
             base.Dispose(isDisposing);
-            Target.Player.Release();
+            Target?.Player?.Release();
         }
 
         static readonly DefaultExtractorsFactory ExtractorsFactory = new DefaultExtractorsFactory();
