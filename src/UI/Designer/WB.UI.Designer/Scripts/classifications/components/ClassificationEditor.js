@@ -14,6 +14,9 @@
     computed: {
         isFormDirty() {
             return Object.keys(this.fields).some(key => this.fields[key].dirty);
+        },
+        isPrivate() {
+            return Vue.$config.userId === this.classification.userId;
         }
     },
     methods: {

@@ -64,9 +64,17 @@
         },
         deleteCategory: function(state, index) {
             state.categories.splice(index, 1);
-        }
+        },
+        updateCategory: function(state, changes) {
+            var category = state.categories[changes.index];
+            category.title = changes.title;
+            category.value = changes.value;
+        },
     },
     actions: {
+        updateCategory(context, changes) {
+            context.commit('updateCategory', changes);
+        },
         deleteCategory(context, index) {
             context.commit('deleteCategory', index);
         },

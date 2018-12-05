@@ -11,48 +11,54 @@
 {
     <script type="x/template" id="categories-editor-template">
         <form>
-            <div class="categories-holder">
-                <div class="categories-holder-body">
-                    <div class="options-editor" v-if="optionsMode">
-                        <div class="option-line" v-for="(category, index) in categories" :key="category.id">
-                            <div class="input-group">
-                                <div class="option-cell">
-                                    <input v-if="isEditMode" name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
-                                    <div v-else>{{category.value}}</div>
+            <div class="scroller">
+                <ul class="breadcrumb">
+                    <li>{{activeGroup.title}}</li>
+                    <li class="active">{{activeClassification.title}}</li>
+                </ul>
+                <div class="categories-holder">
+                    <div class="categories-holder-body">
+                        <div class="options-editor" v-if="optionsMode">
+                            <div class="option-line" v-for="(category, index) in categories" :key="category.id">
+                                <div class="input-group">
+                                    <div class="option-cell">
+                                        <input v-if="isEditMode" name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
+                                        <div v-else>{{category.value}}</div>
+                                    </div>
+                                    <div class="option-cell">
+                                        <input v-if="isEditMode" name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
+                                        <div v-else>{{category.title}}</div>
+                                    </div>
+                                    <div class="input-group-btn" v-if="isEditMode">
+                                        <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
+                                            <svg width="20" height="20">
+                                                <polyline points="0,0 20,20"></polyline>
+                                                <polyline points="20,0 0,20"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="option-cell">
-                                    <input v-if="isEditMode" name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
-                                    <div v-else>{{category.title}}</div>
-                                </div>
-                                <div class="input-group-btn" v-if="isEditMode">
-                                    <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
-                                        <svg width="20" height="20">
-                                            <polyline points="0,0 20,20"></polyline>
-                                            <polyline points="20,0 0,20"></polyline>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
 
-                            @*<category-editor :category="category" :index="index"></category-editor>*@
+                                @*<category-editor :category="category" :index="index"></category-editor>*@
+                            </div>
+                        </div>
+                        <div v-else class="form-group">
+                            <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
                         </div>
                     </div>
-                    <div v-else class="form-group">
-                        <textarea  v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
+                    <div v-if="isEditMode" class="categories-holder-footer clearfix">
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
+                        <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
                     </div>
-                </div>
-                <div class="categories-holder-footer clearfix">
-                    <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
-                    <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
-                    <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
                 </div>
             </div>
             <div class="form-buttons-holder">
-                <button type="button" class="btn btn-success" @@click="save">Save</button>
-                <button type="button" class="btn btn-link" @@click="cancel">Cancel</button>
+                <button type="button" class="btn btn-success btn-lg" @@click="save">Save</button>
             </div>
         </form>
-    </script>
+
+</script>
     @*<script type="x/template" id="category-editor-template">
             <div class="input-group">
                 <div class="option-cell">
@@ -103,7 +109,7 @@
 
                 </form>
             </div>
-            <div v-else class="line-wrapper">
+            <div v-else class="line-wrapper" :class="{'private': isPrivate}">
                 <a @@click="select()"> {{ title }}</a>
             </div>
         </div>
@@ -192,13 +198,7 @@
             </div>
         </div>
         <div class="col-xs-5 column categories-groups tab-content">
-            <div class="scroller">
-                <ul class="breadcrumb">
-                    <li>{{activeGroup.title}}</li>
-                    <li class="active">{{activeClassification.title}}</li>
-                </ul>
-                <categories-editor></categories-editor>
-            </div>
+            <categories-editor></categories-editor>
         </div>
     </div>
 </div>
