@@ -44,12 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
                 Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
                     questionnaireStorage: questionnaireStorage));
 
-            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, settings);
+            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, null, settings);
             
             
             //act
             var entities = factory.GetEntities(interviewId.ToString(), chapterIdentity, navigationState).ToList();
-            
             
             //assert
             Assert.That(entities.Count, Is.EqualTo(1));

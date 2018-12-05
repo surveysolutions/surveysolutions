@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLastSupervisorComment();
 
-        IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+        List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 

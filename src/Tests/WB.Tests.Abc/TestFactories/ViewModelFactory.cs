@@ -510,5 +510,16 @@ namespace WB.Tests.Abc.TestFactories
                 identifyingQuestionsRepo ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(m => m.LoadAll() == Enumerable.Empty<PrefilledQuestionView>().ToReadOnlyCollection()),
                 assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>(),
                 messenger ?? Mock.Of<IMvxMessenger>());
+
+        public RosterViewModel RosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+            IInterviewViewModelFactory interviewViewModelFactory = null,
+            ILiteEventRegistry eventRegistry = null,
+            IQuestionnaireStorage questionnaireRepository = null)
+        {
+            return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+        }
     }
 }
