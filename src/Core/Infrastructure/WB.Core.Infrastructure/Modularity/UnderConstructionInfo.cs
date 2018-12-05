@@ -17,6 +17,7 @@ namespace WB.Core.Infrastructure.Modularity
         public void Error(string message)
         {
             Status = UnderConstructionStatus.Error;
+            Message = message;
         }
 
         public UnderConstructionStatus Status { get; private set; } = UnderConstructionStatus.NotStarted;

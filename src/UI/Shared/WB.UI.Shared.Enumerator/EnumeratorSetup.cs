@@ -149,7 +149,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
-            registry.RegisterCustomBindingFactory<TextView>("GroupInfo", textView => new TextViewGroupInfoBinding(textView));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
             registry.RegisterCustomBindingFactory<Button>("ToParentButtonGroupStyle", button => new ToParentGroupButtonBinding(button));
             registry.RegisterCustomBindingFactory<TextView>("GroupStatus", textView => new TextViewGroupStatusBinding(textView));
@@ -179,6 +178,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("TextViewNodeStateTextColor", (view) => new TextViewNodeStateTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewAnswerState", (view) => new TextViewAnswerStateBinding(view));
             registry.RegisterCustomBindingFactory<RadioButton>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
+            registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);

@@ -141,6 +141,9 @@
   <data name="Teams" xml:space="preserve">
     <value>Команды</value>
   </data>
+  <data name="TeamSize" xml:space="preserve">
+    <value>Итого</value>
+  </data>
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>Неправильное время на устройстве</value>
   </data>

@@ -53,11 +53,11 @@
 								</a>
 							</td>
 							<td class="date">
-								<time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.FormatDate()</time>
+								<time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()</time>
 
 							</td>
 							<td class="date">
-								<time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.FormatDate()</time>
+								<time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.ConvertToLocalAndFormatDate()</time>
 							</td>
 							<td class="email">
 								@listViewModel.Owner

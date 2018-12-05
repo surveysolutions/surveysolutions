@@ -161,8 +161,6 @@ namespace WB.UI.WebTester
             registry.Bind<IAudioFileStorage, WebTesterAudioFileStorage>();
             registry.Bind<IImageFileStorage, WebTesterImageFileStorage>();
 
-            registry.Bind<EvictionService>();
-
             // TODO: Find a generic place for each of the dependencies below
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();

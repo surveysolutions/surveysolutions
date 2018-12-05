@@ -16,7 +16,8 @@ namespace WB.UI.Shared.Web.Controllers
         public class UnderConstructionModel
         {
             public string Title { get; set; }
-            public string Message { get; set; }
+            public string MainMessage { get; set; }
+            public string SubMessage { get; set; }
         }
         
         public ActionResult Index()
@@ -28,10 +29,13 @@ namespace WB.UI.Shared.Web.Controllers
                 return Redirect(Url.Content("~/"));
             }
 
+            var isError = status.Status == UnderConstructionStatus.Error;
+
             var model = new UnderConstructionModel()
             {
                 Title = UnderConstruction.UnderConstructionTitle,
-                Message = status.Message ?? UnderConstruction.ServerInitializing
+                MainMessage = isError ? status.Message : UnderConstruction.ServerInitializing,
+                SubMessage = isError ? null : status.Message
             };
 
             return View(model);

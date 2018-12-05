@@ -59,8 +59,9 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
             stopwatch.Stop();
-            this.logger.Log(LogLevel.Information, $"Export of {interviewsToExport.Count:N0} interview datas for questionnaire" +
-                                                  $" {questionnaireExportStructure.QuestionnaireId} finised. Took {stopwatch.Elapsed:c} to complete");
+            this.logger.LogInformation("Export of {interviewsCount:N0} interview datas for questionnaire" +
+                    " {questionnaireId} finised. Took {elapsed:c} to complete",
+                interviewsToExport.Count, questionnaireExportStructure.QuestionnaireId, stopwatch.Elapsed);
         }
 
         private Task DoExportAsync(TenantInfo tenant,
@@ -136,7 +137,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
 
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to query {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
                 
                 Parallel.ForEach(batch, interviewToExport =>
@@ -156,11 +158,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                     progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
                 });
 
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to process {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
 
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-                logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to write {batch.Count} interviews {interviewEntities.Count} rows");
+                logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
+                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
             }
 
             progress.Report(100);
@@ -415,14 +419,6 @@ namespace WB.Services.Export.CsvExport.Exporters
                     
                     if (systemVariableValues.Count > 0) // main file?
                     {
-                        /*var interviewKeyIndex = ServiceColumns.SystemVariables[ServiceVariableType.InterviewKey].Index;
-
-                        if (systemVariableValues.Count < interviewKeyIndex + 1)
-                            systemVariableValues.Add(interviewId.Key);
-
-                        if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
-                            systemVariableValues[interviewKeyIndex] = interviewId.Key;*/
-
                         void InsertOrSetAt(ServiceVariableType type, string value)
                         {
                             var index = ServiceColumns.SystemVariables[type].Index;
@@ -438,7 +434,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         }
 
                         InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
-                        InsertOrSetAt(ServiceVariableType.InterviewStatus, interviewId.Status.ToString());
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);
