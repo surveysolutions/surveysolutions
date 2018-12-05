@@ -306,10 +306,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Monitor de salud</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>Pagina de salud</value>
-  </data>
-  <data name="HideFilter" xml:space="preserve">
+    <data name="HideFilter" xml:space="preserve">
     <value>Ocultar filtro</value>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">

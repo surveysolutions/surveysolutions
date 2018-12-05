@@ -18,10 +18,7 @@ namespace WB.Services.Export.Interview
 
         //prefix to identify parent record
         public const string ParentId = "parentId";
-
-        public const string ResponsibleColumnName = "_responsible";
-        public const string AssignmentsCountColumnName = "_quantity";
-
+        
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
         {
@@ -32,8 +29,5 @@ namespace WB.Services.Export.Interview
 
         public static readonly ServiceVariable InterviewKey = new ServiceVariable(ServiceVariableType.InterviewKey, Key, 0);
         
-
-        public static readonly string[] AllSystemVariables = SystemVariables.Values
-            .Select(x => x.VariableExportColumnName).Select(x => x.ToLower()).ToArray();
     }
 }

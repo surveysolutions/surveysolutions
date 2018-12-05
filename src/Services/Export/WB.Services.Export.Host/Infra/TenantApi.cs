@@ -15,6 +15,7 @@ using Polly;
 using Polly.Retry;
 using Refit;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Host.Infra
@@ -32,12 +33,12 @@ namespace WB.Services.Export.Host.Infra
         {
             this.logger = logger;
             id = Interlocked.Increment(ref _counter);
-            logger.LogTrace($"Creating new TenantApi<{typeof(T).Name}> #{id}");
+            // logger.LogTrace("Creating new TenantApi<{name}> #{id}", typeof(T).Name, id);
         }
 
         public void Dispose()
         {
-            logger.LogTrace($"Disposing TenantApi<{typeof(T).Name}> #{id}");
+            //logger.LogTrace("Disposing TenantApi<{name}> #{id}", typeof(T).Name, id);
         }
 
         readonly ConcurrentDictionary<TenantInfo, T> cache = new ConcurrentDictionary<TenantInfo, T>();
@@ -47,7 +48,7 @@ namespace WB.Services.Export.Host.Infra
             return cache.GetOrAdd(tenant, id =>
             {
                 var httpClient = new HttpClient(new ApiKeyHandler(tenant, logger), true);
-                
+
                 httpClient.BaseAddress = new Uri(tenant.BaseUrl);
 
                 return RestService.For<T>(httpClient, new RefitSettings
@@ -74,14 +75,19 @@ namespace WB.Services.Export.Host.Infra
                 this.policy = Policy
                     .HandleResult<HttpResponseMessage>(
                         message => message.RequestMessage.Method == HttpMethod.Get
-                                   && !message.IsSuccessStatusCode)
-                    .WaitAndRetryAsync(8,
-                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), 
+                                   && !message.IsSuccessStatusCode && message.StatusCode != HttpStatusCode.NotFound)
+                    .WaitAndRetryAsync(6,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (response, timeSpan, retryCount, context) =>
                             {
-                                logger.LogWarning("Request failed with {statusCode}. " +
-                                                  "Waiting {timeSpan} before next retry. Retry attempt {retryCount}",
-                                response.Result.StatusCode, timeSpan, retryCount);
+                                using (LoggingHelpers.LogContext
+                                    (("tenantName", tenant.Name),
+                                    ("uri", response.Result.RequestMessage.RequestUri)))
+                                {
+                                    logger.LogWarning("Request failed with {statusCode}. " +
+                                                      "Waiting {timeSpan} before next retry. Retry attempt {retryCount}",
+                                        response.Result.StatusCode, timeSpan, retryCount);
+                                }
                             });
             }
 
@@ -91,27 +97,28 @@ namespace WB.Services.Export.Host.Infra
                 var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenant.Id.ToString());
                 request.RequestUri = new Uri(uri);
 
-                var sw = Stopwatch.StartNew();
-                logger.LogTrace("Calling {method}: {requestUri}", request.Method, request.RequestUri);
+                using (LoggingHelpers.LogContext(("uri", uri)))
+                {
+                    var sw = Stopwatch.StartNew();
 
-                var result = await this.policy.ExecuteAsync(() => base.SendAsync(request, cancellationToken));
-                sw.Stop();
+                    var result = await this.policy.ExecuteAsync(() => base.SendAsync(request, cancellationToken));
+                    sw.Stop();
 
-                var size = result.Content.Headers.ContentLength ?? GetRawSizeUsingReflection(result) ?? 0;
+                    var size = result.Content.Headers.ContentLength ?? GetRawSizeUsingReflection(result) ?? 0;
 
-                Monitoring.Http.RegisterRequest(
-                    this.tenant.Name ?? this.tenant.Id.ToString(),
-                    sw.Elapsed.TotalSeconds,
-                    size);
+                    Monitoring.Http.RegisterRequest(
+                        this.tenant.Name ?? this.tenant.Id.ToString(),
+                        sw.Elapsed.TotalSeconds,
+                        size);
 
-                logger.LogDebug("Got {size} in {elapsed} ms: {uri}...",
-                    size.Bytes().Humanize("#.##"), sw.ElapsedMilliseconds, uri.Substring(0, 80));
+                    logger.LogTrace("TenantApi executed with size {size} in {elapsed} ms", size, sw.ElapsedMilliseconds);
 
-                return result;
+                    return result;
+                }
             }
 
             private static readonly ConcurrentDictionary<Type, FieldInfo> Cache = new ConcurrentDictionary<Type, FieldInfo>();
-            
+
             private static long? GetRawSizeUsingReflection(HttpResponseMessage result)
             {
                 var field = Cache.GetOrAdd(result.Content.GetType(), type =>
