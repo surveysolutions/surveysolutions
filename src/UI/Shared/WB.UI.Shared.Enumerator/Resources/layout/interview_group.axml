@@ -8,19 +8,17 @@
   <LinearLayout style="@style/Interview_Group">
     <LinearLayout android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(IsStarted, true, false), false))">
+                     local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(false, If(Not(EnumToString(Status) == 'NotStarted'), true, false), false))">
       <Button style="@style/Interview_Group_Button"
               local:MvxBind="
                 HideKeyboardOnClick .; 
                 Click NavigateToGroupCommand; 
                 Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle);
-                ButtonGroupStyle GroupState; 
+                ButtonGroupStyle Status; 
                 Enabled Enablement.Enabled;
                 Tag Format('Group_{0}', Identity)
               "/>
     </LinearLayout>
-    <TextView style="@style/Interview_Group_Description"
-              local:MvxBind="Visible Enablement.Enabled; GroupInfo GroupState"/>
   </LinearLayout>
   <LinearLayout style="@style/Interview_GroupWithDivider"
                 local:MvxBind="Enabled Enablement.Enabled"

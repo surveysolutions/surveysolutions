@@ -2,12 +2,14 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NLog.Web;
+using Serilog;
+using Serilog.Events;
 
 namespace WB.Services.Export.Host
 {
@@ -17,21 +19,18 @@ namespace WB.Services.Export.Host
 
         static async Task Main(string[] args)
         {
-            // NLog: setup the logger first to catch all errors
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-
             try
             {
                 AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
                 {
                     Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
-                    logger.Error(eventArgs.ExceptionObject.ToString);
+                    Log.Logger.Fatal("Unhandled exception occur {exception}", new [] { eventArgs.ExceptionObject.ToString() });
                 };
 
                 var isService = !(Debugger.IsAttached || args.Contains("--console"));
                 args = args.Where(arg => arg != "--console").ToArray();
-                
+
                 var useKestrel = args.Contains("--kestrel");
                 args = args.Where(arg => arg != "--kestrel").ToArray();
 
@@ -46,7 +45,7 @@ namespace WB.Services.Export.Host
                 }
 
                 var builder = CreateWebHostBuilder(args, useKestrel);
-                
+
                 if (isService)
                 {
                     builder.UseContentRoot(currentWorkingDir);
@@ -67,32 +66,80 @@ namespace WB.Services.Export.Host
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Stopped program because of exception");
+                Log.Logger.Fatal(ex, "Stopped program because of exception");
                 throw;
             }
-            finally
+        }
+
+        private static void ConfigureSerilog(LoggerConfiguration logConfig, IConfiguration configuration)
+        {
+            var seqConfig = configuration.GetSection("Logging:Seq");
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            var fileLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
+
+            logConfig
+                .MinimumLevel.Verbose()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("AppType", "ExportService")
+                .Enrich.WithProperty("Version", fvi.FileVersion)
+                .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
+                .Enrich.WithProperty("Host", Environment.MachineName)
+                .WriteTo.File(Path.GetFullPath(fileLogFolder), rollingInterval: RollingInterval.Day);
+
+            var metadata = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
+
+            foreach (var assemblyMetadataAttribute in metadata)
             {
-                NLog.LogManager.Shutdown();
+                logConfig.Enrich.WithProperty(assemblyMetadataAttribute.Key, assemblyMetadataAttribute.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(seqConfig["Uri"]))
+            {
+                var apiKey = seqConfig["ApiKey"];
+                logConfig.WriteTo.Seq(seqConfig["Uri"], apiKey: apiKey, restrictedToMinimumLevel: LogEventLevel.Verbose);
             }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, bool useKestrel)
         {
-            var host = WebHost.CreateDefaultBuilder(args)
-                    .ConfigureAppConfiguration(c =>
-                    {
-                        c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
-                        c.AddCommandLine(args);
-                    })
-                    .ConfigureLogging((hosting, logging) =>
-                    {
-                        if (!hosting.HostingEnvironment.IsDevelopment())
-                        {
-                            logging.ClearProviders();
-                        }
-                    })
-                    .UseNLog()
-                    .UseUrls(GetCommandLineUrls(args));
+            var host = WebHost.CreateDefaultBuilder(args);
+
+            host.ConfigureAppConfiguration(c =>
+            {
+                c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                c.AddJsonFile($"appsettings.Production.json", true);
+                c.AddJsonFile($"appsettings.Staging.json", true);
+
+                c.AddCommandLine(args);
+            });
+
+            host.ConfigureLogging((hosting, logging) =>
+            {
+                var logConfig = new LoggerConfiguration();
+                ConfigureSerilog(logConfig, hosting.Configuration);
+
+                logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
+
+                if (hosting.HostingEnvironment.IsDevelopment())
+                {
+                    logConfig.WriteTo.Console(LogEventLevel.Information);
+                }
+
+                Log.Logger = logConfig.CreateLogger();
+
+                if (!hosting.HostingEnvironment.IsDevelopment())
+                {
+                    logging.ClearProviders();
+                }
+            });
+
+            host
+                .UseSerilog()
+                .UseUrls(GetCommandLineUrls(args));
 
             host = useKestrel ? host.UseKestrel() : host.UseHttpSys();
             return host.UseStartup<Startup>();

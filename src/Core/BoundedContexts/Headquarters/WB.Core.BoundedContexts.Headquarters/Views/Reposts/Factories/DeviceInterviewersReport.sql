@@ -2,19 +2,17 @@
        userNames."UserName" TeamName,
        SUM(case when up."DeviceId" IS NULL then 1 else 0 end) NeverSynchedCount, 
        SUM(case when up."DeviceAppBuildVersion" IS NOT NULL AND up."DeviceAppBuildVersion" < @latestAppBuildVersion then 1 else 0 end) OutdatedCount, 
-       SUM(case when lastSync."StorageFreeInBytes" < @neededFreeStorageInBytes then 1 else 0 end) LowStorageCount, 
-       --SUM(case when lastSync."DeviceDate" = '0001-01-01T00:00:00' OR 
-		--			 abs(extract(epoch from date_trunc('minute', lastSync."SyncDate") - date_trunc('minute', lastSync."DeviceDate"))) / 60 > @minutesMismatch then 1 else 0 end) WrongDateOnTabletCount,
        SUM(case when lastSync."AndroidSdkVersion" < @targetAndroidSdkVersion then 1 else 0 end) OldAndroidCount,
        SUM(case when anySync."InterviewerId" IS NULL then 1 else 0 end) NeverUploadedCount,
        SUM(case when wasReassign."InterviewerId" IS NOT NULL then 1 else 0 end) ReassignedCount,
-       SUM(case when anySyncWithQuestionnaire."InterviewerId" IS NULL then 1 else 0 end) NoQuestionnairesCount
+       SUM(case when anySyncWithQuestionnaire."InterviewerId" IS NULL then 1 else 0 end) NoQuestionnairesCount,
+       COUNT(up."Id") TeamSize
 from users.users u
 	inner join users.userprofiles up on u."UserProfileId" = up."Id"
 -- find last synchronization info
 	LEFT JOIN 
 	(
-		SELECT dsi1."DeviceDate", dsi1."SyncDate", dsi1."AndroidSdkVersion", dsi1."InterviewerId", dsi1."StorageFreeInBytes"
+		SELECT dsi1."DeviceDate", dsi1."SyncDate", dsi1."AndroidSdkVersion", dsi1."InterviewerId"
 		FROM plainstore.devicesyncinfo dsi1
 		INNER JOIN (SELECT dsi."InterviewerId", MAX(dsi."Id") AS maxid
 			    FROM plainstore.devicesyncinfo dsi GROUP BY dsi."InterviewerId") AS p2

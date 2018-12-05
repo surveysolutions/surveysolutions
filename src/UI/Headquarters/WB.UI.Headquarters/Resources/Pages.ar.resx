@@ -297,10 +297,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>مراقبة فحص الصحة</value>
   </data>
-  <data name="HealthCheck_IndexTitle" xml:space="preserve">
-    <value>صفحة التحقق من الصحة</value>
-  </data>
-  <data name="HideFilter" xml:space="preserve">
+    <data name="HideFilter" xml:space="preserve">
     <value>إخفاء التصفية</value>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
