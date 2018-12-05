@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Filters;
@@ -51,7 +52,7 @@ namespace WB.UI.Designer.Api.Designer
         [Route("init")]
         public void Init()
         {
-            var json = File.ReadAllText(@"D:\Temp\aaa.json");
+            var json = File.ReadAllText(HostingEnvironment.MapPath("~/Content/QbankClassifications.json"));
             var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);
             foreach (var entity in entities)
             {
