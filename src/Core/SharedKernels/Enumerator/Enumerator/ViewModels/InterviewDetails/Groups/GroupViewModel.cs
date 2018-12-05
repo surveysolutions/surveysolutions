@@ -54,14 +54,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             protected set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
-        private SimpleGroupStatus simpleStatus;
-
-        public SimpleGroupStatus SimpleStatus
-        {
-            get => this.simpleStatus;
-            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
-        }
-
         public Identity Identity => this.groupIdentity;
 
         public IMvxCommand NavigateToGroupCommand => new MvxAsyncCommand(this.NavigateToGroup);
@@ -111,7 +103,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.Enablement.Init(interviewId, entityIdentity);
             this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
-            this.SimpleStatus = CalculateSimpleStatus(Status);
 
             this.GroupTitle.Init(interviewId, entityIdentity);
             this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
@@ -128,7 +119,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             var statefulInterview = this.interviewRepository.Get(interviewId);
             this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
-            this.SimpleStatus = CalculateSimpleStatus(Status);
         }
 
         private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
@@ -151,20 +141,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.answerNotifier.Dispose();
             this.GroupTitle.Dispose();
             this.Enablement.Dispose();
-        }
-
-        private SimpleGroupStatus CalculateSimpleStatus(GroupStatus status)
-        {
-            switch (status)
-            {
-                case GroupStatus.Completed:
-                    return SimpleGroupStatus.Completed;
-                case GroupStatus.StartedInvalid:
-                case GroupStatus.CompletedInvalid:
-                    return SimpleGroupStatus.Invalid;
-                default:
-                    return SimpleGroupStatus.Other;
-            }
         }
     }
 }

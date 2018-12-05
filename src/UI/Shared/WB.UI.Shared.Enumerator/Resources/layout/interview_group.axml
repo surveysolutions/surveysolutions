@@ -14,7 +14,7 @@
                 HideKeyboardOnClick .; 
                 Click NavigateToGroupCommand; 
                 Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle);
-                ButtonGroupStyle SimpleStatus; 
+                ButtonGroupStyle Status; 
                 Enabled Enablement.Enabled;
                 Tag Format('Group_{0}', Identity)
               "/>
