@@ -669,4 +669,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Show PDF </value>
   </data>
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+<value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
+  </data>
 </root>
