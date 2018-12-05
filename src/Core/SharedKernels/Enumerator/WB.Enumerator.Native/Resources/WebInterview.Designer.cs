@@ -79,7 +79,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restart.
+        ///   Looks up a localized string similar to Reopen.
         /// </summary>
         public static string DiscardAndStart {
             get {
@@ -385,11 +385,20 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot modify interview that were received on interviewer device.
+        ///   Looks up a localized string similar to Cannot modify interview that was received by device.
         /// </summary>
         public static string InterviewReceivedByInterviewer {
             get {
                 return ResourceManager.GetString("InterviewReceivedByInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview contains total number of roster instances and questions exceeding the system limits..
+        /// </summary>
+        public static string InterviewSizeLimitReached {
+            get {
+                return ResourceManager.GetString("InterviewSizeLimitReached", resourceCulture);
             }
         }
         
