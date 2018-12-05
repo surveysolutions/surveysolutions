@@ -11,10 +11,9 @@ using WB.Enumerator.Native.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
 {
-    
     public class LazyNotificationServiceTests
     {
-        private WebInterviewNotificationService Subj { get; set; }
+        private WebInterviewLazyNotificationService Subj { get; set; }
         private Mock<IStatefulInterviewRepository> statefullRepoMock { get; set; }
         private TaskCompletionSource<string> tcs;
 
@@ -26,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             this.statefullRepoMock.Setup(repo => repo.Get(It.IsAny<string>())).Returns((IStatefulInterview)null)
                 .Callback<string>(id => tcs.SetResult(id));
 
-            this.Subj = new WebInterviewNotificationService(statefullRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>());
+            this.Subj = new WebInterviewLazyNotificationService(statefullRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>());
         }
 
         private string GetStatefullInterviewCallResult()
