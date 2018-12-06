@@ -14,37 +14,44 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
-    public class MarkdownTitleValueCombiner : BaseValueCombiner<ICharSequence>
+    public class MarkdownTextToHtmlValueCombiner : BaseValueCombiner<ICharSequence>
     {
         protected override int ExpectedParamsCount => 2;
 
         protected override ICharSequence GetValue(List<object> values)
         {
-            string title = values[0]?.ToString() ?? string.Empty;
-            var interviewEntity = (IInterviewEntity)values[1];
+            string text = values[0]?.ToString() ?? string.Empty;
+            var interviewEntity = (IInterviewEntity) values[1];
 
-            if (interviewEntity == null) return new SpannableString(title);
+            if (interviewEntity == null) return new SpannableString(text);
 
+            var htmlText = MarkdownTextToHtml(text);
+
+            ICharSequence sequence = Build.VERSION.SdkInt >= BuildVersionCodes.N
+                ? Html.FromHtml(htmlText, FromHtmlOptions.ModeLegacy)
+                : Html.FromHtml(htmlText);
+
+            var strBuilder = new SpannableStringBuilder(sequence);
+
+            var urlSpans = strBuilder.GetSpans(0, sequence.Length(), Class.FromType(typeof(URLSpan)));
+            foreach (URLSpan span in urlSpans)
+            {
+                if (!Uri.IsWellFormedUriString(span.URL, UriKind.Absolute))
+                    this.MakeNavigationLink(strBuilder, span, interviewEntity);
+            }
+
+            return strBuilder;
+        }
+
+        private static string MarkdownTextToHtml(string title)
+        {
             var document = CommonMarkConverter.Parse(title);
 
             using (var writer = new System.IO.StringWriter())
             {
                 CommonMarkConverter.ProcessStage3(document, writer);
 
-                ICharSequence sequence = Build.VERSION.SdkInt >= BuildVersionCodes.N
-                    ? Html.FromHtml(writer.ToString(), FromHtmlOptions.ModeLegacy)
-                    : Html.FromHtml(writer.ToString());
-
-                var strBuilder = new SpannableStringBuilder(sequence);
-                var urlSpans = strBuilder.GetSpans(0, sequence.Length(), Class.FromType(typeof(URLSpan)));
-
-                foreach (URLSpan span in urlSpans)
-                {
-                    if (!Uri.IsWellFormedUriString(span.URL, UriKind.Absolute))
-                        this.MakeNavigationLink(strBuilder, span, interviewEntity);
-                }
-
-                return strBuilder;
+                return writer.ToString();
             }
         }
 
