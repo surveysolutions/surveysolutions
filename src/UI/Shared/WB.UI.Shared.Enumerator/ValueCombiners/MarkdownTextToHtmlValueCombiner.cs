@@ -51,7 +51,11 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             {
                 CommonMarkConverter.ProcessStage3(document, writer);
 
-                return writer.ToString();
+                var htmlText = writer.ToString().TrimEnd('\n');
+                if (htmlText.StartsWith("<p>") && htmlText.EndsWith("</p>"))
+                    htmlText = htmlText.Substring(3, htmlText.Length - 7);
+
+                return htmlText;
             }
         }
 
@@ -105,6 +109,12 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                     AnchoredElementIdentity = interviewRoster
                 });
             }
+            else if (entityVariable.ToLower() == "cover")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
+            else if(entityVariable.ToLower() == "complete")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+            else if (entityVariable.ToLower() == "overview")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
         }
 
         private class NavigateToEntitySpan : ClickableSpan
