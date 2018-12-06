@@ -96,78 +96,79 @@ namespace WB.UI.Designer.Api.Designer
         [HttpGet]
         [Route("classifications")]
         [ResponseType(typeof(IEnumerable<Classification>))]
-        public async Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
+        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
         {
-            return await classificationsStorage.GetClassifications(groupId);
+            return classificationsStorage.GetClassifications(groupId);
         }
 
         [HttpGet]
         [Route("groups")]
-        public async Task<IEnumerable<ClassificationGroup>> GetGroups()
+        public Task<IEnumerable<ClassificationGroup>> GetGroups()
         {
-            return await classificationsStorage.GetClassificationGroups();
+            return classificationsStorage.GetClassificationGroups();
         }
 
         [HttpGet]
         [Route("classifications/search")]
-        public async Task<ClassificationsSearchResult> Search([FromUri] SearchQueryModel model)
+        public Task<ClassificationsSearchResult> Search([FromUri] SearchQueryModel model)
         {
-            return await classificationsStorage.SearchAsync(model.Query, model.GroupId);
+            return classificationsStorage.SearchAsync(model.Query, model.GroupId);
         }
 
         [HttpGet]
         [Route("classification/{id}/categories")]
-        public async Task<IEnumerable<Category>> Categories([FromUri] Guid id)
+        public Task<List<Category>> Categories([FromUri] Guid id)
         {
-            return await classificationsStorage.GetCategories(id);
+            return classificationsStorage.GetCategories(id);
         }
 
         [HttpPatch]
         [Route("classification/{id}")]
-        public async Task UpdateClassification(Classification classification)
+        public Task UpdateClassification(Classification classification)
         {
-            await classificationsStorage.UpdateClassification(classification);
+            return classificationsStorage.UpdateClassification(classification);
         }
+
         [HttpPost]
         [Route("classification")]
-        public async Task CreateClassification(Classification classification)
+        public Task CreateClassification(Classification classification)
         {
-            await classificationsStorage.CreateClassification(classification);
+            return classificationsStorage.CreateClassification(classification);
         }
 
         [HttpDelete]
         [Route("classification/{id}")]
-        public async Task DeleteClassification([FromUri] Guid id)
+        public Task DeleteClassification([FromUri] Guid id)
         {
-            await classificationsStorage.DeleteClassification(id);
+            return classificationsStorage.DeleteClassification(id);
         }
 
         [HttpPatch]
         [Route("group/{id}")]
-        public async Task UpdateClassificationGroup([FromUri] Guid id, ClassificationGroup group)
+        public Task UpdateClassificationGroup([FromUri] Guid id, ClassificationGroup group)
         {
-            await classificationsStorage.UpdateClassificationGroup(group);
+            return classificationsStorage.UpdateClassificationGroup(group);
         }
 
         [HttpPost]
         [Route("group")]
-        public async Task CreateClassificationGroup(ClassificationGroup group)
+        public Task CreateClassificationGroup(ClassificationGroup group)
         {
-            await classificationsStorage.CreateClassificationGroup(group);
+            return classificationsStorage.CreateClassificationGroup(group);
         }
 
         [HttpDelete]
         [Route("group/{id}")]
-        public async Task DeleteClassificationGroup([FromUri] Guid id)
+        public Task DeleteClassificationGroup([FromUri] Guid id)
         {
-            await classificationsStorage.DeleteClassificationGroup(id);
+            return classificationsStorage.DeleteClassificationGroup(id);
         }
 
         [HttpPost]
         [Route("classification/{id}/categories")]
-        public async Task UpdateCategories([FromUri] Guid id, Category[] categories)
+        public Task UpdateCategories([FromUri] Guid id, Category[] categories)
         {
-            await classificationsStorage.UpdateCategories(id, categories);
+            return classificationsStorage.UpdateCategories(id, categories);
         }
     }
 
