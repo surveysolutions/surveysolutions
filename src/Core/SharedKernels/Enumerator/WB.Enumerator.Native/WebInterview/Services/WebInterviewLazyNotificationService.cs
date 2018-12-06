@@ -15,13 +15,19 @@ namespace WB.Enumerator.Native.WebInterview.Services
             IWebInterviewInvoker webInterviewInvoker)
             : base(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker)
         {
-            // can be safely added more tasks if for some reason we are not notify users in-time
-            Task.Factory.StartNew(ProcessActionsInBackground, TaskCreationOptions.LongRunning);
         }
 
-        private readonly BlockingCollection<Action<IServiceLocator>> deferQueue = new BlockingCollection<Action<IServiceLocator>>();
+        static WebInterviewLazyNotificationService()
+        {
+            // can be safely added more tasks if for some reason we are not notifying users in-time
+            ExecutionTask = Task.Factory.StartNew(ProcessActionsInBackground, TaskCreationOptions.LongRunning);
+        }
 
-        private void ProcessActionsInBackground()
+        private static Task ExecutionTask { get; }
+
+        private static readonly BlockingCollection<Action<IServiceLocator>> deferQueue = new BlockingCollection<Action<IServiceLocator>>();
+
+        private static void ProcessActionsInBackground()
         {
             foreach (var action in deferQueue.GetConsumingEnumerable())
             {
