@@ -3,32 +3,50 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Tests.Abc;
+using WB.UI.WebTester.Infrastructure;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
 {
     public class LazyNotificationServiceTests
     {
         private WebInterviewLazyNotificationService Subj { get; set; }
-        private Mock<IStatefulInterviewRepository> statefullRepoMock { get; set; }
+        private Mock<IStatefulInterviewRepository> statefulRepoMock { get; set; }
         private TaskCompletionSource<string> tcs;
 
         [SetUp]
         public void Setup()
         {
-            this.statefullRepoMock = new Mock<IStatefulInterviewRepository>();
+            this.statefulRepoMock = new Mock<IStatefulInterviewRepository>();
             this.tcs = new TaskCompletionSource<string>();
-            this.statefullRepoMock.Setup(repo => repo.Get(It.IsAny<string>())).Returns((IStatefulInterview)null)
+            this.statefulRepoMock.Setup(repo => repo.Get(It.IsAny<string>())).Returns((IStatefulInterview)null)
                 .Callback<string>(id => tcs.SetResult(id));
 
-            this.Subj = new WebInterviewLazyNotificationService(statefullRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>());
+            this.Subj = new WebInterviewLazyNotificationService(statefulRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>());
+
+            var serviceLocatorMock = new Mock<IServiceLocator>();
+            serviceLocatorMock.Setup(x => x.GetInstance<WebInterviewNotificationService>())
+                .Returns(new WebInterviewNotificationService(this.statefulRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>()));
+
+
+            var inScopeExecutor = Create.Service.InScopeExecutor(serviceLocatorMock.Object);
+
+            InScopeExecutor.Init(inScopeExecutor);
         }
 
-        private string GetStatefullInterviewCallResult()
+        [TearDown]
+        public void TearDown()
+        {
+            InScopeExecutor.Init(null);
+        }
+
+        private string GetStatefulInterviewCallResult()
         {
             this.tcs.Task.Wait(TimeSpan.FromSeconds(15));
             return tcs.Task.Result;
@@ -41,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
 
             Subj.RefreshEntities(interviewId);
 
-            Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
 
         [Test]
@@ -51,7 +69,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
 
             Subj.RefreshRemovedEntities(interviewId);
 
-            Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
 
         [Test]
@@ -61,7 +79,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
 
             Subj.RefreshEntitiesWithFilteredOptions(interviewId);
 
-            Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
 
         [Test]
@@ -71,7 +89,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
 
             Subj.RefreshLinkedToListQuestions(interviewId, Array.Empty<Identity>());
 
-            Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
 
         [Test]
@@ -81,7 +99,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
 
             Subj.RefreshLinkedToRosterQuestions(interviewId, Array.Empty<Identity>());
 
-            Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
+            Assert.That(GetStatefulInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
     }
 }

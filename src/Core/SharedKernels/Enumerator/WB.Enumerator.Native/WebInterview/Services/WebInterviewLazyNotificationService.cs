@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -18,7 +19,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             Task.Factory.StartNew(ProcessActionsInBackground, TaskCreationOptions.LongRunning);
         }
 
-        private readonly BlockingCollection<Action> deferQueue = new BlockingCollection<Action>();
+        private readonly BlockingCollection<Action<IServiceLocator>> deferQueue = new BlockingCollection<Action<IServiceLocator>>();
 
         private void ProcessActionsInBackground()
         {
@@ -26,7 +27,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 try
                 {
-                    action();
+                    InScopeExecutor.Current.ExecuteActionInScope(action);
                 }
                 catch (NotSupportedException)
                 {
@@ -37,15 +38,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
         }
 
-        private void AddToQueue(Action action)
+        private void AddToQueue(Action<IServiceLocator> action)
         {
             deferQueue.Add(action);
         }
 
-        public override void RefreshEntities(Guid interviewId, params Identity[] questions) => AddToQueue(() => base.RefreshEntities(interviewId, questions));
-        public override void RefreshRemovedEntities(Guid interviewId, params Identity[] entities) => AddToQueue(() => base.RefreshRemovedEntities(interviewId, entities));
-        public override void RefreshEntitiesWithFilteredOptions(Guid interviewId) => AddToQueue(() => base.RefreshEntitiesWithFilteredOptions(interviewId));
-        public override void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities) => AddToQueue(() => base.RefreshLinkedToListQuestions(interviewId, identities));
-        public override void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities) => AddToQueue(() => base.RefreshLinkedToRosterQuestions(interviewId, rosterIdentities));
+        public override void RefreshEntities(Guid interviewId, params Identity[] questions) => 
+            AddToQueue((serviceLocator) => serviceLocator.GetInstance<WebInterviewNotificationService>().RefreshEntities(interviewId, questions));
+        public override void RefreshRemovedEntities(Guid interviewId, params Identity[] entities) => AddToQueue((serviceLocator) => serviceLocator.GetInstance<WebInterviewNotificationService>().RefreshRemovedEntities(interviewId, entities));
+        public override void RefreshEntitiesWithFilteredOptions(Guid interviewId) => AddToQueue((serviceLocator) => serviceLocator.GetInstance<WebInterviewNotificationService>().RefreshEntitiesWithFilteredOptions(interviewId));
+        public override void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities) => AddToQueue((serviceLocator) => serviceLocator.GetInstance<WebInterviewNotificationService>().RefreshLinkedToListQuestions(interviewId, identities));
+        public override void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities) => AddToQueue((serviceLocator) => serviceLocator.GetInstance<WebInterviewNotificationService>().RefreshLinkedToRosterQuestions(interviewId, rosterIdentities));
     }
 }
