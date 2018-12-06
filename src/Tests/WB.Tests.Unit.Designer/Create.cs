@@ -10,6 +10,7 @@ using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -22,6 +23,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
@@ -1436,6 +1438,29 @@ namespace WB.Tests.Unit.Designer
         public static IPatchGenerator PatchGenerator()
         {
             return new JsonPatchService(new ZipArchiveUtils());
+        }
+
+        public static ClassificationsStorage ClassificationStorage(
+            IPlainStorageAccessor<ClassificationEntity> classificationsStorage = null, 
+            IMembershipUserService membershipUserService = null)
+        {
+            return new ClassificationsStorage(
+                classificationsStorage ??  new TestPlainStorage<ClassificationEntity>(), 
+                membershipUserService ?? Mock.Of<IMembershipUserService>());
+        }
+
+        public static IMembershipUserService MembershipUserService(Guid userId, bool isAdmin = false)
+        {
+            return Mock.Of<IMembershipUserService>(
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId && u.IsAdmin == isAdmin)
+                     && _.WebServiceUser == Mock.Of<IMembershipWebServiceUser>(u => u.UserId == userId && u.IsAdmin == isAdmin));
+        }
+
+        public static IPlainStorageAccessor<ClassificationEntity> ClassificationsStorage(params ClassificationEntity[] entities)
+        {
+            var storage = new TestPlainStorage<ClassificationEntity>();
+            storage.Store(entities.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)));
+            return storage;
         }
     }
 }
