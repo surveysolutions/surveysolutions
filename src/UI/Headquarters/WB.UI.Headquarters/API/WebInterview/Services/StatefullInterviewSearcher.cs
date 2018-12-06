@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         }
 
-        public SearchResults Search(IStatefulInterview interview, FilterOption[] flags, int skip, int take)
+        public SearchResults Search(IStatefulInterview interview, IQuestionnaire questionnaire, FilterOption[] flags, int skip, int take)
         {
             var stats = new Dictionary<FilterOption, int>();
             var nodes = GetFilteredNodes(flags, interview, stats);
@@ -71,8 +71,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     return new SearchResult
                     {
                         Id = searchResultId,
-                        SectionId = node.Parent.Identity.ToString(),
-                        Sections = node.GetBreadcrumbs().ToList()
+                        SectionId = node.GetParentIdentity(questionnaire)?.ToString(),
+                        Sections = node.GetBreadcrumbs(questionnaire).ToList()
                     };
                 }
 
