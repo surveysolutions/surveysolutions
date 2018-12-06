@@ -40,8 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Identity = entityIdentity;
             this.Title.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Warnings.Init(interviewId, entityIdentity);
+            this.Validity.Init(interviewId, entityIdentity, navigationState);
+            this.Warnings.Init(interviewId, entityIdentity, navigationState);
 
             var question = interview.GetQuestion(entityIdentity);
             if (question.IsAnswered())
