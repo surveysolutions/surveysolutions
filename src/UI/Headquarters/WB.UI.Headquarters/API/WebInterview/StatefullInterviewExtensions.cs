@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
     public static class StatefullInterviewExtensions
     {
-        public static IEnumerable<Link> GetBreadcrumbs(this IInterviewTreeNode nodeParents)
+        public static IEnumerable<Link> GetBreadcrumbs(this IInterviewTreeNode nodeParents, IQuestionnaire questionnaire)
         {
             foreach (var node in nodeParents.Parents)
             {
+                if (questionnaire.IsPlainMode(node.Identity.Id))
+                    continue;
+
                 var link = new Link { Target = node.Identity.ToString() };
 
                 if (node is InterviewTreeSection section)
@@ -34,5 +39,19 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
 
+        public static IInterviewTreeNode GetParent(this IInterviewTreeNode node, IQuestionnaire questionnaire)
+        {
+            var parent = node.Parent;
+            while (parent != null && questionnaire.IsPlainMode(parent.Identity.Id))
+            {
+                parent = parent.Parent;
+            }
+            return parent;
+        }
+
+        public static Identity GetParentIdentity(this IInterviewTreeNode node, IQuestionnaire questionnaire)
+        {
+            return GetParent(node, questionnaire)?.Identity;
+        }
     }
 }
