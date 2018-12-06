@@ -78,7 +78,6 @@
             },
             showList() {
                 var parsedCategories = this.parseOptions();
-                console.log(parsedCategories);
 
                 var commonLength = Math.min(this.categories.length, parsedCategories.length);
                 for (var i = 0; i < commonLength; i++) {
@@ -92,7 +91,7 @@
 
                 if (this.categories.length < parsedCategories.length) {
                     // need to add
-                    for (var i = commonLength - 1; i < parsedCategories.length; i++) {
+                    for (var i = commonLength; i < parsedCategories.length; i++) {
                         this.$store.dispatch('addCategory',
                             {
                                 id: guid(),

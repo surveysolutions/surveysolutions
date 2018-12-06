@@ -18,7 +18,7 @@
             {
                 return $http({
                         method: 'GET',
-                        url: baseUrl + '/classifications/groups',
+                        url: baseUrl + '/groups',
                         params: {}
                     })
                     .then(function(response) {

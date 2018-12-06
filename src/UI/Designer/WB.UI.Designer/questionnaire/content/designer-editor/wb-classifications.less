@@ -203,34 +203,55 @@
                 border-top: 5px solid #337ab7;
             }
         }
+
+        .list-categories {
+            color: #333;
+            font-size: 12px;
+            line-height: 14px;
+            padding-left: 15px;
+
+            & li {
+                display: block;
+                position: relative;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    bottom: .4rem;
+                    width: 100%;
+                    height: 0;
+                    line-height: 0;
+                    border-bottom: 2px dotted #ddd;
+                }
+
+                & > span:first-of-type {
+                    background: #fff;
+                    position: relative;
+                    display: inline;
+                    z-index: 1;
+                    padding-right: .2rem;
+                    word-break: break-word;
+
+                    & span{
+                        color: transparent
+                    }
+                }
+
+                & > span:last-of-type {
+                    background: #fff;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    padding-left: .2rem;
+                    z-index: 2;
+                    text-align: right
+                }
+            }
+        }
     }
 
     .scroller {
         margin-bottom: 10px;
-    }
-
-    ul {
-        margin-right: 15px;
-        color: #333;
-        font-size: 12px;
-        line-height: 14px;
-        max-height: 300px;
-
-        li {
-            margin: 5px 0;
-            word-break: break-word;
-            position: relative;
-            padding-left: 85px;
-
-            .option-value {
-                position: absolute;
-                left: 0;
-                text-align: right;
-                display: block;
-                font-weight: bold;
-                width: 80px;
-            }
-        }
     }
 
     .tile-footer {
@@ -301,4 +322,8 @@
             top: -1px;
         }
     }
+}
+
+.handle {
+    cursor: pointer;
 }
