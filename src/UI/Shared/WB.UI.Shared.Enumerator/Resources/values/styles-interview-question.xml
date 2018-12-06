@@ -35,6 +35,7 @@
   <style name="Interview_Question_Title_Base">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/question_title_text</item>
+    <item name="android:textColorLink">@color/group_started</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
