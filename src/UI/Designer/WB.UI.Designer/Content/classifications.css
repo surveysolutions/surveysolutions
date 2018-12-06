@@ -50,6 +50,7 @@
         width: 10%;
     }
 }
+
 /* common styles */
 .classifications-wrapper {
     margin-top: -0.1px;
@@ -59,7 +60,8 @@
 }
 
     .classifications-wrapper .column {
-        height: calc(100% - 52px);
+        height: 100%;
+        box-shadow: inset -10px 0px 20px -5px rgba(0, 0, 0, 0.2);
     }
 
         .classifications-wrapper .column h3 {
@@ -238,7 +240,7 @@
     position: absolute;
     border-radius: 100%;
     box-shadow: 8px 7px 0px -3px #e4e7e9;
-    right: -20px;
+    right: -21px;
     top: -20px;
 }
 
@@ -307,7 +309,7 @@
 
 /* edit classification column */
 .classifications-wrapper .categories-groups {
-    height: calc(100% - 52px);
+    height: 100%;
 }
 
 .categories-groups form {
@@ -404,3 +406,53 @@
     bottom: 0;
     left: 0;
 }
+
+.categories-holder-body.readonly {
+    padding: 0 25px 0 5px;
+}
+
+.categories-groups .readonly .input-group {
+    display: block;
+}
+
+.categories-groups .readonly .option-cell {
+    display: block;
+    position: relative;
+}
+
+    .categories-groups .readonly .option-cell:before {
+        content: '';
+        position: absolute;
+        bottom: .4rem;
+        width: 100%;
+        height: 0;
+        line-height: 0;
+        border-bottom: 2px dotted #ddd;
+    }
+
+    .categories-groups .readonly .option-cell > span span {
+        color: transparent;
+        font-size: 1px;
+    }
+
+    .categories-groups .readonly .option-cell:first-of-type {
+        width: 100%;
+    }
+
+    .categories-groups .readonly .option-cell > span:first-of-type {
+        background: #f9f9f9;
+        position: relative;
+        display: inline;
+        z-index: 1;
+        padding-right: .2rem;
+        word-break: break-word;
+    }
+
+    .categories-groups .readonly .option-cell > span:last-of-type {
+        background: #f9f9f9;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding-left: .2rem;
+        z-index: 2;
+    }

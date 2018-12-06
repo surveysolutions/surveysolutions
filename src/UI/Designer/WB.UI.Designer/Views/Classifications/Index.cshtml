@@ -17,68 +17,49 @@
                     <li class="active">{{activeClassification.title}}</li>
                 </ul>
                 <div class="categories-holder">
-                    <div class="categories-holder-body">
-                        <div class="options-editor" v-if="optionsMode">
-                            <div class="option-line" v-for="(category, index) in categories" :key="category.id">
-                                <div class="input-group">
-                                    <div class="option-cell">
-                                        <input v-if="isEditMode" name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
-                                        <div v-else>{{category.value}}</div>
-                                    </div>
-                                    <div class="option-cell">
-                                        <input v-if="isEditMode" name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
-                                        <div v-else>{{category.title}}</div>
-                                    </div>
-                                    <div class="input-group-btn" v-if="isEditMode">
-                                        <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
-                                            <svg width="20" height="20">
-                                                <polyline points="0,0 20,20"></polyline>
-                                                <polyline points="20,0 0,20"></polyline>
-                                            </svg>
-                                        </button>
+                    <div v-if="!isEditMode"  class="categories-holder-body readonly">
+                        <div class="option-cell" v-for="(category, index) in categories" :key="category.id">
+                            <span>{{category.title}} <span>...</span></span>
+                            <span>{{category.value}}</span>
+                        </div>
+                    </div>
+                    <div v-else class="categories-holder-body">
+                            <div class="options-editor" v-if="optionsMode">
+                                <div class="option-line" v-for="(category, index) in categories" :key="category.id">
+                                    <div class="input-group">
+                                        <div class="option-cell">
+                                            <input name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
+                                        </div>
+                                        <div class="option-cell">
+                                            <input name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
+                                                <svg width="20" height="20">
+                                                    <polyline points="0,0 20,20"></polyline>
+                                                    <polyline points="20,0 0,20"></polyline>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-
-                                @*<category-editor :category="category" :index="index"></category-editor>*@
+                            </div>
+                            <div v-else class="form-group">
+                                <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
                             </div>
                         </div>
-                        <div v-else class="form-group">
-                            <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
+                        <div v-if="isEditMode" class="categories-holder-footer clearfix">
+                            <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
+                            <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
+                            <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
                         </div>
                     </div>
-                    <div v-if="isEditMode" class="categories-holder-footer clearfix">
-                        <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
-                        <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
-                        <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
-                    </div>
                 </div>
-            </div>
             <div class="form-buttons-holder">
                 <button type="button" class="btn btn-success btn-lg" @@click="save">Save</button>
             </div>
         </form>
-
-</script>
-    @*<script type="x/template" id="category-editor-template">
-            <div class="input-group">
-                <div class="option-cell">
-                    <input v-if="isEditMode" name="value" v-on:keyup.enter="moveFocus" v-validate="'required'" type="number" v-model="value" class="form-control" placeholder="Value">
-                    <div v-else>{{value}}</div>
-                </div>
-                <div class="option-cell">
-                    <input v-if="isEditMode" name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="title" class="form-control" placeholder="Title">
-                    <div v-else>{{title}}</div>
-                </div>
-                <div class="input-group-btn" v-if="isEditMode">
-                    <button @@click="deleteCategory" type="button" class="btn btn-link btn-delete">
-                        <svg width="20" height="20">
-                            <polyline points="0,0 20,20"></polyline>
-                            <polyline points="20,0 0,20"></polyline>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </script>*@
+    </script>
     <script type="x/template" id="group-editor-template">
         <div>
             <div v-if="isEditMode" class="edit-classification-group-name">
@@ -150,22 +131,6 @@
 }
 <div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
 <div class="classifications-wrapper">
-    <div class="search-row">
-        <form id="frmSearch" class="form-inline">
-            <div class="input-group">
-                <input id="txtFilter" type="text" class="form-control" name="f" value="">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" onclick="$('#frmSearch').submit()">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="13px" height="12px">
-                        <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" fill="#b2b2b2"></path>
-                        </svg>
-
-                    </button>
-                </span>
-            </div>
-            <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
-        </form>
-    </div>
     <div class="classifications-block">
         <div class="col-xs-3 column classification-groups">
             <div class="classification-list-wrapper">
@@ -197,7 +162,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-5 column categories-groups tab-content">
+        <div class="col-xs-5 column categories-groups">
             <categories-editor></categories-editor>
         </div>
     </div>

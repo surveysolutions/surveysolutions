@@ -46,8 +46,8 @@
                     </button>
                     <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
                         <perfect-scrollbar class="scroller">
-                            <ul class="list-unstyled">
-                                <li ng-repeat="category in classification.categories"><span class="option-value">{{category.value}}</span> {{category.title}}</li>
+                            <ul class="list-unstyled list-categories">
+                                <li ng-repeat="category in classification.categories"><span>{{category.title}}<span>...</span></span> <span class="option-value">{{category.value}}</span></li>
                             </ul>
                         </perfect-scrollbar>
                     </div>
@@ -65,8 +65,8 @@
                     </button>
                     <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
                         <perfect-scrollbar class="scroller">
-                            <ul class="list-unstyled">
-                                <li ng-repeat="category in classification.categories"><span class="option-value">{{category.value}}</span> {{category.title}}</li>
+                            <ul class="list-unstyled list-categories">
+                                <li ng-repeat="category in classification.categories"><span>{{category.title}}<span>...</span></span> <span class="option-value">{{category.value}}</span></li>
                             </ul>
                         </perfect-scrollbar>
                     </div>
