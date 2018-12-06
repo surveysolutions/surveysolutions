@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 if (group is InterviewTreeRoster roster)
                 {
-                    return new OverviewWebGroupNode(roster)
+                    return new OverviewWebGroupNode(roster, questionnaire)
                     {
                         Id = roster.Identity.ToString(),
                         Title = roster.Title.Text,
@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     };
                 }
 
-                return new OverviewWebGroupNode(group)
+                return new OverviewWebGroupNode(group, questionnaire)
                 {
                     Id = group.Identity.ToString(),
                     Title = group.Title.Text
