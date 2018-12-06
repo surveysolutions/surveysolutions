@@ -73,48 +73,65 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
         private void NavigateToEntity(string entityVariable, IInterviewEntity sourceEntity)
         {
-            var interview = ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>()
+            entityVariable = entityVariable.ToLower();
+
+            if (entityVariable == "cover")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
+            else if (entityVariable == "complete")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+            else if (entityVariable == "overview")
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
+            else
+            {
+                var interview = ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>()
                 .Get(sourceEntity.InterviewId);
 
-            if(interview == null) return;
+                if (interview == null) return;
 
-            var questionnaire = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
-                .GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+                var questionnaire = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
+                    .GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            if (questionnaire == null) return;
+                if (questionnaire == null) return;
 
-            var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
-            var rosterId = questionnaire.GetRosterIdByVariableName(entityVariable, true);
+                var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
+                var rosterId = questionnaire.GetRosterIdByVariableName(entityVariable, true);
 
-            if (questionId.HasValue)
-            {
-                var interviewQuestion = interview.GetAllIdentitiesForEntityId(questionId.Value).FirstOrDefault();
+                if (!questionId.HasValue && !rosterId.HasValue) return;
 
-                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value).ToArray();
+
+                var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
+                    x.RosterVector.Identical(sourceEntity.Identity.RosterVector,
+                        sourceEntity.Identity.RosterVector.Length)).ToArray();
+
+                var entitiesForSelection = entitiesInTheSameOrDeeperRoster.Any()
+                    ? entitiesInTheSameOrDeeperRoster
+                    : interviewEntities;
+
+                var nearestInterviewEntity = entitiesForSelection.OrderBy(x => x.RosterVector).FirstOrDefault();
+                if (nearestInterviewEntity == null) return;
+
+                if (questionId.HasValue)
                 {
-                    TargetScreen = questionnaire.IsPrefilled(questionId.Value) ? ScreenType.Identifying : ScreenType.Group,
-                    TargetGroup = interview.GetParentGroup(interviewQuestion),
-                    AnchoredElementIdentity = interviewQuestion
-                });
-            }
-            else if (rosterId.HasValue)
-            {
-                var interviewRoster = interview.GetAllIdentitiesForEntityId(rosterId.Value)
-                    .FirstOrDefault();
-
-                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                    sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                    {
+                        TargetScreen = questionnaire.IsPrefilled(questionId.Value)
+                                ? ScreenType.Identifying
+                                : ScreenType.Group,
+                        TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
+                        AnchoredElementIdentity = nearestInterviewEntity
+                    });
+                }
+                else if (rosterId.HasValue)
                 {
-                    TargetScreen = ScreenType.Group,
-                    TargetGroup = interview.GetParentGroup(interviewRoster),
-                    AnchoredElementIdentity = interviewRoster
-                });
+                    sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
+                    {
+                        TargetScreen = ScreenType.Group,
+                        TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
+                        AnchoredElementIdentity = nearestInterviewEntity
+                    });
+                }
             }
-            else if (entityVariable.ToLower() == "cover")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
-            else if(entityVariable.ToLower() == "complete")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
-            else if (entityVariable.ToLower() == "overview")
-                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
         }
 
         private class NavigateToEntitySpan : ClickableSpan
