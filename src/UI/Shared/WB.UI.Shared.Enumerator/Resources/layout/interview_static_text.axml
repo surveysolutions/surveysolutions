@@ -6,7 +6,7 @@
 
   <TextView
     style="@style/Interview_Question_Title"
-    local:MvxBind="Html Text.HtmlText; 
+    local:MvxBind="HtmlWithLinks MarkdownTextToHtml(Text.HtmlText, .); 
                    Visible Not(QuestionState.Validity.IsInvalid);
                    Tag Format('Static_Valid_Title{0}', Identity)" />
 
