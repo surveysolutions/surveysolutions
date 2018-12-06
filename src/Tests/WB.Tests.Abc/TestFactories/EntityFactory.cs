@@ -1046,7 +1046,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             string enablementCondition = null,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            bool isPlainMode = false)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -1056,6 +1057,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
+            group.IsPlainMode = isPlainMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
