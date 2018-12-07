@@ -74,6 +74,8 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
         private void NavigateToEntity(string entityVariable, IInterviewEntity sourceEntity)
         {
+            if(sourceEntity.NavigationState == null) return;
+
             entityVariable = entityVariable.ToLower();
 
             if (entityVariable == "cover")
