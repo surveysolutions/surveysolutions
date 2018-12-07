@@ -35,8 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
                 Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefullInterview = Setup.StatefulInterview(
-                questionnaireDocument);
+            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 
@@ -65,8 +64,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
                 Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
                 Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
-            var statefullInterview = Setup.StatefulInterview(
-                questionnaireDocument);
+            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
@@ -140,8 +138,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                     })
             });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefullInterview = Setup.StatefulInterview(
-                questionnaireDocument);
+            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 
