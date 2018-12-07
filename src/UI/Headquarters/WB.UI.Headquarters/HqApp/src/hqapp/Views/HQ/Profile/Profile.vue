@@ -34,8 +34,8 @@
                 <div class="graphic-explanation">
                     <div class="legend-block">
                         <div class="legend">
-                            <div class="legend-unit up-unit"><span></span>{{$t("Pages.InterviewerProfile_IncomingTraffic")}}</div>
-                            <div class="legend-unit down-unit"><span></span>{{$t("Pages.InterviewerProfile_OutgoingTraffic")}}</div>
+                            <div class="legend-unit down-unit"><span></span>{{$t("Pages.InterviewerProfile_IncomingTraffic")}}</div>
+                            <div class="legend-unit up-unit"><span></span>{{$t("Pages.InterviewerProfile_OutgoingTraffic")}}</div>
                         </div>
                     </div>
                     <div class="total">
