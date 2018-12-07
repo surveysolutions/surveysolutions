@@ -427,7 +427,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
-        }
 
         public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
         {
@@ -493,5 +492,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 parent = interview.GetParentGroup(parent);
             }
             return parent;
+        }
     }
 }
