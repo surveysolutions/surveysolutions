@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -426,5 +427,68 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
+        }
+
+        public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
+        {
+            if (statefulInterview == null) return null;
+
+            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
+
+            var groupEntities = statefulInterview.GetGroup(sectionIdentity).Children;
+
+            foreach (var treeNode in groupEntities)
+            {
+                if (questionnaire.IsPlainMode(treeNode.Identity.Id))
+                {
+                    nodes.AddRange(treeNode.Children);
+                }
+                else
+                {
+                    nodes.Add(treeNode);
+                }
+            }
+
+            return FilterEntitiesByReviewMode(nodes, questionnaire, isReviewMode);
+        }
+
+        public IEnumerable<Identity> GetAllInterviewEntities(IStatefulInterview statefulInterview,
+            IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
+        {
+            if (statefulInterview == null) return null;
+
+            IInterviewTreeNode section = statefulInterview.GetGroup(sectionIdentity);
+
+            IEnumerable<IInterviewTreeNode> entities = section.TreeToEnumerableDepthFirst(s => s.Children)
+                .Where(e => !questionnaire.IsPlainMode(e.Identity.Id));
+
+            return FilterEntitiesByReviewMode(entities, questionnaire, isReviewMode);
+        }
+
+        private IEnumerable<Identity> FilterEntitiesByReviewMode(IEnumerable<IInterviewTreeNode> nodes,
+            IQuestionnaire questionnaire, bool isReviewMode)
+        {
+            var entities = nodes;
+
+            if (!isReviewMode)
+            {
+                entities = entities.Except(x =>
+                    questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id)
+                );
+            }
+
+            return entities.Except(x =>
+                questionnaire.IsVariable(x.Identity.Id)
+            ).Select(e => e.Identity);
+        }
+
+        public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        {
+            var parent = interview.GetParentGroup(identity);
+            while (parent != null && questionnaire.IsPlainMode(parent.Id))
+            {
+                parent = interview.GetParentGroup(parent);
+            }
+            return parent;
     }
 }

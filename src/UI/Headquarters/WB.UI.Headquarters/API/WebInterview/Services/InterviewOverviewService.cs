@@ -6,12 +6,20 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
+        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+
+        public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory)
+        {
+            this.interviewEntityFactory = interviewEntityFactory;
+        }
+
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
@@ -19,10 +27,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
-                var interviewEntities = isReviewMode
-                    ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
-                    : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
-                
+                var interviewEntities = interviewEntityFactory
+                    .GetAllInterviewEntities(interview, questionnaire, enabledSectionId, isReviewMode);
+
                 foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
             }
