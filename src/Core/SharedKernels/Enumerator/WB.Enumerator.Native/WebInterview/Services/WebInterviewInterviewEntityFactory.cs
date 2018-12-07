@@ -449,7 +449,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
             }
 
-            return FilterEntitiesByReviewMode(nodes, questionnaire, isReviewMode);
+            IEnumerable<Identity> entityIdenties = nodes.Select(e => e.Identity);
+            return FilterEntitiesByReviewMode(entityIdenties, questionnaire, isReviewMode);
         }
 
         public IEnumerable<Identity> GetAllInterviewEntities(IStatefulInterview statefulInterview,
@@ -457,29 +458,31 @@ namespace WB.Enumerator.Native.WebInterview.Services
         {
             if (statefulInterview == null) return null;
 
-            IInterviewTreeNode section = statefulInterview.GetGroup(sectionIdentity);
+            var interviewIdentities = isReviewMode
+                ? statefulInterview.GetUnderlyingEntitiesForReviewRecursive(sectionIdentity)
+                : statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
 
-            IEnumerable<IInterviewTreeNode> entities = section.TreeToEnumerableDepthFirst(s => s.Children)
-                .Where(e => !questionnaire.IsPlainMode(e.Identity.Id));
+            IEnumerable<Identity> entityIdenties = interviewIdentities
+                .Where(e => !questionnaire.IsPlainMode(e.Id));
 
-            return FilterEntitiesByReviewMode(entities, questionnaire, isReviewMode);
+            return FilterEntitiesByReviewMode(entityIdenties, questionnaire, isReviewMode);
         }
 
-        private IEnumerable<Identity> FilterEntitiesByReviewMode(IEnumerable<IInterviewTreeNode> nodes,
+        private IEnumerable<Identity> FilterEntitiesByReviewMode(IEnumerable<Identity> entityIdenties,
             IQuestionnaire questionnaire, bool isReviewMode)
         {
-            var entities = nodes;
+            var entities = entityIdenties;
 
             if (!isReviewMode)
             {
                 entities = entities.Except(x =>
-                    questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id)
+                    questionnaire.IsQuestion(x.Id) && !questionnaire.IsInterviewierQuestion(x.Id)
                 );
             }
 
             return entities.Except(x =>
-                questionnaire.IsVariable(x.Identity.Id)
-            ).Select(e => e.Identity);
+                questionnaire.IsVariable(x.Id)
+            );
         }
 
         public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
@@ -27,17 +29,19 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var supervisorQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), RosterVector.Empty);
             var interviewerQuestionIdentity = Identity.Create(Guid.Parse("44444444444444444444444444444444"), RosterVector.Empty);
 
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g9,
+                Create.Entity.TextQuestion(hiddenQuestionIdentity.Id, scope: QuestionScope.Hidden),
+                Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
+                Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
+                Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
             var statefullInterview = Setup.StatefulInterview(
-                Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g9,
-                    Create.Entity.TextQuestion(hiddenQuestionIdentity.Id, scope: QuestionScope.Hidden),
-                    Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
-                    Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
-                    Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer)));
+                questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, null, true).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, plainQuestionnaire, true).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(5));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(Id.g9.FormatGuid()));
@@ -56,17 +60,19 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var supervisorQuestionIdentity = Identity.Create(Guid.Parse("33333333333333333333333333333333"), RosterVector.Empty);
             var interviewerQuestionIdentity = Identity.Create(Guid.Parse("44444444444444444444444444444444"), RosterVector.Empty);
 
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(hiddenQuestionIdentity.Id, scope: QuestionScope.Hidden),
+                Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
+                Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
+                Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
             var statefullInterview = Setup.StatefulInterview(
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.TextQuestion(hiddenQuestionIdentity.Id, scope: QuestionScope.Hidden),
-                    Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
-                    Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
-                    Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer)));
+                questionnaireDocument);
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 
             // act
-            var overviewNodes = service.GetOverview(statefullInterview, null, false).ToArray();
+            var overviewNodes = service.GetOverview(statefullInterview, plainQuestionnaire, false).ToArray();
             // assert
             Assert.That(overviewNodes.Length, Is.EqualTo(1));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(interviewerQuestionIdentity.ToString()));
@@ -108,6 +114,47 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             // assert
             Assert.That(overviewNode.Answer, Is.EqualTo($@"?interviewId={statefulInterview.Id}&questionId=11111111111111111111111111111111&filename=file.name"));
             Assert.That(overviewNode.ControlType, Is.EqualTo("image"));
+        }
+
+        [Test]
+        public void when_creating_display_plain_roster_on_overview()
+        {
+            // arrange
+            var sectionId     = Guid.Parse("11111111111111111111111111111111");
+            var groupId       = Guid.Parse("22222222222222222222222222222222");
+            var intQuestionId = Guid.Parse("33333333333333333333333333333333");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
+            {
+                Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                    {
+                        Create.Entity.FixedTitle(1, "1"),
+                        Create.Entity.FixedTitle(2, "2"),
+                    },
+                    children: new IComposite[]
+                    {
+                        Create.Entity.Group(groupId, children:new IComposite[]
+                        {
+                            Create.Entity.NumericIntegerQuestion(intQuestionId)
+                        })
+                    })
+            });
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var statefullInterview = Setup.StatefulInterview(
+                questionnaireDocument);
+
+            var service = CreateInterviewOverviewService();
+
+            // act
+            var overviewNodes = service.GetOverview(statefullInterview, plainQuestionnaire, true).ToArray();
+
+            // assert
+            Assert.That(overviewNodes.Length, Is.EqualTo(5));
+            Assert.That(overviewNodes[0].Id, Is.EqualTo(Create.Identity(sectionId).ToString()));
+            Assert.That(overviewNodes[1].Id, Is.EqualTo(Create.Identity(groupId, 1).ToString()));
+            Assert.That(overviewNodes[2].Id, Is.EqualTo(Create.Identity(intQuestionId, 1).ToString()));
+            Assert.That(overviewNodes[3].Id, Is.EqualTo(Create.Identity(groupId, 2).ToString()));
+            Assert.That(overviewNodes[4].Id, Is.EqualTo(Create.Identity(intQuestionId, 2).ToString()));
         }
 
         private static InterviewOverviewService CreateInterviewOverviewService()
