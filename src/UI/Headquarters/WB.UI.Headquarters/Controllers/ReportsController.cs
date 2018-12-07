@@ -251,7 +251,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.DevicesInterviewers)]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewersAndDevices()
+        public ActionResult InterviewersAndDevices(Guid? id)
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
@@ -262,7 +262,8 @@ namespace WB.UI.Headquarters.Controllers
                     controller = "ReportDataApi",
                     action = "DeviceInterviewers"
                 }),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers")
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
+                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
             });
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 {
@@ -65,6 +66,10 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         public long? DatabaseSizeInBytes { get; set; }
         public DateTime? ServerTimeAtTheBeginningOfSync { get; set; }
         public DateTime? TabletTimeAtTeBeginningOfSync { get; set; }
+
+        public bool DeviceHasWrongTime => Math.Abs((TabletTimeAtTeBeginningOfSync - ServerTimeAtTheBeginningOfSync)?.TotalMinutes ?? 0) > 
+                                            InterviewerIssuesConstants.MinutesForWrongTime;
+
         public string ConnectionType { get; set; }
         public string ConnectionSubType { get; set; }
         public int QuestionnairesReceived { get; set; }
