@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
-    public static class StatefullInterviewExtensions
+    public static class WebStatefullInterviewExtensions
     {
         public static IEnumerable<Link> GetBreadcrumbs(this IInterviewTreeNode nodeParents, IQuestionnaire questionnaire)
         {
@@ -52,6 +54,47 @@ namespace WB.UI.Headquarters.API.WebInterview
         public static Identity GetParentIdentity(this IInterviewTreeNode node, IQuestionnaire questionnaire)
         {
             return GetParent(node, questionnaire)?.Identity;
+        }
+
+        public static IEnumerable<Identity> GetGroupIdentities(IStatefulInterview statefulInterview, IQuestionnaire questionnaire, string sectionId, bool IsReviewMode)
+        {
+            var result = GetGroupEntities(statefulInterview, questionnaire, sectionId, IsReviewMode);
+            var ids = result.Select(x => x.Identity);
+            return ids;
+        }
+
+        public static IEnumerable<IInterviewTreeNode> GetGroupEntities(IStatefulInterview statefulInterview, IQuestionnaire questionnaire, string sectionId, bool IsReviewMode)
+        {
+            Identity sectionIdentity = Identity.Parse(sectionId);
+            if (statefulInterview == null) return null;
+            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
+
+            var groupEntities = statefulInterview.GetGroup(sectionIdentity).Children;
+
+            foreach (var treeNode in groupEntities)
+            {
+                if (questionnaire.IsPlainMode(treeNode.Identity.Id))
+                {
+                    nodes.AddRange(treeNode.Children);
+                }
+                else
+                {
+                    nodes.Add(treeNode);
+                }
+            }
+
+            IEnumerable<IInterviewTreeNode> result = nodes;
+
+            if (!IsReviewMode)
+            {
+                result = result.Except(x =>
+                    questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id)
+                ).ToList();
+            }
+
+            return result.Except(x =>
+                questionnaire.IsVariable(x.Identity.Id)
+            );
         }
     }
 }
