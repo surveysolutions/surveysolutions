@@ -8,6 +8,7 @@ using Android.Views;
 using CommonMark;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -98,17 +99,29 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 
                 if (!questionId.HasValue && !rosterId.HasValue) return;
 
-                var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value).ToArray();
+                Identity nearestInterviewEntity = null;
+                var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value)
+                    .Where(interview.IsEnabled).ToArray();
 
-                var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
-                    x.RosterVector.Identical(sourceEntity.Identity.RosterVector,
-                        sourceEntity.Identity.RosterVector.Length)).ToArray();
+                if(interviewEntities.Length == 1)
+                    nearestInterviewEntity = interviewEntities[0];
+                else
+                {
+                    var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
+                        x.RosterVector.Identical(sourceEntity.Identity.RosterVector,
+                            sourceEntity.Identity.RosterVector.Length)).ToArray();
 
-                var entitiesForSelection = entitiesInTheSameOrDeeperRoster.Any()
-                    ? entitiesInTheSameOrDeeperRoster
-                    : interviewEntities;
+                    if (entitiesInTheSameOrDeeperRoster.Any())
+                        nearestInterviewEntity = entitiesInTheSameOrDeeperRoster.FirstOrDefault();
+                    else
+                    {
+                        var sourceEntityParentRosterVectors = interview.GetParentGroups(sourceEntity.Identity).Select(x=>x.RosterVector).ToArray();
 
-                var nearestInterviewEntity = entitiesForSelection.OrderBy(x => x.RosterVector).FirstOrDefault();
+                        nearestInterviewEntity = interviewEntities.FirstOrDefault(x => x.Id == (questionId ?? rosterId.Value) && sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
+                                                 interviewEntities.FirstOrDefault();
+                    }
+                }
+
                 if (nearestInterviewEntity == null) return;
 
                 if (questionId.HasValue)
