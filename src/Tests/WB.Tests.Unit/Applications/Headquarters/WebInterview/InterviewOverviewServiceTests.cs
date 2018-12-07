@@ -112,10 +112,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
         private static InterviewOverviewService CreateInterviewOverviewService()
         {
-            var factory = new WebInterviewInterviewEntityFactory(Mock.Of<IMapper>(),
-                Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
-                Mock.Of<ISupervisorGroupStateCalculationStrategy>());
-            return new InterviewOverviewService(factory);
+            var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
+            return new InterviewOverviewService(webInterviewInterviewEntityFactory);
         }
     }
 }
