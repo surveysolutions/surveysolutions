@@ -112,7 +112,7 @@ namespace WB.UI.Designer.Api.Designer
         [Route("classifications/search")]
         public Task<ClassificationsSearchResult> Search([FromUri] SearchQueryModel model)
         {
-            return classificationsStorage.SearchAsync(model.Query, model.GroupId);
+            return classificationsStorage.SearchAsync(model.Query, model.GroupId, model.PrivateOnly);
         }
 
         [HttpGet]
@@ -176,5 +176,6 @@ namespace WB.UI.Designer.Api.Designer
     {
         public string Query { get; set; }
         public Guid? GroupId{ get; set; }
+        public bool PrivateOnly { get; set; } = false;
     }
 }

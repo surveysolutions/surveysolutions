@@ -1186,6 +1186,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My classifications.
+        /// </summary>
+        public static string MyClassifications {
+            get {
+                return ResourceManager.GetString("MyClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
         /// </summary>
         public static string NoPermissions {

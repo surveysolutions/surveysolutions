@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     {
         Task<IEnumerable<ClassificationGroup>> GetClassificationGroups();
         Task<IEnumerable<Classification>> GetClassifications(Guid? groupId);
-        Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId);
+        Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly);
         void Store(ClassificationEntity[] bdEntities);
         Task<List<Category>> GetCategories(Guid classificationId);
         Task CreateClassification(Classification classification);

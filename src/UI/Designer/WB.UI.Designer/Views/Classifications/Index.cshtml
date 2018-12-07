@@ -6,6 +6,75 @@
     IMembershipUserService userHelper = ViewBag.UserHelper;
 }
 
+@section Styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    @Styles.Render("~/classifications-css")
+}
+@section Scripts {
+    @Scripts.Render("~/list")
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+
+    <script type="text/javascript">
+        var ClassificationsConfig = {};
+        ClassificationsConfig.install = function(Vue, options) {
+            Object.defineProperty(Vue, '$config', { get: function() { return options; } });
+            Object.defineProperty(Vue.prototype, '$config', { get: function() { return options; } });
+        };
+
+        Vue.use(ClassificationsConfig,
+            {
+                isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin),
+                userId: '@userHelper.WebUser.UserId'
+            });
+    </script>
+
+    @Scripts.Render("~/classifications-js")
+}
+<div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
+<div class="classifications-wrapper">
+    <div class="classifications-block">
+        <div class="col-xs-3 column classification-groups">
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="breadcrumb">
+                        <li class="active">groups</li>
+                    </ul>
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(group, index) in groups" :key="group.id" :class="{'active': group.isActive }">
+                            <group-editor :group="group" :index="index"></group-editor>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn lighter-hover" @@click="addGroup()" v-if="isAdmin">Add group</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4 column classifications">
+            <div class="classification-list-wrapper">
+                <div class="scroller">
+                    <ul class="breadcrumb">
+                        <li class="active">{{activeGroup.title}}</li>
+                    </ul>
+                    <ul class="list-unstyled classification-list">
+                        <li v-for="(classification, index) in classifications" :key="classification.id" :class="{'active': classification.isActive }">
+                            <classification-editor :classification="classification" :index="index"></classification-editor>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn lighter-hover" @@click="addClassification()">Add classification</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5 column categories-groups">
+            <categories-editor></categories-editor>
+        </div>
+    </div>
+</div>
 
 @section Modal
 {
@@ -17,44 +86,44 @@
                     <li class="active">{{activeClassification.title}}</li>
                 </ul>
                 <div class="categories-holder">
-                    <div v-if="!isEditMode"  class="categories-holder-body readonly">
+                    <div v-if="!isEditMode" class="categories-holder-body readonly">
                         <div class="option-cell" v-for="(category, index) in categories" :key="category.id">
                             <span>{{category.title}} <span>...</span></span>
                             <span>{{category.value}}</span>
                         </div>
                     </div>
                     <div v-else class="categories-holder-body">
-                            <div class="options-editor" v-if="optionsMode">
-                                <div class="option-line" v-for="(category, index) in categories" :key="category.id">
-                                    <div class="input-group">
-                                        <div class="option-cell">
-                                            <input name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
-                                        </div>
-                                        <div class="option-cell">
-                                            <input name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
-                                        </div>
-                                        <div class="input-group-btn">
-                                            <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
-                                                <svg width="20" height="20">
-                                                    <polyline points="0,0 20,20"></polyline>
-                                                    <polyline points="20,0 0,20"></polyline>
-                                                </svg>
-                                            </button>
-                                        </div>
+                        <div class="options-editor" v-if="optionsMode">
+                            <div class="option-line" v-for="(category, index) in categories" :key="category.id">
+                                <div class="input-group">
+                                    <div class="option-cell">
+                                        <input name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
+                                    </div>
+                                    <div class="option-cell">
+                                        <input name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
+                                            <svg width="20" height="20">
+                                                <polyline points="0,0 20,20"></polyline>
+                                                <polyline points="20,0 0,20"></polyline>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div v-else class="form-group">
-                                <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
-                            </div>
                         </div>
-                        <div v-if="isEditMode" class="categories-holder-footer clearfix">
-                            <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
-                            <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
-                            <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
+                        <div v-else class="form-group">
+                            <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
                         </div>
                     </div>
+                    <div v-if="isEditMode" class="categories-holder-footer clearfix">
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @@click="addCategory">Add option</button>
+                        <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings" @@click="showStrings">Show strings</button>
+                        <button v-else type="button" class="btn btn-link pull-left" @@click="showList">Show list</button>
+                    </div>
                 </div>
+            </div>
             <div class="form-buttons-holder">
                 <button type="button" class="btn btn-success btn-lg" @@click="save">Save</button>
             </div>
@@ -96,75 +165,4 @@
         </div>
     </script>
 }
-
-@section Scripts {
-
-
-    @Scripts.Render("~/list")
-    <link href="~/Content/classifications.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuex"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
-    <script src=" https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
-   
-    <script src="~/Scripts/classifications/config.js"></script>
-    <script type="text/javascript">
-        Vue.use(ClassificationsConfig,
-            {
-                isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin),
-                userId: '@userHelper.WebUser.UserId'
-            });
-    </script>
-
-    <script src="~/Scripts/classifications/components/CategoriesEditor.js"></script>
-    <script src="~/Scripts/classifications/components/CategoryEditor.js"></script>
-    <script src="~/Scripts/classifications/components/ClassificationEditor.js"></script>
-    <script src="~/Scripts/classifications/components/GroupEditor.js"></script>
-    <script src="~/Scripts/classifications/routes.js"></script>
-    <script src="~/Scripts/classifications/store.js"></script>
-    <script src="~/Scripts/classifications/main.js"></script>
-}
-<div class="slider" v-if="isLoading"><div class="line"></div><div class="subline inc"></div><div class="subline dec"></div></div>
-<div class="classifications-wrapper">
-    <div class="classifications-block">
-        <div class="col-xs-3 column classification-groups">
-            <div class="classification-list-wrapper">
-                <div class="scroller">
-                    <ul class="breadcrumb">
-                        <li class="active">groups</li>
-                    </ul>
-                    <ul class="list-unstyled classification-list">
-                        <li v-for="(group, index) in groups" :key="group.id" :class="{'active': group.isActive }">
-                            <group-editor :group="group" :index="index"></group-editor>
-                        </li>
-                    </ul>
-                    <button type="button" class="btn lighter-hover" @@click="addGroup()" v-if="isAdmin">Add group</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-4 column classifications">
-            <div class="classification-list-wrapper">
-                <div class="scroller">
-                    <ul class="breadcrumb">
-                        <li class="active">{{activeGroup.title}}</li>
-                    </ul>
-                    <ul class="list-unstyled classification-list">
-                        <li v-for="(classification, index) in classifications" :key="classification.id" :class="{'active': classification.isActive }">
-                            <classification-editor :classification="classification" :index="index"></classification-editor>
-                        </li>
-                    </ul>
-                    <button type="button" class="btn lighter-hover" @@click="addClassification()">Add classification</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-5 column categories-groups">
-            <categories-editor></categories-editor>
-        </div>
-    </div>
-</div>
 
