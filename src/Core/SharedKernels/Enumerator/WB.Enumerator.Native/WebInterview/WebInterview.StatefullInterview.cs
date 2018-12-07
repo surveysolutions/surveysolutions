@@ -167,46 +167,6 @@ namespace WB.Enumerator.Native.WebInterview
             return entities;
         }
 
-        private IEnumerable<Identity> GetGroupIdentities(string sectionId)
-        {
-            Identity sectionIdentity = Identity.Parse(sectionId);
-            var statefulInterview = this.GetCallerInterview();
-            if (statefulInterview == null) return null;
-
-            IQuestionnaire questionnaire = this.GetCallerQuestionnaire();
-            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
-
-            var groupEntities = statefulInterview.GetGroup(sectionIdentity).Children;
-
-            foreach (var treeNode in groupEntities)
-            {
-                if (questionnaire.IsPlainMode(treeNode.Identity.Id))
-                {
-                    nodes.AddRange(treeNode.Children);
-                }
-                else
-                {
-                    nodes.Add(treeNode);
-                }
-            }
-
-            IEnumerable<IInterviewTreeNode> result = nodes;
-
-            if (!IsReviewMode)
-            {
-                result = result.Except(x =>
-                    questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id)
-                ).ToList();
-            }
-
-            result = result.Except(x =>
-                questionnaire.IsVariable(x.Identity.Id)
-            );
-
-            var ids = result.Select(x => x.Identity);
-            return ids;
-        }
-
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public SectionData GetFullSectionInfo(string sectionId)
         {
@@ -259,7 +219,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = GetParentForUI(statefulInterview, questionnaire, sectionIdentity);
+            var parent = GetParentWithoutPlainModeFlag(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -454,7 +414,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = GetParentForUI(interview, questionnaire, identity);
+                var parentId = GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
@@ -474,7 +434,7 @@ namespace WB.Enumerator.Native.WebInterview
             return completeInfo;
         }
 
-        private Identity GetParentForUI(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        private Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
             while (parent != null && questionnaire.IsPlainMode(parent.Id))
@@ -502,7 +462,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = GetParentForUI(interview, questionnaire, identity);
+                var parentId = GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),
