@@ -132,28 +132,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private static readonly MemoryCache QuestionnaireCache = new MemoryCache("QuestionnaireCache");
-
         private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
-            string cacheKey = $"ISD:{questionnaireId}${questionnaireVersion}";
-
-            lock (QuestionnaireCache)
-            {
-                var value = (QuestionnaireDocument)QuestionnaireCache.Get(cacheKey);
-                if (value != null)
-                    return value;
-
-                value = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
-
-                if (value != null)
-                    QuestionnaireCache.Add(cacheKey, value, new CacheItemPolicy
-                    {
-                        SlidingExpiration = TimeSpan.FromMinutes(10)
-                    });
-
-                return value;
-            }
+            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
