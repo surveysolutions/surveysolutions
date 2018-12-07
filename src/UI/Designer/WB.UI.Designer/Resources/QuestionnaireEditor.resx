@@ -1171,4 +1171,7 @@
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
     <value>Only the first {{count}} categories will be taken for question "{{trimmedTitle}}"?</value>
   </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>My classifications</value>
+  </data>
 </root>

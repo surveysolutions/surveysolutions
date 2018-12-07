@@ -5,6 +5,7 @@
 
             $scope.isReadOnlyForUser = isReadOnlyForUser;
             var allClassificationGroups = { id: null, title: $i18next.t('AllClassifications') };
+            var myClassificationGroups = { id: null, title: $i18next.t('MyClassifications'), privateOnly: true };
             $scope.groups = [];
             $scope.selectedGroup = allClassificationGroups;
             $scope.searchText = '';
@@ -23,6 +24,7 @@
                     })
                     .then(function(response) {
                         $scope.groups = response.data;
+                        $scope.groups.splice(0, 0, myClassificationGroups);
                         $scope.groups.splice(0, 0, allClassificationGroups);
                     });
             };
@@ -50,7 +52,8 @@
                             url: baseUrl + '/classifications/search',
                             params: {
                                 query: searchText,
-                                groupId: $scope.selectedGroup.id
+                                groupId: $scope.selectedGroup.id,
+                                privateOnly: $scope.selectedGroup.privateOnly || false
                             }
                         })
                         .then(function(response) {
