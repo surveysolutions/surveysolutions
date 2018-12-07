@@ -16,6 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class DeviceInterviewersReport : IDeviceInterviewersReport
     {
+        private const string ReportBySupervisors = "DeviceInterviewersReport";
+        private const string ReportByInterviewers = "DevicesInterviewersForSupervisor";
+
         private readonly UnitOfWorkConnectionSettings plainStorageSettings;
         private readonly IInterviewerVersionReader interviewerVersionReader;
 
@@ -40,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var targetInterviewerVersion = interviewerVersionReader.Version;
 
-            var sql = GetSqlTexts();
+            var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
             var fullQuery = string.Format(sql, order.ToSqlOrderBy());
 
             using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
@@ -53,10 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                     limit = input.PageSize,
                     offset = input.Page,
-                    filter = input.Filter + "%"
+                    filter = input.Filter + "%",
+                    supervisorId = input.SupervisorId
                 });
                 int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
-                var totalRow = await GetTotalLine(fullQuery, targetInterviewerVersion, input.Filter, connection);
+                var totalRow = await GetTotalLine(fullQuery, input.SupervisorId, targetInterviewerVersion, input.Filter, connection);
 
                 return new DeviceInterviewersReportView
                 {
@@ -79,13 +83,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = input.Filter + "%"
+                filter = input.Filter + "%",
+                supervisorId = input.SupervisorId
             });
 
             return row;
         }
 
-        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, int? targetInterviewerVersion, string filter, IDbConnection connection)
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, Guid? supervisorId, int? targetInterviewerVersion, string filter, IDbConnection connection)
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
@@ -104,7 +109,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = filter + "%"
+                filter = filter + "%",
+                supervisorId = supervisorId
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
@@ -112,19 +118,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return result;
         }
 
-        private static string DeviceInterviewersReportSql = null;
-
-        private string GetSqlTexts()
+        private string GetSqlTexts(string reportName)
         {
-            if (DeviceInterviewersReportSql != null) return DeviceInterviewersReportSql;
-
+            string result = null;
             var assembly = typeof(DeviceInterviewersReport).Assembly;
-            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
+            var resourceName = $"WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.{reportName}.sql";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                DeviceInterviewersReportSql = reader.ReadToEnd();
+                result = reader.ReadToEnd();
             }
-            return DeviceInterviewersReportSql;
+            return result;
         }
 
         public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
