@@ -872,12 +872,10 @@
     <comment>Создание интервью</comment>
   </data>
     <data name="Interview_Loading_Description" xml:space="preserve">
-    <value>Пожалуйста подождите</value>
-    <comment>Скоро интервью будет запущено</comment>
+    <value>Пожалуйста, подождите</value>
   </data>
-    <data name="Interview_Creating_Description" xml:space="preserve">
+  <data name="Interview_Creating_Description" xml:space="preserve">
     <value>Это может занять время, 
 не выходите из приложения</value>
-    <comment>Это может занять время, \rне выходите из приложения</comment>
   </data>
 </root>
