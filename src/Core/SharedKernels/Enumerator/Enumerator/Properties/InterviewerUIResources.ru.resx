@@ -872,7 +872,7 @@
     <comment>Создание интервью</comment>
   </data>
     <data name="Interview_Loading_Description" xml:space="preserve">
-    <value>Скоро интервью будет запущено</value>
+    <value>Пожалуйста подождите</value>
     <comment>Скоро интервью будет запущено</comment>
   </data>
     <data name="Interview_Creating_Description" xml:space="preserve">
