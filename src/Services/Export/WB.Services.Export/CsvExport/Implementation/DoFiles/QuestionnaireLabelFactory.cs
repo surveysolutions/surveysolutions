@@ -38,8 +38,8 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             }
             else
             {
-                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, "Roster instance identifier", null, levelVariableValueLabel, ExportValueType.String));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, "Roster instance identifier", null, levelVariableValueLabel, ExportValueType.NumericInt));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Interview key (identifier in XX-XX-XX-XX format)", null, Array.Empty<VariableValueLabel>(), ExportValueType.String));
             }
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
