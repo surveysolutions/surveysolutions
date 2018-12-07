@@ -10,7 +10,7 @@ export default {
         this.$refs.table.reload();
     },
     methods: {
-        renderCell: function(data, row, facet){
+        renderCell(data, row, facet) {
             const formatedNumber = this.formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") {
                 return `<span>${formatedNumber}</span>`;
@@ -25,7 +25,7 @@ export default {
             }
          
             return `<a href='${window.location}/${row.teamId}'>${formatedNumber}</a>`;
-        }        ,
+        },
         formatNumber(value) {
             if (value == null || value == undefined)
                 return value;
@@ -33,6 +33,9 @@ export default {
                navigator.language ||  
                navigator.userLanguage; 
             return value.toLocaleString(language);
+        },
+        hasIssue(data) {
+            return data.lowStorageCount || data.wrongDateOnTabletCount
         }
     },
     computed: {
@@ -55,8 +58,10 @@ export default {
                         orderable: true,
                         render: function(data, type, row) {
                             if(self.supervisorId) {
-                                const formatedNumber = self.formatNumber(data);
-                                return `<a href='${self.$config.model.interviewerProfileUrl}/${row.teamId}'>${formatedNumber}</a>`;
+                                const formatedNumber = self.formatNumber(data)
+                                const linkClass = self.hasIssue(row) ? "text-danger" : ""
+
+                                return `<a href='${self.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`;
                             }
 
                             return self.renderCell(data, row, null);
