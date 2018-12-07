@@ -66,6 +66,7 @@ namespace WB.UI.Interviewer.Activities
 
                 menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
                 menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
+                menu.LocalizeMenuItem(Resource.Id.menu_maps, InterviewerUIResources.MenuItem_Title_Maps);
                 menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
 
                 this.HideMenuItem(menu, Resource.Id.menu_login);
