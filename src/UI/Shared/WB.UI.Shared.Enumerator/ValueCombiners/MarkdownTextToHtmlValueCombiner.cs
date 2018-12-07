@@ -9,7 +9,10 @@ using CommonMark;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -75,6 +78,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
         private void NavigateToEntity(string entityVariable, IInterviewEntity sourceEntity)
         {
             if(sourceEntity.NavigationState == null) return;
+            if (string.IsNullOrEmpty(entityVariable)) return;
 
             entityVariable = entityVariable.ToLower();
 
@@ -86,66 +90,95 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                 sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForOverviewScreen());
             else
             {
-                var interview = ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>()
-                .Get(sourceEntity.InterviewId);
-
+                var interview = ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>().Get(sourceEntity.InterviewId);
                 if (interview == null) return;
 
                 var questionnaire = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
                     .GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
                 if (questionnaire == null) return;
 
-                var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
-                var rosterId = questionnaire.GetRosterIdByVariableName(entityVariable, true);
+                var attachmentId = questionnaire.GetAttachmentIdByName(entityVariable);
+                if (attachmentId.HasValue)
+                    NavigateToAttachment(sourceEntity, attachmentId, questionnaire);
+                else
+                    NavigateToQuestionOrRoster(entityVariable, sourceEntity, questionnaire, interview);
+            }
+        }
 
-                if (!questionId.HasValue && !rosterId.HasValue) return;
+        private static void NavigateToQuestionOrRoster(string entityVariable, IInterviewEntity sourceEntity,
+            IQuestionnaire questionnaire, IStatefulInterview interview)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
+            var rosterId = questionnaire.GetRosterIdByVariableName(entityVariable, true);
 
-                Identity nearestInterviewEntity = null;
-                var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value)
-                    .Where(interview.IsEnabled).ToArray();
+            if (!questionId.HasValue && !rosterId.HasValue) return;
 
-                if(interviewEntities.Length == 1)
-                    nearestInterviewEntity = interviewEntities[0];
+            Identity nearestInterviewEntity = null;
+            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value)
+                .Where(interview.IsEnabled).ToArray();
+
+            if (interviewEntities.Length == 1)
+                nearestInterviewEntity = interviewEntities[0];
+            else
+            {
+                var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
+                    x.RosterVector.Identical(sourceEntity.Identity.RosterVector,
+                        sourceEntity.Identity.RosterVector.Length)).ToArray();
+
+                if (entitiesInTheSameOrDeeperRoster.Any())
+                    nearestInterviewEntity = entitiesInTheSameOrDeeperRoster.FirstOrDefault();
                 else
                 {
-                    var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
-                        x.RosterVector.Identical(sourceEntity.Identity.RosterVector,
-                            sourceEntity.Identity.RosterVector.Length)).ToArray();
+                    var sourceEntityParentRosterVectors =
+                        interview.GetParentGroups(sourceEntity.Identity).Select(x => x.RosterVector).ToArray();
 
-                    if (entitiesInTheSameOrDeeperRoster.Any())
-                        nearestInterviewEntity = entitiesInTheSameOrDeeperRoster.FirstOrDefault();
-                    else
-                    {
-                        var sourceEntityParentRosterVectors = interview.GetParentGroups(sourceEntity.Identity).Select(x=>x.RosterVector).ToArray();
-
-                        nearestInterviewEntity = interviewEntities.FirstOrDefault(x => x.Id == (questionId ?? rosterId.Value) && sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
-                                                 interviewEntities.FirstOrDefault();
-                    }
+                    nearestInterviewEntity = interviewEntities.FirstOrDefault(x =>
+                                                 x.Id == (questionId ?? rosterId.Value) &&
+                                                 sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
+                                             interviewEntities.FirstOrDefault();
                 }
+            }
 
-                if (nearestInterviewEntity == null) return;
+            if (nearestInterviewEntity == null) return;
 
-                if (questionId.HasValue)
+            if (questionId.HasValue)
+            {
+                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
-                    sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
-                    {
-                        TargetScreen = questionnaire.IsPrefilled(questionId.Value)
-                                ? ScreenType.Identifying
-                                : ScreenType.Group,
-                        TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
-                        AnchoredElementIdentity = nearestInterviewEntity
-                    });
-                }
-                else if (rosterId.HasValue)
+                    TargetScreen = questionnaire.IsPrefilled(questionId.Value)
+                        ? ScreenType.Identifying
+                        : ScreenType.Group,
+                    TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
+                    AnchoredElementIdentity = nearestInterviewEntity
+                });
+            }
+            else if (rosterId.HasValue)
+            {
+                sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
-                    sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
-                    {
-                        TargetScreen = ScreenType.Group,
-                        TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
-                        AnchoredElementIdentity = nearestInterviewEntity
-                    });
-                }
+                    TargetScreen = ScreenType.Group,
+                    TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
+                    AnchoredElementIdentity = nearestInterviewEntity
+                });
+            }
+        }
+
+        private static void NavigateToAttachment(IInterviewEntity sourceEntity, Guid? attachmentId, IQuestionnaire questionnaire)
+        {
+            var attachmentContentStorage = ServiceLocator.Current.GetInstance<IAttachmentContentStorage>();
+            var attachment = questionnaire.GetAttachmentById(attachmentId.Value);
+
+            var attachmentContentMetadata = attachmentContentStorage.GetMetadata(attachment.ContentId);
+            if (!attachmentContentMetadata.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase)) return;
+
+            if (ServiceLocator.Current.GetInstance<IEnumeratorSettings>().IsSupportedWebViewer)
+                sourceEntity.NavigationState.NavigateTo(NavigationIdentity.CreateForPdfView(attachmentId.Value));
+            else
+            {
+                
+                var contentPath = attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+
+                ServiceLocator.Current.GetInstance<IExternalAppLauncher>().OpenPdf(contentPath);
             }
         }
 
