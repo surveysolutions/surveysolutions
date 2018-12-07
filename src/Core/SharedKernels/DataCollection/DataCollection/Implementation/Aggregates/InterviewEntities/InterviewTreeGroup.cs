@@ -83,35 +83,56 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             RosterManager rosterManager = this.Tree.GetRosterManager(rosterId);
 
-            List<Identity> expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
-            List<Identity> actualRosterIdentities =
-                this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToList();
+            var expectedRosterIdentities = rosterManager.CalcuateExpectedIdentities(this.Identity);
 
-            var rostersToRemove = actualRosterIdentities.Except(expectedRosterIdentities);
-            var rostersToAdd = expectedRosterIdentities.Except(actualRosterIdentities).ToList();
-            var rostersToUpdate = actualRosterIdentities.Except(rostersToRemove).ToList();
+            var actualRosterIdentities = this.children.Where(x => x.Identity.Id == rosterId).Select(x => x.Identity).ToHashSet();
+
+            HashSet<Identity> rostersToRemove = new HashSet<Identity>(actualRosterIdentities);
+
+            List<Identity> rostersToAdd = new List<Identity>();
+            List<Identity> rostersToUpdate = new List<Identity>();
+            Dictionary<Identity, int> rosterIndexMap = new Dictionary<Identity, int>();
+
+            for (var index = 0; index < expectedRosterIdentities.Count; index++)
+            {
+                var expectedRosterIdentity = expectedRosterIdentities[index];
+                rosterIndexMap[expectedRosterIdentity] = index;
+
+                if (actualRosterIdentities.Contains(expectedRosterIdentity))
+                {
+                    rostersToRemove.Remove(expectedRosterIdentity);
+                    rostersToUpdate.Add(expectedRosterIdentity);
+                }
+                else
+                {
+                    rostersToAdd.Add(expectedRosterIdentity);
+                }
+            }
 
             this.RemoveChilds(rostersToRemove.ToList());
-
+            
             if (rostersToAdd.Any() || rostersToUpdate.Any())
             {
                 InterviewTreeRoster roster = rosterManager.CreateRoster(rosterId);
+
+                int? baseIndex = null;
 
                 foreach (var rosterToAdd in rostersToAdd)
                 {
                     InterviewTreeRoster expectedRoster = (InterviewTreeRoster) roster.Clone();
 
-                    var sortIndex = expectedRosterIdentities.IndexOf(rosterToAdd);
+                    var sortIndex = rosterIndexMap[rosterToAdd]; //expectedRosterIdentities.IndexOf(rosterToAdd);
                     rosterManager.UpdateRoster(expectedRoster, this.Identity, rosterToAdd, sortIndex);
 
-                    int indexOfRosterInstance = this.IndexOfFirstRosterInstance(expectedRoster) + sortIndex;
-
+                    baseIndex = baseIndex ?? this.IndexOfFirstRosterInstance(expectedRoster);
+                    int indexOfRosterInstance = baseIndex.Value + sortIndex;
+                    
                     this.AddOrInsertChild(expectedRoster, indexOfRosterInstance);
                 }
 
                 foreach (var rosterToUpdate in rostersToUpdate)
                 {
-                    var sortIndex = expectedRosterIdentities.IndexOf(rosterToUpdate);
+                    var sortIndex = rosterIndexMap[rosterToUpdate];// expectedRosterIdentities.IndexOf(rosterToUpdate);
                     rosterManager.UpdateRoster(this.Tree.GetRoster(rosterToUpdate), this.Identity, rosterToUpdate, sortIndex);
                 }
             }
