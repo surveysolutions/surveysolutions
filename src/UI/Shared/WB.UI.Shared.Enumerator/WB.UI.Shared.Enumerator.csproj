@@ -349,7 +349,7 @@
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
     <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
-    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />

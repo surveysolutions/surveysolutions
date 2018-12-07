@@ -255,4 +255,10 @@
   <data name="QuestionnaireVariable_required" xml:space="preserve">
     <value>Questionnaire variable is required</value>
   </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
+  </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Variable names and roster IDs may be from 1 to 32 characters long</value>
+  </data>
 </root>

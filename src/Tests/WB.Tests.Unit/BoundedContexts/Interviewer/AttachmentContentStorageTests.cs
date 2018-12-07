@@ -118,5 +118,29 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             fs.Verify(f => f.IsFileExists(cachedFile), Times.Never);
         }
 
+
+        [Test]
+        public void should_get_video_files_on_fileSystem()
+        {
+            var fs = new Mock<IFileSystemAccessor>();
+            var contentId = Id.g10.FormatGuid();
+            var content = new byte[] { 1, 2, 3, 4 };
+
+            var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
+
+            var cachedFile = storage.GetFileCacheLocation(contentId);
+
+            fs.Setup(f => f.IsFileExists(cachedFile)).Returns(true);
+            fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
+
+            fs.Setup(f => f.ReadAllBytes(cachedFile, null, null)).Returns(content);
+            
+            storage.GetContent(contentId);
+
+            var contentFromStorage = storage.GetContent(contentId);
+
+            Assert.That(contentFromStorage, Is.EqualTo(content));
+        }
+
     }
 }

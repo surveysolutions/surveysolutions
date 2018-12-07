@@ -240,15 +240,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GroupStatus Status { get; set; }
 
         public Validity Validity { get; set; } = new Validity();
-        public AnswersStats Stats { get; set; }
-
-        public class AnswersStats
-        {
-            public int InvalidCount { get; set; }
-            public int AnsweredCount { get; set; }
-            public int SubSectionsCount { get; set; }
-            public bool HasUnanswered { get; set; }
-        }
     }
     
 
