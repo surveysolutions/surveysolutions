@@ -60,11 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                     }
                 }));
         }
-
-        [NUnit.Framework.Test]
-        public void should_set_validation_caption () => 
-            viewModel.Error.Caption.Should().Be(String.Empty);
-
+        
         [NUnit.Framework.Test] public void should_show_single_error_message () => 
             viewModel.Error.ValidationErrors.Count.Should().Be(1);
 
