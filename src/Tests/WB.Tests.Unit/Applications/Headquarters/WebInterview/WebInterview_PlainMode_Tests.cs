@@ -128,12 +128,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         {
             var statefulInterviewRepository = Setup.StatefulInterviewRepository(statefulInterview);
             var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
+            var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
 
             var webInterviewHub = new WebInterviewHub(statefulInterviewRepository, 
                 Mock.Of<ICommandService>(),
                 questionnaireStorage,
                 Mock.Of<IWebInterviewNotificationService>(),
-                Mock.Of<IWebInterviewInterviewEntityFactory>(),
+                webInterviewInterviewEntityFactory,
                 Mock.Of<IImageFileStorage>(),
                 Mock.Of<IInterviewBrokenPackagesService>(),
                 Mock.Of<IAudioFileStorage>(),

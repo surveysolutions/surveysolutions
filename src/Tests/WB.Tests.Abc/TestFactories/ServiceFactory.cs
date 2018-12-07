@@ -11,6 +11,7 @@ using NSubstitute;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Main.Core.Events;
 using NHibernate.Linq;
 using Quartz;
@@ -101,6 +102,8 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -960,6 +963,16 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+        }
+
+        public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(IMapper autoMapper = null,
+            IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy = null,
+            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy = null)
+        {
+            return new WebInterviewInterviewEntityFactory(
+                autoMapper ?? Mock.Of<IMapper>(),
+                enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
+                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>());
         }
     }
 
