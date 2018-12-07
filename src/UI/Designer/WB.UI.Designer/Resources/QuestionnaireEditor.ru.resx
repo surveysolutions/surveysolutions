@@ -1179,4 +1179,7 @@
   <data name="SearchClassification" xml:space="preserve">
     <value>Найти классификацию</value>
   </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Мои классификации</value>
+  </data>
 </root>

@@ -66,11 +66,11 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(classifications);
         }
 
-        public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId)
+        public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly)
         {
             var dbEntities = classificationsStorage.Query(_ =>
             {
-                var searchQuery = ApplySearchFilter(_, query, groupId);
+                var searchQuery = ApplySearchFilter(_, query, groupId, privateOnly);
 
                 var ids = searchQuery.Select(x => x.ClassificationId)
                     .Distinct()
@@ -106,10 +106,12 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                     Id = x.Id,
                     Title = x.Title,
                     Group = (groups.ContainsKey(x.Parent ?? Guid.Empty) ? groups[x.Parent ?? Guid.Empty] : null) ?? groups.Values.FirstOrDefault(),
-                    CategoriesCount = categoriesCounts.ContainsKey(x.Id) ? categoriesCounts[x.Id] : 0
+                    CategoriesCount = categoriesCounts.ContainsKey(x.Id) ? categoriesCounts[x.Id] : 0,
+                    UserId = x.UserId,
+                    Parent = x.Parent
                 }).ToList();
 
-            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId)
+            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId, privateOnly)
                 .Select(x => x.ClassificationId)
                 .Distinct()
                 .Count());
@@ -122,10 +124,13 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         }
 
         private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
-            string query, Guid? groupId)
+            string query, Guid? groupId, bool privateOnly)
         {
             var userId = membershipUserService.WebUser.UserId;
-            var searchQuery = entities.Where(x => x.UserId == null || x.UserId == userId);
+            var searchQuery = privateOnly
+                ? entities.Where(x => x.UserId == userId)
+                : entities.Where(x => x.UserId == null || x.UserId == userId);
+
             var lowercaseQuery = (query?? string.Empty).ToLower().Trim();
             if (!string.IsNullOrWhiteSpace(lowercaseQuery))
             {
@@ -270,7 +275,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 Title = x.Title,
                 Value = x.Value,
                 Type = ClassificationEntityType.Category,
-                Index = index
+                Index = index,
+                UserId = classification.UserId
             }).ToArray();
 
             var categoriesToDelete = categoriesInClassification.Where(x => categories.All(c => c.Id != x.Id)).ToList();
