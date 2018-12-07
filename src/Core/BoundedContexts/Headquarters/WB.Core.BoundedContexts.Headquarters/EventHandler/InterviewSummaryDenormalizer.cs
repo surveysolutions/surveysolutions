@@ -132,14 +132,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return interviewSummary;
         }
 
-        private readonly object lockObject = new object();
         private static readonly MemoryCache QuestionnaireCache = new MemoryCache("QuestionnaireCache");
 
         private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
-            string cacheKey = questionnaireId.ToString() + questionnaireVersion.ToString();
+            string cacheKey = $"ISD:{questionnaireId}${questionnaireVersion}";
 
-            lock (lockObject)
+            lock (QuestionnaireCache)
             {
                 var value = (QuestionnaireDocument)QuestionnaireCache.Get(cacheKey);
                 if (value != null)
