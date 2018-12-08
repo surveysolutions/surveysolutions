@@ -75,6 +75,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -2279,9 +2280,11 @@ namespace WB.Tests.Abc.TestFactories
                 Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
             };
 
-        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
+        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(
+            IServiceLocator serviceLocator,
+            IViewModelNavigationService viewModelNavigationService = null)
         {
-            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator);
+            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>());
         }
 
         public DashboardSubTitleViewModel DashboardSubTitleViewModel()
