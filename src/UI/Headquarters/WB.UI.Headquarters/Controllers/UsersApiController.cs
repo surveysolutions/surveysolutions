@@ -120,7 +120,7 @@ namespace WB.UI.Headquarters.Controllers
                     IsArchived = x.IsArchived,
                     EnumeratorVersion = x.EnumeratorVersion,
                     IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild,
-                    TrafficUsed = x.TrafficUsed.InKb()
+                    TrafficUsed = (x.TrafficUsed ?? (0L)).InKb()
                 })
             };
         }
