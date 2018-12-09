@@ -141,9 +141,6 @@
   <data name="Teams" xml:space="preserve">
     <value>Teams</value>
   </data>
-  <data name="TeamSize" xml:space="preserve">
-    <value>Total</value>
-  </data>
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>Wrong time on tablet</value>
   </data>

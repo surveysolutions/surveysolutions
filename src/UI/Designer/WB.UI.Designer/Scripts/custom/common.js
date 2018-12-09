@@ -123,7 +123,7 @@
     self.updateExportPdfStatus = function (translationId) {
         if (self.pdfStatusUrl === '') return { always: function() {} };
         return $.ajax({
-            url: self.pdfStatusUrl + '?timezoneOffsetMinutes=' + new Date().getTimezoneOffset() + '&translation=' + translationId,
+            url: self.pdfStatusUrl + '?translation=' + translationId,
             cache: false
         }).done(function (result) {
             if (result.Message != null) {

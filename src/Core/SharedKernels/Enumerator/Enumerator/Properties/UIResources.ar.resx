@@ -416,6 +416,9 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>انقر لاخذ الشيفرة</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>هل تريد بالتأكيد إزالة {0} صف (صفوف) من كل القوائم ذات الصلة؟</value>
+  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>انقر لتسجيل الوقت الحالي</value>
   </data>
