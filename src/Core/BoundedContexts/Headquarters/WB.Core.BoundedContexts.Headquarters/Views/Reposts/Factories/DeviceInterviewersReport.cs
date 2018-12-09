@@ -16,9 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class DeviceInterviewersReport : IDeviceInterviewersReport
     {
-        private const string ReportBySupervisors = "DeviceInterviewersReport";
-        private const string ReportByInterviewers = "DevicesInterviewersForSupervisor";
-
         private readonly UnitOfWorkConnectionSettings plainStorageSettings;
         private readonly IInterviewerVersionReader interviewerVersionReader;
 
@@ -43,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var targetInterviewerVersion = interviewerVersionReader.Version;
 
-            var sql = GetSqlTexts(input.SupervisorId.HasValue ? ReportByInterviewers : ReportBySupervisors);
+            var sql = GetSqlTexts();
             var fullQuery = string.Format(sql, order.ToSqlOrderBy());
 
             using (var connection = new NpgsqlConnection(plainStorageSettings.ConnectionString))
@@ -56,11 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                     limit = input.PageSize,
                     offset = input.Page,
-                    filter = input.Filter + "%",
-                    supervisorId = input.SupervisorId
+                    filter = input.Filter + "%"
                 });
                 int totalCount = await GetTotalRowsCountAsync(fullQuery, targetInterviewerVersion, input, connection);
-                var totalRow = await GetTotalLine(fullQuery, input.SupervisorId, targetInterviewerVersion, input.Filter, connection);
+                var totalRow = await GetTotalLine(fullQuery, targetInterviewerVersion, input.Filter, connection);
 
                 return new DeviceInterviewersReportView
                 {
@@ -83,22 +79,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = input.Filter + "%",
-                supervisorId = input.SupervisorId
+                filter = input.Filter + "%"
             });
 
             return row;
         }
 
-        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, Guid? supervisorId, int? targetInterviewerVersion, string filter, IDbConnection connection)
+        private async Task<DeviceInterviewersReportLine> GetTotalLine(string sql, int? targetInterviewerVersion, string filter, IDbConnection connection)
         {
             string summarySql = $@"SELECT SUM(report.NeverSynchedCount) as NeverSynchedCount,
                                           SUM(report.OutdatedCount) as OutdatedCount,
+                                          SUM(report.LowStorageCount) as LowStorageCount,
+                                          -- SUM(report.WrongDateOnTabletCount) as WrongDateOnTabletCount,
                                           SUM(report.OldAndroidCount) as OldAndroidCount,
                                           SUM(report.NeverUploadedCount) as NeverUploadedCount,
                                           SUM(report.ReassignedCount) as ReassignedCount,
-                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount,
-                                          SUM(report.TeamSize) as TeamSize
+                                          SUM(report.NoQuestionnairesCount) as NoQuestionnairesCount
                                    FROM ({sql}) as report";
 
             var row = await connection.QueryAsync<DeviceInterviewersReportLine>(summarySql, new
@@ -109,8 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 targetAndroidSdkVersion = InterviewerIssuesConstants.MinAndroidSdkVersion,
                 limit = (int?) null,
                 offset = 0,
-                filter = filter + "%",
-                supervisorId = supervisorId
+                filter = filter + "%"
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
@@ -118,17 +113,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return result;
         }
 
-        private string GetSqlTexts(string reportName)
+        private static string DeviceInterviewersReportSql = null;
+
+        private string GetSqlTexts()
         {
-            string result = null;
+            if (DeviceInterviewersReportSql != null) return DeviceInterviewersReportSql;
+
             var assembly = typeof(DeviceInterviewersReport).Assembly;
-            var resourceName = $"WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.{reportName}.sql";
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (Stream stream = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories.DeviceInterviewersReport.sql"))
             using (StreamReader reader = new StreamReader(stream))
             {
-                result = reader.ReadToEnd();
+                DeviceInterviewersReportSql = reader.ReadToEnd();
             }
-            return result;
+            return DeviceInterviewersReportSql;
         }
 
         public async Task<ReportView> GetReportAsync(DeviceByInterviewersReportInputModel input)
@@ -145,7 +142,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_NEVER_UPLOADED,
                     Report.COLUMN_TABLET_REASSIGNED,
                     Report.COLUMN_OLD_VERSION,
-                    Report.COLUMN_ANDROID_4_4_OR_LOWER
+                    Report.COLUMN_ANDROID_4_4_OR_LOWER,
+                    // Report.COLUMN_WRONG_TIME_ON_TABLET,
+                    Report.COLUMN_LESS_THAN_100MB_FREE_SPACE
                 },
                 Data = new[]
                 {
@@ -158,6 +157,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         view.TotalRow.ReassignedCount,
                         view.TotalRow.OutdatedCount,
                         view.TotalRow.OldAndroidCount,
+                        // view.TotalRow.WrongDateOnTabletCount,
+                        view.TotalRow.LowStorageCount
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
@@ -168,6 +169,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     x.ReassignedCount,
                     x.OutdatedCount,
                     x.OldAndroidCount,
+                    // x.WrongDateOnTabletCount,
+                    x.LowStorageCount
                 })).ToArray()
             };
         }
