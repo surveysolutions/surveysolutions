@@ -10,16 +10,10 @@ export default class ReportComponent {
     }
 
     get routes() {
-        return [
-            {
-                path: "/Reports/InterviewersAndDevices/:supervisorId",
-                component: InterviewersAndDevices
-            },
-            {
+        return [{
                 path: "/Reports/InterviewersAndDevices",
                 component: InterviewersAndDevices
-            },
-            {
+            }, {
                 path: "/Reports/StatusDuration",
                 component: StatusDuration
             }, {

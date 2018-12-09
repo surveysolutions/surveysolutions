@@ -302,8 +302,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\ProgressInterviewActivity.cs" />
-    <Compile Include="Activities\CreateInterviewActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />

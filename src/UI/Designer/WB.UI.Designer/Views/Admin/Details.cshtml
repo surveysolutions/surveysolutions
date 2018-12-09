@@ -57,10 +57,10 @@
                     <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
                 </td>
                 <td class="date">
-                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
+                    @listViewModel.LastEntryDate.FormatDate()
                 </td>
                 <td class="date">
-                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
+                    @listViewModel.CreationDate.FormatDate()
                 </td>
             </tr>
         }
@@ -89,10 +89,10 @@
                     <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
                 </td>
                 <td class="date">
-                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
+                    @listViewModel.LastEntryDate.FormatDate()
                 </td>
                 <td class="date">
-                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
+                    @listViewModel.CreationDate.FormatDate()
                 </td>
             </tr>
         }

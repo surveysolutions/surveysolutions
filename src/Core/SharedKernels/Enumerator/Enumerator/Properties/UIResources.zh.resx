@@ -414,6 +414,9 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>点击扫描条形码</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>您确定要从每个相关名单中删除{0}行吗？</value>
+  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>点击记录当前时间</value>
   </data>

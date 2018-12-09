@@ -966,15 +966,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creating interview.
-        /// </summary>
-        public static string Interview_Creating {
-            get {
-                return ResourceManager.GetString("Interview_Creating", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Loading.
         /// </summary>
         public static string Interview_Loading {

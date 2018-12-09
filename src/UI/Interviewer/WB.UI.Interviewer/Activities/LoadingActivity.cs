@@ -14,10 +14,20 @@ namespace WB.UI.Interviewer.Activities
         Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
         NoHistory = true,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        ConfigurationChanges =
+            Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class LoadingActivity : ProgressInterviewActivity<LoadingViewModel>
+    public class LoadingActivity : BaseActivity<LoadingViewModel>
     {
+        protected override int ViewResourceId => Resource.Layout.loading;
+
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            this.SetSupportActionBar(toolbar);
+        }
+        
         public override void OnBackPressed()
         {
             this.ViewModel.NavigateToDashboardCommand.Execute();
