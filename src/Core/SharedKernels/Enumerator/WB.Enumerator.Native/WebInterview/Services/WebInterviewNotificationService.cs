@@ -108,20 +108,21 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 foreach (var entity in entities)
                 {
-                    var parent = questionnarie.GetParentById(entity.Id);
-                    var parentVector = entity.RosterVector;
+                    var composite = questionnarie.Find<IComposite>(entity.Id);
+                    var parent = composite.GetParent();
+                    var entityRosterVector = entity.RosterVector;
                     var childIdentity = entity;
 
                     while (parent != null && parent.PublicKey != interview.QuestionnaireIdentity.QuestionnaireId)
                     {
-                        parentVector = parentVector.Shrink(entity.RosterVector.Length - 1);
-                        var parentIdentity = new Identity(parent.PublicKey, parentVector);
+                        entityRosterVector = entityRosterVector.Shrink(entity.RosterVector.Length - 1);
+                        var parentIdentity = new Identity(parent.PublicKey, entityRosterVector);
 
                         var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
                         entitiesToRefresh.Add((parentIdentityAsString, childIdentity));
 
                         childIdentity = parentIdentity;
-                        parent = questionnarie.GetParentById(parent.PublicKey);
+                        parent = parent.GetParent();
                     }
                 }
 

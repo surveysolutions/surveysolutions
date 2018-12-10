@@ -37,12 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Questionid = questionId,
                     });
 
+            savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
+
             var interviewSummaryEventHandler =
                 CreateInterviewSummaryEventHandlerFunctional(
-                    Create.Entity.QuestionnaireDocument(children:
+                    Create.Entity.QuestionnaireDocument(savedInterviewSummary.QuestionnaireId, children:
                         Create.Entity.Question(questionId: questionId, answers: Create.Entity.Answer(answerText, 1))));
 
-            var updatedInterviewSummary =
+             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
                     this.CreatePublishableEvent(new SingleOptionQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, 1)));
 
@@ -63,7 +65,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                         Questionid = questionId,
                     });
 
-            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.Entity.QuestionnaireDocument(children:
+            savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
+
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(Create.Entity.QuestionnaireDocument(savedInterviewSummary.QuestionnaireId, children:
                         Create.Entity.Question(questionId: questionId, answers: new[] { Create.Entity.Answer("1", 1), Create.Entity.Answer("3", 3), Create.Entity.Answer("8", 8) })));
             var updatedInterviewSummary =
                 interviewSummaryEventHandler.Update(savedInterviewSummary,
@@ -114,6 +118,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     {
                         Questionid = dateTimeQuestionId
                     });
+
+            savedInterviewSummary.QuestionnaireId = Guid.NewGuid();
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.DateTimeQuestion(questionId: dateQuestionId, isTimestamp: false),
