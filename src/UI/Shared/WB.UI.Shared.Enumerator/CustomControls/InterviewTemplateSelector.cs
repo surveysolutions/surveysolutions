@@ -57,7 +57,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
-            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner}
+            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
+            {typeof (PlainRosterTitleViewModel), Resource.Layout.interview_group_plain_roster_title}
         };
 
         public int GetItemViewType(object forItemObject)
