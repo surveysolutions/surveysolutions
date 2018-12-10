@@ -36,8 +36,9 @@
     <style name="LoadingProgressIndicator" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:focusable">false</item>
         <item name="android:layout_height">@dimen/LoadingProgressIndicator_height</item>
-        <item name="android:layout_width">@dimen/LoadingProgressIndicator_width</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
         <item name="android:layout_marginTop">@dimen/Loading_margin_between_titles</item>
         <item name="android:keepScreenOn">false</item>
         <item name="android:indeterminateDrawable">@drawable/progress_bar_loading_indeterminate</item>
