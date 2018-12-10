@@ -142,8 +142,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Mock.Of<IChangeStatusFactory>(),
                 Mock.Of<IInterviewFactory>(),
                 Mock.Of<IStatefullInterviewSearcher>(),
-                Mock.Of<IInterviewOverviewService>(),
-                Mock.Of<IUnitOfWork>());
+                Mock.Of<IInterviewOverviewService>());
 
             webInterviewHub.Context = Mock.Of<HubCallerContext>(h =>
                 h.QueryString == Mock.Of<INameValueCollection>(p => 
