@@ -974,6 +974,16 @@ namespace WB.Tests.Abc.TestFactories
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
                 supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>());
         }
+
+        public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
+        {
+            var result = new Mock<IInScopeExecutor>();
+
+            result.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>()))
+                .Callback((Action<IServiceLocator> act) => act(serviceLocatorMock));
+
+            return result.Object;
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions

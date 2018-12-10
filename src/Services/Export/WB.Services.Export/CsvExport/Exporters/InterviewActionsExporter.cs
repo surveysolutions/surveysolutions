@@ -61,7 +61,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             long totalProcessedCount = 0;
             var api = this.tenantApi.For(tenant);
 
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
+            var batchOptions = new BatchOptions { Max = batchSize };
+
+            foreach (var interviewsBatch in interviewIdsToExport.BatchInTime(batchOptions))
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIdsStrings = interviewsBatch.ToArray();
