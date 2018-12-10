@@ -717,4 +717,7 @@
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Questionnaire title shouldn't have two and more consecutive underscore characters.</value>
   </data>
+  <data name="WB0278_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Text contains a link to an unknown question, group, roster or pdf attachment.</value>
+  </data>
 </root>
