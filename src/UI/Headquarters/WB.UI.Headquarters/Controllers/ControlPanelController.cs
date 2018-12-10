@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using Main.Core.Entities.SubEntities;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -209,6 +211,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        [Localizable(false)]
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
         {
             if (!interviewId.HasValue)
@@ -217,18 +220,40 @@ namespace WB.UI.Headquarters.Controllers
             }
             else
             {
-                try
+                if (this.Request.Form["repeat"] != null)
                 {
-                    this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, Strings.ControlPanelController_RepeatLastInterviewStatus));
-                }
-                catch (Exception exception)
-                {
-                    Logger.Error(string.Format("Exception while repating last interview status: {0}", interviewId), exception);
-                    return this.View(model: string.Format("Error occurred on status repeating for interview {0}", interviewId.Value.FormatGuid()));
+                    try
+                    {
+                        this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, Strings.ControlPanelController_RepeatLastInterviewStatus));
+                    }
+                    catch (Exception exception)
+                    {
+                        Logger.Error($"Exception while repating last interview status: {interviewId}", exception);
+                        return this.View(model: $"Error occurred on status repeating for interview {interviewId.Value.FormatGuid()}");
+                    }
+
+                    return this.View(model:
+                        $"Successfully repeated status for interview {interviewId.Value.FormatGuid()}");
                 }
 
-                return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
+                if (this.Request.Form["refreshState"] != null)
+                {
+                    try
+                    {
+                        var fixer = this.serviceLocator.GetInstance<IInterviewStateFixer>();
+                        fixer.RefreshInterview(interviewId.Value);
+                    }
+                    catch (Exception exception)
+                    {
+                        Logger.Error($"Exception while refreshing interview state: {interviewId}", exception);
+                        return this.View(model: $"Exception while refreshing interview state {interviewId.Value.FormatGuid()}");
+                    }
+
+                    return this.View(model: $"Successfully refreshed interview status for {interviewId.Value.FormatGuid()}");
+                }
             }
+
+            return this.View();
         }
 
         #region interview ravalidationg
