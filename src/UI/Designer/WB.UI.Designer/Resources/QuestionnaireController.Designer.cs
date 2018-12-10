@@ -532,7 +532,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire Title.
+        ///   Looks up a localized string similar to Questionnaire title.
         /// </summary>
         public static string QuestionnaireTitle {
             get {
