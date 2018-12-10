@@ -135,7 +135,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void SetFlag(string questionId, bool hasFlag)
         {
             var statefulInterview = this.GetCallerInterview();
-            this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
+            InScopeExecutor.Current.ExecuteActionInScope(sl => 
+                sl.GetInstance<IInterviewFactory>().SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag)
+            );
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
