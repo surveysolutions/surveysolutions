@@ -85,7 +85,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 teamLeadId: supervisorId,
                 responsibleId: responsibleId);
             interview.SummaryId = interviewId.FormatGuid();
-            var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.Completed,
+            var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.FirstAnswerSet,
                 timestamp: dateTime.AddMinutes(1),
                 timeSpanWithPreviousStatus: TimeSpan.FromMinutes(1),
                 supervisorId: supervisorId);

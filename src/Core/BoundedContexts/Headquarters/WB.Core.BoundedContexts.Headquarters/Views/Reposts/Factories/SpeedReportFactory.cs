@@ -193,23 +193,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             InterviewExportedAction[] statuses)
         {
             var isCompleteStatusReport = statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed;
+            if (isCompleteStatusReport)
+                return QueryNonEmptyInterviewDurations(questionnaireId, questionnaireVersion, fromDate, to);
 
             if (questionnaireId != Guid.Empty)
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
-                if (isCompleteStatusReport)
-                {
-                    return this.interviewStatusesStorage.Query(_ =>
-                        _.Where(x => x.QuestionnaireIdentity == questionnaireIdentity)
-                            .SelectMany(x => x.InterviewCommentedStatuses
-                                .Where(c => c.Status == InterviewExportedAction.Completed &&
-                                            c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y => y.Timestamp))
-                            )
-                            .Where(ics =>
-                                ics.Timestamp >= fromDate &&
-                                ics.Timestamp < to &&
-                                ics.TimespanWithPreviousStatusLong.HasValue));
-                }
 
                 return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireIdentity == questionnaireIdentity)
@@ -222,17 +211,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                if (isCompleteStatusReport)
-                {
-                    return this.interviewStatusesStorage.Query(_ =>
-                        _.SelectMany(x => x.InterviewCommentedStatuses
-                               .Where(c => c.Status == InterviewExportedAction.Completed &&
-                                      c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y => y.Timestamp))
-                                )).Where(ics =>
-                        ics.Timestamp >= fromDate &&
-                        ics.Timestamp < to &&
-                        ics.TimespanWithPreviousStatusLong.HasValue);
-                }
                 return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.InterviewCommentedStatuses)
                         .Where(ics =>
@@ -280,7 +258,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 pageSize: input.PageSize,
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
-                query: (questionnaireId, questionnaireVersion, from, to) => this.QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
+                query: (questionnaireId, questionnaireVersion, from, to) =>
+                    this.QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
                 selectUser: u => u.SupervisorId.Value,
                 restrictUser: null,
                 userIdSelector: i => new UserAndTimestampAndTimespan
