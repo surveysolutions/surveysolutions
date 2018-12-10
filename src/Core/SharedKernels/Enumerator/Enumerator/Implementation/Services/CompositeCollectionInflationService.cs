@@ -30,48 +30,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var compositeQuestion = interviewEntityViewModel as ICompositeQuestion;
                 var rosterViewModel = interviewEntityViewModel as RosterViewModel;
+                var plainRosterViewModel = interviewEntityViewModel as PlainRosterViewModel;
                 if (compositeQuestion != null)
                 {
                     InflateOneQuestion(compositeQuestion, allVisibleGroupItems);
                 }
                 else if (rosterViewModel != null)
                 {
-                    if (rosterViewModel.IsPlainRoster)
-                    {
-                        CompositeCollection<ICompositeEntity> plainRoster = new CompositeCollection<ICompositeEntity>();
-
-                        void UpdateRosterInstances()
-                        {
-                            foreach (var rosterInstance in rosterViewModel.RosterInstances)
-                            {
-                                if (rosterInstance is ICompositeQuestion compositePlainQuestion)
-                                {
-                                    InflateOneQuestion(compositePlainQuestion, plainRoster);
-                                }
-                                else
-                                {
-                                    plainRoster.Add(rosterInstance);
-                                }
-                            }
-                        }
-
-                        UpdateRosterInstances();
-
-                        rosterViewModel.RosterInstances.CollectionChanged += async (sender, args) =>
-                        {
-                            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                            {
-                                plainRoster.Clear();
-                                UpdateRosterInstances();
-                            });
-                        };
-
-                        allVisibleGroupItems.AddCollection(plainRoster);
-                    }
-                    else
-                    {
-                        allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
-                    }
+                    allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
+                }
+                else if (plainRosterViewModel != null)
+                {
+                    allVisibleGroupItems.AddCollection(plainRosterViewModel.RosterInstances);
                 }
                 else
                 {
