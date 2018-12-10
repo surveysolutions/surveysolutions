@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.WebTester.Hub;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
@@ -44,7 +45,8 @@ namespace WB.UI.WebTester
             GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-
+            
+            InScopeExecutor.Init(new NoScopeInScopeExecutor(container));
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
             WebInterviewModule.Configure(app, WebTesterModule.HubPipelineModules);
             

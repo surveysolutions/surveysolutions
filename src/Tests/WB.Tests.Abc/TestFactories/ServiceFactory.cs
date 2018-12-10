@@ -101,6 +101,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -958,6 +959,16 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+        }
+
+        public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
+        {
+            var result = new Mock<IInScopeExecutor>();
+
+            result.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>()))
+                .Callback((Action<IServiceLocator> act) => act(serviceLocatorMock));
+
+            return result.Object;
         }
     }
 
