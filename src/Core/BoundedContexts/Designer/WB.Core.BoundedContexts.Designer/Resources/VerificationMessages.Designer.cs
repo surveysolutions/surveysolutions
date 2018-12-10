@@ -1860,5 +1860,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text contains a link to an unknown question, group, roster or pdf attachment..
+        /// </summary>
+        public static string WB0278_TextContainsLinkToUnknownQuestionOrGroup {
+            get {
+                return ResourceManager.GetString("WB0278_TextContainsLinkToUnknownQuestionOrGroup", resourceCulture);
+            }
+        }
     }
 }
