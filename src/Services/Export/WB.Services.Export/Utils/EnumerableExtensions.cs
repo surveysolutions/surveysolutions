@@ -110,7 +110,7 @@ namespace WB.Services.Export.Utils
                     {
                         var elapsed = sw.Elapsed.TotalSeconds;
                         var oldBatchSize = batchSize;
-                        logger.LogTrace("Took {elapsed:F} seconds to process {batchSize} items", sw.Elapsed.TotalSeconds, batchSize);
+                        logger?.LogTrace("Took {elapsed:F} seconds to process {batchSize} items", sw.Elapsed.TotalSeconds, batchSize);
 
                         // delta need just to make batch size to end up in some stable position, and don't change every iteration
                         if (elapsed - options.TargetSeconds > options.TargetSeconds * options.TargetDelta)
