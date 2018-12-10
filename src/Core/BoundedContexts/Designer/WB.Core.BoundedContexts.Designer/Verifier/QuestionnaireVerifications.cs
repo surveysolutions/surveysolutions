@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CommonMark;
+using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
@@ -47,6 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
+            ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
@@ -263,6 +266,63 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByMarkdownText(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var allAllowedVariableNames = questionnaire
+                .Find<IComposite>(x => x is IQuestion || (x is IGroup group && group.IsRoster))
+                .Select(x => x.VariableName.ToLower())
+                .Union(questionnaire.Attachments.Select(x => x.Name.ToLower()))
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToArray();
+
+            foreach (var staticTextOrQuestion in questionnaire.Find<IComposite>(x => x is IStaticText || x is IQuestion))
+            {
+                if (staticTextOrQuestion is IStaticText staticText && TextHasMarkdownLinkWithUnknownVariable(staticText.Text, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IQuestion question && TextHasMarkdownLinkWithUnknownVariable(question.QuestionText, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IValidatable entityWithValidation)
+                {
+                    for (int validationConditionIndex = 0; validationConditionIndex < entityWithValidation.ValidationConditions.Count; validationConditionIndex++)
+                    {
+                        var validationCondition = entityWithValidation.ValidationConditions[validationConditionIndex];
+
+                        if (TextHasMarkdownLinkWithUnknownVariable(validationCondition.Message, allAllowedVariableNames))
+                            foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion, validationConditionIndex));
+                    }
+                }
+            }
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
+            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0278_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+
+        private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+
+            var markdownDocument = CommonMarkConverter.Parse(text);
+
+            foreach (var node in markdownDocument.AsEnumerable())
+            {
+                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
+
+                if (Uri.IsWellFormedUriString(node.Inline.TargetUrl, UriKind.Absolute)) continue;
+
+                if (allAllowedVariableNames.Contains(node.Inline.TargetUrl.ToLower())) continue;
+
+                return true;
+            }
+
+            return false;
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInVariableLabel(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string variableLabel, MultiLanguageQuestionnaireDocument questionnaire)
