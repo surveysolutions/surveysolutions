@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -93,47 +94,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
             else
             {
-                List<Identity> shouldBeOnUiList = interviewRosterInstances
-                    .SelectMany(x => statefulInterview.GetUnderlyingInterviewerEntities(x))
-                    .ToList();
+                this.RosterInstances.SuspendCollectionChanged();
 
-                if (shouldBeOnUiList.Count == 0) this.RosterInstances.Clear();
-                else
+                foreach (var interviewRosterInstance in interviewRosterInstances)
                 {
-                    this.RosterInstances.SuspendCollectionChanged();
-
-                    for (int i = 0; i < shouldBeOnUiList.Count; i++)
-                    {
-                        var currentShouldBeOnUi = shouldBeOnUiList[i];
-                        if (i == RosterInstances.Count)
-                        {
-                            this.RosterInstances.Add(this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
-                        }
-                        else
-                        {
-                            var existingOnUi = this.RosterInstances[i].Identity;
-                            if (!currentShouldBeOnUi.Equals(existingOnUi))
-                            {
-                                this.RosterInstances[i].DisposeIfDisposable();
-                                this.RosterInstances.RemoveAt(i);
-                                this.RosterInstances.Insert(i, this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
-                            }
-                        }
-                    }
-
-                    if (this.RosterInstances.Count > shouldBeOnUiList.Count)
-                    {
-                        for (int i = 0; i < this.RosterInstances.Count - shouldBeOnUiList.Count; i++)
-                        {
-                            var index = this.RosterInstances.Count - 1 - i;
-                            var removedViewModel = this.RosterInstances[index];
-                            removedViewModel.DisposeIfDisposable();
-                            this.RosterInstances.Remove(removedViewModel);
-                        }
-                    }
-
-                    this.RosterInstances.ResumeCollectionChanged();
+                    
                 }
+
+                //List<Identity> shouldBeOnUiList = interviewRosterInstances
+                //    .SelectMany(x => statefulInterview.GetUnderlyingInterviewerEntities(x))
+                //    .ToList();
+
+                //if (shouldBeOnUiList.Count == 0) this.RosterInstances.Clear();
+                //else
+                //{
+                //    this.RosterInstances.SuspendCollectionChanged();
+
+                //    for (int i = 0; i < shouldBeOnUiList.Count; i++)
+                //    {
+                //        var currentShouldBeOnUi = shouldBeOnUiList[i];
+                //        if (i == RosterInstances.Count)
+                //        {
+                //            this.RosterInstances.Add(this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
+                //        }
+                //        else
+                //        {
+                //            var existingOnUi = this.RosterInstances[i].Identity;
+                //            if (!currentShouldBeOnUi.Equals(existingOnUi))
+                //            {
+                //                this.RosterInstances[i].DisposeIfDisposable();
+                //                this.RosterInstances.RemoveAt(i);
+                //                this.RosterInstances.Insert(i, this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
+                //            }
+                //        }
+                //    }
+
+                //    if (this.RosterInstances.Count > shouldBeOnUiList.Count)
+                //    {
+                //        for (int i = 0; i < this.RosterInstances.Count - shouldBeOnUiList.Count; i++)
+                //        {
+                //            var index = this.RosterInstances.Count - 1 - i;
+                //            var removedViewModel = this.RosterInstances[index];
+                //            removedViewModel.DisposeIfDisposable();
+                //            this.RosterInstances.Remove(removedViewModel);
+                //        }
+                //    }
+
+                //    this.RosterInstances.ResumeCollectionChanged();
+                //}
             }
         }
 

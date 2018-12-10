@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -8,5 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(
             IEnumerable<IInterviewEntityViewModel> newGroupItems);
+
+        void InflateOneQuestion(ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems);
     }
 }

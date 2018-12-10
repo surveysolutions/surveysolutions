@@ -57,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
+            PlainRoster = 600
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -90,8 +91,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
                 { InterviewEntityType.VariableModel, Load<VariableViewModel>},
                 { InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
-                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
                 { InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel> },
+                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
+                { InterviewEntityType.PlainRoster, Load<PlainRosterViewModel> },
             };
 
         private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
@@ -163,7 +165,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (questionnaire.HasGroup(entityId))
             {
-                return questionnaire.IsRosterGroup(entityId) ? InterviewEntityType.RosterModel : InterviewEntityType.GroupModel;
+                if (questionnaire.IsRosterGroup(entityId))
+                    return questionnaire.IsPlainMode(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
+                else
+                    return InterviewEntityType.GroupModel;
             }
 
             if (questionnaire.HasQuestion(entityId))
