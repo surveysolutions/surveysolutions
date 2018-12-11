@@ -13,81 +13,33 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public abstract partial class WebInterview : Hub, IErrorDetailsProvider
     {
-        //private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        //protected readonly ICommandService commandService;
-        //private readonly IQuestionnaireStorage questionnaireRepository;
-        //private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        //private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
+        private   IStatefulInterviewRepository statefulInterviewRepository => this.serviceLocator.GetInstance<IStatefulInterviewRepository>();
+        protected ICommandService commandService => this.serviceLocator.GetInstance<ICommandService>();
+        private   IQuestionnaireStorage questionnaireRepository => this.serviceLocator.GetInstance<IQuestionnaireStorage>();
+        private   IWebInterviewNotificationService webInterviewNotificationService => this.serviceLocator.GetInstance<IWebInterviewNotificationService>();
+        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.serviceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
+        private   IImageFileStorage imageFileStorage => this.serviceLocator.GetInstance<IImageFileStorage>();
+        private   IAudioFileStorage audioFileStorage => this.serviceLocator.GetInstance<IAudioFileStorage>();
+
+        protected IServiceLocator serviceLocator;
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
 
-        protected IStatefulInterview GetCallerInterview(IStatefulInterviewRepository statefulInterviewRepository)
-        {
-            return statefulInterviewRepository.Get(this.CallerInterviewId);
-        }
-
-        protected IStatefulInterview GetCallerInterview()
-        {
-            IStatefulInterview interview = null;
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-            });
-            return interview;
-        }
+        protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
         protected IQuestionnaire GetCallerQuestionnaire()
         {
-            IQuestionnaire questionnaire = null;
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                var interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-                if (interview == null)
-                    return;
-
-                questionnaire = sl.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            });
-
-            return questionnaire;
-        }
-
-        protected IQuestionnaire GetCallerQuestionnaire(IServiceLocator sl)
-        {
-            IQuestionnaire questionnaire = null;
-            
-            var interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-            if (interview == null)
-                return null;
-
-            questionnaire = sl.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            
-
-            return questionnaire;
+            var interview = this.GetCallerInterview();
+            return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
         }
 
         protected virtual bool IsReviewMode => false;
 
         protected virtual bool IsCurrentUserObserving => false;
 
-        public WebInterview(
-            //IStatefulInterviewRepository statefulInterviewRepository,
-            //ICommandService commandService,
-            //IQuestionnaireStorage questionnaireRepository,
-            //IWebInterviewNotificationService webInterviewNotificationService,
-            //IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage)
+        public WebInterview()
         {
-            //this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
-            //this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            //this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
-            //this.webInterviewNotificationService = webInterviewNotificationService ?? throw new ArgumentNullException(nameof(webInterviewNotificationService));
-            //this.interviewEntityFactory = interviewEntityFactory ?? throw new ArgumentNullException(nameof(interviewEntityFactory));
-            this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
-            this.imageFileStorage = imageFileStorage ?? throw new ArgumentNullException(nameof(imageFileStorage));
         }
 
         public void FillExceptionData(Dictionary<string, string> data)
@@ -122,6 +74,11 @@ namespace WB.Enumerator.Native.WebInterview
             }
 
             return e.Message;
+        }
+
+        public void SetServiceLocator(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
         }
     }
 }

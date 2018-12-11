@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public static Type[] HubPipelineModules => new[]
         {
+            typeof(HubLifetimePipelineModule),
             typeof(SignalrErrorHandler),
             typeof(HandlePauseEventPipelineModule),
             typeof(WebInterviewStateManager),

@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.Code;
 
@@ -24,43 +25,13 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
-        //private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
-        private readonly IAuthorizedUser authorizedUser;
-        //private readonly IChangeStatusFactory changeStatusFactory;
-        //private readonly IInterviewFactory interviewFactory;
-        //private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
-        private readonly IInterviewOverviewService overviewService;
+        private IInterviewBrokenPackagesService interviewBrokenPackagesService => this.serviceLocator.GetInstance<IInterviewBrokenPackagesService>();
+        private IAuthorizedUser authorizedUser => this.serviceLocator.GetInstance<IAuthorizedUser>();
+        private IChangeStatusFactory changeStatusFactory => this.serviceLocator.GetInstance<IChangeStatusFactory>();
+        private IInterviewFactory interviewFactory => this.serviceLocator.GetInstance<IInterviewFactory>();
+        private IStatefullInterviewSearcher statefullInterviewSearcher => this.serviceLocator.GetInstance<IStatefullInterviewSearcher>();
+        private IInterviewOverviewService overviewService => this.serviceLocator.GetInstance<IInterviewOverviewService>();
         
-        public WebInterviewHub(
-            //IStatefulInterviewRepository statefulInterviewRepository,
-            //ICommandService commandService,
-            //IQuestionnaireStorage questionnaireRepository,
-            //IWebInterviewNotificationService webInterviewNotificationService,
-            //IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            //IInterviewBrokenPackagesService interviewBrokenPackagesService,
-            IAudioFileStorage audioFileStorage,
-            IAuthorizedUser authorizedUser,
-            //IChangeStatusFactory changeStatusFactory,
-            //IInterviewFactory interviewFactory,
-            //IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewOverviewService overviewService) : base(
-            //statefulInterviewRepository,
-            //commandService,
-            //questionnaireRepository,
-            //webInterviewNotificationService,
-            //interviewEntityFactory,
-            imageFileStorage,
-            audioFileStorage)
-        {
-            //this.interviewBrokenPackagesService = interviewBrokenPackagesService;
-            this.authorizedUser = authorizedUser;
-            //this.changeStatusFactory = changeStatusFactory;
-            //this.interviewFactory = interviewFactory;
-            //this.statefullInterviewSearcher = statefullInterviewSearcher;
-            this.overviewService = overviewService;
-        }
-
         protected override bool IsReviewMode =>
             this.authorizedUser.CanConductInterviewReview() &&
             this.Context.QueryString[@"review"].ToBool(false);
@@ -83,7 +54,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment);
-            InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+            this.commandService.Execute(command);
         }
 
         protected override bool IsCurrentUserObserving => this.authorizedUser.IsObserving;
@@ -91,13 +62,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public SearchResults Search(FilterOption[] flags, int skip = 0, int limit = 50)
         {
-            SearchResults result = null;
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                var statefulInterview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-                result = sl.GetInstance<IStatefullInterviewSearcher>().Search(statefulInterview, flags, skip, limit);
-            });
-
+            var interview = GetCallerInterview();
+            var result = this.statefullInterviewSearcher.Search(interview, flags, skip, limit);
             return result;
         }
 
@@ -133,41 +99,22 @@ namespace WB.UI.Headquarters.API.WebInterview
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public List<CommentedStatusHistoryView> GetStatusesHistory()
         {
-            List<CommentedStatusHistoryView> flags = new List<CommentedStatusHistoryView>();
-
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                var statefulInterview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-                flags = sl.GetInstance<IChangeStatusFactory>().GetFilteredStatuses(statefulInterview.Id);
-            });
-
-            return flags;
+            var statefulInterview = this.GetCallerInterview();
+            return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
         }
 
         [ObserverNotAllowed]
         public void SetFlag(string questionId, bool hasFlag)
         {
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-                {
-                    var statefulInterview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
-                    sl.GetInstance<IInterviewFactory>().SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
-                }
-            );
+            var statefulInterview = this.GetCallerInterview();
+            this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
         public IEnumerable<string> GetFlags()
         {
             var statefulInterview = this.GetCallerInterview();
-            List<string> flags = new List<string>();
-
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                flags = sl.GetInstance<IInterviewFactory>().GetFlaggedQuestionIds(statefulInterview.Id)
-                    .Select(x => x.ToString()).ToList();
-            });
-
-            return flags;
+            return this.interviewFactory.GetFlaggedQuestionIds(statefulInterview.Id).Select(x => x.ToString());
         }
 
         [ObserverNotAllowed]
@@ -177,12 +124,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
 
-                InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                this.commandService.Execute(command);
             }
             else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
                 var command = new HqApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                this.commandService.Execute(command);
             }
         }
 
@@ -194,12 +141,12 @@ namespace WB.UI.Headquarters.API.WebInterview
                 if (assignTo.HasValue)
                 {
                     var command = new RejectInterviewToInterviewerCommand(this.CommandResponsibleId, this.GetCallerInterview().Id, assignTo.Value, comment);
-                    InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                    this.commandService.Execute(command);
                 }
                 else
                 {
                     var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                    InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                    this.commandService.Execute(command);
                 }
             }
             if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
@@ -207,25 +154,20 @@ namespace WB.UI.Headquarters.API.WebInterview
                 if (this.GetCallerInterview().Status == InterviewStatus.ApprovedByHeadquarters)
                 {
                     var command = new UnapproveByHeadquartersCommand(GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                    InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                    this.commandService.Execute(command);
                 }
                 else
                 {
                     var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                    InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+                    this.commandService.Execute(command);
                 }
             }
         }
         
         public override InterviewInfo GetInterviewDetails()
         {
-            InterviewInfo interviewDetails = base.GetInterviewDetails(); ;
-
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                interviewDetails.DoesBrokenPackageExist = sl.GetInstance<IInterviewBrokenPackagesService>().IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
-            });
-            
+            var interviewDetails = base.GetInterviewDetails();
+            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
             return interviewDetails;
         }
         
