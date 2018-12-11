@@ -78,11 +78,20 @@ namespace WB.WebInterview.Stress
                 await this._apiMaster.InitAsync(_proxy);
 
                 _restartWatcher.Restart();
-                await QueryAsync().ConfigureAwait(false);
-
-                _sharedInterviews.Remove(this.InterviewId);
-                _client.Stop();
-                _client.Dispose();
+                try
+                {
+                    await QueryAsync().ConfigureAwait(false);
+                }
+                catch
+                {
+                    Log("Restarting");
+                }
+                finally
+                {
+                    _sharedInterviews.Remove(this.InterviewId);
+                    _client.Stop();
+                    _client.Dispose();
+                }
             }
         }
 
