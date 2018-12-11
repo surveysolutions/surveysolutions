@@ -274,8 +274,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var allAllowedVariableNames = questionnaire
                 .Find<IComposite>(x => x is IQuestion || (x is IGroup group && group.IsRoster))
-                .Select(x => x.VariableName.ToLower())
-                .Union(questionnaire.Attachments.Select(x => x.Name.ToLower()))
+                .Select(x => x.VariableName?.ToLower())
+                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
                 .Where(x => !string.IsNullOrEmpty(x))
                 .ToArray();
 
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
-            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0278_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+            => QuestionnaireVerificationMessage.Error("WB0278", VerificationMessages.WB0278_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
 
         private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
         {
