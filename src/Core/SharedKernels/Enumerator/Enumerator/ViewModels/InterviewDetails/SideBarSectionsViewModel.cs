@@ -165,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            if(interview == null) yield break;
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 interview.GetGroup(identity)?.GetEnabledSubGroups().ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x));
             }
 
-            foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters())
+            foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters().Where(x => !questionnaire.IsPlainMode(x.Identity.Id)))
             {
                 if (sectionOrSubSection is InterviewTreeSection)
                     yield return sectionOrSubSection.Identity;
