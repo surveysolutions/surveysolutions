@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -71,10 +72,18 @@ namespace WB.Enumerator.Native.WebInterview
 
         public GroupStatus GetInterviewStatus()
         {
-            var interview = this.GetCallerInterview();
-            if (interview == null) return GroupStatus.StartedInvalid;
+            GroupStatus status = GroupStatus.StartedInvalid;
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
+                var interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+                
+                if (interview == null)
+                    return;
 
-            return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode);
+                status = sl.GetInstance<IWebInterviewInterviewEntityFactory>().GetInterviewSimpleStatus(interview, IsReviewMode);
+            });
+
+            return status;
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -151,24 +160,34 @@ namespace WB.Enumerator.Native.WebInterview
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
 
-            Identity sectionIdentity = Identity.Parse(sectionId);
-            var statefulInterview = this.GetCallerInterview();
-            if (statefulInterview == null) return null;
 
-            var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) : 
-                                     statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
-            var questionarie = this.GetCallerQuestionnaire();
+            InterviewEntityWithType[] result = null;
 
-            var entities = ids
-                .Select(x => new InterviewEntityWithType
-                {
-                    Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionarie).ToString()
-                })
-                .Union(ActionButtonsDefinition)
-                .ToArray();
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
 
-            return entities;
+                Identity sectionIdentity = Identity.Parse(sectionId);
+                var statefulInterview = this.GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+                if (statefulInterview == null)
+                    return;
+
+                var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) :
+                    statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
+                var questionnarie = this.GetCallerQuestionnaire(sl);
+
+                result = ids
+                    .Select(x => new InterviewEntityWithType
+                    {
+                        Identity = x.ToString(),
+                        EntityType = this.GetEntityType(x.Id, questionnarie).ToString()
+                    })
+                    .Union(ActionButtonsDefinition)
+                    .ToArray();
+            });
+
+
+
+            return result;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
@@ -187,74 +206,89 @@ namespace WB.Enumerator.Native.WebInterview
 
         public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
-            var statefulInterview = this.GetCallerInterview();
-            if (statefulInterview == null) return null;
+            ButtonState buttonState = null;
 
-            ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
             {
-                button.Id = id;
-                button.Target = target.Identity.ToString();
-                button.Status = button.Type == ButtonType.Complete
-                    ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
-                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview);
+                var statefulInterview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
 
-                this.interviewEntityFactory.ApplyValidity(button.Validity, target, statefulInterview, IsReviewMode);
+                if (statefulInterview == null)
+                    return;
 
-                return button;
-            }
+                var interviewEntityFactory = sl.GetInstance<IWebInterviewInterviewEntityFactory>();
 
-            var sectionId = CallerSectionid;
-            var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
-            
-            var sections = callerQuestionnaire.GetAllSections()
-                .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
-                .ToArray();
 
-            if (sectionId == null)
-            {
-                var firstSection = statefulInterview.GetGroup(Identity.Create(sections[0], RosterVector.Empty));
-
-                return NewButtonState(new ButtonState
+                ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
                 {
-                    Title = firstSection.Title.Text,
-                    Type = ButtonType.Start
-                }, firstSection);
-            }
+                    button.Id = id;
+                    button.Target = target.Identity.ToString();
+                    button.Status = button.Type == ButtonType.Complete
+                        ? interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
+                        : interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview);
 
-            Identity sectionIdentity = Identity.Parse(sectionId);
+                    interviewEntityFactory.ApplyValidity(button.Validity, target, statefulInterview, IsReviewMode);
 
-            var parent = statefulInterview.GetParentGroup(sectionIdentity);
-            if (parent != null)
-            {
-                var parentGroup = statefulInterview.GetGroup(parent);
-                var parentRoster = parentGroup as InterviewTreeRoster;
+                    return button;
+                }
 
-                return NewButtonState(new ButtonState
+                var sectionId = CallerSectionid;
+                var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
+
+                var sections = callerQuestionnaire.GetAllSections()
+                    .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
+                    .ToArray();
+
+                if (sectionId == null)
                 {
-                    Title = parentGroup.Title.Text,
-                    RosterTitle = parentRoster?.RosterTitle,
-                    Type = ButtonType.Parent
-                }, parentGroup);
-            }
+                    var firstSection = statefulInterview.GetGroup(Identity.Create(sections[0], RosterVector.Empty));
 
-            var currentSectionIdx = Array.IndexOf(sections, sectionIdentity.Id);
+                    buttonState = NewButtonState(new ButtonState
+                    {
+                        Title = firstSection.Title.Text,
+                        Type = ButtonType.Start
+                    }, firstSection);
+                    return;
+                }
 
-            if (currentSectionIdx + 1 >= sections.Length)
-            {
-                return NewButtonState(new ButtonState
+                Identity sectionIdentity = Identity.Parse(sectionId);
+
+                var parent = statefulInterview.GetParentGroup(sectionIdentity);
+                if (parent != null)
                 {
-                    Title = Resources.WebInterview.CompleteInterview,
-                    Type = ButtonType.Complete
-                }, statefulInterview.GetGroup(sectionIdentity));
-            }
+                    var parentGroup = statefulInterview.GetGroup(parent);
+                    var parentRoster = parentGroup as InterviewTreeRoster;
 
-            var nextSectionId = Identity.Create(sections[currentSectionIdx + 1], RosterVector.Empty);
+                    buttonState = NewButtonState(new ButtonState
+                    {
+                        Title = parentGroup.Title.Text,
+                        RosterTitle = parentRoster?.RosterTitle,
+                        Type = ButtonType.Parent
+                    }, parentGroup);
+                    return;
+                }
 
-            return NewButtonState(new ButtonState
-            {
-                Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
-                Type = ButtonType.Next
-            }, statefulInterview.GetGroup(nextSectionId));
+                var currentSectionIdx = Array.IndexOf(sections, sectionIdentity.Id);
+
+                if (currentSectionIdx + 1 >= sections.Length)
+                {
+                    buttonState = NewButtonState(new ButtonState
+                    {
+                        Title = Resources.WebInterview.CompleteInterview,
+                        Type = ButtonType.Complete
+                    }, statefulInterview.GetGroup(sectionIdentity));
+                }
+
+                var nextSectionId = Identity.Create(sections[currentSectionIdx + 1], RosterVector.Empty);
+
+                buttonState = NewButtonState(new ButtonState
+                {
+                    Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
+                    Type = ButtonType.Next
+                }, statefulInterview.GetGroup(nextSectionId));
+
+            });
+
+            return buttonState;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
@@ -324,37 +358,56 @@ namespace WB.Enumerator.Native.WebInterview
 
             var currentTreeGroup = statefulInterview.GetGroup(groupId);
             var currentTreeGroupAsRoster = currentTreeGroup as InterviewTreeRoster;
-
-            if (currentTreeGroup == null)
+            
+            BreadcrumbInfo info = null;
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
             {
-                this.webInterviewNotificationService.ReloadInterview(Guid.Parse(CallerInterviewId));
-            }
+                if (currentTreeGroup == null)
+                {
+                    sl.GetInstance<IWebInterviewNotificationService>().ReloadInterview(Guid.Parse(CallerInterviewId));
+                }
 
-            var info = new BreadcrumbInfo
-            {
-                Title = currentTreeGroup?.Title.Text,
-                RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
-                Breadcrumbs = breadCrumbs.ToArray(),
-                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode, statefulInterview),
-                IsRoster = currentTreeGroupAsRoster != null
-            };
+                var interviewEntityFactory = sl.GetInstance<IWebInterviewInterviewEntityFactory>();
 
-            this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, statefulInterview, IsReviewMode);
+                info = new BreadcrumbInfo
+                {
+                    Title = currentTreeGroup?.Title.Text,
+                    RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
+                    Breadcrumbs = breadCrumbs.ToArray(),
+                    Status = interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode,
+                        statefulInterview),
+                    IsRoster = currentTreeGroupAsRoster != null
+                };
 
+                interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, statefulInterview, IsReviewMode);
+            });
+            
             return info;
         }
 
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
         {
-            var callerInterview = this.GetCallerInterview();
-            if (callerInterview == null) return null;
+            InterviewEntity[] result = null;
 
-            var questionnaire = this.GetCallerQuestionnaire();
-            return ids.Select(id => 
-                id == @"NavigationButton"
-                    ? this.GetNavigationButtonState(id, questionnaire)
-                    : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
-                .ToArray();
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
+                var callerInterview = this.GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+                if (callerInterview == null) return;
+
+                var questionnaire = this.GetCallerQuestionnaire(sl);
+                if (questionnaire == null) return;
+
+                result = ids.Select(id =>
+                        id == @"NavigationButton"
+                            ? this.GetNavigationButtonState(id, questionnaire)
+                            : sl.GetInstance<IWebInterviewInterviewEntityFactory>().GetEntityDetails(id,
+                                callerInterview, 
+                                questionnaire,
+                                IsReviewMode))
+                    .ToArray();
+            });
+
+            return result;
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
@@ -374,10 +427,17 @@ namespace WB.Enumerator.Native.WebInterview
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = CallerSectionid;
-            var interview = this.GetCallerInterview();
-            if (interview == null) return null;
+            Sidebar sidebar = null;
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
+                var callerInterview = this.GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+                if (callerInterview == null) return;
 
-            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
+                sidebar = sl.GetInstance<IWebInterviewInterviewEntityFactory>().GetSidebarChildSectionsOf(sectionId, callerInterview, parentIds, IsReviewMode);
+
+            });
+
+            return sidebar;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
