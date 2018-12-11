@@ -12,25 +12,7 @@ namespace WB.UI.WebTester.Hub
     [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
-        private readonly IEvictionNotifier evictionNotify;
-
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService,
-            IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage,
-            IEvictionNotifier evictionNotify) : base(statefulInterviewRepository,
-            commandService,
-            questionnaireRepository,
-            webInterviewNotificationService,
-            interviewEntityFactory,
-            imageFileStorage,
-            audioFileStorage)
-        {
-            this.evictionNotify = evictionNotify ?? throw new ArgumentException(nameof(evictionNotify));
-        }
+        private IEvictionNotifier evictionNotify => this.ServiceLocator.GetInstance<IEvictionNotifier>();
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
