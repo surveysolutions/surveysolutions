@@ -9,7 +9,5 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         CompositeCollection<ICompositeEntity> GetInflatedCompositeCollection(
             IEnumerable<IInterviewEntityViewModel> newGroupItems);
-
-        void InflateOneQuestion(ICompositeQuestion compositeQuestion, CompositeCollection<ICompositeEntity> allVisibleGroupItems);
     }
 }

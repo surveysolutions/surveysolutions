@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using NUnit.Framework;
@@ -10,6 +11,45 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
     [TestOf(typeof (CompositeCollection<>))]
     public class CompositeCollectionTests
     {
+        [Test]
+        public void when_batch_actions_occur_in_the_nested_collection_Should_raise_appropriate_events()
+        {
+            var collection1 = new CovariantObservableCollection<int>
+            {
+                1, 2
+            };
+            var collection2 = new CovariantObservableCollection<int>
+            {
+                3, 4
+            };
+
+            var compositeCollection = new CompositeCollection<int>();
+            compositeCollection.AddCollection(collection1);
+            compositeCollection.AddCollection(collection2);
+
+            List<PropertyChangedEventArgs> raisedPropertyChanged = new List<PropertyChangedEventArgs>();
+            List<NotifyCollectionChangedEventArgs> raisedCollectionChanged = new List<NotifyCollectionChangedEventArgs>();
+
+            compositeCollection.PropertyChanged += (sender, args) => raisedPropertyChanged.Add(args);
+            compositeCollection.CollectionChanged += (sender, args) => raisedCollectionChanged.Add(args);
+
+            // Act
+            collection1.SuspendCollectionChanged();
+            collection1.Clear();
+            collection1.Add(1);
+            collection1.Add(2);
+            collection1.Add(3);
+            collection1.ResumeCollectionChanged();
+
+            // Assert
+            Assert.That(raisedPropertyChanged, Has.Count.EqualTo(1), "Single Count property changed event should be raised");
+            Assert.That(raisedPropertyChanged[0],  Has.Property(nameof(PropertyChangedEventArgs.PropertyName)).EqualTo("Count"));
+            Assert.That(compositeCollection,  Has.Count.EqualTo(5));
+
+            Assert.That(raisedCollectionChanged, Has.Count.EqualTo(1));
+            Assert.That(raisedCollectionChanged[0], Has.Property(nameof(NotifyCollectionChangedEventArgs.Action)).EqualTo(NotifyCollectionChangedAction.Reset));
+        }
+
         [Test]
         public void when_clearing_child_collection_should_raise_items_removed_with_offset_and_items()
         {
