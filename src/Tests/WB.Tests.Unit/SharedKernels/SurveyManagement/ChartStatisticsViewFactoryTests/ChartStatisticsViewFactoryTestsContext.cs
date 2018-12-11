@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
 {
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         protected static ChartStatisticsViewFactory CreateChartStatisticsViewFactory(StatisticsGroupedByDateAndTemplate statistics = null)
             => new ChartStatisticsViewFactory(
                 Mock.Of<IOldschoolChartStatisticsDataProvider>(_
-                    => _.GetStatisticsInOldFormat(It.IsAny<Guid>(), It.IsAny<long>()) == (statistics ?? new StatisticsGroupedByDateAndTemplate())));
+                    => _.GetStatisticsInOldFormat(It.IsAny<QuestionnaireIdentity>()) == (statistics ?? new StatisticsGroupedByDateAndTemplate())));
 
         protected static QuestionnaireStatisticsForChart CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(int count)
         {

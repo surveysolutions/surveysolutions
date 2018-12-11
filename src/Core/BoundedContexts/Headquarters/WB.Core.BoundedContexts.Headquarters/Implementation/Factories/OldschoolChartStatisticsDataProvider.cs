@@ -21,28 +21,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
         }
 
-        public StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(Guid questionnaireId, long questionnaireVersion)
+        public StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(QuestionnaireIdentity questionnaireId)
         {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
+            var questionnaireIdentity = questionnaireId?.ToString();
             var count =
-                this.cumulativeReportStatusChangeStorage.QueryOver( _ =>_
-                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
-                .Select(Projections.Count<CumulativeReportStatusChange>(x => x.EntryId))
-                .SingleOrDefault<int>());
+                this.cumulativeReportStatusChangeStorage.QueryOver(_ =>
+                {
+                    if (questionnaireIdentity != null)
+                        _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
+
+                    return _.Select(Projections.Count<CumulativeReportStatusChange>(x => x.EntryId))
+                        .SingleOrDefault<int>();
+                });
 
             if (count == 0)
                 return null;
 
-            var minMaxDate = this.cumulativeReportStatusChangeStorage.QueryOver(_ => _
-                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
-                .Select(Projections.Min<CumulativeReportStatusChange>(x => x.Date), Projections.Max<CumulativeReportStatusChange>(x => x.Date))
-                .SingleOrDefault<object[]>());
+            var minMaxDate = this.cumulativeReportStatusChangeStorage.QueryOver(_ =>
+            {
+                if (questionnaireIdentity != null)
+                    _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
+                return _
+                    .Select(Projections.Min<CumulativeReportStatusChange>(x => x.Date), Projections.Max<CumulativeReportStatusChange>(x => x.Date))
+                    .SingleOrDefault<object[]>();
+            });
 
             var minDate = (DateTime)minMaxDate[0];
             var maxDate = (DateTime)minMaxDate[1];
 
             Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate =
-                this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId, questionnaireVersion);
+                this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId);
 
             return GetStatisticsInOldFormat(minDate, maxDate, countsByStatusAndDate);
         }
@@ -75,19 +83,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             return result;
         }
 
-        private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(Guid questionnaireId, long questionnaireVersion)
+        private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(QuestionnaireIdentity questionnaireId)
         {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
+            var questionnaireIdentity = questionnaireId?.ToString();
+            var rawCountsByStatusAndDate = this.cumulativeReportStatusChangeStorage.Query(_ =>
+            {
+                if (questionnaireIdentity != null)
+                    _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
 
-            var rawCountsByStatusAndDate = this.cumulativeReportStatusChangeStorage.Query(_ => _
-                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
-                .GroupBy(change => new {change.Status, change.Date})
-                .Select(grouping => new
-                {
-                    Status = grouping.Key.Status,
-                    Date = grouping.Key.Date,
-                    Count = grouping.Sum(change => (int?) change.ChangeValue) ?? 0, // https://nhibernate.jira.com/browse/NH-2130
-                }));
+                return _
+                    .GroupBy(change => new {change.Status, change.Date})
+                    .Select(grouping => new
+                    {
+                        Status = grouping.Key.Status,
+                        Date = grouping.Key.Date,
+                        Count =
+                            grouping.Sum(change => (int?) change.ChangeValue) ??
+                            0, // https://nhibernate.jira.com/browse/NH-2130
+                    });
+            });
 
             var countsByStatusAndDate = new Dictionary<InterviewStatus, Dictionary<DateTime, int>>();
 

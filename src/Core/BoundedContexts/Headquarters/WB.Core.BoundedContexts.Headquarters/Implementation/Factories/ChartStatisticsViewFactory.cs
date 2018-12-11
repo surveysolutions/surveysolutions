@@ -5,6 +5,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
@@ -19,7 +20,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            StatisticsGroupedByDateAndTemplate collectedStatistics = this.oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(input.QuestionnaireId, input.QuestionnaireVersion);
+            var questionnaireIdentity = input.QuestionnaireId.HasValue
+                ? new QuestionnaireIdentity(input.QuestionnaireId.Value, input.QuestionnaireVersion.Value)
+                : null;
+            StatisticsGroupedByDateAndTemplate collectedStatistics = this.oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireIdentity);
 
             if (collectedStatistics == null || collectedStatistics.StatisticsByDate.Count == 0)
                 return new ChartStatisticsView { Lines = new object[0][][] };
