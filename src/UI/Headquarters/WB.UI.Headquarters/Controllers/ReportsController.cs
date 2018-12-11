@@ -113,14 +113,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
-
             AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
 
             return this.View("CumulativeInterviewChart", new DocumentFilter
             {
-                Templates = usersAndQuestionnaires.Questionnaires,
-                Statuses = statuses
+                Templates = usersAndQuestionnaires.Questionnaires
             });
         }
 

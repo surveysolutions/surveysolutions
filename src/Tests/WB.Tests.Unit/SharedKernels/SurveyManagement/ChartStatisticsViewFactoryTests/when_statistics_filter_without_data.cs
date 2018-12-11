@@ -17,8 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         [OneTimeSetUp]
         public void Establish()
         {
-            var stats = Mock.Of<IQueryableReadSideRepositoryReader<StatisticsLineGroupedByDateAndTemplate>>();
-
             var questionnaireId = Guid.NewGuid();
             baseDate = new DateTime(2014, 8, 22);
             var questionnaireVersion = 1;
@@ -36,10 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                                     ApprovedByHeadquartersCount = 1,
                                     ApprovedBySupervisorCount = 1,
                                     CompletedCount = 1,
-                                    InterviewerAssignedCount = 1,
                                     RejectedByHeadquartersCount = 1,
                                     RejectedBySupervisorCount = 1,
-                                    SupervisorAssignedCount = 1
                                 }
                             }
                         }
