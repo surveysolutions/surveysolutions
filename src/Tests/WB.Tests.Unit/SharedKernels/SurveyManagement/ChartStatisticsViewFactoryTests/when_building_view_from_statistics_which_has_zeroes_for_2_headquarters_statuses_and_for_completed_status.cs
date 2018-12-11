@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_return_5_lines_the_same_as_statuses_count() => view.Lines.Length.Should().Be(5);
+        public void should_return_3_lines_the_same_as_statuses_count() => view.Lines.Length.Should().Be(3);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;
