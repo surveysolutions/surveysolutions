@@ -12,7 +12,7 @@ namespace WB.UI.WebTester.Hub
     [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
-        private IEvictionNotifier evictionNotify => this.serviceLocator.GetInstance<IEvictionNotifier>();
+        private IEvictionNotifier evictionNotify => this.ServiceLocator.GetInstance<IEvictionNotifier>();
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {

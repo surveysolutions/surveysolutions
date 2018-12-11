@@ -13,15 +13,15 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public abstract partial class WebInterview : Hub, IErrorDetailsProvider
     {
-        private   IStatefulInterviewRepository statefulInterviewRepository => this.serviceLocator.GetInstance<IStatefulInterviewRepository>();
-        protected ICommandService commandService => this.serviceLocator.GetInstance<ICommandService>();
-        private   IQuestionnaireStorage questionnaireRepository => this.serviceLocator.GetInstance<IQuestionnaireStorage>();
-        private   IWebInterviewNotificationService webInterviewNotificationService => this.serviceLocator.GetInstance<IWebInterviewNotificationService>();
-        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.serviceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
-        private   IImageFileStorage imageFileStorage => this.serviceLocator.GetInstance<IImageFileStorage>();
-        private   IAudioFileStorage audioFileStorage => this.serviceLocator.GetInstance<IAudioFileStorage>();
+        private   IStatefulInterviewRepository statefulInterviewRepository => this.ServiceLocator.GetInstance<IStatefulInterviewRepository>();
+        protected ICommandService commandService => this.ServiceLocator.GetInstance<ICommandService>();
+        private   IQuestionnaireStorage questionnaireRepository => this.ServiceLocator.GetInstance<IQuestionnaireStorage>();
+        private   IWebInterviewNotificationService webInterviewNotificationService => this.ServiceLocator.GetInstance<IWebInterviewNotificationService>();
+        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.ServiceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
+        private   IImageFileStorage imageFileStorage => this.ServiceLocator.GetInstance<IImageFileStorage>();
+        private   IAudioFileStorage audioFileStorage => this.ServiceLocator.GetInstance<IAudioFileStorage>();
 
-        protected IServiceLocator serviceLocator;
+        public IServiceLocator ServiceLocator { get; private set; }
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -78,7 +78,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public void SetServiceLocator(IServiceLocator serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
+            this.ServiceLocator = serviceLocator;
         }
     }
 }
