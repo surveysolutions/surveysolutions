@@ -68,8 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     new QuestionnaireStatisticsForChart
                     {
                         CreatedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Created, date, countsByStatusAndDate),
-                        SupervisorAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.SupervisorAssigned, date, countsByStatusAndDate),
-                        InterviewerAssignedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.InterviewerAssigned, date, countsByStatusAndDate),
                         CompletedCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.Completed, date, countsByStatusAndDate),
                         ApprovedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.ApprovedBySupervisor, date, countsByStatusAndDate),
                         RejectedBySupervisorCount = GetCumulativeCountForStatusUpToSpecifiedDate(InterviewStatus.RejectedBySupervisor, date, countsByStatusAndDate),
