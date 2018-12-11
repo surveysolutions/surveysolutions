@@ -3,7 +3,6 @@ using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity.Autofac;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
@@ -29,17 +28,12 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            var uow = Scope.Value.Resolve<IUnitOfWork>();
-            uow.AcceptChanges();
-            uow.Dispose();
             Scope.Value.Dispose();
             return base.OnAfterIncoming(result, context);
         }
 
         protected override void OnIncomingError(ExceptionContext exceptionContext, IHubIncomingInvokerContext invokerContext)
         {
-            var uow = Scope.Value.Resolve<IUnitOfWork>();
-            uow.Dispose();
             Scope.Value.Dispose();
             base.OnIncomingError(exceptionContext, invokerContext);
         }
