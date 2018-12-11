@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -27,10 +26,7 @@ namespace WB.Enumerator.Native.WebInterview
         {
             try
             {
-                InScopeExecutor.Current.ExecuteActionInScope(sl =>
-                {
-                    sl.GetInstance<ICommandService>().Execute(command);
-                });
+                this.commandService.Execute(command);
             }
             catch (Exception e)
             {
@@ -41,12 +37,9 @@ namespace WB.Enumerator.Native.WebInterview
 
         public void ChangeLanguage(ChangeLanguageRequest request)
         {
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                sl.GetInstance<ICommandService>().Execute(
+            this.commandService.Execute(
                     new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
                     this.CommandResponsibleId));
-            });
         }
 
         public void AnswerTextQuestion(string questionIdenty, string text)
@@ -178,7 +171,7 @@ namespace WB.Enumerator.Native.WebInterview
             var identity = Identity.Parse(questionIdentity);
             var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, comment);
 
-            InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+            this.commandService.Execute(command);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR.Hubs;
 using StackExchange.Exceptional;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
