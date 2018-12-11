@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,23 +13,59 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public abstract partial class WebInterview : Hub, IErrorDetailsProvider
     {
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        protected readonly ICommandService commandService;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        //private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        //protected readonly ICommandService commandService;
+        //private readonly IQuestionnaireStorage questionnaireRepository;
+        //private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        //private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
 
-        protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
+        protected IStatefulInterview GetCallerInterview(IStatefulInterviewRepository statefulInterviewRepository)
+        {
+            return statefulInterviewRepository.Get(this.CallerInterviewId);
+        }
+
+        protected IStatefulInterview GetCallerInterview()
+        {
+            IStatefulInterview interview = null;
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
+                interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+            });
+            return interview;
+        }
 
         protected IQuestionnaire GetCallerQuestionnaire()
         {
-            var interview = this.GetCallerInterview();
-            return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            IQuestionnaire questionnaire = null;
+            InScopeExecutor.Current.ExecuteActionInScope(sl =>
+            {
+                var interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+                if (interview == null)
+                    return;
+
+                questionnaire = sl.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            });
+
+            return questionnaire;
+        }
+
+        protected IQuestionnaire GetCallerQuestionnaire(IServiceLocator sl)
+        {
+            IQuestionnaire questionnaire = null;
+            
+            var interview = GetCallerInterview(sl.GetInstance<IStatefulInterviewRepository>());
+            if (interview == null)
+                return null;
+
+            questionnaire = sl.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            
+
+            return questionnaire;
         }
 
         protected virtual bool IsReviewMode => false;
@@ -36,19 +73,19 @@ namespace WB.Enumerator.Native.WebInterview
         protected virtual bool IsCurrentUserObserving => false;
 
         public WebInterview(
-            IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService,
-            IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            //IStatefulInterviewRepository statefulInterviewRepository,
+            //ICommandService commandService,
+            //IQuestionnaireStorage questionnaireRepository,
+            //IWebInterviewNotificationService webInterviewNotificationService,
+            //IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage)
         {
-            this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
-            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
-            this.webInterviewNotificationService = webInterviewNotificationService ?? throw new ArgumentNullException(nameof(webInterviewNotificationService));
-            this.interviewEntityFactory = interviewEntityFactory ?? throw new ArgumentNullException(nameof(interviewEntityFactory));
+            //this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            //this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            //this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            //this.webInterviewNotificationService = webInterviewNotificationService ?? throw new ArgumentNullException(nameof(webInterviewNotificationService));
+            //this.interviewEntityFactory = interviewEntityFactory ?? throw new ArgumentNullException(nameof(interviewEntityFactory));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.imageFileStorage = imageFileStorage ?? throw new ArgumentNullException(nameof(imageFileStorage));
         }
