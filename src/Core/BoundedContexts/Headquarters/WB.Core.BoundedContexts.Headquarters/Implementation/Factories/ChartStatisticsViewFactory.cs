@@ -68,8 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             IEnumerable<IEnumerable<(DateTime date, int count)>> rangeLines = new[]
             {
-                selectedRange.Select(x => (x.Key, x.Value.SupervisorAssignedCount)),
-                selectedRange.Select(x => (x.Key, x.Value.InterviewerAssignedCount)),
                 selectedRange.Select(x => (x.Key, x.Value.CompletedCount)),
                 selectedRange.Select(x => (x.Key, x.Value.RejectedBySupervisorCount)),
                 selectedRange.Select(x => (x.Key, x.Value.ApprovedBySupervisorCount)),
