@@ -105,6 +105,7 @@ namespace WB.UI.Headquarters
 
             var hubActivator = new CustomAutofacHubActivator(new CustomLifetimeHubManager(), container);
             var signalRAutofacDependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+            
             signalRAutofacDependencyResolver.Register(typeof(IHubActivator), () => hubActivator);
             
             GlobalHost.DependencyResolver = signalRAutofacDependencyResolver;

@@ -5,14 +5,17 @@ using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.Modularity.Autofac;
 
+
 namespace WB.UI.Headquarters.Code
 {
     public class CustomLifetimeHubManager : IDisposable
     {
         private readonly ConcurrentDictionary<IHub, ILifetimeScope> hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
 
-        public T CreateUnitOwWorkScopeAndResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
+        public T CreateUnitOfWorkScopeAndResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
         {
+            //return (T) lifetimeScope.Resolve(type);
+
             ILifetimeScope context = lifetimeScope.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope);
             
             T obj = (T)context.Resolve(type);
@@ -36,9 +39,10 @@ namespace WB.UI.Headquarters.Code
         private void HubOnDisposing(object sender, EventArgs eventArgs)
         {
             IHub key = sender as IHub;
-            ILifetimeScope lifetimeScope;
-            if (key == null || !this.hubLifetimeScopes.TryRemove(key, out lifetimeScope) || lifetimeScope == null)
+
+            if (key == null || !this.hubLifetimeScopes.TryRemove(key, out var lifetimeScope) || lifetimeScope == null)
                 return;
+            
             lifetimeScope.Dispose();
         }
     }
