@@ -986,7 +986,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
             }
 
-            return (entity as IConditional)?.HideIfDisabled ?? false;
+            var parent = entity.GetParent();
+            bool shouldBeHiddenByParentHideIfDisabled = false;
+            if(IsPlainMode(parent.PublicKey))
+            {
+                shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
+            }
+
+            return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
         }
 
         public bool IsPlainMode(Guid entityId)
