@@ -20,7 +20,7 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
         {
             Scope.Value = serviceLocator.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope);
-            if (context.Hub is Enumerator.Native.WebInterview.WebInterview hub)
+            if (context.Hub is WebInterview hub)
             {
                 hub.SetServiceLocator(Scope.Value.Resolve<IServiceLocator>());
             }

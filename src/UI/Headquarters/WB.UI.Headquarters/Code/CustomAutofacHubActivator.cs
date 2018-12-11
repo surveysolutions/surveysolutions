@@ -15,9 +15,6 @@ namespace WB.UI.Headquarters.Code
         public IHub Create(HubDescriptor descriptor)
         {
             return this.lifetimeScope.Resolve(descriptor.HubType) as IHub;
-            //return typeof(ILifetimeHub).IsAssignableFrom(descriptor.HubType) 
-            //    ? (IHub)this.lifetimeHubManager.CreateUnitOfWorkScopeAndResolveHub<ILifetimeHub>(descriptor.HubType, this.lifetimeScope) 
-            //    : this.lifetimeScope.Resolve(descriptor.HubType) as IHub;
         }
     }
 }
