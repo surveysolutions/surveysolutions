@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private string interviewId;
         private NavigationState navigationState;
         private readonly CovariantObservableCollection<ICompositeEntity> rosterInstances;
+        private List<Identity> shownRosterInstances;
 
         public PlainRosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory viewModelFactory,
@@ -39,11 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.compositeCollectionInflationService = compositeCollectionInflationService;
             this.rosterInstances = new CovariantObservableCollection<ICompositeEntity>();
         }
-
-        //public void Handle(RosterInstancesTitleChanged @event)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public Identity Identity { get; private set; }
 
@@ -61,9 +57,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             var statefulInterview = this.interviewRepository.Get(this.interviewId);
             var interviewRosterInstances = statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id);
-
+            if(shownRosterInstances?.Count == interviewRosterInstances.Count && shownRosterInstances.SequenceEqual(interviewRosterInstances))
+                return;
+            
             ObservableCollection<ICompositeEntity> uiEntities = new ObservableCollection<ICompositeEntity>();
-
             foreach (var interviewRosterInstance in interviewRosterInstances)
             {
                 var interviewEntityViewModel = this.viewModelFactory.GetNew<PlainRosterTitleViewModel>();
@@ -88,6 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             finally
             {
                 rosterInstances.ResumeCollectionChanged();
+                shownRosterInstances = interviewRosterInstances;
             }
         }
 
@@ -95,12 +93,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public void Handle(RosterInstancesAdded @event)
         {
-            UpdateFromInterview();
+            if(@event.Instances.Any(x => x.GroupId == this.Identity.Id))
+                UpdateFromInterview();
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            UpdateFromInterview();
+            if(@event.Instances.Any(x => x.GroupId == this.Identity.Id))
+                UpdateFromInterview();
         }
 
         public void Handle(YesNoQuestionAnswered @event)
