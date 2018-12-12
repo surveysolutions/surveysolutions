@@ -113,15 +113,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
+            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
 
             return this.View("CumulativeInterviewChart", new DocumentFilter
             {
-                Templates = usersAndQuestionnaires.Questionnaires,
-                Statuses = statuses
+                Templates = usersAndQuestionnaires.Questionnaires
             });
         }
 
@@ -251,7 +247,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.DevicesInterviewers)]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewersAndDevices(Guid? id)
+        public ActionResult InterviewersAndDevices()
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
@@ -262,8 +258,7 @@ namespace WB.UI.Headquarters.Controllers
                     controller = "ReportDataApi",
                     action = "DeviceInterviewers"
                 }),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
-                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers")
             });
         }
 

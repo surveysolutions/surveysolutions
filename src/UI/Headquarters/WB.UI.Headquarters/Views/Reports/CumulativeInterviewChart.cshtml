@@ -39,6 +39,7 @@
                     <div class="block-filter">
                         <h5>@Reports.Questionnaire</h5>
                         <select id="templateSelector" class="selectpicker" data-bind="value: SelectedTemplate" class="form-control">
+                            <option value='{"templateId": "null","version": "null"}'>@Common.AllQuestionnaires</option>
                             @foreach (var item in Model.Templates)
                             {
                                 <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>

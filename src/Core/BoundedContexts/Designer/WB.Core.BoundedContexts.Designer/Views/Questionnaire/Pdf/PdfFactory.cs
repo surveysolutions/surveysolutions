@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 UserId = requestedByUserId,
                 Name = requestedByUserName,
-                Date = DateTime.UtcNow
+                Date = DateTime.Now
             };
 
             var statisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser

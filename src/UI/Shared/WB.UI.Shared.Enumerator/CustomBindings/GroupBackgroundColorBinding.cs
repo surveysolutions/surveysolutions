@@ -1,10 +1,11 @@
 ﻿using Android.Widget;
 using MvvmCross.Binding;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupStatus>
+    public class ButtonGroupStyleBinding : BaseBinding<Button, GroupStateViewModel>
     {
         public ButtonGroupStyleBinding(Button androidControl) : base(androidControl)
         {
@@ -15,26 +16,28 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             get { return MvxBindingMode.OneWay; }
         } 
 
-        protected override void SetValueToView(Button control, GroupStatus value)
+        protected override void SetValueToView(Button control, GroupStateViewModel value)
         {
-            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(value);
+            SimpleGroupStatus status = value?.SimpleStatus ?? SimpleGroupStatus.Other;
+
+            var groupBackgroundResourceId = GetGroupBackgroundResourceIdByStatus(status);
 
             control.SetBackgroundResource(groupBackgroundResourceId);
         }
 
-        private static int GetGroupBackgroundResourceIdByStatus(GroupStatus status)
+        private static int GetGroupBackgroundResourceIdByStatus(SimpleGroupStatus? status)
         {
             switch (status)
             {
-                case GroupStatus.Completed:
+                case SimpleGroupStatus.Completed:
                     return Resource.Drawable.group_completed;
-                case GroupStatus.StartedInvalid:
-                case GroupStatus.CompletedInvalid:
+
+                case SimpleGroupStatus.Invalid:
                     return Resource.Drawable.group_with_invalid_answers;
+
                 default:
                     return Resource.Drawable.group_started;
             }
         }
-        
     }
 }

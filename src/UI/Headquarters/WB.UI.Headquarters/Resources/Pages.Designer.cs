@@ -2007,9 +2007,9 @@ namespace WB.UI.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s)..
         /// </summary>
-        public static string Interviewers_ReassigntToOriginalSupervisor {
+        public static string Interviewers_ReassignToOriginalSupervisor {
             get {
-                return ResourceManager.GetString("Interviewers_ReassigntToOriginalSupervisor", resourceCulture);
+                return ResourceManager.GetString("Interviewers_ReassignToOriginalSupervisor", resourceCulture);
             }
         }
         
