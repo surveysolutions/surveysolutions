@@ -14,7 +14,6 @@ using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -57,7 +56,6 @@ namespace WB.UI.Interviewer
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
-                {typeof(CreateInterviewViewModel),typeof(CreateInterviewActivity) },
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(LoadingViewModel),typeof(LoadingActivity) },
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},

@@ -212,4 +212,8 @@
     <value>{0} или новее</value>
     <comment>{0} или новее</comment>
   </data>
+    <data name="CurrentVersion" xml:space="preserve">
+    <value>Текущая версия Херквотера</value>
+    <comment>Текущая версия</comment>
+  </data>
 </root>

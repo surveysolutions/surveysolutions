@@ -48,7 +48,7 @@
                                 @FormatEmail(user.Email)
                             </td>
                             <td class="date">
-                                @user.CreationDate.ConvertToLocalAndFormatDate()
+                                @user.CreationDate.FormatDate()
                             </td>
                             <td>
                                 @(user.IsApproved ? "Yes" : "No")

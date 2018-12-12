@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Controllers
 
         [LocalOrDevelopmentAccessOnly]
         [System.Web.Mvc.AllowAnonymous]
-        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode)
         {
             if (!string.IsNullOrWhiteSpace(cultureCode))
             {
@@ -93,8 +93,7 @@ namespace WB.UI.Designer.Controllers
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation, false);
-            questionnaire.TimezoneOffsetMinutes = timezoneOffsetMinutes;
+            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation, false);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -139,11 +138,11 @@ namespace WB.UI.Designer.Controllers
 
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         [System.Web.Mvc.HttpGet]
-        public JsonResult Status(Guid id, Guid? translation, int? timezoneOffsetMinutes)
+        public JsonResult Status(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
             var cultureCode = CultureInfo.CurrentUICulture.Name;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet);
@@ -166,27 +165,27 @@ namespace WB.UI.Designer.Controllers
         }
 
         [System.Web.Mvc.HttpPost]
-        public ActionResult Retry(Guid id, Guid? translation, int? timezoneOffsetMinutes)
+        public ActionResult Retry(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
             var cultureCode = CultureInfo.CurrentUICulture.Name;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
                 GeneratedPdfs.TryRemove(pdfKey, out _);
             }
-            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode, timezoneOffsetMinutes));
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, string cultureCode, int? timezoneOffsetMinutes)
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, string cultureCode)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(id, newPdfGenerationProgress, translation, cultureCode, timezoneOffsetMinutes ?? 0);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation, cultureCode);
             return newPdfGenerationProgress;
         }
         
-        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode, int timezoneOffsetMinutes)
+        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode)
         {
             var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
 
@@ -194,8 +193,7 @@ namespace WB.UI.Designer.Controllers
                 requestedByUserId: this.UserHelper.WebUser.UserId,
                 requestedByUserName: this.UserHelper.WebUser.UserName,
                 translation: translation,
-                cultureCode: cultureCode,
-                timezoneOffsetMinutes: timezoneOffsetMinutes);
+                cultureCode: cultureCode);
             var questionnaireHtml = RenderActionResultToString(renderQuestionnaireResult);
             var pageFooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new { });
 

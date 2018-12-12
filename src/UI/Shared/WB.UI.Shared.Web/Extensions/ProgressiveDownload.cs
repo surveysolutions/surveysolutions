@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Web.Extensions
                     {
                         stream.Seek(rangeHeader.From ?? 0, SeekOrigin.Begin);
 
-                        long bufferSize = 1024 * 1024;
+                        long bufferSize = 32 * 1024;
                         byte[] buffer = new byte[bufferSize];
 
                         while (true)
@@ -52,10 +52,7 @@ namespace WB.UI.Shared.Web.Extensions
 
                             int count = stream.Read(buffer, 0, (int) bufferSize);
                             if (count != 0)
-                            {
                                 outputStream.Write(buffer, 0, count);
-                                outputStream.Flush();
-                            }
                             else
                                 break;
                         }

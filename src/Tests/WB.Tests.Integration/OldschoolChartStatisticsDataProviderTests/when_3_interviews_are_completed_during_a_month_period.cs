@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
@@ -25,27 +26,19 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
             
-            cumulativeReportStatusChangeStorage =
-                new PostgreReadSideStorage<CumulativeReportStatusChange>(UnitOfWork,
-                    Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            cumulativeReportStatusChangeStorage = new PostgreReadSideStorage<CumulativeReportStatusChange>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
-            var cumulativeReportStatusChangeBegin =
-                IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
-            var cumulativeReportStatusChangeInBetween =
-                IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);
-            var cumulativeReportStatusChangeEnd =
-                IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, endDate);
-            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeBegin,
-                cumulativeReportStatusChangeBegin.EntryId);
-            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeInBetween,
-                cumulativeReportStatusChangeInBetween.EntryId);
-            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeEnd,
-                cumulativeReportStatusChangeEnd.EntryId);
+            var cumulativeReportStatusChangeBegin = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
+            var cumulativeReportStatusChangeInBetween = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);
+            var cumulativeReportStatusChangeEnd = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, endDate);
+            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeBegin, cumulativeReportStatusChangeBegin.EntryId);
+            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeInBetween, cumulativeReportStatusChangeInBetween.EntryId);
+            cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeEnd, cumulativeReportStatusChangeEnd.EntryId);
 
             
             oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
 
-            result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion);
+            result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Create.Entity.QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
         [OneTimeTearDown]

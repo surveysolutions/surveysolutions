@@ -11,8 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public QuestionnaireStatisticsForChart(QuestionnaireStatisticsForChart statisticsToDublicate)
         {
             this.CreatedCount = statisticsToDublicate.CreatedCount;
-            this.SupervisorAssignedCount = statisticsToDublicate.SupervisorAssignedCount;
-            this.InterviewerAssignedCount = statisticsToDublicate.InterviewerAssignedCount;
             this.CompletedCount = statisticsToDublicate.CompletedCount;
             this.ApprovedBySupervisorCount = statisticsToDublicate.ApprovedBySupervisorCount;
             this.RejectedBySupervisorCount = statisticsToDublicate.RejectedBySupervisorCount;
@@ -22,8 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public int CreatedCount { get; set; }
-        public int SupervisorAssignedCount { get; set; }
-        public int InterviewerAssignedCount { get; set; }
         public int CompletedCount { get; set; }
         public int ApprovedBySupervisorCount { get; set; }
         public int RejectedBySupervisorCount { get; set; }

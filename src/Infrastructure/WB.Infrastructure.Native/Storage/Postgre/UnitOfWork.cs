@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    [DebuggerDisplay("Id = {SessionId}")]
+    [DebuggerDisplay("Id#{Id}; SessionId: {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
         private readonly ISessionFactory sessionFactory;
@@ -16,13 +16,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private ITransaction transaction;
         private bool isDisposed = false;
         public Guid? SessionId;
-
+        private static long counter = 0;
+        public long Id { get; }
+        
         public UnitOfWork(ISessionFactory sessionFactory, ILogger logger)
         {
             if (session != null) throw new InvalidOperationException("Unit of work already started");
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
             this.sessionFactory = sessionFactory;
             this.logger = logger;
+            Id = Interlocked.Increment(ref counter);
         }
 
         public void AcceptChanges()

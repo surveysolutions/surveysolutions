@@ -1199,7 +1199,7 @@
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{0} и еще {1}</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Сделать первичного супервизора ответственным за задания и интервью перемещаемых интервьюеров. </value>
   </data>
   <data name="OperationFailedDescription" xml:space="preserve">

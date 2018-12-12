@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
 {
     public enum MoveUserToAnotherTeamMode
     {
-        ReassigntToOriginalSupervisor = 1,
+        ReassignToOriginalSupervisor = 1,
         MoveAllToNewTeam = 2
     }
     public interface IMoveUserToAnotherTeamService
