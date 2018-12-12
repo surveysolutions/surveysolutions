@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -428,35 +428,38 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
+        public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, 
+            IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
         {
-            if (statefulInterview == null) return null;
+            var groupEntities = GetGroupEntitiesIds(sectionIdentity);
 
-            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
-
-            var groupEntities = statefulInterview.GetGroup(sectionIdentity).Children;
-
-            foreach (var treeNode in groupEntities)
+            IEnumerable<Identity> GetGroupEntitiesIds(Identity identity)
             {
-                if (questionnaire.IsPlainMode(treeNode.Identity.Id))
+                return isReviewMode
+                    ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
+            }
+
+            foreach (var elementId in groupEntities)
+            {
+                if (questionnaire.IsPlainMode(elementId.Id))
                 {
-                    nodes.AddRange(treeNode.Children);
+                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
+                    foreach (var groupEntitiesId in groupEntitiesIds)
+                    {
+                        yield return groupEntitiesId;
+                    }
                 }
                 else
                 {
-                    nodes.Add(treeNode);
+                    yield return elementId;
                 }
             }
-
-            IEnumerable<Identity> entityIdenties = nodes.Select(e => e.Identity);
-            return FilterEntitiesByReviewMode(entityIdenties, questionnaire, isReviewMode);
         }
 
         public IEnumerable<Identity> GetAllInterviewEntities(IStatefulInterview statefulInterview,
             IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
         {
-            if (statefulInterview == null) return null;
-
             var interviewIdentities = isReviewMode
                 ? statefulInterview.GetUnderlyingEntitiesForReviewRecursive(sectionIdentity)
                 : statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
@@ -464,24 +467,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             IEnumerable<Identity> entityIdenties = interviewIdentities
                 .Where(e => !questionnaire.IsPlainMode(e.Id));
 
-            return FilterEntitiesByReviewMode(entityIdenties, questionnaire, isReviewMode);
-        }
-
-        private IEnumerable<Identity> FilterEntitiesByReviewMode(IEnumerable<Identity> entityIdenties,
-            IQuestionnaire questionnaire, bool isReviewMode)
-        {
-            var entities = entityIdenties;
-
-            if (!isReviewMode)
-            {
-                entities = entities.Except(x =>
-                    questionnaire.IsQuestion(x.Id) && !questionnaire.IsInterviewierQuestion(x.Id)
-                );
-            }
-
-            return entities.Except(x =>
-                questionnaire.IsVariable(x.Id)
-            );
+            return entityIdenties;
         }
 
         public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
