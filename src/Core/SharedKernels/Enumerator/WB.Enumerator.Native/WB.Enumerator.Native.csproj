@@ -41,6 +41,9 @@
         <PackageReference Include="WebGrease" Version="1.6.0" />
     </ItemGroup>
     <ItemGroup>
+        <Reference Include="CommonMark">
+          <HintPath>..\..\..\..\..\..\..\Users\RLA376582\.nuget\packages\commonmark.net\0.15.1\lib\net45\CommonMark.dll</HintPath>
+        </Reference>
         <Reference Include="System.Configuration" />
         <Reference Include="System.Transactions" />
         <Reference Include="System.Web" />
