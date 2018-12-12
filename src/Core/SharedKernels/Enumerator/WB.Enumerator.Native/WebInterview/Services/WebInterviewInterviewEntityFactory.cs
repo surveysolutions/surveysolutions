@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using CommonMark;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -259,12 +260,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                 }
 
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire);
                 this.PutHideInstructions(result, identity, questionnaire);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
-
+                result.Title = MarkdownTextToHtml(result.Title, questionnaire);
+                
                 return result;
             }
 
@@ -272,12 +274,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (staticText != null)
             {
                 InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
+                result.Title = MarkdownTextToHtml(result.Title, questionnaire);
 
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire);
                 return result;
             }
 
@@ -312,10 +315,32 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
+        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
+            IQuestionnaire questionnaire)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
-            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
+                .Select(x => MarkdownTextToHtml(x, questionnaire)).ToArray();
+
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
+                .Select(x => MarkdownTextToHtml(x, questionnaire)).ToArray();
+        }
+
+        private static string MarkdownTextToHtml(string text, IQuestionnaire questionnaire)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            var document = CommonMarkConverter.Parse(text);
+
+            using (var writer = new System.IO.StringWriter())
+            {
+                CommonMarkConverter.ProcessStage3(document, writer);
+
+                var htmlText = writer.ToString().TrimEnd('\n');
+                if (htmlText.StartsWith("<p>") && htmlText.EndsWith("</p>"))
+                    htmlText = htmlText.Substring(3, htmlText.Length - 7);
+
+                return htmlText;
+            }
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
