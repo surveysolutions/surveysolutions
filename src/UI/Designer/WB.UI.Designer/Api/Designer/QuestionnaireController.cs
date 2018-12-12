@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
@@ -38,6 +39,7 @@ namespace WB.UI.Designer.Api
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IWebTesterService webTesterService;
+        private readonly ISearchService searchService;
         private const int MaxCountOfOptionForFileredCombobox = 200;
         public const int MaxVerificationErrors = 100;
 
@@ -49,7 +51,8 @@ namespace WB.UI.Designer.Api
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IMembershipUserService userHelper, 
             WebTesterSettings webTesterSettings,
-            IWebTesterService webTesterService)
+            IWebTesterService webTesterService,
+            ISearchService searchService)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -61,6 +64,7 @@ namespace WB.UI.Designer.Api
             this.userHelper = userHelper;
             this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
+            this.searchService = searchService;
         }
 
         [HttpGet]
@@ -228,6 +232,13 @@ namespace WB.UI.Designer.Api
         public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public SearchResult SearchQuestionsInPublicFolder(SearchInput searchInput)
+        {
+            return this.searchService.PerformSearch(searchInput);
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)
