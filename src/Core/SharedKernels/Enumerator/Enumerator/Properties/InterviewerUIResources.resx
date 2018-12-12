@@ -673,9 +673,6 @@ for further instructions</value>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Loading</value>
   </data>
-  <data name="Interview_Creating" xml:space="preserve">
-    <value>Creating interview</value>
-  </data>
   <data name="Interview_Loading_With_Percents" xml:space="preserve">
     <value>Loading... {0}%</value>
   </data>
