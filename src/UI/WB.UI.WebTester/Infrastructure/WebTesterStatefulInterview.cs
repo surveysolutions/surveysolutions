@@ -24,7 +24,6 @@ namespace WB.UI.WebTester.Infrastructure
                 )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
-            base.ServiceLocatorInstance = serviceLocator;
         }
 
         public override List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
