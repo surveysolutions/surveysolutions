@@ -445,7 +445,7 @@
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutOptionBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
-    <Compile Include="ValueCombiners\MarkdownTextToHtmlValueCombiner.cs" />
+    <Compile Include="ValueCombiners\MakeMarkdownLinksExecutableValueCombiner.cs" />
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>

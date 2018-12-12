@@ -5,7 +5,6 @@ using Android.OS;
 using Android.Text;
 using Android.Text.Style;
 using Android.Views;
-using CommonMark;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
@@ -18,18 +17,16 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
-    public class MarkdownTextToHtmlValueCombiner : BaseValueCombiner<ICharSequence>
+    public class MakeMarkdownLinksExecutableValueCombiner : BaseValueCombiner<ICharSequence>
     {
         protected override int ExpectedParamsCount => 2;
 
         protected override ICharSequence GetValue(List<object> values)
         {
-            string text = values[0]?.ToString() ?? string.Empty;
+            string htmlText = values[0]?.ToString() ?? string.Empty;
             var interviewEntity = (IInterviewEntity) values[1];
 
-            if (interviewEntity == null) return new SpannableString(text);
-
-            var htmlText = MarkdownTextToHtml(text);
+            if (interviewEntity == null) return new SpannableString(htmlText);
 
             ICharSequence sequence = Build.VERSION.SdkInt >= BuildVersionCodes.N
                 ? Html.FromHtml(htmlText, FromHtmlOptions.ModeLegacy)
@@ -45,22 +42,6 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             }
 
             return strBuilder;
-        }
-
-        private static string MarkdownTextToHtml(string title)
-        {
-            var document = CommonMarkConverter.Parse(title);
-
-            using (var writer = new System.IO.StringWriter())
-            {
-                CommonMarkConverter.ProcessStage3(document, writer);
-
-                var htmlText = writer.ToString().TrimEnd('\n');
-                if (htmlText.StartsWith("<p>") && htmlText.EndsWith("</p>"))
-                    htmlText = htmlText.Substring(3, htmlText.Length - 7);
-
-                return htmlText;
-            }
         }
 
         protected void MakeNavigationLink(SpannableStringBuilder strBuilder, URLSpan span, IInterviewEntity interviewEntity)
