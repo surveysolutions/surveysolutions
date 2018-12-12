@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
 {
@@ -11,8 +10,6 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
     public static class ServiceLocator
     {
         private static ServiceLocatorProvider currentProvider;
-
-        public static AsyncLocal<IServiceLocator> CurrentAsyncLocalShouldBeRemovedWhenWeWillFindAWayToDoIt { get; } = new AsyncLocal<IServiceLocator>();
 
         /// <summary>
         ///     The current ambient container.
