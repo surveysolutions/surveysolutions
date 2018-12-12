@@ -206,5 +206,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 containerBuilder.RegisterType(implementation).As(@interface).SingleInstance();
             }
         }
+
+        public void BindAsSingleton(Type @interface, Type interface2, Type implementation)
+        {
+            containerBuilder.RegisterType(implementation).As(@interface, @interface2);
+        }
     }
 }
