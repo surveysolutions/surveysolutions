@@ -14,4 +14,9 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CommonMark">
+      <HintPath>..\..\..\..\..\..\..\Users\RLA376582\.nuget\packages\commonmark.net\0.15.1\lib\net45\CommonMark.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
