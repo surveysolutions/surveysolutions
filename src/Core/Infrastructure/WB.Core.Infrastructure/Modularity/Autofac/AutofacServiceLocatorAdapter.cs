@@ -14,10 +14,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public AutofacServiceLocatorAdapter(ILifetimeScope kernel)
         {
             this.rootScope = kernel;
-            if (kernel.Tag != "root")
-            {
-                ServiceLocator.CurrentAsyncLocalShouldBeRemovedWhenWeWillFindAWayToDoIt.Value = this;
-            }
         }
 
         public override void InjectProperties(object instance)
