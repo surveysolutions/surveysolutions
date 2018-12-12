@@ -104,5 +104,35 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(result));
         }
+
+        [TestCase("19.01.0.0 (build 0)", "20.08.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("19.01.0.0 (build 0)", "18.08.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("19.01.0.3 (build 0)", "19.01.0.2", HttpStatusCode.UpgradeRequired)]
+        [TestCase("19.01.1.3 (build 0)", "19.01.0.3", HttpStatusCode.UpgradeRequired)]
+        [TestCase("19.01.0.3 (build 0)", "19.01.0.3", HttpStatusCode.OK)]
+        public void when_set_setting_to_update_app_to_0_for_app_of_version_should_return_correct_upgrade_result(
+            string hqVersion, string appVersion, HttpStatusCode result)
+        {
+            var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
+
+            var deviceId = "device";
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
+
+            var interviewerSettings = Create.Entity.InterviewerSettings(howManyMajorReleaseDontNeedUpdate: 0);
+            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
+                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
+
+            var interviewerApiController = Create.Controller.InterviewerApiController(
+                productVersion: productVersionObj,
+                authorizedUser: authorizedUser,
+                interviewerSettings: interviewerSettingsStorage);
+            interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", appVersion)); ;
+
+            // Act
+            HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7060);
+
+            Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(result));
+        }
+
     }
 }

@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage GlobalNoticeSettings()
         {
-            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
             return Request.CreateResponse(new GlobalNoticeModel
             {
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
