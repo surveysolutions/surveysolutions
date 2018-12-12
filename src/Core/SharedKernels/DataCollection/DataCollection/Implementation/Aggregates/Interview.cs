@@ -75,7 +75,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
         }
 
-        public IServiceLocator ServiceLocatorInstance { get; set; }
+        private IServiceLocator localLocator;
+        public IServiceLocator ServiceLocatorInstance
+        {
+            get => localLocator ?? ServiceLocator.CurrentAsyncLocalShouldBeRemovedWhenWeWillFindAWayToDoIt.Value;
+            set => localLocator = value;
+        }
 
         /// <remarks>
         /// Repository operations are time-consuming.
