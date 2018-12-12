@@ -133,15 +133,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total.
-        /// </summary>
-        public static string TeamSize {
-            get {
-                return ResourceManager.GetString("TeamSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Wrong time on tablet.
         /// </summary>
         public static string WrongDateOnTablet {

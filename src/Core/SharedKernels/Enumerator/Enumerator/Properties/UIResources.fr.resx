@@ -299,6 +299,9 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Appuyer pour capter le code-barres</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer {0} ligne (s) de chaque roster qui y est lié à cette question ?</value>
+  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>

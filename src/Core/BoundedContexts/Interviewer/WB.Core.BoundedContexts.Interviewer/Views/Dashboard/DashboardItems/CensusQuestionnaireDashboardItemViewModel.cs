@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewCommand = new SharedKernels.DataCollection.Commands.Interview.CreateInterview(interviewId,
+            var createInterviewCommand = new CreateInterview(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, 
                 new List<InterviewAnswer>(),
                 new List<string>(),
