@@ -81,6 +81,8 @@ namespace WB.Infrastructure.Native.Storage
                 return null;
             }
 
+            this.serviceLocator.InjectProperties(cachedAggregate);
+
             return cachedAggregate;
         }
 
