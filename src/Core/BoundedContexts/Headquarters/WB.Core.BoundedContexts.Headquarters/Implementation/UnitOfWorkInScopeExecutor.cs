@@ -20,14 +20,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public ILifetimeScope CreateChildContainer()
         {
             if(lifetimeScope == null) throw new Exception($"Class was not initialized");
-            return lifetimeScope.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope);
+            return lifetimeScope.BeginLifetimeScope();
         }
 
         public void ExecuteActionInScope(Action<IServiceLocator> action)
         {
             using (var scope = CreateChildContainer())
             {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
                 action(serviceLocatorLocal);
 
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         {
             using (var scope = CreateChildContainer())
             {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
                 var result = func(serviceLocatorLocal);
 
@@ -53,11 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         {
             using (var scope = CreateChildContainer())
             {
-                var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
 
                 var result = await func(serviceLocatorLocal);
 
-                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
+                scope.Resolve<IUnitOfWork>().AcceptChanges();
 
                 return result;
             }

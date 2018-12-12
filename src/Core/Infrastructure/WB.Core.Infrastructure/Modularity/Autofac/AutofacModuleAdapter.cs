@@ -89,14 +89,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
-        public void BindInPerUnitOfWorkOrPerRequestScope<TInterface, TImplementation>() where TImplementation : TInterface
-        {
-            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
-                .InstancePerMatchingLifetimeScope(
-                    AutofacServiceLocatorConstants.UnitOfWorkScope,
-                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-        }
-
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
