@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using NHibernate;
 using NHibernate.Impl;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
@@ -17,6 +20,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private bool isDisposed = false;
         public Guid? SessionId;
         private static long counter = 0;
+
+        public DateTime CreatedAt {get;}
+        public static readonly ConcurrentDictionary<string, List<UnitOfWork>> opennedUofs = new ConcurrentDictionary<string, List<UnitOfWork>>();
+        private readonly List<UnitOfWork> myList;
         public long Id { get; }
         
         public UnitOfWork(ISessionFactory sessionFactory, ILogger logger)
@@ -26,6 +33,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.sessionFactory = sessionFactory;
             this.logger = logger;
             Id = Interlocked.Increment(ref counter);
+
+            StackTrace t = new StackTrace();
+            var stackTrace = t.ToString();
+            this.CreatedAt = DateTime.UtcNow;
+
+            var list = opennedUofs.GetOrAdd(stackTrace, key => new List<UnitOfWork>());
+            this.myList = list;
+            list.Add(this);
         }
 
         public void AcceptChanges()
@@ -60,6 +75,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) return;
 
+            this.myList.Remove(this);
             transaction?.Dispose();
             session?.Dispose();
 
