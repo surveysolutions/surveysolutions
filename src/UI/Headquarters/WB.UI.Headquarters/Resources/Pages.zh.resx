@@ -1164,7 +1164,7 @@
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{0}和{1}更多</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>使原督导员仍负责已转移调查员现有的任务和问卷。</value>
   </data>
   <data name="Map_Status" xml:space="preserve">

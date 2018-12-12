@@ -268,7 +268,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.ReadOnly = readOnlyQuestions.Select(InterviewStateIdentity.Create).ToList();
+            interviewState.ReadOnly = readOnlyQuestions.Select(InterviewStateIdentity.Create).ToHashSet();
 
             //act
             factory.Save(interviewState);
@@ -968,7 +968,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var interviewNewState = Create.Entity.InterviewState(interviewId);
-                interviewState.Removed = removedEntities.ToList();
+                interviewState.Removed = removedEntities.ToHashSet();
 
             factory.Save(interviewNewState);
             

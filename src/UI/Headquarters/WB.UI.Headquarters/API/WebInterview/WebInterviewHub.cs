@@ -25,47 +25,13 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
-        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
-        private readonly IAuthorizedUser authorizedUser;
-        private readonly IChangeStatusFactory changeStatusFactory;
-        private readonly IInterviewFactory interviewFactory;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
-        private readonly IInterviewOverviewService overviewService;
-        private IUnitOfWork unitOfWork;
-
-        //separate interview logic into interface implementation from hub logic and inject it 
+        private IInterviewBrokenPackagesService interviewBrokenPackagesService => this.ServiceLocator.GetInstance<IInterviewBrokenPackagesService>();
+        private IAuthorizedUser authorizedUser => this.ServiceLocator.GetInstance<IAuthorizedUser>();
+        private IChangeStatusFactory changeStatusFactory => this.ServiceLocator.GetInstance<IChangeStatusFactory>();
+        private IInterviewFactory interviewFactory => this.ServiceLocator.GetInstance<IInterviewFactory>();
+        private IStatefullInterviewSearcher statefullInterviewSearcher => this.ServiceLocator.GetInstance<IStatefullInterviewSearcher>();
+        private IInterviewOverviewService overviewService => this.ServiceLocator.GetInstance<IInterviewOverviewService>();
         
-
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService,
-            IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            IInterviewBrokenPackagesService interviewBrokenPackagesService,
-            IAudioFileStorage audioFileStorage,
-            IAuthorizedUser authorizedUser,
-            IChangeStatusFactory changeStatusFactory,
-            IInterviewFactory interviewFactory,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewOverviewService overviewService,
-            IUnitOfWork unitOfWork) : base(statefulInterviewRepository,
-            commandService,
-            questionnaireRepository,
-            webInterviewNotificationService,
-            interviewEntityFactory,
-            imageFileStorage,
-            audioFileStorage)
-        {
-            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
-            this.authorizedUser = authorizedUser;
-            this.changeStatusFactory = changeStatusFactory;
-            this.interviewFactory = interviewFactory;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
-            this.overviewService = overviewService;
-            this.unitOfWork = unitOfWork;
-        }
-
         protected override bool IsReviewMode =>
             this.authorizedUser.CanConductInterviewReview() &&
             this.Context.QueryString[@"review"].ToBool(false);
@@ -157,6 +123,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (this.authorizedUser.IsSupervisor)
             {
                 var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
+
                 this.commandService.Execute(command);
             }
             else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
@@ -208,8 +175,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override void Dispose(bool disposing)
         {
-            unitOfWork.AcceptChanges();
-
             base.Dispose(disposing);
             if (disposing)
             {
