@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
@@ -31,7 +32,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
         }
 
         private void BecauseOf() =>
-            result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Guid.NewGuid(), 1);
+            result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Create.Entity.QuestionnaireIdentity());
 
         [OneTimeTearDown]
         public void TearDown()
