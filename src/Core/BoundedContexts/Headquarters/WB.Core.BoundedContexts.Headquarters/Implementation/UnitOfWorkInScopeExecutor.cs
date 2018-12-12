@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
             }
         }
-
+        
         public bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func)
         {
             using (var scope = CreateChildContainer())
@@ -41,6 +42,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
 
                 var result = func(serviceLocatorLocal);
+
+                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
+
+                return result;
+            }
+        }
+
+        public async Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func)
+        {
+            using (var scope = CreateChildContainer())
+            {
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+
+                var result = await func(serviceLocatorLocal);
 
                 serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
 
