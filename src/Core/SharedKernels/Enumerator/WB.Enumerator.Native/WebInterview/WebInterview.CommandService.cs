@@ -41,12 +41,9 @@ namespace WB.Enumerator.Native.WebInterview
 
         public void ChangeLanguage(ChangeLanguageRequest request)
         {
-            InScopeExecutor.Current.ExecuteActionInScope(sl =>
-            {
-                sl.GetInstance<ICommandService>().Execute(
+            this.commandService.Execute(
                     new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
                     this.CommandResponsibleId));
-            });
         }
 
         public void AnswerTextQuestion(string questionIdenty, string text)
@@ -178,7 +175,7 @@ namespace WB.Enumerator.Native.WebInterview
             var identity = Identity.Parse(questionIdentity);
             var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, comment);
 
-            InScopeExecutor.Current.ExecuteActionInScope(sl => sl.GetInstance<ICommandService>().Execute(command));
+            this.commandService.Execute(command);
         }
     }
 }

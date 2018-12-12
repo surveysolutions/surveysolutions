@@ -154,8 +154,7 @@ namespace WB.UI.Designer.Controllers
                         questionnaireId: questionnaireId,
                         text: model.Title,
                         responsibleId: this.UserHelper.WebUser.UserId,
-                        isPublic: model.IsPublic,
-                        variable: model.Variable);
+                        isPublic: model.IsPublic);
 
                     this.commandService.Execute(command);
 

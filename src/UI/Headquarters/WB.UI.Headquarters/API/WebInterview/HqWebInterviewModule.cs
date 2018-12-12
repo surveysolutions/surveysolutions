@@ -29,6 +29,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             typeof(SignalrErrorHandler),
             typeof(HandlePauseEventPipelineModule),
+            typeof(HubLifetimePipelineModule),
+            typeof(HubTransactionPipelineModule),
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
