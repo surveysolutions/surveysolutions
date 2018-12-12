@@ -54,7 +54,9 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new NavigationState(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Substitute.For<IViewModelNavigationService>());
+                Mock.Of<IQuestionnaireStorage>(),
+                Substitute.For<IViewModelNavigationService>()
+                );
         }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
