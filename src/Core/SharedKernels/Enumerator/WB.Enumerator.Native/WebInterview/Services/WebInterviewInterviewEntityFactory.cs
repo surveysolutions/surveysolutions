@@ -265,7 +265,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
-                result.Title = MarkdownTextToHtml(result.Title, questionnaire);
                 
                 return result;
             }
@@ -274,7 +273,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (staticText != null)
             {
                 InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
-                result.Title = MarkdownTextToHtml(result.Title, questionnaire);
 
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
@@ -318,29 +316,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
             IQuestionnaire questionnaire)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
-                .Select(x => MarkdownTextToHtml(x, questionnaire)).ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
 
-            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
-                .Select(x => MarkdownTextToHtml(x, questionnaire)).ToArray();
-        }
-
-        private static string MarkdownTextToHtml(string text, IQuestionnaire questionnaire)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-
-            var document = CommonMarkConverter.Parse(text);
-
-            using (var writer = new System.IO.StringWriter())
-            {
-                CommonMarkConverter.ProcessStage3(document, writer);
-
-                var htmlText = writer.ToString().TrimEnd('\n');
-                if (htmlText.StartsWith("<p>") && htmlText.EndsWith("</p>"))
-                    htmlText = htmlText.Substring(3, htmlText.Length - 7);
-
-                return htmlText;
-            }
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
