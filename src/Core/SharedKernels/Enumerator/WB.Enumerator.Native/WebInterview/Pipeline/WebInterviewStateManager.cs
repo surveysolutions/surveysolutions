@@ -1,8 +1,4 @@
 using System;
-using System.Web;
-using Autofac;
-using Autofac.Integration.Owin;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
@@ -45,16 +41,16 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
                 }
 
                 questionnaireId = interview.QuestionnaireIdentity.ToString();
+
+                var isReview = hub.Context.QueryString[@"review"].ToBool(false);
+
+                if (!isReview)
+                {
+                    hub.Clients.OthersInGroup(interviewId).closeInterview();
+                }
+
+                hub.Groups.Add(hub.Context.ConnectionId, questionnaireId);
             });
-
-            var isReview = hub.Context.QueryString[@"review"].ToBool(false);
-
-            if (!isReview)
-            {
-                hub.Clients.OthersInGroup(interviewId).closeInterview();
-            }
-
-            hub.Groups.Add(hub.Context.ConnectionId, questionnaireId);
 
             base.OnAfterConnect(hub);
         }

@@ -77,13 +77,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IServiceLocator ServiceLocatorInstance { get; set; }
 
-        /// <remarks>
-        /// Repository operations are time-consuming.
-        /// So this repository may be used only in command handlers.
-        /// And should never be used in event handlers!!
-        /// </remarks>
-        public IQuestionnaireStorage questionnaireRepository => 
-            ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>();
         private IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider => 
             ServiceLocatorInstance.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
@@ -673,16 +666,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
 
+        private Dictionary<string, IQuestionnaire> questionnairesCache = new Dictionary<string, IQuestionnaire>();
+
         private IQuestionnaire GetQuestionnaireOrThrow(string language)
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.QuestionnaireIdentity, language);
+            var cacheKey = language ?? "Default-Language-9518C2F02FF54DC9A6BCB31507B03F06";
 
-            if (questionnaire == null)
-                throw new InterviewException(
-                    $"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {this.EventSourceId}",
-                    InterviewDomainExceptionType.QuestionnaireIsMissing);
+            if (!questionnairesCache.ContainsKey(cacheKey))
+            {
+                var questionnaire = this.ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>()
+                    .GetQuestionnaire(this.QuestionnaireIdentity, language);
+                if (questionnaire == null)
+                    throw new InterviewException($"Questionnaire '{this.QuestionnaireIdentity}' was not found. InterviewId {this.EventSourceId}", InterviewDomainExceptionType.QuestionnaireIsMissing);
+                questionnairesCache[cacheKey] = questionnaire;
+            }
 
-            return questionnaire;
+            return questionnairesCache[cacheKey];
         }
 
         protected static string FormatQuestionForException(Guid questionId, IQuestionnaire questionnaire)

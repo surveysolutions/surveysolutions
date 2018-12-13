@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Runtime.Caching;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -71,9 +72,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IReviewAllowedService SetupService(IQueryableReadSideRepositoryReader<InterviewSummary> summaries = null, 
             IAuthorizedUser authorizedUser = null)
         {
-            return new ReviewAllowedService(
+            var reviewAllowedService = new ReviewAllowedService(
                 summaries ?? new TestInMemoryWriter<InterviewSummary>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
+            ReviewAllowedService.reviewAllowedCache = new MemoryCache("test");
+            return reviewAllowedService;
         }
     }
 }
