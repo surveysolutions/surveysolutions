@@ -28,6 +28,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.sessionFactory = sessionFactory;
             this.logger = logger;
             Id = Interlocked.Increment(ref counter);
+
+            var opened = Interlocked.Increment(ref OpenUnits);
+
+            if (opened > 20)
+            {
+                logger.Error($"UOW#{Id} - Got too much open sessions. Opened {opened} sessions");
+            }
         }
 
         public void AcceptChanges()
@@ -50,14 +57,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 if (this.session == null)
                 {
                     session = sessionFactory.OpenSession();
-                    var opened = Interlocked.Increment(ref OpenUnits);
-                    
-                    if (opened > 20)
-                    {
-                        
-                        logger.Error($"UOW#{Id} - Got too much open sessions. Opened {opened} sessions");
-                        //throw new Exception("We got connections problem.");
-                    }
+                   
                     transaction = session.BeginTransaction();
                     SessionId = (session as SessionImpl)?.SessionId;
                 }
@@ -71,6 +71,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             if (isDisposed) return;
 
             transaction?.Dispose();
+            
             session?.Dispose();
             Interlocked.Decrement(ref OpenUnits);
             isDisposed = true;
