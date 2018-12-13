@@ -1,9 +1,11 @@
-﻿using MvvmCross.ViewModels;
+﻿using System.Diagnostics.CodeAnalysis;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
+    [ExcludeFromCodeCoverage] // no reason to cover it yet. Doesn't have any logic 
     public class PlainRosterTitleViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
     {
@@ -16,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             Enablement = enablement;
         }
         public Identity Identity { get; private set; }
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
             Title.Init(interviewId, entityIdentity);
