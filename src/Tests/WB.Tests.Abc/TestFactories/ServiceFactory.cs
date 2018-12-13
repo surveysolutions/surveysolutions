@@ -133,7 +133,7 @@ namespace WB.Tests.Abc.TestFactories
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(), Mock.Of<ILoggerProvider>());
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();

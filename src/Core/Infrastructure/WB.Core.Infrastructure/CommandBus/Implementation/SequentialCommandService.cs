@@ -1,10 +1,12 @@
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
@@ -35,9 +37,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator, 
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner, ILoggerProvider logger)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
             : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, 
-                aggregateLock, aggregateRootCacheCleaner, logger) { }
+                aggregateLock, aggregateRootCacheCleaner) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
@@ -71,12 +73,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private bool IsOnTopOfQueue(CommandDescriptor commandDescriptor)
         {
-            return this.queue.TryPeek(out var topDescriptor) && topDescriptor == commandDescriptor;
+            CommandDescriptor topDescriptor;
+
+            return this.queue.TryPeek(out topDescriptor) && topDescriptor == commandDescriptor;
         }
 
         private void RemoveFromTopOfQueue(CommandDescriptor commandDescriptor)
         {
-            var removeSucceeded = this.queue.TryDequeue(out var removedDescriptor);
+            CommandDescriptor removedDescriptor;
+
+            var removeSucceeded = this.queue.TryDequeue(out removedDescriptor);
 
             if (!removeSucceeded)
                 throw new CommandServiceException("Failed to remove top command from queue because queue is empty.");

@@ -301,8 +301,7 @@ namespace WB.Tests.Integration
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>(), Mock.Of<ILoggerProvider>()
-
+                Mock.Of<IAggregateRootCacheCleaner>()
                 //,Mock.Of<IEventStore>()
                 );
         }
