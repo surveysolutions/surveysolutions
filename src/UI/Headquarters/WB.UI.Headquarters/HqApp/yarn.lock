@@ -6244,11 +6244,6 @@ js-beautify@^1.6.12, js-beautify@^1.6.14:
     mkdirp "~0.5.0"
     nopt "~3.0.1"
 
-js-info-bubble@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/js-info-bubble/-/js-info-bubble-0.8.0.tgz#762433debe905248975b897c5d1f3eb102b974de"
-  integrity sha1-diQz3r6QUkiXW4l8XR8+sQK5dN4=
-
 js-message@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/js-message/-/js-message-1.0.5.tgz#2300d24b1af08e89dd095bc1a4c9c9cfcb892d15"
@@ -9352,9 +9347,9 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
 signalr@^2.2.2:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/signalr/-/signalr-2.3.0.tgz#2c5aceab8a3d6eaa81785debd8bca069bc3ed14d"
-  integrity sha512-NrvIGftLz3QVujdjCvaNso56ltTr1FowSR0DCIaSOJ3J4t5pTebTfnh2VT0HHIM3PJ/v15lukIL4y+8MMknqzg==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/signalr/-/signalr-2.4.0.tgz#92af008e6b527ad4b36e94fbb340e135087a60d2"
+  integrity sha512-GPJHb3pcNk3IUui5/WG8lMuarEn+Vpc8wEvJ60w0KQ43W9FHnJcuNcF8dkZePr81eBslzicsRdyEunKNF7KjZQ==
   dependencies:
     jquery ">=1.6.4"
 
