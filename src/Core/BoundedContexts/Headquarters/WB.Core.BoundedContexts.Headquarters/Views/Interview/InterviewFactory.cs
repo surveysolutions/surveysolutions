@@ -293,8 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                 }
             }
-
-            Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
+            
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
             Upsert(state.Warnings, (e, v) => e.WarningValidations = v.Validations);
@@ -314,7 +313,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsYesNo = answer.AsYesNo;
                 entity.AsAudio = answer.AsAudio;
                 entity.AsArea = answer.AsArea;
+
+                entity.IsEnabled = true; //if the answer was changed we assume that question is enabled or disabling would come from state.Enablement
             });
+
+            //order is important
+            //overrides with saved value if it was set to true in value setting state
+            Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
 
             SaveInterviewStateItem(state.Id, perEntity.Values);
         }
