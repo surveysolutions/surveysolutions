@@ -707,6 +707,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public Guid SupervisorId
+        {
+            get
+            {
+                if (!this.properties.SupervisorId.HasValue)
+                    throw new InterviewException($"Interview has no supervisor assigned. Interview key: {this.interviewKey}");
+                return this.properties.SupervisorId.Value;
+            }
+        }
+
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
 

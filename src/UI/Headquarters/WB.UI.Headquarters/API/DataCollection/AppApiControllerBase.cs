@@ -25,6 +25,11 @@ namespace WB.UI.Headquarters.API.DataCollection
             var majorUpdatesToUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue;
             if (majorUpdatesToUpdate.HasValue)
             {
+                if (majorUpdatesToUpdate.Value == 0)
+                {
+                    return hqVersion != appVersion;
+                }
+
                 var acceptedInterviewerVersion = hqVersion.Minor - majorUpdatesToUpdate.Value;
                 if (appVersion.Major == hqVersion.Major && appVersion.Minor < acceptedInterviewerVersion)
                 {

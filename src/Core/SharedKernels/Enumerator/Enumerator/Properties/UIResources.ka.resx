@@ -416,6 +416,9 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>barcode-ის გადასაღებად დააჭირეთ</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ {0} სვეტის ამოღება ყოველი დაკავშირებული როსტერიდან?</value>
+  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>მიმდინარე დროის ჩასაწერად დააჭირეთ</value>
   </data>

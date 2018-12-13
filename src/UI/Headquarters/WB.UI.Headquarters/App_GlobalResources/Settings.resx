@@ -201,4 +201,7 @@
   <data name="VersionOrNewer" xml:space="preserve">
     <value>Allow to use {0} or newer</value>
   </data>
+  <data name="CurrentVersion" xml:space="preserve">
+    <value>Same as the Headquarters</value>
+  </data>
 </root>

@@ -13,8 +13,7 @@
                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
                             :placeholder='$t("WebInterviewUI.CommentEnter")' 
                             :disabled="!$store.getters.addCommentsAllowed"
-                            :title="inputTitle"
-                            :maxlength="$me.maxLength"/>
+                            :title="inputTitle"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
                                 :class="buttonClass" 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Caching;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -9,7 +11,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
@@ -19,7 +20,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly EventBusSettings eventBusSettings;
-        
+        public static MemoryCache interviewsCache = new MemoryCache("WebInterviewAllowServiceInterviewsCache"); 
+
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
             InterviewStatus.InterviewerAssigned,
@@ -56,8 +58,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     return;
                 }
 
-            Guid interviewGuid = Guid.Parse(interviewId);
-            var interview = interviewSummaryStorage.GetById(interviewGuid);
+            InterviewSummary interview = (InterviewSummary) interviewsCache.Get(interviewId);
+            if (interview == null)
+            {
+                interview = interviewSummaryStorage.GetById(interviewId);
+                if (interview != null)
+                {
+                    interviewsCache.Set(interviewId, interview, DateTimeOffset.UtcNow.AddSeconds(5));
+                }
+            }
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
@@ -76,7 +85,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
             }
 
-            QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity);
 
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 

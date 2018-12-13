@@ -285,7 +285,6 @@
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
-    <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
     <Compile Include="CustomBindings\ExoPlayerBinding.cs" />
@@ -348,7 +347,7 @@
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
     <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
-    <Compile Include="CustomBindings\ButtonGroupStyleBinding.cs" />
+    <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
@@ -356,6 +355,7 @@
     <Compile Include="CustomBindings\NumericValueBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
+    <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupStatusBinding.cs" />
     <Compile Include="CustomBindings\TextViewWatermarkBinding.cs" />
     <Compile Include="CustomBindings\TextViewHtmlBinding.cs" />
