@@ -1,23 +1,19 @@
 ﻿using System;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel, IDashboardViewItem
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        private IInterviewFromAssignmentCreatorService InterviewFromAssignmentCreator
+            => serviceLocator.GetInstance<IInterviewFromAssignmentCreatorService>();
 
-        public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator,
-            IViewModelNavigationService viewModelNavigationService) 
-            : base(serviceLocator)
+        public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         protected override void BindActions()
@@ -29,12 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => viewModelNavigationService.NavigateToAsync<CreateInterviewViewModel, CreateInterviewViewModelArg>(
-                        new CreateInterviewViewModelArg()
-                        {
-                            AssignmentId = Assignment.Id,
-                            InterviewId = Guid.NewGuid()
-                        }),
+                    () => InterviewFromAssignmentCreator.CreateInterviewAsync(Assignment.Id),
                     () => !Assignment.Quantity.HasValue ||
                           Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 

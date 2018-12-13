@@ -299,6 +299,9 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tekan untuk mengambil kode batang</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Apakah Anda yakin Anda ingin menghapus {0} baris dari setiap daftar terkait?</value>
+  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Pewawancara Survey Solutions</value>
   </data>

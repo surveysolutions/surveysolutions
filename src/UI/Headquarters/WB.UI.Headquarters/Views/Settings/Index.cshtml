@@ -122,9 +122,8 @@
                         <div class="input-group">
                             <div>
                                 <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, event:{ change: updateHowManyMajorReleaseDontNeedUpdate}" class="selectpicker">
-                                    <option value="null">@Settings.Any</option>
+                                    <option value="0">@Settings.CurrentVersion</option>
                                     <option value='4'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(4))</option>
-                                    <option value='8'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(8))</option>
                                 </select>
                             </div>
                         </div>
@@ -188,10 +187,11 @@
     {
         var productVersion = DependencyResolver.Current.GetService<IProductVersion>();
         var version = productVersion.GetVersion();
-        if (version.Minor - releasesAgo > 0)
-        {
-            return new Version(version.Major, version.Minor - releasesAgo, 0).ToString();
-        }
-        return new Version(version.Major - 1, (version.Minor + 12) - releasesAgo, 0).ToString();
+        var prevVersion = (version.Minor - releasesAgo > 0)
+            ? new Version(version.Major, version.Minor - releasesAgo, 0)
+            : new Version(version.Major - 1, (version.Minor + 12) - releasesAgo, 0);
+        return prevVersion.Revision == 0
+            ? $"{prevVersion.Major}.{prevVersion.Minor}"
+            : prevVersion.ToString();
     }
 }

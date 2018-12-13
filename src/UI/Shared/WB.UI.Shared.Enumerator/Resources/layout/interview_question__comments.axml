@@ -22,7 +22,6 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         local:MvxBind="Text InterviewerComment; 
-                       TextLength MaxTextLength;
                        Visible IsCommentInEditMode; 
                        FocusValueChanged InterviewerCommentChangeCommand; 
                        SetFocus IsCommentInEditMode;

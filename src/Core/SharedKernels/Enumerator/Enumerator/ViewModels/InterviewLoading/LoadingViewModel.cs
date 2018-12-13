@@ -16,12 +16,13 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 {
-    public class LoadingViewModel : ProgressViewModel<LoadingViewModelArg>
+    public class LoadingViewModel : BaseViewModel<LoadingViewModelArg>, IDisposable
     {
         protected Guid interviewId;
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly IUserInteractionService interactionService;
@@ -41,11 +42,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.commandService = commandService;
             this.logger = logger;
             this.interactionService = interactionService;
+            this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewFactory = interviewFactory;
         }
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
+
+        public void Dispose()
+        {
+        }
 
         public override void Prepare(LoadingViewModelArg arg)
         {
@@ -132,7 +138,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             }
         }
 
+        private string progressDescription;
         private bool shouldReopen;
+
+        public string ProgressDescription
+        {
+            get => this.progressDescription;
+            set => SetProperty(ref this.progressDescription, value);
+        }
 
         private void Progress_ProgressChanged(object sender, EventReadingProgress e)
         {

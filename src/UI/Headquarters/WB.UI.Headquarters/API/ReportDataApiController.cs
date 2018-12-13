@@ -451,16 +451,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, Guid? id = null, 
-            [FromUri]string exportType = null)
+        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, [FromUri]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
             {
                 Filter = request.Search.Value,
                 Orders = request.GetSortOrderRequestItems(),
                 Page = request.Start,
-                PageSize = request.Length,
-                SupervisorId = id
+                PageSize = request.Length
             };
 
             if (!string.IsNullOrEmpty(exportType))
