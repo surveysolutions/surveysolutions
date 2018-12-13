@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Concurrent;
-using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline

@@ -137,9 +137,14 @@ export default {
 
         dispatch("refreshSectionState", null)
 
-        if (getters.isReviewMode)
-            dispatch("refreshSearchResults")
+        if (getters.isReviewMode) {
+            dispatch("refreshReviewSearch");
+        }
     },
+
+    refreshReviewSearch: debounce(({dispatch}) => {
+        dispatch("fetchSearchResults")
+    }, 200),
 
     refreshSectionState: debounce(({ dispatch }) => {
         dispatch("fetchSectionEnabledStatus")
