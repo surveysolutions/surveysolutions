@@ -189,7 +189,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        private bool doesExistTable = false;
+        private static bool doesExistTable = false;
 
         protected void EnshureTableExists()
         {

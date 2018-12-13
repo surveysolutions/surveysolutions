@@ -41,11 +41,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             authorizedUserMock = new Mock<IAuthorizedUser>();
             eventBusSettings = new EventBusSettings();
 
-            webInterviewAllowService = new WebInterviewAllowService(
+            var interviewAllowService = new WebInterviewAllowService(
                 interviewSummaryRepoMock.Object, 
                 webInterviewConfigProvider,
                 authorizedUserMock.Object,
                 eventBusSettings);
+            webInterviewAllowService = interviewAllowService;
+            WebInterviewAllowService.interviewsCache.Remove(interviewId.FormatGuid());
         }
 
         private void Act()

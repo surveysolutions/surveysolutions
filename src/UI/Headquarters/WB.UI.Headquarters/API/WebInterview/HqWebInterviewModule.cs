@@ -20,8 +20,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
-                registry.BindAsSingleton(type, type);
+                registry.BindAsSingleton(typeof(IHubPipelineModule), type, type);
             }
         }
 
@@ -30,7 +29,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             typeof(SignalrErrorHandler),
             typeof(HandlePauseEventPipelineModule),
             typeof(HubLifetimePipelineModule),
-            typeof(HubTransactionPipelineModule),
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
