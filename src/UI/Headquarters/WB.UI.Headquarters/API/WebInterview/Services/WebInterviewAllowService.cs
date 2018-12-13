@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly EventBusSettings eventBusSettings;
-        private static MemoryCache interviewsCache = new MemoryCache("WebInterviewAllowServiceInterviewsCache"); 
+        public static MemoryCache interviewsCache = new MemoryCache("WebInterviewAllowServiceInterviewsCache"); 
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -62,7 +62,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (interview == null)
             {
                 interview = interviewSummaryStorage.GetById(interviewId);
-                interviewsCache.Set(interviewId, interview, DateTimeOffset.UtcNow.AddSeconds(5));
+                if (interview != null)
+                {
+                    interviewsCache.Set(interviewId, interview, DateTimeOffset.UtcNow.AddSeconds(5));
+                }
             }
 
             if (interview == null)
