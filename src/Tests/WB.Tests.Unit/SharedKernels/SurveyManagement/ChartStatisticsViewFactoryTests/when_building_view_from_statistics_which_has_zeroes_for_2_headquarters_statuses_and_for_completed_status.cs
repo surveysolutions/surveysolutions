@@ -18,8 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 {
                     new DateTime(2014, 8, 20),
                     CreateQuestionnaireStatisticsForChart(
-                        supervisorAssigned: 1,
-                        interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
                         restarted: 2,
@@ -30,8 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 {
                     new DateTime(2014, 8, 21),
                     CreateQuestionnaireStatisticsForChart(
-                        supervisorAssigned: 1,
-                        interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
                         restarted: 5,
@@ -42,8 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 {
                     new DateTime(2014, 8, 22),
                     CreateQuestionnaireStatisticsForChart(
-                        supervisorAssigned: 1,
-                        interviewerAssigned: 1,
                         rejectedBySupervisor: 1,
                         approvedBySupervisor: 1,
                         restarted: 7,
@@ -71,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_return_5_lines_the_same_as_statuses_count() => view.Lines.Length.Should().Be(5);
+        public void should_return_3_lines_the_same_as_statuses_count() => view.Lines.Length.Should().Be(3);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

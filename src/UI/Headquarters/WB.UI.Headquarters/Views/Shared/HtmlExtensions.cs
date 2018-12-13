@@ -24,10 +24,10 @@ namespace ASP
             var page = html.ViewBag.ActivePage ?? MenuItem.Logon;
             string isActive = page == renderedPage ? "active" : String.Empty;
 
-            string liStartTag = $"<li class='{isActive}'>{Environment.NewLine}";
-            MvcHtmlString part2 = html.ActionLink(linkText, actionName, controllerName, new {area = "", id = ""}, new { title = linkText });
+            string liStartTag = $"<li class='{isActive}'>\r\n";
+            MvcHtmlString part2 = html.ActionLink(linkText, actionName, controllerName, new {area = ""}, new { title = linkText });
 
-            return new MvcHtmlString(liStartTag + part2 + $"{Environment.NewLine}</li>");
+            return new MvcHtmlString(liStartTag + part2 + "</li>");
         }
 
         public static IHtmlString ActivePage(this HtmlHelper html)
