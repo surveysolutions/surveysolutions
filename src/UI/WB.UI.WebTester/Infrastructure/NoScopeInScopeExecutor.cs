@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
@@ -20,6 +21,11 @@ namespace WB.UI.WebTester.Infrastructure
         }
 
         public bool ExecuteFunctionInScope(Func<IServiceLocator, bool> func)
+        {
+            return func(lifetimeScope.Resolve<IServiceLocator>());
+        }
+
+        public Task<object> ExecuteActionInScopeAsync(Func<IServiceLocator, Task<object>> func)
         {
             return func(lifetimeScope.Resolve<IServiceLocator>());
         }
