@@ -6,10 +6,8 @@ using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -27,7 +25,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
-        private readonly ILogger logger;
         private readonly EventBusSettings eventBusSettings;
 
         private static int executingCommandsCount = 0;
@@ -41,8 +38,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock, 
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            ILoggerProvider logger)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -51,7 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
-            this.logger = logger.GetFor<CommandService>();
+            
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -170,14 +166,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Action<ICommand, IAggregateRoot> commandHandler,
             CancellationToken cancellationToken)
         {
-            var aggregate = CommandRegistry.IsStateless(command) 
-                ? this.eventSourcedRepository.GetStateless(aggregateType, aggregateId) 
-                : this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
+            IEventSourcedAggregateRoot aggregate;
 
-            logger?.Info(JsonConvert.SerializeObject(new
+            if (CommandRegistry.IsStateless(command))
             {
-                name = command.GetType().Name, command, aggregateId, timestamp = DateTime.UtcNow
-            }));
+                aggregate = this.eventSourcedRepository.GetStateless(aggregateType, aggregateId);
+            }
+            else
+            {
+                aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
+            }
 
             cancellationToken.ThrowIfCancellationRequested();
 
