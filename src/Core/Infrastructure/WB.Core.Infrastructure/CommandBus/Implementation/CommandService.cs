@@ -174,7 +174,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 ? this.eventSourcedRepository.GetStateless(aggregateType, aggregateId) 
                 : this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
 
-            logger.Info(JsonConvert.SerializeObject(new
+            logger?.Info(JsonConvert.SerializeObject(new
             {
                 name = command.GetType().Name, command, aggregateId, timestamp = DateTime.UtcNow
             }));
