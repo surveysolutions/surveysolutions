@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IAuthorizedUser authorizedUser;
 
-        private static readonly MemoryCache reviewAllowedCache = new MemoryCache("ReviewAllowedServiceInterviewsCache");
+        public static MemoryCache reviewAllowedCache = new MemoryCache("ReviewAllowedServiceInterviewsCache");
 
         public ReviewAllowedService(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
             IAuthorizedUser authorizedUser)
