@@ -4,36 +4,27 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     class ReviewAllowedService : IReviewAllowedService
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IAuthorizedUser authorizedUser;
 
-        public static MemoryCache reviewAllowedCache = new MemoryCache("ReviewAllowedServiceInterviewsCache");
-
-        public ReviewAllowedService(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
+        public ReviewAllowedService(IStatefulInterviewRepository statefulInterviewRepository,
             IAuthorizedUser authorizedUser)
         {
-            this.interviewSummaryStorage = interviewSummaryStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
             this.authorizedUser = authorizedUser;
         }
 
         public void CheckIfAllowed(Guid interviewId)
         {
-            var interview = (InterviewSummary)reviewAllowedCache.Get(interviewId.FormatGuid());
-            if (interview == null)
-            {
-                interview = interviewSummaryStorage.GetById(interviewId);
-                if (interview != null)
-                {
-                    reviewAllowedCache.Set(interviewId.FormatGuid(), interview, DateTimeOffset.UtcNow.AddSeconds(5));
-                }
-            }
-
+            var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
@@ -43,10 +34,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
+        private bool CurrentUserCanAccessInterview(IStatefulInterview interview)
         {
             return this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter ||
-                   (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+                   (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interview.SupervisorId);
         }
     }
 }
