@@ -296,9 +296,11 @@ namespace WB.Tests.Abc.TestFactories
                 warningsViewModel: warningsViewModel);
         }
 
-        private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry, IQuestionnaireStorage questionnaireRepository)
-            => new EnablementViewModel(interviewRepository, eventRegistry, questionnaireRepository);
+        private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null,
+            ILiteEventRegistry eventRegistry = null, IQuestionnaireStorage questionnaireRepository = null)
+            => new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                eventRegistry ?? Create.Service.LiteEventRegistry(), 
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
 
         public FilteredOptionsViewModel FilteredOptionsViewModel(
             Identity questionId,
@@ -520,6 +522,26 @@ namespace WB.Tests.Abc.TestFactories
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+        }
+
+        public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+            IInterviewViewModelFactory viewModelFactory = null,
+            ILiteEventRegistry eventRegistry = null,
+            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+        {
+            return new PlainRosterViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>()
+                );
+        }
+
+        public PlainRosterTitleViewModel PlainRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage)
+        {
+            return new PlainRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
+                Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
     }
 }
