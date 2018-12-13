@@ -431,9 +431,6 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Apăsați pentru a prelua codul de bare</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Sigur doriți să eliminați {0} rânduri din fiecare Listă asociată?</value>
-  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Apăsați pentru a înregistra timpul curent</value>
   </data>

@@ -102,10 +102,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
                 deviceSyncInfos[0].LastAppUpdatedDate, 14.15, 16.17, "AppOrientation", 88, "BatteryPowerSource", false,
                 5242880, 2097152000, 52428800, 1073741824, 76546048,
                 deviceSyncInfos[0].SyncDate, deviceSyncInfos[0].DeviceDate, "NetworkType", "NetworkSubType", 0, 0, 0, 10, 0, 0 }));
+            Assert.That(report.GetData(0, "s_traffic_used"),Is.EqualTo(30000));
 
-            Assert.That(report.Data[1], Is.EquivalentTo(new object[]{ "u2", Id.g2, "super", null, false, null, 0, 0, null, null,
-                null, null, null, null, null, null, 0, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, 0, 0, 0, 0, 0, 0 }));
+
+            Assert.That(report.GetData(1, "i_name"), Is.EqualTo("u2"));
+            Assert.That(report.GetData(1, "i_id"), Is.EqualTo(Id.g2));
+            Assert.That(report.GetData(1, "i_supervisorName"), Is.EqualTo("super"));
         }
 
         [Test]
