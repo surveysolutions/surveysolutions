@@ -438,6 +438,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
 
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var targetList = sectionId != null
+                ? this.Tree.GetGroup(sectionId).Children
+                : this.Tree.GetAllNodesInEnumeratorOrder();
+
+            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
+
+            foreach (var interviewTreeNode in targetList)
+            {
+                if (questionnaire.IsPlainMode(interviewTreeNode.Identity.Id))
+                {
+                    nodes.AddRange(interviewTreeNode.Children);
+                }
+                else
+                {
+                    nodes.Add(interviewTreeNode);
+                }
+            }
+
+            IEnumerable<IInterviewTreeNode> result = nodes.Except(x =>
+                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                || questionnaire.IsVariable(x.Identity.Id)
+            );
+
+            return result.Select(x => x.Identity);
+        }
+
         public IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId)
         {
             var section = this.Tree.GetNodeByIdentity(sectionId);
@@ -453,7 +482,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 };
             }
 
-            return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
+            return section.Children
+                .Where(x => !(x is InterviewTreeVariable))
+                .Select(x => x.Identity);
+        }
+
+        private IEnumerable<Identity> GetUnderlyingEntitiesWithPlainFlagAnalize(
+            Identity sectionIdentity)
+        {
+            var groupEntities = GetGroupEntitiesIds(sectionIdentity);
+
+
+            foreach (var elementId in groupEntities)
+            {
+                if (questionnaire.IsPlainMode(elementId.Id))
+                {
+                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
+                    foreach (var groupEntitiesId in groupEntitiesIds)
+                    {
+                        yield return groupEntitiesId;
+                    }
+                }
+                else
+                {
+                    yield return elementId;
+                }
+            }
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
