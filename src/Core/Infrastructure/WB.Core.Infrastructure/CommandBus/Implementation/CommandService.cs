@@ -176,7 +176,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             logger.Info(JsonConvert.SerializeObject(new
             {
-                command, aggregateId, timestamp = DateTime.UtcNow
+                name = command.GetType().Name, command, aggregateId, timestamp = DateTime.UtcNow
             }));
 
             cancellationToken.ThrowIfCancellationRequested();
