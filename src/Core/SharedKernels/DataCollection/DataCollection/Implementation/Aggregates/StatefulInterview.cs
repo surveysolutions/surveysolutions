@@ -445,23 +445,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? this.Tree.GetGroup(sectionId).Children
                 : this.Tree.GetAllNodesInEnumeratorOrder();
 
-            List<IInterviewTreeNode> nodes = new List<IInterviewTreeNode>();
-
-            foreach (var interviewTreeNode in targetList)
-            {
-                if (questionnaire.IsPlainMode(interviewTreeNode.Identity.Id))
-                {
-                    nodes.AddRange(interviewTreeNode.Children);
-                }
-                else
-                {
-                    nodes.Add(interviewTreeNode);
-                }
-            }
-
-            IEnumerable<IInterviewTreeNode> result = nodes.Except(x =>
-                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
-                || questionnaire.IsVariable(x.Identity.Id)
+            IEnumerable<IInterviewTreeNode> result = GetUnderlyingEntitiesWithPlainFlagAnalize(targetList)
+                .Except(x =>
+                    (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                    || questionnaire.IsVariable(x.Identity.Id)
             );
 
             return result.Select(x => x.Identity);
@@ -482,38 +469,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 };
             }
 
-            return section.Children
+            return GetUnderlyingEntitiesWithPlainFlagAnalize(section.Children)
                 .Where(x => !(x is InterviewTreeVariable))
                 .Select(x => x.Identity);
         }
 
-        private IEnumerable<Identity> GetUnderlyingEntitiesWithPlainFlagAnalize(
-            Identity sectionIdentity)
+        private IEnumerable<IInterviewTreeNode> GetUnderlyingEntitiesWithPlainFlagAnalize(IEnumerable<IInterviewTreeNode> groupEntities)
         {
-            var groupEntities = GetGroupEntitiesIds(sectionIdentity);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-
-            foreach (var elementId in groupEntities)
+            foreach (var treeNode in groupEntities)
             {
-                if (questionnaire.IsPlainMode(elementId.Id))
+                if (questionnaire.IsPlainMode(treeNode.Identity.Id))
                 {
-                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
-                    foreach (var groupEntitiesId in groupEntitiesIds)
+                    foreach (var groupTreeNode in treeNode.Children)
                     {
-                        yield return groupEntitiesId;
+                        yield return groupTreeNode;
                     }
                 }
                 else
                 {
-                    yield return elementId;
+                    yield return treeNode;
                 }
             }
         }
 
         public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
         {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             var section = this.Tree.GetNodeByIdentity(sectionId);
-            
+
             if (section == null)
             {
                 throw new ArgumentException($"Section not found", nameof(sectionId))
@@ -528,10 +514,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return section
                 .TreeToEnumerableDepthFirst(s => s.Children)
-                .Where(x => !(x is InterviewTreeVariable))
+                .Where(x => !(x is InterviewTreeVariable) && !questionnaire.IsPlainMode(x.Identity.Id))
                 .Select(x => x.Identity);
         }
-        
 
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);
@@ -668,7 +653,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public Identity GetParentGroup(Identity groupOrQuestion)
-            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent?.Identity;
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var parent = this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent;
+            while (parent != null && questionnaire.IsPlainMode(parent.Identity.Id))
+            {
+                parent = parent.Parent;
+            }
+            return parent?.Identity;
+        }
 
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)

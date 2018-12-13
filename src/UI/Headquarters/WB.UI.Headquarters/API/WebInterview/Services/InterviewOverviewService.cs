@@ -27,8 +27,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
-                var interviewEntities = interviewEntityFactory
-                    .GetAllInterviewEntities(interview, questionnaire, enabledSectionId, isReviewMode);
+                var interviewEntities = isReviewMode
+                    ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
+                    : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
 
                 foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);

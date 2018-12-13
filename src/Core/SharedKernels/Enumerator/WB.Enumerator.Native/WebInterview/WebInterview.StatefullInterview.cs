@@ -157,7 +157,9 @@ namespace WB.Enumerator.Native.WebInterview
             var questionarie = this.GetCallerQuestionnaire();
 
             var sectionIdentity = Identity.Parse(sectionId);
-            var ids = interviewEntityFactory.GetGroupEntities(statefulInterview, questionarie, sectionIdentity, IsReviewMode);
+            var ids = IsReviewMode
+                ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity)
+                : statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
 
             var entities = ids
                 .Select(x => new InterviewEntityWithType
@@ -223,7 +225,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = interviewEntityFactory.GetParentWithoutPlainModeFlag(statefulInterview, questionnaire, sectionIdentity);
+            var parent = statefulInterview.GetParentGroup(sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -418,7 +420,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
+                var parentId = interview.GetParentGroup(identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
@@ -456,7 +458,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
+                var parentId = interview.GetParentGroup(identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),
