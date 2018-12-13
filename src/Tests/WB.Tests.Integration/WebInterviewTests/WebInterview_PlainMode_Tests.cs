@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -79,19 +80,14 @@ namespace WB.Tests.Integration.WebInterviewTests
             var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
             var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
 
-            var webInterviewHub = new WebInterviewHub(statefulInterviewRepository,
-                Mock.Of<ICommandService>(),
-                questionnaireStorage,
-                Mock.Of<IWebInterviewNotificationService>(),
-                webInterviewInterviewEntityFactory,
-                Mock.Of<IImageFileStorage>(),
-                Mock.Of<IInterviewBrokenPackagesService>(),
-                Mock.Of<IAudioFileStorage>(),
-                Mock.Of<IAuthorizedUser>(),
-                Mock.Of<IChangeStatusFactory>(),
-                Mock.Of<IInterviewFactory>(),
-                Mock.Of<IStatefullInterviewSearcher>(),
-                Mock.Of<IInterviewOverviewService>());
+            var serviceLocator = Mock.Of<IServiceLocator>(sl =>
+                sl.GetInstance<IStatefulInterviewRepository>() == statefulInterviewRepository
+                && sl.GetInstance<IQuestionnaireStorage>() == questionnaireStorage
+                && sl.GetInstance<IWebInterviewInterviewEntityFactory>() == webInterviewInterviewEntityFactory
+                && sl.GetInstance<IAuthorizedUser>() == Mock.Of<IAuthorizedUser>());
+
+            var webInterviewHub = new WebInterviewHub();
+            webInterviewHub.SetServiceLocator(serviceLocator);
 
             webInterviewHub.Context = Mock.Of<HubCallerContext>(h =>
                 h.QueryString == Mock.Of<INameValueCollection>(p =>
