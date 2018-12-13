@@ -3,7 +3,6 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -24,9 +23,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IExecutedCommandsStorage executedCommandsStorage, ILoggerProvider logger) : 
+            IExecutedCommandsStorage executedCommandsStorage) : 
                 base(eventSourcedRepository, eventBus, snapshooter,
-                     serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner, logger)
+                     serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner)
         {
             this.executedCommandsStorage = executedCommandsStorage;
         }
