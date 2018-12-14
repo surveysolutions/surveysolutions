@@ -32,11 +32,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         public void GetSectionEntities_for_entities_with_comments_placed_in_plain_roster_should_return_correct_parent_link()
         {
             var sectionId = Guid.NewGuid();
+            var rosterId = Guid.NewGuid();
             var intQuestionId = Guid.NewGuid();
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
-                Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(rosterId, isPlainMode: true, fixedTitles: new FixedRosterTitle[]
                 {
                     Create.Entity.FixedTitle(1, "1"),
                     Create.Entity.FixedTitle(2, "2"),
@@ -50,11 +51,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var entities = webInterview.GetSectionEntities(sectionId.FormatGuid());
 
-            Assert.That(entities.Length, Is.EqualTo(3));
-            Assert.That(entities.First().EntityType, Is.EqualTo(InterviewEntityType.Integer.ToString()));
-            Assert.That(entities.Second().EntityType, Is.EqualTo(InterviewEntityType.Integer.ToString()));
-            Assert.That(entities.First().Identity, Is.EqualTo(Create.Identity(intQuestionId, Create.RosterVector(1)).ToString()));
-            Assert.That(entities.Second().Identity, Is.EqualTo(Create.Identity(intQuestionId, Create.RosterVector(2)).ToString()));
+            Assert.That(entities.Length, Is.EqualTo(5));
+            Assert.That(entities[0].EntityType, Is.EqualTo(InterviewEntityType.GroupTitle.ToString()));
+            Assert.That(entities[1].EntityType, Is.EqualTo(InterviewEntityType.Integer.ToString()));
+            Assert.That(entities[2].EntityType, Is.EqualTo(InterviewEntityType.GroupTitle.ToString()));
+            Assert.That(entities[3].EntityType, Is.EqualTo(InterviewEntityType.Integer.ToString()));
+            Assert.That(entities[0].Identity, Is.EqualTo(Create.Identity(rosterId, Create.RosterVector(1)).ToString()));
+            Assert.That(entities[1].Identity, Is.EqualTo(Create.Identity(intQuestionId, Create.RosterVector(1)).ToString()));
+            Assert.That(entities[2].Identity, Is.EqualTo(Create.Identity(rosterId, Create.RosterVector(2)).ToString()));
+            Assert.That(entities[3].Identity, Is.EqualTo(Create.Identity(intQuestionId, Create.RosterVector(2)).ToString()));
         }
 
         [Test]
