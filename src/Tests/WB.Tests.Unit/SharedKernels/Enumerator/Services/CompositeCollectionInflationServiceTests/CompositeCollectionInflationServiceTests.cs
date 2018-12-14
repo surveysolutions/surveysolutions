@@ -284,7 +284,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         {
             var rosterViewModel = Create.ViewModel.RosterViewModel();
             var nestedRoster = Create.ViewModel.RosterViewModel();
-            rosterViewModel.AsDynamic().IsPlainRoster = true;
             rosterViewModel.RosterInstances.Add(Create.ViewModel.TextQuestionViewModel());
             rosterViewModel.RosterInstances.Add(nestedRoster);
 
