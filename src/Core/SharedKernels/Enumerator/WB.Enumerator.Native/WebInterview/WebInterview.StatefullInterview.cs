@@ -157,9 +157,7 @@ namespace WB.Enumerator.Native.WebInterview
             var questionarie = this.GetCallerQuestionnaire();
 
             var sectionIdentity = Identity.Parse(sectionId);
-            var ids = IsReviewMode
-                ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity)
-                : statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
+            var ids = interviewEntityFactory.GetGroupEntities(statefulInterview, questionarie, sectionIdentity, IsReviewMode);
 
             var entities = ids
                 .Select(x => new InterviewEntityWithType
@@ -225,7 +223,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = statefulInterview.GetParentGroup(sectionIdentity);
+            var parent = interviewEntityFactory.GetParentWithoutPlainModeFlag(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -420,7 +418,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interview.GetParentGroup(identity);
+                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
@@ -458,7 +456,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interview.GetParentGroup(identity);
+                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),
