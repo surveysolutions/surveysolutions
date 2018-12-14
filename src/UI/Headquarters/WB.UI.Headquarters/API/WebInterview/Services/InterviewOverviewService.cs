@@ -27,10 +27,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
-                var interviewEntities = interviewEntityFactory
-                    .GetAllInterviewEntities(interview, questionnaire, enabledSectionId, isReviewMode);
+                var interviewEntities = isReviewMode
+                    ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
+                    : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
 
-                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
+                interviewEntities = interviewEntities
+                    .Where(e => interview.IsEnabled(e) && !questionnaire.IsPlainMode(e.Id));
+
+                foreach (var interviewEntity in interviewEntities)
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
             }
         }
