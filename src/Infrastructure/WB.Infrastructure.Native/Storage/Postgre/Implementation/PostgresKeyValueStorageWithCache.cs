@@ -18,13 +18,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
         }
 
-
         public override TEntity GetById(string id)
         {
             lock (lockObject)
             {
-                var value = memoryCache.Get(id) as TEntity;
-                if (value != null)
+                if (memoryCache.Get(id) is TEntity value)
                     return value;
 
                 value = base.GetById(id);
