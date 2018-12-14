@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Caching;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-//using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 
@@ -16,11 +11,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     class WebInterviewAllowService : IWebInterviewAllowService
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly EventBusSettings eventBusSettings;
-        public static MemoryCache interviewsCache = new MemoryCache("WebInterviewAllowServiceInterviewsCache"); 
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -35,12 +29,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         };
 
         public WebInterviewAllowService(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
             EventBusSettings EventBusSettings)
         {
-            this.interviewSummaryStorage = interviewSummaryStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
             this.eventBusSettings = EventBusSettings;
@@ -58,15 +52,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     return;
                 }
 
-            InterviewSummary interview = (InterviewSummary) interviewsCache.Get(interviewId);
-            if (interview == null)
-            {
-                interview = interviewSummaryStorage.GetById(interviewId);
-                if (interview != null)
-                {
-                    interviewsCache.Set(interviewId, interview, DateTimeOffset.UtcNow.AddSeconds(5));
-                }
-            }
+            var interview = statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
@@ -76,7 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             if (this.authorizedUser.IsInterviewer)
             {
-                if (interview.ResponsibleId == this.authorizedUser.Id)
+                if (interview.CurrentResponsibleId == this.authorizedUser.Id)
                     return;
                 else
                 {
@@ -85,7 +71,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
             }
 
-            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity);
+            QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
 
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 

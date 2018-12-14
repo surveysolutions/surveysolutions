@@ -60,10 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                     }
                 }));
         }
-
-        [NUnit.Framework.Test] public void should_set_validation_caption () => viewModel.Error.Caption.Should().Be(UIResources.Validity_Answered_Invalid_ErrorCaption);
-
-        [NUnit.Framework.Test] public void should_show_single_error_message () => viewModel.Error.ValidationErrors.Count.Should().Be(1);
+        
+        [NUnit.Framework.Test] public void should_show_single_error_message () => 
+            viewModel.Error.ValidationErrors.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_show_error_message_without_index_postfix () => viewModel.Error.ValidationErrors.First()?.PlainText.Should().Be("message 1");
 

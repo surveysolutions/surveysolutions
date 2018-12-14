@@ -144,6 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 CreationDate = this.clock.UtcNow(),
                 LastEntryDate = this.clock.UtcNow(),
                 CreatedBy = createQuestionnaire.ResponsibleId,
+                VariableName = createQuestionnaire.Variable
             };
 
             this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
