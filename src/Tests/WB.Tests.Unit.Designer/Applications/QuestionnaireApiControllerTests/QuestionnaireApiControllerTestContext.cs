@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -41,7 +42,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 userHelper ?? Mock.Of < IMembershipUserService>(),
                 Mock.Of<WebTesterSettings>(),
-                webTesterService ?? Mock.Of<IWebTesterService>());
+                webTesterService ?? Mock.Of<IWebTesterService>(),
+                Mock.Of<ISearchService>());
 
             return questionnaireController;
         }
