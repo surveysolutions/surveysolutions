@@ -58,7 +58,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
-                children = children.Where(e => !questionnaire.IsPlainMode(e.Identity.Id));
+                children = children.Where(e => !questionnaire.IsPlainRoster(e.Identity.Id));
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -74,7 +74,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
-                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainMode(c.Identity.Id));
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainRoster(c.Identity.Id));
                     });
                 }
             }
@@ -431,7 +431,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
-            while (parent != null && questionnaire.IsPlainMode(parent.Id))
+            while (parent != null && questionnaire.IsPlainRoster(parent.Id))
             {
                 parent = interview.GetParentGroup(parent);
             }

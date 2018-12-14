@@ -988,7 +988,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var parent = entity.GetParent();
             bool shouldBeHiddenByParentHideIfDisabled = false;
-            if(IsPlainMode(parent.PublicKey))
+            if(IsPlainRoster(parent.PublicKey))
             {
                 shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
             }
@@ -996,7 +996,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
         }
 
-        public bool IsPlainMode(Guid entityId)
+        public bool IsPlainRoster(Guid entityId)
         {
             return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
