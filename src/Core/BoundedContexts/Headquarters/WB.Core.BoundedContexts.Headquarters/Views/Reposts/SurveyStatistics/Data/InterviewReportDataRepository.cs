@@ -16,18 +16,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             this.sessionProvider = sessionProvider;
         }
 
-        public List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity)
+        public List<QuestionnaireItem> QuestionsForQuestionnaireWithData(string questionnaireId, long? version)
         {
             return this.sessionProvider.Session.Connection
-                .Query<Guid>(@"with questionnaires as (
-	                    select id, entityid from readside.questionnaire_entities
-	                    where questionnaireidentity = @Id	
-                    )
-                    select q.entityid from questionnaires q
+                .Query<QuestionnaireItem>(@"with questionnaires as (
+	                    select id, entityid, questionnaireidentity from readside.questionnaire_entities
+	                    where questionnaireidentity like @Id)
+                    select q.entityid as questionId, q.questionnaireidentity from questionnaires q
                     where exists (
 	                    select 1 from readside.report_tabulate_data rd
 	                    where rd.entity_id = q.id)",
-                    new { Id = questionnaireIdentity.ToString() })
+                    new { Id = $"{questionnaireId}${(version == null ? "%" : version.ToString())}"})
                 .ToList();
         }
 
