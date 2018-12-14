@@ -62,7 +62,6 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();
             registry.Bind<IArchivePatcherService, ArchivePatcherService>();
-            registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();

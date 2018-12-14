@@ -388,7 +388,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance @group, InterviewTreeGroup treeGroup,
             IStatefulInterview callerInterview, bool isReviewMode)
         {
-            group.Stats = this.GetGroupStatistics(treeGroup, isReviewMode);
             group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode, callerInterview);
         }
 
@@ -396,21 +395,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             isReviewMode
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor() > 0
                 : group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
-
-        private static bool HasUnansweredQuestions(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.HasUnansweredQuestionsForSupervisor()
-                : group.HasUnansweredQuestions();
-
-        private static int CountEnabledAnsweredQuestions(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.CountEnabledAnsweredQuestionsForSupervisor()
-                : group.CountEnabledAnsweredQuestions();
-
-        private static int CountEnabledInvalidQuestionsAndStaticTexts(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
-                : group.CountEnabledInvalidQuestionsAndStaticTexts();
         
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview)
         {
@@ -442,19 +426,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             int AnsweredQuestions() => isReviewMode
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
-        }
-
-        private InterviewGroupOrRosterInstance.AnswersStats GetGroupStatistics(InterviewTreeGroup group, bool isReviewMode)
-        {
-            var stats = new InterviewGroupOrRosterInstance.AnswersStats
-            {
-                AnsweredCount = CountEnabledAnsweredQuestions(group, isReviewMode),
-                HasUnanswered = HasUnansweredQuestions(group, isReviewMode),
-                InvalidCount = CountEnabledInvalidQuestionsAndStaticTexts(group, isReviewMode),
-                SubSectionsCount = group.Children.OfType<InterviewTreeGroup>().Count()
-            };
-
-            return stats;
         }
 
         public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, 

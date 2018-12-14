@@ -301,9 +301,6 @@ Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solution
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Nhấn vào để lấy mã vạch</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Bạn có chắc là bạn muốn bỏ {0} lựa chọn từ danh sách này?</value>
-  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
