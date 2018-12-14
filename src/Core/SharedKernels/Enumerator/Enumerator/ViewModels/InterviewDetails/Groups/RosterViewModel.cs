@@ -63,8 +63,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(entityId.Id);
             }
 
-            this.IsPlainRoster = questionnaire.IsPlainRoster(entityId.Id);
-
             this.UpdateFromInterview();
         }
 
@@ -78,74 +76,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             var statefulInterview = this.interviewRepository.Get(this.interviewId);
 
-            var interviewRosterInstances = statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
-                                                            .ToList();
-            if (!IsPlainRoster)
-            {
-                var rosterIdentitiesByViewModels =
-                    this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
-                var notChangedRosterInstances =
-                    rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
+            var interviewRosterInstances = statefulInterview
+                .GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
+                .ToList();
+            var rosterIdentitiesByViewModels =
+                this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
+            var notChangedRosterInstances =
+                rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
 
-                var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
-                var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
+            var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
+            var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
 
-                this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances, this.RosterInstances);
-            }
-            else
-            {
-                this.RosterInstances.SuspendCollectionChanged();
-
-                foreach (var interviewRosterInstance in interviewRosterInstances)
-                {
-                    
-                }
-
-                //List<Identity> shouldBeOnUiList = interviewRosterInstances
-                //    .SelectMany(x => statefulInterview.GetUnderlyingInterviewerEntities(x))
-                //    .ToList();
-
-                //if (shouldBeOnUiList.Count == 0) this.RosterInstances.Clear();
-                //else
-                //{
-                //    this.RosterInstances.SuspendCollectionChanged();
-
-                //    for (int i = 0; i < shouldBeOnUiList.Count; i++)
-                //    {
-                //        var currentShouldBeOnUi = shouldBeOnUiList[i];
-                //        if (i == RosterInstances.Count)
-                //        {
-                //            this.RosterInstances.Add(this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
-                //        }
-                //        else
-                //        {
-                //            var existingOnUi = this.RosterInstances[i].Identity;
-                //            if (!currentShouldBeOnUi.Equals(existingOnUi))
-                //            {
-                //                this.RosterInstances[i].DisposeIfDisposable();
-                //                this.RosterInstances.RemoveAt(i);
-                //                this.RosterInstances.Insert(i, this.interviewViewModelFactory.GetEntity(currentShouldBeOnUi, interviewId, navigationState));
-                //            }
-                //        }
-                //    }
-
-                //    if (this.RosterInstances.Count > shouldBeOnUiList.Count)
-                //    {
-                //        for (int i = 0; i < this.RosterInstances.Count - shouldBeOnUiList.Count; i++)
-                //        {
-                //            var index = this.RosterInstances.Count - 1 - i;
-                //            var removedViewModel = this.RosterInstances[index];
-                //            removedViewModel.DisposeIfDisposable();
-                //            this.RosterInstances.Remove(removedViewModel);
-                //        }
-                //    }
-
-                //    this.RosterInstances.ResumeCollectionChanged();
-                //}
-            }
+            this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances,
+                this.RosterInstances);
         }
-
-        public bool IsPlainRoster { get; private set; }
 
         private void UpdateViewModels(List<Identity> removedRosterInstances, List<Identity> addedRosterInstances,
             List<Identity> interviewRosterInstances, 
