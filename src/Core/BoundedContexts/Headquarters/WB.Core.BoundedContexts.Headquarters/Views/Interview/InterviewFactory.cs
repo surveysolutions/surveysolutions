@@ -314,7 +314,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsAudio = answer.AsAudio;
                 entity.AsArea = answer.AsArea;
 
-                entity.IsEnabled = true; //if the answer was changed we assume that question is enabled or disabling would come from state.Enablement
+                entity.IsEnabled = true; //if the answer was changed we assume that question is enabled
+                                         //and disabling would come from state.Enablement
             });
 
             //order is important
