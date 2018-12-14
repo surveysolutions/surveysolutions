@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (questionnaire.HasGroup(entityId))
             {
                 if (questionnaire.IsRosterGroup(entityId))
-                    return questionnaire.IsPlainMode(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
+                    return questionnaire.IsPlainRoster(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
                 else
                     return InterviewEntityType.GroupModel;
             }

@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(entityId.Id);
             }
 
-            this.IsPlainRoster = questionnaire.IsPlainMode(entityId.Id);
+            this.IsPlainRoster = questionnaire.IsPlainRoster(entityId.Id);
 
             this.UpdateFromInterview();
         }

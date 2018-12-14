@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 interview.GetGroup(identity)?.GetEnabledSubGroups().ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x));
             }
 
-            foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters().Where(x => !questionnaire.IsPlainMode(x.Identity.Id)))
+            foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters().Where(x => !questionnaire.IsPlainRoster(x.Identity.Id)))
             {
                 if (sectionOrSubSection is InterviewTreeSection)
                     yield return sectionOrSubSection.Identity;
