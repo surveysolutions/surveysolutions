@@ -154,16 +154,37 @@ namespace WB.Enumerator.Native.WebInterview
             var statefulInterview = GetCallerInterview();
             if (statefulInterview == null) return null;
 
-            var questionarie = this.GetCallerQuestionnaire();
+            var questionnaire = this.GetCallerQuestionnaire();
 
             var sectionIdentity = Identity.Parse(sectionId);
-            var ids = interviewEntityFactory.GetGroupEntities(statefulInterview, questionarie, sectionIdentity, IsReviewMode);
 
-            var entities = ids
+            var ids = GetGroupEntitiesIds(sectionIdentity);
+
+            IEnumerable<Identity> GetGroupEntitiesIds(Identity identity)
+            {
+                return IsReviewMode
+                    ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
+            }
+
+            List<Identity> groupIds = new List<Identity>();
+
+            foreach (var elementId in ids)
+            {
+                groupIds.Add(elementId);
+
+                if (questionnaire.IsPlainMode(elementId.Id))
+                {
+                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
+                    groupIds.AddRange(groupEntitiesIds);
+                }
+            }
+
+            var entities = groupIds
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionarie).ToString()
+                    EntityType = this.GetEntityType(x.Id, questionnaire).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -354,11 +375,12 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire();
-            return ids.Select(id => 
-                id == @"NavigationButton"
-                    ? this.GetNavigationButtonState(id, questionnaire)
-                    : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
+            var interviewEntities = ids.Select(id => 
+                    id == @"NavigationButton"
+                        ? this.GetNavigationButtonState(id, questionnaire)
+                        : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
                 .ToArray();
+            return interviewEntities;
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
@@ -487,7 +509,11 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
 
             if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
+            {
+                if (callerQuestionnaire.IsPlainMode(entityId))
+                    return InterviewEntityType.GroupTitle;
                 return InterviewEntityType.Group;
+            }
 
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
 
