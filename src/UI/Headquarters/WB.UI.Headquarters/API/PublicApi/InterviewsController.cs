@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Diag;
@@ -381,6 +382,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">Interview Id</param>
         [HttpPost]
         [Route("{id:Guid}/rebuild")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public void RebuildInterviewByEventStream(Guid id) => this.interviewStateFixer.RefreshInterview(id);
 
         #endregion
