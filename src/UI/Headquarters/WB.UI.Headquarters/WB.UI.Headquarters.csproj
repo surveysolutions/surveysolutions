@@ -2277,6 +2277,7 @@
     <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
+    <Compile Include="Models\Reports\SurveysAndStatusesModel.cs" />
     <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />

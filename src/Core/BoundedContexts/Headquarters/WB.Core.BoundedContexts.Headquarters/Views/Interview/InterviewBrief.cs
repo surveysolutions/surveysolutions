@@ -8,9 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         
         public virtual Guid InterviewId { get; set; }
-        [Obsolete("Use QuestionnaireIdentity instead")]
         public virtual Guid QuestionnaireId { get; set; }
-        [Obsolete("Use QuestionnaireIdentity instead")]
         public virtual long QuestionnaireVersion { get; set; }
         public virtual Guid ResponsibleId { get; set; }
         public virtual InterviewStatus Status { get; set; }
