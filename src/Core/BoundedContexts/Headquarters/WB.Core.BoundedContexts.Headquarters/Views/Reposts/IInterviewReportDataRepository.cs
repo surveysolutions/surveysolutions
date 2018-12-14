@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
     public interface IInterviewReportDataRepository
     {
-        List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity);
+        List<QuestionnaireItem> QuestionsForQuestionnaireWithData(string questionnaireId, long? version);
         List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId);
         List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params);
 
