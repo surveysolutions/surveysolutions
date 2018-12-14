@@ -428,48 +428,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        public IEnumerable<Identity> GetGroupEntities(IStatefulInterview statefulInterview, 
-            IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
-        {
-            var groupEntities = GetGroupEntitiesIds(sectionIdentity);
-
-            IEnumerable<Identity> GetGroupEntitiesIds(Identity identity)
-            {
-                return isReviewMode
-                    ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
-                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
-            }
-
-            foreach (var elementId in groupEntities)
-            {
-                if (questionnaire.IsPlainMode(elementId.Id))
-                {
-                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
-                    foreach (var groupEntitiesId in groupEntitiesIds)
-                    {
-                        yield return groupEntitiesId;
-                    }
-                }
-                else
-                {
-                    yield return elementId;
-                }
-            }
-        }
-
-        public IEnumerable<Identity> GetAllInterviewEntities(IStatefulInterview statefulInterview,
-            IQuestionnaire questionnaire, Identity sectionIdentity, bool isReviewMode)
-        {
-            var interviewIdentities = isReviewMode
-                ? statefulInterview.GetUnderlyingEntitiesForReviewRecursive(sectionIdentity)
-                : statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
-
-            IEnumerable<Identity> entityIdenties = interviewIdentities
-                .Where(e => !questionnaire.IsPlainMode(e.Id));
-
-            return entityIdenties;
-        }
-
         public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
             var parent = interview.GetParentGroup(identity);
