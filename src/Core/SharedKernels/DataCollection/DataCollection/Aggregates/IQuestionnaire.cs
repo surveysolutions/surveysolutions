@@ -280,6 +280,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
-        bool IsPlainMode(Guid groupId);
+        bool IsPlainRoster(Guid groupId);
     }
 }
