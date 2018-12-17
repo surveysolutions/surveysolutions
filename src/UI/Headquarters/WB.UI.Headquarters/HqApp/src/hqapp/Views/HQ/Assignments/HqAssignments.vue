@@ -22,7 +22,7 @@
                            :ajax-params="questionnaireParams"
                            :value="questionnaireVersion"
                            v-on:selected="questionnaireVersionSelected"
-                           :fetch-url="questionnaireVersionFetchUrl" />
+                           :fetch-url="questionnaireVersionFetchUrl" :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
