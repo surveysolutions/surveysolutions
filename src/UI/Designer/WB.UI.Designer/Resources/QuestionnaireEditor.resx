@@ -1174,4 +1174,22 @@
   <data name="MyClassifications" xml:space="preserve">
     <value>My classifications</value>
   </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Add classification</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Add group</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Group title</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Enter categories</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Classification title</value>
+  </data>
 </root>
