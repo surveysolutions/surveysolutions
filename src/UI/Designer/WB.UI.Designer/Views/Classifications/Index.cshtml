@@ -31,7 +31,8 @@
         Vue.use(ClassificationsConfig,
             {
                 isAdmin: @Json.Encode(userHelper.WebUser.IsAdmin),
-                userId: '@userHelper.WebUser.UserId'
+                userId: '@userHelper.WebUser.UserId',
+                optionsParseRegex: new RegExp(/^(.+?)[\…\.\s]+([-+]?\d+)\s*$/)
             });
     </script>
 
@@ -95,12 +96,12 @@
                     <div v-else class="categories-holder-body">
                         <div class="options-editor" v-if="optionsMode">
                             <div class="option-line" v-for="(category, index) in categories" :key="category.id">
-                                <div class="input-group">
-                                    <div class="option-cell">
-                                        <input name="value" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" type="number" v-model="category.value" class="form-control" placeholder="Value">
+                                <div class="input-group" >
+                                    <div class="option-cell" :class="{'has-error': errors.has('value'+category.id)}">
+                                        <input :name="'value'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required|integer'" key="value" type="number" v-model="category.value" class="form-control" placeholder="Value">
                                     </div>
-                                    <div class="option-cell">
-                                        <input name="title" v-on:keyup.enter="moveFocus" v-validate="'required'" type="text" v-model="category.title" class="form-control" placeholder="Title">
+                                    <div class="option-cell" :class="{'has-error': errors.has('title'+category.id)}">
+                                        <input :name="'title'+category.id" v-on:keyup.enter="moveFocus" v-validate="'required'" key="title" type="text" v-model="category.title" class="form-control" placeholder="Title">
                                     </div>
                                     <div class="input-group-btn">
                                         <button @@click="deleteCategory(index)" type="button" class="btn btn-link btn-delete">
@@ -113,8 +114,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else class="form-group">
-                            <textarea v-elastic v-model="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
+                        <div v-else class="form-group" :class="{'has-error': errors.has('stringifiedOptions')}">
+                            <textarea name="stringifiedOptions" v-elastic v-model="stringifiedOptions" v-validate="'stringOptions'" key="stringifiedOptions" class="form-control js-elasticArea" placeholder="Enter categories"></textarea>
+                            <p v-if="errors.has('stringifiedOptions')" class="text-danger">{{ errors.first('stringifiedOptions')}}</p>
                         </div>
                     </div>
                     <div v-if="isEditMode" class="categories-holder-footer clearfix">
@@ -125,7 +127,7 @@
                 </div>
             </div>
             <div class="form-buttons-holder">
-                <button type="button" class="btn btn-success btn-lg" @@click="save">Save</button>
+                <button type="button" class="btn btn-success btn-lg" :disabled="!isFormDirty" @@click="save">Save</button>
             </div>
         </form>
     </script>
