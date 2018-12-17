@@ -4,7 +4,7 @@
             <button type="button" :id="buttonId"
                     class="btn dropdown-toggle"
                     data-toggle="dropdown"
-                    :disabled="!fetchUrl">
+                    :disabled="disabled">
                 <span data-bind="label"
                       v-if="value == null"
                       class="gray-text">{{placeholderText}}</span>
@@ -71,6 +71,7 @@ export default {
         values: Array,
         noSearch: Boolean,
         noClear: Boolean,
+        disabled: Boolean,
         fuzzy: {
             type: Boolean,
             default: false
