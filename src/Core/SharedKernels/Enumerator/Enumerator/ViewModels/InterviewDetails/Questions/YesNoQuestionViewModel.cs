@@ -237,7 +237,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
         {
-            if (this.userInteraction.HasPendingUserInterations)
+            if (this.userInteraction.HasPendingUserInteractions)
             {
                 changedModel.Selected = oldValue;
                 return;

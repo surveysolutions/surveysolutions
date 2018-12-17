@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
     public class DashboardMenuViewModel : MvxViewModel
     {
-        private readonly IMvxNavigationService mvxNavigationService;
+        public IMvxNavigationService MvxNavigationService { get; }
         private readonly IMvxMessenger messenger;
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         
@@ -22,16 +22,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private int waitingForDecisionCount;
 
         protected readonly IPrincipal Principal;
-        private MvxSubscriptionToken messengerSubscribtion;
-
-        private MvxSubscriptionToken syncMessengerSubscribtion;
+        private MvxSubscriptionToken messengerSubscription;
 
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
             IDashboardItemsAccessor dashboardItemsAccessor,
             IPrincipal principal)
         {
-            this.mvxNavigationService = mvxNavigationService;
+            MvxNavigationService = mvxNavigationService;
             this.messenger = messenger;
             this.dashboardItemsAccessor = dashboardItemsAccessor;
 
@@ -46,14 +44,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(msg => RefreshCounters(), MvxReference.Strong);
             RefreshCounters();
         }
 
         public override void ViewDisappeared()
         {
             base.ViewDisappeared();
-            messengerSubscribtion.Dispose();
+            messengerSubscription.Dispose();
         }
 
         private void RefreshCounters()
@@ -110,15 +108,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         public IMvxCommand ShowToBeAssignedItems => 
-            new MvxAsyncCommand(async() => await mvxNavigationService.Navigate<ToBeAssignedItemsViewModel>());
+            new MvxAsyncCommand(async() => await MvxNavigationService.Navigate<ToBeAssignedItemsViewModel>());
 
         public IMvxCommand ShowWaitingForActionItems =>
-            new MvxAsyncCommand(async() => await mvxNavigationService.Navigate<WaitingForSupervisorActionViewModel>());
+            new MvxAsyncCommand(async() => await MvxNavigationService.Navigate<WaitingForSupervisorActionViewModel>());
 
         public IMvxCommand ShowOutboxItems =>
-            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel>());
+            new MvxAsyncCommand(async () => await MvxNavigationService.Navigate<OutboxViewModel>());
 
         public IMvxCommand ShowSentItems => 
-            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<SentToInterviewerViewModel>());
+            new MvxAsyncCommand(async () => await MvxNavigationService.Navigate<SentToInterviewerViewModel>());
     }
 }
