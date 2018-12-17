@@ -22,7 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 var specialValuesData = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
-                        input.QuestionnaireId.ToString(),
+                        input.QuestionnaireId,
+                        input.QuestionnaireVersion,
                         input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId,
@@ -50,7 +51,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     input.QuestionnaireId, input.QuestionnaireVersion,
                     input.Question.PublicKey, input.ConditionalQuestion.PublicKey);
 
-                var report = new CategoricalPivotReportViewBuilder(input.Question, input.ConditionalQuestion, queryResult);
+                var report = new CategoricalPivotReportViewBuilder(input.Question, 
+                    input.ConditionalQuestion, 
+                    queryResult);
 
                 reportView = report.AsReportView();
             }
@@ -58,7 +61,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 var queryResult = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
-                        input.QuestionnaireId.ToString(), 
+                        input.QuestionnaireId, 
+                        input.QuestionnaireVersion,
                         input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId, 

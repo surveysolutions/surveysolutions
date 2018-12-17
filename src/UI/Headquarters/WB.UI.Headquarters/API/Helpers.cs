@@ -21,7 +21,7 @@ namespace WB.UI.Headquarters.API
             var response = new JObject
             {
                 {"recordsTotal", report.TotalCount},
-
+                {"warnings", new JArray(report.Warnings) },
                 // ReSharper disable once CoVariantArrayConversion
                 {"headers", new JArray(report.Headers)},
                 {"recordsFiltered", report.TotalCount}

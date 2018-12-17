@@ -88,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 It.IsAny<Guid>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<bool>(),
-                minAnswer: It.IsAny<long>(), maxAnswer: It.IsAny<long>()
+                It.IsAny<long>(), It.IsAny<long>()
             ), Times.Once);
         }
 
@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             this.Subject.GetReport(new SurveyStatisticsReportInputModel
             {
                 Pivot = true,
-                QuestionnaireId = Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity().QuestionnaireId.FormatGuid(),
                 Question = Mock.Of<IQuestion>(q =>
                     q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
                 ConditionalQuestion = Mock.Of<IQuestion>(q =>
@@ -106,8 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             });
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetCategoricalPivotData(
-                It.IsAny<Guid?>(),
-                It.IsAny<QuestionnaireIdentity>(),
+                It.IsAny<Guid?>(), It.IsAny<string>(), It.IsAny<long?>(),
                 It.IsAny<Guid>(), It.IsAny<Guid>()
             ), Times.Once);
         }
@@ -118,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             this.Subject.GetReport(new SurveyStatisticsReportInputModel
             {
                 Pivot = false,
-                QuestionnaireId = Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity().QuestionnaireId.FormatGuid(),
                 Question = Mock.Of<IQuestion>(q =>
                     q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
                 ConditionalQuestion = Mock.Of<IQuestion>(q =>
