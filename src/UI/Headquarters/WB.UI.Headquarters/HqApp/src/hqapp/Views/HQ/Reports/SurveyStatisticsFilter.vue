@@ -192,8 +192,6 @@ export default {
         await this.loadQuestions(this.selectedQuestionnaire.key, version)
 
         this.onChange(query => query.version = version)
-
-        //const version = _.find(this.questionnaireVersionsList, 'key', this.query.version)
     },
 
     selectQuestion(id) {
