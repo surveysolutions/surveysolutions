@@ -90,5 +90,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     .Select(x => x.Id)
                     .ToArray())
                 .Select(QuestionnaireIdentity.Parse);
+
+        public QuestionnairesList UniqueQuestionnaireIds(string searchFor, int pageSize)
+        {
+            return this.reader.Query(queryable =>
+            {
+                var query = queryable.Where(x => !x.IsDeleted)
+                    .Select(x => new {x.QuestionnaireId, x.Title});
+
+                if (!string.IsNullOrEmpty(searchFor))
+                {
+                    var filterLowerCase = searchFor.ToLower();
+                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+                }
+
+                var list = query.ToList();
+                var questionnaireListItems = list.Distinct()
+                    .Select(x => new QuestionnaireListItem
+                    {
+                        Id = x.QuestionnaireId,
+                        Title = x.Title
+                    });
+
+                var listItems = questionnaireListItems.ToList();
+                return new QuestionnairesList
+                {
+                    Items = listItems,
+                    TotalCount = listItems.Count
+                };
+            });
+        }
     }
 }
