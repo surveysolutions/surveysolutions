@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 {
     internal class WebInterviewConfigProvider : IWebInterviewConfigProvider
     {
-        private IPlainKeyValueStorage<WebInterviewConfig> configs;
+        private readonly IPlainKeyValueStorage<WebInterviewConfig> configs;
 
         public WebInterviewConfigProvider(IPlainKeyValueStorage<WebInterviewConfig> configs)
         {

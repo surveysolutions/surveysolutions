@@ -1185,9 +1185,9 @@ namespace WB.Tests.Unit.Designer
                 return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
 
-            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
+            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic, string variable = null)
             {
-                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
+                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic, variable);
             }
 
             public static UpdateMultimediaQuestion UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string instructions, string enablementCondition, string variableLabel, bool hideIfDisabled, Guid responsibleId, QuestionScope scope, QuestionProperties properties, bool isSignature)

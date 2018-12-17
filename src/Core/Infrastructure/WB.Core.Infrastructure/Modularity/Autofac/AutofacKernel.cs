@@ -70,9 +70,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             try
             {
-                using (var scope = container.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope))
+                using (var scope = container.BeginLifetimeScope())
                 {
-                    var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+                    var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
                     foreach (var module in initModules)
                     {
                         status.ClearMessage();
