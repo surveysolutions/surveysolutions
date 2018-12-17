@@ -50,19 +50,17 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult SurveysAndStatuses()
+        [ActivePage(MenuItem.SurveyAndStatuses)]
+        public ActionResult SurveysAndStatuses(SurveysAndStatusesModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
+            return this.View(model);
         }
 
         [AuthorizeOr403(Roles = "Supervisor")]
-        public ActionResult SurveysAndStatusesForSv()
+        [ActivePage(MenuItem.SurveyAndStatuses)]
+        public ActionResult SurveysAndStatusesForSv(SurveysAndStatusesModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
+            return this.View(model);
         }
 
 

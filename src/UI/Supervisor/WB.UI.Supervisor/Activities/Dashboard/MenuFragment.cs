@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;
-using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Base;
@@ -24,12 +23,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
     {
         private NavigationView navigationView;
         private IMenuItem previousMenuItem;
-        private DrawerLayout drawerLayout;
-
-        private IMvxNavigationService mvxNavigationService =>
-            ServiceLocator.Current.GetInstance<IMvxNavigationService>();
-        private IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher =>
-            ServiceLocator.Current.GetInstance<IMvxMainThreadAsyncDispatcher>();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -39,8 +32,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
             navigationView = view.FindViewById<NavigationView>(Resource.Id.dashboard_sidebar_navigation);
             navigationView.SetNavigationItemSelectedListener(this);
-
-            mvxNavigationService.AfterNavigate += MenuFragment_AfterNavigate;
 
             LocalizeMenuItem(Resource.Id.dashboard_to_be_assigned, SupervisorDashboard.ToBeAssigned, nameof(ViewModel.ToBeAssignedItemsCount));
             LocalizeMenuItem(Resource.Id.dashboard_your_team, SupervisorDashboard.YourTeam);
@@ -54,8 +45,15 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         public override void OnDestroyView()
         {
-            mvxNavigationService.AfterNavigate -= MenuFragment_AfterNavigate;
+            ViewModel.MvxNavigationService.AfterNavigate -= MenuFragment_AfterNavigate;
             base.OnDestroyView();
+        }
+
+        public override void OnViewModelSet()
+        {
+            base.OnViewModelSet();
+
+            ViewModel.MvxNavigationService.AfterNavigate += MenuFragment_AfterNavigate;
         }
 
         private async void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)
@@ -78,8 +76,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             }
 
             if (menuItemId.HasValue)
-                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value)));
+                this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value));
         }
 
         private void LocalizeMenuItem(int id, string title, string viewModelPropertyName = null)

@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IServiceLocator serviceLocator;
+        private readonly IDeviceInformationService deviceInformationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IAssignmentDocumentsStorage assignmentsStorage;
 
@@ -47,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService, 
             IEnumeratorSettings enumeratorSettings,
             IServiceLocator serviceLocator,
+            IDeviceInformationService deviceInformationService,
             IUserInteractionService userInteractionService,
             IAssignmentDocumentsStorage assignmentsStorage)
         {
@@ -58,6 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.auditLogService = auditLogService;
             this.enumeratorSettings = enumeratorSettings;
             this.serviceLocator = serviceLocator;
+            this.deviceInformationService = deviceInformationService;
             this.userInteractionService = userInteractionService;
             this.assignmentsStorage = assignmentsStorage;
         }
@@ -235,12 +238,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        DeviceInfo deviceInfo;
-
-                        using (var deviceInformationService = ServiceLocator.Current.GetInstance<IDeviceInformationService>())
-                        {
-                            deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
-                        }
+                        var deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
 
                         await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo),
                             cancellationToken);

@@ -124,6 +124,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All versions.
+        /// </summary>
+        internal static string AllVersions {
+            get {
+                return ResourceManager.GetString("AllVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Rights Reserved.
         /// </summary>
         internal static string AlRightsReserved {
@@ -444,6 +453,15 @@ namespace Resources {
         internal static string Questionnaires {
             get {
                 return ResourceManager.GetString("Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire version.
+        /// </summary>
+        internal static string QuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("QuestionnaireVersion", resourceCulture);
             }
         }
         
