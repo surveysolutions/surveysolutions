@@ -1062,7 +1062,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove {0} row(s) from each related roster?.
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
         /// </summary>
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {

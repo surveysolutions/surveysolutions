@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
 {
@@ -63,6 +64,36 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             Assert.That(firstLine.RejectedByHeadquartersCount, Is.EqualTo(1));
 
             Assert.That(view.Items.ToList()[1].CompletedCount, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void when_questionnaire_id_not_provided_should_search_for_all_interviews_from_all_versions_grouped_by_questionnaire()
+        {
+            Guid questionnaireId = Id.gA;
+            Guid questionnaire1Id = Id.gB;
+            List<InterviewSummary> interviews = new List<InterviewSummary>()
+            {
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaire1Id, questionnaireVersion: 1, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaire1Id, questionnaireVersion: 2, status: InterviewStatus.Completed),
+                
+            };
+
+            var report = Hq.SurveyAndStatuses(interviews);
+
+            // Act
+            var view = report.Load(new SurveysAndStatusesReportInputModel { Order = "CompletedCount ASC" });
+            
+            // Assert
+            Assert.That(view.TotalCount, Is.EqualTo(2));
+            
+            var firstLine = view.Items.First();
+
+            Assert.That(firstLine.CompletedCount, Is.EqualTo(1));
+            
+            var secondLine = view.Items.ToArray()[1];
+
+            Assert.That(secondLine.CompletedCount, Is.EqualTo(2));
         }
     }
 }

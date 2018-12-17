@@ -1,84 +1,121 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross;
-using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
-using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 {
-    public class InterviewFromAssignmentCreatorService : IInterviewFromAssignmentCreatorService
+    public class CreateAndLoadInterviewViewModel : LoadingInterviewViewModel, IMvxViewModel<CreateInterviewViewModelArg>
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IInterviewerPrincipal interviewerPrincipal;
-        private readonly IMvxMessenger messenger;
-        private readonly ICommandService commandService;
-        private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
+        private readonly IInterviewerPrincipal interviewerPrincipal;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
+        private readonly ICommandService commandService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly ILogger logger;
         private readonly IAuditLogService auditLogService;
+        private readonly IInterviewAnswerSerializer answerSerializer;
+        private readonly IUserInteractionService userInteractionService;
 
-        public InterviewFromAssignmentCreatorService(IMvxMessenger messenger,
-            ICommandService commandService,
-            IInterviewerPrincipal interviewerPrincipal,
-            IViewModelNavigationService viewModelNavigationService,
-            IInterviewAnswerSerializer answerSerializer,
-            IAssignmentDocumentsStorage assignmentsRepository,
-            IInterviewUniqueKeyGenerator keyGenerator,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
-            ILogger logger,
-            IAuditLogService auditLogService)
+        public CreateAndLoadInterviewViewModel(
+            IViewModelNavigationService viewModelNavigationService, 
+            IStatefulInterviewRepository interviewRepository, 
+            ICommandService commandService, 
+            ILogger logger, 
+            IPlainStorage<InterviewView> interviewsRepository, 
+            IAssignmentDocumentsStorage assignmentsRepository, 
+            IInterviewerPrincipal interviewerPrincipal, 
+            IInterviewUniqueKeyGenerator keyGenerator, 
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage, 
+            IAuditLogService auditLogService, 
+            IInterviewAnswerSerializer answerSerializer, 
+            IUserInteractionService userInteractionService) 
+            : base(interviewerPrincipal, viewModelNavigationService, interviewRepository, commandService, logger,
+                userInteractionService, interviewsRepository)
         {
-            this.messenger = messenger;
-            this.commandService = commandService;
-            this.interviewerPrincipal = interviewerPrincipal;
-            this.viewModelNavigationService = viewModelNavigationService;
-            this.answerSerializer = answerSerializer;
             this.assignmentsRepository = assignmentsRepository;
+            this.interviewerPrincipal = interviewerPrincipal;
             this.keyGenerator = keyGenerator;
+            this.commandService = commandService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.logger = logger;
             this.auditLogService = auditLogService;
+            this.answerSerializer = answerSerializer;
+            this.userInteractionService = userInteractionService;
         }
 
-        public async Task CreateInterviewAsync(int assignmentId)
+        protected int AssignmentId { get; set; }
+
+        public void Prepare(CreateInterviewViewModelArg parameter)
         {
+            AssignmentId = parameter.AssignmentId;
+            InterviewId = parameter.InterviewId;
+        }
+
+        public override Task Initialize()
+        {
+            if (AssignmentId == 0) throw new ArgumentException(nameof(AssignmentId));
+            if (InterviewId == Guid.Empty) throw new ArgumentException(nameof(InterviewId));
+
+            var assignmentDocument = assignmentsRepository.GetById(AssignmentId);
+            QuestionnaireTitle = assignmentDocument.Title;
+
+            return Task.CompletedTask;
+        }
+
+        public override void ViewAppeared()
+        {
+            Task.Run(CreateAndNavigateToInterviewAsync);
+        }
+
+        private async Task CreateAndNavigateToInterviewAsync()
+        {
+            var interviewId = await CreateInterviewAsync(this.AssignmentId, this.InterviewId);
+            if (!interviewId.HasValue)
+            {
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                return;
+            }
+
+            await LoadAndNavigateToInterviewAsync(interviewId.Value);
+        }
+
+        protected async Task<Guid?> CreateInterviewAsync(int assignmentId, Guid interviewId)
+        {
+            IsIndeterminate = true;
+            this.ProgressDescription = InterviewerUIResources.Interview_Creating;
+            this.OperationDescription = InterviewerUIResources.Interview_Creating_Description;
+
             try
             {
-                this.messenger.Publish(new StartingLongOperationMessage(this));
-
                 var assignment = this.assignmentsRepository.GetById(assignmentId);
 
                 if (assignment.CreatedInterviewsCount.HasValue && assignment.Quantity.HasValue &&
                     (assignment.CreatedInterviewsCount.Value >= assignment.Quantity.Value))
                 {
-                    await this.viewModelNavigationService.NavigateToDashboardAsync();
-                    return;
+                    return null;
                 }
 
-                var interviewId = Guid.NewGuid();
                 var interviewerIdentity = this.interviewerPrincipal.CurrentUserIdentity;
-                
+
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
@@ -86,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 List<string> protectedVariables = assignment.ProtectedVariables.Select(x => x.Variable).ToList();
 
                 var interviewKey = keyGenerator.Get();
-                ICommand createInterviewCommand = new CreateInterview(interviewId,
+                ICommand createInterviewCommand = new SharedKernels.DataCollection.Commands.Interview.CreateInterview(interviewId,
                     interviewerIdentity.UserId,
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
                     answers,
@@ -104,20 +141,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
                 auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
-                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{InterviewId = interviewId});
+
+                return interviewId;
             }
             catch (InterviewException e)
             {
-                // This code is going to be removed after KP-9461. And according to research in KP-9513 we should reduce amount of dependencies in constructor
-
-                var userInteractionService = Mvx.Resolve<IUserInteractionService>();
-                Mvx.Resolve<ILoggerProvider>().GetFor<InterviewerAssignmentDashboardItemViewModel>().Error(e.Message, e);
+                logger.Error($"Failed to create interview {interviewId}. {e.ToString()}", e);
                 await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
-            finally
-            {
-                this.messenger.Publish(new StopingLongOperationMessage(this));
-            }
+
+            return null;
         }
 
         private List<InterviewAnswer> GetAnswers(List<AssignmentDocument.AssignmentAnswer> identifyingAnswers)

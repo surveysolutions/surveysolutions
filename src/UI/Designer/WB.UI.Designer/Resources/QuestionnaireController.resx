@@ -277,7 +277,7 @@
 &lt;br/&gt;- "Delete" to delete folder with subfolders</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire Title</value>
+    <value>Questionnaire title</value>
   </data>
   <data name="RestoreQuestionnaire" xml:space="preserve">
     <value>Restore questionnaire</value>

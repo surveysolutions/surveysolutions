@@ -389,6 +389,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 PageSize = filter.PageSize,
                 Orders = filter.ToOrderRequestItems(),
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
+                QuestionnaireId = filter.QuestionnaireId
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -422,7 +423,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Orders = filter.ToOrderRequestItems(),
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
-                TeamLeadName = filter.ResponsibleName
+                TeamLeadName = filter.ResponsibleName,
+                QuestionnaireId = filter.QuestionnaireId
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -451,14 +453,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, [FromUri]string exportType = null)
+        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, Guid? id = null, 
+            [FromUri]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
             {
                 Filter = request.Search.Value,
                 Orders = request.GetSortOrderRequestItems(),
                 Page = request.Start,
-                PageSize = request.Length
+                PageSize = request.Length,
+                SupervisorId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))

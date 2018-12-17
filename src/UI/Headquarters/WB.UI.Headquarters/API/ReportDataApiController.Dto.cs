@@ -41,12 +41,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class DeviceInterviewersFilter : DataTableRequest
         {
-
+            public Guid? SupervisorId { get; set; }
         }
 
         public class SurveysAndStatusesFilter : DataTableRequest
         {
             public string ResponsibleName { get; set; }
+            public Guid? QuestionnaireId { get; set; }
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)

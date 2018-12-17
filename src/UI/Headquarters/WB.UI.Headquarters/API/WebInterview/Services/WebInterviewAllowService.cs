@@ -1,25 +1,21 @@
-using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-//using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     class WebInterviewAllowService : IWebInterviewAllowService
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly EventBusSettings eventBusSettings;
-        
+
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
             InterviewStatus.InterviewerAssigned,
@@ -33,12 +29,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         };
 
         public WebInterviewAllowService(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
+            IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
             EventBusSettings EventBusSettings)
         {
-            this.interviewSummaryStorage = interviewSummaryStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
             this.eventBusSettings = EventBusSettings;
@@ -56,8 +52,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     return;
                 }
 
-            Guid interviewGuid = Guid.Parse(interviewId);
-            var interview = interviewSummaryStorage.GetById(interviewGuid);
+            var interview = statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
@@ -67,7 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             if (this.authorizedUser.IsInterviewer)
             {
-                if (interview.ResponsibleId == this.authorizedUser.Id)
+                if (interview.CurrentResponsibleId == this.authorizedUser.Id)
                     return;
                 else
                 {
@@ -76,7 +71,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
             }
 
-            QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
+            QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
 
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 

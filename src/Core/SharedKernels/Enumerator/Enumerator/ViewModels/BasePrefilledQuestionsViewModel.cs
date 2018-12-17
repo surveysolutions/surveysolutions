@@ -28,12 +28,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IViewModelNavigationService viewModelNavigationService,
+            IEnumeratorSettings enumeratorSettings,
             ILogger logger,
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
             VibrationViewModel vibrationViewModel)
-            : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
+            : base(principal, viewModelNavigationService, commandService, enumeratorSettings, vibrationViewModel)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
