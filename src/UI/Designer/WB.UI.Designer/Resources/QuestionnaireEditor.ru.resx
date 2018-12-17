@@ -1182,4 +1182,22 @@
   <data name="MyClassifications" xml:space="preserve">
     <value>Мои классификации</value>
   </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Добавить классификацию</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Группы</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Заголовок группы</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Введите категории</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Название категории</value>
+  </data>
 </root>
