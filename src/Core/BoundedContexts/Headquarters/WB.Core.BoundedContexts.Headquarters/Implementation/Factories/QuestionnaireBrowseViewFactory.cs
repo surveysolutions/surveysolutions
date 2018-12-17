@@ -96,6 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             return this.reader.Query(queryable =>
             {
                 var query = queryable.Where(x => !x.IsDeleted)
+                    .OrderBy(x => x.Title)
                     .Select(x => new {x.QuestionnaireId, x.Title});
 
                 if (!string.IsNullOrEmpty(searchFor))
