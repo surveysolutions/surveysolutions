@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Moq;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -9,7 +10,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
 {
     internal class when_opening_not_existed_interview : PrefilledQuestionsViewModelTestContext
     {
-        [NUnit.Framework.OneTimeSetUp]
+        [Test]
         public async Task should_logg_error_and_navigate_to_dashboard()
         {
             string notExistedInterviewId = "same id";

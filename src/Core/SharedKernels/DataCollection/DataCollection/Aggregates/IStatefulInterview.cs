@@ -126,6 +126,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid CurrentResponsibleId { get; }
 
+        Guid SupervisorId { get; }
+
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
