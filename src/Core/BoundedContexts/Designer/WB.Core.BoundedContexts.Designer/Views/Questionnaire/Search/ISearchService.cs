@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
         SearchResult PerformSearch(SearchInput search);
     }
 
-    class SearchService : ISearchService
+    public class SearchService : ISearchService
     {
         private const string ScriptName = "WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search.SearchQuestions.sql";
 
