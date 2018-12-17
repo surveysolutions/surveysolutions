@@ -6,6 +6,7 @@ using MvvmCross.Navigation.EventArguments;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IMvxNavigationService mvxNavigationService;
         public Guid? LastVisitedInterviewId { get; set; }
 
+        public IDashboardItemsAccessor DashboardItemsAccessor { get; }
         public LocalSynchronizationViewModel Synchronization { get; set; }
 
         public string DashboardTitle
@@ -42,12 +44,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public DashboardViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
+            IDashboardItemsAccessor dashboardItemsAccessor,
             IMvxNavigationService mvxNavigationService,
             IMvxMessenger messenger,
             LocalSynchronizationViewModel synchronization)
             : base(principal, viewModelNavigationService)
         {
             this.mvxNavigationService = mvxNavigationService;
+            DashboardItemsAccessor = dashboardItemsAccessor;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
 
