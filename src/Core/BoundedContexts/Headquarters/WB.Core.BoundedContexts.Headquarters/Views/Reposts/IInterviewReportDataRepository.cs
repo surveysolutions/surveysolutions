@@ -11,13 +11,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId);
         List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params);
 
-        List<GetNumericalReportItem> GetNumericalReportData(QuestionnaireIdentity questionnaireIdentity,
+        List<GetNumericalReportItem> GetNumericalReportData(string questionnaireId, long? version,
             Guid questionId,
             Guid? teamLeadId,
             bool detailedView, long minAnswer = Int64.MinValue, long maxAnswer = Int64.MaxValue);
 
         List<GetReportCategoricalPivotReportItem> GetCategoricalPivotData(Guid? teamLeadId,
-            QuestionnaireIdentity questionnaire,
+            string questionnaire,
+            long? version,
             Guid variableA, Guid variableB);
     }
 }

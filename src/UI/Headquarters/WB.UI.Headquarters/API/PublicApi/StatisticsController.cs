@@ -207,12 +207,27 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return ReturnEmptyResult(query);
             }
 
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(query.QuestionnaireId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            //var questionnaireIdentity = QuestionnaireIdentity.Parse(query.QuestionnaireId);
+            //var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            QuestionnaireDocument questionnaire;
 
-            if (questionnaire == null)
+
+            if (query.Version == null)
             {
-                return ReturnEmptyResult(query);
+                var allQuestionnaires = this.questionnaireBrowseViewFactory.GetAllQuestionnaireIdentities()
+                    .Where(q => q.QuestionnaireId.FormatGuid() == query.QuestionnaireId)
+                    .ToList();
+
+                var questionnaireId = allQuestionnaires.OrderByDescending(q => q.Version).First();
+
+                questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
+            }
+            else
+            {
+                questionnaire =
+                    this.questionnaireStorage.GetQuestionnaireDocument(Guid.Parse(query.QuestionnaireId),
+                        query.Version.Value);
+
             }
 
             IQuestion GetQuestionByGuidOrStataCaption(string inputVar)
@@ -237,7 +252,8 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 var inputModel = new SurveyStatisticsReportInputModel
                 {
-                    QuestionnaireIdentity = questionnaireIdentity,
+                    QuestionnaireId = query.QuestionnaireId,
+                    QuestionnaireVersion = query.Version,
                     Question = question,
                     ShowTeamMembers = query.ExpandTeams,
                     PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
@@ -279,14 +295,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }
 
                 return CreateReportResponse(query.exportType.Value, report,
-                    $"{questionnaire.Title} (ver. {questionnaireIdentity.Version}) {question.StataExportCaption}");
+                    $"{questionnaire.Title} (ver. {query.Version}) {question.StataExportCaption}");
             }
 
             return ReturnEmptyResult(query);
         }      
 
-        private HttpResponseMessage CreateReportResponse(ExportFileType exportType, ReportView report,
-            string reportName)
+        private HttpResponseMessage CreateReportResponse(
+            ExportFileType exportType, ReportView report, string reportName)
         {
             var exportFile = this.exportFactory.CreateExportFile(exportType);
 
