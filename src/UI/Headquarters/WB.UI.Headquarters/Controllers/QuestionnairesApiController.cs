@@ -116,7 +116,8 @@ namespace WB.UI.Headquarters.Controllers
                     PageSize = pageSize,
                     QuestionnaireId = id,
                     SearchFor = query,
-                    IsAdminMode = true
+                    IsAdminMode = true,
+                    Order = nameof(QuestionnaireBrowseItem.Version) + " DESC"
                 });
                 return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Version.ToString(), x.Version.ToString())).ToArray(), questionnaires.TotalCount);
             }
