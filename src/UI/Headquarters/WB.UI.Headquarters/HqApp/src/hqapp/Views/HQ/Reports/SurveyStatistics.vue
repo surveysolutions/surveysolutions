@@ -2,7 +2,7 @@
     <HqLayout has-filter
         :title="$t('MainMenu.SurveyStatistics')">
         <div slot="subtitle">
-            <div class="row">                
+            <div class="row">
                 <div class="col-md-6">
                     <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
                 </div>
@@ -25,7 +25,7 @@
             v-if="isFiltersLoaded"
             noSearch exportable multiorder hasTotalRow noSelect
             :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
-            @ajaxComplete="processResponse"
+            @ajaxComplete="onTableReload"
             :addParamsToRequest="addFilteringParams">
         </DataTables>
     </HqLayout>
@@ -101,9 +101,8 @@ export default {
             }
         },
 
-        processResponse(data) {
+        onTableReload(data) {
             this.warnings = data.warnings
-            //return data
         }
     },
 

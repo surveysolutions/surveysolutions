@@ -7,10 +7,9 @@
                 :forceLoadingState="loading.questionnaire"
                 @selected="selectQuestionnaire" />
 
-            <Typeahead :placeholder="selectedQuestionnairePlaceholder" noSearch
+            <Typeahead :placeholder="$t('Common.AllVersions')" noSearch
                 :values="questionnaireVersionsList"
                 :value="selectedQuestionnaireVersion"
-                placeholder="All Versions"
                 :forceLoadingState="loading.questionnaire"
                 @selected="selectQuestionnaireVersion" />
         </FilterBlock>
