@@ -623,7 +623,7 @@
     <value>Не удалось открыть интервью</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
-    <value>Интервью находится в неправильном состоянии и будет удалено. Синхронизируйтесь, чтобы получить правильное.</value>
+    <value>Интервью находится в неправильном состоянии и не может быть открыто. Свяжитесь с поддержкой или попробуйте синхронизироваться, чтобы получить правильное состояние.</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
@@ -870,5 +870,12 @@
     <data name="Interview_Creating" xml:space="preserve">
     <value>Создание интервью</value>
     <comment>Создание интервью</comment>
+  </data>
+    <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Пожалуйста, подождите</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Это может занять время, 
+не выходите из приложения</value>
   </data>
 </root>
