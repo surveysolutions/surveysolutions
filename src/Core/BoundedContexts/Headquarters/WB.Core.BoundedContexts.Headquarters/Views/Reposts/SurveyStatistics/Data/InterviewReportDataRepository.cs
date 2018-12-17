@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                 where  
                     {IfSupervisor("(@teamleadid is null or s.teamleadid = @teamleadid) and")}
                     v1.entity_id in (select id from lookupVariable)     
-                    {IfWithCondition("and v2.entity_id in (select id from condVariable) and array[v2.answer] <@ @condition")}
+                    {IfWithCondition("and v2.entity_id in (select id from condVariable) and array[v2.answer] && @condition")}
             ) as agg 
             group by 1, 2, 3 
             order by 1, 2 ,3;";

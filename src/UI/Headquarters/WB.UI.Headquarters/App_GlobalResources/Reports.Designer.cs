@@ -313,6 +313,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is compatibility issues between questionnaire versions. Some answers in early versions of questionnaire are no longer exist in latest questionnaire version. Such answers were ignored.
+        /// </summary>
+        internal static string QuestionnaireCompatibilityIssues_UnknownAnswer {
+            get {
+                return ResourceManager.GetString("QuestionnaireCompatibilityIssues_UnknownAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question text.
         /// </summary>
         internal static string QuestionText {

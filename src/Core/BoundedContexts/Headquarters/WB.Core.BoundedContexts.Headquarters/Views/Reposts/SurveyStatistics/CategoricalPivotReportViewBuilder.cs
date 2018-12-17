@@ -82,6 +82,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 var rowIndex = rowsAnswers[item.RowValue];
                 var row = report.Data[rowIndex.index];
 
+                if (!columnAnswers.ContainsKey(item.ColValue))
+                {
+                    report.Warnings.Add(ReportWarnings.AnswerIgnored);
+                    continue;
+                }
+
                 var columnIndex = columnAnswers[item.ColValue];
                 row[columnIndex.index + 1] = item.Count;
 

@@ -588,6 +588,11 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.zh.resx">
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
     </Content>
+    <Content Include="App_GlobalResources\Reports.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.ar.designer.cs</LastGenOutput>
+      <DependentUpon>Reports.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Reports.es.resx">
       <DependentUpon>Reports.resx</DependentUpon>
     </Content>
@@ -604,6 +609,11 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Reports.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.ro.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.ro.designer.cs</LastGenOutput>
+      <DependentUpon>Reports.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\Reports.ru.resx">
       <SubType>Designer</SubType>
@@ -783,10 +793,6 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.ar.designer.cs</LastGenOutput>
     </Content>
-    <Content Include="App_GlobalResources\Reports.ar.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.ar.designer.cs</LastGenOutput>
-    </Content>
     <Content Include="App_GlobalResources\Settings.ar.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Settings.ar.designer.cs</LastGenOutput>
@@ -843,10 +849,6 @@
     <Content Include="App_GlobalResources\QuestionnaireImport.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>QuestionnaireImport.ro.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ro.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.ro.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Settings.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -2071,14 +2073,14 @@
       <DependentUpon>QuestionnaireImport.ro.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Reports.ar.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Reports.ar.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="App_GlobalResources\Reports.ro.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>Reports.ro.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="App_GlobalResources\Settings.ar.designer.cs">
       <AutoGen>True</AutoGen>
