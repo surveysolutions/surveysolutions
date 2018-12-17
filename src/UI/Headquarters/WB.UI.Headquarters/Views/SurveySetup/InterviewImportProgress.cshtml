@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div class="action-buttons" data-bind="ifnot: status.isInProgress">
-                    <a class="btn btn-primary" href="@Url.Action("Index", "Assignments", new {templateId = Model.QuestionnaireId, templateVersion = Model.Version})">@MainMenu.Assignments</a>
+                    <a class="btn btn-primary" href="@Url.Action("Index", "Assignments", new {questionnaireId = Model.QuestionnaireId, questionnaireVersion = Model.Version})">@MainMenu.Assignments</a>
                     <a class="btn btn-primary" href="@Url.Action("Index", "SurveySetup")">@MainMenu.SurveySetup</a>
                     @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version}, new {@class = "back-link"})
                 </div>

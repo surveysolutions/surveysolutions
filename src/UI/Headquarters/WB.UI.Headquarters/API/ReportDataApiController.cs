@@ -389,6 +389,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 PageSize = filter.PageSize,
                 Orders = filter.ToOrderRequestItems(),
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
+                QuestionnaireId = filter.QuestionnaireId
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -422,7 +423,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Orders = filter.ToOrderRequestItems(),
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
-                TeamLeadName = filter.ResponsibleName
+                TeamLeadName = filter.ResponsibleName,
+                QuestionnaireId = filter.QuestionnaireId
             };
 
             if (!string.IsNullOrEmpty(exportType))

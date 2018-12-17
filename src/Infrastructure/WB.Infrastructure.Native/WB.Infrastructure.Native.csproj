@@ -49,5 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Storage\Postgre\Implementation\Migrations\" />
+    <Folder Include="Threading\" />
   </ItemGroup>
 </Project>

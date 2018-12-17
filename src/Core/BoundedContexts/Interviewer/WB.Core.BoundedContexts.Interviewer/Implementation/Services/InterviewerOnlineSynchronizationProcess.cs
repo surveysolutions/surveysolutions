@@ -33,9 +33,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAssignmentDocumentsStorage assignmentsStorage,
             IInterviewerSettings interviewerSettings,
             IAuditLogService auditLogService,
+            IDeviceInformationService deviceInformationService,
             IUserInteractionService userInteractionService,
             IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
-            interviewViewRepository, auditLogService, interviewerSettings, serviceLocator, userInteractionService,
+            interviewViewRepository, auditLogService, interviewerSettings, serviceLocator, deviceInformationService, userInteractionService,
             assignmentsStorage)
         {
             this.principal = principal;

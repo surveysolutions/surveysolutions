@@ -31,9 +31,9 @@ class SurveyStatistics {
         this.http = http
     }
 
-    async Questions(questionnaireId) {
+    async Questions(questionnaireId, version) {
         return (await this.http.get(`${this.reportPath}/questions`, {
-            params: { questionnaireId }
+            params: { questionnaireId, version }
         })).data
     }
 
