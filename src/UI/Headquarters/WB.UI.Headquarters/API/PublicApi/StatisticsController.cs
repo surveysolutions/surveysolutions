@@ -207,10 +207,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return ReturnEmptyResult(query);
             }
 
-            //var questionnaireIdentity = QuestionnaireIdentity.Parse(query.QuestionnaireId);
-            //var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             QuestionnaireDocument questionnaire;
-
 
             if (query.Version == null)
             {
@@ -239,66 +236,64 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             var question = GetQuestionByGuidOrStataCaption(query.Question);
 
-            if (question != null)
+            if (question == null) return ReturnEmptyResult(query);
+
+            if (question.LinkedToQuestionId != null
+                || question.LinkedToRosterId != null)
             {
-                if (question.LinkedToQuestionId != null
-                    || question.LinkedToRosterId != null)
-                {
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                        $"Cannot build report for Single Question that linked to roster or other questions"));
-                }
-
-                var conditionalQuestion = GetQuestionByGuidOrStataCaption(query.ConditionalQuestion);
-
-                var inputModel = new SurveyStatisticsReportInputModel
-                {
-                    QuestionnaireId = query.QuestionnaireId,
-                    QuestionnaireVersion = query.Version,
-                    Question = question,
-                    ShowTeamMembers = query.ExpandTeams,
-                    PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
-                    Page = query.exportType == null ? query.PageIndex : 1,
-                    MinAnswer = query.Min,
-                    MaxAnswer = query.Max,
-                    Condition = query.Condition,
-                    ConditionalQuestion = conditionalQuestion,
-                    Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
-                    Pivot = query.Pivot,
-                    Orders = query.ToOrderRequestItems()
-                };
-
-                if (this.authorizedUser.IsSupervisor)
-                {
-                    inputModel.TeamLeadId = this.authorizedUser.Id;
-                    inputModel.ShowTeamMembers = true;
-                }
-
-                var stopwatch = Stopwatch.StartNew();
-
-                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-                var report = this.surveyStatisticsReport.GetReport(inputModel);
-                report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel ?? string.Empty}";
-
-                stopwatch.Stop();
-                var reportTimeToMonitor = question.QuestionType + (conditionalQuestion != null ? @"_filtered" : "");
-                reportQueryCounter.Labels(reportTimeToMonitor).Inc();
-                reportQueryTimeGauge
-                    .Labels(reportTimeToMonitor)
-                    .Set(stopwatch.Elapsed.TotalSeconds);
-
-                if (query.exportType == null)
-                {
-                    var response = Request.CreateResponse(HttpStatusCode.OK);
-                    var reportJson = report.AsDataTablesJson(query.Draw);
-                    response.Content = new StringContent(reportJson.ToString(), Encoding.UTF8, "application/json");
-                    return response;
-                }
-
-                return CreateReportResponse(query.exportType.Value, report,
-                    $"{questionnaire.Title} (ver. {query.Version}) {question.StataExportCaption}");
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    $"Cannot build report for Single Question that linked to roster or other questions"));
             }
 
-            return ReturnEmptyResult(query);
+            var conditionalQuestion = GetQuestionByGuidOrStataCaption(query.ConditionalQuestion);
+
+            var inputModel = new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = query.QuestionnaireId,
+                QuestionnaireVersion = query.Version,
+                Question = question,
+                ShowTeamMembers = query.ExpandTeams,
+                PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
+                Page = query.exportType == null ? query.PageIndex : 1,
+                MinAnswer = query.Min,
+                MaxAnswer = query.Max,
+                Condition = query.Condition,
+                ConditionalQuestion = conditionalQuestion,
+                Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
+                Pivot = query.Pivot,
+                Orders = query.ToOrderRequestItems(),
+            };
+
+            if (this.authorizedUser.IsSupervisor)
+            {
+                inputModel.TeamLeadId = this.authorizedUser.Id;
+                inputModel.ShowTeamMembers = true;
+            }
+
+            var stopwatch = Stopwatch.StartNew();
+
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+            var report = this.surveyStatisticsReport.GetReport(inputModel);
+            report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel ?? string.Empty}";
+
+            stopwatch.Stop();
+            var reportTimeToMonitor = question.QuestionType + (conditionalQuestion != null ? @"_filtered" : "");
+            reportQueryCounter.Labels(reportTimeToMonitor).Inc();
+            reportQueryTimeGauge
+                .Labels(reportTimeToMonitor)
+                .Set(stopwatch.Elapsed.TotalSeconds);
+
+            if (query.exportType == null)
+            {
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                var reportJson = report.AsDataTablesJson(query.Draw);
+                response.Content = new StringContent(reportJson.ToString(), Encoding.UTF8, "application/json");
+                return response;
+            }
+
+            return CreateReportResponse(query.exportType.Value, report,
+                $"{questionnaire.Title} (ver. {query.Version}) {question.StataExportCaption}");
+
         }      
 
         private HttpResponseMessage CreateReportResponse(
