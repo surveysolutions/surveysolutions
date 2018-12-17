@@ -178,6 +178,42 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add classification.
+        /// </summary>
+        public static string ClassificationAdd {
+            get {
+                return ResourceManager.GetString("ClassificationAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add group.
+        /// </summary>
+        public static string ClassificationAddGroup {
+            get {
+                return ResourceManager.GetString("ClassificationAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups.
+        /// </summary>
+        public static string ClassificationGroupBreadcrumbs {
+            get {
+                return ResourceManager.GetString("ClassificationGroupBreadcrumbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group title.
+        /// </summary>
+        public static string ClassificationGroupTitle {
+            get {
+                return ResourceManager.GetString("ClassificationGroupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show categories.
         /// </summary>
         public static string ClassificationShowCategories {
@@ -187,11 +223,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter categories.
+        /// </summary>
+        public static string ClassificationsStringOptionsEditorPlaceholder {
+            get {
+                return ResourceManager.GetString("ClassificationsStringOptionsEditorPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question Bank. Classifications.
         /// </summary>
         public static string ClassificationsTitle {
             get {
                 return ResourceManager.GetString("ClassificationsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classification title.
+        /// </summary>
+        public static string ClassificationTitle {
+            get {
+                return ResourceManager.GetString("ClassificationTitle", resourceCulture);
             }
         }
         
