@@ -58,6 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
             foreach (var row in rows)
             {
+                if(!answersIndexMap.ContainsKey(row.Answer)) continue;
+                
                 var answerIndex = answersIndexMap[row.Answer] + dataIndex;
 
                 if (row.TeamLeadName == null && row.ResponsibleName == null) // handle total row

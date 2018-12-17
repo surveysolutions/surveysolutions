@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 var specialValuesData = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
-                        input.QuestionnaireIdentity.ToString(),
+                        input.QuestionnaireId.ToString(),
                         input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId,
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 var categoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData);
 
                 var numericalData = this.interviewReportDataRepository.GetNumericalReportData(
-                    input.QuestionnaireIdentity,
+                    input.QuestionnaireId,input.QuestionnaireVersion,
                     input.Question.PublicKey,
                     input.TeamLeadId,
                     input.ShowTeamMembers,
@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             }
             else if (input.Pivot && input.ConditionalQuestion != null)
             {
-                var queryResult = this.interviewReportDataRepository.GetCategoricalPivotData(input.TeamLeadId, input.QuestionnaireIdentity,
+                var queryResult = this.interviewReportDataRepository.GetCategoricalPivotData(input.TeamLeadId, 
+                    input.QuestionnaireId, input.QuestionnaireVersion,
                     input.Question.PublicKey, input.ConditionalQuestion.PublicKey);
 
                 var report = new CategoricalPivotReportViewBuilder(input.Question, input.ConditionalQuestion, queryResult);
@@ -57,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 var queryResult = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
-                        input.QuestionnaireIdentity.ToString(),
+                        input.QuestionnaireId.ToString(), 
                         input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId, 

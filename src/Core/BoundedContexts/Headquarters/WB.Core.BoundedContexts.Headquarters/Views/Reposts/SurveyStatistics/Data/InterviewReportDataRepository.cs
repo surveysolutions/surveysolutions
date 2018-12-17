@@ -48,16 +48,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         }
 
         public List<GetReportCategoricalPivotReportItem> GetCategoricalPivotData(Guid? teamLeadId,
-            QuestionnaireIdentity questionnaireIdentity,
+            string questionnaireIdentity,
+            long? version,
             Guid variableA, Guid variableB)
         {
             var connection = this.sessionProvider.Session.Connection;
-            var questionnaire = questionnaireIdentity.ToString();
+
             return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as colvalue, b as rowvalue, count
                 from readside.get_report_categorical_pivot(@teamLeadId, @questionnaire, @variableA, @variableB)", new
             {
                 teamLeadId,
-                questionnaire,
+                questionnaire = $"{questionnaireIdentity}${version?.ToString() ?? "%"}",
                 variableA,
                 variableB
             }).ToList();
@@ -77,10 +78,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             return result.Concat(totals).ToList();
         }
         
-        public List<GetNumericalReportItem> GetNumericalReportData(QuestionnaireIdentity questionnaireIdentity,
-            Guid questionId,
-            Guid? teamLeadId,
-            bool detailedView, long minAnswer = long.MinValue, long maxAnswer = long.MaxValue)
+        public List<GetNumericalReportItem> GetNumericalReportData(
+            string questionnaireId, long? version,
+            Guid questionId, Guid? teamLeadId,
+            bool detailedView, long minAnswer = Int64.MinValue, long maxAnswer = Int64.MaxValue)
         {
             var session = this.sessionProvider.Session;
             var result = session.Connection.Query<GetNumericalReportItem>(@"
@@ -93,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                     @detailedView, @minAnswer, @maxAnswer)",
                 new
                 {
-                    questionnaireIdentity = questionnaireIdentity.ToString(),
+                    questionnaireIdentity = $"{questionnaireId}${version?.ToString() ?? "%"}",
                     questionId,
                     teamLeadId,
                     detailedView,

@@ -6,7 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     public class SurveyStatisticsReportInputModel : ListViewModelBase
     {
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public string QuestionnaireId { get; set; }
+        public long? QuestionnaireVersion { get; set; }
         public IQuestion Question { get; set; }
         public Guid? TeamLeadId { get; set; }
         public bool ShowTeamLead { get; set; }

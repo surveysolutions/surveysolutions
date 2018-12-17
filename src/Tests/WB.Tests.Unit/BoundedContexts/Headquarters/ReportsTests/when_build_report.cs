@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
@@ -77,17 +78,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         {
             this.Subject.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireId = Id.g1.FormatGuid(),
                 Question = Mock.Of<IQuestion>(q =>
                     q.QuestionType == QuestionType.Numeric && q.Answers == new List<Answer>())
             });
 
             Mock.Get(this.interviewReportDataRepository).Verify(r => r.GetNumericalReportData(
-                It.IsAny<QuestionnaireIdentity>(),
+                It.IsAny<string>(), It.IsAny<long?>(),
                 It.IsAny<Guid>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<bool>(),
-                It.IsAny<long>(), It.IsAny<long>()
+                minAnswer: It.IsAny<long>(), maxAnswer: It.IsAny<long>()
             ), Times.Once);
         }
 
@@ -97,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             this.Subject.GetReport(new SurveyStatisticsReportInputModel
             {
                 Pivot = true,
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(),
                 Question = Mock.Of<IQuestion>(q =>
                     q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
                 ConditionalQuestion = Mock.Of<IQuestion>(q =>
@@ -117,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             this.Subject.GetReport(new SurveyStatisticsReportInputModel
             {
                 Pivot = false,
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(),
                 Question = Mock.Of<IQuestion>(q =>
                     q.QuestionType == QuestionType.SingleOption && q.Answers == new List<Answer>()),
                 ConditionalQuestion = Mock.Of<IQuestion>(q =>

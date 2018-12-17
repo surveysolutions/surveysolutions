@@ -6,9 +6,14 @@ namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
     public class SurveyStatisticsQuery : DataTableRequest
     {
         /// <summary>
-        /// Questionnaire Identity
+        /// Questionnaire Id
         /// </summary>
         public string QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Questionnaire version
+        /// </summary>
+        public long? Version { get; set; }
 
         /// <summary>
         /// Question variable name or UUID
