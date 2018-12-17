@@ -3,7 +3,8 @@
         <div class="btn-group btn-input clearfix">
             <button type="button" :id="buttonId"
                     class="btn dropdown-toggle"
-                    data-toggle="dropdown">
+                    data-toggle="dropdown"
+                    :disabled="!fetchUrl">
                 <span data-bind="label"
                       v-if="value == null"
                       class="gray-text">{{placeholderText}}</span>
@@ -75,7 +76,17 @@ export default {
             default: false
         }
     },
-
+    watch: {
+        fetchUrl (val) {
+            if(val) {
+                this.fetchOptions();
+            }
+            else {
+                this.options.splice(0, this.options.length);
+                this.clear();
+            }
+        }
+    },
     data() {
         return {
             options: [],
