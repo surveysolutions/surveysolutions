@@ -8,7 +8,8 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
-    partial class InterviewReportDataRepository : IInterviewReportDataRepository
+    [SuppressMessage("ReSharper", "StringLiteralTypo")]
+    class InterviewReportDataRepository : IInterviewReportDataRepository
     {
         private readonly IUnitOfWork sessionProvider;
         
@@ -86,7 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             }).ToList();
         }
 
-        [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params)
         {
             var connection = this.sessionProvider.Session.Connection;
@@ -95,38 +95,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             string IfSupervisor(string sql) => @params.TeamLeadId != null ? sql : string.Empty;
 
             string SqlQuery = $@"with
-	    lookupVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+	        lookupVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
                 and entityid = @variable)
-        {IfWithCondition(
-         @", condVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
-                and entityid = @ConditionVariable)")
-        } 
-        select agg.teamleadname, agg.responsiblename, agg.answer, count(interview_id)
-        from (
-            select 
-                case when @totals then null else s.teamleadid end as teamleadid,
-                case when @totals then null else s.teamleadname end as teamleadname,
-                case when @detailed then s.responsiblename else null end as responsiblename, 
-                v1.interview_id, v1.answer 
-            from readside.report_tabulate_data v1
-            {IfWithCondition(
-           @"join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id and 
-                (v1.rostervector = v2.rostervector
-                    or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
-                    or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
-                )")
-            }
-            join readside.interviews_id id on id.id = v1.interview_id
-            join readside.interviewsummaries s on s.interviewid = id.interviewid
-            join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
-            where  
-                {IfSupervisor("(@teamleadid is null or s.teamleadid = @teamleadid) and")}
-                v1.entity_id in (select id from lookupVariable)     
-                {IfWithCondition($@"-- filter by condition variable 
-                and v2.entity_id in (select id from condVariable) and array[v2.answer] <@ @condition")}
-        ) as agg 
-        group by 1, 2, 3 
-        order by 1, 2 ,3;";
+            {IfWithCondition(@",
+            condVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+                and entityid = @ConditionVariable)")} 
+            select agg.teamleadname, agg.responsiblename, agg.answer, count(interview_id)
+            from (
+                select 
+                    case when @totals then null else s.teamleadid end as teamleadid,
+                    case when @totals then null else s.teamleadname end as teamleadname,
+                    case when @detailed then s.responsiblename else null end as responsiblename, 
+                    v1.interview_id, v1.answer 
+                from readside.report_tabulate_data v1
+                {IfWithCondition( // we don't want to self join on report_tabulate_data if no conditions specified
+               @"join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id and 
+                    (v1.rostervector = v2.rostervector
+                        or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
+                        or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
+                    )")
+                }
+                join readside.interviews_id id on id.id = v1.interview_id
+                join readside.interviewsummaries s on s.interviewid = id.interviewid
+                join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
+                where  
+                    {IfSupervisor("(@teamleadid is null or s.teamleadid = @teamleadid) and")}
+                    v1.entity_id in (select id from lookupVariable)     
+                    {IfWithCondition("and v2.entity_id in (select id from condVariable) and array[v2.answer] <@ @condition")}
+            ) as agg 
+            group by 1, 2, 3 
+            order by 1, 2 ,3;";
 
             var result = connection.Query<GetCategoricalReportItem>(SqlQuery, @params);
             var totals = connection.Query<GetCategoricalReportItem>(SqlQuery, @params.AsTotals());
@@ -141,13 +139,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         {
             var session = this.sessionProvider.Session;
             var result = session.Connection.Query<GetNumericalReportItem>(@"
-                select teamleadname, responsiblename,
-                    count, avg as average, median, min, max, sum,
-                    percentile_05 as percentile05,
-                    percentile_50 as percentile50,
-                    percentile_95 as percentile95
-                from readside.get_numerical_report(@questionId, @questionnaireIdentity, @TeamLeadId, 
-                    @detailedView, @minAnswer, @maxAnswer)",
+                with countables as (
+                    select s.teamleadname,
+                        case when @detailedView then s.responsiblename else null end as responsiblename, 
+                        qe.entityid, qe.questionnaireidentity, rd.answer
+                    from readside.report_tabulate_numerical rd
+                    inner join readside.questionnaire_entities qe on rd.entity_id = qe.id
+                    inner join readside.interviews_id id on rd.interview_id = id.id
+                    inner join readside.interviewsummaries s on id.interviewid = s.interviewid
+                    where 
+                        qe.entityid = @questionId and
+                        (@teamleadid is null or s.teamleadid = @teamleadid) and
+                        qe.questionnaireidentity like @questionnaireIdentity and
+                        answer >= @minanswer and answer <= @maxanswer
+                )
+                select c.teamleadname, c.responsiblename,
+                    count(c.answer) as count, avg(c.answer) as avg, 
+                    readside.median(c.answer) as median, 
+                    min(c.answer) as min, max(c.answer) as max, 
+                    sum(c.answer) as sum, 
+                    percentile_cont(0.05) within group (order by c.answer asc) as percentile_05,
+                    percentile_cont(0.5) within group (order by c.answer asc) as percentile_50,
+                    percentile_cont(0.95) within group (order by c.answer asc) as percentile_95
+                from countables c
+                group by 1,2
+
+                union all
+
+                select null, null,
+                    count(c.answer) as count, 
+                    avg(c.answer) as avg, 
+                    readside.median(c.answer) as median, 
+                    min(c.answer) as min, max(c.answer) as max, 
+                    sum(c.answer) as sum, 
+                    percentile_cont(0.05) within group (order by c.answer asc) as percentile_05,
+                    percentile_cont(0.50) within group (order by c.answer asc) as percentile_50,
+                    percentile_cont(0.95) within group (order by c.answer asc) as percentile_95
+                from countables c;",
                 new
                 {
                     questionnaireIdentity = $"{questionnaireId}${version?.ToString() ?? "%"}",
