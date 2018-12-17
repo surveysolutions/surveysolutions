@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 Question = question
             });
 
@@ -99,7 +99,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 Question = question
             });
 
@@ -114,7 +114,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
                 Condition = new[] { (long)Relation.Spouse },
                 Question = question
@@ -129,7 +129,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Pivot = true
@@ -155,7 +155,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Condition = condition.Select(c => (long) c).ToArray()
@@ -169,7 +169,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Pivot = true
