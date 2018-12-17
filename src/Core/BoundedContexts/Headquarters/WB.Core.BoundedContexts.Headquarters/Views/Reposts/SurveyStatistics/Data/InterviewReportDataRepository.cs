@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -54,8 +55,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         {
             var connection = this.sessionProvider.Session.Connection;
 
-            return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as colvalue, b as rowvalue, count
-                from readside.get_report_categorical_pivot(@teamLeadId, @questionnaire, @variableA, @variableB)", new
+            return connection.Query<GetReportCategoricalPivotReportItem>(@"with
+                 vara as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableA),
+                 varb as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity like @questionnaire and qe.entityid = @variableB),
+                 agg as (
+	                select v1.interview_id, v1.answer as a1, v2.answer as a2, s.questionnaireidentity
+	                from readside.report_tabulate_data v1
+	                join readside.report_tabulate_data v2 on v1.interview_id = v2.interview_id
+		                and 
+			                (v1.rostervector = v2.rostervector
+				                or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
+				                or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
+			                )
+	                join readside.interviews_id id on id.id = v1.interview_id
+	                join readside.interviewsummaries s on s.interviewid = id.interviewid
+	                where 
+ 		                v1.entity_id in (select id from vara) 
+ 		                and v2.entity_id in (select id from varb)
+		                and (@teamLeadId is null or @teamLeadId = s.teamleadid)
+                )
+                select  a1 as colvalue, a2 as rowvalue, count(interview_id)
+                from agg
+                group by 1, 2
+                order by 1, 2", new
             {
                 teamLeadId,
                 questionnaire = $"{questionnaireIdentity}${version?.ToString() ?? "%"}",
@@ -64,13 +86,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             }).ToList();
         }
 
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
         public List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params)
         {
             var connection = this.sessionProvider.Session.Connection;
 
-            const string SqlQuery = @"select teamleadname, responsiblename, answer, count
-                    from readside.get_categorical_report(@questionnaireIdentity, @detailed, @totals, @teamLeadId, 
-                        @variable, @conditionVariable, @condition)";
+            string IfWithCondition(string sql) => @params.ConditionVariable != null ? sql: string.Empty;
+            string IfSupervisor(string sql) => @params.TeamLeadId != null ? sql : string.Empty;
+
+            string SqlQuery = $@"with
+	    lookupVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+                and entityid = @variable)
+        {IfWithCondition(
+         @", condVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
+                and entityid = @ConditionVariable)")
+        } 
+        select agg.teamleadname, agg.responsiblename, agg.answer, count(interview_id)
+        from (
+            select 
+                case when @totals then null else s.teamleadid end as teamleadid,
+                case when @totals then null else s.teamleadname end as teamleadname,
+                case when @detailed then s.responsiblename else null end as responsiblename, 
+                v1.interview_id, v1.answer 
+            from readside.report_tabulate_data v1
+            {IfWithCondition(
+           @"join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id and 
+                (v1.rostervector = v2.rostervector
+                    or concat(v1.rostervector, '-') like coalesce(nullif(v2.rostervector, '') || '-%', '%')
+                    or concat(v2.rostervector, '-') like coalesce(nullif(v1.rostervector, '') || '-%', '%')
+                )")
+            }
+            join readside.interviews_id id on id.id = v1.interview_id
+            join readside.interviewsummaries s on s.interviewid = id.interviewid
+            join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
+            where  
+                {IfSupervisor("(@teamleadid is null or s.teamleadid = @teamleadid) and")}
+                v1.entity_id in (select id from lookupVariable)     
+                {IfWithCondition($@"-- filter by condition variable 
+                and v2.entity_id in (select id from condVariable) and array[v2.answer] <@ @condition")}
+        ) as agg 
+        group by 1, 2, 3 
+        order by 1, 2 ,3;";
 
             var result = connection.Query<GetCategoricalReportItem>(SqlQuery, @params);
             var totals = connection.Query<GetCategoricalReportItem>(SqlQuery, @params.AsTotals());
