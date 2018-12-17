@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -16,39 +15,60 @@ using WB.Tests.Integration.InterviewFactoryTests;
 
 namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 {
-    internal class SurveyStatisticsReportTests : InterviewFactorySpecification
+    internal class SurveyStatisticsAllVersionsReportTests : InterviewFactorySpecification
     {
-        private QuestionnaireDocument questionnaire;
+        private QuestionnaireDocument questionnaireV1;
+        private QuestionnaireDocument questionnaireV2;
+
+        Dictionary<int, QuestionnaireDocument> Questionnaires;
+
         private readonly Guid relationQuestion = Id.g1;
         private readonly Guid sexQuestion = Id.g2;
         private readonly Guid dwellingQuestion = Id.g3;
+        private Guid questionnaireId;
 
         private InterviewFactory factory;
         private SurveyStatisticsReport reporter;
         private const string teamLeadName = "teamLead";
 
         internal enum Relation { Head = 1, Spouse, Child }
-        internal enum Sex { Male = 1, Female }
-        internal enum Dwelling { House = 1, Barrack, Hole }
+        internal enum Sex { Male = 1, Female, Human }
+        internal enum Dwelling { House = 1, Barrack, Hole, Moon }
 
         [SetUp]
         public void SettingUp()
         {
-            this.questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+            Questionnaires = new Dictionary<int, QuestionnaireDocument>();
+            questionnaireId = Guid.NewGuid();
+
+            this.questionnaireV1 = Create.Entity.QuestionnaireDocumentWithOneChapter(null, questionnaireId,
                 Create.Entity.SingleOptionQuestion(dwellingQuestion, "dwelling", answers: GetAnswersFromEnum<Dwelling>()),
                 Create.Entity.Roster(Id.gA, variable: "hh_member", children: new[]
                 {
                     Create.Entity.SingleOptionQuestion(relationQuestion, variable: "relation", answers: GetAnswersFromEnum<Relation>()),
-                    Create.Entity.SingleOptionQuestion(sexQuestion, variable: "sex", answers:  GetAnswersFromEnum<Sex>())
+                    Create.Entity.SingleOptionQuestion(sexQuestion,      variable: "sex",      answers: GetAnswersFromEnum<Sex>())
                 })
             );
 
-            PrepareQuestionnaire(questionnaire, 1);
+            PrepareQuestionnaire(questionnaireV1, 1);
+            Questionnaires.Add(1, questionnaireV1);
+
+            this.questionnaireV2 = Create.Entity.QuestionnaireDocumentWithOneChapter(null, questionnaireId,
+                Create.Entity.SingleOptionQuestion(dwellingQuestion, "dwelling", answers: GetAnswersFromEnum<Dwelling>()),
+                Create.Entity.Roster(Id.gA, variable: "hh_member", children: new[]
+                {
+                    Create.Entity.SingleOptionQuestion(relationQuestion, variable: "relation", answers: GetAnswersFromEnum<Relation>()),
+                    Create.Entity.SingleOptionQuestion(sexQuestion,      variable: "sex",      answers: GetAnswersFromEnum<Sex>(exclude: Sex.Human))
+                })
+            );
+
+            PrepareQuestionnaire(questionnaireV2, 2);
+            Questionnaires.Add(2, questionnaireV2);
 
             this.factory = CreateInterviewFactory();
 
             Because();
-            
+
             this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
@@ -56,20 +76,24 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             // Creating 4 interviews with different members configuration
 
-            CreateInterview(Dwelling.House,
+            CreateInterview(1, Dwelling.House,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female));
 
-            CreateInterview(Dwelling.Barrack,
+            CreateInterview(1, Dwelling.House,
+                (Relation.Head, Sex.Human),
+                (Relation.Spouse, Sex.Human));
+
+            CreateInterview(1, Dwelling.Barrack,
                 (Relation.Head, Sex.Female),
                 (Relation.Spouse, Sex.Male));
 
-            CreateInterview(Dwelling.Hole,
+            CreateInterview(2, Dwelling.Hole,
                 (Relation.Head, Sex.Male),
                 (Relation.Spouse, Sex.Female),
                 (Relation.Child, Sex.Male));
 
-            CreateInterview(Dwelling.House,
+            CreateInterview(2, Dwelling.House,
                 (Relation.Head, Sex.Female));
 
             // there is in total 8 members in survey
@@ -79,124 +103,85 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         }
 
         [Test]
-        public void Categorical_report_by_sex()
+        public void Categorical_report_by_sex_should_has_warning()
         {
-            var question = this.questionnaire.Find<SingleQuestion>(sexQuestion);
+            var question = this.questionnaireV2.Find<SingleQuestion>(sexQuestion);
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(), QuestionnaireVersion = 1,
+                QuestionnaireId = questionnaireV2.PublicKey.FormatGuid(),
                 Question = question
             });
 
             // there is 4 males ,4 females in total 8
             Assert.That(report.Data[0], Is.EqualTo(new object[] { teamLeadName, null, 4, 4, 8 }));
+            Assert.That(report.Warnings, Has.Count.EqualTo(1));
         }
 
         [Test]
-        public void Categorical_report_by_relation()
+        public void Categorical_report_by_sex_with_condition_by_relation_should_has_warning()
         {
-            var question = this.questionnaire.Find<SingleQuestion>(relationQuestion);
+            var question = this.questionnaireV2.Find<SingleQuestion>(sexQuestion);
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                QuestionnaireVersion = 1,
-                Question = question
-            });
-
-            // there is 4 heads, 3 spouses and 1 child in total 8
-            Assert.That(report.Data[0], Is.EqualTo(new object[] { teamLeadName, null, 4, 3, 1, 8 }));
-        }
-
-        [Test]
-        public void Categorical_report_by_sex_with_condition_by_relation()
-        {
-            var question = this.questionnaire.Find<SingleQuestion>(sexQuestion);
-
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
-            {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
+                QuestionnaireId = questionnaireV2.PublicKey.FormatGuid(),
+                ConditionalQuestion = this.questionnaireV2.Find<SingleQuestion>(relationQuestion),
                 Condition = new[] { (long)Relation.Spouse },
                 Question = question
             });
 
             // there is 1 male and 2 female spouses, in total there is 3 spouses
             Assert.That(report.Data[0], Is.EqualTo(new object[] { teamLeadName, null, 1, 2, 3 }));
+            Assert.That(report.Warnings, Has.Count.EqualTo(1));
         }
 
         [Test]
-        public void PivotReport_report_proper_data()
+        public void PivotReport_report_proper_data_should_has_warning()
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
+                QuestionnaireId = questionnaireV2.PublicKey.FormatGuid(),
+                ConditionalQuestion = this.questionnaireV2.Find<SingleQuestion>(relationQuestion),
+                Question = this.questionnaireV2.Find<SingleQuestion>(sexQuestion),
                 Pivot = true
             });
 
             // there is 2 male and 2 female head members
-            Assert.That(report.Data[0], Is.EqualTo(new object[] { Relation.Head.ToString(),   2, 2, 4}));
+            Assert.That(report.Data[0], Is.EqualTo(new object[] { Relation.Head.ToString(), 2, 2, 4 }));
 
             // there is 1 male and 2 female spouse members
             Assert.That(report.Data[1], Is.EqualTo(new object[] { Relation.Spouse.ToString(), 1, 2, 3 }));
 
             // there is 1 male and 0 female child members
-            Assert.That(report.Data[2], Is.EqualTo(new object[] { Relation.Child.ToString(),  1, 0, 1 }));
+            Assert.That(report.Data[2], Is.EqualTo(new object[] { Relation.Child.ToString(), 1, 0, 1 }));
+
+            Assert.That(report.Warnings, Has.Count.EqualTo(1));
         }
 
         //                                                            object[] { Male, Female, Total }
-        [TestCase(Dwelling.House,                ExpectedResult = new object[] {    1,      2,     3 })]
-        [TestCase(Dwelling.Hole, Dwelling.House, ExpectedResult = new object[] {    3,      3,     6 })]
-        [TestCase(Dwelling.Barrack,              ExpectedResult = new object[] {    1,      1,     2 })]
-        [TestCase(Dwelling.Barrack, Dwelling.Hole, Dwelling.House, Description = "Should return all members", 
-                                                 ExpectedResult = new object[] {    4,      4,     8 })]
+        [TestCase(Dwelling.House, ExpectedResult = new object[] { 1, 2, 3 })]
+        [TestCase(Dwelling.Hole, Dwelling.House, ExpectedResult = new object[] { 3, 3, 6 })]
+        [TestCase(Dwelling.Barrack, ExpectedResult = new object[] { 1, 1, 2 })]
+        [TestCase(Dwelling.Barrack, Dwelling.Hole, Dwelling.House, Description = "Should return all members",
+            ExpectedResult = new object[] { 4, 4, 8 })]
         public object[] Should_be_able_to_condition_report_by_non_roster_variable(params Dwelling[] condition)
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
-                Condition = condition.Select(c => (long) c).ToArray()
+                QuestionnaireId = questionnaireV2.PublicKey.FormatGuid(),
+                ConditionalQuestion = this.questionnaireV2.Find<SingleQuestion>(dwellingQuestion),
+                Question = this.questionnaireV2.Find<SingleQuestion>(sexQuestion),
+                Condition = condition.Select(c => (long)c).ToArray()
             });
-
+            
             return report.Data[0].Skip(2).ToArray();
         }
 
-        [Test]
-        public void Should_be_able_to_build_pivot_report_by_non_roster_variable()
-        {
-            var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
-            {
-                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
-                QuestionnaireVersion = 1,
-                ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
-                Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
-                Pivot = true
-            });
-
-            // there is 1 male and 2 females in houses
-            Assert.That(report.Data[0], Is.EqualTo(new object[] { Dwelling.House.ToString(),   1, 2, 3 }));
-
-            // there is 1 male and 1 female in barracks
-            Assert.That(report.Data[1], Is.EqualTo(new object[] { Dwelling.Barrack.ToString(), 1, 1, 2 }));
-
-            // there is 2 male and 1 females in holes
-            Assert.That(report.Data[2], Is.EqualTo(new object[] { Dwelling.Hole.ToString(),    2, 1, 3 }));
-
-            // total 8 members are 4 male 4 female 
-            Assert.That(report.Totals, Is.EqualTo(new object[] { "Total", 4, 4, 8}));
-        }
-
-        private void CreateInterview(Dwelling dwelling, params (Relation rel, Sex sex)[] members)
+        private void CreateInterview(int version, Dwelling dwelling, params (Relation rel, Sex sex)[] members)
         {
             var interviewId = Guid.NewGuid();
+            var questionnaire = Questionnaires[version];
 
             StoreInterviewSummary(new InterviewSummary(questionnaire)
             {
@@ -206,18 +191,18 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                 ResponsibleId = Id.gC,
                 TeamLeadId = Id.gE,
                 TeamLeadName = teamLeadName
-            }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+            }, new QuestionnaireIdentity(questionnaire.PublicKey, version));
 
             var state = Create.Entity.InterviewState(interviewId);
 
-            SetIntAnswer(dwellingQuestion, (int) dwelling);
+            SetIntAnswer(dwellingQuestion, (int)dwelling);
 
             for (var vector = 0; vector < members.Length; vector++)
             {
                 var member = members[vector];
 
-                SetIntAnswer(relationQuestion, (int) member.rel, vector);
-                SetIntAnswer(sexQuestion, (int) member.sex, vector);
+                SetIntAnswer(relationQuestion, (int)member.rel, vector);
+                SetIntAnswer(sexQuestion, (int)member.sex, vector);
             }
 
             factory.Save(state);
