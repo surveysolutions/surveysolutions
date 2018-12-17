@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly CoverStateViewModel coverState;
         protected readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
-        private readonly IEnumeratorSettings enumeratorSettings;
+        public IEnumeratorSettings EnumeratorSettings { get; }
         public static BaseInterviewViewModel CurrentInterviewScope;
 
         protected BaseInterviewViewModel(
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ICommandService commandService,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings)
-            : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
+            : base(principal, viewModelNavigationService, commandService, enumeratorSettings, vibrationViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.coverState = coverState;
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewViewModelFactory = interviewViewModelFactory;
-            this.enumeratorSettings = enumeratorSettings;
+            this.EnumeratorSettings = enumeratorSettings;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
 
-            this.IsVariablesShowed = this.enumeratorSettings.ShowVariables;
+            this.IsVariablesShowed = this.EnumeratorSettings.ShowVariables;
             this.IsSuccessfullyLoaded = true;
         }
 

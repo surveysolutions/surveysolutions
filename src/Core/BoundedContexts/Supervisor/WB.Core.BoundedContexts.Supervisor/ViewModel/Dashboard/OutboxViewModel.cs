@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public void Prepare(Guid? parameter) => this.lastVisitedInterviewId = parameter;
 
         public OutboxViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory)
+            IInterviewViewModelFactory viewModelFactory, IMvxMessenger messenger) : base(messenger)
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
