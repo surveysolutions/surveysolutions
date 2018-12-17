@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IViewModelNavigationService viewModelNavigationService,
             ILogger logger,
             IPrincipal principal,
+            IEnumeratorSettings enumeratorSettings,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
             VibrationViewModel vibrationViewModel)
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 questionnaireRepository,
                 interviewRepository,
                 viewModelNavigationService,
+                enumeratorSettings,
                 logger,
                 principal,
                 commandService,

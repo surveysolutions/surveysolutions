@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        public IEnumeratorSettings EnumeratorSettings { get; }
         protected readonly ICommandService commandService;
         protected readonly VibrationViewModel vibrationViewModel;
 
@@ -20,10 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ICommandService commandService,
+            IEnumeratorSettings enumeratorSettings,
             VibrationViewModel vibrationViewModel)
             : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
+            EnumeratorSettings = enumeratorSettings;
             this.commandService = commandService;
             this.vibrationViewModel = vibrationViewModel;
         }

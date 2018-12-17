@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -24,36 +25,62 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var teamLead = input.TeamLeadName?.ToLower();
 
             var queryForItems = this.interviewSummaryReader.Query(_ =>
-                FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
-                    {
-                        x.QuestionnaireId,
-                        x.QuestionnaireVersion,
-                        x.QuestionnaireTitle,
-                        x.ResponsibleName,
-                        x.TeamLeadName,
-                        SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
-                        InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
-                        Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
-                        RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
-                        ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
-                        RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
-                        ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
-                    })
-                    .GroupBy(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle})
-                    .Select(x => new
-                    {
-                        QuestionnaireId = x.Key.QuestionnaireId,
-                        QuestionnaireVersion = x.Key.QuestionnaireVersion,
-                        QuestionnaireTitle = x.Key.QuestionnaireTitle,
-                        SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
-                        InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
-                        CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
-                        RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
-                        ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
-                        RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
-                        ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
-                        TotalCount = x.Count()
-                    }));
+            {
+                var filteredInterviews = FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId).Select(x => new
+                {
+                    x.QuestionnaireId,
+                    x.QuestionnaireVersion,
+                    x.QuestionnaireTitle,
+                    x.ResponsibleName,
+                    x.TeamLeadName,
+                    SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                    InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                    Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
+                    RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                    ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                    RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                    ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                });
+
+                if (input.QuestionnaireId.HasValue)
+                {
+                    return filteredInterviews
+                        .GroupBy(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle})
+                        .Select(x => new
+                        {
+                            QuestionnaireId = x.Key.QuestionnaireId,
+                            QuestionnaireVersion = (long?)x.Key.QuestionnaireVersion,
+                            QuestionnaireTitle = x.Key.QuestionnaireTitle,
+                            SupervisorAssignedCount = (int?) x.Sum(y => y.SupervisorAssigned) ?? 0,
+                            InterviewerAssignedCount = (int?) x.Sum(y => y.InterviewerAssigned) ?? 0,
+                            CompletedCount = (int?) x.Sum(y => y.Completed) ?? 0,
+                            RejectedBySupervisorCount = (int?) x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                            ApprovedBySupervisorCount = (int?) x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                            RejectedByHeadquartersCount = (int?) x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                            ApprovedByHeadquartersCount = (int?) x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
+                            TotalCount = x.Count()
+                        });
+                }
+                else
+                {
+                    return filteredInterviews
+                        .GroupBy(x => new {x.QuestionnaireId, x.QuestionnaireTitle})
+                        .Select(x => new
+                        {
+                            QuestionnaireId = x.Key.QuestionnaireId,
+                            QuestionnaireVersion = (long?)null,
+                            QuestionnaireTitle = x.Key.QuestionnaireTitle,
+                            SupervisorAssignedCount = (int?) x.Sum(y => y.SupervisorAssigned) ?? 0,
+                            InterviewerAssignedCount = (int?) x.Sum(y => y.InterviewerAssigned) ?? 0,
+                            CompletedCount = (int?) x.Sum(y => y.Completed) ?? 0,
+                            RejectedBySupervisorCount = (int?) x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                            ApprovedBySupervisorCount = (int?) x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                            RejectedByHeadquartersCount = (int?) x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                            ApprovedByHeadquartersCount = (int?) x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
+                            TotalCount = x.Count()
+                        });
+                }
+            });
 
             var reportLines = queryForItems.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
                 .Take(input.PageSize).ToList().Select(x => new HeadquarterSurveysAndStatusesReportLine
@@ -76,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             if (reportLines.Count != 1)
             {
                 var queryForTotalRow = this.interviewSummaryReader.Query(_ =>
-                    FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
+                    FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId).Select(x => new
                         {
                             x.QuestionnaireId,
                             x.QuestionnaireVersion,
@@ -108,8 +135,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 totalRow = queryForTotalRow.FirstOrDefault();
             }
 
-            int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead)
-                .Select(x => x.QuestionnaireIdentity)
+            int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead, input.QuestionnaireId)
+                .Select(x => input.QuestionnaireId.HasValue ? x.QuestionnaireIdentity : x.QuestionnaireId.ToString())
                 .Distinct()
                 .Count());
 
@@ -124,13 +151,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _, string responsible, string teamLead)
+        private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _,
+            string responsible, string teamLead, Guid? questionnaireId)
         {
             if (!string.IsNullOrWhiteSpace(responsible))
                 _ = _.Where(x => x.ResponsibleName.ToLower() == responsible);
 
             if (!string.IsNullOrWhiteSpace(teamLead))
                 _ = _.Where(x => x.TeamLeadName.ToLower() == teamLead);
+            if (questionnaireId.HasValue)
+            {
+                _ = _.Where(x => x.QuestionnaireId == questionnaireId);
+            }
 
             return _;
         }

@@ -33,10 +33,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings,
             IUserInteractionService userInteractionService,
+            IDeviceInformationService deviceInformationService,
             IServiceLocator serviceLocator,
             IAssignmentDocumentsStorage assignmentsStorage)
             : base(synchronizationService, logger, httpStatistician, principal, interviewViewRepository,
-                auditLogService, enumeratorSettings, serviceLocator, userInteractionService, assignmentsStorage)
+                auditLogService, enumeratorSettings, serviceLocator, deviceInformationService, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;

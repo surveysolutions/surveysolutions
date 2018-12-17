@@ -58,7 +58,7 @@ alter@~0.2.0:
   dependencies:
     stable "~0.1.3"
 
-angular-animate@1.7.5:
+angular-animate@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.5.tgz#1ffc6c2a9cdee227a2ba79cc6cd8f71ec44db5dc"
   integrity sha512-kU/fHIGf2a4a3bH7E1tzALTHk+QfoUSCK9fEcMFisd6ZWvNDwPzXWAilItqOC3EDiAXPmGHaNc9/aXiD9xrAxQ==
@@ -68,7 +68,7 @@ angular-block-ui@0.2.2:
   resolved "https://registry.yarnpkg.com/angular-block-ui/-/angular-block-ui-0.2.2.tgz#466613cd80ad286eb4b588cfced00fec6ac5e975"
   integrity sha1-RmYTzYCtKG60tYjPztAP7GrF6XU=
 
-angular-cookies@1.7.5:
+angular-cookies@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.7.5.tgz#1c5ab3c05cdc43f1777be9506e64587cb3543634"
   integrity sha512-/8xvvSl/Z9Vwu8ChRm+OQE3vmli8Icwl8uTYkHqD7j7cknJP9kNaf7SgsENlsLVtOqLE/I7TCFYrSx3bmSeNQA==
@@ -114,12 +114,12 @@ angular-pnotify@^0.1.2:
     jquery ">=1.9"
     pnotify "~3.0.0"
 
-angular-resource@1.7.5:
+angular-resource@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular-resource/-/angular-resource-1.7.5.tgz#80007af3aed8b6278bf2344e8e5257ea7bca333e"
   integrity sha512-zlCKVNa2nnZNb4Lz3YFPKhsYG+v+t4STEsjkWRbii6PfwSrtH9R/zGpCOkBNFnq3naeZMMmd5aIIgHi5a7k9jA==
 
-angular-sanitize@1.7.5:
+angular-sanitize@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.7.5.tgz#75d49e15071ca9c70581e76d20940f26372e24d2"
   integrity sha512-wjKCJOIwrkEvfD0keTnKGi6We13gtoCAQIHcdoqyoo3gwvcgNfYymVQIS3+iCGVcjfWz0jHuS3KgB4ysRWsTTA==
@@ -146,7 +146,7 @@ angular-ui-utils@^0.1.1:
   resolved "https://registry.yarnpkg.com/angular-ui-utils/-/angular-ui-utils-0.1.1.tgz#ff8b5c4abb2aebeb08ee05d09a78c4cfbfb65009"
   integrity sha1-/4tcSrsq6+sI7gXQmnjEz7+2UAk=
 
-angular@1.7.5, angular@>=1.0.6, angular@^1.0.8:
+angular@>=1.0.6, angular@^1.0.8, angular@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.5.tgz#d1c1c01c6f5dc835638f3f9aa51012857bdac49e"
   integrity sha512-760183yxtGzni740IBTieNuWLtPNAoMqvmC0Z62UoU0I3nqk+VJuO3JbQAXOyvo3Oy/ZsdNQwrSTh/B0OQZjNw==

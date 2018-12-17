@@ -1,24 +1,18 @@
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Support.V7.Widget;
 using Android.Views;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
-using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(Label = "",
-        Theme = "@style/GrayAppTheme",
-        WindowSoftInputMode = SoftInput.StateHidden,
-        NoHistory = true,
-        ConfigurationChanges =
-            Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
-        Exported = false)]
-    public class LoadingActivity : BaseActivity<LoadingViewModel>
+    public abstract class ProgressInterviewActivity<T> : BaseActivity<T> where T : ProgressViewModel
     {
+        public abstract bool IsSupportMenu { get; }
+
         protected override int ViewResourceId => Resource.Layout.loading;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -27,15 +21,21 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
         }
-        
+
         public override void OnBackPressed()
         {
-            this.ViewModel.NavigateToDashboardCommand.Execute();
-            this.CancelLoadingAndFinishActivity();
+            if (IsSupportMenu)
+            {
+                this.ViewModel.NavigateToDashboardCommand.Execute();
+                this.CancelLoadingAndFinishActivity();
+            }
         }
-         
+
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
+            if (!IsSupportMenu)
+                return false;
+
             switch (item.ItemId)
             {
                 case Resource.Id.menu_dashboard:
@@ -60,17 +60,22 @@ namespace WB.UI.Interviewer.Activities
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            this.MenuInflater.Inflate(Resource.Menu.diagnostics, menu);
+            if (IsSupportMenu)
+            {
+                this.MenuInflater.Inflate(Resource.Menu.diagnostics, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
-            menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
-            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+                menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
+                menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
+                menu.LocalizeMenuItem(Resource.Id.menu_maps, InterviewerUIResources.MenuItem_Title_Maps);
+                menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
 
-            this.HideMenuItem(menu, Resource.Id.menu_login);
+                this.HideMenuItem(menu, Resource.Id.menu_login);
+            }
+
             return base.OnCreateOptionsMenu(menu);
         }
 
-        public void HideMenuItem(IMenu menu, int menuItemId)
+        private void HideMenuItem(IMenu menu, int menuItemId)
         {
             var menuItem = menu.FindItem(menuItemId);
             menuItem?.SetVisible(false);
@@ -81,5 +86,6 @@ namespace WB.UI.Interviewer.Activities
             this.ViewModel.CancelLoadingCommand.Execute();
             this.Finish();
         }
+
     }
 }
