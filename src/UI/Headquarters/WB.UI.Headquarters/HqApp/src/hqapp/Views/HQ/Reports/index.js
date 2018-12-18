@@ -29,6 +29,10 @@ export default class ReportComponent {
                 component: TeamsAndStatuses
             },
             {
+                path: '/Reports/TeamMembersAndStatuses',
+                component: TeamsAndStatuses
+            },
+            {
                 path: "/Reports/MapReport",
                 component: MapReport
             }, {
