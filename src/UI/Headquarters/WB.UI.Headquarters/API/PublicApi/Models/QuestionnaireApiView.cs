@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.TotalCount = questionnaireBrowseView.TotalCount;
             this.Limit = questionnaireBrowseView.PageSize.GetValueOrDefault();
             this.Questionnaires = questionnaireBrowseView.Items.Select(
-                    item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version, item.Title, item.LastEntryDate));
+                    item => new QuestionnaireApiItem(item.QuestionnaireId, item.Version, item.Title, item.Variable, item.LastEntryDate));
             this.Order = questionnaireBrowseView.Order;
         }
         
