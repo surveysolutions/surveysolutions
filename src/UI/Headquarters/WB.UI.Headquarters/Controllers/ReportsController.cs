@@ -65,14 +65,19 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.Summary)]
         public ActionResult SupervisorsAndStatuses()
         {
-            this.ViewBag.ActivePage = MenuItem.Summary;
+            var model = new TeamsAndStatusesModel();
+            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" });
+            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"});
+            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"});
+            model.InterviewsUrl = Url.Action("Interviews", "HQ");
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
-
-            return this.View("TeamsAndStatuses", usersAndQuestionnaires.Questionnaires);
+            return this.View("TeamsAndStatuses", model);
         }
 
 
