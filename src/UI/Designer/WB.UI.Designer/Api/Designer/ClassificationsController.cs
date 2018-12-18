@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Api.Designer
             }
         }
     }
-    [Authorize]
+
     [ApiNoCache]
     [Authorize]
     [RoutePrefix("api")]
@@ -50,6 +50,7 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpPost]
         [Route("init")]
+        [Authorize(Roles = "Administrator")]
         public void Init()
         {
             var json = File.ReadAllText(HostingEnvironment.MapPath("~/Content/QbankClassifications.json"));
@@ -110,7 +111,7 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [Route("classifications/search")]
-        public Task<ClassificationsSearchResult> Search([FromUri] SearchQueryModel model)
+        public Task<ClassificationsSearchResult> Search([FromUri] ClassificationSearchQueryModel model)
         {
             return classificationsStorage.SearchAsync(model.Query, model.GroupId, model.PrivateOnly);
         }
@@ -172,7 +173,7 @@ namespace WB.UI.Designer.Api.Designer
         }
     }
 
-    public class SearchQueryModel
+    public class ClassificationSearchQueryModel
     {
         public string Query { get; set; }
         public Guid? GroupId{ get; set; }

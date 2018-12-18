@@ -1195,4 +1195,10 @@
   <data name="SearchForQuestion" xml:space="preserve">
     <value>Search for question</value>
   </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>All folders</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Search for a question</value>
+  </data>
 </root>

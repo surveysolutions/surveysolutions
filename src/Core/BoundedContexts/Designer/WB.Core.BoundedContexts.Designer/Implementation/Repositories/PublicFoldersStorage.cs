@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -33,15 +34,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid? folderId)
         {
-            return folderStorage.Query(_ =>
-            {
-                return _.Where(f => f.Parent == folderId).OrderBy(i => i.Title);
-            }).ToArray();
+            return folderStorage.Query(_ => { return _.Where(f => f.Parent == folderId).OrderBy(i => i.Title); })
+                .ToArray();
         }
 
         public IEnumerable<QuestionnaireListViewFolder> GetRootFolders()
         {
-            return new[]  { publicQuestionnairesFolder };
+            return new[] {publicQuestionnairesFolder};
         }
 
         public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId, Guid userId)
@@ -95,9 +94,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
                 folders.Add(folder);
                 folderId = folder.Parent;
             }
+
             folders.Add(publicQuestionnairesFolder);
             folders.Reverse();
             return folders;
+        }
+
+        public Task<List<QuestionnaireListViewFolder>> GetAllFolders()
+        {
+            var allFolders =  folderStorage.Query(_ => { return _.OrderBy(i => i.Title).ToList(); });
+            
+            var stack = new Stack<QuestionnaireListViewFolder>(allFolders.Where(x => x.Parent == null).OrderByDescending(x => x.Title));
+
+            var result = new List<QuestionnaireListViewFolder>();
+            while (stack.Count != 0)
+            {
+                var folder = stack.Pop();
+                result.Add(folder);
+                allFolders.Where(x => x.Parent == folder.PublicId).OrderByDescending(x=>x.Title).ForEach(x => stack.Push(x));
+            }
+
+            return Task.FromResult(result);
         }
     }
 }

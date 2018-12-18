@@ -142,6 +142,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All folders.
+        /// </summary>
+        public static string AllFolders {
+            get {
+                return ResourceManager.GetString("AllFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment preview.
         /// </summary>
         public static string AttachmentPreview {
@@ -1911,6 +1920,15 @@ namespace WB.UI.Designer.Resources {
         public static string SearchForQuestion {
             get {
                 return ResourceManager.GetString("SearchForQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for a question.
+        /// </summary>
+        public static string SearchQuestionPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchQuestionPlaceholder", resourceCulture);
             }
         }
         
