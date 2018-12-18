@@ -12,7 +12,12 @@ namespace WB.UI.Designer.Api.Attributes
         public void Apply(SwaggerDocument swaggerDoc, SchemaRegistry schemaRegistry, IApiExplorer apiExplorer)
         {
             IDictionary<string, PathItem> pathsToKeep = new Dictionary<string, PathItem>();
-            var filters = new string[] {"Api.Portal", nameof(ClassificationsController)};
+            var filters = new string[]
+            {
+                "Api.Portal", 
+                nameof(ClassificationsController),
+                nameof(SearchController)
+            };
             
             foreach (ApiDescription apiDescription in apiExplorer.ApiDescriptions)
             {
@@ -22,9 +27,10 @@ namespace WB.UI.Designer.Api.Attributes
                 if (!filters.Any(x => controllerTypeNamespace.Contains(x))) continue;
 
                 var pathToRemove = $"/{apiDescription.Route.RouteTemplate.TrimEnd('/')}";
-                pathsToKeep[pathToRemove] = swaggerDoc.paths[pathToRemove];
-
-                
+                if (swaggerDoc.paths.ContainsKey(pathToRemove))
+                {
+                    pathsToKeep[pathToRemove] = swaggerDoc.paths[pathToRemove];
+                }
             }
 
             swaggerDoc.paths = pathsToKeep;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {

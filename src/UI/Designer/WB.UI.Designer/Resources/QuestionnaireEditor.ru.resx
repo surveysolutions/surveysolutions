@@ -1182,6 +1182,9 @@
   <data name="MyClassifications" xml:space="preserve">
     <value>Мои классификации</value>
   </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Все папки</value>
+  </data>
   <data name="ClassificationAdd" xml:space="preserve">
     <value>Добавить классификацию</value>
   </data>
@@ -1199,5 +1202,8 @@
   </data>
   <data name="ClassificationTitle" xml:space="preserve">
     <value>Название категории</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Поиск вопроса</value>
   </data>
 </root>

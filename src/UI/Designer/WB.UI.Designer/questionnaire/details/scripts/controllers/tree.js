@@ -61,7 +61,18 @@
                     });
 
                     modalInstance.result.then(
-                        function(selectedClassification) {},
+                        function(entityToPaste) {
+                            var newId = utilityService.guid();
+
+                            commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, entityToPaste.questionnaireId, entityToPaste.itemId, newId)
+                                .then(function () {
+
+                                $scope.refreshTree();
+
+                                $rootScope.$emit('itemPasted');
+                                $state.go('questionnaire.chapter.' + entityToPaste.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+                            });
+                        },
                         function() { });
                 };
                 showModal();

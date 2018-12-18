@@ -116,12 +116,13 @@
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-.classifications-block .has-error {
+.classifications-block .has-error .form-control,
+.classifications-block .has-error .form-control[type="number"] {
     border-color: #c44919;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(196, 73, 25, 0.6) !important;
 }
 
-.classifications-block .has-warning {
+.classifications-block .has-warning .form-control {
     border-color: #8a6d3b;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(138, 109, 59, 0.6) !important;
 }
@@ -330,6 +331,7 @@
 
 .categories-holder {
     height: 100%;
+    padding-left: 5px;
 }
 
 .margin-bottom-0 {
