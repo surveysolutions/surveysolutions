@@ -1206,4 +1206,7 @@
   <data name="SearchQuestionPlaceholder" xml:space="preserve">
     <value>Поиск вопроса</value>
   </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Поиск вопроса</value>
+  </data>
 </root>
