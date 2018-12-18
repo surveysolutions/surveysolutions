@@ -1906,6 +1906,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for question.
+        /// </summary>
+        public static string SearchForQuestion {
+            get {
+                return ResourceManager.GetString("SearchForQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select country.
         /// </summary>
         public static string SelectCountry {
