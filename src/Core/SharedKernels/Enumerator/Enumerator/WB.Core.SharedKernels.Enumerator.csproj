@@ -91,9 +91,6 @@
     <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.zh-CN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Update="Properties\InterviewerUIResources.zh.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
@@ -135,9 +132,6 @@
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.vi-VN.resx">
-      <DependentUpon>UIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\UIResources.zh-CN.resx">
       <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.zh.resx">
