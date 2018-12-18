@@ -28,7 +28,7 @@
         />
       </FilterBlock>
     </Filters>
-    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" exportable hasTotalRow></DataTables>
+    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true" exportable hasTotalRow></DataTables>
   </HqLayout>
 </template>
 <script>
@@ -131,7 +131,7 @@ export default {
             const formatedNumber = formatNumber(data)
 
             if (data === 0 || row.DT_RowClass === 'total-row') {
-                return _.isNumber(data) ?  `<span>${formatedNumber}</span>` : `<span>${this.$t('Strings.AllTeams')}</span>`
+                return _.isNumber(data) ?  `<span>${formatedNumber}</span>` : `<span>${this.$config.model.allTeamsTitle}</span>`
             }
 
             var queryObject = {}
@@ -184,7 +184,7 @@ export default {
                                 row,
                                 "")
                         },
-                        title: this.$t("Users.Supervisors")
+                        title: this.$config.model.teamTitle
                     },
                     {
                         className: "type-numeric",
