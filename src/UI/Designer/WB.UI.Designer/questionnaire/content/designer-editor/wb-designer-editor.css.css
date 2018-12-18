@@ -1,20 +1,12 @@
 ﻿@media screen and (max-width: 767px) {
-}
-@media (min-width: 768px) {
-}
-@media (min-width: 768px) {
-}
-@media (max-width: 767px) {
-}
-@media (min-width: 768px) {
-}
-@media (min-width: 768px) {
-}
-@media (max-width: 767px) {
-}
-@media (max-width: 767px) {
-}
-#loading-logo {
+}@media (min-width: 768px) {
+}@media (min-width: 768px) {
+}@media (max-width: 767px) {
+}@media (min-width: 768px) {
+}@media (min-width: 768px) {
+}@media (max-width: 767px) {
+}@media (max-width: 767px) {
+}#loading-logo {
   width: 52px;
   height: 75px;
   position: absolute;
@@ -977,7 +969,7 @@
 }
 #designer-editor.container section#main {
   position: relative;
-  height: calc(100% - 77px);
+  height: calc(100% - (75px + 2px));
 }
 #designer-editor.container section#main > .questionnaire-tree {
   height: 100%;
@@ -1025,6 +1017,9 @@
   border-top: 2px solid #edeff1;
   margin-top: 2px;
   padding: 8px 24px 0 18px;
+}
+#designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons .btn {
+  margin-bottom: 10px;
 }
 .question-editor {
   position: relative;

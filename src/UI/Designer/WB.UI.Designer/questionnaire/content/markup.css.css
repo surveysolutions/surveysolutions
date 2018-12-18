@@ -9053,6 +9053,9 @@ textarea#edit-group-description {
   margin-top: 2px;
   padding: 8px 24px 0 18px;
 }
+#designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons .btn {
+  margin-bottom: 10px;
+}
 .question-editor {
   position: relative;
   height: 100%;
@@ -10405,7 +10408,7 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   position: absolute;
   right: 0px;
   top: 0px;
-  background-image: url(content/i/search-glyph.png);
+  background-image: url(i/search-glyph.png);
   width: 42px;
   height: 42px;
   z-index: 5;
