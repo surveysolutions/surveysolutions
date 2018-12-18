@@ -6,5 +6,7 @@
         public string QuestionnairesUrl { get; set; }
         public string QuestionnaireByIdUrl { get; set; }
         public string InterviewsUrl { get; set; }
+        public string AllTeamsTitle { get; set; }
+        public string TeamTitle { get; set; }
     }
 }
