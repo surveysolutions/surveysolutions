@@ -71,7 +71,7 @@
                     case 'Chapter':  urlItemType ='group';break;
                     case 'Variable': urlItemType ='variable';break;
                 }
-                return `../../questionnaire/details/${searchResult.questionnaireId}/chapter/${searchResult.sectionId}/${urlItemType}/${searchResult.itemId}`;
+                return '../../questionnaire/details/'+searchResult.questionnaireId + '/chapter/' + searchResult.sectionId +'/' + urlItemType + '/' + searchResult.itemId;
             };
 
             $scope.pasteEntity = function(searchResult) {
