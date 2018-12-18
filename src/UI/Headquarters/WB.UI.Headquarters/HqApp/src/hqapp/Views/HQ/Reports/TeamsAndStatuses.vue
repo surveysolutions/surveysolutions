@@ -1,0 +1,302 @@
+<template>
+  <HqLayout :title="$t('Reports.TeamsAndStatuses')" :hasFilter="true">
+    <Filters slot="filters">
+      <FilterBlock
+        :title="$t('Common.Questionnaire')">
+        <Typeahead
+          data-vv-name="questionnaireId"
+          data-vv-as="questionnaire"
+          :placeholder="$t('Common.AllQuestionnaires')"
+          control-id="questionnaireId"
+          :value="questionnaireId"
+          v-on:selected="questionnaireSelected"
+          :fetch-url="$config.model.questionnairesUrl"
+        />
+      </FilterBlock>
+
+      <FilterBlock
+        :title="$t('Common.QuestionnaireVersion')">
+        <Typeahead
+          data-vv-name="questionnaireVersion"
+          data-vv-as="questionnaireVersion"
+          :placeholder="$t('Common.AllVersions')"
+          control-id="questionnaireVersion"
+          :value="questionnaireVersion"
+          v-on:selected="questionnaireVersionSelected"
+          :fetch-url="questionnaireVersionFetchUrl"
+          :disabled="questionnaireVersionFetchUrl == null"
+        />
+      </FilterBlock>
+    </Filters>
+    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" exportable hasTotalRow></DataTables>
+  </HqLayout>
+</template>
+<script>
+import { formatNumber } from "./helpers"
+
+export default {
+    data() {
+        return {
+            questionnaireId: null,
+            questionnaireVersion: null
+        }
+
+    },
+    mounted() {
+        // this.$refs.table.reload()
+        const self = this
+
+        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
+            if (questionnaireId != undefined) {
+                self.questionnaireId = {
+                    key: questionnaireId,
+                    value: questionnaireTitle
+                }
+                self.questionnaireVersion = {
+                    key: version,
+                    value: version
+                }
+            }
+
+            self.reloadTable()
+            self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.reloadTable.bind(self))
+        });
+    },
+    methods: {
+        
+        questionnaireSelected(newValue) {
+            this.questionnaireId = newValue
+        },
+
+        questionnaireVersionSelected(newValue){
+            this.questionnaireVersion = newValue
+        },
+        reloadTable(){
+            this.isLoading = true
+            
+            this.$refs.table.reload(self.reloadTable)
+
+            this.addParamsToQueryString()
+        },
+        startWatchers(props, watcher) {
+            var iterator = (prop) => this.$watch(prop, watcher)
+
+            props.forEach(iterator, this)
+        },
+        addParamsToQueryString() {
+            var queryString = { }
+
+            if (this.questionnaireId != null) {
+                queryString.questionnaireId = this.questionnaireId.key
+                
+            }
+            if(this.questionnaireVersion != null) {
+                queryString.questionnaireVersion = this.questionnaireVersion.key
+            }
+
+            this.$router.push({ query: queryString })
+        },
+
+        addFilteringParams(data) {
+
+            if (this.questionnaireId != null) {
+                data.templateId = this.questionnaireId.key
+                
+            }
+            if(this.questionnaireVersion != null) {
+                data.templateVersion = this.questionnaireVersion.key
+            }
+        },
+
+        async loadQuestionnaireId(onDone) {
+            let requestParams = null;
+
+            const questionnaireId = this.$route.query.questionnaireId
+            const version = this.$route.query.questionnaireVersion
+
+            if (questionnaireId != undefined && version != undefined) {
+                requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
+                             this.ajaxParams);
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
+
+                if (response.data) {
+                    onDone(response.data.id, response.data.title, response.data.version);
+                }
+
+            } else onDone();
+        },
+        
+
+        getLinkToInterviews(data, row, interviewStatus) {
+            const formatedNumber = formatNumber(data)
+
+            if (data === 0 || row.DT_RowClass === 'total-row') {
+                return _.isNumber(data) ?  `<span>${formatedNumber}</span>` : `<span>${this.$t('Strings.AllTeams')}</span>`
+            }
+
+            var queryObject = {}
+
+            const templateId = (this.questionnaireId || {}).key; 
+            const templateVersion = (this.questionnaireVersion || {}).key;
+
+            if (!_.isUndefined(templateId) && !_.isUndefined(templateVersion)) {
+                queryObject.templateId = templateId
+                queryObject.templateVersion = templateVersion
+            }
+
+            if (row.responsible) {
+                queryObject.responsible = row.responsible
+            }
+
+            if (!_.isUndefined(interviewStatus)) {
+                queryObject.status = interviewStatus
+            }
+
+            var queryString = $.param(queryObject)
+
+            var linkUrl =
+                this.$config.model.interviewsUrl + (queryString ? "?" + queryString : "")
+
+            return `<a href=\"${linkUrl}\">${formatedNumber}</a>`
+        }
+    },
+    computed: {
+        config() {
+            return this.$config.model
+        },
+
+        questionnaireVersionFetchUrl() {
+             if(this.questionnaireId && this.questionnaireId.key)
+                return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
+            return null
+        },
+        tableOptions() {
+            var self = this
+            return {
+                deferLoading: 0,
+                columns: [
+                    {
+                        data: "responsible",
+                        name: "Responsible",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "")
+                        },
+                        title: this.$t("Users.Supervisors")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "supervisorAssignedCount",
+                        name: "SupervisorAssignedCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "SupervisorAssigned")
+                        },
+                        title: this.$t("Reports.SupervisorAssigned")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "interviewerAssignedCount",
+                        name: "InterviewerAssignedCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "InterviewerAssigned")
+                        },
+                        title: this.$t("Reports.InterviewerAssigned")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "completedCount",
+                        name: "CompletedCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "Completed")
+                        },
+                        title: this.$t("Reports.Completed")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "rejectedBySupervisorCount",
+                        name: "RejectedBySupervisorCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "RejectedBySupervisor")
+                        },
+                        title: this.$t("Reports.RejectedBySupervisor")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "approvedBySupervisorCount",
+                        name: "ApprovedBySupervisorCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "ApprovedBySupervisor"
+                            )
+                        },
+                        title: this.$t("Reports.ApprovedBySupervisor")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "rejectedByHeadquartersCount",
+                        name: "RejectedByHeadquartersCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "RejectedByHeadquarters"
+                            )
+                        },
+                        title: this.$t("Reports.RejectedByHQ")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "approvedByHeadquartersCount",
+                        name: "ApprovedByHeadquartersCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                "ApprovedByHeadquarters"
+                            )
+                        },
+                        title: this.$t("Reports.ApprovedByHQ")
+                    },
+                    {
+                        className: "type-numeric",
+                        data: "totalCount",
+                        name: "TotalCount",
+                        render(data, type, row) {
+                            return self.getLinkToInterviews(
+                                data,
+                                row,
+                                ""
+                            )
+                        },
+                        title: this.$t("Common.Total")
+                    }
+                ],
+                ajax: {
+                    url: this.$config.model.dataUrl,
+                    type: "GET",
+                    contentType: "application/json"
+                },
+                responsive: false,
+                order: [[0, "asc"]],
+                sDom: 'rf<"table-with-scroll"t>ip'
+            }
+        }
+    }
+}
+</script>
