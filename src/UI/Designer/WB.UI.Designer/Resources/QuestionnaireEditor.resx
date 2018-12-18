@@ -1192,4 +1192,7 @@
   <data name="ClassificationTitle" xml:space="preserve">
     <value>Classification title</value>
   </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Search for question</value>
+  </data>
 </root>
