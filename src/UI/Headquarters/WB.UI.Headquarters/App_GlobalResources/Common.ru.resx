@@ -311,7 +311,7 @@
     <comment>Ничего не выбрано</comment>
   </data>
   <data name="AllVersions" xml:space="preserve">
-    <value>Любая версия</value>
+    <value>Все версии</value>
   </data>
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>Версия опросника</value>
