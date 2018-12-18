@@ -1,46 +1,30 @@
 ﻿angular.module('designerApp')
     .controller('searchForQuestionCtrl',
         function ($rootScope, $scope, $http, $state, commandService, utilityService, isReadOnlyForUser, $i18next, $uibModalInstance) {
-            var baseUrl = '../../api';
+            var baseUrl = '../../api/search';
 
             $scope.isReadOnlyForUser = isReadOnlyForUser;
-            var allClassificationGroups = { id: null, title: $i18next.t('AllClassifications') };
-            var myClassificationGroups = { id: null, title: $i18next.t('MyClassifications'), privateOnly: true };
-            $scope.groups = [];
-            $scope.selectedGroup = allClassificationGroups;
+            var allFolders = { id: null, title: $i18next.t('AllFolders') };
+            
+            $scope.filters = [];
+            $scope.selectedFilter = allFolders;
             $scope.searchText = '';
-            $scope.classifications1 = [];
-            $scope.classifications2 = [];
+            $scope.searchResult1 = [];
+            $scope.searchResult2 = [];
             $scope.totalResults = 0;
 
             utilityService.setFocusIn('searchFor');
 
-            $scope.loadClassificationGroups = function()
+            $scope.loadFilters = function()
             {
                 return $http({
                         method: 'GET',
-                        url: baseUrl + '/groups',
+                        url: baseUrl + '/filters',
                         params: {}
                     })
                     .then(function(response) {
-                        $scope.groups = response.data;
-                        $scope.groups.splice(0, 0, myClassificationGroups);
-                        $scope.groups.splice(0, 0, allClassificationGroups);
-                    });
-            };
-
-            $scope.loadCategories = function(classification) {
-                if (classification.categories.length > 0)
-                    return new Promise(function(resolve, reject){
-                        resolve();
-                    });
-                return $http({
-                        method: 'GET',
-                        url: baseUrl + '/classification/'+ classification.id + '/categories',
-                        params: {}
-                    })
-                    .then(function(response) {
-                        classification.categories = response.data;
+                        $scope.filters = response.data;
+                        $scope.groups.splice(0, 0, allFolders);
                     });
             };
 
@@ -49,21 +33,21 @@
                     var searchText = $scope.searchText.toLowerCase();
                     return $http({
                             method: 'GET',
-                            url: baseUrl + '/classifications/search',
+                            url: baseUrl + '',
                             params: {
                                 query: searchText,
-                                groupId: $scope.selectedGroup.id,
-                                privateOnly: $scope.selectedGroup.privateOnly || false
+                                folderId: $scope.selectedFilter.id,
+                                privateOnly: false
                             }
                         })
                         .then(function(response) {
-                            var classifications = response.data.classifications;
-                            _.each(classifications, function(classification) {
-                                classification.categories = [];
-                                classification.categoriesAreOpen = false;
+                            var results = response.data.entities;
+                            _.forEach(results, function(entity) {
+                                
                             });
-                            $scope.classifications1 = classifications.slice(0, classifications.length/2);
-                            $scope.classifications2 = classifications.slice(classifications.length/2 + 1);
+                            var half = Math.ceil(results.length / 2);
+                            $scope.searchResult1 = results.slice(0, half);
+                            $scope.searchResult2 = results.slice(half + 1);
                             $scope.totalResults = response.data.total;
                         });
                 });
@@ -73,32 +57,26 @@
 
             $scope.$watch('searchText', function(){searchThrottled($scope);});
 
-            $scope.changeClassificationGroup = function(group) {
-                $scope.selectedGroup = group;
+            $scope.changeFilter = function(filter) {
+                $scope.selectedFilter = filter;
                 searchThrottled($scope);
             };
 
-            $scope.toggleCategories  = function(classification) {
-                if (classification.categories.length === 0) {
-                    $scope.loadCategories(classification)
-                        .then(function() {
-                            classification.categoriesAreOpen = true;
-                        });
-                } else {
-                    classification.categoriesAreOpen = !classification.categoriesAreOpen;
+            $scope.getLink=  function(searchResult) {
+                var urlItemType = '';
+                switch (searchResult.itemType) {
+                    case 'Question': urlItemType = 'question'; break;
+                    case 'Group': urlItemType =(item.isRoster ? "roster" : "group"); break;
+                    case 'StaticText': urlItemType = 'static-text'; break;
+                    case 'Chapter':  urlItemType ='group';break;
+                    case 'Variable': urlItemType ='variable';break;
                 }
+                return `../../questionnaire/details/${searchResult.questionnaireId}/chapter/${searchResult.sectionId}/${urlItemType}/${searchResult.itemId}`;
             };
 
-
-            $scope.replaceOptions = function(classification) {
-                if (classification.categories.length === 0) {
-                    $scope.loadCategories(classification)
-                        .then(function() {
-                            $uibModalInstance.close(classification);
-                        });
-                } else {
-                    $uibModalInstance.close(classification);
-                }
+            $scope.pasteEntity = function(searchResult) {
+                $uibModalInstance.close(searchResult);
             };
-            $scope.loadClassificationGroups();
+
+            $scope.loadFilters();
         });
