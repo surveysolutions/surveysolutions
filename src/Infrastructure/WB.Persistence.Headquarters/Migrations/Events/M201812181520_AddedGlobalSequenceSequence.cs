@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.Events
 {
-    [Migration(201812181510)]
+    [Migration(201812181520)]
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class M201812181520_AddedGlobalSequenceSequence : Migration
     {
