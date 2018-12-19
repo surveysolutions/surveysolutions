@@ -315,9 +315,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
 
-                if (Uri.IsWellFormedUriString(node.Inline.TargetUrl, UriKind.Absolute)) continue;
+                var url = node.Inline.TargetUrl.ToLower();
 
-                if (allAllowedVariableNames.Contains(node.Inline.TargetUrl.ToLower())) continue;
+                if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) continue;
+                if (allAllowedVariableNames.Contains(url)) continue;
+                if(new []{ "cover", "complete", "overview" }.Contains(url)) continue;
 
                 return true;
             }

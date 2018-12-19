@@ -187,5 +187,44 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.GetError("WB0278").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
+
+        [TestCase("cover")]
+        [TestCase("complete")]
+        [TestCase("overview")]
+        public void when_verifying_static_text_with_markdown_link_to_system_variable_in_validation_message(string systemVariable)
+        {
+
+            Guid staticTextId = Guid.Parse("10000000000000000000000000000000");
+
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.StaticText(staticTextId, validationConditions: new []{Create.ValidationCondition(message: $"[link to unknown entity]({systemVariable})") })
+            }));
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+
+            verificationMessages.ShouldNotContainError("WB0278");
+        }
+        [TestCase("cover")]
+        [TestCase("complete")]
+        [TestCase("overview")]
+        public void when_verifying_question_with_markdown_link_to_unknown_question_in_validation_message(string systemVariable)
+        {
+
+            Guid questionId = Guid.Parse("10000000000000000000000000000000");
+
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.TextQuestion(questionId, validationConditions: new []{Create.ValidationCondition(message: $"[link to unknown entity]({systemVariable})") })
+            }));
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+
+            verificationMessages.ShouldNotContainError("WB0278");
+        }
     }
 }
