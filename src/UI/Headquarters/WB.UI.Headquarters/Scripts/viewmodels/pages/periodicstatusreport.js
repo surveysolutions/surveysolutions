@@ -1,13 +1,15 @@
-﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl) {
+﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl, $questionnaires) {
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
+    self.$questionnaires = $questionnaires;
     var defaultFromDate = moment();
     var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
 
-    self.SelectedQuestionnaire = ko.observable('');
+    self.SelectedQuestionnaireId = ko.observable('');
+    self.SelectedQuestionnaireVersion = ko.observable('');
 
     self.SelectedType = ko.observable(null);
 
@@ -21,9 +23,15 @@
 
     self.TotalRow = ko.observable(null);
 
-    this.QuestionnaireName = ko.observable();
+    self.QuestionnaireName = ko.observable();
 
-    this.ReportTypeName = ko.observable();
+    self.ReportTypeName = ko.observable();
+
+    self.questionnaires = _.chain($questionnaires).map(function(q) {
+        return { id: q.templateId, title: q.templateName};
+    }).uniqWith(_.isEqual).value();
+
+    self.QuestionnaireVersions = ko.observableArray([]);
 
     self.GetPeriodName = function (period) {
         return moment(period.To()).format(dateFormat);
@@ -50,13 +58,9 @@
         return formatedNumber;
     };
 
-    var updateQuestionnaireName = function (value) {
-        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
-    }
-
-    var updateReportTypeName = function (value) {
+    var updateReportTypeName = function(value) {
         self.ReportTypeName($("#reportTypeSelector option[value='" + value + "']").text());
-    }
+    };
 
     self.load = function () {
         var todayMinus7Days = defaultFromDate.format(dateFormat);
@@ -68,10 +72,10 @@
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
         self.Url.query['reportType'] = self.QueryString['reportType'] || "";
 
-        self.SelectedQuestionnaire("{\"questionnaireId\": \"" + self.QueryString['questionnaireId'] + "\",\"questionnaireVersion\": \"" + self.QueryString['questionnaireVersion'] + "\"}");
+        self.SelectedQuestionnaireId(self.QueryString['questionnaireId']);
+        self.SelectedQuestionnaireVersion(self.QueryString['questionnaireVersion']);
         self.SelectedType(self.Url.query['reportType']);
 
-        updateQuestionnaireName(self.SelectedQuestionnaire());
         updateReportTypeName(self.SelectedType());
 
         var from = unescape(self.Url.query['from']);
@@ -85,8 +89,18 @@
 
         self.initReport();
 
-        self.SelectedQuestionnaire.subscribe(function (value) {
-            updateQuestionnaireName(self.SelectedQuestionnaire());
+        self.SelectedQuestionnaireId.subscribe(function (value) {
+            if (value) {
+                var versions = _.chain(self.$questionnaires).filter({ templateId: value }).map(function (q) {
+                    return q.templateVersion;
+                }).value();
+                self.QuestionnaireVersions(versions);
+            } else {
+                self.QuestionnaireVersions([]);
+            }
+            self.initReport();
+        });
+        self.SelectedQuestionnaireVersion.subscribe(function (value) {
             self.initReport();
         });
 
@@ -121,14 +135,10 @@
     };
 
     self.GetFilterMethod = function () {
-        var selectedQuestionnaire = Supervisor.Framework.Objects.isEmpty(self.SelectedQuestionnaire())
-           ? { questionnaireId: '', questionnaireVersion: '' }
-           : JSON.parse(self.SelectedQuestionnaire());
-
         var startDate = moment(self.FromDate());
 
-        self.Url.query['questionnaireId'] = selectedQuestionnaire.questionnaireId;
-        self.Url.query['questionnaireVersion'] = selectedQuestionnaire.questionnaireVersion;
+        self.Url.query['questionnaireId'] = self.SelectedQuestionnaireId() || '';
+        self.Url.query['questionnaireVersion'] = self.SelectedQuestionnaireVersion() || '';
         self.Url.query['from'] = startDate.format(dateFormat);
         self.Url.query['period'] = self.Period();
         self.Url.query['columnCount'] = self.ColumnCount();
@@ -138,8 +148,8 @@
             window.history.pushState({}, "Charts", self.Url.toString());
         }
         return {
-            questionnaireId: selectedQuestionnaire.questionnaireId,
-            questionnaireVersion: selectedQuestionnaire.questionnaireVersion,
+            questionnaireId: self.SelectedQuestionnaireId() || '',
+            questionnaireVersion: self.SelectedQuestionnaireVersion() || '',
             from: startDate.format(dateFormat),
             period: self.Period(),
             columnCount: self.ColumnCount(),
