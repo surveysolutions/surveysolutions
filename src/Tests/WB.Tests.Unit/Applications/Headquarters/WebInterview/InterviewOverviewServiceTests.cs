@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
@@ -105,6 +106,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(overviewNode.ControlType, Is.EqualTo("image"));
         }
 
-        private static InterviewOverviewService CreateInterviewOverviewService() => new InterviewOverviewService();
+        private static InterviewOverviewService CreateInterviewOverviewService() => new InterviewOverviewService(new WebNavigationService());
     }
 }

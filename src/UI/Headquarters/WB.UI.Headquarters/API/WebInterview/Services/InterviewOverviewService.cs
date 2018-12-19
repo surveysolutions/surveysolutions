@@ -6,12 +6,20 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
+        private readonly IWebNavigationService webNavigationService;
+
+        public InterviewOverviewService(IWebNavigationService webNavigationService)
+        {
+            this.webNavigationService = webNavigationService;
+        }
+
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
@@ -59,7 +67,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             
             if (question != null)
             {
-                return new OverviewWebQuestionNode(question, interview);
+                var overviewQuestion = new OverviewWebQuestionNode(question, interview);
+                overviewQuestion.Title = this.webNavigationService.MakeNavigationLinks(overviewQuestion.Title,
+                    interviewerEntityIdentity, questionnaire, interview, true);
+                return overviewQuestion;
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
@@ -68,7 +79,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = staticText.Title.Text,
+                    Title = this.webNavigationService.MakeNavigationLinks(staticText.Title.Text, interviewerEntityIdentity, questionnaire, interview, true),
                     AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }

@@ -123,6 +123,7 @@ namespace WB.UI.WebTester
             }
 
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebNavigationService, WebNavigationService>();
 
             registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
             {
