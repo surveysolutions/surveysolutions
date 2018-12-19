@@ -53,7 +53,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             Subject = new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUserMock.Object,
                 new EnumeratorGroupGroupStateCalculationStrategy(), 
-                new SupervisorGroupStateCalculationStrategy());
+                new SupervisorGroupStateCalculationStrategy(), 
+                new WebNavigationService());
         }
 
         [SetUp]
