@@ -21,12 +21,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private readonly UnitOfWorkConnectionSettings plainStorageSettings;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IUserViewFactory userViewFactory;
 
         public DeviceInterviewersReport(UnitOfWorkConnectionSettings plainStorageSettings,
-            IInterviewerVersionReader interviewerVersionReader)
+            IInterviewerVersionReader interviewerVersionReader,
+            IUserViewFactory userViewFactory)
         {
             this.plainStorageSettings = plainStorageSettings;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.userViewFactory = userViewFactory;
         }
 
         public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
@@ -114,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
-            result.TeamName = Strings.AllTeams;
+            result.TeamName = supervisorId.HasValue ? this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value)).UserName : Strings.AllTeams;
             return result;
         }
 
