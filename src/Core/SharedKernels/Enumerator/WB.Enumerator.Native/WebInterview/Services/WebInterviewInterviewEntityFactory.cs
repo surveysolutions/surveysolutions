@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using AutoMapper;
 using CommonMark;
+using HtmlAgilityPack;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -265,6 +269,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
+
+                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview);
                 
                 return result;
             }
@@ -276,6 +282,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
+
+                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview);
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire);
@@ -316,9 +324,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
             IQuestionnaire questionnaire)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
+                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview)).ToArray();
 
-            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
+                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview)).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
@@ -425,5 +435,111 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
+
+        private string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview statefulInterview)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(text);
+
+            var hyperlinks = doc.DocumentNode.SelectNodes("//a");
+            if (hyperlinks == null) return text;
+
+            foreach (var hyperlink in hyperlinks)
+            {
+                var href = hyperlink.Attributes["href"].Value;
+                if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) continue;
+
+                hyperlink.Attributes["href"].Value =
+                    MakeNavigationLink(href, entityIdentity, questionnaire, statefulInterview);
+            }
+
+            var writer = new StringWriter();
+            doc.Save(writer);
+
+            return writer.ToString();
+        }
+
+        private static string MakeNavigationLink(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview interview)
+        {
+            switch (text)
+            {
+                case "cover":
+                    return GenerateInterviewUrl("cover", interview.Id);
+                case "complete":
+                    return GenerateInterviewUrl("complete", interview.Id);
+                default:
+                {
+                    var attachmentId = questionnaire.GetAttachmentIdByName(text);
+                    if (attachmentId.HasValue)
+                    {
+                        var attachment = questionnaire.GetAttachmentById(attachmentId.Value);
+                        return GenerateAttachmentUrl(interview.Id, attachment.ContentId);
+                    }
+
+                    return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview) ?? "javascript:void(0);";
+                }
+                    
+            }
+        }
+
+        private static string MakeNavigationLinkToQuestionOrRoster(string text, Identity sourceEntity,
+            IQuestionnaire questionnaire, IStatefulInterview interview)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(text);
+            var rosterId = questionnaire.GetRosterIdByVariableName(text, true);
+
+            if (!questionId.HasValue && !rosterId.HasValue) return null;
+
+            var nearestInterviewEntity = GetNearestInterviewEntity(sourceEntity, interview, questionId ?? rosterId.Value);
+            if (nearestInterviewEntity == null) return null;
+
+            if (questionId.HasValue)
+                return questionnaire.IsPrefilled(questionId.Value)
+                    ? GenerateInterviewUrl("cover", interview.Id)
+                    : GenerateInterviewUrl("section", interview.Id, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+
+            if (rosterId.HasValue)
+                return GenerateInterviewUrl("section", interview.Id, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+
+            return null;
+        }
+
+        private static Identity GetNearestInterviewEntity(Identity sourceEntity, IStatefulInterview interview, Guid questionOrRosterId)
+        {
+            Identity nearestInterviewEntity = null;
+            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionOrRosterId)
+                .Where(interview.IsEnabled).ToArray();
+
+            if (interviewEntities.Length == 1)
+                nearestInterviewEntity = interviewEntities[0];
+            else
+            {
+                var entitiesInTheSameOrDeeperRoster = interviewEntities.Where(x =>
+                    x.RosterVector.Identical(sourceEntity.RosterVector,
+                        sourceEntity.RosterVector.Length)).ToArray();
+
+                if (entitiesInTheSameOrDeeperRoster.Any())
+                    nearestInterviewEntity = entitiesInTheSameOrDeeperRoster.FirstOrDefault();
+                else
+                {
+                    var sourceEntityParentRosterVectors =
+                        interview.GetParentGroups(sourceEntity).Select(x => x.RosterVector).ToArray();
+
+                    nearestInterviewEntity = interviewEntities.FirstOrDefault(x =>
+                                                 x.Id == (questionOrRosterId) &&
+                                                 sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
+                                             interviewEntities.FirstOrDefault();
+                }
+            }
+
+            return nearestInterviewEntity;
+        }
+
+        private static string GenerateInterviewUrl(string action, Guid interviewId, Identity sectionId = null, Identity scrollTo = null)
+            => VirtualPathUtility.ToAbsolute($@"~/WebInterview/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}");
+        private static string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)
+            => VirtualPathUtility.ToAbsolute($"~/api/WebInterviewResources/Content?interviewId={interviewId.FormatGuid()}&contentId={attachmentContentId}");
     }
 }
