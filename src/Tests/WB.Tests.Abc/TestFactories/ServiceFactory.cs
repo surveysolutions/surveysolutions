@@ -905,6 +905,7 @@ namespace WB.Tests.Abc.TestFactories
                 attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
                 attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
                 pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
+                Mock.Of<IPermissionsService>(),
                 files ?? Mock.Of<IFileSystemAccessor>());
         }
 
