@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
@@ -1461,6 +1462,27 @@ namespace WB.Tests.Unit.Designer
             var storage = new TestPlainStorage<ClassificationEntity>();
             storage.Store(entities.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)));
             return storage;
+        }
+
+        public static PublicFoldersStorage PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage = null,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage = null,
+            IPlainStorageAccessor<User> accountStorage = null)
+        {
+            return new PublicFoldersStorage(
+                folderStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewFolder>>(),
+                questionnaireStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem> >(),
+                accountStorage ?? Mock.Of<IPlainStorageAccessor<User>>()
+                );
+        }
+
+        public static QuestionnaireListViewFolder QuestionnaireListViewFolder(Guid? id=null, string title = null, Guid? parent = null)
+        {
+            return new QuestionnaireListViewFolder
+            {
+                Parent = parent,
+                PublicId = id ?? Guid.NewGuid(),
+                Title = title
+            };
         }
     }
 }
