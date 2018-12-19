@@ -69,7 +69,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             {
                 var overviewQuestion = new OverviewWebQuestionNode(question, interview);
                 overviewQuestion.Title = this.webNavigationService.MakeNavigationLinks(overviewQuestion.Title,
-                    interviewerEntityIdentity, questionnaire, interview, true);
+                    interviewerEntityIdentity, questionnaire, interview, @"Interview/Review");
                 return overviewQuestion;
             }
 
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = this.webNavigationService.MakeNavigationLinks(staticText.Title.Text, interviewerEntityIdentity, questionnaire, interview, true),
+                    Title = this.webNavigationService.MakeNavigationLinks(staticText.Title.Text, interviewerEntityIdentity, questionnaire, interview, @"Interview/Review"),
                     AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }
