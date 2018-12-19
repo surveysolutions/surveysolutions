@@ -264,13 +264,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                 }
 
-                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
                 this.PutHideInstructions(result, identity, questionnaire);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
 
-                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview);
+                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, isReviewMode);
                 
                 return result;
             }
@@ -283,10 +283,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
 
-                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview);
+                result.Title = MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, isReviewMode);
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
                 return result;
             }
 
@@ -322,13 +322,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
         }
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
-            IQuestionnaire questionnaire)
+            IQuestionnaire questionnaire, bool isReview)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
-                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview)).ToArray();
+                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview, isReview)).ToArray();
 
             validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
-                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview)).ToArray();
+                .Select(x => MakeNavigationLinks(x, identity, questionnaire, callerInterview, isReview)).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
@@ -436,7 +436,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        private string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview statefulInterview)
+        private string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview statefulInterview, bool isReview)
         {
             if (string.IsNullOrEmpty(text)) return text;
 
@@ -452,7 +452,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) continue;
 
                 hyperlink.Attributes["href"].Value =
-                    MakeNavigationLink(href, entityIdentity, questionnaire, statefulInterview);
+                    MakeNavigationLink(href, entityIdentity, questionnaire, statefulInterview, isReview);
             }
 
             var writer = new StringWriter();
@@ -461,14 +461,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return writer.ToString();
         }
 
-        private static string MakeNavigationLink(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview interview)
+        private static string MakeNavigationLink(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview interview, bool isReview)
         {
             switch (text)
             {
                 case "cover":
-                    return GenerateInterviewUrl("cover", interview.Id);
+                    return GenerateInterviewUrl("cover", interview.Id, isReview);
                 case "complete":
-                    return GenerateInterviewUrl("complete", interview.Id);
+                    return GenerateInterviewUrl("complete", interview.Id, isReview);
                 default:
                 {
                     var attachmentId = questionnaire.GetAttachmentIdByName(text);
@@ -478,14 +478,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         return GenerateAttachmentUrl(interview.Id, attachment.ContentId);
                     }
 
-                    return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview) ?? "javascript:void(0);";
+                    return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview, isReview) ?? "javascript:void(0);";
                 }
                     
             }
         }
 
         private static string MakeNavigationLinkToQuestionOrRoster(string text, Identity sourceEntity,
-            IQuestionnaire questionnaire, IStatefulInterview interview)
+            IQuestionnaire questionnaire, IStatefulInterview interview, bool isReview)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(text);
             var rosterId = questionnaire.GetRosterIdByVariableName(text, true);
@@ -497,11 +497,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             if (questionId.HasValue)
                 return questionnaire.IsPrefilled(questionId.Value)
-                    ? GenerateInterviewUrl("cover", interview.Id)
-                    : GenerateInterviewUrl("section", interview.Id, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+                    ? GenerateInterviewUrl("cover", interview.Id, isReview)
+                    : GenerateInterviewUrl("section", interview.Id, isReview, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
             if (rosterId.HasValue)
-                return GenerateInterviewUrl("section", interview.Id, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+                return GenerateInterviewUrl("section", interview.Id, isReview, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
             return null;
         }
@@ -537,8 +537,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return nearestInterviewEntity;
         }
 
-        private static string GenerateInterviewUrl(string action, Guid interviewId, Identity sectionId = null, Identity scrollTo = null)
-            => VirtualPathUtility.ToAbsolute($@"~/WebInterview/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}");
+        private static string GenerateInterviewUrl(string action, Guid interviewId, bool isReview,
+            Identity sectionId = null, Identity scrollTo = null)
+            => VirtualPathUtility.ToAbsolute(
+                $@"~/{(isReview ? "Interview/Review" : "WebInterview")}/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}");
+
         private static string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)
             => VirtualPathUtility.ToAbsolute($"~/api/WebInterviewResources/Content?interviewId={interviewId.FormatGuid()}&contentId={attachmentContentId}");
     }
