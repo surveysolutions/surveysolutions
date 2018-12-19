@@ -269,7 +269,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
 
-                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, isReviewMode);
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReviewMode));
                 
                 return result;
             }
@@ -282,7 +282,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
 
-                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, isReviewMode);
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReviewMode));
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
@@ -324,10 +324,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             IQuestionnaire questionnaire, bool isReview)
         {
             validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
-                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, isReview)).ToArray();
+                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
 
             validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
-                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, isReview)).ToArray();
+                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
@@ -435,6 +435,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        
+        protected virtual string WebLinksVirtualDirectory(bool isReview) => "WebTester/Interview";
     }
 }

@@ -50,5 +50,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     })
                 .ToArray();
         }
+
+        protected override string WebLinksVirtualDirectory(bool isReview) => isReview ? @"Interview/Review" : @"WebInterview";
     }
 }

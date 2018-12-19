@@ -6,6 +6,6 @@ namespace WB.Enumerator.Native.WebInterview
     public interface IWebNavigationService
     {
         string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire,
-            IStatefulInterview statefulInterview, bool isReview);
+            IStatefulInterview statefulInterview, string virtualDirectoryName);
     }
 }
