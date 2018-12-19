@@ -1664,7 +1664,6 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.mn.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\lodash.underscore.js" />
-    <Content Include="Scripts\lodash.underscore.min.js" />
     <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-langs.js" />
