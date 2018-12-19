@@ -32,7 +32,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
-        private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public ReportsController(
@@ -47,7 +46,6 @@ namespace WB.UI.Headquarters.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
-            this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
             this.interviewStatuses = interviewStatuses;
         }
 
