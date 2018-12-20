@@ -379,7 +379,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public HttpResponseMessage SupervisorSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
+        public HttpResponseMessage SupervisorSurveysAndStatusesReport(Guid? id,[FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
@@ -389,7 +389,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 PageSize = filter.PageSize,
                 Orders = filter.ToOrderRequestItems(),
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
-                QuestionnaireId = filter.QuestionnaireId
+                QuestionnaireId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -416,7 +416,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public HttpResponseMessage HeadquarterSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
+        public HttpResponseMessage HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
             {
@@ -424,7 +424,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
                 TeamLeadName = filter.ResponsibleName,
-                QuestionnaireId = filter.QuestionnaireId
+                QuestionnaireId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))
