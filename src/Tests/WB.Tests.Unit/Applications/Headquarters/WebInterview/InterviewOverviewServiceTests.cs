@@ -106,6 +106,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(overviewNode.ControlType, Is.EqualTo("image"));
         }
 
-        private static InterviewOverviewService CreateInterviewOverviewService() => new InterviewOverviewService(new WebNavigationService());
+        private static InterviewOverviewService CreateInterviewOverviewService() => new InterviewOverviewService(Create.Service.WebNavigationService());
     }
 }

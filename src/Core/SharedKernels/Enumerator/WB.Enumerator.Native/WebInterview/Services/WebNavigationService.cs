@@ -1,16 +1,23 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Web;
 using HtmlAgilityPack;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebNavigationService : IWebNavigationService
     {
+        private readonly IVirtualPathService virtualPathService;
+
+        public WebNavigationService(IVirtualPathService virtualPathService)
+        {
+            this.virtualPathService = virtualPathService;
+        }
+
         public string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview statefulInterview, string virtualDirectoryName)
         {
             if (string.IsNullOrEmpty(text)) return text;
@@ -36,7 +43,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return writer.ToString();
         }
 
-        private static string MakeNavigationLink(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview interview, string virtualDirectoryName)
+        private string MakeNavigationLink(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview interview, string virtualDirectoryName)
         {
             switch (text)
             {
@@ -59,7 +66,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
         }
 
-        private static string MakeNavigationLinkToQuestionOrRoster(string text, Identity sourceEntity,
+        private string MakeNavigationLinkToQuestionOrRoster(string text, Identity sourceEntity,
             IQuestionnaire questionnaire, IStatefulInterview interview, string virtualDirectoryName)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(text);
@@ -112,12 +119,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return nearestInterviewEntity;
         }
 
-        private static string GenerateInterviewUrl(string action, Guid interviewId, string virtualDirectoryName,
+        private string GenerateInterviewUrl(string action, Guid interviewId, string virtualDirectoryName,
             Identity sectionId = null, Identity scrollTo = null)
-            => VirtualPathUtility.ToAbsolute(
+            => this.virtualPathService.GetAbsolutePath(
                 $@"~/{virtualDirectoryName}/{interviewId.FormatGuid()}/{action}{(sectionId == null ? "" : $@"/{sectionId}")}{(scrollTo == null ? "" : $"#{scrollTo}")}");
 
-        private static string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)
-            => VirtualPathUtility.ToAbsolute($"~/api/WebInterviewResources/Content?interviewId={interviewId.FormatGuid()}&contentId={attachmentContentId}");
+        private string GenerateAttachmentUrl(Guid interviewId, string attachmentContentId)
+            => this.virtualPathService.GetAbsolutePath($"~/api/WebInterviewResources/Content?interviewId={interviewId.FormatGuid()}&contentId={attachmentContentId}");
     }
 }
