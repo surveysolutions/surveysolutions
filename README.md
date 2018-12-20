@@ -1,4 +1,7 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+# 19.01
+- For export service we need to execute script in deploy tools to move all archives into new place
+> `deploy-tools\utils\move-archive.ps1 -config export-0`
 
 # 18.12
 - For Designer's website app pool: Advanced Settings -> Enable 32-Bit Applications = true
