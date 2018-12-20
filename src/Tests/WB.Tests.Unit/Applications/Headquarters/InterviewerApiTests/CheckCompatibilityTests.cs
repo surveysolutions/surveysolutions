@@ -74,14 +74,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
         }
 
-        [TestCase("18.06.0.0 (build 0)", "18.01.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("18.06.0.0 (build 0)", "18.02.0.0", HttpStatusCode.OK)]
-        [TestCase("18.06.0.0 (build 0)", "18.03.0.0", HttpStatusCode.OK)]
-        [TestCase("19.01.0.0 (build 0)", "18.06.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.0.0 (build 0)", "18.08.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.0.0 (build 0)", "18.09.0.0", HttpStatusCode.OK)]
-        [TestCase("19.01.0.0 (build 0)", "18.11.0.0", HttpStatusCode.OK)]
-        public void when_set_setting_to_update_app_to_4_for_app_of_version_should_return_correct_upgrade_result(
+        [TestCase("18.12.0.0 (build 0)", "18.03.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("18.12.0.0 (build 0)", "18.04.0.0", HttpStatusCode.OK)]
+        [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
+        [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
+        [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
+        public void when_set_setting_to_autoUpdateEnabled_to_false_should_return_correct_upgrade_result(
             string hqVersion, string appVersion, HttpStatusCode result)
         {
             var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
@@ -89,7 +87,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
-            var interviewerSettings = Create.Entity.InterviewerSettings(howManyMajorReleaseDontNeedUpdate: 4);
+            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                     m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
@@ -105,12 +103,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(result));
         }
 
-        [TestCase("19.01.0.0 (build 0)", "20.08.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.0.0 (build 0)", "18.08.0.0", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.0.3 (build 0)", "19.01.0.2", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.1.3 (build 0)", "19.01.0.3", HttpStatusCode.UpgradeRequired)]
-        [TestCase("19.01.0.3 (build 0)", "19.01.0.3", HttpStatusCode.OK)]
-        public void when_set_setting_to_update_app_to_0_for_app_of_version_should_return_correct_upgrade_result(
+        [TestCase("18.12.0.0 (build 0)", "18.03.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("18.12.0.0 (build 0)", "18.04.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("18.06.0.0 (build 0)", "18.06.0.0", HttpStatusCode.OK)]
+        [TestCase("18.06.0.1 (build 0)", "18.06.0.0", HttpStatusCode.UpgradeRequired)]
+        [TestCase("18.06.0.4 (build 0)", "18.06.0.4", HttpStatusCode.OK)]
+        public void when_set_setting_autoUpdateEnabled_to_true_should_return_correct_upgrade_result(
             string hqVersion, string appVersion, HttpStatusCode result)
         {
             var productVersionObj = Mock.Of<IProductVersion>(x => x.ToString() == hqVersion);
@@ -118,7 +116,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
 
-            var interviewerSettings = Create.Entity.InterviewerSettings(howManyMajorReleaseDontNeedUpdate: 0);
+            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: true);
             var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
                 m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 

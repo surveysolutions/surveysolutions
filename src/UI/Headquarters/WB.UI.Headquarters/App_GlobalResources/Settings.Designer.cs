@@ -61,20 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowed Interviewer/Supervisor application versions:.
+        ///   Looks up a localized string similar to If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters.
         /// </summary>
-        internal static string AllowedToSync {
+        internal static string AutoUpdateDescription {
             get {
-                return ResourceManager.GetString("AllowedToSync", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Any.
-        /// </summary>
-        internal static string Any {
-            get {
-                return ResourceManager.GetString("Any", resourceCulture);
+                return ResourceManager.GetString("AutoUpdateDescription", resourceCulture);
             }
         }
         
@@ -93,15 +84,6 @@ namespace Resources {
         internal static string CurrentLogo {
             get {
                 return ResourceManager.GetString("CurrentLogo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Same as the Headquarters.
-        /// </summary>
-        internal static string CurrentVersion {
-            get {
-                return ResourceManager.GetString("CurrentVersion", resourceCulture);
             }
         }
         
@@ -214,24 +196,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some specific settings by android version of Interviewer application.
-        /// </summary>
-        internal static string InterviewerSettings_Description {
-            get {
-                return ResourceManager.GetString("InterviewerSettings_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interviewer application settings.
-        /// </summary>
-        internal static string InterviewerSettings_Title {
-            get {
-                return ResourceManager.GetString("InterviewerSettings_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Company logo.
         /// </summary>
         internal static string Logo {
@@ -277,6 +241,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some specific settings by android version of Interviewer/Supervisor application.
+        /// </summary>
+        internal static string MobileAppSettings_Description {
+            get {
+                return ResourceManager.GetString("MobileAppSettings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer/Supervisor application settings.
+        /// </summary>
+        internal static string MobileAppSettings_Title {
+            get {
+                return ResourceManager.GetString("MobileAppSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         internal static string Password {
@@ -309,15 +291,6 @@ namespace Resources {
         internal static string Settings_Title {
             get {
                 return ResourceManager.GetString("Settings_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow to use {0} or newer.
-        /// </summary>
-        internal static string VersionOrNewer {
-            get {
-                return ResourceManager.GetString("VersionOrNewer", resourceCulture);
             }
         }
     }
