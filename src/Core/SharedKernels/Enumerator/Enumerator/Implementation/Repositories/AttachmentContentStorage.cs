@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -34,8 +35,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             this.files = files;
         }
 
-        public void Store(AttachmentContent attachmentContent)
+        public async Task StoreAsync(AttachmentContent attachmentContent)
         {
+            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
+            if (storeInFileSystem)
+            {
+                await this.permissionsService.AssureHasPermission(Permission.Storage);
+            }
+
             this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
@@ -43,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 Size = attachmentContent.Size,
             });
 
-            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
             if (!storeInFileSystem)
             {
                 this.attachmentContentDataRepository.Store(new AttachmentContentData
@@ -54,8 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
             else
             {
-                this.permissionsService.AssureHasPermission(Permission.Storage);
-
                 var fileCache = GetFileCacheLocation(attachmentContent.Id);
 
                 if (!files.IsFileExists(fileCache))
