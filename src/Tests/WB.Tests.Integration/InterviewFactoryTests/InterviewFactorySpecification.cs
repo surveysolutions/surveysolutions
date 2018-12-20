@@ -130,8 +130,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork,
-                questionnaireItems: Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+                sessionProvider: this.UnitOfWork);
         }
         
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
