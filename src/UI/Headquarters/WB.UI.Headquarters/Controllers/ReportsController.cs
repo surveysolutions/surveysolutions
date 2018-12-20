@@ -35,11 +35,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public ReportsController(
-            IMapReport mapReport, 
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IAuthorizedUser authorizedUser, 
-            IUserViewFactory userViewFactory, 
-            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory, 
+            IMapReport mapReport,
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
+            IAuthorizedUser authorizedUser,
+            IUserViewFactory userViewFactory,
+            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.mapReport = mapReport;
@@ -72,9 +72,9 @@ namespace WB.UI.Headquarters.Controllers
             model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
                 new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" });
             model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"});
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
             model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"});
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
             model.InterviewsUrl = Url.Action("Interviews", "HQ");
             model.AllTeamsTitle = Strings.AllTeams;
             model.TeamTitle = Users.Supervisors;
@@ -91,9 +91,9 @@ namespace WB.UI.Headquarters.Controllers
             model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
                 new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" });
             model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"});
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
             model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"});
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
             model.InterviewsUrl = Url.Action("Interviews", "Survey");
             model.AllTeamsTitle = Strings.AllInterviewers;
             model.TeamTitle = Pages.TeamMember;
@@ -107,18 +107,18 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
 
+            var result = from questionnaire in questionnaires
+                group questionnaire by (questionnaire.QuestionnaireId, questionnaire.Title) into g
+                select new
+                {
+                    id = g.Key.QuestionnaireId,
+                    title = g.Key.Title,
+                    versions = g.Select(v => v.Version).OrderBy(v => v).ToList()
+                };
+
             return View(new
             {
-                Api = new
-                {
-                    GpsQuestionsByQuestionnaireUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" }),
-                    MapReportUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" }),
-                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" }),
-                    InterviewDetailsUrl = Url.Action("Review", "Interview")
-                },
-                Questionnaires = questionnaires.OrderBy(x => x.Title).ThenBy(x => x.Version)
-                    .Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}"))
-                    .ToArray()
+                Questionnaires = result
             });
         }
 
@@ -266,7 +266,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction", 
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
                 new
                 {
                     httproute = "",
@@ -278,13 +278,13 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, 
+        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName,
             PeriodiceReportType reportType,
-            bool canNavigateToQuantityByTeamMember, 
-            bool canNavigateToQuantityBySupervisors, 
-            string reportName, 
-            string responsibleColumnName, 
-            bool totalRowPresent, 
+            bool canNavigateToQuantityByTeamMember,
+            bool canNavigateToQuantityBySupervisors,
+            string reportName,
+            string responsibleColumnName,
+            bool totalRowPresent,
             Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Controllers
                 case PeriodiceReportType.AverageCaseAssignmentDuration:
                     return PeriodicStatusReport.AverageCaseAssignmentDurationDescription;
                 case PeriodiceReportType.AverageInterviewDuration:
-                    return supervisorId.HasValue ?  PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageInterviewDurationForSupervisors;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageInterviewDurationForSupervisors;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
                     return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
                 case PeriodiceReportType.AverageHQProcessingTime:
