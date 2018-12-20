@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 authorizedUserMock.Object,
                 new EnumeratorGroupGroupStateCalculationStrategy(), 
                 new SupervisorGroupStateCalculationStrategy(), 
-                new WebNavigationService());
+                Create.Service.WebNavigationService());
         }
 
         [SetUp]
