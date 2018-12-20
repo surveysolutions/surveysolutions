@@ -7,12 +7,13 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class QuestionnaireApiItem
     {
-        public QuestionnaireApiItem(Guid questionnaireId, long version, string title, DateTime lastEntryDate)
+        public QuestionnaireApiItem(Guid questionnaireId, long version, string title, string variable, DateTime lastEntryDate)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, version).ToString();
             this.Version = version;
             this.Title = title;
+            this.Variable = variable;
             this.LastEntryDate = lastEntryDate;
         }
 
@@ -30,6 +31,10 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [DataMember]
         [Required]
         public string Title { get; set; }
+
+        [DataMember]
+        [Required]
+        public string Variable { get; set; }
 
         [DataMember]
         [Required]
