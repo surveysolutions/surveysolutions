@@ -150,7 +150,8 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
-                Questionnaires = this.GetAllQuestionnaires()
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"})
             });
         }
 
