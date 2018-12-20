@@ -103,6 +103,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -110,6 +111,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -988,6 +990,14 @@ namespace WB.Tests.Abc.TestFactories
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>()
             );
+        }
+
+        public WebNavigationService WebNavigationService()
+        {
+            var mockOfVirtualPathService = new Mock<IVirtualPathService>();
+            mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
+
+            return new WebNavigationService(mockOfVirtualPathService.Object);
         }
     }
 
