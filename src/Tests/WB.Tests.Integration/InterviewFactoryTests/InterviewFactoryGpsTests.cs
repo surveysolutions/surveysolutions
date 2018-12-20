@@ -49,6 +49,60 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         }
 
         [Test]
+        public void when_getting_gps_answers_by_questionnaire_all_versions()
+        { 
+            //arrange
+            var answers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = anotherGpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = otherQuestionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(answers);
+
+            //act
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId.QuestionnaireId, null, "gps", 10,
+                GeoBounds.Open, null);
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(3));
+            Assert.That(gpsAnswers, Is.EquivalentTo(answers
+                .Where(x => x.QuestionId == gpsQuestionId)
+                .Select(x => new InterviewGpsAnswer
+                {
+                    InterviewId = x.InterviewId,
+                    Longitude = x.Answer.Longitude,
+                    Latitude = x.Answer.Latitude
+                })));
+        }
+
+        [Test]
         public void when_getting_gps_answers_by_questionnaire_id_and_question_id()
         {
             //arrange
