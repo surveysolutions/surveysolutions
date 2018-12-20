@@ -5,7 +5,9 @@ using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
@@ -15,42 +17,55 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     internal class OldschoolChartStatisticsDataProvider : IOldschoolChartStatisticsDataProvider
     {
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
-        public OldschoolChartStatisticsDataProvider(INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
+        public OldschoolChartStatisticsDataProvider(INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
         {
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(QuestionnaireIdentity questionnaireId)
         {
             var questionnaireIdentity = questionnaireId?.ToString();
+
+            var nonDeletedQuestionnaires = questionnaireIdentity == null
+                ? questionnaireRepository.Query(_ => _.Where(i => !i.IsDeleted).Select(i => i.Id))
+                : null;
+
             var count =
-                this.cumulativeReportStatusChangeStorage.QueryOver(_ =>
+                this.cumulativeReportStatusChangeStorage.Query(_ =>
                 {
                     if (questionnaireIdentity != null)
                         _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
-
-                    return _.Select(Projections.Count<CumulativeReportStatusChange>(x => x.EntryId))
-                        .SingleOrDefault<int>();
+                    else
+                        _ = _.Where(change => nonDeletedQuestionnaires.Contains(change.QuestionnaireIdentity));
+                    return _.Select(q => q.EntryId).Count();
                 });
 
             if (count == 0)
                 return null;
 
-            var minMaxDate = this.cumulativeReportStatusChangeStorage.QueryOver(_ =>
+            var minMaxDate = this.cumulativeReportStatusChangeStorage.Query(_ =>
             {
                 if (questionnaireIdentity != null)
                     _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
-                return _
-                    .Select(Projections.Min<CumulativeReportStatusChange>(x => x.Date), Projections.Max<CumulativeReportStatusChange>(x => x.Date))
-                    .SingleOrDefault<object[]>();
+                else
+                    _ = _.Where(change => nonDeletedQuestionnaires.Contains(change.QuestionnaireIdentity));
+                var dates = _.Select(change => change.Date);
+                return new
+                    {
+                        minDate = dates.Min(),
+                        maxDate = dates.Max(),
+                    };
             });
 
-            var minDate = (DateTime)minMaxDate[0];
-            var maxDate = (DateTime)minMaxDate[1];
+            var minDate = minMaxDate.minDate;
+            var maxDate = minMaxDate.maxDate;
 
             Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate =
-                this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId);
+                this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId, nonDeletedQuestionnaires);
 
             return GetStatisticsInOldFormat(minDate, maxDate, countsByStatusAndDate);
         }
@@ -81,13 +96,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             return result;
         }
 
-        private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(QuestionnaireIdentity questionnaireId)
+        private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(QuestionnaireIdentity questionnaireId, IQueryable<string> nonDeletedQuestionnaires)
         {
             var questionnaireIdentity = questionnaireId?.ToString();
             var rawCountsByStatusAndDate = this.cumulativeReportStatusChangeStorage.Query(_ =>
             {
                 if (questionnaireIdentity != null)
                     _ = _.Where(change => change.QuestionnaireIdentity == questionnaireIdentity);
+                else
+                    _ = _.Where(change => nonDeletedQuestionnaires.Contains(change.QuestionnaireIdentity));
 
                 return _
                     .GroupBy(change => new {change.Status, change.Date})
