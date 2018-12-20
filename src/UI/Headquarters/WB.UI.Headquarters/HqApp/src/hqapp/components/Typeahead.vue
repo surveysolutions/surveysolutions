@@ -79,12 +79,12 @@ export default {
     },
     watch: {
         fetchUrl (val) {
+            this.clear();
             if(val) {
                 this.fetchOptions();
             }
             else {
                 this.options.splice(0, this.options.length);
-                this.clear();
             }
         }
     },

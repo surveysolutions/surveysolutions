@@ -43,7 +43,6 @@ export default {
 
     },
     mounted() {
-        // this.$refs.table.reload()
         const self = this
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
@@ -88,23 +87,33 @@ export default {
 
             if (this.questionnaireId != null) {
                 queryString.questionnaireId = this.questionnaireId.key
-                
+            }
+            else {
+                queryString.questionnaireId = ''
             }
             if(this.questionnaireVersion != null) {
                 queryString.questionnaireVersion = this.questionnaireVersion.key
+            }
+            else {
+                queryString.questionnaireVersion = ''
             }
 
             this.$router.push({ query: queryString })
         },
 
         addFilteringParams(data) {
-
             if (this.questionnaireId != null) {
                 data.templateId = this.questionnaireId.key
-                
             }
+            else {
+                data.templateId = null
+            }
+
             if(this.questionnaireVersion != null) {
                 data.templateVersion = this.questionnaireVersion.key
+            }
+            else {
+                data.templateVersion = null
             }
         },
 
