@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
@@ -30,7 +32,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
-        private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public ReportsController(
@@ -45,7 +46,6 @@ namespace WB.UI.Headquarters.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
-            this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
             this.interviewStatuses = interviewStatuses;
         }
 
@@ -65,24 +65,40 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.Summary)]
         public ActionResult SupervisorsAndStatuses()
         {
-            this.ViewBag.ActivePage = MenuItem.Summary;
+            var model = new TeamsAndStatusesModel();
+            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" });
+            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"});
+            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"});
+            model.InterviewsUrl = Url.Action("Interviews", "HQ");
+            model.AllTeamsTitle = Strings.AllTeams;
+            model.TeamTitle = Users.Supervisors;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
-
-            return this.View("TeamsAndStatuses", usersAndQuestionnaires.Questionnaires);
+            return this.View("TeamsAndStatuses", model);
         }
 
 
         [AuthorizeOr403(Roles = "Supervisor")]
+        [ActivePage(MenuItem.Summary)]
         public ActionResult TeamMembersAndStatuses()
         {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.authorizedUser.Id));
-            return this.View(usersAndQuestionnaires.Questionnaires);
+            var model = new TeamsAndStatusesModel();
+            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" });
+            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"});
+            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"});
+            model.InterviewsUrl = Url.Action("Interviews", "Survey");
+            model.AllTeamsTitle = Strings.AllInterviewers;
+            model.TeamTitle = Pages.TeamMember;
+
+            return this.View(model);
         }
 
         [AuthorizeOr403(Roles = "Administrator, Supervisor, Headquarter")]

@@ -543,7 +543,6 @@ export default {
         this.teamId = this.$route.query.teamId;
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            console.info(questionnaireId)
             if (questionnaireId != undefined) {
                 self.questionnaireId = {
                     key: questionnaireId,

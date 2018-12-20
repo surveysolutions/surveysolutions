@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
@@ -274,7 +275,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Success_Title,
-                    Description = SuccessDescription, 
+                    Description = SuccessDescription,
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics,
                     Stage = SyncStage.Success
@@ -392,6 +393,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                 }
+            }
+            catch (MissingPermissionsException ex)
+            {
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = InterviewerUIResources.Synchronization_Fail_Title,
+                    Description = ex.Message,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
             }
             catch (Exception ex)
             {

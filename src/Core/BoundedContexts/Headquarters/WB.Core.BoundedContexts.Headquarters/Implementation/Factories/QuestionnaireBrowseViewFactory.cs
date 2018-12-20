@@ -95,9 +95,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
         {
             return this.reader.Query(queryable =>
             {
-                var query = queryable.Where(x => !x.IsDeleted)
-                    .OrderBy(x => x.Title)
-                    .Select(x => new {x.QuestionnaireId, x.Title});
+                var query = queryable.Where(x => !x.IsDeleted);
 
                 if (!string.IsNullOrEmpty(searchFor))
                 {
@@ -105,15 +103,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
                 }
 
-                var list = query.ToList();
-                var questionnaireListItems = list.Distinct()
+                var listItems = query
+                    .OrderBy(x => x.Title)
                     .Select(x => new QuestionnaireListItem
                     {
                         Id = x.QuestionnaireId,
                         Title = x.Title
-                    });
-
-                var listItems = questionnaireListItems.ToList();
+                    }).Distinct().ToList();
                 return new QuestionnairesList
                 {
                     Items = listItems,
