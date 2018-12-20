@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -17,10 +20,13 @@ namespace WB.UI.Designer.Api.Designer
     public class SearchController : ApiController
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
+        private readonly IQuestionnaireSearchStorage questionnaireSearchStorage;
 
-        public SearchController(IPublicFoldersStorage publicFoldersStorage)
+        public SearchController(IPublicFoldersStorage publicFoldersStorage,
+            IQuestionnaireSearchStorage questionnaireSearchStorage)
         {
             this.publicFoldersStorage = publicFoldersStorage;
+            this.questionnaireSearchStorage = questionnaireSearchStorage;
         }
    
         [HttpGet]
@@ -34,7 +40,38 @@ namespace WB.UI.Designer.Api.Designer
         [Route("")]
         public Task<SearchResultModel> Search([FromUri] SearchQueryModel model)
         {
-            var result = new SearchResultModel
+            var searchResult = questionnaireSearchStorage.Search(new SearchInput()
+            {
+                Query = model.Query,
+                FolderId = model.FolderId,
+                PageIndex = model.PageIndex,
+                PageSize = model.PageSize,
+            });
+
+            var result = new SearchResultModel()
+            {
+                Total = searchResult.TotalCount,
+                Entities = searchResult.Items.Select(i =>
+                    new QuestionnaireSearchResultEntity()
+                    {
+                        QuestionnaireId = i.QuestionnaireId.FormatGuid(),
+                        QuestionnaireTitle = i.QuestionnaireTitle,
+                        ItemId = i.EntityId.FormatGuid(),
+                        ItemType = i.EntityType,
+                        SectionId = i.SectionId.FormatGuid(),
+                        Title = i.Title,
+                        Folder = !i.FolderId.HasValue
+                            ? null
+                            : new QuestionnaireListViewFolder()
+                            {
+                                Title = i.FolderName,
+                                PublicId = i.FolderId.Value
+                            }
+                    }).ToList()
+            };
+
+
+            /*var result = new SearchResultModel
             {
                 Total = 348,
                 Entities = new List<QuestionnaireSearchResultEntity>
@@ -54,7 +91,7 @@ namespace WB.UI.Designer.Api.Designer
                         }
                     }
                 }
-            };
+            };*/
             return Task.FromResult(result);
         }
     }
@@ -81,5 +118,8 @@ namespace WB.UI.Designer.Api.Designer
         public string Query { get; set; }
         public Guid? FolderId{ get; set; }
         public bool PrivateOnly { get; set; } = false;
+
+        public string PageIndex { get; set; }
+        public string PageSize { get; set; }
     }
 }
