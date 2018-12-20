@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -39,7 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
             IAttachmentContentStorage attachmentContentStorage = null,
             IAsyncRunner asyncRunner = null,
-            IPlainStorage<TranslationInstance> translationsStorage = null)
+            IPlainStorage<TranslationInstance> translationsStorage = null,
+            IQuestionnaireStorage questionnaireRepository = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
@@ -73,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     userInteractionService: userInteractionService,
                     logger: logger ?? Mock.Of<ILogger>(),
                     attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
-                    questionnaireRepository: Create.Fake.QuestionnaireRepository(new KeyValuePair<string, QuestionnaireDocument>[]{}),
+                    questionnaireRepository: questionnaireRepository ?? Create.Fake.QuestionnaireRepository(new KeyValuePair<string, QuestionnaireDocument>[]{}),
                     executedCommandsStorage: Mock.Of<IExecutedCommandsStorage>()
                 ));
         }

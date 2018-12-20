@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -10,20 +13,20 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
-using AttachmentContentEnumerable = WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
     internal class when_load_questionnaire_with_attachments : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             downloadedQuestionnaire = new Questionnaire
             {
@@ -39,6 +42,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("5")).Returns(true);
+            mockOfAttachmentContentStorage.Setup(x =>
+                    x.StoreAsync(It.IsAny<WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent>()))
+                .Returns(Task.CompletedTask);
 
             mockOfDesignerApiService
                 .Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
@@ -49,30 +55,35 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfDesignerApiService
                 .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("2")));
+            
 
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
+            questionnaireRepository.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null))
+                .Returns(Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter()));
 
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,
                 commandService: mockOfCommandService.Object,
                 questionnaireImportService: mockOfQuestionnaireImportService.Object,
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
-                attachmentContentStorage: mockOfAttachmentContentStorage.Object
+                attachmentContentStorage: mockOfAttachmentContentStorage.Object,
+                questionnaireRepository: questionnaireRepository.Object
                 );
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+        public async Task Because() => await viewModel.LoadQuestionnaireCommand.ExecuteAsync(selectedQuestionnaire);
 
         [Test] public void should_be_downloaded_questionnaire () => 
             mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         [Test] public void should_store_attachment_1_to_local_storage () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "1")), Times.Once);
+            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent>(ac => ac.Id == "1")), Times.Once);
 
         [Test] public void should_store_attachment_2_to_local_storage () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "2")), Times.Once);
+            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent>(ac => ac.Id == "2")), Times.Once);
 
         [Test] public void should_not_store_attachment_5_to_local_storage () =>
-            mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
+            mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent>(ac => ac.Id == "5")), Times.Never);
 
         [Test] public void should_be_questionnaire_stored_to_local_storage () => 
             mockOfQuestionnaireImportService.Verify(
