@@ -511,15 +511,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Orders = request.GetSortOrderRequestItems(),
                 MinutesOffsetToUtc = request.Timezone,
-                SupervisorId = request.SupervisorId
+                SupervisorId = request.SupervisorId,
+                TemplateId = request.QuestionnaireId,
+                TemplateVersion = request.QuestionnaireVersion
             };
-
-            if (!string.IsNullOrEmpty(request.QuestionnaireId))
-            {
-                var questionnaireIdentity = QuestionnaireIdentity.Parse(request.QuestionnaireId);
-                input.TemplateVersion = questionnaireIdentity.Version;
-                input.TemplateId = questionnaireIdentity.QuestionnaireId;
-            }
 
             if (!string.IsNullOrEmpty(exportType))
             {
