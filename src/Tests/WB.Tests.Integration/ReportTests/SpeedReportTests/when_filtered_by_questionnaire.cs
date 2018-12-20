@@ -2,60 +2,26 @@
 using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 {
-    [TestFixture]
-    internal class should_calculate_report_for_supervisor : SpeedReportContext
+    internal class when_filtered_by_questionnaire : SpeedReportContext
     {
         [Test]
-        public void should_calculate_interview_duration_for_supervisor_with_one_interviewer()
+        public void should_find_by_questionnaire_id()
         {
             var supervisorId = Id.gA;
             var interviewerId = Id.g1;
             var reportEndDate = new DateTime(2010, 10, 30);
 
-            var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), supervisorId, interviewerId, reportEndDate);
+            var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 1);
+            var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
+            var interview2 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g3);
             var interviewSummaries =  CreateInterviewSummaryRepository();
 
             interviewSummaries.Store(interview, interview.SummaryId);
-
-            var report = CreateSpeedReport(interviewSummaries);
-
-            // Act
-            var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
-            {
-                InterviewStatuses = new[] {InterviewExportedAction.Completed},
-                ColumnCount = 1,
-                Period = "d",
-                From = reportEndDate
-            };
-
-            var reportValue = report.Load(speedBySupervisorsReportInputModel);
-
-            // Assert
-            Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo(15));
-        }
-
-        [Test]
-        public void should_calculate_duration_for_two_interviewers_in_same_team()
-        {
-            var supervisorId = Id.gA;
-            var interviewer1Id = Id.g1;
-            var interviewer2Id = Id.g2;
-            var reportEndDate = new DateTime(2010, 10, 30);
-
-            var firstInterviewDuration = 15;
-            var secondInterviewDuration = 9;
-            var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(firstInterviewDuration), supervisorId, interviewer1Id, reportEndDate);
-            var interview2 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(secondInterviewDuration), supervisorId, interviewer2Id, reportEndDate);
-
-            var interviewSummaries =  CreateInterviewSummaryRepository();
-
             interviewSummaries.Store(interview1, interview1.SummaryId);
             interviewSummaries.Store(interview2, interview2.SummaryId);
 
@@ -67,13 +33,47 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 InterviewStatuses = new[] {InterviewExportedAction.Completed},
                 ColumnCount = 1,
                 Period = "d",
-                From = reportEndDate
+                From = reportEndDate,
+                QuestionnaireId = Id.g2
             };
 
             var reportValue = report.Load(speedBySupervisorsReportInputModel);
 
             // Assert
-            Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo((firstInterviewDuration + secondInterviewDuration) / 2));
+            Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo(9));
+        }
+
+        [Test]
+        public void should_find_by_questionnaire_version()
+        {
+            var supervisorId = Id.gA;
+            var interviewerId = Id.g1;
+            var reportEndDate = new DateTime(2010, 10, 30);
+
+            var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(10), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 1);
+            var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(8), supervisorId, interviewerId, reportEndDate, questionnaireId: Id.g2, questionnaireVersion: 2);
+            var interviewSummaries =  CreateInterviewSummaryRepository();
+
+            interviewSummaries.Store(interview, interview.SummaryId);
+            interviewSummaries.Store(interview1, interview1.SummaryId);
+
+            var report = CreateSpeedReport(interviewSummaries);
+
+            // Act
+            var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
+            {
+                InterviewStatuses = new[] {InterviewExportedAction.Completed},
+                ColumnCount = 1,
+                Period = "d",
+                From = reportEndDate,
+                QuestionnaireId = Id.g2,
+                QuestionnaireVersion = 1
+            };
+
+            var reportValue = report.Load(speedBySupervisorsReportInputModel);
+
+            // Assert
+            Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo(10));
         }
     }
 }
