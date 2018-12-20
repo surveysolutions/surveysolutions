@@ -48,7 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public class SurveysAndStatusesFilter : DataTableRequest
         {
             public string ResponsibleName { get; set; }
-            public Guid? QuestionnaireId { get; set; }
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
