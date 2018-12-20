@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -13,16 +14,16 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_load_questionnaire_and_previous_request_is_in_progress : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             viewModel = CreateDashboardViewModel(
                 designerApiService: mockOfDesignerApiService.Object
             );
             viewModel.IsInProgress = true;
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(new QuestionnaireListItem());
+        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(new QuestionnaireListItem());
 
         [Test]
         public void should_not_be_loaded_new_questionnaire () => mockOfDesignerApiService.Verify(
