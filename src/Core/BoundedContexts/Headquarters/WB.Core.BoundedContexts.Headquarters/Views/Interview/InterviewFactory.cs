@@ -9,9 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
 using Supercluster;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -22,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -30,16 +27,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly IUnitOfWork sessionProvider;
-        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            IUnitOfWork sessionProvider, 
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            IUnitOfWork sessionProvider)
         {
             this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
-            this.questionnaireItems = questionnaireItems;
         }
 
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
@@ -156,11 +150,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             (int) InterviewStatus.ApprovedByHeadquarters
         });
 
-        public InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
-            Guid gpsQuestionId, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
+        public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
+            string gpsQuestion, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswer>(
-                $@"with interviews as(
+                $@"
+                with gpsQuestions 
+                        as (
+                            select id from readside.questionnaire_entities 
+                            where questionnaireidentity like @Questionnaire and stata_export_caption = @question),
+                interviews as(
                     select teamleadid, interviewid, rostervector, latitude, longitude
                     from
                         (
@@ -170,15 +169,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                 i.rostervector,
                                 (i.asgps ->> 'Latitude')::float8 as latitude,
                                 (i.asgps ->> 'Longitude')::float8 as longitude
-                            from
-                                readside.interviews_view i
-                            join readside.interviewsummaries s on
-                                s.interviewid = i.interviewid
+                            from readside.interviews i
+                            join readside.interviews_id id     on id.id = i.interviewid
+                            join readside.interviewsummaries s on s.interviewid = id.interviewid
                             where
                                 i.asgps is not null
-                                and (@supervisorId is null OR s.status not in({DisabledForGpsStatuses}))
-                                and s.questionnaireidentity = @Questionnaire
-                                and i.entityid = @QuestionId
+                                and (@supervisorId is null OR s.status not in({DisabledForGpsStatuses}))                                
+                                and i.entityid in (select id from gpsQuestions)
                                 and i.isenabled = true
                         ) as q
                     where latitude > @south and latitude < @north
@@ -192,8 +189,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 new
                 {
                     supervisorId,
-                    Questionnaire = questionnaireIdentity.ToString(),
-                    QuestionId = gpsQuestionId,
+                    Questionnaire = $"{questionnaireId.FormatGuid()}${questionnaireVersion?.ToString() ?? "%"}",
+                    question = gpsQuestion,
                     MaxCount = maxAnswersCount,
                     bounds.South, bounds.North, bounds.East, bounds.West
                 })

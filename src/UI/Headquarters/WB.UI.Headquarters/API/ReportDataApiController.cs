@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -145,12 +146,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public ComboboxOptionModel[] QuestionInfo(string id)
+        public List<string> QuestionInfo(Guid id, long? version)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-
-            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(questionnaireIdentity);
-            return variables.Select(x => new ComboboxOptionModel(x, x)).ToArray();
+            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(id, version);
+            return variables;
         }
 
         [HttpGet]
