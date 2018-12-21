@@ -499,6 +499,14 @@ namespace WB.Tests.Unit.Designer
             return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();
         }
 
+        public static QuestionnaireCategoricalOption QuestionnaireCategoricalOption(int code, string text = null, int? parentValue = null) =>
+            new QuestionnaireCategoricalOption
+            {
+                Title = text ?? "text",
+                ParentValue = parentValue,
+                Value = code
+            };
+
         public static Answer Option(int code, string text = null, string parentValue = null)
         {
             return new Answer
