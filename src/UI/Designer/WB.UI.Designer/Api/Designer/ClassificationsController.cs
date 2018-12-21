@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Filters;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.UI.Designer.Filters;
@@ -46,52 +42,6 @@ namespace WB.UI.Designer.Api.Designer
         public ClassificationsController(IClassificationsStorage classificationsStorage)
         {
             this.classificationsStorage = classificationsStorage;
-        }
-
-        [HttpPost]
-        [Route("init")]
-        [Authorize(Roles = "Administrator")]
-        public void Init()
-        {
-            var json = File.ReadAllText(HostingEnvironment.MapPath("~/Content/QbankClassifications.json"));
-            var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);
-            foreach (var entity in entities)
-            {
-                entity.IdGuid = Guid.NewGuid();
-            }
-
-            foreach (var entity in entities)
-            {
-                if (!entity.Parent.HasValue) continue;
-                switch (entity.Type)
-                {
-                    case ClassificationEntityType.Group:
-                        break;
-                    case ClassificationEntityType.Classification:
-                        var parenGroup = entities.FirstOrDefault(x => x.Id == entity.Parent.Value && x.Type == ClassificationEntityType.Group);
-                        entity.ParentGuid = parenGroup?.IdGuid;
-                        entity.ClassificationId = entity.IdGuid;
-                        break;
-                    case ClassificationEntityType.Category:
-                        var parenClassification = entities.FirstOrDefault(x => x.Id == entity.Parent.Value && x.Type == ClassificationEntityType.Classification);
-                        entity.ParentGuid = parenClassification?.IdGuid;
-                        entity.ClassificationId = entity.ParentGuid;
-                        break;
-                }
-            }
-
-            var bdEntities = entities.Select(x => new ClassificationEntity
-            {
-                Id = x.IdGuid,
-                Value = x.Value,
-                Title = x.Title,
-                Type = x.Type,
-                Index = x.Order,
-                Parent = x.ParentGuid,
-                ClassificationId = x.ClassificationId
-            }).ToArray();
-
-            classificationsStorage.Store(bdEntities);
         }
 
         [HttpGet]
