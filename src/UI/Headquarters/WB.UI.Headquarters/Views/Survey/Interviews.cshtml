@@ -3,6 +3,7 @@
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using WB.UI.Headquarters.Code
 @using Interviews = WB.UI.Headquarters.Resources.Interviews
 
 @model DocumentFilter
@@ -50,10 +51,11 @@
         };
 
         $(function () {
+            var $questionnaires = @Model.Templates.AsJsonValue();
             var notifier = new Notifier();
             var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
             var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
-            var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsiblesUrl, usersToAssignUrl, $commandExecutionUrl, notifier);
+            var model = new Supervisor.VM.SVInterviews($statistics, $interviewsPageUrl, responsiblesUrl, usersToAssignUrl, $commandExecutionUrl, notifier, $questionnaires);
             model.IsNothingSelected.subscribe(function (value) {
                 if (value) {
                     model.Users.AssignTo(undefined);
@@ -137,27 +139,23 @@
 
                     <div class="block-filter">
                         <h5 title="@Interviews.Tooltip_Filter_Questionnaire">@Common.Questionnaire</h5>
-                        <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
-                            @if (Model.Templates.Count() > 1)
-                            {
-                                <option value="">@Strings.AllQuestionnaires</option>
-                            }
-                            @foreach (var item in Model.Templates)
-                            {
-                                <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>(ver. @item.TemplateVersion) @item.TemplateName</option>
-                            }
-                        </select>
+                        <select id="questionnaireSelector"
+                                data-bind="value: SelectedQuestionnaireId,
+                                           selectPicker: {},
+                                           options: questionnaires,
+                                           optionsText: 'title',
+                                           optionsCaption: '@Html.ToSafeJavascriptMessage(Strings.AllQuestionnaires)',
+                                           optionsValue: 'id' "></select>
                     </div>
 
                     <div class="block-filter">
-                        <h5 title="@Interviews.Tooltip_Filter_Status">@Common.Status</h5>
-                        <select data-bind="value: SelectedStatus" class="selectpicker">
-                            <option value="">@Common.AllStatuses</option>
-                            @foreach (var item in Model.Statuses)
-                            {
-                                <option value="@item.Status">@item.StatusName</option>
-                            }
-                        </select>
+                        <h5>@Common.QuestionnaireVersion</h5>
+                        <select id="questionnaireVersionSelector"
+                                data-bind="enable: SelectedQuestionnaireId,
+                                           value: SelectedQuestionnaireVersion,
+                                           selectPicker: {},
+                                           options: QuestionnaireVersions,
+                                           optionsCaption: '@Html.ToSafeJavascriptMessage(Common.AllVersions)',"></select>
                     </div>
 
                     <div class="block-filter">
@@ -221,10 +219,10 @@
                                                 <a href="javascript:void(0);" title="@Interviews.Tooltip_Table_HideShowIdentifying"
                                                    class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@HttpUtility.JavaScriptStringEncode(Common.HideIdentifying)' : '@HttpUtility.JavaScriptStringEncode(Common.ShowIdentifying)', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
-                                            <!-- ko if:SelectedTemplate() == '' -->
+                                            <!-- ko if:SelectedQuestionnaireId() == '' -->
                                             <th title="@Interviews.Tooltip_Table_IdentifyingQuestions" class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                             <!-- /ko -->
-                                            <!-- ko ifnot:SelectedTemplate() == '' -->
+                                            <!-- ko ifnot:SelectedQuestionnaireId() == '' -->
                                             <!-- ko if:Items().length > 0-->
                                             <!-- ko foreach:Items()[0].FeaturedQuestions -->
                                             <th class="sorting_disabled prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.Items()[0].FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, html: Question"></th>
@@ -261,10 +259,10 @@
                                                     </span>
                                                 </a>
                                             </td>
-                                            <!-- ko if:$root.SelectedTemplate() == '' -->
+                                            <!-- ko if:$root.SelectedQuestionnaireId() == '' -->
                                             <td class="prefield-column first-identifying last-identifying" data-bind="css: { visible : $root.IsVisiblePrefilledColumns() }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
                                             <!-- /ko -->
-                                            <!-- ko ifnot:$root.SelectedTemplate() == '' -->
+                                            <!-- ko ifnot:$root.SelectedQuestionnaireId() == '' -->
                                             <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
                                             <td class="prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.FeaturedQuestions().length - 1 == $index()), 'visible' : $root.IsVisiblePrefilledColumns() },  text: Answer"></td>
                                             <!-- /ko -->
