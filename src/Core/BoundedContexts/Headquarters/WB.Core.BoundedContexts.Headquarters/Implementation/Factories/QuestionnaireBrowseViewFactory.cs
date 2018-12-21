@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 if (!string.IsNullOrEmpty(input.SearchFor))
                 {
                     var filterLowerCase = input.SearchFor.ToLower();
-                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase) || 
+                                             (x.Version.ToString().Contains(filterLowerCase) && input.QuestionnaireId != null));
                 }
 
                 if (input.OnlyCensus.HasValue)
