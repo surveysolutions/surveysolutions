@@ -21,8 +21,12 @@
     },
     methods: {
         cancel() {
-            this.title = this.classification.title;
-            this.isEditMode = false;
+            if (this.isNew) {
+                store.dispatch('deleteClassification', this.index);
+            } else {
+                this.title = this.classification.title;
+                this.isEditMode = false;
+            }
         },
         edit() {
             this.isEditMode = true;

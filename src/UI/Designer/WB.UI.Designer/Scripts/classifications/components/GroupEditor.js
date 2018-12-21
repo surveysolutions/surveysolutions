@@ -17,8 +17,12 @@
         },
         methods: {
             cancel() {
-                this.title = this.group.title;
-                this.isEditMode = false;
+                if (this.isNew) {
+                    store.dispatch('deleteGroup', this.index);
+                } else {
+                    this.title = this.group.title;
+                    this.isEditMode = false;
+                }
             },
             edit() {
                 this.isEditMode = true;

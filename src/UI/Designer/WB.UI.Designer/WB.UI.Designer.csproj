@@ -549,7 +549,6 @@
     <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\classifications\components\CategoriesEditor.js" />
-    <Content Include="Scripts\classifications\components\CategoryEditor.js" />
     <Content Include="Scripts\classifications\components\ClassificationEditor.js" />
     <Content Include="Scripts\classifications\components\GroupEditor.js" />
     <Content Include="Scripts\classifications\config.js" />
