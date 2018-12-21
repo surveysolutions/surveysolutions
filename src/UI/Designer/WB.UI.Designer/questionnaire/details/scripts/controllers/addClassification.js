@@ -62,8 +62,9 @@
                                 classification.categories = [];
                                 classification.categoriesAreOpen = false;
                             });
-                            $scope.classifications1 = classifications.slice(0, classifications.length/2);
-                            $scope.classifications2 = classifications.slice(classifications.length/2 + 1);
+                            var half = Math.ceil(classifications.length / 2);
+                            $scope.classifications1 = classifications.slice(0, half);
+                            $scope.classifications2 = classifications.slice(half);
                             $scope.totalResults = response.data.total;
                         });
                 });
