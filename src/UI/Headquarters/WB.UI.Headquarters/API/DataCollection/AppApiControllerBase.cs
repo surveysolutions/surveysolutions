@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.API.DataCollection
 {
     public class AppApiControllerBase : ApiController
     {
-        private readonly Version LastSupportedVersion = new Version(18, 04); // version from the sky, discussed on scrum 12/19/2018
+        private readonly Version LastSupportedVersion = new Version(18, 04, 0, 0); // version from the sky, discussed on scrum 12/19/2018
 
         private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
 

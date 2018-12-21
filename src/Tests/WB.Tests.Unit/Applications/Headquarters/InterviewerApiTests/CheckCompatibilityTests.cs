@@ -34,11 +34,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             var deviceId = "device";
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId);
+            var interviewerSettings = Create.Entity.InterviewerSettings(autoUpdateEnabled: false);
+            var interviewerSettingsStorage = Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>(m =>
+                m.GetById(AppSetting.InterviewerSettings) == interviewerSettings);
 
             var interviewerApiController = Create.Controller.InterviewerApiController(syncVersionProvider: syncProtocolVersionProvider,
                 productVersion: productVersion,
                 assignmentsService: assignments,
-                authorizedUser: authorizedUser);
+                authorizedUser: authorizedUser,
+                interviewerSettings: interviewerSettingsStorage);
             interviewerApiController.Request.Headers.UserAgent.Add(new ProductInfoHeaderValue("org.worldbank.solutions.interviewer", "18.04.0.0"));;
 
             // Act
