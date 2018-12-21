@@ -39,12 +39,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private bool isInstructions = false;
 
-        public void InitAsStatic(string textWithoutSubstitutions)
+        public void InitAsStatic(string textWithoutSubstitutions, Identity entityId = null)
         {
             if (textWithoutSubstitutions == null) throw new ArgumentNullException(nameof(textWithoutSubstitutions));
 
             this.HtmlText = textWithoutSubstitutions;
             this.PlainText = textWithoutSubstitutions;
+            this.identity = entityId;
         }
 
         public void InitAsInstructions(string interviewId, Identity entityIdentity)
