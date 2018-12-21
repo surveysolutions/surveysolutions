@@ -1714,7 +1714,7 @@
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
-    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
+    <Content Include="Views\Reports\CumulativeInterviewChartOld.cshtml" />
     <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1867,6 +1867,7 @@
     <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
+    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
