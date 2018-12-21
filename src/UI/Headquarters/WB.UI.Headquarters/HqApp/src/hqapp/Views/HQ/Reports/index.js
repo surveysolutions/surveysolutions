@@ -3,6 +3,8 @@ import StatusDuration from "./StatusDuration";
 import MapReport from "./MapReport";
 import SurveyStatistics from "./SurveyStatistics";
 import TeamsAndStatuses from "./TeamsAndStatuses";
+import CumulativeChart from "./CumulativeChartReport";
+
 import Vue from 'vue'
 
 export default class ReportComponent {
@@ -31,6 +33,10 @@ export default class ReportComponent {
             {
                 path: '/Reports/TeamMembersAndStatuses',
                 component: TeamsAndStatuses
+            },
+            {
+                path: '/Reports/InterviewsChart',
+                component: CumulativeChart
             },
             {
                 path: "/Reports/MapReport",
