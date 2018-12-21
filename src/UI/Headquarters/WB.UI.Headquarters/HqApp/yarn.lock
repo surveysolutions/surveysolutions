@@ -3048,15 +3048,15 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-datatables.net-select@1.2.7:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.7.tgz#7d5badfca49c438f8b51df04483d8d77857e917c"
-  integrity sha512-C3XDi7wpruGjDXV36dc9hN/FrAX9GOFvBZ7+KfKJTBNkGFbbhdzHS91SMeGiwRXPYivAyxfPTcVVndVaO83uBQ==
+datatables.net-select@1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.5.tgz#4f764669b464d5576a59c576c1250a5d069aa2e9"
+  integrity sha1-T3ZGabRk1VdqWcV2wSUKXQaaouk=
   dependencies:
     datatables.net "^1.10.15"
     jquery ">=1.7"
 
-datatables.net@1.10.19, datatables.net@^1.10.15:
+datatables.net@^1.10.15, datatables.net@^1.10.19:
   version "1.10.19"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
   integrity sha512-+ljXcI6Pj3PTGy5pesp3E5Dr3x3AV45EZe0o1r0gKENN2gafBKXodVnk2ypKwl2tTmivjxbkiqoWnipTefyBTA==
