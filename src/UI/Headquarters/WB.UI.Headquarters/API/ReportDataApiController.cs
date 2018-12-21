@@ -378,7 +378,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public HttpResponseMessage SupervisorSurveysAndStatusesReport(Guid? id,[FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
+        public HttpResponseMessage SupervisorSurveysAndStatusesReport(Guid? id = null,[FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
