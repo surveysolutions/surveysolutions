@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Api.Designer
         {
             this.publicFoldersStorage = publicFoldersStorage;
         }
-
+   
         [HttpGet]
         [Route("filters")]
         public Task<List<QuestionnaireListViewFolder>> GetFilters()
