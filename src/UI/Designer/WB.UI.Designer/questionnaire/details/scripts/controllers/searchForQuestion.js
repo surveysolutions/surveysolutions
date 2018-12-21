@@ -47,7 +47,7 @@
                             });
                             var half = Math.ceil(results.length / 2);
                             $scope.searchResult1 = results.slice(0, half);
-                            $scope.searchResult2 = results.slice(half + 1);
+                            $scope.searchResult2 = results.slice(half);
                             $scope.totalResults = response.data.total;
                         });
                 });
