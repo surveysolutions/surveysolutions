@@ -157,22 +157,12 @@ export default {
         },
 
         questionnaires() {
-            return _.map(this.model.questionnaires, q => {
-                return {
-                    key: q.id,
-                    value: q.title,
-                    versions: q.versions
-            }});
+            return this.model.questionnaires
         },
 
         questionnaireVersions() {
             if(this.questionnaireId == null) return []
-            return _.map(this.questionnaireId.versions, v => {
-                return {
-                    key: v,
-                    value: 'ver. ' + v
-                }
-            })
+            return this.questionnaireId.versions;
         },
         
         selectedVersion() {

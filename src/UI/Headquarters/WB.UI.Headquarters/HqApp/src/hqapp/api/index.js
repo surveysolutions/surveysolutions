@@ -102,6 +102,14 @@ class Reports {
     get MapReport() {
         return new MapsReport(this.http)
     }
+
+    Chart({questionnaireId, version, from, to}) {
+        return this.http.post('api/ReportDataApi/ChartStatistics', {
+            templateId: questionnaireId,
+            templateVersion: version,
+            from, to
+        })
+    }
 }
 
 class HqApiClient {
