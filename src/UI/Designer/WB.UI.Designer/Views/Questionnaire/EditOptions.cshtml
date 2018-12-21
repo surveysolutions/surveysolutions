@@ -2,7 +2,7 @@
 @using Microsoft.Security.Application
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
-@model IEnumerable<Main.Core.Entities.SubEntities.Option>
+@model IEnumerable<Main.Core.Entities.SubEntities.QuestionnaireCategoricalOption>
 @{
     ViewBag.Title = "Edit options";
     Layout = null;
@@ -72,59 +72,63 @@
             </div>
         </nav>
     }
-    <div id="content" class="container">
-        <div id="applyOptionsError" class="alert alert-danger">
-            <div id="applyOptionsErrorContent"></div>
-        </div>
-        @foreach (string key in Alerts.ALL)
-        {
-            if (TempData.ContainsKey(key))
+        <div id="content" class="container">
+            <div id="applyOptionsError" class="alert alert-danger">
+                <div id="applyOptionsErrorContent"></div>
+            </div>
+            @foreach (string key in Alerts.ALL)
             {
-                <div class="alert alert-danger">
-                    @Html.Raw(@TempData[key])
-                </div>
+                if (TempData.ContainsKey(key))
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var errorMessage in ((string) TempData[key]).Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            @Html.Raw(errorMessage)
+                            <br/>
+                        }
+                    </div>
+                }
             }
-        }
-        @if (Model != null && Model.Any())
-        {
-            <table class="table table-bordered table-hover table-condensed">
-                <thead>
-                    <tr class="active">
-                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
-                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var option in Model)
-                    {
-                        <tr>
-                            <td>@option.Value</td>
-                            <td>@option.Title</td>
+            @if (Model != null && Model.Any())
+            {
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr class="active">
+                            <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                            <td>@QuestionnaireEditor.OptionsUploadTitle</td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <table class="table table-bordered table-hover table-condensed">
-                <thead>
-                    <tr class="active">
-                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
-                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <p><text>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</text></p>
-        }
-    </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var option in Model)
+                        {
+                            <tr>
+                                <td>@option.Value</td>
+                                <td>@option.Title</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <table class="table table-bordered table-hover table-condensed">
+                    <thead>
+                        <tr class="active">
+                            <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                            <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><text>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</text></p>
+            }
+        </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
             <a class="btn btn-success navbar-btn" href="javascript:apply();">@QuestionnaireEditor.OptionsUploadApply</a>
