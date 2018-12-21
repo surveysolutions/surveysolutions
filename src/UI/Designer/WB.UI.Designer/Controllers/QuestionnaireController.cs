@@ -10,12 +10,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CsvHelper.TypeConversion;
+using Main.Core.Documents;
 using System.Web.Routing;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -25,6 +28,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -306,18 +310,21 @@ namespace WB.UI.Designer.Controllers
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
-        public ActionResult EditCascadingOptions(string id, Guid questionId)
-        {
-            this.SetupViewModel(id, questionId);
-            return this.View(this.questionWithOptionsViewModel.Options);
-        }
+        public ActionResult EditCascadingOptions(string id, Guid questionId) 
+            => this.EditOptions(id, questionId);
 
         private void SetupViewModel(string id, Guid questionId)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView?.Options.Select(
-                              option => new Option(option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+                              option => new QuestionnaireCategoricalOption
+                              {
+                                  Value = (int)option.Value,
+                                  ParentValue = (int?)option.ParentValue,
+                                  Title = option.Title
+                              }) ??
+                          new QuestionnaireCategoricalOption[0];
             var optionsList = options.ToList();
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
@@ -326,7 +333,8 @@ namespace WB.UI.Designer.Controllers
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
                 Options = optionsList,
-                SourceOptions = optionsList
+                SourceOptions = optionsList,
+                IsCascading = !string.IsNullOrEmpty(editQuestionView.CascadeFromQuestionId)
             };
         }
 
@@ -353,7 +361,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditOptions(HttpPostedFileBase csvFile)
         {
-            this.GetOptionsFromStream(csvFile);
+            this.GetOptionsFromStream(csvFile, false);
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
@@ -361,39 +369,69 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditCascadingOptions(HttpPostedFileBase csvFile)
         {
-            this.GetOptionsFromStream(csvFile, isCascade: true);
+            this.GetOptionsFromStream(csvFile, true);
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
-        private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
+        private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascading)
         {
+            if (csvFile == null)
+                this.Error(Resources.QuestionnaireController.SelectTabFile);
+
             try
             {
-                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, isCascade);
+                var list = new List<QuestionnaireCategoricalOption>();
+                var hasErrors = false;
+                using (var csvReader = new CsvReader(new StreamReader(csvFile.InputStream), this.CreateCsvConfiguration(isCascading)))
+                {
+                    while (csvReader.Read())
+                    {
+                        try
+                        {
+                            list.Add(csvReader.GetRecord<QuestionnaireCategoricalOption>());
+                        }
+                        catch (Exception e)
+                        {
+                            hasErrors = true;
+                            if (e.InnerException is CsvReaderException csvReaderException)
+                                this.Error($"(column: {csvReaderException.ColumnIndex + 1}, row: {csvReaderException.RowIndex}) {csvReaderException.Message}", true);
+                            else
+                                this.Error(e.Message, true);
+                        }
+                    }
+                        
+                }
+
+                if (!hasErrors)
+                    this.questionWithOptionsViewModel.Options = list;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                if (csvFile == null)
-                {
-                    this.Error(Resources.QuestionnaireController.SelectTabFile);
-                }
-                else
-                {
-                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
-                }
+                this.Error(Resources.QuestionnaireController.TabFilesOnly);
+                this.logger.Error(e.Message, e);
             }
         }
 
-        private Configuration CreateCsvConfiguration()
+        private Configuration CreateCsvConfiguration(bool isCascading)
         {
-            return new Configuration
+            var cfg = new Configuration
             {
                 HasHeaderRecord = false,
                 TrimOptions = TrimOptions.Trim,
                 IgnoreQuotes = false,
                 Delimiter = "\t",
+                // Skip if all fields are empty.
+                ShouldSkipRecord = record => record.All(string.IsNullOrEmpty)
+
             };
+
+            if (isCascading)
+                cfg.RegisterClassMap<CascadingOptionMap>();
+            else
+                cfg.RegisterClassMap<CategoricalOptionMap>();
+
+            return cfg;
         }
 
         public JsonResult ApplyOptions()
@@ -455,69 +493,86 @@ namespace WB.UI.Designer.Controllers
         {
             var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
-            return
-                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
-                    fileDownloadName);
+
+            return File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions,
+                this.questionWithOptionsViewModel.IsCascading), "text/csv", fileDownloadName);
         }
 
         public class EditOptionsViewModel
         {
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
-            public List<Option> Options { get; set; }
-            public List<Option> SourceOptions { get; set; }
+            public List<QuestionnaireCategoricalOption> Options { get; set; }
+            public List<QuestionnaireCategoricalOption> SourceOptions { get; set; }
             public string QuestionTitle { get; set; }
+            public bool IsCascading { get; set; }
         }
 
-        private List<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
+        
+        private class CascadingOptionMap : CategoricalOptionMap
         {
-            var importedOptions = new List<Option>();
-
-            var csvReader = new CsvReader(new StreamReader(inputStream), this.CreateCsvConfiguration());
-            using (csvReader)
+            public CascadingOptionMap()
             {
-                while (csvReader.Read())
+                Map(m => m.ParentValue).Index(2).TypeConverter<Int32Converter>();
+            }
+        }
+
+        private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
+        {
+            public CategoricalOptionMap()
+            {
+                Map(m => m.Value).Index(0).TypeConverter<Int32Converter>();
+                Map(m => m.Title).Index(1).TypeConverter<StringConverter>();
+            }
+
+            private class StringConverter : DefaultTypeConverter
+            {
+                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {
-                    if (isCascade)
-                    {
-                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
-                    }
-                    else
-                    {
-                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1)));    
-                    }
+                    return !string.IsNullOrEmpty(text)
+                        ? text
+                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Empty value");
                 }
             }
 
-            return importedOptions;
+            protected class Int32Converter : DefaultTypeConverter
+            {
+                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+                {
+                    if(string.IsNullOrEmpty(text))
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Empty value");
+
+                    var numberStyle = memberMapData.TypeConverterOptions.NumberStyle ?? NumberStyles.Integer;
+
+                    return int.TryParse(text, numberStyle, memberMapData.TypeConverterOptions.CultureInfo, out var i)
+                        ? i
+                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Not number value");
+                }
+            }
+        }
+        
+        private class CsvReaderException : Exception
+        {
+            public readonly int? RowIndex;
+            public readonly int? ColumnIndex;
+
+            public CsvReaderException(int? rowIndex, int? columnIndex, string message) : base(message)
+            {
+                this.RowIndex = rowIndex;
+                this.ColumnIndex = columnIndex;
+            }
         }
 
-        private Stream SaveOptionsToStream(IEnumerable<Option> options)
+        private Stream SaveOptionsToStream(IEnumerable<QuestionnaireCategoricalOption> options, bool isCascading)
         {
             var sb = new StringBuilder();
-            using (var csvWriter = new CsvWriter(new StringWriter(sb),this.CreateCsvConfiguration()))
+
+            using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration(isCascading)))
             {
-                foreach (var option in options)
-                {
-                    if (String.IsNullOrEmpty(option.ParentValue))
-                    {
-                        csvWriter.WriteRecord(new { key = option.Value, value = option.Title });
-                    }
-                    else
-                    {
-                        csvWriter.WriteRecord(new { key = option.Value, value = option.Title, parent = option.ParentValue });
-                    }
-                    csvWriter.NextRecord();
-                }
+                csvWriter.WriteRecords(options);
             }
 
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(sb.ToString());
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-
-            return memoryStream;
+            return new MemoryStream(Encoding.Unicode.GetBytes(sb.ToString()));
         }
 
         #endregion

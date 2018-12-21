@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid questionnaireId,
             Guid questionId,
             Guid responsibleId,
-            Option[] options)
+            QuestionnaireCategoricalOption[] options)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId)
         {
             this.Options = options;
         }
 
-        public Option[] Options { get; set; }
+        public QuestionnaireCategoricalOption[] Options { get; set; }
     }
 }
