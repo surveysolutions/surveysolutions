@@ -86,7 +86,9 @@ namespace WB.UI.Headquarters.Controllers
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
-                Questionnaires = this.GetQuestionnaires(statuses)
+                Questionnaires = this.GetQuestionnaires(statuses),
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" })
             };
         }
         

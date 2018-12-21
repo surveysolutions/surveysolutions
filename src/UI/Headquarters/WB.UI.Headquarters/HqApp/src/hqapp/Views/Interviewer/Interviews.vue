@@ -3,11 +3,26 @@
             :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="$config.model.questionnaires"
-                           :value="questionnaireId"
-                           noSearch
-                           @selected="selectQuestionnaire" />
+                <Typeahead
+                    data-vv-name="questionnaireId"
+                    data-vv-as="questionnaire"
+                    :placeholder="$t('Common.AllQuestionnaires')"
+                    control-id="questionnaireId"
+                    :value="questionnaireId"
+                    v-on:selected="questionnaireSelected"
+                    :fetch-url="$config.model.questionnairesUrl" />
+            </FilterBlock>
+
+            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                <Typeahead
+                    data-vv-name="questionnaireVersion"
+                    data-vv-as="questionnaireVersion"
+                    :placeholder="$t('Common.AllVersions')"
+                    control-id="questionnaireVersion"
+                    :value="questionnaireVersion"
+                    v-on:selected="questionnaireVersionSelected"
+                    :fetch-url="questionnaireVersionFetchUrl"
+                    :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
@@ -63,6 +78,7 @@ export default {
         return {
             restart_comment: null,
             questionnaireId: null,
+            questionnaireVersion: null,
             assignmentId: null
         }
     },
@@ -71,12 +87,20 @@ export default {
         questionnaireId: function() {
             this.reload();
         },
+        questionnaireVersion: function() {
+            this.reload();
+        },
         assignmentId: function() {
             this.reload();
         }
     },
 
     computed: {
+        questionnaireVersionFetchUrl() {
+             if(this.questionnaireId && this.questionnaireId.key)
+                return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
+            return null
+        },
 
         title() {
             return this.$config.title;
@@ -102,10 +126,13 @@ export default {
     },
 
     methods: {
-        selectQuestionnaire(value) {
-            this.questionnaireId = value;
+        questionnaireSelected(newValue) {
+            this.questionnaireId = newValue
         },
-
+        questionnaireVersionSelected(newValue){
+            this.questionnaireVersion = newValue
+        },
+        
         reload() {
             this.$refs.table.reload();
         },
@@ -175,9 +202,8 @@ export default {
         addFilteringParams(data) {
             data.statuses = this.$config.model.statuses;
 
-            if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId.key;
-            }
+            data.questionnaireId = (this.questionnaireId || {}).key;
+            data.questionnaireVersion = (this.questionnaireVersion || {}).key;
 
             if (this.assignmentId) {
                 data.assignmentId = this.assignmentId;
