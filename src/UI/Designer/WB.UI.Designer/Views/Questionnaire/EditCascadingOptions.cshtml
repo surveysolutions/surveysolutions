@@ -2,7 +2,7 @@
 @using Microsoft.Security.Application
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
-@model IEnumerable<Main.Core.Entities.SubEntities.Option>
+@model IEnumerable<Main.Core.Entities.SubEntities.QuestionnaireCategoricalOption>
 @{
     ViewBag.Title = "Edit cascading options";
     Layout = null;
@@ -82,7 +82,11 @@
             if (TempData.ContainsKey(key))
             {
                 <div class="alert alert-danger">
-                    @Html.Raw(@TempData[key])
+                    @foreach (var errorMessage in ((string) TempData[key]).Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        @Html.Raw(errorMessage)
+                        <br/>
+                    }
                 </div>
             }
         }
