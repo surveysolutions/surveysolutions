@@ -352,4 +352,7 @@
   <data name="MapDataLoading" xml:space="preserve">
     <value>Данные карты загружаются</value>
   </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Имеются проблемы совместимости между разными версиями опросника. Некоторые ответы в прошлых версиях опросника больше не присутствуют в последней версии опросника. Такие ответы были проигнорированы.</value>
+  </data>
 </root>

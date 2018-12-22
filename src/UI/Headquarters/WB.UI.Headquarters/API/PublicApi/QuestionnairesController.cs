@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
@@ -99,7 +100,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             var questionnaireDocumentVersionedSerialized = this.serializer.Serialize(questionnaireDocumentVersioned);
-            var response = this.Request.CreateResponse(questionnaireDocumentVersionedSerialized);
+            var response = this.Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(questionnaireDocumentVersionedSerialized, Encoding.UTF8, "application/json");
             return response;
         }
 

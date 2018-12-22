@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Autofac.Extras.MvvmCross;
 using MvvmCross.IoC;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.Infrastructure;
@@ -10,7 +11,6 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Infrastructure;
-using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Tester.ServiceLocation
 {
@@ -37,7 +37,7 @@ namespace WB.UI.Tester.ServiceLocation
 
             kernel.InitAsync().Wait();
 
-            return new MvxIoCProvider(kernel.Container);
+            return new AutofacMvxIocProvider(kernel.Container);
         }
     }
 }

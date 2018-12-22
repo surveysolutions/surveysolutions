@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
             };
 
             var interviewFactory = Mock.Of<IInterviewFactory>(
-                iif => iif.GetGpsAnswers(questionnaireId, Id.gF, null, It.IsAny<GeoBounds>(), null) == points);
+                iif => iif.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", null, It.IsAny<GeoBounds>(), null) == points);
 
             this.subject = Create.Service.MapReport(
                 authorizedUser: authorizedUser,
@@ -64,7 +64,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
                 East = 180,
                 North = 90,
                 South = -90,
-                QuestionnaireId = questionnaireId.ToString(),
+                QuestionnaireId = questionnaireId.QuestionnaireId,
+                QuestionnaireVersion = questionnaireId.Version,
                 Variable = "gps",
                 Zoom = 5
             });
@@ -91,7 +92,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
                 East = 180,
                 North = 90,
                 South = -90,
-                QuestionnaireId = questionnaireId.ToString(),
+                QuestionnaireId = questionnaireId.QuestionnaireId,
+                QuestionnaireVersion = questionnaireId.Version,
                 Variable = "gps",
                 Zoom = 5
             });
@@ -105,7 +107,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
                 East = 8,
                 North = 8,
                 South = 5,
-                QuestionnaireId = questionnaireId.ToString(),
+                QuestionnaireId = questionnaireId.QuestionnaireId,
+                QuestionnaireVersion = questionnaireId.Version,
                 Variable = "gps",
                 Zoom = (int) expand
             });

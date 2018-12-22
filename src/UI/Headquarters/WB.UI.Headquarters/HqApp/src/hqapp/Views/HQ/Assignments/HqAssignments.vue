@@ -11,8 +11,18 @@
                            :ajax-params="questionnaireParams"
                            :value="questionnaireId"
                            v-on:selected="questionnaireSelected"
-                           :fetch-url="config.api.questionnaire">
-                </typeahead>
+                           :fetch-url="config.api.questionnaire" />
+            </FilterBlock>
+
+            <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
+                <Typeahead data-vv-name="questionnaireVersion"
+                           data-vv-as="questionnaireVersion"
+                           :placeholder="$t('Common.AllVersions')"
+                           control-id="questionnaireVersion"
+                           :ajax-params="questionnaireParams"
+                           :value="questionnaireVersion"
+                           v-on:selected="questionnaireVersionSelected"
+                           :fetch-url="questionnaireVersionFetchUrl" :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
@@ -152,6 +162,7 @@ export default {
         return {
             responsibleId: null,
             questionnaireId: null,
+            questionnaireVersion: null,
             wasInitialized: false,
             responsibleParams: { showArchived: true, showLocked: true },
             questionnaireParams: { censusOnly: false },
@@ -172,6 +183,12 @@ export default {
         },
         config(){
             return this.$config.model;
+        },
+
+        questionnaireVersionFetchUrl() {
+            if(this.questionnaireId && this.questionnaireId.key)
+                return `${this.config.api.questionnaire}/${this.questionnaireId.key}`;
+            return null;
         },
 
         tableOptionsraw() {
@@ -317,6 +334,7 @@ export default {
         addParamsToRequest(requestData) {
             requestData.responsibleId = (this.responsibleId || {}).key;
             requestData.questionnaireId = (this.questionnaireId || {}).key;
+            requestData.questionnaireVersion = (this.questionnaireVersion || {}).key;
             requestData.showArchive = this.showArchive;
             requestData.dateStart = this.dateStart;
             requestData.dateEnd = this.dateEnd;
@@ -331,6 +349,10 @@ export default {
 
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue;
+        },
+
+        questionnaireVersionSelected(newValue){
+            this.questionnaireVersion = newValue;
         },
 
         newResponsibleSelected(newValue) {
@@ -355,10 +377,11 @@ export default {
             var queryString = { showArchive: this.showArchive };
 
             if (this.questionnaireId != null) {
-                queryString.questionnaire =
-                    this.questionnaireId.value.substring(this.questionnaireId.value.indexOf(")") + 2,
-                        this.questionnaireId.value.length);
-                queryString.version = this.questionnaireId.key.split("$")[1];
+                queryString.QuestionnaireId = this.questionnaireId.value;
+                
+            }
+            if(this.questionnaireVersion != null) {
+                queryString.questionnaireVersion = this.questionnaireVersion.key;
             }
 
             if (this.responsibleId)
@@ -476,21 +499,18 @@ export default {
         async loadQuestionnaireId(onDone) {
             let requestParams = null;
 
-            if (this.$route.query.questionnaire != undefined) {
-                requestParams = Object.assign({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
-                const response = await this.$http.get(this.config.api.questionnaire, { params: requestParams })
+            const questionnaireId = this.$route.query.questionnaireId
+            const version = this.$route.query.questionnaireVersion
 
-                if (response.data.options.length > 0) {
-                    onDone(response.data.options[0].key, response.data.options[0].value);
-                }
-
-            } else if (this.$route.query.questionnaireId != undefined) {
-                requestParams = Object.assign({ questionnaireIdentity: this.$route.query.questionnaireId, cache: false }, this.ajaxParams);
+            if (questionnaireId != undefined && version != undefined) {
+                requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
+                             this.ajaxParams);
                 const response = await this.$http.get(this.config.api.questionnaireById, { params: requestParams })
 
-                if (response.data.options.length > 0) {
-                    onDone(response.data.options[0].key, response.data.options[0].value);
+                if (response.data) {
+                    onDone(response.data.id, response.data.title, response.data.version);
                 }
+
             } else onDone();
         },
         
@@ -522,13 +542,16 @@ export default {
         this.receivedByTablet = this.$route.query.receivedByTablet;
         this.teamId = this.$route.query.teamId;
 
-        self.loadQuestionnaireId((questionnaireId, questionnaireTitle) => {
-
+        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
             if (questionnaireId != undefined) {
                 self.questionnaireId = {
                     key: questionnaireId,
                     value: questionnaireTitle
-                };
+                }
+                self.questionnaireVersion = {
+                    key: version,
+                    value: version
+                }
             }
 
             self.loadResponsibleIdByName((responsibleId) => {
@@ -536,7 +559,7 @@ export default {
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
                 self.reloadTable();
-                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet'], self.reloadTable.bind(self));
+                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));
 
                 $('.ddl').selectpicker('val', self.showArchive.toString());
                 $('.ddl-receivedByTablet').selectpicker('val', self.receivedByTablet);

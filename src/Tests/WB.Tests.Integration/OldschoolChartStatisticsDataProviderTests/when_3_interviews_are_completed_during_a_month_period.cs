@@ -7,8 +7,10 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -36,7 +38,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeEnd, cumulativeReportStatusChangeEnd.EntryId);
 
             
-            oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
+            oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage, Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
 
             result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Create.Entity.QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }

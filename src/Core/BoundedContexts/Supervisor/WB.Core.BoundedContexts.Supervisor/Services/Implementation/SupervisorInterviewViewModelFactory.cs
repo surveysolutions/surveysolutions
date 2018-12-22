@@ -16,7 +16,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SupervisorInterviewViewModelFactory : InterviewViewModelFactory
     {
-        public SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository, IStatefulInterviewRepository interviewRepository, IEnumeratorSettings settings) : base(questionnaireRepository, interviewRepository, settings)
+        public SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository, 
+            IEnumeratorSettings settings,
+            IServiceLocator serviceLocator) : base(questionnaireRepository, interviewRepository, settings, serviceLocator)
         {
         }
 
@@ -28,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public override IDashboardItem GetDashboardAssignment(AssignmentDocument assignment)
         {
             SupervisorAssignmentDashboardItemViewModel result =
-                ServiceLocator.Current.GetInstance<SupervisorAssignmentDashboardItemViewModel>();
+                base.ServiceLocator.GetInstance<SupervisorAssignmentDashboardItemViewModel>();
             result.Init(assignment);
             return result;
         }

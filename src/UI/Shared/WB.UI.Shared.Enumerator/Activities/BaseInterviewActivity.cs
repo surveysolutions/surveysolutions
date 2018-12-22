@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnCreate(bundle);
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
-            this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
+            this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, base.Toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
             {
@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnStart()
         {
-            var messenger = Mvx.Resolve<IMvxMessenger>();
+            var messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
 
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
@@ -69,7 +69,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
             catch (ObjectDisposedException e)
             {
-                Mvx.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Disposing already disposed activity", e);
+                Mvx.IoCProvider.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Disposing already disposed activity", e);
             }
         }
 

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IServiceLocator serviceLocator;
+        private readonly IDeviceInformationService deviceInformationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IAssignmentDocumentsStorage assignmentsStorage;
 
@@ -47,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService, 
             IEnumeratorSettings enumeratorSettings,
             IServiceLocator serviceLocator,
+            IDeviceInformationService deviceInformationService,
             IUserInteractionService userInteractionService,
             IAssignmentDocumentsStorage assignmentsStorage)
         {
@@ -58,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.auditLogService = auditLogService;
             this.enumeratorSettings = enumeratorSettings;
             this.serviceLocator = serviceLocator;
+            this.deviceInformationService = deviceInformationService;
             this.userInteractionService = userInteractionService;
             this.assignmentsStorage = assignmentsStorage;
         }
@@ -235,12 +239,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        DeviceInfo deviceInfo;
-
-                        using (var deviceInformationService = ServiceLocator.Current.GetInstance<IDeviceInformationService>())
-                        {
-                            deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
-                        }
+                        var deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
 
                         await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo),
                             cancellationToken);
@@ -276,7 +275,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Success_Title,
-                    Description = SuccessDescription, 
+                    Description = SuccessDescription,
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics,
                     Stage = SyncStage.Success
@@ -394,6 +393,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                 }
+            }
+            catch (MissingPermissionsException ex)
+            {
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = InterviewerUIResources.Synchronization_Fail_Title,
+                    Description = ex.Message,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
             }
             catch (Exception ex)
             {
