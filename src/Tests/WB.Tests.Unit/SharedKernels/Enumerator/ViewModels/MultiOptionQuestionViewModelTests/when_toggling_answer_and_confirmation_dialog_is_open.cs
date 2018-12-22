@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var interviewRepository = Setup.StatefulInterviewRepository(interview);
 
             userInteractionService = new Mock<IUserInteractionService>();
-            userInteractionService.Setup(x => x.HasPendingUserInterations).Returns(true);
+            userInteractionService.Setup(x => x.HasPendingUserInteractions).Returns(true);
 
             viewModel = CreateViewModel(
                 questionnaireStorage: questionnaireStorage,

@@ -81,12 +81,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var validationMessages = interview.GetFailedValidationMessages(this.Identity, UIResources.Error);
 
                     this.Error.Caption = String.Empty;
-                    this.Error.ChangeValidationErrors(validationMessages);
+                    this.Error.ChangeValidationErrors(validationMessages, this.Identity);
                 }
                 else if (wasError)
                 {
                     this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
-                    this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable());
+                    this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable(), this.Identity);
                 }
 
                 this.IsInvalid = isInvalidEntity || wasError;
@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
-                        this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable());
+                        this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable(), this.Identity);
                         this.IsInvalid = true;
                     });
                 }

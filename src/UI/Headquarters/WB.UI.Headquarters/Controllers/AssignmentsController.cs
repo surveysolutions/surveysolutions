@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
 
             model.Api = new AssignmentsFilters.ApiEndpoints
             {
-                Questionnaire = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"}),
+                Questionnaire = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
                 QuestionnaireById = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
                 Responsible = model.IsSupervisor
                     ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})

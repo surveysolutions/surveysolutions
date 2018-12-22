@@ -224,12 +224,15 @@
       <LastGenOutput>Report.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Report.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
       <DependentUpon>Report.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Report.zh.resx">
       <DependentUpon>Report.resx</DependentUpon>
     </EmbeddedResource>
+      <EmbeddedResource Update="Resources\Report.ro.resx">
+          <DependentUpon>Report.resx</DependentUpon>
+      </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.es.resx">
       <DependentUpon>Strings.resx</DependentUpon>
     </EmbeddedResource>

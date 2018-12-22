@@ -4,38 +4,55 @@ using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer
 {
     public class InterviewerAppStart : MvxAppStart
     {
-        public InterviewerAppStart(IMvxApplication application, IMvxNavigationService navigationService) : base(application, navigationService)
+        private readonly IAuditLogService auditLogService;
+        private readonly IServiceLocator serviceLocator;
+        private readonly IApplicationCypher applicationCypher;
+
+        public InterviewerAppStart(IMvxApplication application, 
+            IMvxNavigationService navigationService,
+            IAuditLogService auditLogService,
+            IServiceLocator serviceLocator,
+            IApplicationCypher applicationCypher) : base(application, navigationService)
         {
+            this.auditLogService = auditLogService;
+            this.serviceLocator = serviceLocator;
+            this.applicationCypher = applicationCypher;
         }
 
         public override void ResetStart()
         {
-            //temp fix ofKP-11583
+            //temp fix of KP-11583
             //
             //base.ResetStart();
         }
 
-        protected override async Task<object> ApplicationStartup(object hint = null)
+        protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.Resolve<InterviewDashboardEventHandler>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
+            this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
 
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<InterviewerAppStart>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
+            applicationCypher.EncryptAppData();
+
             this.BackwardCompatibility();
            
-            return await base.ApplicationStartup(hint);
+            return base.ApplicationStartup(hint);
         }
 
         protected override async Task NavigateToFirstViewModel(object hint = null)

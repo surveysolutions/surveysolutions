@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using Android.Widget;
 using Autofac;
+using Autofac.Extras.MvvmCross;
 using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -39,9 +39,7 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer
@@ -57,9 +55,9 @@ namespace WB.UI.Interviewer
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
-                {typeof(CreateInterviewViewModel),typeof(CreateInterviewActivity) },
+                {typeof(CreateAndLoadInterviewViewModel),typeof(CreateAndLoadInterviewActivity) },
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
-                {typeof(LoadingViewModel),typeof(LoadingActivity) },
+                {typeof(LoadingInterviewViewModel),typeof(LoadingInterviewActivity) },
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
@@ -94,7 +92,7 @@ namespace WB.UI.Interviewer
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new AutofacMvxIocProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
@@ -133,14 +131,12 @@ namespace WB.UI.Interviewer
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-            var serviceLocator = ServiceLocator.Current;
-
             var status = new UnderConstructionInfo();
             status.Run();
 
             foreach (var module in modules)
             {
-                module.Init(serviceLocator, status).Wait();
+                module.Init(container.Resolve<IServiceLocator>(), status).Wait();
             }
             status.Finish();
 

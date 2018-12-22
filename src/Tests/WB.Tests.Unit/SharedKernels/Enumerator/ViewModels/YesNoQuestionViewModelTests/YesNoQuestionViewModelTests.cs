@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 interviewRepository: interviewRepository,
                 filteredOptionsViewModel: filteredOptionsViewModel,
                 throttlingModel: throttlingModel,
-                userInteractionService: Mock.Of<IUserInteractionService>(x => x.HasPendingUserInterations == true));
+                userInteractionService: Mock.Of<IUserInteractionService>(x => x.HasPendingUserInteractions == true));
             viewModel.Init("", questionId, Create.Other.NavigationState(interviewRepository));
 
             // act

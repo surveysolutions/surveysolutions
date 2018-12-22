@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, usersToAssignUrl, commandExecutionUrl, notifier) {
+﻿Supervisor.VM.SVInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, usersToAssignUrl, commandExecutionUrl, notifier, $questionnaires) {
     Supervisor.VM.SVInterviews.superclass.constructor.apply(this, arguments);
     var self = this;
 

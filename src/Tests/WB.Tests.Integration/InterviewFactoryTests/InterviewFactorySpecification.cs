@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -24,6 +25,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
@@ -128,8 +130,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork,
-                questionnaireItems: Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+                sessionProvider: this.UnitOfWork);
+        }
+        
+        protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T)).Cast<object>();
+            return values
+                .Where(v => exclude.All(e => (int)(object)e != (int) v))
+                .Select(v => Create.Entity.Answer(v.ToString(), (int)v)).ToList();
         }
     }
 }

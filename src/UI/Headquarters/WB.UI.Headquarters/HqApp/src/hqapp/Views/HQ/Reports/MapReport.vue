@@ -2,10 +2,16 @@
     <HqLayout :hasFilter="true" :hasHeader="false">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
-                <Typeahead :placeholder="$t('Common.AllQuestionnaires')" :values="questionnaires" :value="questionnaireId" fuzzy @selected="selectQuestionnaire" />
+                <Typeahead :placeholder="$t('Common.AllQuestionnaires')" 
+                    :values="questionnaires" :value="questionnaireId" fuzzy @selected="selectQuestionnaire" />
+                <Typeahead :placeholder="$t('Common.AllVersions')" 
+                    :values="questionnaireVersions" :value="questionnaireVersion" fuzzy @selected="selectQuestionnaireVersion" />
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
-                <Typeahead :placeholder="$t('Common.AllGpsQuestions')" :values="gpsQuestions" :value="gpsQuestionId" noSearch @selected="selectGpsQuestion" />
+                <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
+                    :values="gpsQuestions" 
+                    :value="gpsQuestionId" 
+                    @selected="selectGpsQuestion" />
             </FilterBlock>
             <FilterBlock>
                 <div class="center-block">
@@ -46,7 +52,7 @@
                     <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
                 <div class="row-fluid" style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
-                    <a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.details")}}</a>
+                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.InterviewId)" target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
         </div>
@@ -73,18 +79,10 @@
 }
 
 @keyframes dotdotdot {
-    0% {
-        content: "...";
-    }
-    25% {
-        content: "";
-    }
-    50% {
-        content: ".";
-    }
-    75% {
-        content: "..";
-    }
+    0%  { content: "..."; }
+    25% { content: ""; }
+    50% { content: "."; }
+    75% { content: ".."; }
 }
 </style>
 <script>
@@ -95,6 +93,7 @@ export default {
     data() {
         return {
             questionnaireId: null,
+            questionnaireVersion: null,
             gpsQuestionId: null,
             gpsQuestions: null,
             infoWindow: null,
@@ -156,8 +155,32 @@ export default {
         model() {
             return this.$config.model;
         },
+
         questionnaires() {
-            return this.model.questionnaires;
+            return _.map(this.model.questionnaires, q => {
+                return {
+                    key: q.id,
+                    value: q.title,
+                    versions: q.versions
+            }});
+        },
+
+        questionnaireVersions() {
+            if(this.questionnaireId == null) return []
+            return _.map(this.questionnaireId.versions, v => {
+                return {
+                    key: v,
+                    value: 'ver. ' + v
+                }
+            })
+        },
+        
+        selectedVersion() {
+            return this.questionnaireVersion == null ? null : this.questionnaireVersion.key
+        },
+
+        api() {
+            return this.$hq.Report.MapReport
         }
     },
 
@@ -194,6 +217,12 @@ export default {
             this.reloadMarkersInBounds();
         },
 
+        async selectQuestionnaireVersion(value) {
+            this.questionnaireVersion = value
+
+            await this.selectQuestionnaire(this.questionnaireId)
+        },
+
         async selectQuestionnaire(value) {
             this.questionnaireId = value;
 
@@ -202,13 +231,12 @@ export default {
 
             if (_.isNull(value)) return;
 
-            var response = await this.$http.get(
-                this.model.api.gpsQuestionsByQuestionnaireUrl +
-                    "/" +
-                    this.questionnaireId.key
-            );
+            var response = await this.api.GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersion)
 
-            this.gpsQuestions = response.data;
+            this.gpsQuestions = _.map(response.data, d => {
+                return { key: d, value: d }
+            });
+
             if (this.gpsQuestions.length > 0) {
                 if (this.gpsQuestions.length === 1) {
                     this.selectGpsQuestion(this.gpsQuestions[0]);
@@ -315,40 +343,33 @@ export default {
                 return {};
             });
 
-            this.map.data.addListener("click", event => {
+            this.map.data.addListener("click", async event => {
                 if (event.feature.getProperty("count") > 1) {
                     const expand = event.feature.getProperty("expand");
                     self.map.setZoom(expand);
                     self.map.panTo(event.latLng);
                 } else {
-                    const interviewId = event.feature.getProperty(
-                        "interviewId"
-                    );
+                    const interviewId = event.feature.getProperty("interviewId");
 
-                    self.$http
-                        .post(self.model.api.interiewSummaryUrl, {
-                            InterviewId: interviewId
-                        })
-                        .then(response => {
-                            const data = response.data;
+                    const response = await this.api.InteriewSummaryUrl(interviewId)
+                    const data = response.data;
 
-                            if (data == undefined || data == null) return;
+                    if (data == undefined || data == null) return;
 
-                            data["InterviewId"] = interviewId;
+                    data["InterviewId"] = interviewId;
 
-                            self.selectedTooltip = data;
+                    self.selectedTooltip = data;
 
-                            Vue.nextTick(function() {
-                                self.infoWindow.setContent(
-                                    $(self.$refs.tooltip).html()
-                                );
-                                self.infoWindow.setPosition(event.latLng);
-                                self.infoWindow.setOptions({
-                                    pixelOffset: new google.maps.Size(0, -30)
-                                });
-                                self.infoWindow.open(self.map);
-                            });
+                    Vue.nextTick(function() {
+                        self.infoWindow.setContent(
+                            $(self.$refs.tooltip).html()
+                        );
+                        self.infoWindow.setPosition(event.latLng);
+                        self.infoWindow.setOptions({
+                            pixelOffset: new google.maps.Size(0, -30)
                         });
+                        self.infoWindow.open(self.map);
+                    });
                 }
             });
 
@@ -392,7 +413,7 @@ export default {
             }
         },
 
-        showPointsOnMap(east, north, west, south, extendBounds) {
+        async showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom();
 
             if (this.questionnaireId == null || this.gpsQuestionId == null)
@@ -401,6 +422,7 @@ export default {
             var request = {
                 Variable: this.gpsQuestionId.key,
                 QuestionnaireId: this.questionnaireId.key,
+                QuestionnaireVersion: this.selectedVersion,
                 Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
@@ -417,82 +439,80 @@ export default {
                 if (stillLoading == true) this.isLoading = true;
             }, 5000);
 
-            this.$http
-                .post(self.model.api.mapReportUrl, request)
-                .then(response => {
-                    const toRemove = {};
-                    stillLoading = false;
-                    this.isLoading = false;
+            const response = await this.api.Report(request)
+                
+            const toRemove = {};
+            stillLoading = false;
+            this.isLoading = false;
 
-                    this.totalAnswers = response.data.TotalPoint;
-                    const features = response.data.FeatureCollection.features;
-                    const heatmapData = { data: [] };
+            this.totalAnswers = response.data.TotalPoint;
+            const features = response.data.FeatureCollection.features;
+            const heatmapData = { data: [] };
 
-                    this.map.data.forEach(feature => {
-                        toRemove[feature.getId()] = feature;
-                    });
+            this.map.data.forEach(feature => {
+                toRemove[feature.getId()] = feature;
+            });
 
-                    const markers = {
-                        features: [],
-                        type: "FeatureCollection"
-                    };
+            const markers = {
+                features: [],
+                type: "FeatureCollection"
+            };
 
-                    _.forEach(features, feature => {
-                        if (toRemove[feature.id]) {
-                            delete toRemove[feature.id];
-                        } else {
-                            markers.features.push(feature);
-                        }
+            _.forEach(features, feature => {
+                if (toRemove[feature.id]) {
+                    delete toRemove[feature.id];
+                } else {
+                    markers.features.push(feature);
+                }
 
-                        const coords = feature.geometry.coordinates;
-                        const count = feature.properties.count || 1;
+                const coords = feature.geometry.coordinates;
+                const count = feature.properties.count || 1;
 
-                        heatmapData.data.push({
-                            location: new google.maps.LatLng(
-                                coords[1],
-                                coords[0]
-                            ),
-                            weight: count
-                        });
-                    });
-
-                    if (self.showHeatmap) {
-                        this.map.data.forEach(feature => {
-                            this.map.data.remove(feature);
-                        });
-
-                        this.heatmap.setData(heatmapData.data);
-                    } else {
-                        this.map.data.addGeoJson(markers);
-                        this.heatmap.setData([]);
-                    }
-
-                    _.forEach(Object.keys(toRemove), key => {
-                        self.map.data.remove(toRemove[key]);
-                    });
-
-                    if (extendBounds) {
-                        if (this.totalAnswers === 0) {
-                            self.map.setZoom(1);
-                        } else {
-                            const bounds = response.data.InitialBounds;
-
-                            const sw = new google.maps.LatLng(
-                                bounds.South,
-                                bounds.West
-                            );
-                            const ne = new google.maps.LatLng(
-                                bounds.North,
-                                bounds.East
-                            );
-                            const latlngBounds = new google.maps.LatLngBounds(
-                                sw,
-                                ne
-                            );
-                            self.map.fitBounds(latlngBounds);
-                        }
-                    }
+                heatmapData.data.push({
+                    location: new google.maps.LatLng(
+                        coords[1],
+                        coords[0]
+                    ),
+                    weight: count
                 });
+            });
+
+            if (self.showHeatmap) {
+                this.map.data.forEach(feature => {
+                    this.map.data.remove(feature);
+                });
+
+                this.heatmap.setData(heatmapData.data);
+            } else {
+                this.map.data.addGeoJson(markers);
+                this.heatmap.setData([]);
+            }
+
+            _.forEach(Object.keys(toRemove), key => {
+                self.map.data.remove(toRemove[key]);
+            });
+
+            if (extendBounds) {
+                if (this.totalAnswers === 0) {
+                    self.map.setZoom(1);
+                } else {
+                    const bounds = response.data.InitialBounds;
+
+                    const sw = new google.maps.LatLng(
+                        bounds.South,
+                        bounds.West
+                    );
+                    const ne = new google.maps.LatLng(
+                        bounds.North,
+                        bounds.East
+                    );
+                    const latlngBounds = new google.maps.LatLngBounds(
+                        sw,
+                        ne
+                    );
+                    self.map.fitBounds(latlngBounds);
+                }
+            }
         }
     }
 };

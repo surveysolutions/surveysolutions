@@ -2,7 +2,7 @@
 {
     public class QuestionnaireDto
     {
-        public string Identity { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public long Version { get; set; }
     }

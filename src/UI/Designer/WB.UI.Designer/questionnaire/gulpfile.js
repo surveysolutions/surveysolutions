@@ -4,13 +4,13 @@ const path = require('path');
 const mainBowerFiles = require('main-bower-files');
 const runSequence = require('run-sequence');
 const concat = require('gulp-concat');
-const utils = require('gulp-util')
+const utils = require('gulp-util');
 const debug = require('gulp-debug');
 const appendPrepend = require('gulp-append-prepend');
 const minifyHTML = require('gulp-htmlmin');
 const templateCache = require("gulp-angular-templatecache");
 const fs = require("fs");
-const isDevMode = !utils.env.production
+const isDevMode = !utils.env.production;
 
 const paths = {
   scripts: ['details/scripts/**/*.js'],
@@ -170,7 +170,7 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/jquery-mousewheel/jquery.mousewheel.js',
     'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js',
-    'node_modules/jquery.fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js',
+    'external/jquery.fancytree.contextMenu.js',
     'node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css',
     'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js',
     'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css',

@@ -66,7 +66,6 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(new AutoUpdateModel
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings?.AutoUpdateEnabled ?? true,
-                HowManyMajorReleaseDontNeedUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue
             });
         }
 
@@ -77,7 +76,6 @@ namespace WB.UI.Headquarters.API
                 new InterviewerSettings
                 {
                     AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
-                    HowManyMajorReleaseDontNeedUpdate = message.HowManyMajorReleaseDontNeedUpdate
                 },
                 AppSetting.InterviewerSettings);
 

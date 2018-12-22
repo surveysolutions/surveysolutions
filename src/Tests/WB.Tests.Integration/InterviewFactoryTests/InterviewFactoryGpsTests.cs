@@ -38,14 +38,68 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId.QuestionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Entity.GpsCoordinateQuestion(gpsQuestionId.Id),
-                    Create.Entity.GpsCoordinateQuestion(anotherGpsQuestionId.Id)
+                    Create.Entity.GpsCoordinateQuestion(gpsQuestionId.Id, "gps"),
+                    Create.Entity.GpsCoordinateQuestion(anotherGpsQuestionId.Id, "gps2")
                 });
 
             this.factory = CreateInterviewFactory();
 
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
+        }
+
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_all_versions()
+        { 
+            //arrange
+            var answers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = anotherGpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = otherQuestionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(answers);
+
+            //act
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId.QuestionnaireId, null, "gps", 10,
+                GeoBounds.Open, null);
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(3));
+            Assert.That(gpsAnswers, Is.EquivalentTo(answers
+                .Where(x => x.QuestionId == gpsQuestionId)
+                .Select(x => new InterviewGpsAnswer
+                {
+                    InterviewId = x.InterviewId,
+                    Longitude = x.Answer.Longitude,
+                    Latitude = x.Answer.Latitude
+                })));
         }
 
         [Test]
@@ -87,7 +141,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(answers);
 
             //act
-            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10,
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 10,
                 GeoBounds.Open, null);
 
             //assert
@@ -139,7 +193,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, new GeoBounds(3, 3, 5, 5), null);
+                questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 10, new GeoBounds(3, 3, 5, 5), null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -180,7 +234,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, GeoBounds.Open, null);
+                questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 10, GeoBounds.Open, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -242,7 +296,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, GeoBounds.Open, null);
+                questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 10, GeoBounds.Open, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(allGpsAnswers.Length));
@@ -281,7 +335,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 1, GeoBounds.Open, null);
+                questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 1, GeoBounds.Open, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -342,7 +396,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 2, GeoBounds.Open, supervisorId);
+                questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 2, GeoBounds.Open, supervisorId);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
@@ -399,7 +453,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 2, GeoBounds.Open, supervisorId);
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 2, GeoBounds.Open, supervisorId);
 
             //assert
             Assert.IsEmpty(gpsAnswers);

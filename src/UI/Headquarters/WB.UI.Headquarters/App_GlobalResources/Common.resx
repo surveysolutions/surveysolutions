@@ -303,4 +303,10 @@
   <data name="NothingSelected" xml:space="preserve">
     <value>Nothing selected</value>
   </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Questionnaire version</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>All versions</value>
+  </data>
 </root>
