@@ -315,9 +315,26 @@ namespace WB.UI.Designer.Controllers
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
                 Options = optionsList,
-                SourceOptions = optionsList,
-                IsCascading = !string.IsNullOrEmpty(editQuestionView.CascadeFromQuestionId)
+                SourceOptions = optionsList
             };
+
+            if (editQuestionView.CascadeFromQuestionId != null)
+            {
+                var cascadingParentQuestionId = Guid.Parse(editQuestionView.CascadeFromQuestionId);
+                var cascadingParentQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, cascadingParentQuestionId);
+                this.questionWithOptionsViewModel.CascadingParent = new CascadingParent
+                {
+                    Values = cascadingParentQuestionView.Options.Select(x => (int) x.Value).ToHashSet(),
+                    VariableName = cascadingParentQuestionView.VariableName
+                };
+            }
+
+            if (this.questionWithOptionsViewModel.IsCascading && this.questionWithOptionsViewModel.CascadingParent.Values.Count == 0)
+            {
+                this.Error(string.Format(Resources.QuestionnaireController.NoParentCascadingOptions,
+                    this.questionWithOptionsViewModel.CascadingParent.VariableName));
+                return;
+            }
         }
 
         public ActionResult ResetOptions()
@@ -364,6 +381,13 @@ namespace WB.UI.Designer.Controllers
                 return;
             }
 
+            if (this.questionWithOptionsViewModel.IsCascading && this.questionWithOptionsViewModel.CascadingParent.Values.Count == 0)
+            {
+                this.Error(string.Format(Resources.QuestionnaireController.NoParentCascadingOptions,
+                    this.questionWithOptionsViewModel.CascadingParent.VariableName));
+                return;
+            }
+
             try
             {
                 var list = new List<QuestionnaireCategoricalOption>();
@@ -380,7 +404,10 @@ namespace WB.UI.Designer.Controllers
                         {
                             hasErrors = true;
                             if (e.InnerException is CsvReaderException csvReaderException)
-                                this.Error($"(column: {csvReaderException.ColumnIndex + 1}, row: {csvReaderException.RowIndex}) {csvReaderException.Message}", true);
+                                this.Error(
+                                    $"({Resources.QuestionnaireController.Column}: {csvReaderException.ColumnIndex + 1}, " +
+                                    $"{Resources.QuestionnaireController.Row}: {csvReaderException.RowIndex}) " +
+                                    $"{csvReaderException.Message}", true);
                             else
                                 this.Error(e.Message, true);
                         }
@@ -412,7 +439,7 @@ namespace WB.UI.Designer.Controllers
             };
 
             if (isCascading)
-                cfg.RegisterClassMap<CascadingOptionMap>();
+                cfg.RegisterClassMap(new CascadingOptionMap(this.questionWithOptionsViewModel.CascadingParent.Values));
             else
                 cfg.RegisterClassMap<CategoricalOptionMap>();
 
@@ -490,48 +517,76 @@ namespace WB.UI.Designer.Controllers
             public List<QuestionnaireCategoricalOption> Options { get; set; }
             public List<QuestionnaireCategoricalOption> SourceOptions { get; set; }
             public string QuestionTitle { get; set; }
-            public bool IsCascading { get; set; }
+            public bool IsCascading => CascadingParent != null;
+            public CascadingParent CascadingParent { get; set;}
         }
 
-        
+        public class CascadingParent
+        {
+            public HashSet<int> Values { get; set; }
+            public string VariableName { get; set; }
+        }
+
         private class CascadingOptionMap : CategoricalOptionMap
         {
-            public CascadingOptionMap()
+            public CascadingOptionMap(HashSet<int> cascadingParentValues)
             {
-                Map(m => m.ParentValue).Index(2).TypeConverter<Int32Converter>();
+                Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(cascadingParentValues));
+            }
+
+            private class ConvertToInt32AndCheckParentOptionValueOrThrow : ConvertToInt32OrThrow
+            {
+                private readonly HashSet<int> cascadingParentValues;
+
+                public ConvertToInt32AndCheckParentOptionValueOrThrow(HashSet<int> cascadingParentValues)
+                {
+                    this.cascadingParentValues = cascadingParentValues;
+                }
+
+                public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+                {
+                    var convertedValue = (int)base.ConvertFromString(text, row, memberMapData);
+
+                    if(!this.cascadingParentValues.Contains(convertedValue))
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index, 
+                            string.Format(Resources.QuestionnaireController.ImportOptions_ParentValueNotFound, convertedValue));
+
+                    return convertedValue;
+                }
             }
         }
 
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
-            public CategoricalOptionMap()
+            protected CategoricalOptionMap()
             {
-                Map(m => m.Value).Index(0).TypeConverter<Int32Converter>();
-                Map(m => m.Title).Index(1).TypeConverter<StringConverter>();
+                Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrow>();
+                Map(m => m.Title).Index(1).TypeConverter<ConvertToStringOrThrow>();
             }
 
-            private class StringConverter : DefaultTypeConverter
+            private class ConvertToStringOrThrow : DefaultTypeConverter
             {
                 public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {
                     return !string.IsNullOrEmpty(text)
                         ? text
-                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Empty value");
+                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, Resources.QuestionnaireController.ImportOptions_EmptyValue);
                 }
             }
 
-            protected class Int32Converter : DefaultTypeConverter
+            protected class ConvertToInt32OrThrow : DefaultTypeConverter
             {
                 public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {
                     if(string.IsNullOrEmpty(text))
-                        throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Empty value");
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index, Resources.QuestionnaireController.ImportOptions_EmptyValue);
 
                     var numberStyle = memberMapData.TypeConverterOptions.NumberStyle ?? NumberStyles.Integer;
 
                     return int.TryParse(text, numberStyle, memberMapData.TypeConverterOptions.CultureInfo, out var i)
                         ? i
-                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, "Not number value");
+                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, 
+                            string.Format(Resources.QuestionnaireController.ImportOptions_NotNumber, text));
                 }
             }
         }
