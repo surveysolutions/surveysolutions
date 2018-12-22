@@ -355,4 +355,8 @@
     <value>Родительский вопрос не содержит опцию со значением '{0}'</value>
     <comment>Родительский вопрос не содержит опцию со значением '{0}'</comment>
   </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>У родительского вопроса '{0}' отсутствуют опции</value>
+    <comment>У родительского вопроса '{0}' отсутствуют опции</comment>
+  </data>
 </root>
