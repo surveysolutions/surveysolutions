@@ -126,8 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
                         {InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel>},
                         {InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel>},
-                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
-                { InterviewEntityType.PlainRoster, Load<PlainRosterViewModel> },
+                        {InterviewEntityType.PlainRoster, Load<PlainRosterViewModel>},
                     };
                 }
 

@@ -308,8 +308,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             IServiceLocator serviceLocator,
-            IEnumeratorSettings settings,
-            IServiceLocator serviceLocator = null)
+            IEnumeratorSettings settings)
         {
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -320,8 +319,7 @@ namespace WB.Tests.Abc.TestFactories
         public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IServiceLocator serviceLocator = null,
-            IEnumeratorSettings settings = null,
-            IServiceLocator serviceLocator = null)
+            IEnumeratorSettings settings = null)
         {
             return new SupervisorInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
