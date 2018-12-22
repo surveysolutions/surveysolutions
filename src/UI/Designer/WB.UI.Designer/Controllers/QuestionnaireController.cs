@@ -345,13 +345,13 @@ namespace WB.UI.Designer.Controllers
                     Values = cascadingParentQuestionView.Options.Select(x => (int) x.Value).ToHashSet(),
                     VariableName = cascadingParentQuestionView.VariableName
                 };
-            }
 
-            if (this.questionWithOptionsViewModel.IsCascading && this.questionWithOptionsViewModel.CascadingParent.Values.Count == 0)
-            {
-                this.Error(string.Format(Resources.QuestionnaireController.NoParentCascadingOptions,
-                    this.questionWithOptionsViewModel.CascadingParent.VariableName));
-                return;
+                if (questionWithOptionsViewModel.CascadingParent.Values.Count == 0)
+                {
+                    this.Error(string.Format(Resources.QuestionnaireController.NoParentCascadingOptions,
+                        this.questionWithOptionsViewModel.CascadingParent.VariableName));
+                    return;
+                }
             }
         }
 
@@ -399,7 +399,7 @@ namespace WB.UI.Designer.Controllers
                 return;
             }
 
-            if (this.questionWithOptionsViewModel.IsCascading && this.questionWithOptionsViewModel.CascadingParent.Values.Count == 0)
+            if (isCascading && this.questionWithOptionsViewModel.CascadingParent?.Values.Count == 0)
             {
                 this.Error(string.Format(Resources.QuestionnaireController.NoParentCascadingOptions,
                     this.questionWithOptionsViewModel.CascadingParent.VariableName));
@@ -525,7 +525,7 @@ namespace WB.UI.Designer.Controllers
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
 
             return File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions,
-                this.questionWithOptionsViewModel.IsCascading), "text/csv", fileDownloadName);
+                this.questionWithOptionsViewModel.CascadingParent != null), "text/csv", fileDownloadName);
         }
 
         public class EditOptionsViewModel
@@ -535,7 +535,6 @@ namespace WB.UI.Designer.Controllers
             public List<QuestionnaireCategoricalOption> Options { get; set; }
             public List<QuestionnaireCategoricalOption> SourceOptions { get; set; }
             public string QuestionTitle { get; set; }
-            public bool IsCascading => CascadingParent != null;
             public CascadingParent CascadingParent { get; set;}
         }
 
@@ -576,7 +575,7 @@ namespace WB.UI.Designer.Controllers
 
         private class CategoricalOptionMap : ClassMap<QuestionnaireCategoricalOption>
         {
-            protected CategoricalOptionMap()
+            public CategoricalOptionMap()
             {
                 Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrow>();
                 Map(m => m.Title).Index(1).TypeConverter<ConvertToStringOrThrow>();
