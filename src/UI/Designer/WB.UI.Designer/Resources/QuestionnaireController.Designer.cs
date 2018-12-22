@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to column.
+        /// </summary>
+        public static string Column {
+            get {
+                return ResourceManager.GetString("Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to confirmation.
         /// </summary>
         public static string Confirmation {
@@ -451,6 +460,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty value.
+        /// </summary>
+        public static string ImportOptions_EmptyValue {
+            get {
+                return ResourceManager.GetString("ImportOptions_EmptyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid 32 bit integer value &apos;{0}&apos;. Value should be between -2147483647 and 2147483647.
+        /// </summary>
+        public static string ImportOptions_NotNumber {
+            get {
+                return ResourceManager.GetString("ImportOptions_NotNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent question don&apos;t have an option with value &apos;{0}&apos;.
+        /// </summary>
+        public static string ImportOptions_ParentValueNotFound {
+            get {
+                return ResourceManager.GetString("ImportOptions_ParentValueNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Initializing.
         /// </summary>
         public static string Initializing {
@@ -501,6 +537,15 @@ namespace WB.UI.Designer.Resources {
         public static string NewFolder {
             get {
                 return ResourceManager.GetString("NewFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No options for parent cascading question &apos;{0}&apos; found.
+        /// </summary>
+        public static string NoParentCascadingOptions {
+            get {
+                return ResourceManager.GetString("NoParentCascadingOptions", resourceCulture);
             }
         }
         
@@ -582,6 +627,15 @@ namespace WB.UI.Designer.Resources {
         public static string RetryExportPDF {
             get {
                 return ResourceManager.GetString("RetryExportPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to row.
+        /// </summary>
+        public static string Row {
+            get {
+                return ResourceManager.GetString("Row", resourceCulture);
             }
         }
         
