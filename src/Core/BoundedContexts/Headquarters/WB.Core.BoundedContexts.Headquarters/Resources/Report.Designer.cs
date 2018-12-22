@@ -223,6 +223,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TEAM SIZE.
+        /// </summary>
+        internal static string COLUMN_TEAM_SIZE {
+            get {
+                return ResourceManager.GetString("COLUMN_TEAM_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TEAMS.
         /// </summary>
         internal static string COLUMN_TEAMS {

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
             }), "1");
 
             // Act
-            var reportTimeline = ReportHelpers.BuildColumns(userSelectedFrom, "w", 1, userTimeZoneAdjastsment, null, queryableReadSideRepositoryReader);
+            var reportTimeline = ReportHelpers.BuildColumns(userSelectedFrom, "w", 1, userTimeZoneAdjastsment, null, null, queryableReadSideRepositoryReader);
 
             // Assert
             DateTimeRange lastUtcTimeSpan = reportTimeline.ColumnRangesUtc.Last();
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories
             {
                 Create.Entity.InterviewCommentedStatus(timestamp: userSelectedFrom.AddMinutes(timezoneAdjastmentMins + 10))
             }), "1");
-            var reportTimeline = ReportHelpers.BuildColumns(userSelectedFrom, "d", 2, timezoneAdjastmentMins, null, queryableReadSideRepositoryReader);
+            var reportTimeline = ReportHelpers.BuildColumns(userSelectedFrom, "d", 2, timezoneAdjastmentMins, null, null, queryableReadSideRepositoryReader);
 
             Assert.That(reportTimeline.ColumnRangesUtc, Has.Length.EqualTo(1), "First timespan is completely before of first interview created date and should not be counted");
 

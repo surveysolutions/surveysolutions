@@ -2,6 +2,7 @@ import InterviewersAndDevices from "./InterviewersAndDevices";
 import StatusDuration from "./StatusDuration";
 import MapReport from "./MapReport";
 import SurveyStatistics from "./SurveyStatistics";
+import TeamsAndStatuses from "./TeamsAndStatuses";
 import Vue from 'vue'
 
 export default class ReportComponent {
@@ -22,7 +23,16 @@ export default class ReportComponent {
             {
                 path: "/Reports/StatusDuration",
                 component: StatusDuration
-            }, {
+            },
+            {
+                path: "/Reports/SupervisorsAndStatuses",
+                component: TeamsAndStatuses
+            },
+            {
+                path: '/Reports/TeamMembersAndStatuses',
+                component: TeamsAndStatuses
+            },
+            {
                 path: "/Reports/MapReport",
                 component: MapReport
             }, {

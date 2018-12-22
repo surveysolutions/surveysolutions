@@ -2289,7 +2289,8 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator,
             IViewModelNavigationService viewModelNavigationService = null)
         {
-            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>());
+            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, 
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>());
         }
 
         public DashboardSubTitleViewModel DashboardSubTitleViewModel()
@@ -2331,12 +2332,11 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false, int? howManyMajorReleaseDontNeedUpdate = 0)
+        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false)
         {
             return new InterviewerSettings()
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
-                HowManyMajorReleaseDontNeedUpdate =  howManyMajorReleaseDontNeedUpdate
             };
         }
     }

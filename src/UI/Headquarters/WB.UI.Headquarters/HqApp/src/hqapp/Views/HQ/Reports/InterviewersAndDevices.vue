@@ -15,16 +15,12 @@ export default {
             if(data === 0 || row.DT_RowClass == "total-row") {
                 return `<span>${formatedNumber}</span>`;
             }
-            if (row.teamId === '00000000-0000-0000-0000-000000000000') {
-                if (facet) {
-                    return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}'>${formatedNumber}</a>`;
-                }
-                else {
-                    return `<span>${formatedNumber}</span>`;
-                }
+
+            if (!this.supervisorId) {
+                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`;
             }
          
-            return `<a href='${window.location}/${row.teamId}'>${formatedNumber}</a>`;
+            return this.getLinkToInterviewerProfile(data, row);
         },
         formatNumber(value) {
             if (value == null || value == undefined)
@@ -36,6 +32,12 @@ export default {
         },
         hasIssue(data) {
             return data.lowStorageCount || data.wrongDateOnTabletCount
+        },
+        getLinkToInterviewerProfile(data, row){
+            const formatedNumber = this.formatNumber(data)
+            const linkClass = this.hasIssue(row) ? "text-danger" : ""
+
+            return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`;
         }
     },
     computed: {
@@ -45,7 +47,6 @@ export default {
         supervisorId() {
             return this.$route.params.supervisorId
         },
-
         tableOptions() {
             var self = this;
             return {
@@ -54,17 +55,15 @@ export default {
                     {
                         data: "teamName",
                         name: "TeamName",
-                        title: this.$t("DevicesInterviewers.Teams"),
+                        title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t("DevicesInterviewers.Teams"),
                         orderable: true,
                         render: function(data, type, row) {
                             if(self.supervisorId) {
-                                const formatedNumber = self.formatNumber(data)
-                                const linkClass = self.hasIssue(row) ? "text-danger" : ""
-
-                                return `<a href='${self.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`;
+                                return self.getLinkToInterviewerProfile(data, row)
                             }
-
-                            return self.renderCell(data, row, null);
+                            
+                            const linkClass = self.hasIssue(row) ? "text-danger" : ""
+                            return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
                         }
                     },
                     {

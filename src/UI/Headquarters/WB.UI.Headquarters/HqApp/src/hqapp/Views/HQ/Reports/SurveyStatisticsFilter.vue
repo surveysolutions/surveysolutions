@@ -3,28 +3,34 @@
         <FilterBlock :title="$t('Reports.Questionnaire')">
             <Typeahead :placeholder="selectedQuestionnairePlaceholder" fuzzy noClear
                 :values="questionnaireList"
-                :value="selectedQuestionnaire"                
+                :value="selectedQuestionnaire"
                 :forceLoadingState="loading.questionnaire"
                 @selected="selectQuestionnaire" />
-        </FilterBlock>        
+
+            <Typeahead :placeholder="$t('Common.AllVersions')" noSearch
+                :values="questionnaireVersionsList"
+                :value="selectedQuestionnaireVersion"
+                :forceLoadingState="loading.questionnaire"
+                @selected="selectQuestionnaireVersion" />
+        </FilterBlock>
         <FilterBlock :title="$t('Reports.Question')">
             <Typeahead :placeholder="selectedQuestionPlaceholder" fuzzy noClear
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
-                :value="selectedQuestion"                
+                :value="selectedQuestion"
                 @selected="selectQuestion" />
-        </FilterBlock>            
+        </FilterBlock>
 
         <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
             <div class="options-group" >
-                <Radio :label="$t('Reports.TeamLeadsOnly')" 
-                    :radioGroup="false" name="expandTeams" 
-                    :value="expandTeams" @input="radioChanged" />           
-                <Radio :label="$t('Reports.WithInterviewers')" 
-                    :radioGroup="true" name="expandTeams"                     
+                <Radio :label="$t('Reports.TeamLeadsOnly')"
+                    :radioGroup="false" name="expandTeams"
+                    :value="expandTeams" @input="radioChanged" />
+                <Radio :label="$t('Reports.WithInterviewers')"
+                    :radioGroup="true" name="expandTeams"
                     :value="expandTeams" @input="radioChanged" /> 
             </div>
-        </FilterBlock>        
+        </FilterBlock>
                 
         <FilterBlock :title="$t('Reports.ByAnswerValue')" 
                 v-if="question && question.Type == 'Numeric'">
@@ -37,23 +43,22 @@
                             @input="inputChange" 
                             v-validate.initial="{ max_value: max }"
                             :value="min">
-                    </div>        
+                    </div>
                 </div>
                 <div class="col-xs-6">
                     <div class="form-group" v-bind:class="{'has-error': errors.has('max')}"
-                        :title="errors.first('max')"
-                        >
+                        :title="errors.first('max')">
                         <label for="max">{{ $t("Reports.Max") }}</label>
                         <input type="number" class="form-control input-sm" 
-                            :placeholder="$t('Reports.Max')"                            
+                            :placeholder="$t('Reports.Max')"
                             v-validate.initial="{ min_value: min }"
                             name="max" @input="inputChange" 
-                            :value="max">                     
+                            :value="max">
                     </div>
                 </div>
             </div>
             
-        </FilterBlock>            
+        </FilterBlock>
 
         <template v-if="question != null && question.SupportConditions">
             <FilterBlock :title="$t('Reports.ConditionQuestion')">
@@ -67,13 +72,13 @@
                   <Checkbox :label="$t('Reports.PivotView')" name="pivot"
                     :value="query.pivot" @input="checkedChange" />
 
-                <ul class="list-group small" v-if="!query.pivot">                
+                <ul class="list-group small" v-if="!query.pivot">
                     <li class="list-group-item pointer"
-                        v-for="answer in condition.Answers" :key="answer.Answer"                    
+                        v-for="answer in condition.Answers" :key="answer.Answer"
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer)}"
                         @click="selectConditionAnswer(answer.Answer)" >
                         {{answer.Answer}}. {{answer.Text}}
-                    </li>                    
+                    </li>
                 </ul>
             </template>
         </template>
@@ -111,10 +116,10 @@ export default {
            if(this.selectedQuestion == null){
                this.loadQuestions(to)
            }
-       }           
+       }
    },
 
-  async mounted() {      
+  async mounted() {
     await this.loadQuestionnaires();
 
     if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0) {
@@ -141,22 +146,23 @@ export default {
             this.questionnaires = await this.$hq
               .Report.SurveyStatistics
               .Questionnaires()
+
         } finally {
             this.loading.questionnaire = false
         }
     },
 
-    async loadQuestions(questionnaireId = null) {
+    async loadQuestions(questionnaireId = null, version = null) {
         if(questionnaireId == null && this.query.questionnaireId == null)
             return
         const id = questionnaireId || this.query.questionnaireId
-        
+
         this.loading.questions = true
 
         try {   
             this.questions = await this.$hq
                 .Report.SurveyStatistics
-                .Questions(id); 
+                .Questions(id, version || this.query.version);
         } finally {
             this.loading.questions = false
         }
@@ -178,6 +184,14 @@ export default {
 
         const question = _.find(this.questionsList, 'key', this.query.questionId)
         this.selectQuestion(question)
+    },
+
+    async selectQuestionnaireVersion(id) {
+        const version = id == null ? null : id.key
+
+        await this.loadQuestions(this.selectedQuestionnaire.key, version)
+
+        this.onChange(query => query.version = version)
     },
 
     selectQuestion(id) {
@@ -236,14 +250,14 @@ export default {
         this.changesQueue.push(change)
         const self = this
         
-        if(wereEmpty) {            
+        if(wereEmpty) {
             Vue.nextTick(() => {
                 const changes = self.changesQueue
                 self.changesQueue = []
 
                 self.applyChanges(changes)
             })
-        }        
+        }
     },
 
     applyChanges(changes) {
@@ -252,7 +266,7 @@ export default {
         // apply accumulated changes to query
         changes.forEach(change => change(data))
 
-        const state = Object.assign(_.clone(this.queryString), data)       
+        const state = Object.assign(_.clone(this.queryString), data)
         this.updateRoute(state)
     },
 
@@ -284,6 +298,7 @@ export default {
 
         const filter = Object.assign({
             questionnaire: this.questionnaire,
+            version: this.version,
             question: this.question,
             condition: this.condition,
             conditionAnswers: this.conditionAnswers
@@ -305,7 +320,8 @@ export default {
             expandTeams: this.expandTeams,
             pivot: this.query.pivot,
             min: this.min,
-            max: this.max
+            max: this.max,
+            version: this.query.version == '*' ? null : this.query.version
         }
     },    
 
@@ -325,13 +341,32 @@ export default {
     
     questionnaireList() {
         return _.chain(this.questionnaires)
+            .orderBy(['Title'],['asc'])
+            .map(q => {
+                return {
+                    key: q.Id,
+                    value: q.Title
+                };
+            })
+            .uniqWith(_.isEqual)
+        .value();
+    },
+
+    questionnaireVersionsList() {
+        var val = _.chain(this.questionnaires)
+            .filter(c => this.selectedQuestionnaire != null 
+                && this.selectedQuestionnaire.key == c.Id)
             .orderBy(['Title', 'Version'],['asc', 'asc'])
             .map(q => {
                 return {
-                    key: q.Identity,
-                    value: `(ver. ${q.Version}) ${q.Title}`
+                    key: q.Version,
+                    value: `ver. ${q.Version}`
                 };
-        }).value();
+            })
+            .uniqWith(_.isEqual)
+        .value();
+
+        return val
     },
 
     questionsList() {
@@ -371,14 +406,14 @@ export default {
         
         return _.find(this.questionnaires, q => 
         { 
-            const key = q.Identity
+            const key = q.Id
             return key == this.selectedQuestionnaire.key 
         })
     },
 
     question() {
         if(this.selectedQuestion == null) return null
-        return _.find(this.questions, { Id : this.selectedQuestion.key })        
+        return _.find(this.questions, { Id : this.selectedQuestion.key })
     },
 
     condition() {
@@ -388,13 +423,19 @@ export default {
 
     conditionAnswers() {
         if(this.condition == null) return []
-        return _.filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))            
+        return _.filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))
     },
 
     // drop down
     selectedQuestionnaire() {
-        if(this.query.questionnaireId == null) return null        
+        if(this.query.questionnaireId == null) return null
         return _.find(this.questionnaireList, { key : this.query.questionnaireId })
+    },
+
+    selectedQuestionnaireVersion() {
+        let key = parseInt(this.query.version)
+        key = key == NaN ? null : key
+        return _.find(this.questionnaireVersionsList, { key })
     },
 
     // drop down

@@ -42,7 +42,7 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
-                                                    this.userInteractionService.HasPendingUserInterations ||
+                                                    this.userInteractionService.HasPendingUserInteractions ||
                                                     this.userInterfaceStateService.IsUserInterfaceLocked ||
                                                     this.userInterfaceStateService.HasPendingThrottledActions;
 

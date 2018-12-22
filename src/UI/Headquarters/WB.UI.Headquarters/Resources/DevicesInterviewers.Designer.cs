@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewers.
+        /// </summary>
+        public static string Interviewers {
+            get {
+                return ResourceManager.GetString("Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Less than 100MB free space.
         /// </summary>
         public static string LowStorage {
@@ -133,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total.
+        ///   Looks up a localized string similar to Team size.
         /// </summary>
         public static string TeamSize {
             get {

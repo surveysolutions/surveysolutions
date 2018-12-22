@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -26,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ObservableCollection<ErrorMessageViewModel> ValidationErrors { get; } = new ObservableCollection<ErrorMessageViewModel>();
         
-        public void ChangeValidationErrors(IEnumerable<string> errors)
+        public void ChangeValidationErrors(IEnumerable<string> errors, Identity entityIdentity)
         {
             this.ValidationErrors.ForEach(x => x.Dispose());
             this.ValidationErrors.Clear();
@@ -39,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     ? UIResources.Error
                     : error;
 
-                errorViewModel.InitAsStatic(errorText);
+                errorViewModel.InitAsStatic(errorText, entityIdentity);
+                
 
                 this.ValidationErrors.Add(errorViewModel);
             }

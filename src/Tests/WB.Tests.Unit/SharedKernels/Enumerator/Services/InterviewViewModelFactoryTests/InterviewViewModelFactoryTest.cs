@@ -4,6 +4,7 @@ using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -40,11 +41,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
             var settings = Mock.Of<IInterviewerSettings>(s => s.ShowVariables == false);
             var navigationState = Mock.Of<NavigationState>();
 
-            Setup.InstanceToMockedServiceLocator(
-                Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance<TextQuestionViewModel>())
+                .Returns(Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
                     questionnaireStorage: questionnaireStorage));
 
-            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, null, settings);
+            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, settings, serviceLocator.Object);
             
             
             //act

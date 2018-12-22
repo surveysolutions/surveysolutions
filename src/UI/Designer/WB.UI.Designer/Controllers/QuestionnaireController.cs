@@ -109,7 +109,7 @@ namespace WB.UI.Designer.Controllers
                     var questionnaireId = Guid.NewGuid();
 
                     var command = new CloneQuestionnaire(questionnaireId, model.Title, this.UserHelper.WebUser.UserId,
-                        model.IsPublic, sourceModel.Source);
+                        false, sourceModel.Source);
 
                     this.commandService.Execute(command);
 
