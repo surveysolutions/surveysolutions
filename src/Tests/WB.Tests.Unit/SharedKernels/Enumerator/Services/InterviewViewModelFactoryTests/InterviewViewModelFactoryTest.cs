@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
                 .Returns(Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
                     questionnaireStorage: questionnaireStorage));
 
-            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, settings, serviceLocator.Object);
+            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, serviceLocator.Object, settings);
             
             
             //act
