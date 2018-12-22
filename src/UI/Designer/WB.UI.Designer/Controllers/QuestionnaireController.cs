@@ -377,7 +377,10 @@ namespace WB.UI.Designer.Controllers
         private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascading)
         {
             if (csvFile == null)
+            {
                 this.Error(Resources.QuestionnaireController.SelectTabFile);
+                return;
+            }
 
             try
             {
