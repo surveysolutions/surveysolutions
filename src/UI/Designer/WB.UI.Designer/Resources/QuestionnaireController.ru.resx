@@ -335,4 +335,24 @@
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
     <value>Вы используете Internet Explorer который не поддерживается. Некоторые функции могут работать не правильно.</value>
   </data>
+    <data name="Column" xml:space="preserve">
+    <value>столбец</value>
+    <comment>столбец</comment>
+  </data>
+    <data name="Row" xml:space="preserve">
+    <value>строка</value>
+    <comment>строка</comment>
+  </data>
+    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Пустое значение</value>
+    <comment>Пустое значение</comment>
+  </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Неверное 32-разрядное целочисленное значение '{0}'. Значение должно быть в пределах от -2147483647 до 2147483647</value>
+    <comment>Неверное 32-разрядное целочисленное значение '{0}'. Значение должно быть в пределах от -2147483647 до 2147483647</comment>
+  </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>Родительский вопрос не содержит опцию со значением '{0}'</value>
+    <comment>Родительский вопрос не содержит опцию со значением '{0}'</comment>
+  </data>
 </root>
