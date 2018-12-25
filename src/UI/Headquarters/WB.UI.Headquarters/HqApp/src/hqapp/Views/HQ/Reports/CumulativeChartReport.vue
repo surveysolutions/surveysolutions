@@ -39,7 +39,8 @@
 
 <script>
 import queryString from "~/hqapp/components/QueryString";
-import LineChart from "./CumulativeChart";
+
+const LineChart = () => import(/* webpackChunkName: "report" */"./CumulativeChart")
 
 const timeFormat = "MM/DD/YYYY HH:mm";
 

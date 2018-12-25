@@ -5,7 +5,8 @@ using System.Linq;
 using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -14,51 +15,80 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
 
-        public ChartStatisticsViewFactory(IUnitOfWork unitOfWork)
+        public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
         {
             this.unitOfWork = unitOfWork;
+            this.questionnaires = questionnaires;
         }
 
-        private static readonly string[] AllowedStatuses =
+        private static readonly int[] AllowedStatuses =
         {
-            ((int) InterviewStatus.Completed).ToString(),
-            ((int) InterviewStatus.RejectedBySupervisor).ToString(),
-            ((int) InterviewStatus.ApprovedBySupervisor).ToString(),
-            ((int) InterviewStatus.RejectedByHeadquarters).ToString(),
-            ((int) InterviewStatus.ApprovedByHeadquarters).ToString()
+            (int) InterviewStatus.Completed,
+            (int) InterviewStatus.RejectedBySupervisor,
+            (int) InterviewStatus.ApprovedBySupervisor,
+            (int) InterviewStatus.RejectedByHeadquarters,
+            (int) InterviewStatus.ApprovedByHeadquarters
         };
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var questionnaireId = input.QuestionnaireId == null
-                ? "%"
-                : $"{input.QuestionnaireId.FormatGuid()}${input.QuestionnaireVersion?.ToString() ?? "%"}";
+            var questionnairesList =  this.questionnaires.Query(_ =>
+            {
+                var query = _.Where(q => q.IsDeleted == false);
+
+                if (input.QuestionnaireId != null)
+                {
+                    query = query.Where(q => q.QuestionnaireId == input.QuestionnaireId.Value);
+
+                    if (input.QuestionnaireVersion != null)
+                    {
+                        query = query.Where(q => q.Version == input.QuestionnaireVersion.Value);
+                    }
+                }
+
+                return query.Select(q => q.Id).ToList();
+            });
 
             // ReSharper disable StringLiteralTypo
+            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime min, DateTime max)>(
+                "select min(date), max(date) from readside.cumulativereportstatuschanges " +
+                "where questionnaireidentity = any(@questionnairesList)", new { questionnairesList });
+
+            var leftEdge = new[] { input.From ?? dates.min.AddDays(-1), input.To ?? dates.min.AddDays(-1) }.Min();
+            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max();
+            
+            var queryParams = new
+            {
+                questionnairesList,
+                AllowedStatuses,
+                // we should always build report from the very beginning, this param will ensure that data accumulated correctly
+                minDateQuery = FormatDate(new[] { input.From ?? dates.min.AddDays(-1), dates.min }.Min()),
+                minDate = FormatDate(leftEdge),
+                maxDate = FormatDate(rightEdge)
+            };
+
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
-                $@"select cum.date, cum.status, sum(sum(cum.changevalue)) over (order by cum.date)
-                    from readside.cumulativereportstatuschanges cum
-                    inner join plainstore.questionnairebrowseitems qbi on cum.questionnaireidentity = qbi.id
-                    where cum.questionnaireidentity like @questionnaire and cum.status in ({string.Join(",", AllowedStatuses)})
-                            and qbi.isdeleted = false and cum.date > @minDate and cum.date < @maxDate
-                    group by cum.date, cum.status 
-                    order by cum.date, cum.status asc", new
-                {
-                    Questionnaire = questionnaireId,
-                    minDate = input.From ?? DateTime.MinValue,
-                    maxDate = input.To ?? DateTime.MaxValue
-                });
+                $@"with 
+                        dates as (select generate_series(@minDateQuery::date,@maxDate::date, interval '1 day')::date as date),
+                        timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
+                        report as 
+                        (
+                            select span.date, span.status, 
+                                    sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
+                            from timespan as span
+                            left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                                and cum.questionnaireidentity = any(@questionnairesList)
+                            group by 1,2 order by 1
+                        )
+                       select date, status, count
+                       from report where date >= @minDate::date and date <= @maxDate::date", queryParams);
             // ReSharper restore StringLiteralTypo
-
-
+            
             var view = new ChartStatisticsView();
             var statusMap = new Dictionary<InterviewStatus, ChartStatisticsDataSet>();
             
-            DateTime? minDate = null;
-            DateTime? endDate = null;
-            DateTime? lastDate = null;
-
             foreach (var row in rawData)
             {
                 if (!statusMap.ContainsKey(row.status))
@@ -66,47 +96,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     var dSet = new ChartStatisticsDataSet {Status = row.status};
                     statusMap.Add(row.status, dSet);
                     view.DataSets.Add(dSet);
-
-                    if (minDate != null && row.date > minDate)
-                    {
-                        // filling in zero values at beginning
-                        var date = minDate.Value;
-                        while (date != row.date)
-                        {
-                            dSet.Add(FormatDate(date), 0);
-                            date = date.AddDays(1);
-                        }
-                    }
-                }
-
-                if (lastDate != null && lastDate != row.date)
-                {
-                    do
-                    {
-                        foreach (var set in view.DataSets)
-                        {
-                            set.FillGap(FormatDate(lastDate.Value));
-                        }
-
-                        lastDate = lastDate.Value.AddDays(1);
-                    } while (lastDate != row.date);
                 }
 
                 var dataSet = statusMap[row.status];
                 dataSet.Add(FormatDate(row.date), row.count);
-
-                if (minDate == null)
-                {
-                    minDate = row.date;
-                }
-
-                endDate = row.date;
-                lastDate = row.date;
             }
-            
-            view.From = minDate.HasValue ? FormatDate(minDate.Value) : null;
-            view.To = endDate.HasValue ? FormatDate(endDate.Value) : null;
-            view.StartDate = minDate.HasValue ? FormatDate(minDate.Value.AddDays(-1)) : null;
+
+            view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
+            view.From = FormatDate(leftEdge);
+            view.To = FormatDate(rightEdge);
+            //view.StartDate = minDate.HasValue ? FormatDate(minDate.Value.AddDays(-1)) : null;
 
             return view;
         }

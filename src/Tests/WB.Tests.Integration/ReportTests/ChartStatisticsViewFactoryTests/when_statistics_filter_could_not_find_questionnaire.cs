@@ -4,7 +4,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     public class when_statistics_filter_could_not_find_questionnaire : ChartStatisticsViewFactoryTestsContext
     {
@@ -32,11 +32,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_have_0_lines() => view.Lines.Length.Should().Be(0);
+        public void should_have_0_lines() => view.DataSets.Count.Should().Be(0);
 
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
-        private static DateTime baseDate;
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
+        private DateTime baseDate;
     }
 }
