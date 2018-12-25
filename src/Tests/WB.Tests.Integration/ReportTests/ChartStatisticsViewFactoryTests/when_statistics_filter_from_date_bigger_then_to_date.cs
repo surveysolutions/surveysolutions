@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     internal class when_statistics_filter_from_date_bigger_then_to_date : ChartStatisticsViewFactoryTestsContext
     {
@@ -50,11 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         [Test]
         public void should_have_0_lines() =>
-            view.Lines.Length.Should().Be(0);
+            view.DataSets.Count.Should().Be(0);
 
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
-        private static DateTime baseDate;
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
+        private DateTime baseDate;
     }
 }

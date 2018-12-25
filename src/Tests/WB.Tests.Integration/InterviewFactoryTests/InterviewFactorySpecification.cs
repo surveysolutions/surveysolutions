@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -54,6 +55,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
+                    typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
@@ -72,6 +74,11 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var test = new PostgreReadSideStorage<CumulativeReportStatusChange, string>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            var change = Create.Entity.CumulativeReportStatusChange("sdfsd", Guid.NewGuid(),
+                1, DateTime.Now, InterviewStatus.Completed, 1, Guid.NewGuid(), 1);
+
+            test.Store(change, change.EntryId);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     public class when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count : ChartStatisticsViewFactoryTestsContext
     {
@@ -72,8 +70,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void should_set_3rd_point_vertical_size_of_all_lines_equal_to_3() =>
             view.Lines.Should().OnlyContain(line => (int)line[2][1] == 3);
 
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
     }
 }
