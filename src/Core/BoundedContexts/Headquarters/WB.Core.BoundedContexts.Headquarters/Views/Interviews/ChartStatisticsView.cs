@@ -12,40 +12,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public string From { get; set; }
         public string To { get; set; }
         public string StartDate { get; set; }
-
-        public void FillGaps(DateTime? min, DateTime? max)
-        {
-            foreach (var chartStatisticsDataSet in DataSets)
-            {
-                chartStatisticsDataSet.FillGaps(min, max);
-            }
-        }
     }
 
     public class ChartStatisticsDataSet
     {
+        [Newtonsoft.Json.JsonIgnore]
+        internal bool AllZeros { get; set; } = true;
         public InterviewStatus Status { get; set; }
         public List<Point> Data { get; set; } = new List<Point>();
-
-        public void FillGap(object x)
+        
+        public void Add(object x, long y)
         {
-            if (Data.Count > 0)
-            {
-                if (Data.Last().X.Equals(x))
-                {
-                    return;
-                }
+            if (y != 0) AllZeros = false;
 
-                Add(x, Data.Last().Y);
-            }
-            else
-            {
-                Add(x, 0);
-            }
-        }
-
-        public void Add(object x, object y)
-        {
             if (Data.Count > 0 && Data.Last().X.Equals(x))
             {
                 Data.Last().Y = y;
@@ -58,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
         public class Point
         {
-            public Point(object x, object y)
+            public Point(object x, long y)
             {
                 X = x;
                 Y = y;
@@ -68,19 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
             public object X { get; set; }
 
             [Newtonsoft.Json.JsonProperty("y")]
-            public object Y { get; set; }
-        }
-        
-        public void FillGaps(DateTime? min, DateTime? max)
-        {
-            if (min == null) return;
-
-            var current = min;
-
-            foreach (var point in Data)
-            {
-                    //if(point.)
-            }
+            public long Y { get; set; }
         }
     }
 }
