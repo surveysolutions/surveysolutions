@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -48,7 +49,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             });
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+                Mock.Of<IMvxMessenger>(), 
+                new SynchronizationCompleteSource(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<ILogger>());
 
             var viewFactory = CreateViewFactory();
 
@@ -83,7 +87,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             });
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+                Mock.Of<IMvxMessenger>(),
+                new SynchronizationCompleteSource(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<ILogger>());
 
             var viewFactory = CreateViewFactory();
 
