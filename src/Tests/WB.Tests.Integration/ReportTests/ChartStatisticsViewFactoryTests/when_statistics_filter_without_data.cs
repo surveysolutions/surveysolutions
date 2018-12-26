@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
@@ -44,11 +42,17 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [Test]
         public void should_each_line_has_2_days_inside() => view.DataSets.Should().OnlyContain(line => line.Data.Count == 2);
 
-        //[Test]
-        //public void should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1() => view.DataSets.Should().OnlyContain(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[0][1] == 1);
+        [Test]
+        public void should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1() 
+            => view.DataSets.Should().OnlyContain(line => 
+                line.Data[0].X.ToString() == baseDate.AddDays(-2).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) 
+                && (int)line.Data[0].Y == 1);
 
-        //[Test]
-        //public void should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1() => view.DataSets.Should().OnlyContain(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
+        [Test]
+        public void should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1() 
+            => view.DataSets.Should().OnlyContain(line => 
+                line.Data[1].X.ToString() == baseDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) 
+                && (int)line.Data[1].Y== 1);
 
         private ChartStatisticsViewFactory chartStatisticsViewFactory;
         private ChartStatisticsInputModel input;

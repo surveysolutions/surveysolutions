@@ -10,14 +10,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_null_from_and_on_day_after.cs" />
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request_one_day_before_and_after.cs" />
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_3_days_with_incremental_data_for_each_count.cs" />
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_building_view_from_statistics_which_has_zeroes_for_2_headquarters_statuses_and_for_completed_status.cs" />
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_statistics_filter_could_not_find_questionnaire.cs" />
-    <Compile Remove="ReportTests\ChartStatisticsViewFactoryTests\when_statistics_filter_from_date_bigger_then_to_date.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
