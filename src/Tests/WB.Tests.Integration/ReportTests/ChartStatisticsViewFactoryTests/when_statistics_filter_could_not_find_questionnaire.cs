@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
             baseDate = new DateTime(2014, 8, 22);
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: null);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
 
             input = new ChartStatisticsInputModel
             {

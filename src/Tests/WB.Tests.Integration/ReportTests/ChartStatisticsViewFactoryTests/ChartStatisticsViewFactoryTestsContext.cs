@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Moq;
 using NHibernate;
@@ -132,6 +133,15 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             }
 
             this.UnitOfWork.Session.Flush();            
+        }
+
+        protected void AddInterviewStatuses(QuestionnaireIdentity questionnaireId, DateTime date,
+            params InterviewStatus[][] statuses)
+        {
+            foreach (var interviewStatuses in statuses)
+            {
+                AddInterviewStatuses(questionnaireId, Guid.NewGuid(), interviewStatuses.Select(i => (date, i)).ToArray());
+            }
         }
 
         private IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
