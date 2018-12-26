@@ -1871,7 +1871,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode don&apos;t allow to use nested rosters..
+        ///   Looks up a localized string similar to Plain mode doesn&apos;t allow to use nested rosters..
         /// </summary>
         public static string WB0279_PlainModeGroupContainsNestedGroup {
             get {

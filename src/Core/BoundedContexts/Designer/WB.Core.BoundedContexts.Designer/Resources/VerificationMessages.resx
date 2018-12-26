@@ -721,6 +721,6 @@
     <value>Plain mode allowed only for rosters with no more then {0} elements.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
-    <value>Plain mode don't allow to use nested rosters.</value>
+    <value>Plain mode doesn't allow to use nested rosters.</value>
   </data>
 </root>
