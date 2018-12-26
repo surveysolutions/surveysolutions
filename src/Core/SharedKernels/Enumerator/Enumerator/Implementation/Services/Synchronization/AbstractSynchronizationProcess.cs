@@ -85,6 +85,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await step.ExecuteAsync();
             }
         }
+
+        public async Task ForceUpdateAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
+            SynchronizationStatistics statistics)
+        {
+            var updateAppStep = this.serviceLocator.GetInstance<UpdateApplication>();
+
+            var context = new EnumeratorSynchonizationContext
+            {
+                Progress = progress,
+                CancellationToken = cancellationToken,
+                Statistics = statistics
+            };
+
+            cancellationToken.ThrowIfCancellationRequested();
+            updateAppStep.Context = context;
+            await updateAppStep.ExecuteAsync();
+        }
         
         protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
         {
@@ -229,7 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
+                await CanSynchronizeAsync(progress, cancellationToken, statistics);
 
                 await CheckAfterStartSynchronization(cancellationToken);
 
@@ -445,6 +462,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.RestCredentials.Password = newPassword;
                     await this.SynchronizeAsync(progress, cancellationToken);
                 }
+            }
+        }
+
+        private async Task CanSynchronizeAsync(IProgress<SyncProgressInfo> progress, 
+            CancellationToken cancellationToken,
+            SynchronizationStatistics statistics)
+        {
+            try
+            {
+                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
+            }
+            catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
+            {
+                await ForceUpdateAsync(progress, cancellationToken, statistics);
+
+                throw;
             }
         }
 
