@@ -377,6 +377,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         {
                             Title = InterviewerUIResources.UpgradeRequired,
                             Status = SynchronizationStatus.Fail,
+                            IsApplicationUpdateRequired = true,
                             Statistics = statistics,
                             Stage = SyncStage.FailedUpgradeRequired
                         });

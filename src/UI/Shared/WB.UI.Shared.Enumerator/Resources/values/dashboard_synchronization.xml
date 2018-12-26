@@ -34,6 +34,15 @@
     <item name="android:padding">@dimen/button_shadow_margin</item>
   </style>
 
+  <style name="Dashboard_Synchronization_Update_Text" parent="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/colorBlueThemePrimary</item>
+    <item name="android:layout_alignParentTop">true</item>
+    <item name="android:layout_alignParentLeft">true</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:padding">@dimen/button_shadow_margin</item>
+  </style>
+
   <style name="Dashboard_Synchronization_Holder">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/Dashboard_Synchronization_Statistics_Height</item>
