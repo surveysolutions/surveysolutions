@@ -40,20 +40,20 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         public void should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_19() =>
             view.DataSets.Should().OnlyContain(line => (string)line.Data[0].X == "2014-08-20");
 
-        //[Test]
-        //public void should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
-        //    view.DataSets.Should().OnlyContain(line => (string)line[1][0] == "2014-08-21");
+        [Test]
+        public void should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
+            view.DataSets.Should().OnlyContain(line => (string)line.Data[1].X == "2014-08-21");
 
 
-        //[Test]
-        //public void should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-        //    view.DataSets.Should().OnlyContain(line => (int) line[0][1] == 0);
+        [Test]
+        public void should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
+            view.DataSets.Should().OnlyContain(line => (int)line.Data[0].Y == 0);
 
-        //[Test]
-        //public void should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-        //    view.DataSets.Should().OnlyContain(line => (int) line[1][1] == 1);
+        [Test]
+        public void should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
+            view.DataSets.Should().OnlyContain(line => (int)line.Data[1].Y == 1);
 
-        
+
         private ChartStatisticsViewFactory chartStatisticsViewFactory;
         private ChartStatisticsInputModel input;
         private ChartStatisticsView view;

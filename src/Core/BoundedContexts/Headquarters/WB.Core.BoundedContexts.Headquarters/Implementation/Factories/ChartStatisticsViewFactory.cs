@@ -52,32 +52,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             });
 
             // ReSharper disable StringLiteralTypo
-            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime min, DateTime max)>(
+            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
                 "select min(date), max(date) from readside.cumulativereportstatuschanges " +
                 "where questionnaireidentity = any(@questionnairesList)", new { questionnairesList });
 
-            var leftEdge = new[] { input.From ?? dates.min.AddDays(-1), input.To ?? dates.min.AddDays(-1) }.Min();
-            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max();
+            if (dates.min == null && dates.max == null) // we have no data at all
+            {
+                return new ChartStatisticsView();
+            }
+
+            var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
+            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max() ?? DateTime.MaxValue;
             
             var queryParams = new
             {
                 questionnairesList,
                 AllowedStatuses,
                 // we should always build report from the very beginning, this param will ensure that data accumulated correctly
-                minDateQuery = FormatDate(new[] { input.From ?? dates.min.AddDays(-1), dates.min }.Min()),
+                minDateQuery = FormatDate(new[] { input.From ?? dates.min?.AddDays(-1), dates.min }.Min() ?? DateTime.MinValue),
                 minDate = FormatDate(leftEdge),
                 maxDate = FormatDate(rightEdge)
             };
 
+            // dates CTE will generate gape-less interval of dates
+            // timespan CTE will produce cross product of dates and available statuses
+            // report CTE will produce report over all data
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
-                $@"with 
+                @"with 
                         dates as (select generate_series(@minDateQuery::date,@maxDate::date, interval '1 day')::date as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
                         (
                             select span.date, span.status, 
                                     sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
-                            from timespan as span
+                            from timespan as span  
                             left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
                                 and cum.questionnaireidentity = any(@questionnairesList)
                             group by 1,2 order by 1

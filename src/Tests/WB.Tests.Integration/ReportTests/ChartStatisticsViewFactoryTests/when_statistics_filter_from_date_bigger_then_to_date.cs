@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
@@ -13,24 +14,18 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         [OneTimeSetUp]
         public void Establish()
         {
-            var questionnaireId = Guid.NewGuid();
+            var qid = Create.Entity.QuestionnaireIdentity();
             baseDate = new DateTime(2014, 8, 22);
 
-            var data = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
-            {
-                {
-                    baseDate,
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 7)
-                }
-            });
+            CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(qid, baseDate, 7);
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
 
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = baseDate,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = 1,
+                QuestionnaireId = qid.QuestionnaireId,
+                QuestionnaireVersion = qid.Version,
                 From = baseDate.AddDays(-1),
                 To = baseDate.AddDays(-2)
             };
