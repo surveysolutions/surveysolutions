@@ -233,12 +233,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (!questionnaireDocument.IsPublic)
                 return;
 
-            var entities = ((IComposite)questionnaireDocument).TreeToEnumerable(e => e.Children);
+            var entities = questionnaireDocument.Children.TreeToEnumerable(e => e.Children);
             foreach (var entity in entities)
             {
                 SearchStorage.AddOrUpdateEntity(questionnaireId, entity);
             }
         }
-
     }
 }
