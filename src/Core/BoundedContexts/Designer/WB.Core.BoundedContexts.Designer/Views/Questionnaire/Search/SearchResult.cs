@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 {
     public class SearchResult
     {
-        public List<SearchResultEntity> Items { get; set; }
+        public IList<SearchResultEntity> Items { get; set; }
         public int TotalCount { get; set; }
     }
 }
