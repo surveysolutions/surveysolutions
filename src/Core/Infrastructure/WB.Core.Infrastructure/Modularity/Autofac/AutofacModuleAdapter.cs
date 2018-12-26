@@ -89,6 +89,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
+        public void BindWithConstructorArgument<TInterface1, TInterface2, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface1, TInterface2
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>()
+                .WithParameter(argumentName, argumentValue);
+        }
+
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()

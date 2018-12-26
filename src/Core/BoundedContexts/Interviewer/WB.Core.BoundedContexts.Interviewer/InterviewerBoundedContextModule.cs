@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerDownloadInterviews>("sortOrder", 40);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 60);
-            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUpdateApplication>("sortOrder", 70);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UpdateApplication, InterviewerUpdateApplication>("sortOrder", 70);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
