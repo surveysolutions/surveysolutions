@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public async Task ForceUpdateAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
             SynchronizationStatistics statistics)
         {
-            var updateAppStep = this.serviceLocator.GetInstance<UpdateApplication>();
+            var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
 
             var context = new EnumeratorSynchonizationContext
             {
