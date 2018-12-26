@@ -322,6 +322,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201806041250_RemoveObsoleteTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201812211517_FillQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
     <Compile Include="Models\AddCommentModel.cs" />

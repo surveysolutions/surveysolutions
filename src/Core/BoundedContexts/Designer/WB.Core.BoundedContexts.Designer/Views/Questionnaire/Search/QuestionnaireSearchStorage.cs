@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Dapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
@@ -20,36 +25,68 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
         public void AddOrUpdateEntity(Guid questionnaireId, IComposite composite)
         {
-            var isQuestion = composite is IQuestion;
-            if (!isQuestion)
-                throw new ArgumentException("composite type is not supported " + composite.GetType());
+            if (!(composite is IQuestion)
+                && !(composite is IVariable)
+                && !(composite is IGroup)
+                && !(composite is IStaticText))
+            {
+                throw new ArgumentException("AddOrUpdateEntity type is not supported " + composite.GetType());
+            }
 
-            var sql = $"INSERT INTO {TableNameWithSchema} s (questionnaireid, entityid, entity, searchtext)" +
-                      $"VALUES(:questionnaireId, :entityid, :entity, :searchtext) " +
+            var sql = $"INSERT INTO {TableNameWithSchema} (title, questionnaireid, entityid, entitytype, sectionid, searchtext)" +
+                      $"VALUES(@title, @questionnaireId, @entityid, @entityType, @sectionid, to_tsvector(@searchtext)) " +
                       $"ON CONFLICT (questionnaireid, entityid) DO UPDATE " +
-                      $"SET questionnaireid = :questionnaireId," +
-                      $"    entityid        = :entityId," +
-                      $"    entity          = :entity," +
-                      $"    searchtext      = :searchText";
+                      $"SET questionnaireid = @questionnaireId," +
+                      $"    title           = @title," +
+                      $"    entityid        = @entityId," +
+                      $"    entitytype      = @entityType," +
+                      $"    sectionid       = @sectionId," +
+                      $"    searchtext      = to_tsvector(@searchText)";
 
-            var query = unitOfWork.Session.CreateQuery(sql);
-            query.SetParameter("questionnaireId", questionnaireId);
-            query.SetParameter("entityId", composite.PublicKey);
-            query.SetParameter("entity", composite);
-            query.SetParameter("searchText", GetTextUsedForSerach(composite));
-            query.ExecuteUpdate();
+            unitOfWork.Session.Connection.Execute(sql, new
+            {
+                title = composite.GetTitle(),
+                questionnaireId = questionnaireId,
+                entityId = composite.PublicKey,
+                entityType = GetEntityType(composite),
+                sectionId = composite.PublicKey,
+                searchText = GetTextUsedForSearch(composite)
+            });
         }
 
-        private string GetTextUsedForSerach(IComposite composite)
+        private string GetEntityType(IComposite composite)
         {
-            return composite.GetTitle();
+            if (composite is IQuestion)
+                return ChapterItemType.Question.ToString();
+            if (composite is IVariable)
+                return ChapterItemType.Variable.ToString();
+            if (composite is IStaticText)
+                return ChapterItemType.StaticText.ToString();
+            if (composite is IGroup)
+                return ChapterItemType.Group.ToString();
+
+            throw new ArgumentException("Unsupported entity type: " + composite.GetType().Name);
+        }
+
+        private string GetTextUsedForSearch(IComposite composite)
+        {
+            var textUsedForSearch = composite.GetTitle();
+            if (composite is IQuestion question)
+            {
+                if (question.QuestionType == QuestionType.SingleOption
+                    || question.QuestionType == QuestionType.MultyOption)
+                {
+                    question.Answers.Aggregate(textUsedForSearch, (text, answer)  => text + Environment.NewLine + answer.AnswerText);
+                }
+            }
+            return textUsedForSearch;
         }
 
         public void Remove(Guid questionnaireId, Guid entityId)
         {
             var sql = $"DELETE from {TableNameWithSchema} s " +
                       $"WHERE s.questionnaireid = :questionnaireId " +
-                      $"AND s.entityid =  :entityId";
+                      $"  AND s.entityid        = :entityId";
             var query = unitOfWork.Session.CreateQuery(sql);
             query.SetParameter("questionnaireId", questionnaireId);
             query.SetParameter("entityId", entityId);
@@ -65,9 +102,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             query.ExecuteUpdate();
         }
 
+        /*
+        public string Title { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public Guid? FolderId { get; set; }
+        public string FolderName { get; set; }
+        public Guid QuestionnaireId { get; set; }
+        public Guid SectionId { get; set; }
+        public Guid EntityId { get; set; }
+        public string EntityType { get; set; }
+*/
+
         public SearchResult Search(SearchInput input)
         {
-            return null;
+            var order = input.OrderBy ?? "title";
+
+            var sql = $"SELECT * from {TableNameWithSchema} s " +
+                      //$"WHERE s.folderid = :folderid " +
+                      $"  WHERE searchtext_{TableName}_idx @@ to_tsquery(:query)" +
+                      $"ORDER BY :order ASC" +
+                      $"LIMIT :pageSize; ";
+            var query = unitOfWork.Session.CreateQuery(sql);
+            query.SetParameter("query", input.Query);
+            query.SetParameter("pageSize", input.PageSize);
+            query.SetParameter("order", order);
+
+            var searchResultEntities = query.List<SearchResultEntity>();
+
+            var searchResult = new SearchResult();
+            searchResult.Items = searchResultEntities;
+            searchResult.TotalCount = searchResultEntities.Count;
+            return searchResult;
         }
     }
 
