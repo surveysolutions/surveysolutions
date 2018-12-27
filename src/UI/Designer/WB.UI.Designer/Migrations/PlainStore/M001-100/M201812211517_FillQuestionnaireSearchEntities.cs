@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.UI.Designer.Migrations.PlainStore
@@ -48,6 +49,10 @@ namespace WB.UI.Designer.Migrations.PlainStore
                             || entity is IGroup
                             || entity is IStaticText)
                         {
+                            var title = entity.GetTitle();
+                            if (string.IsNullOrWhiteSpace(title))
+                                continue;
+
                             questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
                         }
                     }
