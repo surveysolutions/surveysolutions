@@ -581,7 +581,7 @@
     <value>Вставить</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Добавить опцию</value>
+    <value>Добавить категорию</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Поле с каскадным списком</value>

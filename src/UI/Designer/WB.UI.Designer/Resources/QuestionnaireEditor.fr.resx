@@ -466,7 +466,7 @@
     <value>Ajouter une instruction pour l'enquêteur</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Ajouter une option</value>
+    <value>Ajouter une catégorie</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Cascading combo box</value>
