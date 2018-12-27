@@ -5,5 +5,6 @@
         public string Title { get; set; }
         public int Value { get; set; }
         public int? ParentValue { get; set; }
+        public string TitleWithParentIds { get; set; }
     }
 }

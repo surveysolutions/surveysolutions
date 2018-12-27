@@ -25,10 +25,15 @@ namespace Main.Core.Entities.SubEntities
             return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
         }
 
-        public int GetParsedParentValue()
+        public int? GetParsedParentValue()
         {
-            decimal parsedParentValue = this.ParentCode ?? decimal.Parse(this.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture);
-            return Convert.ToInt32(parsedParentValue);
+            if (this.ParentCode.HasValue)
+                return (int) this.ParentCode;
+
+            if (string.IsNullOrEmpty(this.ParentValue)) return null;
+
+            int.TryParse(this.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out var parsedParentValue);
+            return parsedParentValue;
         }
 
         public static Answer CreateFromOther(Answer answer)
