@@ -21,7 +21,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             this.Create.Table(tableName)
-                .WithColumn("title").AsString()
+                .WithColumn("title").AsString().Nullable()
                 .WithColumn("questionnaireid").AsGuid()
                 .WithColumn("entityid").AsGuid()
                 .WithColumn("entitytype").AsString()
