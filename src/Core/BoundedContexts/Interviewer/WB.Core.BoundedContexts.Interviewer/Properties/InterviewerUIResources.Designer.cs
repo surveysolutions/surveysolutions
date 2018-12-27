@@ -1726,6 +1726,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Synchronization_UpdateApp {
+            get {
+                return ResourceManager.GetString("Synchronization_UpdateApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to completed assignments.
         /// </summary>
         public static string Synchronization_Upload_CompletedAssignments_Text {

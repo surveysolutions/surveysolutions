@@ -2327,12 +2327,11 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false, int? howManyMajorReleaseDontNeedUpdate = 0)
+        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false)
         {
             return new InterviewerSettings()
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
-                HowManyMajorReleaseDontNeedUpdate =  howManyMajorReleaseDontNeedUpdate
             };
         }
     }

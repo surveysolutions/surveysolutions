@@ -36,7 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+                Mock.Of<IMvxMessenger>(),
+                new SynchronizationCompleteSource(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<ILogger>());
 
             var viewModel = CreateDashboardViewModel(
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,

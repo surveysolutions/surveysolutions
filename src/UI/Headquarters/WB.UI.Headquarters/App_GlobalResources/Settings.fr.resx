@@ -186,10 +186,4 @@
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
     <value>Mises à jour automatiques des applications Android activées</value>
   </data>
-  <data name="InterviewerSettings_Description" xml:space="preserve">
-    <value>Certains paramètres spécifiques par la version Android de l'application Interviewer</value>
-  </data>
-  <data name="InterviewerSettings_Title" xml:space="preserve">
-    <value>Paramètres de l'application Interviewer</value>
-  </data>
 </root>

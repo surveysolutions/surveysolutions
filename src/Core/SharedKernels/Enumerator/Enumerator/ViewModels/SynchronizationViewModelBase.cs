@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private SynchronizationStatus status;
         private bool synchronizationErrorOccured;
         private bool hasUserAnotherDevice;
+        private bool isUpdateRequired;
 
         public SynchronizationStatistics Statistics
         {
@@ -52,6 +53,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty( ref this.hasUserAnotherDevice, value);
         }
 
+        public virtual bool IsUpdateRequired
+        {
+            get => this.isUpdateRequired;
+            set => SetProperty( ref this.isUpdateRequired, value);
+        }
+
         public string ProcessOperation
         {
             get => this.processOperation;
@@ -81,6 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
 
                     this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
+                    this.IsUpdateRequired = syncProgressInfo.IsApplicationUpdateRequired;
 
                     if (!syncProgressInfo.IsRunning)
                     {

@@ -1,4 +1,4 @@
-import Assignments from "./Assignments"
+import Assignments from "./HqAssignments"
 import CreateNew from "./CreateNew"
 import localStore from "./store"
 

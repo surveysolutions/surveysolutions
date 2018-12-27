@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
@@ -83,6 +84,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 step.Context = context;
                 await step.ExecuteAsync();
             }
+        }
+
+        public async Task ForceUpdateAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
+            SynchronizationStatistics statistics)
+        {
+            var updateAppStep = this.serviceLocator.GetInstance<IUpdateApplicationSynchronizationStep>();
+
+            var context = new EnumeratorSynchonizationContext
+            {
+                Progress = progress,
+                CancellationToken = cancellationToken,
+                Statistics = statistics
+            };
+
+            cancellationToken.ThrowIfCancellationRequested();
+            updateAppStep.Context = context;
+            await updateAppStep.ExecuteAsync();
         }
         
         protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
@@ -228,7 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
+                await CanSynchronizeAsync(progress, cancellationToken, statistics);
 
                 await CheckAfterStartSynchronization(cancellationToken);
 
@@ -274,7 +292,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Success_Title,
-                    Description = SuccessDescription, 
+                    Description = SuccessDescription,
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics,
                     Stage = SyncStage.Success
@@ -376,6 +394,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         {
                             Title = InterviewerUIResources.UpgradeRequired,
                             Status = SynchronizationStatus.Fail,
+                            IsApplicationUpdateRequired = true,
                             Statistics = statistics,
                             Stage = SyncStage.FailedUpgradeRequired
                         });
@@ -392,6 +411,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                 }
+            }
+            catch (MissingPermissionsException ex)
+            {
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = InterviewerUIResources.Synchronization_Fail_Title,
+                    Description = ex.Message,
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics,
+                    Stage = SyncStage.Failed
+                });
             }
             catch (Exception ex)
             {
@@ -432,6 +462,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.RestCredentials.Password = newPassword;
                     await this.SynchronizeAsync(progress, cancellationToken);
                 }
+            }
+        }
+
+        private async Task CanSynchronizeAsync(IProgress<SyncProgressInfo> progress, 
+            CancellationToken cancellationToken,
+            SynchronizationStatistics statistics)
+        {
+            try
+            {
+                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
+            }
+            catch (SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.UpgradeRequired)
+            {
+                await ForceUpdateAsync(progress, cancellationToken, statistics);
+
+                throw;
             }
         }
 

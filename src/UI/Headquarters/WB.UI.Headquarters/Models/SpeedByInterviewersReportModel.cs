@@ -14,8 +14,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public Guid? SupervisorId { get; set; }
         public DateTime From { get; set; }
-        public Guid QuestionnaireId { get; set; }
-        public long QuestionnaireVersion { get; set; }
+        public Guid? QuestionnaireId { get; set; }
+        public long? QuestionnaireVersion { get; set; }
         public string Period { get; set; }
         public int ColumnCount { get; set; }
         public InterviewExportedAction[] InterviewStatuses { get; set; }
