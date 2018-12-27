@@ -1,7 +1,7 @@
 ﻿<div class="modal-header blue-strip handle">
     <button type="button" class="close" aria-hidden="true" ng-click="$close()"></button>
     <h3 class="modal-title">
-        {{'ClassificationsTitle' | i18next}}
+        {{'QuestionsSearchTitle' | i18next}}
     </h3>
 </div>
 <div class="modal-body">
@@ -34,7 +34,7 @@
                 </div>   
             </div><!-- /input-group -->
         </form>
-        <span class="group-summary pull-right">{{ totalResults }} classifications</span>
+        <span class="group-summary pull-right">{{ totalResults }} {{'QuestionsSearchEntities' | i18next}}</span>
     </div>
     <perfect-scrollbar class="scroller">
         <div class="tile-wrapper">
@@ -43,17 +43,17 @@
                     <h4><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
                     <h5>{{searchResult.questionnaireTitle}}</h5>
                     <div class="tile-footer clearfix">
-                        <a class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
+                        <a ng-if="searchResult.hasFolder" class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
                         <button class="btn btn-link add-button" ng-click="pasteEntity(searchResult)">{{'Add' | i18next}}</button>
                     </div>
                 </div>
             </div>
             <div class="tile-column">
                 <div class="tile" ng-repeat="searchResult in searchResult2">
-                    <h4>{{searchResult.title}}</h4>
+                    <h4><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
                     <h5>{{searchResult.questionnaireTitle}}</h5>
                     <div class="tile-footer clearfix">
-                        <a class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
+                        <a ng-if="searchResult.hasFolder" class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
                         <button class="btn btn-link add-button" ng-click="pasteEntity(searchResult)">{{'Add' | i18next}}</button>
                     </div>
                 </div>

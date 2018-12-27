@@ -1201,4 +1201,13 @@
   <data name="SearchQuestionPlaceholder" xml:space="preserve">
     <value>Search for a question</value>
   </data>
+ <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Question Bank</value>
+</data>
+    <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>search results</value>
+  </data>
+    <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>classifications</value>
+  </data>
 </root>
