@@ -10,6 +10,7 @@ namespace WB.Core.Infrastructure.Modularity
         void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface;
         void Bind<TImplementation>(bool propertiesAutowired = false);
         void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface;
+        void BindWithConstructorArgument<TInterface1, TInterface2, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface1, TInterface2;
         void BindAsSingleton<TInterface, TImplementation>() where TImplementation : TInterface;
         void BindAsSingleton<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1;
         void BindAsSingleton<TInterface1, TInterface2, TInterface3, TImplementation>() where TImplementation : TInterface3, TInterface2, TInterface1;

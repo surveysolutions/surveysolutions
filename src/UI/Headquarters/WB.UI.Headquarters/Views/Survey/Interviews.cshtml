@@ -219,10 +219,10 @@
                                                 <a href="javascript:void(0);" title="@Interviews.Tooltip_Table_HideShowIdentifying"
                                                    class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@HttpUtility.JavaScriptStringEncode(Common.HideIdentifying)' : '@HttpUtility.JavaScriptStringEncode(Common.ShowIdentifying)', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
-                                            <!-- ko if:SelectedQuestionnaireId() == '' -->
+                                            <!-- ko if:(!SelectedQuestionnaireId() || !SelectedQuestionnaireVersion()) -->
                                             <th title="@Interviews.Tooltip_Table_IdentifyingQuestions" class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                             <!-- /ko -->
-                                            <!-- ko ifnot:SelectedQuestionnaireId() == '' -->
+                                            <!-- ko ifnot:(!SelectedQuestionnaireId() || !SelectedQuestionnaireVersion()) -->
                                             <!-- ko if:Items().length > 0-->
                                             <!-- ko foreach:Items()[0].FeaturedQuestions -->
                                             <th class="sorting_disabled prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.Items()[0].FeaturedQuestions().length - 1 == $index()), visible : $root.IsVisiblePrefilledColumns }, html: Question"></th>
@@ -245,12 +245,12 @@
                                         <!-- ko foreach:Items -->
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
-    {
-                                        <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
-                                            <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
-                                            <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
-                                        </td>
-}
+                                            {
+                                                <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
+                                                    <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
+                                                    <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
+                                                </td>
+                                            }
                                             <td class="interview-id title-row">
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                                                     <!-- ko text:Key --><!--/ko-->
@@ -259,10 +259,10 @@
                                                     </span>
                                                 </a>
                                             </td>
-                                            <!-- ko if:$root.SelectedQuestionnaireId() == '' -->
+                                            <!-- ko if:(!$root.SelectedQuestionnaireId() || !$root.SelectedQuestionnaireVersion()) -->
                                             <td class="prefield-column first-identifying last-identifying" data-bind="css: { visible : $root.IsVisiblePrefilledColumns() }, text: $root.getFormattedPrefilledQuestions(FeaturedQuestions()).joinArrayOfObjects('Question', 'Answer')"></td>
                                             <!-- /ko -->
-                                            <!-- ko ifnot:$root.SelectedQuestionnaireId() == '' -->
+                                            <!-- ko ifnot:(!$root.SelectedQuestionnaireId() || !$root.SelectedQuestionnaireVersion()) -->
                                             <!-- ko foreach:$root.getFormattedPrefilledQuestions(FeaturedQuestions()) -->
                                             <td class="prefield-column" data-bind="css: { 'first-identifying' :  ($index() == 0), 'last-identifying' : ($parent.FeaturedQuestions().length - 1 == $index()), 'visible' : $root.IsVisiblePrefilledColumns() },  text: Answer"></td>
                                             <!-- /ko -->

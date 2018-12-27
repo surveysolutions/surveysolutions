@@ -15,7 +15,6 @@
     }
     self.SelectedResponsible = ko.observable();
     self.TotalInterviewCount = ko.observable(0);
-    self.StatisticsMessage = ko.observable("");
 
     self.GetFilterMethod = function () {
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
@@ -30,23 +29,14 @@
             self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
         }
 
-        self.setStatisticsMessage();
         self.SelectedResponsible.subscribe(function () {
-            self.setStatisticsMessage();
             self.reloadDataTable();
         });
 
         self.initDataTable(this.onDataTableDataReceived);
     };
 
-    self.setStatisticsMessage = function () {
-        var message = !_.isUndefined(self.SelectedResponsible())
-            ? self.SelectedResponsible().UserName
-            : $("#responsibleSelector").attr("placeholder");
-
-        self.StatisticsMessage(message);
-    };
-
+    
     self.onDataTableDataReceived = function(data) {
         if (data.data.length > 0 && data.totalRow) {
             var totalRow = data.totalRow;
