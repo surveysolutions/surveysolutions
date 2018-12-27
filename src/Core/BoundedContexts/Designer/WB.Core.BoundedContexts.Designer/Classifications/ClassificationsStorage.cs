@@ -146,8 +146,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public void Store(ClassificationEntity[] classifications)
         {
-            classificationsStorage.Store(entities: classifications.Select(x =>
-                new Tuple<ClassificationEntity, object>(x, x.Id)));
+            var enumerable = classifications.Select(x =>  new Tuple<ClassificationEntity, object>(x, x.Id)).ToArray();
+            classificationsStorage.Store(entities: enumerable);
         }
 
         public Task<List<Category>> GetCategories(Guid classificationId)
