@@ -52,9 +52,4 @@
         <Reference Include="System.Data.DataSetExtensions" />
         <Reference Include="System.Net.Http" />
     </ItemGroup>
-    <ItemGroup>
-        <Compile Update="Resources\WebInterview.Designer.cs">
-            <DependentUpon>WebInterview.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
 </Project>

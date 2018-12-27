@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [CamelCase]
         [ApiNoCache]
         public ComboboxModel QuestionnairesWithVersions(Guid? id = null, string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)

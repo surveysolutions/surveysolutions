@@ -85,7 +85,9 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 
         public async Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId)
         {
-            var interviewerDailyTrafficUsages = this.deviceSyncInfoRepository.GetTrafficUsageForInterviewer(interviewerId);
+            List<InterviewerDailyTrafficUsage> interviewerDailyTrafficUsages = this.deviceSyncInfoRepository.GetTrafficUsageForInterviewer(interviewerId);
+
+            if (interviewerDailyTrafficUsages.Count == 0) return null;
 
             var maxDailyUsage = interviewerDailyTrafficUsages.Max(x => x.DownloadedBytes + x.UploadedBytes);
 

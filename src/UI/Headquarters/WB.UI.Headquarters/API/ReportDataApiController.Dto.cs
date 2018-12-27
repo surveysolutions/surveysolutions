@@ -34,7 +34,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class StatusDurationRequest : DataTableRequest
         {
-            public string QuestionnaireId { get; set; }
+            public Guid? QuestionnaireId { get; set; }
+            public long? QuestionnaireVersion { get; set; }
             public Guid? SupervisorId { get; set; }
             public int Timezone { get; set; }
         }
@@ -47,7 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public class SurveysAndStatusesFilter : DataTableRequest
         {
             public string ResponsibleName { get; set; }
-            public Guid? QuestionnaireId { get; set; }
         }
 
         private InterviewExportedAction[] GetInterviewExportedActionsAccordingToReportTypeForQuantityReports(PeriodiceReportType reportType)
