@@ -177,6 +177,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             this.expressionProcessor = expressionProcessor;
         }
 
+        public Guid GetSectionIdForItem(string questionnaireId, Guid? entityid)
+        {
+            var document = this.questionnaireDocumentReader.GetById(questionnaireId);
+            var questionnaire = new ReadOnlyQuestionnaireDocument(document);
+            var firstSectionId = document.Children.First().PublicKey;
+            if (entityid == null)
+                return firstSectionId;
+
+            var entity = questionnaire.Find<IComposite>(entityid.Value);
+            if (entity == null)
+                return firstSectionId;
+
+            var sectionId = questionnaire.GetParentGroupsIds(entity).LastOrDefault();
+            return sectionId == Guid.Empty ? entity.PublicKey : sectionId;
+        }
+
         public NewEditGroupView GetGroupEditView(string questionnaireId, Guid groupId)
         {
             var document = this.questionnaireDocumentReader.GetById(questionnaireId);
