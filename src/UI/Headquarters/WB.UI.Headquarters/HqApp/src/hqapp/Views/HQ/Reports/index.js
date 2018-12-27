@@ -7,6 +7,8 @@ import CumulativeChart from "./CumulativeChartReport";
 
 import Vue from 'vue'
 
+import cumulativeChart from './CumulativeChart.store'
+
 export default class ReportComponent {
     constructor(rootStore) {
         this.rootStore = rootStore;
@@ -59,5 +61,9 @@ export default class ReportComponent {
     initialize() {
         const VeeValidate = require('vee-validate');
         Vue.use(VeeValidate);
-    }    
+    }
+    
+    get modules() {
+        return { cumulativeChart }
+    }
 }

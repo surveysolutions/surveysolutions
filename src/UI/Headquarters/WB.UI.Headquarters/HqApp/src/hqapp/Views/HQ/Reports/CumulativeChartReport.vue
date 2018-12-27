@@ -22,35 +22,39 @@
         />
       </FilterBlock>
 
-
       <FilterBlock :title="$t('Reports.DatesRange')">
-        <DatePicker
-          :config="datePickerConfig"
-          :value="selectedDateRange"
-        ></DatePicker>
+        <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
         <div class="block-filter">
-          <button type="button" class="btn btn-default input-group">{{$t('Common.Refresh')}}</button>
+          <button
+            type="button"
+            class="btn btn-default input-group"
+            @click="refreshData"
+          >{{$t('Common.Refresh')}}</button>
         </div>
       </FilterBlock>
     </Filters>
-    <LineChart id="interviewChart" :chartData="chartData" :options="chartOptions"></LineChart>
+    <div class="clearfix">
+      <div class="col-sm-8">
+        <h2>{{this.selectedQuestionnaire == null ? $t('Common.AllQuestionnaires') : this.selectedQuestionnaire.value}}</h2>
+        <h2 v-if="!state.hasData">{{ $t('Common.NoResultsFound') }}</h2>
+      </div>
+    </div>
+    <LineChart
+      id="interviewChart"
+      :chartData="state.chartData"
+      :options="chartOptions"
+      v-if="state.hasData"
+    ></LineChart>
   </HqLayout>
 </template>
 
 <script>
 import queryString from "~/hqapp/components/QueryString";
+import Vue from "vue";
 
-const LineChart = () => import(/* webpackChunkName: "report" */"./CumulativeChart")
+const LineChart = () => import(/* webpackChunkName: "report" */ "./CumulativeChart");
 
 const timeFormat = "MM/DD/YYYY HH:mm";
-
-const dataSetInfo = {
-    100: { label: 'Completed', fill: true, backgroundColor: '#86B828'},
-    65: {label: 'RejectedBySupervisor', fill: true, backgroundColor: '#F08531'},
-    120: {label: 'ApprovedBySupervisor', fill: true, backgroundColor: '#13A388'},
-    125: {label: 'RejectedByHeadquarters', fill: true, backgroundColor: '#E06B5C'},
-    130: {label: 'ApprovedByHeadquarters', fill: true, backgroundColor: '#00647F'}
-}
 
 export default {
     mixins: [queryString],
@@ -58,32 +62,37 @@ export default {
 
     data() {
         return {
+            isLoading: false,
             startDate: null,
-            chartData: null,
+
             chartOptions: {
-                elements: { point: { radius: 0 } },
+                elements: {
+                    point: { radius: 0 },
+                    line: { fill: true }
+                },
                 responsive: true,
-                 maintainAspectRatio: false,
+                maintainAspectRatio: false,
                 tooltips: {
-                    mode: "index"
+                    mode: "x",
+                    intersect: false
                 },
                 hover: {
-                    mode: "index"
+                    mode: "index",
+                    intersect: false
                 },
                 scales: {
                     xAxes: [
                         {
                             type: "time",
-                            distribution: "series"
+                            gridLines: {
+                                display: false,
+                                tickMarkLength: 10
+                            }
                         }
                     ],
                     yAxes: [
                         {
-                            stacked: true,
-                            scaleLabel: {
-                                display: true,
-                                labelString: "value"
-                            }
+                            stacked: true
                         }
                     ]
                 }
@@ -94,6 +103,10 @@ export default {
     computed: {
         model() {
             return this.$config.model;
+        },
+
+        state() {
+            return this.$store.state.cumulativeChart;
         },
 
         queryString() {
@@ -119,11 +132,7 @@ export default {
         },
 
         selectedVersion() {
-            if (
-                this.selectedQuestionnaire == null ||
-                this.query.version == null
-            )
-                return null;
+            if (this.selectedQuestionnaire == null || this.query.version == null) return null;
 
             return _.find(this.selectedQuestionnaire.versions, {
                 key: this.query.version
@@ -137,25 +146,26 @@ export default {
 
         datePickerConfig() {
             return {
-            mode: 'range',
-            maxDate: 'today',
-            wrap: true,
-            onChange: (selectedDates, dateStr, instance) => {
-                const start = selectedDates.length > 0 ? selectedDates[0] : null;
-                const end = selectedDates.length > 1 ? selectedDates[1] : null;
+                mode: "range",
+                maxDate: "today",
+                wrap: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? selectedDates[0] : null;
+                    const end = selectedDates.length > 1 ? selectedDates[1] : null;
 
-                if (start != null && end != null) {
-                    this.onChange(q => {
-                        q.from = moment(start).format("YYYY-MM-DD")
-                        q.to = moment(start).format("YYYY-MM-DD")
-                    })
+                    if (start != null && end != null) {
+                        this.onChange(q => {
+                            q.from = moment(start).format("YYYY-MM-DD");
+                            q.to = moment(start).format("YYYY-MM-DD");
+                        });
+                    }
                 }
-            }}
+            };
         }
     },
 
     watch: {
-        async queryString() {
+        queryString() {
             this.refreshData();
         }
     },
@@ -181,27 +191,13 @@ export default {
             });
         },
 
-        async refreshData() {
-            const response = await this.$hq.Report.Chart(this.queryString);
-            const dataSets = response.data.DataSets
-
-            const chart = {
-                labels: [],
-                datasets: []
-            }
-
-            _.forEach(dataSets, set => {
-                chart.datasets.push(Object.assign(dataSetInfo[set.Status], {
-                    data: set.Data
-                }))
-            });
-
-            this.chartData = chart
+        refreshData() {
+            this.$store.dispatch("queryChartData", this.queryString);
         }
     },
 
     mounted() {
-        this.refreshData();
+        this.$store.dispatch("queryChartData", this.queryString);
     }
 };
 </script>

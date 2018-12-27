@@ -114,19 +114,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewsChartOld()
-        {
-            this.ViewBag.ActivePage = MenuItem.InterviewsChart;
-
-            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
-
-            return this.View("CumulativeInterviewChartOld", new DocumentFilter
-            {
-                Templates = usersAndQuestionnaires.Questionnaires
-            });
-        }
-
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult InterviewsChart()
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
