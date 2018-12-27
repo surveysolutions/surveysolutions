@@ -105,20 +105,11 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
-
-            var result = from questionnaire in questionnaires
-                group questionnaire by (questionnaire.QuestionnaireId, questionnaire.Title) into g
-                select new
-                {
-                    id = g.Key.QuestionnaireId,
-                    title = g.Key.Title,
-                    versions = g.Select(v => v.Version).OrderBy(v => v).ToList()
-                };
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
 
             return View(new
             {
-                Questionnaires = result
+                Questionnaires = questionnaires
             });
         }
 
@@ -127,11 +118,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
 
-            return this.View("CumulativeInterviewChart", new DocumentFilter
-            {
-                Templates = usersAndQuestionnaires.Questionnaires
+            return this.View("CumulativeInterviewChart", new {
+                Templates = questionnaires
             });
         }
 
@@ -164,16 +154,7 @@ namespace WB.UI.Headquarters.Controllers
                 isSupervisor = this.authorizedUser.IsSupervisor
             });
         }
-
-        private ComboboxOptionModel[] GetAllQuestionnaires()
-        {
-            List<TemplateViewItem> questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaires();
-
-            return questionnaires.Select(s => new ComboboxOptionModel(
-                new QuestionnaireIdentity(s.TemplateId, s.TemplateVersion).ToString(),
-                $@"(ver. {s.TemplateVersion.ToString()}) {s.TemplateName}")).ToArray();
-        }
-
+        
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;

@@ -3,7 +3,11 @@ import StatusDuration from "./StatusDuration";
 import MapReport from "./MapReport";
 import SurveyStatistics from "./SurveyStatistics";
 import TeamsAndStatuses from "./TeamsAndStatuses";
+import CumulativeChart from "./CumulativeChartReport";
+
 import Vue from 'vue'
+
+import cumulativeChart from './CumulativeChart.store'
 
 export default class ReportComponent {
     constructor(rootStore) {
@@ -33,6 +37,10 @@ export default class ReportComponent {
                 component: TeamsAndStatuses
             },
             {
+                path: '/Reports/InterviewsChart',
+                component: CumulativeChart
+            },
+            {
                 path: "/Reports/MapReport",
                 component: MapReport
             }, {
@@ -53,5 +61,9 @@ export default class ReportComponent {
     initialize() {
         const VeeValidate = require('vee-validate');
         Vue.use(VeeValidate);
-    }    
+    }
+    
+    get modules() {
+        return { cumulativeChart }
+    }
 }

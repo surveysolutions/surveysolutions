@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -54,6 +55,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
+                    typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 

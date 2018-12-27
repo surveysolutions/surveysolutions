@@ -6,6 +6,7 @@ namespace WB.UI.Headquarters.Models
 {
     public class InterviewerHqModel
     {
+        public string QuestionnairesUrl { get; set; }
         public string AllInterviews { get; set; }
         public string InterviewerHqEndpoint { get; set; }
         public string[] Statuses { get; set; }
