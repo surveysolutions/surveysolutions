@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     public class MysqlClassificationEntity
     {
         public int Id { get; set; }
+        public int Original_id { get; set; }
         public Guid IdGuid { get; set; }
         public string Title { get; set; }
         public int? Parent { get; set; }
