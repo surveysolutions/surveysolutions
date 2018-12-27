@@ -5,12 +5,16 @@ using System.Web;
 
 namespace WB.UI.Designer.Api.Designer.Qbank
 {
-    /*[{"id":1, "question_id":16, "classification_code_id":2353, "skip_value":"> END"},*/
-    public class MySqlQuestionsWithOptions
+    /*
+     * [{"id":11, "classification_id":1, "classification_label":"Yes", "description":"", "value":"1", "is_missing":0, "weight":11, "attachments":""},
+     */
+    public class MySqlOptions
     {
         public int Id { get; set; }
-        public int Question_id { get; set; }
-        public int Classification_code_id { get; set; }
+        public int Classification_id { get; set; }
+        public string Classification_label { get; set; }
+        public string Value { get; set; }
+        public int Weight { get; set; }
     }
     /*
    *{"id":344,
@@ -25,6 +29,7 @@ namespace WB.UI.Designer.Api.Designer.Qbank
     public class MySqlFoldersAndQuestionnaires
     {
         public int Id { get; set; }
+        public Guid? IdGuid { get; set; }
         public int Pid { get; set; }
         public string Name { get; set; }
         public string Description{ get; set; }
@@ -67,6 +72,8 @@ namespace WB.UI.Designer.Api.Designer.Qbank
         public string Instructions{ get; set; }
         public int? Published { get; set; }
         public int? Weight { get; set; }
+        public int? Classification_id { get; set; }
+        
     }
 
     /*
