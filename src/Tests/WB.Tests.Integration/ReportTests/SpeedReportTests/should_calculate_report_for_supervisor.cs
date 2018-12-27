@@ -75,23 +75,5 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             // Assert
             Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo((firstInterviewDuration + secondInterviewDuration) / 2));
         }
-
-        private static InterviewSummary CreateCompletedInterviewWithDuration(TimeSpan interviewingTotalTime, Guid supervisorId, Guid responsibleId,
-            DateTime dateTime)
-        {
-            var interviewId = Guid.NewGuid();
-            var interview = Create.Entity.InterviewSummary(interviewingTotalTime: interviewingTotalTime,
-                interviewId: interviewId,
-                teamLeadId: supervisorId,
-                responsibleId: responsibleId);
-            interview.SummaryId = interviewId.FormatGuid();
-            var interviewCommentedStatus = Create.Entity.InterviewCommentedStatus(status: InterviewExportedAction.FirstAnswerSet,
-                timestamp: dateTime.AddMinutes(1),
-                timeSpanWithPreviousStatus: TimeSpan.FromMinutes(1),
-                supervisorId: supervisorId);
-            interviewCommentedStatus.InterviewSummary = interview;
-            interview.InterviewCommentedStatuses.Add(interviewCommentedStatus);
-            return interview;
-        }
     }
 }

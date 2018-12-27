@@ -286,4 +286,7 @@
   <data name="CreatingNewAssignment" xml:space="preserve">
     <value>Создание новой задачи для опросника {{questionnaire}}</value>
   </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
+  </data>
 </root>

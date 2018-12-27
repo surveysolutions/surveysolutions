@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
             
-            storage.Store(new AttachmentContent
+            storage.StoreAsync(new AttachmentContent
             {
                 Id = contentId,
                 ContentType = "video/create",
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(true);
             fs.Setup(f => f.IsDirectoryExists(Path.GetDirectoryName(cachedFile))).Returns(true);
             
-            storage.Store(new AttachmentContent
+            storage.StoreAsync(new AttachmentContent
             {
                 Id = contentId,
                 ContentType = "video/destroy",
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(cacheDir)).Returns(false);
             
-            storage.Store(new AttachmentContent
+            storage.StoreAsync(new AttachmentContent
             {
                 Id = contentId,
                 ContentType = "video/content",
@@ -105,7 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             fs.Setup(f => f.IsFileExists(cachedFile)).Returns(false);
             fs.Setup(f => f.IsDirectoryExists(cacheDir)).Returns(false);
 
-            storage.Store(new AttachmentContent
+            storage.StoreAsync(new AttachmentContent
             {
                 Id = contentId,
                 ContentType = "image/magic",

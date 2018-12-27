@@ -21,12 +21,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private readonly UnitOfWorkConnectionSettings plainStorageSettings;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IUserViewFactory userViewFactory;
 
         public DeviceInterviewersReport(UnitOfWorkConnectionSettings plainStorageSettings,
-            IInterviewerVersionReader interviewerVersionReader)
+            IInterviewerVersionReader interviewerVersionReader,
+            IUserViewFactory userViewFactory)
         {
             this.plainStorageSettings = plainStorageSettings;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.userViewFactory = userViewFactory;
         }
 
         public async Task<DeviceInterviewersReportView> LoadAsync(DeviceByInterviewersReportInputModel input)
@@ -114,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
-            result.TeamName = Strings.AllTeams;
+            result.TeamName = supervisorId.HasValue ? this.userViewFactory.GetUser(new UserViewInputModel(supervisorId.Value)).UserName : Strings.AllTeams;
             return result;
         }
 
@@ -145,7 +148,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_NEVER_UPLOADED,
                     Report.COLUMN_TABLET_REASSIGNED,
                     Report.COLUMN_OLD_VERSION,
-                    Report.COLUMN_ANDROID_4_4_OR_LOWER
+                    Report.COLUMN_ANDROID_4_4_OR_LOWER,
+                    Report.COLUMN_TEAM_SIZE
                 },
                 Data = new[]
                 {
@@ -158,6 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         view.TotalRow.ReassignedCount,
                         view.TotalRow.OutdatedCount,
                         view.TotalRow.OldAndroidCount,
+                        view.TotalRow.TeamSize
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
@@ -168,6 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     x.ReassignedCount,
                     x.OutdatedCount,
                     x.OldAndroidCount,
+                    x.TeamSize
                 })).ToArray()
             };
         }

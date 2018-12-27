@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var validationMessages = interview.GetFailedWarningMessages(this.Identity, UIResources.Warning);
                     
-                    this.Warning.ChangeValidationErrors(validationMessages);
+                    this.Warning.ChangeValidationErrors(validationMessages, this.Identity);
                 }
 
                 this.IsImplausible = isInvalidEntity;

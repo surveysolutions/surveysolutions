@@ -47,7 +47,6 @@ export default {
         supervisorId() {
             return this.$route.params.supervisorId
         },
-
         tableOptions() {
             var self = this;
             return {
@@ -56,14 +55,15 @@ export default {
                     {
                         data: "teamName",
                         name: "TeamName",
-                        title: this.$t("DevicesInterviewers.Teams"),
+                        title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t("DevicesInterviewers.Teams"),
                         orderable: true,
                         render: function(data, type, row) {
                             if(self.supervisorId) {
                                 return self.getLinkToInterviewerProfile(data, row)
                             }
-
-                            return `<a href='${window.location}/${row.teamId}'>${data}</a>`
+                            
+                            const linkClass = self.hasIssue(row) ? "text-danger" : ""
+                            return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
                         }
                     },
                     {

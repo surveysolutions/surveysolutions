@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps
 {
-    public abstract class UpdateApplication : SynchronizationStep
+    public abstract class UpdateApplication : SynchronizationStep, IUpdateApplicationSynchronizationStep
     {
         private readonly ITabletDiagnosticService diagnosticService;
 

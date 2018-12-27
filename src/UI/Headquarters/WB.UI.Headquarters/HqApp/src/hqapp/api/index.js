@@ -3,8 +3,8 @@ import axios from "axios";
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
         this.http = http
-        this.base = "questionnaires/"
-        this.details = this.base + `${questionnaireId}/${version}`       
+        this.base = "api/v1/questionnaires/"
+        this.details = this.base + `${questionnaireId}/${version}`
     }
 
     async List() {
@@ -27,13 +27,13 @@ class QuestionnaireApi {
 
 class SurveyStatistics {
     constructor(http) {
-        this.reportPath = "statistics"
+        this.reportPath = "api/v1/statistics"
         this.http = http
     }
 
-    async Questions(questionnaireId) {
+    async Questions(questionnaireId, version) {
         return (await this.http.get(`${this.reportPath}/questions`, {
-            params: { questionnaireId }
+            params: { questionnaireId, version }
         })).data
     }
 
@@ -46,38 +46,78 @@ class SurveyStatistics {
     }
 }
 
+class MapsReport {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GpsQuestionsByQuestionnaire(questionnaireId, version){ 
+        return await this.http.get(`api/ReportDataApi/QuestionInfo/${questionnaireId}?version=${version}`)
+    }
+
+    async Report(request) {
+        return await this.http.post('api/ReportDataApi/MapReport', request)
+    }
+
+    async InteriewSummaryUrl(interviewId) {
+        var response = await this.http.post('api/InterviewApi/InterviewSummaryForMapPoint', 
+        {
+            interviewId
+        })
+
+        return response
+    }
+
+    GetInterviewDetailsUrl(interviewId) {
+        return `${this.http.defaults.baseURL}/Interview/Review/${interviewId}`
+    }
+}
+
 class Users {
     constructor(http){
         this.http = http
     }
 
     async Supervisors(filter) {
-        return (await this.http.get(`users/supervisors`, {
+        return (await this.http.get(`api/v1/users/supervisors`, {
             params: { filter }
         })).data
     }
 
     get SupervisorsUri() {
-        return this.http.defaults.baseURL + '/users/supervisors'
+        return this.http.defaults.baseURL + 'api/v1/users/supervisors'
     }
 }
 
 class Reports {
-    constructor(http, uriOnly = false){
+    constructor(http, basePath){
         this.http = http
-        this.uriOnly = uriOnly
+        this.basePath = basePath
     }
 
     get SurveyStatistics() {
         return new SurveyStatistics(this.http)
     }
+
+    get MapReport() {
+        return new MapsReport(this.http)
+    }
+
+    Chart({questionnaireId, version, from, to}) {
+        return this.http.post('api/ReportDataApi/ChartStatistics', {
+            templateId: questionnaireId,
+            templateVersion: version,
+            from, to
+        })
+    }
 }
 
 class HqApiClient {
-    constructor(basePath, apiPath) {
+    constructor(basePath) {
         this.basePath = basePath;
+
         this.http = axios.create({
-            baseURL: basePath + apiPath
+            baseURL: basePath
         });
     }
 
@@ -93,7 +133,7 @@ class HqApiClient {
 /*  the Plugin */
 export default {
     install: function(vue) {
-        const instance = new HqApiClient(vue.$config.basePath, "api/v1");
+        const instance = new HqApiClient(vue.$config.basePath);
 
         // /*  expose a global API method  */
         Object.defineProperty(vue, "$hq", {

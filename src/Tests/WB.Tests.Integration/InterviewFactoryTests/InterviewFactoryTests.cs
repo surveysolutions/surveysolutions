@@ -980,6 +980,47 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 .Where(x => removedEntities.Contains(x)), Is.Empty);
         }
 
+        [Test]
+        public void when_saving_state_and_old_entity_was_disabled()
+        {
+            //arrange
+            var interviewId = Id.g1;
+            var questionId = Id.g10;
+            var factory = CreateInterviewFactory();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 5);
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
+                children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(questionId)
+                });
+
+            PrepareQuestionnaire(questionnaire);
+            StoreInterviewSummary(new InterviewSummary(questionnaire)
+            {
+                InterviewId = interviewId
+            }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+
+            var interviewState = Create.Entity.InterviewState(interviewId);
+            interviewState.Enablement.Add(InterviewStateIdentity.Create(questionId), false);
+            interviewState.Answers.Add(InterviewStateIdentity.Create(questionId), new InterviewStateAnswer() { AsString = "old" });
+            factory.Save(interviewState);
+            
+            //aa
+            var interviewNewState = Create.Entity.InterviewState(interviewId);
+            interviewNewState.Answers.Add(InterviewStateIdentity.Create(questionId), new InterviewStateAnswer() {AsString = "new"});
+            factory.Save(interviewNewState);
+
+            //aaa
+            var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
+
+            Assert.That(interviewEntities.Single(x => x.Identity.Id == questionId).IsEnabled, Is.True);
+            Assert.That(interviewEntities.Single(x => x.Identity.Id == questionId).AsString, Is.EqualTo("new"));
+
+        }
+
         private IComposite ToQuestionnaireEntity(InterviewEntity entity)
         {
             if (entity.EntityType == EntityType.Question)

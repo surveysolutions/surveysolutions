@@ -1,2 +1,6 @@
 {
+    "search.exclude": {
+        "**/dist": true,
+        "**/locale": true
+    }
 }
