@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         });
 
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
-            string gpsQuestion, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
+            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswer>(
                 $@"
@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     supervisorId,
                     Questionnaire = $"{questionnaireId.FormatGuid()}${questionnaireVersion?.ToString() ?? "%"}",
-                    question = gpsQuestion,
+                    question = gpsQuestionVariableName,
                     MaxCount = maxAnswersCount,
                     bounds.South, bounds.North, bounds.East, bounds.West
                 })
