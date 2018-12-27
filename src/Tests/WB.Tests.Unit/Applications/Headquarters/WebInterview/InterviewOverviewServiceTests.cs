@@ -121,10 +121,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var sectionId     = Guid.Parse("11111111111111111111111111111111");
             var groupId       = Guid.Parse("22222222222222222222222222222222");
             var intQuestionId = Guid.Parse("33333333333333333333333333333333");
+            var rosterId      = Guid.Parse("44444444444444444444444444444444");
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
-                Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(rosterId, isPlainMode: true, fixedTitles: new FixedRosterTitle[]
                     {
                         Create.Entity.FixedTitle(1, "1"),
                         Create.Entity.FixedTitle(2, "2"),
@@ -146,12 +147,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var overviewNodes = service.GetOverview(statefullInterview, plainQuestionnaire, true).ToArray();
 
             // assert
-            Assert.That(overviewNodes.Length, Is.EqualTo(5));
+            Assert.That(overviewNodes.Length, Is.EqualTo(7));
             Assert.That(overviewNodes[0].Id, Is.EqualTo(Create.Identity(sectionId).ToString()));
-            Assert.That(overviewNodes[1].Id, Is.EqualTo(Create.Identity(groupId, 1).ToString()));
-            Assert.That(overviewNodes[2].Id, Is.EqualTo(Create.Identity(intQuestionId, 1).ToString()));
-            Assert.That(overviewNodes[3].Id, Is.EqualTo(Create.Identity(groupId, 2).ToString()));
-            Assert.That(overviewNodes[4].Id, Is.EqualTo(Create.Identity(intQuestionId, 2).ToString()));
+            Assert.That(overviewNodes[1].Id, Is.EqualTo(Create.Identity(rosterId, 1).ToString()));
+            Assert.That(overviewNodes[2].Id, Is.EqualTo(Create.Identity(groupId, 1).ToString()));
+            Assert.That(overviewNodes[3].Id, Is.EqualTo(Create.Identity(intQuestionId, 1).ToString()));
+            Assert.That(overviewNodes[4].Id, Is.EqualTo(Create.Identity(rosterId, 2).ToString()));
+            Assert.That(overviewNodes[5].Id, Is.EqualTo(Create.Identity(groupId, 2).ToString()));
+            Assert.That(overviewNodes[6].Id, Is.EqualTo(Create.Identity(intQuestionId, 2).ToString()));
         }
 
         private static InterviewOverviewService CreateInterviewOverviewService()
