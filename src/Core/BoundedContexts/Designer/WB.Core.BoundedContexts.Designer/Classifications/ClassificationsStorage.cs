@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
-using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Classifications
 {
@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public Task<List<Category>> GetCategories(Guid classificationId)
         {
-            var dbEntities = classificationsStorage.Query(_ => _.Where(x => x.Parent == classificationId).OrderBy(x => x.Index).ThenBy(x => x.Value).Take(AbstractVerifier.MaxOptionLength).ToList());
+            var dbEntities = classificationsStorage.Query(_ => _.Where(x => x.Parent == classificationId).OrderBy(x => x.Index).ThenBy(x => x.Value).Take(Constants.MaxLongRosterRowCount).ToList());
 
             var categories = dbEntities.Select(x => new Category
                 {
