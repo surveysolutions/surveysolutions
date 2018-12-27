@@ -465,6 +465,12 @@ span.image-zoom-box, span.image-option {
     left: -30px; }
   .question .progress.question-progress {
     bottom: -2px; }
+  .question.roster-title {
+    background-color: #d5ebf8;
+    color: #2d9cdb;
+    font-family: "RobotoRegular"; }
+    .question.roster-title div {
+      margin-left: 10px; }
 
 .information-block {
   padding: 20px 10px 0;
