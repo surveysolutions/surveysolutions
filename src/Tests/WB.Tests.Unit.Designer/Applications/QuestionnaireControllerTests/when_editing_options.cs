@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FluentAssertions;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Controllers;
 
 
@@ -14,8 +17,22 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     internal class when_editing_options : QuestionnaireControllerTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            controller = CreateQuestionnaireController();
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionnaireId: questionnaireId,
+                children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(questionId: questionId),
+                });
+
+            controller = CreateQuestionnaireController(
+                categoricalOptionsImportService: Create.CategoricalOptionsImportService(questionnaire));
+
+            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel
+            {
+                QuestionnaireId = questionnaireId.FormatGuid(),
+                QuestionId = questionId
+            });
 
             stream = GenerateStreamFromString("1\tStreet 1");
 
