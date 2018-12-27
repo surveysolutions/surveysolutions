@@ -43,7 +43,7 @@
                         .then(function(response) {
                             var results = response.data.entities;
                             _.forEach(results, function(entity) {
-                                
+                                entity.hasFolder = (entity.folder || null) != null;
                             });
                             var half = Math.ceil(results.length / 2);
                             $scope.searchResult1 = results.slice(0, half);
@@ -66,12 +66,12 @@
                 var urlItemType = '';
                 switch (searchResult.itemType) {
                     case 'Question': urlItemType = 'question'; break;
-                    case 'Group': urlItemType =(item.isRoster ? "roster" : "group"); break;
+                    case 'Group': urlItemType =(searchResult.isRoster ? "roster" : "group"); break;
                     case 'StaticText': urlItemType = 'static-text'; break;
                     case 'Chapter':  urlItemType ='group';break;
                     case 'Variable': urlItemType ='variable';break;
                 }
-                return '../../questionnaire/details/'+searchResult.questionnaireId + '/chapter/' + searchResult.sectionId +'/' + urlItemType + '/' + searchResult.itemId;
+                return '../../questionnaire/details/'+searchResult.questionnaireId +'/nosection/' + urlItemType + '/' + searchResult.itemId;
             };
 
             $scope.pasteEntity = function(searchResult) {

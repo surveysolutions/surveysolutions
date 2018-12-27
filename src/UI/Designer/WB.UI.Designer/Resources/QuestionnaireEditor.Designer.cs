@@ -232,6 +232,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to classifications.
+        /// </summary>
+        public static string ClassificationsSearchEntities {
+            get {
+                return ResourceManager.GetString("ClassificationsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter categories.
         /// </summary>
         public static string ClassificationsStringOptionsEditorPlaceholder {
@@ -1695,6 +1704,24 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionShowStrings {
             get {
                 return ResourceManager.GetString("QuestionShowStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to search results.
+        /// </summary>
+        public static string QuestionsSearchEntities {
+            get {
+                return ResourceManager.GetString("QuestionsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank.
+        /// </summary>
+        public static string QuestionsSearchTitle {
+            get {
+                return ResourceManager.GetString("QuestionsSearchTitle", resourceCulture);
             }
         }
         
