@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionInstructionViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity, IDisposable
+        ICompositeEntity, IInterviewEntity, IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -38,22 +38,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasInstructions => !string.IsNullOrWhiteSpace(this.Instruction.HtmlText);
 
-        public virtual void Init(string interviewId, Identity questionIdentity)
+        public virtual void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
+            this.InterviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.NavigationState = navigationState;
 
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
-            
             this.Identity = questionIdentity;
 
             this.Instruction.InitAsInstructions(interviewId, questionIdentity);
         }
 
+        public string InterviewId { get; private set; }
         public Identity Identity { get; private set; }
+        public NavigationState NavigationState { get; private set; }
 
         public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
 
