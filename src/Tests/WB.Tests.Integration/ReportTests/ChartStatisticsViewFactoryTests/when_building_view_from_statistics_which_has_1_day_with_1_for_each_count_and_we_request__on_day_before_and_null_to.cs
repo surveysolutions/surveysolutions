@@ -2,64 +2,60 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     public class when_building_view_from_statistics_which_has_1_day_with_1_for_each_count_and_we_request__on_day_before_and_null_to : ChartStatisticsViewFactoryTestsContext
     {
         [OneTimeSetUp]
         public void Establish()
         {
-            var statistics = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
-            {
-                {
-                    new DateTime(2014, 8, 21),
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 1)
-                },
-            });
+            var qId = WB.Tests.Abc.Create.Entity.QuestionnaireIdentity();
+
+            CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(qId, new DateTime(2014, 8, 21), 1);
 
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
-                QuestionnaireId = Guid.NewGuid(),
-                QuestionnaireVersion = 1,
+                QuestionnaireId = qId.QuestionnaireId,
+                QuestionnaireVersion = qId.Version,
                 From = new DateTime(2014, 8, 20),
                 To = null,
             };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
             Because();
+            UnitOfWork.AcceptChanges();
         }
 
         public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
         public void should_return_5_lines_the_same_as_statuses_count() =>
-            view.Lines.Length.Should().Be(5);
+            view.DataSets.Count.Should().Be(5);
 
         [Test]
         public void should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_19() =>
-            view.Lines.Should().OnlyContain(line => (string)line[0][0] == "2014-08-20");
+            view.DataSets.Should().OnlyContain(line => (string)line.Data[0].X == "2014-08-20");
 
         [Test]
         public void should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
-            view.Lines.Should().OnlyContain(line => (string)line[1][0] == "2014-08-21");
+            view.DataSets.Should().OnlyContain(line => (string)line.Data[1].X == "2014-08-21");
 
 
         [Test]
         public void should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-            view.Lines.Should().OnlyContain(line => (int) line[0][1] == 0);
+            view.DataSets.Should().OnlyContain(line => (int)line.Data[0].Y == 0);
 
         [Test]
         public void should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-            view.Lines.Should().OnlyContain(line => (int) line[1][1] == 1);
+            view.DataSets.Should().OnlyContain(line => (int)line.Data[1].Y == 1);
 
-        
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
+
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
     }
 }

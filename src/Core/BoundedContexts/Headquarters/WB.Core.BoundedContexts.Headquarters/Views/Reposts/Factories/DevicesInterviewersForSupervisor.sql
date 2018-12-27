@@ -36,7 +36,7 @@ LEFT JOIN (SELECT DISTINCT dsi."InterviewerId" FROM plainstore.devicesyncinfo ds
 	AS anySyncWithQuestionnaire ON anySyncWithQuestionnaire."InterviewerId" = u."Id"
 
 
-WHERE up."SupervisorId" = @supervisorId
+WHERE up."SupervisorId" = @supervisorId AND u."IsArchived" = false 
 group by u."UserName", u."Id"
 ORDER BY {0}
 LIMIT @limit OFFSET @offset

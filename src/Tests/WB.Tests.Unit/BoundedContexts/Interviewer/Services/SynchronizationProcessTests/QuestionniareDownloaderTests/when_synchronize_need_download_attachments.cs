@@ -54,6 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 && x.Exists("2") == true
                 && x.Exists("3") == true
                 && x.Exists("5") == false
+                && x.StoreAsync(It.IsAny<AttachmentContent>()) == Task.CompletedTask
                 );
 
             downloader = Create.Service.QuestionnaireDownloader(
@@ -84,19 +85,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
         [Test]
         public void should_store_attachment_content_for_id_1() =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "1")), Times.Once());
+            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "1")), Times.Once());
 
         [Test]
         public void should_store_attachment_content_for_id_2() =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "2")), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "2")), Times.Never());
 
         [Test]
         public void should_store_attachment_content_for_id_3() =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "3")), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "3")), Times.Never());
 
         [Test]
         public void should_store_attachment_content_for_id_5() =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.Store(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
+            Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
 
 
         static IQuestionnaireDownloader downloader;

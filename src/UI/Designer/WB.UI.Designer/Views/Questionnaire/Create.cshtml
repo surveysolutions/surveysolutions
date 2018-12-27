@@ -21,11 +21,13 @@
             <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
         }
         <div class="form-group">
-            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireTitle })
-            @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
+            @Html.LabelFor(x => x.Title, QuestionnaireController.QuestionnaireTitle)
+            @Html.TextBoxFor(x => x.Title, new {@class = "form-control"})
+            @Html.ValidationMessageFor(x => x.Title, null, new {@class = "help-inline"})
         </div>
         <div class="form-group">
-            @Html.TextBoxFor(x => x.Variable, new { @class = "form-control", placeholder = QuestionnaireEditor.SettingsQuestionnaireVariable })
+            @Html.LabelFor(x => x.Variable, QuestionnaireEditor.SettingsQuestionnaireVariable)
+            @Html.TextBoxFor(x => x.Variable, new { @class = "form-control" })
             @Html.ValidationMessageFor(x => x.Variable, null, new { @class = "help-inline" })
         </div>
 

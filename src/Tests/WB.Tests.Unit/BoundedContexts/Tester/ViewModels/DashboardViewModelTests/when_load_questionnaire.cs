@@ -4,16 +4,17 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Tests.Abc;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -21,21 +22,26 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_load_questionnaire : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
 
+            var questionnaireRepository = new Mock<IQuestionnaireStorage>();
+            questionnaireRepository.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null))
+                .Returns(Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter()));
+
             viewModel = CreateDashboardViewModel(designerApiService: mockOfDesignerApiService.Object,
                 commandService: mockOfCommandService.Object,
                 questionnaireImportService: mockOfQuestionnaireImportService.Object,
-                viewModelNavigationService: mockOfViewModelNavigationService.Object
+                viewModelNavigationService: mockOfViewModelNavigationService.Object,
+                questionnaireRepository: questionnaireRepository.Object
                 );
 
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(selectedQuestionnaire);
 
         [Test]
         public void should_be_downloaded_questionnaire() => 

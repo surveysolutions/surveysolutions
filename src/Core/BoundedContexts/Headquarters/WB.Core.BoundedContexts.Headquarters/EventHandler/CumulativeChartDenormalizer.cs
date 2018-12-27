@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.cumulativeReportReader = cumulativeReportReader;
         }
 
-
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
             var statusChangeEvents = publishableEvents.Where(x => x.Payload is InterviewStatusChanged).ToList();
@@ -70,23 +69,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private void Update(CumulativeState state, InterviewStatusChanged statusChanged, IPublishableEvent publishableEvent)
         {
-            InterviewStatus? previouStatus = state.LastInterviewStatus;
+            InterviewStatus? lastInterviewStatus = state.LastInterviewStatus;
 
             InterviewStatus newStatus = statusChanged.Status;
             if (newStatus == InterviewStatus.Deleted)
                 return;
 
-            if (previouStatus != null)
+            if (lastInterviewStatus != null)
             {
                 var minusChange = new CumulativeReportStatusChange(
                     $"{publishableEvent.EventIdentifier.FormatGuid()}-minus",
                     state.QuestionnaireIdentity.QuestionnaireId,
                     state.QuestionnaireIdentity.Version,
                     publishableEvent.EventTimeStamp.Date, // time of synchronization
-                    previouStatus.Value,
+                    lastInterviewStatus.Value,
                     -1,
                     publishableEvent.EventSourceId,
-                    publishableEvent.GlobalSequence);
+                    publishableEvent.EventSequence);
 
                 state.Added.Add(minusChange);
             }
@@ -99,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 newStatus,
                 +1,
                 publishableEvent.EventSourceId,
-                publishableEvent.GlobalSequence);
+                publishableEvent.EventSequence);
 
             state.Added.Add(plusChange);
         }
@@ -115,8 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public string Name => "Cumulative Chart Functional Denormalizer";
-        public object[] Readers { get; } = new object[0];
-        public object[] Writers { get; } = new object[0];
-        
+        public object[] Readers { get; } = Array.Empty<object>();
+        public object[] Writers { get; } = Array.Empty<object>();
     }
 }

@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
             var result = new ReportView
             {
                 Columns = report.Columns,
+                Warnings = report.Warnings,
                 Headers = report.Headers,
                 TotalCount = report.Data.Length,
                 Totals = report.Totals
@@ -135,6 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
             }
 
             report.Data = reportData.ToArray();
+            report.Warnings = new Quartz.Collection.HashSet<ReportWarnings>(a.Warnings.Union(b.Warnings));
             return report;
         }
 
@@ -162,7 +164,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
             report.Columns = newStructure.Select(c => c.column).ToArray();
             report.Headers = newStructure.Select(c => c.header).ToArray();
             report.Totals = newStructure.Select(c => c.total).ToArray();
-            
+            report.Warnings = a.Warnings;
+
             var reportData = new List<object[]>();
 
             foreach (var row in a.Data)
