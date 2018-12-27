@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             var questionModel = interview.GetGpsQuestion(entityIdentity);
             if (questionModel.IsAnswered())
