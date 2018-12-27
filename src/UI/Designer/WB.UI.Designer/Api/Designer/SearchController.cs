@@ -119,7 +119,7 @@ namespace WB.UI.Designer.Api.Designer
         public Guid? FolderId{ get; set; }
         public bool PrivateOnly { get; set; } = false;
 
-        public string PageIndex { get; set; }
-        public string PageSize { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; } = 20;
     }
 }
