@@ -35,7 +35,7 @@
   <style name="Interview_Question_Title_Base">
     <item name="android:textStyle">bold</item>
     <item name="android:textColor">@color/question_title_text</item>
-    <item name="android:textColorLink">@color/group_started</item>
+    <item name="android:textColorLink">@color/btn_default</item>
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -85,6 +85,7 @@
     <item name="android:fontFamily">Arial</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColorLink">@color/btn_default</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:layout_marginTop">@dimen/Interview_Instructions_margin</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
@@ -420,7 +421,7 @@
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:textColorLink">@color/group_started</item>
+    <item name="android:textColorLink">@color/btn_default</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
