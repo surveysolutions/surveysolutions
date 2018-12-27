@@ -4,7 +4,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     public class when_building_statistics_view_and_from_is_more_than_to : ChartStatisticsViewFactoryTestsContext
     {
@@ -25,11 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void Because () => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_return_empty_result() =>
-            view.Lines.Should().BeEmpty();
+        public void should_return_empty_result() => view.DataSets.Should().BeEmpty();
 
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
     }
 }

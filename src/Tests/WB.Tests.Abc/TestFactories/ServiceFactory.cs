@@ -419,7 +419,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
-            IHttpStatistician httpStatistician = null)
+            IHttpStatistician httpStatistician = null,
+            IServiceLocator serviceLocator = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
 
@@ -436,7 +437,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                Mock.Of<IServiceLocator>());
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
@@ -948,20 +949,21 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+                sessionProvider ?? Mock.Of<IUnitOfWork>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null,
             IAuthorizedUser authorizedUser = null)
         {
             return new MapReport(
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>());
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
         }
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)

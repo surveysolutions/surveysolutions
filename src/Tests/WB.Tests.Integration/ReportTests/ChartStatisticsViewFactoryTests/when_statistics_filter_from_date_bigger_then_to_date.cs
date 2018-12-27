@@ -3,35 +3,29 @@ using System.Collections.Generic;
 using System.Globalization;
 using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactoryTests
+namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
     internal class when_statistics_filter_from_date_bigger_then_to_date : ChartStatisticsViewFactoryTestsContext
     {
         [OneTimeSetUp]
         public void Establish()
         {
-            var questionnaireId = Guid.NewGuid();
+            var qid = Create.Entity.QuestionnaireIdentity();
             baseDate = new DateTime(2014, 8, 22);
 
-            var data = CreateStatisticsGroupedByDateAndTemplate(new Dictionary<DateTime, QuestionnaireStatisticsForChart>
-            {
-                {
-                    baseDate,
-                    CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(count: 7)
-                }
-            });
+            CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(qid, baseDate, 7);
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: data);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
 
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = baseDate,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = 1,
+                QuestionnaireId = qid.QuestionnaireId,
+                QuestionnaireVersion = qid.Version,
                 From = baseDate.AddDays(-1),
                 To = baseDate.AddDays(-2)
             };
@@ -50,11 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         [Test]
         public void should_have_0_lines() =>
-            view.Lines.Length.Should().Be(0);
+            view.DataSets.Count.Should().Be(0);
 
-        private static ChartStatisticsViewFactory chartStatisticsViewFactory;
-        private static ChartStatisticsInputModel input;
-        private static ChartStatisticsView view;
-        private static DateTime baseDate;
+        private ChartStatisticsViewFactory chartStatisticsViewFactory;
+        private ChartStatisticsInputModel input;
+        private ChartStatisticsView view;
+        private DateTime baseDate;
     }
 }

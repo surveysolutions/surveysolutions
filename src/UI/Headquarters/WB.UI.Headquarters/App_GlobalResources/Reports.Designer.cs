@@ -664,6 +664,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to questionnaires.
+        /// </summary>
+        internal static string ToAllQuestionnaires {
+            get {
+                return ResourceManager.GetString("ToAllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated {0}.
         /// </summary>
         internal static string Updated {

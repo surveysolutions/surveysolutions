@@ -29,7 +29,7 @@
 
     self.questionnaires = _.chain($questionnaires).map(function(q) {
         return { id: q.templateId, title: q.templateName};
-    }).uniqWith(_.isEqual).value();
+    }).uniqWith(_.isEqual).sortBy(function(q) { return q.templateName}).value();
 
     self.QuestionnaireVersions = ko.observableArray([]);
 
@@ -62,6 +62,22 @@
         self.ReportTypeName($("#reportTypeSelector option[value='" + value + "']").text());
     };
 
+    
+    self.filterQuestionnaireVersions = function() {
+        if (self.SelectedQuestionnaireId()) {
+            var versions = _.chain(self.$questionnaires)
+                .filter({ templateId: self.SelectedQuestionnaireId() })
+                .sortBy(function(q) { return parseInt(q); })
+                .reverse()
+                .map(function(q) { return q.templateVersion; })
+                .value();
+            self.QuestionnaireVersions(versions);
+        } else {
+            self.QuestionnaireVersions([]);
+        }
+    };
+
+
     self.load = function () {
         var todayMinus7Days = defaultFromDate.format(dateFormat);
 
@@ -73,6 +89,7 @@
         self.Url.query['reportType'] = self.QueryString['reportType'] || "";
 
         self.SelectedQuestionnaireId(self.QueryString['questionnaireId']);
+        self.filterQuestionnaireVersions();
         self.SelectedQuestionnaireVersion(self.QueryString['questionnaireVersion']);
         self.SelectedType(self.Url.query['reportType']);
 
@@ -91,9 +108,12 @@
 
         self.SelectedQuestionnaireId.subscribe(function (value) {
             if (value) {
-                var versions = _.chain(self.$questionnaires).filter({ templateId: value }).map(function (q) {
-                    return q.templateVersion;
-                }).value();
+                var versions = _.chain(self.$questionnaires)
+                                .filter({ templateId: value })
+                                .sortBy(function(q) { return parseInt(q); })
+                                .reverse()
+                                .map(function (q) { return q.templateVersion; })
+                                .value();
                 self.QuestionnaireVersions(versions);
             } else {
                 self.QuestionnaireVersions([]);

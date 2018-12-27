@@ -1701,7 +1701,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
             if (!this.SharedUsersIds.Contains(personId))
             {
@@ -1710,7 +1710,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
-
         }
 
         #endregion
@@ -2052,6 +2051,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+        }
+
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(Guid personId, Guid viewerId)
+        {
+            if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+            if (this.ReadOnlyUsersIds.Contains(viewerId) && personId != viewerId)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
         }
 
