@@ -114,29 +114,41 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
         public SearchResult Search(SearchInput input)
         {
-            var sql = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, s.sectionid, " +
+            var sqlSelect = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, s.sectionid, " +
                       $"       li.folderid, li.title as questionnairetitle, f.title as foldername" +
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
                       $" WHERE s.searchtext @@ to_tsquery(@query)" +
-                      $"   AND @folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%' " +
+                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') " +
                       $" ORDER BY @order ASC" +
                       $" LIMIT @pageSize" +
                       $" OFFSET @offset ";
 
-            var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sql, new
+            var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sqlSelect, new
             {
-                query = input.Query ?? String.Empty,
+                query = input.Query ?? string.Empty,
                 folderid = input.FolderId,
                 pageSize = input.PageSize,
                 order = input.OrderBy ?? "title",
                 offset = input.PageIndex * input.PageSize
             }).ToList();
 
+            var sqlCount = $"SELECT COUNT(s.entityid) " +
+                      $" FROM {TableNameWithSchema} s " +
+                      $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
+                      $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
+                      $" WHERE s.searchtext @@ to_tsquery(@query)" +
+                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') ";
+            var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
+            {
+                query = input.Query ?? String.Empty,
+                folderid = input.FolderId,
+            });
+
             var searchResult = new SearchResult();
             searchResult.Items = searchResultEntities;
-            searchResult.TotalCount = searchResultEntities.Count;
+            searchResult.TotalCount = count;
             return searchResult;
         }
     }
