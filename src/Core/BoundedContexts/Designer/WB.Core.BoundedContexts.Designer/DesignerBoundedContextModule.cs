@@ -70,6 +70,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.Bind<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             registry.Bind<IPublicFoldersStorage, PublicFoldersStorage>();
+            registry.Bind<ICategoricalOptionsImportService, CategoricalOptionsImportService>();
             registry.Bind<IQuestionnaireChangeHistoryFactory, QuestionnaireChangeHistoryFactory>();
             registry.Bind<IQuestionnaireViewFactory, QuestionnaireViewFactory>();
             registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();
