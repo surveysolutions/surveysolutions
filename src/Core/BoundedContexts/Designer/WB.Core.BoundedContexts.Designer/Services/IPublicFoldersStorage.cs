@@ -21,6 +21,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 
         IEnumerable<QuestionnaireListViewFolder> GetFoldersPath(Guid? folderId);
 
-        Task<List<QuestionnaireListViewFolder>> GetAllFolders();
+        Task<List<QuestionnaireListViewFolder>> GetAllFoldersAsync();
     }
 }

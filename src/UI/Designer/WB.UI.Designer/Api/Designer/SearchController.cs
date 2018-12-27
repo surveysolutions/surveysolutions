@@ -30,9 +30,9 @@ namespace WB.UI.Designer.Api.Designer
    
         [HttpGet]
         [Route("filters")]
-        public Task<List<QuestionnaireListViewFolder>> GetFilters()
+        public Task<List<QuestionnaireListViewFolder>> GetFolders()
         {
-            return publicFoldersStorage.GetAllFolders();
+            return publicFoldersStorage.GetAllFoldersAsync();
         }
 
         [HttpGet]
