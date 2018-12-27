@@ -325,6 +325,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201812211517_FillQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
+    <Compile Include="Migrations\RepositoriesMigration.cs" />
     <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
