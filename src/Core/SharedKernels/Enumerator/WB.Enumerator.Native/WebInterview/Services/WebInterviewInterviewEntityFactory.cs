@@ -87,6 +87,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
 
+            var webLinksVirtualDirectory = WebLinksVirtualDirectory(isReviewMode);
+
             if (question != null)
             {
                 GenericQuestion result;
@@ -269,7 +271,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
 
-                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReviewMode));
+                result.Instructions = this.webNavigationService.MakeNavigationLinks(result.Instructions, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
                 
                 return result;
             }
@@ -282,7 +285,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
 
-                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReviewMode));
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
