@@ -55,6 +55,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -1459,6 +1460,17 @@ namespace WB.Tests.Unit.Designer
         {
             return new JsonPatchService(new ZipArchiveUtils());
         }
+
+        public static ICategoricalOptionsImportService CategoricalOptionsImportService(QuestionnaireDocument document)
+            => new CategoricalOptionsImportService(
+                new InMemoryKeyValueStorage<QuestionnaireDocument>(
+                    new Dictionary<string, QuestionnaireDocument>()
+                    {
+                        {
+                            document.PublicKey.FormatGuid(),
+                            document
+                        }
+                    }));
 
         public static ClassificationsStorage ClassificationStorage(
             IPlainStorageAccessor<ClassificationEntity> classificationsAccessor = null,
