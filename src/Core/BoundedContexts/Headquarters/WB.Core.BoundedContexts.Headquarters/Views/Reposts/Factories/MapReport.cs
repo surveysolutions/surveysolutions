@@ -53,8 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 }
                 else
                 {
-                    var identity = new QuestionnaireIdentity(questionnaireId, version.Value);
-                    q = q.Where(i => i.QuestionnaireIdentity == identity.ToString());
+                    var identity = new QuestionnaireIdentity(questionnaireId, version.Value).ToString();
+                    q = q.Where(i => i.QuestionnaireIdentity == identity);
                 }
 
                 q = q.Where(i => i.QuestionType == QuestionType.GpsCoordinates);
@@ -125,11 +125,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private MapReportCacheLine InitializeSuperCluster(MapReportInputModel input)
         {
-            //var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
-            //var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
-
-            //if (!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
-            
             var gpsAnswers = this.interviewFactory.GetGpsAnswers(
                 input.QuestionnaireId, input.QuestionnaireVersion, input.Variable, null, GeoBounds.Open,
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
