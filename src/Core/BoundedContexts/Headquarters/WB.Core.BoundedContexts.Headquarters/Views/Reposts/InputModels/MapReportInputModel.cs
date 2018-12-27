@@ -1,12 +1,11 @@
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using System;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
 {
     public class MapReportInputModel
     {
-        public string QuestionnaireId { get; set; }
-
-        public QuestionnaireIdentity QuestionnaireIdentity => QuestionnaireIdentity.Parse(this.QuestionnaireId);
+        public Guid QuestionnaireId { get; set; }
+        public long? QuestionnaireVersion { get; set; }
 
         public string Variable { get; set; }
 

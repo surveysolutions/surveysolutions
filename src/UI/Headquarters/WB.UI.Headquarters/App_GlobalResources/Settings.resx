@@ -144,11 +144,11 @@
   <data name="LogoUpdated" xml:space="preserve">
     <value>Company logo updated</value>
   </data>
-  <data name="InterviewerSettings_Title" xml:space="preserve">
-    <value>Interviewer application settings</value>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Interviewer/Supervisor application settings</value>
   </data>
-  <data name="InterviewerSettings_Description" xml:space="preserve">
-    <value>Some specific settings by android version of Interviewer application</value>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Some specific settings by android version of Interviewer/Supervisor application</value>
   </data>
   <data name="InterviewerAutoUpdate" xml:space="preserve">
     <value>Enable automatic updates</value>
@@ -192,16 +192,7 @@
   <data name="GlobalNoteClearingConfirm" xml:space="preserve">
     <value>Are you sure you want to delete global note?</value>
   </data>
-  <data name="AllowedToSync" xml:space="preserve">
-    <value>Allowed Interviewer/Supervisor application versions:</value>
-  </data>
-  <data name="Any" xml:space="preserve">
-    <value>Any</value>
-  </data>
-  <data name="VersionOrNewer" xml:space="preserve">
-    <value>Allow to use {0} or newer</value>
-  </data>
-  <data name="CurrentVersion" xml:space="preserve">
-    <value>Same as the Headquarters</value>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters</value>
   </data>
 </root>

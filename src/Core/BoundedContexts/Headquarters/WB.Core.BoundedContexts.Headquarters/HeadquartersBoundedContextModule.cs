@@ -193,7 +193,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
-            registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
             registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
 

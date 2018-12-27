@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             await Because();
         }
 
-        public async Task Because() => await viewModel.LoadQuestionnaireCommand.ExecuteAsync(selectedQuestionnaire);
+        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(selectedQuestionnaire);
 
         [Test] public void should_be_downloaded_questionnaire () => 
             mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);

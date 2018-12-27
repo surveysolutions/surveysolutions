@@ -630,6 +630,7 @@
     </Content>
     <Content Include="App_GlobalResources\Settings.fr.resx">
       <DependentUpon>Settings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Settings.ka.resx">
       <DependentUpon>Settings.resx</DependentUpon>
@@ -647,6 +648,7 @@
     </Content>
     <Content Include="App_GlobalResources\Settings.zh.resx">
       <DependentUpon>Settings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.es.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
@@ -856,6 +858,7 @@
     <Content Include="App_GlobalResources\Settings.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Settings.ro.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1714,7 +1717,6 @@
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
-    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1867,6 +1869,7 @@
     <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
+    <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

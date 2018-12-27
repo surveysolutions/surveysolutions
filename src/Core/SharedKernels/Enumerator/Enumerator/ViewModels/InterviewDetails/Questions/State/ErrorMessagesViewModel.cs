@@ -41,7 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     : error;
                 errorViewModel.InitializeNavigation(interviewId, identity, navigationState);
 
-                errorViewModel.InitAsStatic(errorText);
+                errorViewModel.InitAsStatic(errorText, identity);
+                
 
                 this.ValidationErrors.Add(errorViewModel);
             }
