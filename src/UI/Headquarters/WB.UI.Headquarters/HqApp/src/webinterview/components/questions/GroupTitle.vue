@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true" noComments="true" noFlag="true">
+    <wb-question :question="$me" :questionDivCssClassName="titleClass" :questionCssClassName="statusClass" noTitle="true" noValidation="true" noInstructions="true" noComments="true" noFlag="true">
         <span v-html="$me.title"></span><span v-if="this.$me.isRoster"> - <i>{{rosterTitle}}</i></span>
     </wb-question>
 </template>
@@ -44,16 +44,8 @@
             isCompleted() {
                 return this.$me.status === GroupStatus.Completed
             },
-            hasInvalidAnswers() {
-                return !this.$me.validity.isValid
-            },
-            btnStatusClass() {
-                return [{
-                    'btn-success': this.$me.validity.isValid && this.isCompleted,
-                    'btn-danger': !this.$me.validity.isValid,
-                    'btn-primary': !this.isCompleted ,
-                    'disabled': this.$me.isDisabled
-                }]
+            titleClass() {
+                return ['roster-title']
             },
             statusClass() {
                 return ['roster-section-block', {

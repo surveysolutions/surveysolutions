@@ -50,6 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(PlainModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
+            Error<IGroup>(PlainModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements, MaxEntitiesInPlainModeGroup)),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -61,7 +62,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<IGroup>(TooManySubsectionsAtOneLevel, "WB0224", VerificationMessages.WB0224_TooManySubsectionsAtOneLevel),
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
-            Warning<IGroup>(PlainModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements, MaxEntitiesInPlainModeGroup)),
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>
