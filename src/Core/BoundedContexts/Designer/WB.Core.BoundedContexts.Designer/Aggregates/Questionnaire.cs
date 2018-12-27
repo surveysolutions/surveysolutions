@@ -1239,7 +1239,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId);
-            ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
@@ -2129,17 +2128,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(QuestionnaireCategoricalOption[] options)
-        {
-
-            if (options.Select(x => x.ParentValue + "$" + x.Title).Distinct().Count() != options.Length)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
-                    ExceptionMessages.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair);
-            }
-        }
-
         #endregion
 
         #region Utilities
@@ -2158,7 +2146,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             AnswerCode = option.Value,
             AnswerText = option.Title,
-            ParentCode = option.ParentValue
+            ParentCode = option.ParentValue,
+            ParentValue = option.ParentValue?.ToString(),
+            AnswerValue = option.Value.ToString()
         };
 
         private static Answer[] ConvertOptionsToAnswers(Option[] options) 
