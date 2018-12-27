@@ -1,6 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
@@ -13,6 +14,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
@@ -233,7 +236,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var entities = questionnaireDocument.Children.TreeToEnumerable(e => e.Children);
             foreach (var entity in entities)
             {
-                questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
+                if (entity is IQuestion
+                    || entity is IVariable
+                    || entity is IGroup
+                    || entity is IStaticText)
+                {
+                    var title = entity.GetTitle();
+                    if (string.IsNullOrWhiteSpace(title))
+                        continue;
+
+                    questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
+                }
             }
         }
     }
