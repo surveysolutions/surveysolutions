@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -49,11 +50,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>
     {
-        private IQuestionnaireSearchStorage SearchStorage =>
+        private IQuestionnaireSearchStorage GetSearchStorage() =>
             ServiceLocator.Current.GetInstance<IQuestionnaireSearchStorage>();
 
-        private IPlainKeyValueStorage<QuestionnaireDocument> QuestionnaireStorage =>
+        private IPlainKeyValueStorage<QuestionnaireDocument> GetQuestionnaireStorage() =>
             ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireDocument>>();
+
+        private IPlainStorageAccessor<QuestionnaireListViewItem> GetQuestionnaireListViewItemStorage() =>
+            ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
         {
@@ -72,7 +76,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
-            SearchStorage.RemoveAllEntities(command.QuestionnaireId);
+            GetSearchStorage().RemoveAllEntities(command.QuestionnaireId);
         }
 
         public void Process(Questionnaire aggregate, AddStaticText command)
@@ -87,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteStaticText command)
         {
-            SearchStorage.Remove(command.QuestionnaireId, command.EntityId);
+            GetSearchStorage().Remove(command.QuestionnaireId, command.EntityId);
         }
 
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command)
@@ -112,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteGroup command)
         {
-            SearchStorage.Remove(command.QuestionnaireId, command.GroupId);
+            GetSearchStorage().Remove(command.QuestionnaireId, command.GroupId);
         }
 
         public void Process(Questionnaire aggregate, PasteAfter command)
@@ -132,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
-            SearchStorage.Remove(command.QuestionnaireId, command.QuestionId);
+            GetSearchStorage().Remove(command.QuestionnaireId, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateMultimediaQuestion command)
@@ -217,26 +221,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void UpdateEntity(Guid questionnaireId, Guid entityId)
         {
-            var questionnaireDocument = QuestionnaireStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireDocument = GetQuestionnaireStorage().GetById(questionnaireId.FormatGuid());
             if (!questionnaireDocument.IsPublic)
                 return;
 
             var entity = questionnaireDocument.Find<IComposite>(entityId);
-            SearchStorage.AddOrUpdateEntity(questionnaireId, entity);
+            GetSearchStorage().AddOrUpdateEntity(questionnaireId, entity);
         }
 
         private void RewriteQuestionnaireEntities(Guid questionnaireId)
         {
-            SearchStorage.RemoveAllEntities(questionnaireId);
+            var questionnaireSearchStorage = GetSearchStorage();
+            questionnaireSearchStorage.RemoveAllEntities(questionnaireId);
 
-            var questionnaireDocument = QuestionnaireStorage.GetById(questionnaireId.FormatGuid());
+            /*var questionnaireListViewItem = GetQuestionnaireListViewItemStorage().GetById(questionnaireId.FormatGuid());
+            if (!questionnaireListViewItem.IsPublic)
+                return;*/
+
+            var questionnaireDocument = GetQuestionnaireStorage().GetById(questionnaireId.FormatGuid());
             if (!questionnaireDocument.IsPublic)
                 return;
 
             var entities = questionnaireDocument.Children.TreeToEnumerable(e => e.Children);
             foreach (var entity in entities)
             {
-                SearchStorage.AddOrUpdateEntity(questionnaireId, entity);
+                questionnaireSearchStorage.AddOrUpdateEntity(questionnaireId, entity);
             }
         }
     }

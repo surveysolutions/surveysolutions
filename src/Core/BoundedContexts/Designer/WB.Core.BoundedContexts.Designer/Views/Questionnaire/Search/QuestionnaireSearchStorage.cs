@@ -85,49 +85,54 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
         public void Remove(Guid questionnaireId, Guid entityId)
         {
             var sql = $"DELETE from {TableNameWithSchema} s " +
-                      $"WHERE s.questionnaireid = :questionnaireId " +
-                      $"  AND s.entityid        = :entityId";
-            var query = unitOfWork.Session.CreateQuery(sql);
-            query.SetParameter("questionnaireId", questionnaireId);
-            query.SetParameter("entityId", entityId);
-            query.ExecuteUpdate();
+                      $"WHERE s.questionnaireid = @questionnaireId " +
+                      $"  AND s.entityid        = @entityId";
+
+            unitOfWork.Session.Connection.Execute(sql, new
+            {
+                questionnaireId = questionnaireId,
+                entityId = entityId,
+            });
         }
 
         public void RemoveAllEntities(Guid questionnaireId)
         {
             var sql = $"DELETE from {TableNameWithSchema} s " +
-                      $"WHERE s.questionnaireid = :questionnaireId ";
-            var query = unitOfWork.Session.CreateQuery(sql);
-            query.SetParameter("questionnaireId", questionnaireId);
-            query.ExecuteUpdate();
+                      $"WHERE s.questionnaireid = @questionnaireId ";
+            unitOfWork.Session.Connection.Execute(sql, new
+            {
+                questionnaireId = questionnaireId,
+            });
         }
 
         /*
-        public string Title { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public Guid? FolderId { get; set; }
         public string FolderName { get; set; }
-        public Guid QuestionnaireId { get; set; }
-        public Guid SectionId { get; set; }
-        public Guid EntityId { get; set; }
-        public string EntityType { get; set; }
+        
+            public Guid SectionId { get; set; }
 */
 
         public SearchResult Search(SearchInput input)
         {
-            var order = input.OrderBy ?? "title";
+            var sql = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, s.sectionid, " +
+                      $"       li.folderid, li.title as questionnairetitle, f.title as foldername" +
+                      $" FROM {TableNameWithSchema} s " +
+                      $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
+                      $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
+                      $" WHERE s.searchtext @@ to_tsquery(@query)" +
+                      $"   AND @folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%' " +
+                      $" ORDER BY @order ASC" +
+                      $" LIMIT @pageSize" +
+                      $" OFFSET @offset ";
 
-            var sql = $"SELECT * from {TableNameWithSchema} s " +
-                      //$"WHERE s.folderid = :folderid " +
-                      $"  WHERE searchtext_{TableName}_idx @@ to_tsquery(:query)" +
-                      $"ORDER BY :order ASC" +
-                      $"LIMIT :pageSize; ";
-            var query = unitOfWork.Session.CreateQuery(sql);
-            query.SetParameter("query", input.Query);
-            query.SetParameter("pageSize", input.PageSize);
-            query.SetParameter("order", order);
-
-            var searchResultEntities = query.List<SearchResultEntity>();
+            var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sql, new
+            {
+                query = input.Query ?? String.Empty,
+                folderid = input.FolderId,
+                pageSize = input.PageSize,
+                order = input.OrderBy ?? "title",
+                offset = input.PageIndex * input.PageSize
+            }).ToList();
 
             var searchResult = new SearchResult();
             searchResult.Items = searchResultEntities;
