@@ -332,4 +332,8 @@
     <value>Дубрикат опции '{0}' с родительским значением '{1}'</value>
     <comment>Дубрикат опции '{0}' с родительским значением '{1}'</comment>
   </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>Родительский вопрос '{0}' содержит {1} опции со значением '{2}'</value>
+    <comment>Родительский вопрос '{0}' содержит {1} опции со значением '{2}'</comment>
+  </data>
 </root>
