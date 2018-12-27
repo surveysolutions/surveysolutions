@@ -16,13 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnaireController();
-            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel
-            {
-                CascadingParent = new QuestionnaireController.CascadingParent
-                {
-                    Values = new HashSet<int>(new []{1,2})
-                }
-            });
+            SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
             stream = GenerateStreamFromString("1\tStreet 1\t2");
 
