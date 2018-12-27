@@ -53,199 +53,187 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IQuestionnaireSearchStorage GetSearchStorage() =>
             ServiceLocator.Current.GetInstance<IQuestionnaireSearchStorage>();
 
-        private IPlainKeyValueStorage<QuestionnaireDocument> GetQuestionnaireStorage() =>
-            ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireDocument>>();
-
-        private IPlainStorageAccessor<QuestionnaireListViewItem> GetQuestionnaireListViewItemStorage() =>
-            ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
-
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, CloneQuestionnaire command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateQuestionnaire command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
-            GetSearchStorage().RemoveAllEntities(command.QuestionnaireId);
+            GetSearchStorage().RemoveAllEntities(aggregate.Id);
         }
 
         public void Process(Questionnaire aggregate, AddStaticText command)
         {
-            UpdateEntity(command.QuestionnaireId, command.EntityId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.EntityId);
         }
 
         public void Process(Questionnaire aggregate, UpdateStaticText command)
         {
-            UpdateEntity(command.QuestionnaireId, command.EntityId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.EntityId);
         }
 
         public void Process(Questionnaire aggregate, DeleteStaticText command)
         {
-            GetSearchStorage().Remove(command.QuestionnaireId, command.EntityId);
+            GetSearchStorage().Remove(aggregate.Id, command.EntityId);
         }
 
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, DeleteTranslation command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, AddGroup command)
         {
-            UpdateEntity(command.QuestionnaireId, command.GroupId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.GroupId);
         }
 
         public void Process(Questionnaire aggregate, UpdateGroup command)
         {
-            UpdateEntity(command.QuestionnaireId, command.GroupId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.GroupId);
         }
 
         public void Process(Questionnaire aggregate, DeleteGroup command)
         {
-            GetSearchStorage().Remove(command.QuestionnaireId, command.GroupId);
+            GetSearchStorage().Remove(aggregate.Id, command.GroupId);
         }
 
         public void Process(Questionnaire aggregate, PasteAfter command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, PasteInto command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, AddDefaultTypeQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
-            GetSearchStorage().Remove(command.QuestionnaireId, command.QuestionId);
+            GetSearchStorage().Remove(aggregate.Id, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateMultimediaQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateDateTimeQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateNumericQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateQRBarcodeQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateGpsCoordinatesQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateTextListQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateTextQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateMultiOptionQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateSingleOptionQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, ReplaceOptionsWithClassification command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
         public void Process(Questionnaire aggregate, UpdateAreaQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, UpdateAudioQuestion command)
         {
-            UpdateEntity(command.QuestionnaireId, command.QuestionId);
+            UpdateEntity(aggregate.QuestionnaireDocument, command.QuestionId);
         }
 
         public void Process(Questionnaire aggregate, ReplaceTextsCommand command)
         {
-            RewriteQuestionnaireEntities(command.QuestionnaireId);
+            RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
-        private void UpdateEntity(Guid questionnaireId, Guid entityId)
+        private void UpdateEntity(QuestionnaireDocument questionnaireDocument, Guid entityId)
         {
-            var questionnaireDocument = GetQuestionnaireStorage().GetById(questionnaireId.FormatGuid());
             if (!questionnaireDocument.IsPublic)
                 return;
 
             var entity = questionnaireDocument.Find<IComposite>(entityId);
-            GetSearchStorage().AddOrUpdateEntity(questionnaireId, entity);
+            GetSearchStorage().AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
         }
 
-        private void RewriteQuestionnaireEntities(Guid questionnaireId)
+        private void RewriteQuestionnaireEntities(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireSearchStorage = GetSearchStorage();
-            questionnaireSearchStorage.RemoveAllEntities(questionnaireId);
+            questionnaireSearchStorage.RemoveAllEntities(questionnaireDocument.PublicKey);
 
-            /*var questionnaireListViewItem = GetQuestionnaireListViewItemStorage().GetById(questionnaireId.FormatGuid());
-            if (!questionnaireListViewItem.IsPublic)
-                return;*/
-
-            var questionnaireDocument = GetQuestionnaireStorage().GetById(questionnaireId.FormatGuid());
             if (!questionnaireDocument.IsPublic)
                 return;
 
             var entities = questionnaireDocument.Children.TreeToEnumerable(e => e.Children);
             foreach (var entity in entities)
             {
-                questionnaireSearchStorage.AddOrUpdateEntity(questionnaireId, entity);
+                questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
             }
         }
     }
