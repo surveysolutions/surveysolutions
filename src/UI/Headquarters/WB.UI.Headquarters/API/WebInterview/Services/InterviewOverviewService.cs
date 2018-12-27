@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
 
                 interviewEntities = interviewEntities
-                    .Where(e => interview.IsEnabled(e) && !questionnaire.IsPlainRoster(e.Id));
+                    .Where(e => interview.IsEnabled(e));
 
                 foreach (var interviewEntity in interviewEntities)
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
