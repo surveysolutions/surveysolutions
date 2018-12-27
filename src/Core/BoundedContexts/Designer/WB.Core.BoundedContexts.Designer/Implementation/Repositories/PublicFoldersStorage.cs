@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             return folders;
         }
 
-        public Task<List<QuestionnaireListViewFolder>> GetAllFolders()
+        public Task<List<QuestionnaireListViewFolder>> GetAllFoldersAsync()
         {
             var allFolders =  folderStorage.Query(_ => { return _.OrderBy(i => i.Title).ToList(); });
             

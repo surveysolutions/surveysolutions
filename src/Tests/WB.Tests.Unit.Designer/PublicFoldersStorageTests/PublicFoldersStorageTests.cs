@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.PublicFoldersStorageTests
     
             var storage = Create.PublicFoldersStorage(foldersAccessor);
 
-            var folders = await storage.GetAllFolders();
+            var folders = await storage.GetAllFoldersAsync();
 
             Assert.That(folders.Count, Is.EqualTo(8));
             CollectionAssert.IsOrdered(folders.Select(x => x.Title));
