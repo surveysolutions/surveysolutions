@@ -1714,7 +1714,6 @@
     <Content Include="Scripts\viewmodels\pages\teamsandstatuses.js" />
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
-    <Content Include="Views\Reports\CumulativeInterviewChartOld.cshtml" />
     <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>

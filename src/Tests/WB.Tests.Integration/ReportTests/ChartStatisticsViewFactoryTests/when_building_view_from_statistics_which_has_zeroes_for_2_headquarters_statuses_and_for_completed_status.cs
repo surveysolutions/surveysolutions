@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -13,7 +12,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
     {
         [OneTimeSetUp]
         public void Establish()
-        {   
+        {
             var day1 = new DateTime(2014, 8, 20);
             var day2 = day1.AddDays(1);
             var day3 = day1.AddDays(2);
@@ -47,8 +46,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             Because();
         }
 
-        public void Because() =>
-            view = chartStatisticsViewFactory.Load(input);
+        public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
         public void should_return_3_lines_the_same_as_statuses_count() => view.DataSets.Count.Should().Be(3);
