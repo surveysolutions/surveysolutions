@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.Question(),
                     })
             ) 
-            .ExpectWarning("WB0278");
+            .ExpectError("WB0278");
         }
 
         [Test]
