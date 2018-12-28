@@ -124,10 +124,10 @@
     <value>Apéndice {0} {1} de instrucciones</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>Apéndice {0} {1} de opciones de filtro</value>
+    <value>Apéndice {0} {1} de categorías de filtro</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>Apéndice {0} {1} de opciones</value>
+    <value>Apéndice {0} {1} de categorías</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>Apéndice {0} {1} de condiciones de validación y  mensajes</value>
@@ -160,7 +160,7 @@
     <value>No ha sido compartido con ningún otro usuario</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Opciones:</value>
+    <value>Categorías:</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>Leyendas y estructura de información en este archivo</value>

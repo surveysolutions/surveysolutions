@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question can not have empty ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column..
+        ///   Looks up a localized string similar to Categories in cascading question can not have not numeric value in ParentValue column..
         /// </summary>
         public static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
+        ///   Looks up a localized string similar to There is at least one duplicate of &quot;Title&quot; and &quot;Parent Value&quot; pairs. The list should not contain any duplicates..
         /// </summary>
         public static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
@@ -385,7 +385,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option value should have only number characters.
+        ///   Looks up a localized string similar to Category value should have only number characters.
         /// </summary>
         public static string OptionValuesShouldBeNumbers {
             get {

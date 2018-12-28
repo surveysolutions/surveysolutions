@@ -139,13 +139,13 @@
     <value>تعذر إزالة المستخدم، لأنه غير موجود في قائمة المشاركات</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>الخيارات في السؤال المتتالي لا يمكن أن تكون فارغة من قيم العامود الأصل.</value>
+    <value>لا يمكن أن تحتوي الفئات في السؤال المتتالي على عمود فارغ لقيمة الوالدين.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>لا يمكن أن تكون الخيارات في السؤال المتتالي قيمة غير رقمية في قيم العامود الأصل.</value>
+    <value>لا يمكن أن تكون الفئات في سؤال المتتالية ليس قيمة رقمية في عمود قيمة الوالد.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>هناك تكرار واحد على الأقل في العنوان + ازواج قيمة الأصل. يجب ألا تحتوي قائمة الخيارات على أية نسخ مكررة من هذا النوع.</value>
+    <value>يوجد تكرار واحد على الأقل من أزواج "العنوان" و "قيمة الأصل". يجب ألا تحتوي القائمة على أية نسخ مكررة.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>لا يمكن العثور على سؤال مربع التحرير و السرد مع المفتاح العام {0}</value>
@@ -226,7 +226,7 @@
     <value>وثائق الاستبيان فقط معتمدة الآن</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>يجب أن تحتوي قيمة الخيار على أرقام فقط</value>
+    <value>يجب أن تحتوي قيمة الفئة على أحرف الأرقام فقط</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>لا يمكن العثور على السؤال باستخدام المفتاح العام {0}.</value>
