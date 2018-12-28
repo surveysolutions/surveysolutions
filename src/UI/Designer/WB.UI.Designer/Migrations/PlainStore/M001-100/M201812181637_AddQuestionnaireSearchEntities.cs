@@ -25,7 +25,6 @@ namespace WB.UI.Designer.Migrations.PlainStore
                 .WithColumn("questionnaireid").AsGuid()
                 .WithColumn("entityid").AsGuid()
                 .WithColumn("entitytype").AsString()
-                .WithColumn("sectionid").AsGuid()
                 .WithColumn("searchtext").AsCustom("tsvector");
 
 

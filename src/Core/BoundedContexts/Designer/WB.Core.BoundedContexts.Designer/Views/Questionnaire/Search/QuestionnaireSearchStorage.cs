@@ -33,14 +33,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                 throw new ArgumentException("AddOrUpdateEntity type is not supported " + composite.GetType());
             }
 
-            var sql = $"INSERT INTO {TableNameWithSchema} (title, questionnaireid, entityid, entitytype, sectionid, searchtext)" +
-                      $"VALUES(@title, @questionnaireId, @entityid, @entityType, @sectionid, to_tsvector(@searchtext)) " +
+            var sql = $"INSERT INTO {TableNameWithSchema} (title, questionnaireid, entityid, entitytype, searchtext)" +
+                      $"VALUES(@title, @questionnaireId, @entityid, @entityType, to_tsvector(@searchtext)) " +
                       $"ON CONFLICT (questionnaireid, entityid) DO UPDATE " +
                       $"SET questionnaireid = @questionnaireId," +
                       $"    title           = @title," +
                       $"    entityid        = @entityId," +
                       $"    entitytype      = @entityType," +
-                      $"    sectionid       = @sectionId," +
                       $"    searchtext      = to_tsvector(@searchText)";
 
             unitOfWork.Session.Connection.Execute(sql, new
@@ -49,7 +48,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
-                sectionId = composite.PublicKey,
                 searchText = GetTextUsedForSearch(composite)
             });
         }
@@ -105,16 +103,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             });
         }
 
-        /*
-        public string QuestionnaireTitle { get; set; }
-        public string FolderName { get; set; }
-        
-            public Guid SectionId { get; set; }
-*/
-
         public SearchResult Search(SearchInput input)
         {
-            var sqlSelect = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, s.sectionid, " +
+            var sqlSelect = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, " +
                       $"       li.folderid, li.title as questionnairetitle, f.title as foldername" +
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
