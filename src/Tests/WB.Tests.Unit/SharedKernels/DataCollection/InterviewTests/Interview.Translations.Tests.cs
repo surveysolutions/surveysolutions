@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var rosterIdentity = Create.Entity.Identity("11111111111111111111111111111111", Create.Entity.RosterVector(0));
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.Roster(rosterIdentity.Id, "invariant title")}),
                 new KeyValuePair<string, IComposite[]>(ruTranslationName, new [] { Create.Entity.Roster(rosterIdentity.Id, ruTitle) })
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var groupIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.Group(groupIdentity.Id, "invariant title")}),
                 new KeyValuePair<string, IComposite[]>(ruTranslationName, new [] { Create.Entity.Group(groupIdentity.Id, ruTitle) })
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionIdentity = Identity.Create(Guid.Parse("21111111111111111111111111111111"), RosterVector.Empty);
             var groupIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new IComposite[]
                 {
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var staticTextIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new [] { 
                     Create.Entity.StaticText(staticTextIdentity.Id, "invariant text",
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 }.ToEnumerable()
             );
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(
                 new[] {
 
                     new KeyValuePair<string, IComposite[]>(null, new IComposite[]
@@ -219,7 +219,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionIdentity = Identity.Create(Guid.Parse("21111111111111111111111111111111"), RosterVector.Empty);
             var staticTextIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new IComposite[] 
                 {
@@ -264,7 +264,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.TextQuestion(questionIdentity.Id, text: "invariant title", validationConditions: new List<ValidationCondition>(new []
             {
@@ -316,7 +316,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
+            var interview = SetUp.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
                 new KeyValuePair<string, IComposite[]>(null, new IComposite[] {
                     Create.Entity.NumericIntegerQuestion(substQuestionIdentity.Id, "num"),

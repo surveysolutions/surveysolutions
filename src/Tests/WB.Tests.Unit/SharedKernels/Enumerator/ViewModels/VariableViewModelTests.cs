@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             //arrange
             var variableIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.Variable(variableIdentity.Id));
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             var viewModel = Create.ViewModel.VariableViewModel(
                 questionnaire: Create.Entity.PlainQuestionnaire(questionnaire),
                 interviewRepository: Create.Fake.StatefulInterviewRepositoryWith(interview));

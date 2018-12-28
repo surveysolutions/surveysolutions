@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                     Create.Entity.TextQuestion(deletedQuestionId)
                 })
             });
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             Assert.DoesNotThrow(() => interview.Apply(Create.Event.SubstitutionTitlesChanged(new[]
             {Identity.Create(deletedQuestionId, Create.Entity.RosterVector(0))})));

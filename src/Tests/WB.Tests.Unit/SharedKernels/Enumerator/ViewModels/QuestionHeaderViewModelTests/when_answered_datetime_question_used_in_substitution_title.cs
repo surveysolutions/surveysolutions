@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             });
 
             statefullInterview = Create.AggregateRoot.StatefulInterview(
-                questionnaireRepository: Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument));
+                questionnaireRepository: SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument));
             BecauseOf();
         }
 

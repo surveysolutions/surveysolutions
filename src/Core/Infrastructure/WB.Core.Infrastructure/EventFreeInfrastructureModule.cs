@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -21,7 +19,6 @@ namespace WB.Core.Infrastructure
         {
             registry.Bind<IEventSourcedAggregateRootRepository, DummyEventSourcedAggregateRootRepository>();
             registry.Bind<ILiteEventBus, DummyEventBus>();
-            registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
             registry.Bind<IEventStore, DummyEventStore>();
         }
 
@@ -79,31 +76,6 @@ namespace WB.Core.Infrastructure
             }
 
             public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
-            {
-                throw new NotImplementedException("This application is event free.");
-            }
-        }
-
-        public class DummyAggregateSnapshotter : IAggregateSnapshotter
-        {
-            public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream,
-                out EventSourcedAggregateRoot aggregateRoot)
-            {
-                throw new NotImplementedException("This application is event free.");
-            }
-
-            public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history,
-                out EventSourcedAggregateRoot aggregateRoot)
-            {
-                throw new NotImplementedException("This application is event free.");
-            }
-
-            public bool TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot, out Snapshot snapshot)
-            {
-                throw new NotImplementedException("This application is event free.");
-            }
-
-            public void CreateSnapshotIfNeededAndPossible(IEventSourcedAggregateRoot aggregateRoot)
             {
                 throw new NotImplementedException("This application is event free.");
             }

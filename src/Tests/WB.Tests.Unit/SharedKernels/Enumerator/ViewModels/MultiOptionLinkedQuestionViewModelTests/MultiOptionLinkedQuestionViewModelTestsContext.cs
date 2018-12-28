@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using MvvmCross.Base;
+using MvvmCross.Tests;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,8 +16,14 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
     [NUnit.Framework.TestOf(typeof(MultiOptionLinkedToRosterQuestionQuestionViewModel))]
-    internal class MultiOptionLinkedQuestionViewModelTestsContext
+    internal class MultiOptionLinkedQuestionViewModelTestsContext : MvxIoCSupportingTest
     {
+        public MultiOptionLinkedQuestionViewModelTestsContext()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
+        }
+
         protected static MultiOptionLinkedToRosterQuestionQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
             AnsweringViewModel answering = null, 
             IStatefulInterviewRepository interviewRepository = null, 

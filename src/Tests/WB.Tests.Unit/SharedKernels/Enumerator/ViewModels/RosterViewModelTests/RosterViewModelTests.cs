@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {
     [TestOf(typeof(RosterViewModel))]
-    internal class RosterViewModelTests
+    internal class RosterViewModelTests : BaseMvvmCrossTest
     {
         class FakeGroupViewModel : GroupViewModel
         {
@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? viewModelFactory.Object,
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
-                Stub.MvxMainThreadAsyncDispatcher(),
                 questionnaireRepository ?? questionnaireRepositoryMock.Object);
         }
     }

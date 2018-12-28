@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Ncqrs.Domain;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 
 namespace Ncqrs.Eventing.Sourcing
 {
@@ -60,10 +59,10 @@ namespace Ncqrs.Eventing.Sourcing
 
         protected virtual bool CanHandleEvent(CommittedEvent committedEvent) => true;
 
-        public virtual void InitializeFromSnapshot(Snapshot snapshot)
+        public virtual void InitializeFromSnapshot(Guid eventSourceId, int version)
         {
-            EventSourceId = snapshot.EventSourceId;
-            _initialVersion = _currentVersion = snapshot.Version;
+            EventSourceId = eventSourceId;
+            _initialVersion = _currentVersion = version;
         }
 
         public void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)

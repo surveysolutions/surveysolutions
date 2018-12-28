@@ -986,7 +986,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
             }
 
-            return (entity as IConditional)?.HideIfDisabled ?? false;
+            var parent = entity.GetParent();
+            bool shouldBeHiddenByParentHideIfDisabled = false;
+            if(IsPlainRoster(parent.PublicKey))
+            {
+                shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
+            }
+
+            return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
+        }
+
+        public bool IsPlainRoster(Guid entityId)
+        {
+            return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)

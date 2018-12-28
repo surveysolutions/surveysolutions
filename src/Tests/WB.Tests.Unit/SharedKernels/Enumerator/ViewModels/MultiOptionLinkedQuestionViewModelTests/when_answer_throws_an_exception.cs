@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 })
             });
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
 
             var interviews = Create.Fake.StatefulInterviewRepositoryWith(interview);

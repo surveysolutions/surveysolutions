@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.Roster(rosterId, rosterSizeQuestionId: questionId),
                 });
             
-            statefulInterview = Setup.StatefulInterview(questionnaire);
+            statefulInterview = SetUp.StatefulInterview(questionnaire);
             statefulInterview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, 1);
             BecauseOf();
         }

@@ -59,7 +59,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (questionOptionsRepository != null)
             {
-                Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
+                SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
             }
 
             interview.Apply(Create.Event.InterviewCreated(
@@ -111,7 +111,7 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
             }
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
             var serviceLocator = new Mock<IServiceLocator>();

@@ -191,9 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     break;
                 case ScreenType.Group:
                     this.vibrationViewModel.Enable();
-                    var interview = this.interviewRepository.Get(this.InterviewId);
-                    IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
-                    this.answerNotifier.Init(this.InterviewId, questionsToListen.ToArray());
+                    this.answerNotifier.Init(this.InterviewId);
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                 break;
             }

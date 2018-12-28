@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>()
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
             {
                 new CategoricalOption() {Title = "abc", Value = 1},
                 new CategoricalOption() {Title = "bac", Value = 2},
