@@ -1862,7 +1862,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text contains a link to an unknown question, group, roster or pdf attachment..
+        ///   Looks up a localized string similar to Text contains a link to an unknown question, subsection, roster or pdf attachment..
         /// </summary>
         public static string WB0278_TextContainsLinkToUnknownQuestionOrGroup {
             get {
