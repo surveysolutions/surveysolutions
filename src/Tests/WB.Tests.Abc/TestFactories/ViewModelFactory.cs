@@ -264,10 +264,11 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository: interviewRepository,
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
-
+            
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
+                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
