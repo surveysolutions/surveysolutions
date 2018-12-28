@@ -20,11 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ValidityViewModel Validity { get; }
         public WarningsViewModel Warnings { get; }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Enablement.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity);
-            this.Warnings.Init(interviewId, entityIdentity);
+            this.Validity.Init(interviewId, entityIdentity, navigationState);
+            this.Warnings.Init(interviewId, entityIdentity, navigationState);
         }
 
         public void Dispose()

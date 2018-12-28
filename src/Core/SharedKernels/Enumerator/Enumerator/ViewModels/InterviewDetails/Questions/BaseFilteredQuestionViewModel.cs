@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = this.interview.Id;
 
             ((QuestionStateViewModel<SingleOptionQuestionAnswered>)this.QuestionState).Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             this.Initialize(interviewId, entityIdentity, navigationState);
             Task.Run(this.SetAnswerAndUpdateFilter).WaitAndUnwrapException();

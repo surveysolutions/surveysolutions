@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.instructionViewModel.Init(interviewId, entityIdentity);
+            this.instructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 

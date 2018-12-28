@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
-            viewModel.Init("interviewid", questionIdentity);
+            viewModel.Init("interviewid", questionIdentity, Create.Other.NavigationState());
             BecauseOf();
         }
 
