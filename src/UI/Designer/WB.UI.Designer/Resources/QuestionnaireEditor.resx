@@ -584,7 +584,7 @@
     <value>Question text</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>To update options</value>
+    <value>To update categories</value>
   </data>
   <data name="QuestionVariableLabel" xml:space="preserve">
     <value>Variable label</value>
@@ -618,6 +618,9 @@
   </data>
   <data name="RosterVariableName" xml:space="preserve">
     <value>Roster ID</value>
+  </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Section name</value>
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
@@ -737,7 +740,7 @@
     <value>Only integers are allowed</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to {{count}}</value>
+    <value>Question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained too many categories, their number was reduced up to {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Record answer order</value>
@@ -749,7 +752,7 @@
     <value>Show strings</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>Upload new options</value>
+    <value>Upload new categories</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Use 1000 separator</value>
@@ -932,7 +935,7 @@
     <value>Chosen file is not image</value>
   </data>
   <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>To open options editor all unsaved changes must be saved. Should we save them now?</value>
+    <value>To open editor all unsaved changes must be saved. Should we save them now?</value>
   </data>
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>It was saved successfully. The window for file upload will be opened.</value>
@@ -971,7 +974,7 @@
     <value>Apply</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>No options. Choose tab separated file. The file can contain up to {0} options.</value>
+    <value>No categories. Choose tab separated file. The file can contain up to {0} categories.</value>
   </data>
   <data name="OptionsUploadTitle" xml:space="preserve">
     <value>Title</value>
@@ -1130,7 +1133,7 @@
     <value>Questionnaire settings</value>
   </data>
   <data name="HelpCombobox" xml:space="preserve">
-    <value>A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list</value>
+    <value>A combo-box is a combination of a drop-down list and a single-line editable text box. Categories could be selected either by typing a value or its part or selecting a value from the list</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
     <value>Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>

@@ -160,6 +160,12 @@ export default {
             if (this.selectedQuestion == null) {
                 this.loadQuestions(to);
             }
+        },
+
+        selectedQuestion(to) {
+            if(to == null && this.questionsList != null && this.questionsList.length > 0) {
+                this.selectQuestion(this.questionsList[0]);
+            }
         }
     },
 

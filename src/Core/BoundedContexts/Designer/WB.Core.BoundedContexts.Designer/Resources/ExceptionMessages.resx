@@ -253,16 +253,16 @@
     <value>Variable cannot be pasted here.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have empty ParentValue column.</value>
+    <value>Categories in cascading question can not have empty ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
+    <value>Categories in cascading question can not have not numeric value in ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+    <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>Option value should have only number characters</value>
+    <value>Category value should have only number characters</value>
   </data>
   <data name="AttachmentIdIsMissing" xml:space="preserve">
     <value>Missing attachment with id {0}</value>

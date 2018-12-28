@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 {
                     ItemId = reference.Id.FormatGuid(),
                     Type = @group.IsRoster ? QuestionnaireVerificationReferenceType.Roster : reference.Type,
-                    Variable = @group.IsRoster ? @group.VariableName : null,
+                    Variable = @group.VariableName,
                     Title = @group.Title,
                     ChapterId = parent?.PublicKey.FormatGuid()
                 };

@@ -793,7 +793,10 @@
                 var group = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(group)) return;
                 group.title = data.title;
+                group.variable = data.variable;
                 group.hasCondition = data.hasCondition;
+
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable, data.type);
             });
 
             $rootScope.$on('rosterUpdated', function (event, data) {
