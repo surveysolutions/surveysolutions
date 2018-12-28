@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxCountOfDecimalPlaces = 15;
         protected const int MaxTitleLength = 500;
         protected const int MaxValidationMessageLength = 250;
-        protected const int MaxOptionLength = 250;
+        public const int MaxOptionLength = 250;
         protected const int MaxNestedSubsectionsCount = 10;
         protected const int MaxRosterSizeAnswer = 200;
         protected const int MaxQuestionnaireSizeInMb = 5;
