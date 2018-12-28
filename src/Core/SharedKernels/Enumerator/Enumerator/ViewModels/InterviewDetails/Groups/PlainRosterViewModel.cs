@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if(shownRosterInstances?.Count == interviewRosterInstances.Count && shownRosterInstances.SequenceEqual(interviewRosterInstances))
                 return;
             
-            ObservableCollection<ICompositeEntity> uiEntities = new ObservableCollection<ICompositeEntity>();
+            List<ICompositeEntity> uiEntities = new List<ICompositeEntity>();
             foreach (var interviewRosterInstance in interviewRosterInstances)
             {
                 var interviewEntityViewModel = this.viewModelFactory.GetNew<PlainRosterTitleViewModel>();
@@ -70,21 +70,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 var underlyingInterviewerEntities = statefulInterview.GetUnderlyingInterviewerEntities(interviewRosterInstance)
                     .Select(x => this.viewModelFactory.GetEntity(x, interviewId, navigationState));
 
-
                 CompositeCollection<ICompositeEntity> inflatedChildren = this.compositeCollectionInflationService.GetInflatedCompositeCollection(underlyingInterviewerEntities);
-
-                inflatedChildren.ForEach(x => uiEntities.Add(x));
+                foreach (var compositeEntity in inflatedChildren)
+                {
+                    uiEntities.Add(compositeEntity);
+                }
             }
 
             try
             {
-                rosterInstances.SuspendCollectionChanged();
-                this.RosterInstances.Clear();
-                uiEntities.ForEach(x => this.rosterInstances.Add(x));
+                InvokeOnMainThread(() =>
+                {
+                    rosterInstances.SwitchTo(uiEntities);
+                });
             }
             finally
             {
-                rosterInstances.ResumeCollectionChanged();
                 shownRosterInstances = interviewRosterInstances;
             }
         }
