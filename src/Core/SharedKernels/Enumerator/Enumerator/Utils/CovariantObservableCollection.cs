@@ -2,10 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
-    public class CovariantObservableCollection<T> : ObservableCollection<T>, IObservableCollection<T>
+    public class CovariantObservableCollection<T> : MvxObservableCollection<T>, IObservableCollection<T>
     {
         private bool collectionChangedEventsSuspended;
 
@@ -17,32 +18,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
         }
 
-        public void SuspendCollectionChanged()
-        {
-            this.collectionChangedEventsSuspended = true;
-        }
-
-        public void ResumeCollectionChanged()
-        {
-            this.collectionChangedEventsSuspended = false;
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (!this.collectionChangedEventsSuspended)
             {
                 base.OnCollectionChanged(e);
             }
-        }
-
-        public new void Clear()
-        {
-            var removedItems = this.ToList();
-
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, 0));
-
-            base.Clear();
         }
     }
 }

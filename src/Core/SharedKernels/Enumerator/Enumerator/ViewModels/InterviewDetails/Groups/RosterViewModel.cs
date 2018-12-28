@@ -95,36 +95,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             List<Identity> interviewRosterInstances, 
             CovariantObservableCollection<IInterviewEntityViewModel> target)
         {
-            target.SuspendCollectionChanged();
-
-            foreach (var removedRosterInstance in removedRosterInstances)
+            InvokeOnMainThread(() =>
             {
-                var rosterInstanceViewModel =
-                    this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
-                rosterInstanceViewModel.DisposeIfDisposable();
-                target.Remove(rosterInstanceViewModel);
-            }
+                foreach (var removedRosterInstance in removedRosterInstances)
+                {
+                    var rosterInstanceViewModel =
+                        this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
+                    rosterInstanceViewModel.DisposeIfDisposable();
+                    target.Remove(rosterInstanceViewModel);
+                }
 
-            foreach (var addedRosterInstance in addedRosterInstances)
-            {
-                target.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
-                    this.GetGroupViewModel(addedRosterInstance));
-            }
+                foreach (var addedRosterInstance in addedRosterInstances)
+                {
+                    target.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
+                        this.GetGroupViewModel(addedRosterInstance));
+                }
 
-            // change order
-            for (int i = 0; i < interviewRosterInstances.Count; i++)
-            {
-                var rosterInstanceViewModel =
-                    this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(interviewRosterInstances[i]));
+                // change order
+                for (int i = 0; i < interviewRosterInstances.Count; i++)
+                {
+                    var rosterInstanceViewModel =
+                        this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(interviewRosterInstances[i]));
 
-                if (rosterInstanceViewModel == null)
-                    continue;
+                    if (rosterInstanceViewModel == null)
+                        continue;
 
-                target.Remove(rosterInstanceViewModel);
-                target.Insert(i, rosterInstanceViewModel);
-            }
-
-            target.ResumeCollectionChanged();
+                    target.Remove(rosterInstanceViewModel);
+                    target.Insert(i, rosterInstanceViewModel);
+                }
+            });
         }
 
         public void Handle(RosterInstancesAdded @event)
