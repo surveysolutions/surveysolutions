@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -28,21 +27,16 @@ namespace WB.UI.Headquarters.Controllers
     [LimitsFilter]
     public class ReportsController : Controller
     {
-        private readonly IMapReport mapReport;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
-        public ReportsController(
-            IMapReport mapReport,
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
+        public ReportsController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
-            this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
@@ -105,20 +99,11 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
-
-            var result = from questionnaire in questionnaires
-                group questionnaire by (questionnaire.QuestionnaireId, questionnaire.Title) into g
-                select new
-                {
-                    id = g.Key.QuestionnaireId,
-                    title = g.Key.Title,
-                    versions = g.Select(v => v.Version).OrderBy(v => v).ToList()
-                };
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return View(new
             {
-                Questionnaires = result
+                Questionnaires = questionnaires
             });
         }
 
@@ -127,11 +112,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
-            return this.View("CumulativeInterviewChart", new DocumentFilter
-            {
-                Templates = usersAndQuestionnaires.Questionnaires
+            return this.View("CumulativeInterviewChart", new {
+                Templates = questionnaires
             });
         }
 
@@ -164,16 +148,7 @@ namespace WB.UI.Headquarters.Controllers
                 isSupervisor = this.authorizedUser.IsSupervisor
             });
         }
-
-        private ComboboxOptionModel[] GetAllQuestionnaires()
-        {
-            List<TemplateViewItem> questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaires();
-
-            return questionnaires.Select(s => new ComboboxOptionModel(
-                new QuestionnaireIdentity(s.TemplateId, s.TemplateVersion).ToString(),
-                $@"(ver. {s.TemplateVersion.ToString()}) {s.TemplateName}")).ToArray();
-        }
-
+        
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;

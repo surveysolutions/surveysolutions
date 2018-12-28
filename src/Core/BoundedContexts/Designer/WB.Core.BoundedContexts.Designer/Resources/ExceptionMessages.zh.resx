@@ -139,13 +139,13 @@
     <value>无法移除该用户，因为她/他不在分享列表中</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>级联问题的选项不允许有空的上级待选值列。</value>
+    <value>级联问题中的类别不能具有空父值列。</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>级联问题的选项不允许有数值型的上级待选值列。</value>
+    <value>级联问题中的类别在“父值”列中不能具有数值。</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>至少有一个重复的标题 + 上级值配对。选项列表不应该包含任何此类重复。</value>
+    <value>至少有一个“标题”和“父值”对的副本。 该列表不应包含任何重复项。</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>无法找到带有公共键{0}的复选框型问题</value>
@@ -226,7 +226,7 @@
     <value>目前仅支持问卷文件</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>选项值只能是数字</value>
+    <value>类别值应仅包含数字字符</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>带公共键{0}的问题无法被找到。</value>

@@ -734,6 +734,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
+            var group = this.GetGroupById(groupId);
+
+            var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
+            var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
+
             this.innerDocument.UpdateGroup(groupId,
                 title,
                 variableName,

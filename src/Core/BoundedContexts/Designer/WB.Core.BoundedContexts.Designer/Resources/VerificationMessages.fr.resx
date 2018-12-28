@@ -178,7 +178,7 @@
     <value>Une autre macro portant le même nom existe déjà.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Le nombre maximum de réponses est supérieur au nombre d'options de la question.</value>
+    <value>Le nombre maximum de réponses est supérieur au nombre de catégories de questions.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Une question de ce type ne peut être une question d'identification.</value>
@@ -202,7 +202,7 @@
     <value>L'expression du filtre d'options a une longueur supérieure à {0} caractères.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Une question avec des options d'expression de filtre ne peut pas être une question d'identification.</value>
+    <value>Les questions avec expression de filtre de catégories ne peuvent pas être identifiées.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Les questions d'identification ne peuvent pas figurer dans un roster.</value>
@@ -484,7 +484,7 @@
     <value>Le nom de la variable ou l'identifiant du roster doit être unique dans l'ensemble du questionnaire.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Il y a au moins un doublon de Titre + Parent Value. La liste des options ne doit pas contenir de doublons de ce type.</value>
+    <value>Il y a au moins un doublon de Titre + Parent Value. La liste ne doit pas contenir de doublons de ce type.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>Le nombre de décimales n'est pas compris entre {0} et {1}.</value>
