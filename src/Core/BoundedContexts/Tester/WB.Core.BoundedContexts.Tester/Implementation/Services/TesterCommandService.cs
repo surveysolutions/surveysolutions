@@ -18,13 +18,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public TesterCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus,
-            IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner,
             IExecutedCommandsStorage executedCommandsStorage) : 
-                base(eventSourcedRepository, eventBus, snapshooter,
+                base(eventSourcedRepository, eventBus, 
                      serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner)
         {
             this.executedCommandsStorage = executedCommandsStorage;
