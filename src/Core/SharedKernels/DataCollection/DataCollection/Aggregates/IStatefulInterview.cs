@@ -112,6 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasUnansweredQuestions(Identity group);
 
         Identity GetParentGroup(Identity groupOrQuestion);
+        Identity[] GetParentGroups(Identity groupOrQuestion);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
         

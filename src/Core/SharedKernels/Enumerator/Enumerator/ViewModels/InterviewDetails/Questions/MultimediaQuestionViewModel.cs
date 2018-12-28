@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             NavigationState navigationState)
         {
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.questionIdentity = entityIdentity;
 
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);

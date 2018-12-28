@@ -566,6 +566,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Links are prohibited on navigation elements: sections, sub-sections, rosters.
+        /// </summary>
+        public static string WB0057_LinksAreProhibitedOnNavigationElements {
+            get {
+                return ResourceManager.GetString("WB0057_LinksAreProhibitedOnNavigationElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
         public static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
@@ -1876,6 +1885,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0279_PlainModeGroupContainsNestedGroup {
             get {
                 return ResourceManager.GetString("WB0279_PlainModeGroupContainsNestedGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text contains a link to an unknown question, subsection, roster or pdf attachment..
+        /// </summary>
+        public static string WB0280_TextContainsLinkToUnknownQuestionOrGroup {
+            get {
+                return ResourceManager.GetString("WB0280_TextContainsLinkToUnknownQuestionOrGroup", resourceCulture);
             }
         }
     }

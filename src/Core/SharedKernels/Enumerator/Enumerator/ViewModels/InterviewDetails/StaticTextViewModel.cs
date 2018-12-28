@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class StaticTextViewModel : 
         IInterviewEntityViewModel,
+        IInterviewEntity,
         IDisposable
     {
         public DynamicTextViewModel Text { get; }
@@ -22,18 +23,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionState = questionState;
         }
 
+        public string InterviewId { get; private set; }
         public Identity Identity { get; private set; }
+        public NavigationState NavigationState { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.InterviewId = interviewId;
+            this.NavigationState = navigationState;
             this.Identity = entityIdentity;
 
             this.Text.Init(interviewId, entityIdentity);
             this.Attachment.Init(interviewId, entityIdentity, navigationState);
-            this.QuestionState.Init(interviewId, entityIdentity);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
         }
 
         public void Dispose()

@@ -160,7 +160,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
         private static InterviewOverviewService CreateInterviewOverviewService()
         {
             var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
-            return new InterviewOverviewService(webInterviewInterviewEntityFactory);
+            return new InterviewOverviewService(webInterviewInterviewEntityFactory,
+            Create.Service.WebNavigationService());
         }
     }
 }

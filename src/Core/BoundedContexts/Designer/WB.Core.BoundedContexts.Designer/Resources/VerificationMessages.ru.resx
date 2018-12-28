@@ -285,6 +285,9 @@
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Циклические ссылки не разрешены.</value>
   </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Ссылки запрещены на элементах навигации: секциях, подсекциях, ростерах.</value>
+  </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Имя переменной или ID ростера не может быть зарезервированным словом.</value>
   </data>
@@ -723,5 +726,9 @@
   </data>
     <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Плоский режим запрещает использовать внутри ростеры.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Текст содержит ссылку на неизвестный вопрос, подсекцию, ростер или pdf вложение.
+</value>
   </data>
 </root>

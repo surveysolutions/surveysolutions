@@ -45,10 +45,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get; set; }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId;
+            this.navigationState = navigationState;
             this.Identity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
@@ -58,6 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string exceptionErrorMessageFromViewModel;
 
         private bool isInvalid;
+        private NavigationState navigationState;
+
         public bool IsInvalid
         {
             get { return this.isInvalid; }
@@ -81,12 +84,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var validationMessages = interview.GetFailedValidationMessages(this.Identity, UIResources.Error);
 
                     this.Error.Caption = String.Empty;
-                    this.Error.ChangeValidationErrors(validationMessages, this.Identity);
+                    this.Error.ChangeValidationErrors(validationMessages, this.interviewId, this.Identity, this.navigationState);
                 }
                 else if (wasError)
                 {
                     this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
-                    this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable(), this.Identity);
+                    this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable(), this.interviewId, this.Identity, this.navigationState);
                 }
 
                 this.IsInvalid = isInvalidEntity || wasError;
@@ -156,7 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
-                        this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable(), this.Identity);
+                        this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable(), this.interviewId, this.Identity, this.navigationState);
                         this.IsInvalid = true;
                     });
                 }
