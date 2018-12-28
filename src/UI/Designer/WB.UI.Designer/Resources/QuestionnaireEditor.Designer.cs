@@ -691,7 +691,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list.
+        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable text box. Categories could be selected either by typing a value or its part or selecting a value from the list.
         /// </summary>
         public static string HelpCombobox {
             get {
@@ -1231,7 +1231,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No options. Choose tab separated file. The file can contain up to {0} options..
+        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {0} categories..
         /// </summary>
         public static string OptionsUploadLimit {
             get {
@@ -1501,7 +1501,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To open options editor all unsaved changes must be saved. Should we save them now?.
+        ///   Looks up a localized string similar to To open editor all unsaved changes must be saved. Should we save them now?.
         /// </summary>
         public static string QuestionOpenEditorConfirm {
             get {
@@ -1519,7 +1519,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to As the question was marked as &quot;Combo box&quot; or &quot;Cascading combo box&quot; while uploading question&apos;s details and contained many options, it&apos;s value was reduced up to {{count}}.
+        ///   Looks up a localized string similar to Question was marked as &quot;Combo box&quot; or &quot;Cascading combo box&quot; while uploading question&apos;s details and contained too many categories, their number was reduced up to {{count}}.
         /// </summary>
         public static string QuestionOptionsCut {
             get {
@@ -1582,7 +1582,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To update options.
+        ///   Looks up a localized string similar to To update categories.
         /// </summary>
         public static string QuestionToUpdateOptions {
             get {
@@ -1591,7 +1591,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload new options.
+        ///   Looks up a localized string similar to Upload new categories.
         /// </summary>
         public static string QuestionUploadOptions {
             get {
