@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             var answerViewModel = new AnsweringViewModel(Mock.Of<ICommandService>(), Mock.Of<IUserInterfaceStateService>(), Mock.Of<IMvxMessenger>());
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel();
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel();
 
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
                 questionStateViewModel: questionStateMock.Object,

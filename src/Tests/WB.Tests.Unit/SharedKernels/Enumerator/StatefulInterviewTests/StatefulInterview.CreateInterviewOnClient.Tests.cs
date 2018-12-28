@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     fixedTitles: new[] {Create.Entity.FixedTitle(1, "roster title")}));
 
             //act
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             //assert
             Assert.That(interview.GetTitleText(Identity.Create(questionWithSubstitutionId, RosterVector.Empty)), Is.EqualTo("question with [...]"));
@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var questionIdentity = Create.Identity(questionId);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(question);
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionTextId, variable: "text", preFilled: true));
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {
@@ -169,7 +169,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             // arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId, preFilled: true));
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             SetupEventContext();
             var answersToIdentifyingQuestions = new List<InterviewAnswer>()
             {

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
-            interview = Setup.StatefulInterview(questionnaire);
+            interview = SetUp.StatefulInterview(questionnaire);
 
             interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));

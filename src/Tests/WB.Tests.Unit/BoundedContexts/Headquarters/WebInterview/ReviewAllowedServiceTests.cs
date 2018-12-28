@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsSupervisor == true && x.Id == supervisorId);
             var interview = Create.AggregateRoot.StatefulInterview(interviewId, supervisorId: supervisorId);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
             var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsSupervisor == true && x.Id == supervisorId);
             var interview = Create.AggregateRoot.StatefulInterview(interviewId, supervisorId: Id.g2);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
             var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.Throws<InterviewAccessException>(() => service.CheckIfAllowed(interviewId));
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
             var interview = Create.AggregateRoot.StatefulInterview(interviewId);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
             var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsAdministrator == true);
             var interview = Create.AggregateRoot.StatefulInterview(interviewId);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
             var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));

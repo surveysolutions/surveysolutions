@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
-            var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
+            var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
             
             userInteractionServiceMock
                 .Setup(x => x.ConfirmWithTextInputAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))

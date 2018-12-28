@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.StaticText(invalidStaticTextdentity.Id),
             });
 
-            var interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaireDocument: questionnaire);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
             interview.Apply(Create.Event.StaticTextsDeclaredInvalid(invalidStaticTextdentity));
 

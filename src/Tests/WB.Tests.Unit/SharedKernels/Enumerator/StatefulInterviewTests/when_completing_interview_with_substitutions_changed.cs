@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextQuestion(questionId: substitutionId, variable: substitutionVar),
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
+            interview = SetUp.StatefulInterview(questionnaireDocument: questionnaire);
 
             interview.AnswerTextQuestion(userId, substitutionId, RosterVector.Empty, DateTime.UtcNow, "substitution text");
 

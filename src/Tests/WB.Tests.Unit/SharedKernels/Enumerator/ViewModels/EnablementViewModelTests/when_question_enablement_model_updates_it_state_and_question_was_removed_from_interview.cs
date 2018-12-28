@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
                 })
              });
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, DateTime.Now, new [] { 1 });
 
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
             viewModel.Init(interview.EventSourceId.FormatGuid(), numericQuestionIdentity);

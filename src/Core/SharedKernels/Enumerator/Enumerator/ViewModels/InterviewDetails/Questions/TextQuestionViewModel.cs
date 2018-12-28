@@ -185,7 +185,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            this.Mask = questionnaire.GetTextQuestionMask(this.questionIdentity.Id);
+            this.mask = questionnaire.GetTextQuestionMask(this.questionIdentity.Id);
         }
 
         private void UpdateSelfFromModel()

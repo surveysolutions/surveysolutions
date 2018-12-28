@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Group(@group.Id)
             });
 
-            interview = Setup.StatefulInterview(questionnaire);
+            interview = SetUp.StatefulInterview(questionnaire);
 
             BecauseOf();
         }

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 new CategoricalOption() {Value = 2, Title = "2"}
             };
 
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
+            IQuestionnaireStorage questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, 
                 _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
