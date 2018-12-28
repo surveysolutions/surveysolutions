@@ -11,6 +11,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebNavigationService : IWebNavigationService
     {
+        const string DefaultNavigationLink = "javascript:void(0);";
+
         private readonly IVirtualPathService virtualPathService;
 
         public WebNavigationService(IVirtualPathService virtualPathService)
@@ -18,7 +20,21 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.virtualPathService = virtualPathService;
         }
 
-        public string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire, IStatefulInterview statefulInterview, string virtualDirectoryName)
+        public string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire,
+            IStatefulInterview statefulInterview, string virtualDirectoryName)
+            => this.ReplaceNavigationLinks(text, hyperlink =>
+            {
+                var href = hyperlink.Attributes["href"].Value;
+                if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) return;
+
+                hyperlink.Attributes["href"].Value =
+                    MakeNavigationLink(href, entityIdentity, questionnaire, statefulInterview, virtualDirectoryName);
+            });
+
+        public string ResetNavigationLinksToDefault(string text)
+            => this.ReplaceNavigationLinks(text, hyperlink => hyperlink.Attributes["href"].Value = DefaultNavigationLink);
+
+        private string ReplaceNavigationLinks(string text, Action<HtmlNode> onReplace)
         {
             if (string.IsNullOrEmpty(text)) return text;
 
@@ -29,13 +45,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             if (hyperlinks == null) return text;
 
             foreach (var hyperlink in hyperlinks)
-            {
-                var href = hyperlink.Attributes["href"].Value;
-                if (Uri.IsWellFormedUriString(href, UriKind.Absolute)) continue;
-
-                hyperlink.Attributes["href"].Value =
-                    MakeNavigationLink(href, entityIdentity, questionnaire, statefulInterview, virtualDirectoryName);
-            }
+                onReplace.Invoke(hyperlink);
 
             var writer = new StringWriter();
             doc.Save(writer);
@@ -60,7 +70,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         return GenerateAttachmentUrl(interview.Id, attachment.ContentId);
                     }
 
-                    return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview, virtualDirectoryName) ?? "javascript:void(0);";
+                    
+                    return MakeNavigationLinkToQuestionOrRoster(text, entityIdentity, questionnaire, interview, virtualDirectoryName) ?? DefaultNavigationLink;
                 }
 
             }

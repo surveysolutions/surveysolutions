@@ -7,5 +7,6 @@ namespace WB.Enumerator.Native.WebInterview
     {
         string MakeNavigationLinks(string text, Identity entityIdentity, IQuestionnaire questionnaire,
             IStatefulInterview statefulInterview, string virtualDirectoryName);
+        string ResetNavigationLinksToDefault(string text);
     }
 }
