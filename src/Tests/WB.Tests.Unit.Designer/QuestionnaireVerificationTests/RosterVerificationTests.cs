@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
@@ -10,7 +11,27 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     internal class RosterVerificationTests : QuestionnaireVerifierTestsContext
     {
         [Test]
-        public void when_exists_roster_with_roster_title_question_then_cyrcular_referance_should_not_be_exists()
+        public void when_roster_title_has_markdown_link()
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.NumericIntegerQuestion(Id.g1, variable: "q1"),
+                Create.NumericRoster(rosterId: Id.gA, title: "Roster [move to q1](q1)", rosterSizeQuestionId: Id.g1, rosterTitleQuestionId:Id.g2, variable: "r1", children: new IComposite[]
+                {
+                    Create.TextQuestion(Id.g2, variable: "tb")
+                })
+            });
+
+            var verifier = CreateQuestionnaireVerifier();
+
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+
+            verificationMessages.ShouldContainError("WB0057");
+            Assert.That(verificationMessages.GetError("WB0057").References.First().Id, Is.EqualTo(Id.gA));
+        }
+
+        [Test]
+        public void when_exists_roster_with_roster_title_question_then_circular_reference_should_not_be_exists()
         {
             var intQuestionId = Guid.Parse("11111111111111111111111111111111");
             var rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
