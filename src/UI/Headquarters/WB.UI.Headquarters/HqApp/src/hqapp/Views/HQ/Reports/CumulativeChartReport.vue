@@ -49,15 +49,13 @@
 </template>
 
 <script>
-import queryString from "~/hqapp/components/QueryString";
+import routeSync from "~/shared/routeSync";
 import Vue from "vue";
 
 const LineChart = () => import(/* webpackChunkName: "report" */ "./CumulativeChart");
 
-const timeFormat = "MM/DD/YYYY HH:mm";
-
 export default {
-    mixins: [queryString],
+    mixins: [routeSync],
     components: { LineChart },
 
     data() {

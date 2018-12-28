@@ -454,7 +454,7 @@
     <value>إضافة تعليمات الباحث</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>إضافة خيار</value>
+    <value>إضافة فئة</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>مربع التحرير و السرد المتتالي</value>

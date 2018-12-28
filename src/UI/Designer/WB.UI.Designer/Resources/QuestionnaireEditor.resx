@@ -701,7 +701,7 @@
     <value>Paste</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Add option</value>
+    <value>Add category</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Cascading combo box</value>
