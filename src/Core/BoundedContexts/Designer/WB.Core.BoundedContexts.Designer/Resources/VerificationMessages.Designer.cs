@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s options..
+        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s categories..
         /// </summary>
         public static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -314,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with options filter expression cannot be identifying..
+        ///   Looks up a localized string similar to Question with categories filter expression cannot be identifying..
         /// </summary>
         public static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
@@ -1169,7 +1169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
+        ///   Looks up a localized string similar to There is at least one duplicate of &quot;Title&quot; and &quot;Parent Value&quot; pairs. The list should not contain any duplicates..
         /// </summary>
         public static string WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {

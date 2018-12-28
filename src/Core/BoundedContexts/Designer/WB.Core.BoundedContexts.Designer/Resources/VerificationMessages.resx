@@ -160,7 +160,7 @@
     <value>Substitution cannot reference items from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Max number of answers is greater than number of question's options.</value>
+    <value>Max number of answers is greater than number of question's categories.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be identifying.</value>
@@ -373,7 +373,7 @@
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Question with options filter expression cannot be identifying.</value>
+    <value>Question with categories filter expression cannot be identifying.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
     <value>Items with the same name found.</value>
@@ -667,7 +667,7 @@
     <value>Variable name or roster ID should be unique in questionnaire's scope.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+    <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>Number of decimal places is not in range from {0} to {1}.</value>
