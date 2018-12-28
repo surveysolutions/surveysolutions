@@ -27,7 +27,7 @@
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
-                <li v-if="!forceLoadingState" v-for="option in options" :key="option">
+                <li v-if="!forceLoadingState" v-for="option in options" :key="option.item.key">
                     <a 
                        :class="[option.item.iconClass]"
                        href="javascript:void(0);"
