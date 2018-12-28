@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Init("interview", substitutionTargetQuestionIdentity);
+        public void BecauseOf() => viewModel.Init("interview", substitutionTargetQuestionIdentity, Create.ViewModel.EnablementViewModel());
 
         [NUnit.Framework.Test] public void should_change_item_title () => viewModel.Title.HtmlText.Should().Be("Your first variable is 2016-01-31 and second is 7,77");
 

@@ -13,27 +13,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public event EventHandler ShowComments;
 
         public DynamicTextViewModel Title { get; }
-        public EnablementViewModel Enablement { get; }
+        public EnablementViewModel Enablement { get; private set; }
 
         public Identity Identity { get; private set; }
 
         public QuestionHeaderViewModel(
-            DynamicTextViewModel dynamicTextViewModel,
-            EnablementViewModel enablementViewModel)
+            DynamicTextViewModel dynamicTextViewModel)
         {
-            this.Enablement = enablementViewModel;
             this.Title = dynamicTextViewModel;
         }
 
-        public void Init(string interviewId, Identity questionIdentity)
+        public void Init(string interviewId, Identity questionIdentity, EnablementViewModel enablement)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
             this.Identity = questionIdentity;
 
+            this.Enablement = enablement;
             this.Title.Init(interviewId, questionIdentity);
-            this.Enablement.Init(interviewId, questionIdentity);
         }
 
         public ICommand ShowCommentEditorCommand => new MvxCommand(() => ShowComments?.Invoke(this, EventArgs.Empty));

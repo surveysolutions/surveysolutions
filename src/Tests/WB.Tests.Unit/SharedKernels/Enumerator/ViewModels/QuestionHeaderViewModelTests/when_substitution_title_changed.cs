@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             liteEventBus = Create.Service.LiteEventBus(registry);
 
             viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
-            viewModel.Init("interview", questionWithSubstitutionIdentity);
+            viewModel.Init("interview", questionWithSubstitutionIdentity, Create.ViewModel.EnablementViewModel());
             BecauseOf();
         }
 

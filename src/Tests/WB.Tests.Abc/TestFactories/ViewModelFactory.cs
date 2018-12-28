@@ -256,10 +256,6 @@ namespace WB.Tests.Abc.TestFactories
             interviewRepository = interviewRepository ?? Stub<IStatefulInterviewRepository>.WithNotEmptyValues;
 
             var headerViewModel = new QuestionHeaderViewModel(
-                enablementViewModel: Create.ViewModel.EnablementViewModel(
-                    interviewRepository: interviewRepository,
-                    eventRegistry: liteEventRegistry,
-                    questionnaireRepository: questionnaireRepository),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(eventRegistry: liteEventRegistry,
                     interviewRepository: interviewRepository));
 
@@ -272,7 +268,6 @@ namespace WB.Tests.Abc.TestFactories
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
-                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
@@ -296,7 +291,7 @@ namespace WB.Tests.Abc.TestFactories
                 warningsViewModel: warningsViewModel);
         }
 
-        private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null,
+        public EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null,
             ILiteEventRegistry eventRegistry = null, IQuestionnaireStorage questionnaireRepository = null)
             => new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 eventRegistry ?? Create.Service.LiteEventRegistry(), 
