@@ -102,7 +102,7 @@ export default {
         },
 
         onTableReload(data) {
-            this.warnings = data.warnings
+            this.warnings = data.warnings || []
         }
     },
 

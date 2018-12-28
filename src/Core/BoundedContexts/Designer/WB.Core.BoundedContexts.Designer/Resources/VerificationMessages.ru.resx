@@ -178,7 +178,7 @@
     <value>Макрос с таким же именем уже существует.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Максимальное количество ответов больше, чем количество опций.</value>
+    <value>Максимальное количество ответов превышает количество категорий.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Вопрос данного типа не может быть отмечен как идентифицирующий.</value>
@@ -202,7 +202,7 @@
     <value>Выражение для фильтрации опций содержит более {0} символов.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Вопрос с фильтром опций не может быть помечен как идентифицирующий.</value>
+    <value>Вопрос с фильтром категорий не может быть помечен как идентифицирующий.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Идентифицирующий вопрос не может быть внутри ростера.</value>
@@ -487,7 +487,7 @@
     <value>Имя переменной или ID ростера должны быть уникальными в рамках опросника.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список опций не должен содержать дубликатов такого типа.</value>
+    <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список не должен содержать дубликатов.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}.</value>

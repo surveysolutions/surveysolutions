@@ -448,7 +448,7 @@
     <value>应用</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>没有选项。用tab分隔文件。文件最多可以包含{0}个选项。</value>
+    <value>没有类别。 选择制表符分隔文件。 该文件最多可包含{0}个类别。</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>上级值</value>
@@ -526,13 +526,13 @@
     <value>只能填整数</value>
   </data>
   <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>所有的更改必须先保存才能打开选项编辑器。我们应该现在保存？</value>
+    <value>要打开编辑器，必须保存所有未保存的更改。 我们现在应该救他们吗？</value>
   </data>
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>保存成功。文件上传的窗口将被打开。</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>如果一问题已经被标记为“复选框型”或“级联复选框型”，且正在上传的问题的细节包含多个选项，那么这个问题的值将最多被减掉{{count}}</value>
+    <value>在上传问题的详细信息并包含太多类别时，问题被标记为“组合框”或“级联组合框”，其数量减少到{{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>记录答题的顺序</value>
@@ -553,10 +553,10 @@
     <value>问题内容</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>更新选项</value>
+    <value>更新类别</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>上传新选项</value>
+    <value>上传新类别</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>使用千位符</value>
