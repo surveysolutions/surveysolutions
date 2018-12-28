@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.GetError("WB0056").References.ElementAt(0).Id.Should().Be(numericQuestionId);
         }
         [Test]
-        public void when_verifying_question_text_with_markdown_links_to_unknown_question_then_should_return_WB0278_errors()
+        public void when_verifying_question_text_with_markdown_links_to_unknown_question_then_should_return_WB0280_errors()
         {
             Guid questionId = Guid.Parse("10000000000000000000000000000000");
 
@@ -130,17 +130,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldContainError("WB0278");
+            verificationMessages.ShouldContainError("WB0280");
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
                 .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
 
-            verificationMessages.GetError("WB0278").References.ElementAt(0).Id.Should().Be(questionId);
+            verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
 
         [Test]
-        public void when_verifying_static_text_with_markdown_links_to_unknown_question_then_should_return_WB0278_errors()
+        public void when_verifying_static_text_with_markdown_links_to_unknown_question_then_should_return_WB0280_errors()
         {
             Guid staticTextId = Guid.Parse("20000000000000000000000000000000");
 
@@ -153,13 +153,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldContainError("WB0278");
+            verificationMessages.ShouldContainError("WB0280");
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
                 .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
 
-            verificationMessages.GetError("WB0278").References.ElementAt(0).Id.Should().Be(staticTextId);
+            verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
 
         [Test]
@@ -177,17 +177,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldContainError("WB0278");
+            verificationMessages.ShouldContainError("WB0280");
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
                 .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question);
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
                 .Should().BeEquivalentTo(0);
 
-            verificationMessages.GetError("WB0278").References.ElementAt(0).Id.Should().Be(questionId);
+            verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(questionId);
         }
 
         [Test]
@@ -205,17 +205,17 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldContainError("WB0278");
+            verificationMessages.ShouldContainError("WB0280");
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.Type)
                 .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.StaticText);
 
-            verificationMessages.GetError("WB0278")
+            verificationMessages.GetError("WB0280")
                 .References.Select(x => x.IndexOfEntityInProperty)
                 .Should().BeEquivalentTo(0);
 
-            verificationMessages.GetError("WB0278").References.ElementAt(0).Id.Should().Be(staticTextId);
+            verificationMessages.GetError("WB0280").References.ElementAt(0).Id.Should().Be(staticTextId);
         }
 
         [TestCase("cover")]
@@ -235,7 +235,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldNotContainError("WB0278");
+            verificationMessages.ShouldNotContainError("WB0280");
         }
         [TestCase("cover")]
         [TestCase("complete")]
@@ -254,7 +254,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
 
-            verificationMessages.ShouldNotContainError("WB0278");
+            verificationMessages.ShouldNotContainError("WB0280");
         }
     }
 }
