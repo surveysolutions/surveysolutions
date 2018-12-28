@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
                 
-                if (translatedEntity.Entity is IValidatable entityAsValidatable)
+                if (translatedEntity.Entity is Main.Core.Entities.SubEntities.IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
 
@@ -310,7 +310,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
-            => QuestionnaireVerificationMessage.Error("WB0278", VerificationMessages.WB0278_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
 
         private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
         {
