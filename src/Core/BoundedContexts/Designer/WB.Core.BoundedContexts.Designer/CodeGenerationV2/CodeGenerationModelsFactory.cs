@@ -93,8 +93,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         {
             var map = questionnaire.Find<IQuestion>().ToDictionary(x => x.PublicKey, questionnaire.GetVariable);
             questionnaire.Find<StaticText>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
-            questionnaire.Find<IGroup>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
+            questionnaire.Find<IGroup>().Where(x=> x.IsRoster).ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
             questionnaire.Find<IVariable>().ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
+            questionnaire.Find<IGroup>().Where(x => !x.IsRoster).ForEach(x => map.Add(x.PublicKey, questionnaire.GetVariable(x)));
             map.Add(questionnaire.PublicKey, CodeGeneratorV2.QuestionnaireIdName);
             return map;
         }
