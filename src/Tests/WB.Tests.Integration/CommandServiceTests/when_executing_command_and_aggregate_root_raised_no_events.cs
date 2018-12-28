@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
-            commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object, 
+            commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object,  
                 eventStore: eventStoreMock.Object);
 
             // Act
@@ -56,7 +56,6 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         private static CommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
-        private static Mock<IAggregateSnapshotter> snapshooterMock = new Mock<IAggregateSnapshotter>();
         private static Aggregate aggregateFromRepository;
         private static Mock<IEventBus> eventBusMock = new Mock<IEventBus>();
         private static Mock<IEventStore> eventStoreMock = new Mock<IEventStore>();

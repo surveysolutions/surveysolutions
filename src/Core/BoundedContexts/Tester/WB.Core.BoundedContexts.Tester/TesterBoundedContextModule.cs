@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Tester
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
-            registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();

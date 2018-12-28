@@ -12,10 +12,8 @@ using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -50,10 +48,6 @@ namespace WB.Tests.Abc.TestFactories
 
         public MemoryStreamWithDisposeCallback MemoryStreamWithCallback(Action<byte[]> disposeCallback) 
             => new MemoryStreamWithDisposeCallback(disposeCallback);
-
-        public IAggregateSnapshotter AggregateSnapshotter(EventSourcedAggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
-            => Mock.Of<IAggregateSnapshotter>(_
-                => _.TryLoadFromSnapshot(It.IsAny<Type>(), It.IsAny<Snapshot>(), It.IsAny<CommittedEventStream>(), out aggregateRoot) == isARLoadedFromSnapshotSuccessfully);
 
         public IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
             => Mock.Of<IEventStore>(_ =>
@@ -121,11 +115,6 @@ namespace WB.Tests.Abc.TestFactories
 
             return questionnairesStorage.Object;
         }
-
-
-        public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
-            => Mock.Of<ISnapshotStore>(_
-                => _.GetSnapshot(aggregateRootId, It.IsAny<int>()) == snapshot);
 
         public IStatefulInterviewRepository StatefulInterviewRepositoryWith(IStatefulInterview interview)
         {

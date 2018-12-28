@@ -49,6 +49,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
+            Error<IGroup>(PlainModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
+            Error<IGroup>(PlainModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -138,6 +140,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool SectionHasMoreThanAllowedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
+
+        private static bool PlainModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.IsPlainMode && group.Children.Count() > MaxEntitiesInPlainModeGroup;
+
+        private static bool PlainModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.IsPlainMode && group.Children.Any(e => ((e as IGroup)?.IsPlainMode ?? false) || ((e as IGroup)?.IsRoster ?? false));
 
         private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {

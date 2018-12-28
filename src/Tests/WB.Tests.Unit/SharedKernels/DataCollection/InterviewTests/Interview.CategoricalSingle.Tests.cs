@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     {
                         Create.Entity.SingleOptionQuestion(categoricalSingleQuestionId, linkedToQuestionId: textListQuestionId)
                     }));
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextListQuestion(interviewerId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new[] {new Tuple<decimal, string>(1, "option 1") });
             interview.AnswerNumericIntegerQuestion(interviewerId, numericRosterSizeId, RosterVector.Empty, DateTime.UtcNow, 1);
             //act

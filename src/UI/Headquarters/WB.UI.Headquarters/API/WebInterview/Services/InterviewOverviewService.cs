@@ -6,12 +6,20 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
+        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+
+        public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory)
+        {
+            this.interviewEntityFactory = interviewEntityFactory;
+        }
+
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
@@ -22,8 +30,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 var interviewEntities = isReviewMode
                     ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
                     : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
-                
-                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
+
+                interviewEntities = interviewEntities
+                    .Where(e => interview.IsEnabled(e));
+
+                foreach (var interviewEntity in interviewEntities)
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
             }
         }
@@ -87,7 +98,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 if (group is InterviewTreeRoster roster)
                 {
-                    return new OverviewWebGroupNode(roster)
+                    return new OverviewWebGroupNode(roster, questionnaire)
                     {
                         Id = roster.Identity.ToString(),
                         Title = roster.Title.Text,
@@ -95,7 +106,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     };
                 }
 
-                return new OverviewWebGroupNode(group)
+                return new OverviewWebGroupNode(group, questionnaire)
                 {
                     Id = group.Identity.ToString(),
                     Title = group.Title.Text

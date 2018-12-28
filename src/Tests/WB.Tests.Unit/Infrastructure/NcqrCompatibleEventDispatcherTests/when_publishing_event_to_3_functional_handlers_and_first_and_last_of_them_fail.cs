@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondFunctionalEventHandlerMock = secondEventHandlerMock.As<IFunctionalEventHandler>();
 
-            var handler1 = Setup.FailingFunctionalEventHandlerHavingUniqueType<int>();
-            var handler2 = Setup.FailingFunctionalEventHandlerHavingUniqueType<bool>();
+            var handler1 = SetUp.FailingFunctionalEventHandlerHavingUniqueType<int>();
+            var handler2 = SetUp.FailingFunctionalEventHandlerHavingUniqueType<bool>();
 
             var serviceLocator = new Mock<IServiceLocator>();
 

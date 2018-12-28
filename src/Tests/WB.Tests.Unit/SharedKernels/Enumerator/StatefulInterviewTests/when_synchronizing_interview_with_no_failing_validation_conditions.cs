@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                             })
                     }));
 
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId), questionnaire);
+            IQuestionnaireStorage questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireIdentity(questionnaireId), questionnaire);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository, shouldBeInitialized: false

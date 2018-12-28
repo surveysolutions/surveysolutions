@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: questionId),
             });
 
-            interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
+            interview = SetUp.InterviewForQuestionnaireDocument(questionnaireDocument);
 
             command = Create.Command.AnswerYesNoQuestion(
                 questionId: questionId,

@@ -721,7 +721,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
-            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
+            bool isPlainMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -732,13 +733,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
-            
+
+            var group = this.GetGroupById(groupId);
+
+            var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
+            var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
+
             this.innerDocument.UpdateGroup(groupId,
                 title,
                 variableName,
                 description,
                 condition,
-                hideIfDisabled);
+                hideIfDisabled,
+                isPlainMode);
 
             if (isRoster)
             {

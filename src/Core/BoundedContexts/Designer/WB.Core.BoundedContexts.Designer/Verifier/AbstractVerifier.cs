@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int MaxTotalRosterPropagationLimit = 80000;
         protected const int MaxQuestionsCountInSection = 400;
+        protected const int MaxEntitiesInPlainModeGroup = 10;
 
         protected static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
 

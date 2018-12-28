@@ -148,7 +148,7 @@ namespace WB.UI.WebTester
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
-            registry.BindAsSingleton<IInMemoryEventStore, ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
             registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
