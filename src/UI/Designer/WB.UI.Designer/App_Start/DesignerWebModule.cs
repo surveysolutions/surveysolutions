@@ -44,7 +44,6 @@ namespace WB.UI.Designer
             registry.Bind<IMembershipUserService, MembershipUserService>();
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
-            registry.Bind<ISearchService, SearchService>();
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
 
             registry.BindToMethod<WebTesterSettings>(() =>
