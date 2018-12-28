@@ -678,6 +678,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.CascadeFromQuestionId.HasValue)
                 return OptionsHaveUniqueValues(question.Answers);
 
+            if (CascadingHasCircularReference((SingleQuestion) question, questionnaire).HasErrors) return false;
+
             var list = new List<int[]>();
             var parentQuestions = new List<ICategoricalQuestion>();
 
@@ -685,9 +687,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             while (parentQuestionId != null)
             {
                 var cascadingQuestion = questionnaire.Find<ICategoricalQuestion>(parentQuestionId.Value);
+                if (cascadingQuestion == null) break;
+
                 parentQuestions.Add(cascadingQuestion);
                 parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
             }
+
+            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question.Answers);
 
             foreach (var questionAnswer in question.Answers)
             {
