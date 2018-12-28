@@ -478,7 +478,7 @@
     <value>Adicionar instrucciones al entrevistador</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Adicionar opción</value>
+    <value>Adicionar categoría</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Caja combo en cascada</value>

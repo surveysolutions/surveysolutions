@@ -636,15 +636,20 @@
     <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx">
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.ar.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.ar.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ar.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx">
@@ -1075,6 +1080,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

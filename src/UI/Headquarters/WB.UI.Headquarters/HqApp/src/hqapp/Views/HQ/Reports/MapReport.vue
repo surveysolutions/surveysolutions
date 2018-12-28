@@ -3,9 +3,14 @@
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')" 
-                    :values="questionnaires" :value="questionnaireId" fuzzy @selected="selectQuestionnaire" />
+                    :values="questionnaires" :value="questionnaireId" fuzzy noClear
+                    @selected="selectQuestionnaire" />
+            </FilterBlock>
+            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead :placeholder="$t('Common.AllVersions')" 
-                    :values="questionnaireVersions" :value="questionnaireVersion" fuzzy @selected="selectQuestionnaireVersion" />
+                    :disabled="questionnaireId == null"
+                    :values="questionnaireVersions" :value="questionnaireVersion"
+                     fuzzy @selected="selectQuestionnaireVersion" />
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
