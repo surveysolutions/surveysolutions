@@ -1158,6 +1158,14 @@
   <data name="HideIfDisabledNested" xml:space="preserve">
     <value>Унаследовано от опросника</value>
   </data>
+    <data name="PlainRoster" xml:space="preserve">
+    <value>Режим списка</value>
+    <comment>Режим списка</comment>
+  </data>
+    <data name="HelpPlainRoster" xml:space="preserve">
+    <value>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</value>
+    <comment>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</comment>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
   </data>

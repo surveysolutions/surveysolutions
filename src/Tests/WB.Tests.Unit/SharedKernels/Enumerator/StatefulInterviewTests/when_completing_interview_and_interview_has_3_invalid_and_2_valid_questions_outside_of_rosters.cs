@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextQuestion(questionId: validQuestion2Id, variable: "q5"),
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
+            interview = SetUp.StatefulInterview(questionnaireDocument: questionnaire);
 
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
 

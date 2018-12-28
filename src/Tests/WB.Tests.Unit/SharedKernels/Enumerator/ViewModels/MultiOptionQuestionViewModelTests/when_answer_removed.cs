@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             interview.AnswerMultipleOptionsQuestion(userId, questionGuid, RosterVector.Empty, DateTime.Now, new[] {1});
 
             viewModel = CreateViewModel(
-                questionnaireStorage: Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
+                questionnaireStorage: SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository: Stub<IStatefulInterviewRepository>.Returning((IStatefulInterview)interview),
                 filteredOptionsViewModel: Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview));
 

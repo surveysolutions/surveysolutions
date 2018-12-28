@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             interview.AnswerNumericRealQuestion(interviewerId, substitedQuestionIdentity.Id,
                 substitedQuestionIdentity.RosterVector, DateTime.UtcNow, answerOnDoubleQuestion);
 
-            Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
         }
 
         [Test]

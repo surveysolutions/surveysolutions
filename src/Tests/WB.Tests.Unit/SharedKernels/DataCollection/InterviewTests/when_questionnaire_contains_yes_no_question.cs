@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 }),
             });
 
-            interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
+            interview = SetUp.InterviewForQuestionnaireDocument(questionnaireDocument);
             BecauseOf();
         }
 

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionInstructionV
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             ILiteEventBus liteEventBus = Create.Service.LiteEventBus(registry);
 
-            var viewModel = CreateQuestionHeaderViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
+            var viewModel = CreateQuestionHeaderViewModel(SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
             viewModel.Init("interview", questionWithSubstitutionIdentity);
 
             liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,

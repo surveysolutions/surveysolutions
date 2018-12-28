@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     {
                         Create.Entity.MultipleOptionsQuestion(categoricalMultiQuestionId, linkedToQuestionId: textListQuestionId)
                     }));
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextListQuestion(interviewerId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow,
                 new[]
                 {

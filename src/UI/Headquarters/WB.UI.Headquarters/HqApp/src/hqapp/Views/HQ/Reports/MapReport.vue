@@ -1,17 +1,23 @@
 <template>
     <HqLayout :hasFilter="true" :hasHeader="false">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Reports.Questionnaire')">
-                <Typeahead :placeholder="$t('Common.AllQuestionnaires')" 
-                    :values="questionnaires" :value="selectedQuestionnaireId" fuzzy noClear
-                    @selected="selectQuestionnaire" />
+            <FilterBlock :title="$t('Common.Questionnaire')">
+                <Typeahead
+                    :placeholder="$t('Common.AllQuestionnaires')"
+                    control-id="questionnaireId"
+                    :value="selectedQuestionnaireId"
+                    :values="questionnaires"
+                    v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead :placeholder="$t('Common.AllVersions')" 
-                    :disabled="selectedQuestionnaireId == null"
-                    :values="questionnaireVersions" :value="selectedVersion"
-                     fuzzy @selected="selectQuestionnaireVersion" />
-            </FilterBlock>
+                <Typeahead
+                    :placeholder="$t('Common.AllVersions')"
+                    control-id="questionnaireVersion"
+                    :value="selectedVersion"
+                    :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
+                    v-on:selected="selectQuestionnaireVersion"
+                    :disabled="selectedQuestionnaireId == null"/>
+      </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
                     :values="gpsQuestions" :value="selectedQuestion"
@@ -144,7 +150,7 @@ export default {
         };
     },
 
-    watch: {
+    watch: {       
         selectedQuestionnaireId(to) {
             if (to == null) {
                 this.showHeatmap = false;
@@ -203,13 +209,21 @@ export default {
         },
 
         selectedQuestionnaireId() {
-            if(this.query.questionnaireId == null) return null;
-            return _.find(this.questionnaires, {key : this.query.questionnaireId})
+            if (this.query == null || this.query.questionnaireId == null) {
+                return null;
+            }
+
+            return _.find(this.model.questionnaires, {
+                key: this.query.questionnaireId
+            });            
         },
 
         selectedVersion() {
-            if(this.query.version == null) return null;
-            return _.find(this.questionnaireVersions, {key: this.query.version})
+            if (this.selectedQuestionnaireId == null || this.query.version == null) return null;
+
+            return _.find(this.selectedQuestionnaireId.versions, {
+                key: this.query.version
+            });
         },
 
         selectedQuestion() {
@@ -256,14 +270,19 @@ export default {
          selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value
             this.onChange(s => s.version = value == null ? null : value.key)
-            this.selectQuestionnaire(this.questionnaireId)
+            this.selectGpsQuestion(null);
+            this.gpsQuestions = [];
         },
 
         selectQuestionnaire(value) {
             this.questionnaireId = value;
-
+            this.selectQuestionnaireVersion(null);
             this.selectGpsQuestion(null);
             this.gpsQuestions = [];
+
+            this.onChange(q => {
+                q.questionnaireId = value == null ? null : value.key;
+            });
 
             if (_.isNull(value)) return;
 
