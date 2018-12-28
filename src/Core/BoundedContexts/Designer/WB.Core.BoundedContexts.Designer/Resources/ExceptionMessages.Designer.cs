@@ -232,6 +232,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title is too long. Title length should be less than {0}.
+        /// </summary>
+        public static string ImportOptions_TitleTooLong {
+            get {
+                return ResourceManager.GetString("ImportOptions_TitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicated option &apos;{0}&apos; with value &apos;{1}&apos;.
+        /// </summary>
+        public static string ImportOptions_ValueIsNotUnique {
+            get {
+                return ResourceManager.GetString("ImportOptions_ValueIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid title list.
         /// </summary>
         public static string InvalidFixedTitle {
