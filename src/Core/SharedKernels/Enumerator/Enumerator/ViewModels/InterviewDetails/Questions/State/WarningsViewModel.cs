@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -24,18 +23,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         protected WarningsViewModel() { }
 
         public WarningsViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
             this.Warning = errorMessagesViewModel;
         }
 
@@ -62,13 +58,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ErrorMessagesViewModel Warning { get; }
 
-        private async Task UpdateValidStateAsync()
+        private void UpdateValidStateAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
             bool isInvalidEntity = !interview.IsEntityPlausible(this.Identity);
 
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity)
                 {
@@ -78,54 +73,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.IsImplausible = isInvalidEntity;
-            });
+            }
         }
 
-        public async void Handle(AnswersDeclaredPlausible @event)
+        public void Handle(AnswersDeclaredPlausible @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(AnswersDeclaredImplausible @event)
+        public void Handle(AnswersDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(StaticTextsDeclaredPlausible @event)
+        public void Handle(StaticTextsDeclaredPlausible @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(StaticTextsDeclaredImplausible @event)
+        public void Handle(StaticTextsDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(QuestionsEnabled @event)
+        public void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(SubstitutionTitlesChanged @event)
+        public void Handle(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
