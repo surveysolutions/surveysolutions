@@ -472,7 +472,7 @@
     <value>增加调查员说明</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>添加选项</value>
+    <value>添加类别</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>级联复选框</value>

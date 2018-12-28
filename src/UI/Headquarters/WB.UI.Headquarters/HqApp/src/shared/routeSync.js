@@ -56,6 +56,33 @@ export default {
             });
 
             this.$router.push({ query });
+        },
+
+        
+        checkedChange(ev) {
+            this.onChange(q => {
+                q[ev.name] = ev.checked;
+            });
+        },
+
+        radioChanged(ev) {
+            this.onChange(q => {
+                q[ev.name] = ev.selected;
+            });
+        },
+
+        inputChange(ev) {
+            const source = ev.target;
+            let value = source.value;
+
+            if (source.type == "number") {
+                const intValue = parseInt(value);
+                value = _.isNaN(intValue) ? null : intValue;
+            }
+
+            return this.onChange(q => {
+                q[source.name] = value;
+            });
         }
     }
 };
