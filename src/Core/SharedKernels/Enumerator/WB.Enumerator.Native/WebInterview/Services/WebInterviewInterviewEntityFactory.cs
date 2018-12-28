@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -31,6 +32,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
             IStatefulInterview interview, 
+            IQuestionnaire questionnaire, 
             string[] sectionIds, 
             bool isReviewMode)
         {
@@ -56,6 +58,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
+                children = children.Where(e => !questionnaire.IsPlainRoster(e.Identity.Id));
+
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
@@ -70,6 +74,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainRoster(c.Identity.Id));
                     });
                 }
             }
@@ -421,6 +426,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
             int AnsweredQuestions() => isReviewMode
                 ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
                 : interview.CountActiveAnsweredQuestionsInInterview();
+        }
+
+        public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
+        {
+            var parent = interview.GetParentGroup(identity);
+            while (parent != null && questionnaire.IsPlainRoster(parent.Id))
+            {
+                parent = interview.GetParentGroup(parent);
+            }
+            return parent;
         }
     }
 }

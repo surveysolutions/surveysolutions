@@ -151,19 +151,40 @@ namespace WB.Enumerator.Native.WebInterview
         {
             if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
 
-            Identity sectionIdentity = Identity.Parse(sectionId);
-            var statefulInterview = this.GetCallerInterview();
+            var statefulInterview = GetCallerInterview();
             if (statefulInterview == null) return null;
 
-            var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) : 
-                                     statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
-            var questionarie = this.GetCallerQuestionnaire();
+            var questionnaire = this.GetCallerQuestionnaire();
 
-            var entities = ids
+            var sectionIdentity = Identity.Parse(sectionId);
+
+            var ids = GetGroupEntitiesIds(sectionIdentity);
+
+            IEnumerable<Identity> GetGroupEntitiesIds(Identity identity)
+            {
+                return IsReviewMode
+                    ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity);
+            }
+
+            List<Identity> groupIds = new List<Identity>();
+
+            foreach (var elementId in ids)
+            {
+                groupIds.Add(elementId);
+
+                if (questionnaire.IsPlainRoster(elementId.Id))
+                {
+                    var groupEntitiesIds = GetGroupEntitiesIds(elementId);
+                    groupIds.AddRange(groupEntitiesIds);
+                }
+            }
+
+            var entities = groupIds
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionarie).ToString()
+                    EntityType = this.GetEntityType(x.Id, questionnaire).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -223,7 +244,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
 
-            var parent = statefulInterview.GetParentGroup(sectionIdentity);
+            var parent = interviewEntityFactory.GetParentWithoutPlainModeFlag(statefulInterview, questionnaire, sectionIdentity);
             if (parent != null)
             {
                 var parentGroup = statefulInterview.GetGroup(parent);
@@ -268,9 +289,13 @@ namespace WB.Enumerator.Native.WebInterview
 
             var statefulInterview = this.GetCallerInterview();
             if (statefulInterview == null) return null;
+            var questionnaire = this.GetCallerQuestionnaire();
+            if (questionnaire == null) return null;
 
             var callerQuestionnaire = this.GetCallerQuestionnaire();
-            ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id);
+            ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id)
+                .Except(id => questionnaire.IsPlainRoster(id))
+                .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
             int metRosters = 0;
@@ -350,11 +375,12 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerInterview == null) return null;
 
             var questionnaire = this.GetCallerQuestionnaire();
-            return ids.Select(id => 
-                id == @"NavigationButton"
-                    ? this.GetNavigationButtonState(id, questionnaire)
-                    : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
+            var interviewEntities = ids.Select(id => 
+                    id == @"NavigationButton"
+                        ? this.GetNavigationButtonState(id, questionnaire)
+                        : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
                 .ToArray();
+            return interviewEntities;
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
@@ -376,8 +402,10 @@ namespace WB.Enumerator.Native.WebInterview
             var sectionId = CallerSectionid;
             var interview = this.GetCallerInterview();
             if (interview == null) return null;
+            var questionnaire = this.GetCallerQuestionnaire();
+            if (questionnaire == null) return null;
 
-            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
+            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, questionnaire, parentIds, IsReviewMode);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
@@ -401,6 +429,8 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var interview = this.GetCallerInterview();
             if (interview == null) return null;
+            var questionnaire = this.GetCallerQuestionnaire();
+            if (questionnaire == null) return null;
 
             var questionsCount = interview.CountActiveQuestionsInInterview();
             var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
@@ -410,15 +440,14 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interview.GetParentGroup(identity).ToString();
+                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithError
                 {
                     Id = identity.ToString(),
-                    ParentId = parentId,
+                    ParentId = parentId.ToString(),
                     Title = titleText,
                     IsPrefilled = isPrefilled
                 };
-
             }).ToArray();
 
             var completeInfo = new CompleteInfo
@@ -436,6 +465,8 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var interview = this.GetCallerInterview();
             if (interview == null) return null;
+            var questionnaire = this.GetCallerQuestionnaire();
+            if (questionnaire == null) return null;
 
             var allCommented = IsReviewMode ? interview.GetAllCommentedEnabledQuestions().ToList() : 
                                               interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToList();
@@ -447,18 +478,16 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 var titleText = HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
                 var isPrefilled = interview.IsQuestionPrefilled(identity);
-                var parentId = interview.GetParentGroup(identity).ToString();
+                var parentId = interviewEntityFactory.GetParentWithoutPlainModeFlag(interview, questionnaire, identity);
                 return new EntityWithComment
                 {
                     Id = identity.ToString(),
-                    ParentId = parentId,
+                    ParentId = parentId.ToString(),
                     Title = titleText,
                     IsPrefilled = isPrefilled
                 };
 
             }).ToArray();
-
-            var questionnaire = this.GetCallerQuestionnaire();
 
             var interviewEntityWithTypes = questionnaire
                 .GetPrefilledQuestions()
@@ -480,7 +509,11 @@ namespace WB.Enumerator.Native.WebInterview
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
 
             if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
+            {
+                if (callerQuestionnaire.IsPlainRoster(entityId))
+                    return InterviewEntityType.GroupTitle;
                 return InterviewEntityType.Group;
+            }
 
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
 

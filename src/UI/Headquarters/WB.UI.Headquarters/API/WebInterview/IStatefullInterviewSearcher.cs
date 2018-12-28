@@ -5,7 +5,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public interface IStatefullInterviewSearcher
     {
-        SearchResults Search(IStatefulInterview interview, FilterOption[] flags, int skip, int take);
+        SearchResults Search(IStatefulInterview interview, IQuestionnaire questionnaire, FilterOption[] flags, int skip, int take);
 
         Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview);
     }

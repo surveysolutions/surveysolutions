@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [OneTimeSetUp]
         public async Task Context()
         {
-            var principal = Setup.InterviewerPrincipal("name", "pass");
+            var principal = SetUp.InterviewerPrincipal("name", "pass");
 
             var interviewId = Guid.NewGuid();
 

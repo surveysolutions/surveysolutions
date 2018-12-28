@@ -624,7 +624,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<IInterviewTreeNode> GetAllChildrenOrEmptyList(Identity groupIdentity)
             => this.Tree.GetGroup(groupIdentity)?.Children ?? new List<IInterviewTreeNode>();
 
-        public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
+        public List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.GetAllChildrenOrEmptyList(parentIdentity)
                 .Where(roster => roster.Identity.Id == rosterId)
                 .OfType<InterviewTreeRoster>()

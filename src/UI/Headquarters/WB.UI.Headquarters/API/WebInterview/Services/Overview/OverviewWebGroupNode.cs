@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 
@@ -7,9 +8,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services.Overview
 {
     public class OverviewWebGroupNode : OverviewGroup
     {
-        public OverviewWebGroupNode(InterviewTreeGroup treeNode) : base(treeNode)
+        public OverviewWebGroupNode(InterviewTreeGroup treeNode, IQuestionnaire questionnaire) : base(treeNode)
         {
-            Breadcrumbs = treeNode.GetBreadcrumbs().ToList();
+            Breadcrumbs = treeNode.GetBreadcrumbs(questionnaire).ToList();
         }
 
         public bool IsGroup { get; } = true;

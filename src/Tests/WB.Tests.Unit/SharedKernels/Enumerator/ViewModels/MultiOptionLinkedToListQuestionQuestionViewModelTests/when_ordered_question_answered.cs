@@ -1,4 +1,6 @@
 ﻿using System;
+using MvvmCross.Base;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -7,7 +9,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
     [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
-    public class when_ordered_question_answered
+    public class when_ordered_question_answered : BaseMvvmCrossTest
     {
         [Test]
         public void should_checked_orders_be_updated()
@@ -20,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
                 Create.Entity.TextListQuestion(textListQuestionId),
                 Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, linkedToQuestionId: textListQuestionId, areAnswersOrdered: true));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
             {
                 new Tuple<decimal, string>(1, "option 1"),

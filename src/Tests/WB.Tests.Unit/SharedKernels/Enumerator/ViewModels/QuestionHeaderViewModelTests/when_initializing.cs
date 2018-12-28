@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         }
 
         public void BecauseOf() => 
-            viewModel.Init("interview", Create.Identity(substitutionTargetId, Empty.RosterVector));
+            viewModel.Init("interview", Create.Identity(substitutionTargetId, Empty.RosterVector), Create.ViewModel.EnablementViewModel());
 
         [NUnit.Framework.Test] public void should_substitute_question_titles () => 
             viewModel.Title.HtmlText.Should().Be("title with answer");

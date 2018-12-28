@@ -32,7 +32,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Abc
 {
-    internal static class Setup
+    internal static class SetUp
     {
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
@@ -52,15 +52,15 @@ namespace WB.Tests.Abc
         }
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(QuestionnaireDocument questionnaireDocument)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument), questionnaireDocument);
+            => SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument), questionnaireDocument);
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
+            => SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+            => SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument = null)
         {
@@ -123,7 +123,7 @@ namespace WB.Tests.Abc
 
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
-            return Setup.InterviewForQuestionnaire(Create.Entity.PlainQuestionnaire(document: questionnaireDocument));
+            return SetUp.InterviewForQuestionnaire(Create.Entity.PlainQuestionnaire(document: questionnaireDocument));
         }
 
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
@@ -138,7 +138,7 @@ namespace WB.Tests.Abc
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
             return Create.AggregateRoot.StatefulInterview(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -22,18 +21,16 @@ namespace WB.Tests.Unit.Infrastructure.Native
         public void on_evict_should_not_call_cached_remove_method_twice()
         {
             var eventStore = new Mock<IEventStore>();
-            var snapshotStore = new Mock<ISnapshotStore>();
             var domainRepo = new Mock<IDomainRepository>();
 
             domainRepo
-                .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), null, It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>((type, id, s, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
+                .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
 
             var repo = new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore.Object, 
                 Mock.Of<IInMemoryEventStore>(), 
                 new EventBusSettings(), 
-                snapshotStore.Object,
                 domainRepo.Object,
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock());
@@ -58,7 +55,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
         public void should_evict_from_cache_if_aggregate_root_is_dirty()
         {
             var eventStore = new Mock<IEventStore>();
-            var snapshotStore = new Mock<ISnapshotStore>();
             var domainRepo = new Mock<IDomainRepository>();
 
             const int versionForNewObjects = 100;
@@ -66,11 +62,11 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             domainRepo
                 .Setup(dr =>
-                    dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), null, It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>((type, id, s, ce)
+                    dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Returns<Type, Guid, IEnumerable<CommittedEvent>>((type, id, ce)
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(), snapshotStore.Object, domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(),  domainRepo.Object,
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock());
 
@@ -105,7 +101,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Returns(committedEvents);
 
             var domainRepositoryMock = new Mock<IDomainRepository>();
-            domainRepositoryMock.Setup(x => x.Load(typeof(IEventSourcedAggregateRoot), aggregateRootId, null, committedEvents))
+            domainRepositoryMock.Setup(x => x.Load(typeof(IEventSourcedAggregateRoot), aggregateRootId, committedEvents))
                 .Returns(aggregateFromInMemoryEvents);
 
             var eventBusSettings = new EventBusSettings();
@@ -131,7 +127,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 eventStore ?? Mock.Of<IEventStore>(), 
                 inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(), 
                 eventBusSettings ?? new EventBusSettings(), 
-                Mock.Of<ISnapshotStore>(), 
                 domainRepository ?? Mock.Of<IDomainRepository>(),
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock()

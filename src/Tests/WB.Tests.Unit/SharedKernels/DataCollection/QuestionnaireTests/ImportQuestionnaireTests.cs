@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             var questionnaireBrowseItemStorage =
              Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
-            Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage);
+            Abc.SetUp.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage);
 
             using (var eventContext = new EventContext())
             {
@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             var questionnaireBrowseItemStorage =
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(_ => _.GetById(Moq.It.IsAny<object>())== new QuestionnaireBrowseItem() { Disabled = true });
 
-            Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage);
+            Abc.SetUp.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage);
             using (var eventContext = new EventContext())
             {
                 TestDelegate act =
@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             var plainQuestionnaireRepository =
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(document.PublicKey, 3) == document);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(plainQuestionnaireRepository);
+            Abc.SetUp.InstanceToMockedServiceLocator<IQuestionnaireStorage>(plainQuestionnaireRepository);
 
 
             Questionnaire questionnaire = CreateImportedQuestionnaire();

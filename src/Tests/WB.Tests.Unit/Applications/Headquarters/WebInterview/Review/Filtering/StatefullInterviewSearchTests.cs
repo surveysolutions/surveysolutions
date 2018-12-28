@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview;
@@ -16,6 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
     public partial class StatefullInterviewSearchTests
     {
         StatefulInterview interview;
+        IQuestionnaire questionnaire;
 
         private static readonly Identity TextFlagged = Id.Identity1;
         private static readonly Identity TextSupervisor = Id.Identity2;
@@ -44,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                         Create.Entity.TextQuestion(TextInRosterFlagged.Id, text: "Text Roster Flagged", variable: "textInRoster"),
                     }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") }),
                     Create.Entity.StaticText(StaticTextInvalid.Id, "StaticText 4 Invalid"),
-                    Create.Entity.TextQuestion(TextCommentFlaggedAnswered.Id, text: "Text 5 With Comment Flagged Answered", variable: "text5")
+                    Create.Entity.TextQuestion(TextCommentFlaggedAnswered.Id, text: "Text 5 With Comment Flagged Answered", variable: "text5"),
                 }),
                 Create.Entity.Group(Id.gB, "Group B", children: new IComposite[]
                 {
@@ -53,7 +55,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                     Create.Entity.StaticText(StaticText.Id, "StaticText 9"),
                     Create.Entity.TextQuestion(Text.Id, text: "Text 10", variable: "text9")
                 }));
-
+            questionnaire = Create.Entity.PlainQuestionnaire(document);
             interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: document);
 
             interview.Apply(Create.Event.AnswersDeclaredInvalid(TextAnsweredInvalid));
@@ -91,7 +93,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         [TestCaseSource(nameof(TestCaseData))]
         public void ShouldFilterResults(FilterTestCase @case)
         {
-            var search = Subject.Search(interview, @case.Options.ToArray(), 0, 100);
+            var search = Subject.Search(interview, questionnaire, @case.Options.ToArray(), 0, 100);
             AssertSearchReturnFollowingIds(search, @case.Results.Select(id => id).ToArray());
 
             if (@case.StatsCounter != null)
@@ -156,7 +158,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         [TestCase(7, 5)]
         public void ShouldReturnConsistentSearchResultIds(int skip, int take)
         {
-            var search = Subject.Search(interview, Array.Empty<FilterOption>(), skip, take);
+            var search = Subject.Search(interview, questionnaire, Array.Empty<FilterOption>(), skip, take);
 
             // no matter of what skip/take values provided result id should always point to same sectionId
             var map = new Dictionary<int, string>
