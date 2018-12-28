@@ -717,8 +717,8 @@
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Questionnaire title shouldn't have two and more consecutive underscore characters.</value>
   </data>
-  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements" xml:space="preserve">
-    <value>Plain mode allowed only for rosters with no more then {0} elements.</value>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Plain mode allowed only for rosters with no more than {0} elements.</value>
   </data>
   <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
     <value>Plain mode doesn't allow to use nested rosters.</value>
