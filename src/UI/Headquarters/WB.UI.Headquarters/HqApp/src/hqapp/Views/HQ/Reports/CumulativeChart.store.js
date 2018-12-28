@@ -3,13 +3,13 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const dataSetInfo = {
-    100: { label: Vue.$t('Strings.InterviewStatus_Completed'), backgroundColor: "#86B828" },
-    65: { label: Vue.$t('Strings.InterviewStatus_RejectedBySupervisor'), backgroundColor: "#F08531" },
-    120: { label: Vue.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: "#13A388" },
-    125: { label: Vue.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: "#E06B5C" },
-    130: { label: Vue.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: "#00647F" }
-};
+const dataSetInfo = [
+    {status: 100, label: Vue.$t('Strings.InterviewStatus_Completed'), backgroundColor: "#86B828" },
+    {status: 65,  label: Vue.$t('Strings.InterviewStatus_RejectedBySupervisor'), backgroundColor: "#F08531" },
+    {status: 120, label: Vue.$t('Strings.InterviewStatus_ApprovedBySupervisor'), backgroundColor: "#13A388" },
+    {status: 125, label: Vue.$t('Strings.InterviewStatus_RejectedByHeadquarters'), backgroundColor: "#E06B5C" },
+    {status: 130, label: Vue.$t('Strings.InterviewStatus_ApprovedByHeadquarters'), backgroundColor: "#00647F" }
+]
 
 export default {
     state: {
@@ -23,20 +23,24 @@ export default {
             const response = await Vue.$hq.Report.Chart(queryString);
             dispatch('hideProgress')
 
-            const dataSets = response.data.DataSets;
+            let dataSets = response.data.DataSets;
 
             const datasets = [];
 
             _.forEach(dataSets, set => {
-                const info = dataSetInfo[set.Status];
+                const infoIndex = _.findIndex(dataSetInfo, {status: set.Status})
+                const info = dataSetInfo[infoIndex]
 
                 datasets.push(
                     Object.assign(info, {
                         data: set.Data,
+                        index: infoIndex,
                         cubicInterpolationMode: 'monotone'
                     })
                 );
             });
+
+            dataSets = _.sortBy(dataSets, 'index')
 
             commit("SET_CHART_DATA", { datasets });
         }
