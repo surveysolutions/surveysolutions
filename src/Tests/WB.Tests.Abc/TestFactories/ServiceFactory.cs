@@ -967,7 +967,8 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewInterviewEntityFactory(
                 autoMapper ?? Mock.Of<IMapper>(),
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
-                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>());
+                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
+                Mock.Of<IWebNavigationService>());
         }
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
