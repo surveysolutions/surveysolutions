@@ -38,12 +38,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                     level.Setup(x => x.GetVariableExpression(Create.Identity(substitutedVariableIdentity.Id)))
                         .Returns(() => 10);
                 });
-            var interviewRepository = Setup.StatefulInterviewRepository(statefullInterview);
+            var interviewRepository = Abc.SetUp.StatefulInterviewRepository(statefullInterview);
 
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);
 
-            viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
+            viewModel = CreateViewModel(Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository, registry);
             viewModel.Init(statefullInterview.EventSourceId.FormatGuid(), staticTextIdentity, Create.Other.NavigationState());
 

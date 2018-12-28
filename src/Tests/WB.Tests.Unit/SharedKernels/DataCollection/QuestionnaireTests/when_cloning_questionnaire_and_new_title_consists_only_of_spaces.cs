@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_specific_words () {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+                = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
             questionnaire = Create.AggregateRoot.Questionnaire(

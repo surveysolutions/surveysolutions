@@ -22,9 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             questionnaire.Setup(x => x.GetAttachmentForEntity(staticTextIdentity.Id))
                 .Returns(Create.Entity.Attachment(attachmentContentId));
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire.Object);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire.Object);
             var interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             IAttachmentContentStorage attachmentContentStorage = Mock.Of<IAttachmentContentStorage>(x => x.GetFileCacheLocation(attachmentContentId) == location);
 

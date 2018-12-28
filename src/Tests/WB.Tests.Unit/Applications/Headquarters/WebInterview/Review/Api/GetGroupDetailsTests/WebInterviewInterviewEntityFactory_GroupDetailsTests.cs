@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
                 }, children: new IComposite[] { Create.Entity.TextQuestion() })
             });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefulInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
 
             var sidebar = factory.GetSidebarChildSectionsOf(sectionId.FormatGuid(), 
                 statefulInterview, plainQuestionnaire, new []{ sectionId.FormatGuid() }, false );
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
                 })
             });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefulInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
 
             var sidebar = factory.GetSidebarChildSectionsOf(sectionId.FormatGuid(), 
                 statefulInterview, plainQuestionnaire, new []{ sectionId.FormatGuid() }, false );

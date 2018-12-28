@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             interview.IsEnabled(rosterIdentity)
                      .Returns(true);
 
-            navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
+            navigationState = Create.Other.NavigationState(SetUp.StatefulInterviewRepository(interview));
             await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(rosterIdentity));
 
             emptyHistoryHandler = () => emptyHandlerCalled = true;

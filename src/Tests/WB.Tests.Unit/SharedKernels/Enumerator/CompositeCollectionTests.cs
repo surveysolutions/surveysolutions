@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Tests.Abc;
+using WB.Tests.Unit.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator
 {
     [TestOf(typeof (CompositeCollection<>))]
-    public class CompositeCollectionTests
+    public class CompositeCollectionTests : BaseMvvmCrossTest
     {
         [Test]
         public void when_clearing_child_collection_should_raise_items_removed_with_offset_and_items()

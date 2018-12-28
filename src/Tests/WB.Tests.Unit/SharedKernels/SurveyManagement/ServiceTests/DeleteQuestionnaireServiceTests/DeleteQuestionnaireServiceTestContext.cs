@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            IAssignmentsImportService interviewImportService = null,
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null)
         {
-            Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+            SetUp.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
                 new DeleteQuestionnaireService(
                     interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>(),

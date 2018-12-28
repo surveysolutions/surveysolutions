@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using MvvmCross.Base;
 using MvvmCross.Tests;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,6 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         public IntegerQuestionViewModelTestContext()
         {
             base.Setup();
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
         }
         
         public static IntegerQuestionViewModel CreateIntegerQuestionViewModel(

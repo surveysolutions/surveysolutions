@@ -7,13 +7,12 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.PlainRosterViewModelTests
 {
     [TestOf(typeof(PlainRosterViewModel))]
-    public class PlainRosterViewModelTestsClass 
+    public class PlainRosterViewModelTestsClass : BaseMvvmCrossTest
     {
         [Test]
         public void should_read_plain_rosters_from_interview()
