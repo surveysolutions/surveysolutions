@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ plainto_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) " +
                       $" ORDER BY @order ASC" +
                       $" LIMIT @pageSize" +
@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ plainto_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) ";
             var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
             {
