@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
                       $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
-                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') " +
+                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) " +
                       $" ORDER BY @order ASC" +
                       $" LIMIT @pageSize" +
                       $" OFFSET @offset ";
@@ -120,6 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             {
                 query = input.Query,
                 folderid = input.FolderId,
+                folderpathquery = "%" +input.FolderId + "%",
                 pageSize = input.PageSize,
                 order = input.OrderBy ?? "title",
                 offset = input.PageIndex * input.PageSize
@@ -130,11 +131,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
                       $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
-                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') ";
+                      $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) ";
             var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
             {
                 query = input.Query,
                 folderid = input.FolderId,
+                folderpathquery = "%" + input.FolderId + "%",
             });
 
             var searchResult = new SearchResult();
