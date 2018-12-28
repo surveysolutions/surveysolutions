@@ -1239,6 +1239,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId);
+            ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
@@ -2125,6 +2126,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionNotFound,
                     string.Format(ExceptionMessages.ComboboxCannotBeFound, questionId));
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(QuestionnaireCategoricalOption[] options)
+        {
+
+            if (options.Select(x => x.ParentValue + "$" + x.Title).Distinct().Count() != options.Length)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
+                    ExceptionMessages.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair);
             }
         }
 

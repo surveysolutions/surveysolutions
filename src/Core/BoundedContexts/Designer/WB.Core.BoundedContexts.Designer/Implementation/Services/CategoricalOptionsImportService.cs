@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var question = document?.Find<IQuestion>(categoricalQuestionId);
 
             if (question == null)
-                return ImportCategoricalOptionsResult.Failed($"Question with id {categoricalQuestionId} not found");
+                return ImportCategoricalOptionsResult.Failed(string.Format(ExceptionMessages.QuestionCannotBeFound, categoricalQuestionId));
 
             var importedOptions = new List<QuestionnaireCategoricalOption>();
             var importErrors = new List<string>();
