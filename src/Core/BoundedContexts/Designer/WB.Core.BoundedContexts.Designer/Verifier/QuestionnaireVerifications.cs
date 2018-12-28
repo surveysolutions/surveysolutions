@@ -78,6 +78,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     Name = r.VariableName,
                     Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
                 })
+                .Union(questionnaire
+                    .Find<IGroup>(g => !g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                    .Select(r => new
+                    {
+                        Name = r.VariableName,
+                        Reference = QuestionnaireEntityReference.CreateForGroup(r.PublicKey)
+                    }))
                 .Union(questionnaire.Find<IQuestion>(q => true)
                     .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                     .Select(r => new
