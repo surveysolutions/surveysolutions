@@ -23,10 +23,6 @@
     <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
     <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
     <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
-    <None Remove="Views\Questionnaire\Search\SearchQuestions.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\Questionnaire\Search\SearchQuestions.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />

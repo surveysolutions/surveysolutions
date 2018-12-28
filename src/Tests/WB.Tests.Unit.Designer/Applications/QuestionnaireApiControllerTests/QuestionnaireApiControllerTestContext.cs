@@ -42,8 +42,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 userHelper ?? Mock.Of < IMembershipUserService>(),
                 Mock.Of<WebTesterSettings>(),
-                webTesterService ?? Mock.Of<IWebTesterService>(),
-                Mock.Of<ISearchService>());
+                webTesterService ?? Mock.Of<IWebTesterService>());
 
             return questionnaireController;
         }
