@@ -619,6 +619,9 @@
   <data name="RosterVariableName" xml:space="preserve">
     <value>Roster ID</value>
   </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Section name</value>
+  </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
   </data>

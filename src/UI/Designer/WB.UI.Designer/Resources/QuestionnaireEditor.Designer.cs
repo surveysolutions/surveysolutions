@@ -1771,6 +1771,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section name.
+        /// </summary>
+        public static string SectionVariableName {
+            get {
+                return ResourceManager.GetString("SectionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select country.
         /// </summary>
         public static string SelectCountry {

@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Main.Core.Entities.SubEntities" #>
 <#@ import namespace="WB.Core.SharedKernels.DataCollection.ExpressionStorage" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection.Portable" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
 	internal partial class <#=Model.ClassName#> : LevelFunctions, <#=typeof(IInterviewLevel).Name#>, <#=typeof(IIndexedInterviewLevel).Name#>
@@ -158,4 +159,13 @@
 <# 
 	}
 #>
+<#
+	foreach (var section in Model.Sections) 
+    {
+#>        public Section <#=section.Variable#> => _state.GetSection(IdOf.<#=section.Variable#>, <#=
+			section.RosterScope.Length > 0 ? "RosterVector.Take(" + section.RosterScope.Length + ")" : "RosterVector.Empty" #>);
+<# 
+	}
+#>
+
 	}
