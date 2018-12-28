@@ -24,7 +24,7 @@
                     })
                     .then(function(response) {
                         $scope.filters = response.data;
-                        $scope.groups.splice(0, 0, allFolders);
+                        $scope.filters.splice(0, 0, allFolders);
                     });
             };
 
@@ -36,7 +36,7 @@
                             url: baseUrl + '',
                             params: {
                                 query: searchText,
-                                folderId: $scope.selectedFilter.id,
+                                folderId: $scope.selectedFilter.publicId,
                                 privateOnly: false
                             }
                         })
