@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE s.searchtext @@ to_tsquery(@query)" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') " +
                       $" ORDER BY @order ASC" +
                       $" LIMIT @pageSize" +
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sqlSelect, new
             {
-                query = input.Query ?? string.Empty,
+                query = input.Query,
                 folderid = input.FolderId,
                 pageSize = input.PageSize,
                 order = input.OrderBy ?? "title",
@@ -129,11 +129,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE s.searchtext @@ to_tsquery(@query)" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ phraseto_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like '%@folderid%') ";
             var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
             {
-                query = input.Query ?? String.Empty,
+                query = input.Query,
                 folderid = input.FolderId,
             });
 
