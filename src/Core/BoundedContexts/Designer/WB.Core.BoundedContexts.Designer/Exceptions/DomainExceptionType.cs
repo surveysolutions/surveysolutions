@@ -157,5 +157,6 @@
         GroupYouAreLinkedToIsNotRoster,
 
         VariableLabelContainsSubstitutionReference,
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
     }
 }
