@@ -37,12 +37,10 @@ namespace WB.Tests.Abc.TestFactories
             IUserViewFactory userViewFactory = null,
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory = null)
         {
-            return new ReportsController(mapReport ?? Mock.Of<IMapReport>(),
-                allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() ==
+            return new ReportsController(allUsersAndQuestionnairesFactory ?? Mock.Of<IAllUsersAndQuestionnairesFactory>(_ => _.Load() ==
                 new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                teamUsersAndQuestionnairesFactory ?? Mock.Of<ITeamUsersAndQuestionnairesFactory>(),
                 new TestInMemoryWriter<InterviewSummary>());
         }
 
