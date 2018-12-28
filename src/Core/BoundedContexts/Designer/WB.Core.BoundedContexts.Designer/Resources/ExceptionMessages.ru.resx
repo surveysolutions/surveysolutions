@@ -250,13 +250,13 @@
     <value>Переменная не может быть скопирована сюда.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Опции каскадного вопроса не могут содержать пустые значения в колонке ParentValue.</value>
+    <value>Категории каскадного вопроса не могут содержать пустые значения в колонке ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Опции каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue.</value>
+    <value>Категории каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
+    <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список не должен сожержать дубликаты.</value>
   </data>
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
     <value>Последняя секция не может быть удалена из опросника</value>
@@ -274,7 +274,7 @@
     <value>Старый ключ вложения пуст и файл отсутствует для вложения {0} для опросника {1}</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>Значения опций должны содержать только числовые значения</value>
+    <value>Значения категорий должны содержать только числовые значения</value>
   </data>
   <data name="TranlationExcelFileHasErrors" xml:space="preserve">
     <value>Найдены ошибки в excel файле</value>

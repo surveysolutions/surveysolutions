@@ -178,7 +178,7 @@
     <value>另一个同名的宏已存在。</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>答案的最大数量已大于问题的选项。</value>
+    <value>答案的最大数量大于问题类别的数量。</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>这种类型的问题无法被识别。</value>
@@ -202,7 +202,7 @@
     <value>选线筛选器的表达式的长度超过{0}个字符。</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>带有选项筛选器表达式的问题无法被识别。</value>
+    <value>类别过滤器表达式的问题无法识别。</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>识别型的问题不能存在于二维表。</value>
@@ -487,7 +487,7 @@
     <value>变量名字或二维表ID在问卷内的有效范围应该是唯一的。</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>至少有一个重复的标题 + 上级值配对。选项列表不应该包含任何此类重复。</value>
+    <value>至少有一个“标题”和“父值”对的副本。 该列表不应包含任何重复项。</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>十进制的位数不在{0}和{1}的范围之内。</value>
