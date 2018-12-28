@@ -124,10 +124,10 @@
     <value>Annexe {0} {1} instructions</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>Annexe {0} {1} filtres d'options</value>
+    <value>Annexe {0} {1} filtres de catégories</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>Annexe {0} {1} options</value>
+    <value>Annexe {0} {1} catégories</value>
   </data>
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Annexe {0} {1} valeurs spéciales</value>
@@ -229,7 +229,7 @@
     <value>Pas partagé avec quelqu'un</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options:</value>
+    <value>Сatégories:</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>Légende</value>
