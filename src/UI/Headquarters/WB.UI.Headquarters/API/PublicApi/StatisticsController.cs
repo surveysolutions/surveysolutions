@@ -137,7 +137,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                     Label = item.q.VariableLabel,
                     HasTotal = item.q.QuestionType == QuestionType.SingleOption
                                || item.q.QuestionType == QuestionType.MultyOption,
-                    SupportConditions = item.q.QuestionType == QuestionType.SingleOption || item.q.QuestionType == QuestionType.MultyOption,
+                    SupportConditions = item.q.QuestionType == QuestionType.SingleOption 
+                                        || item.q.QuestionType == QuestionType.MultyOption,
                     QuestionText = item.q.QuestionText.RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
                 })
                 .ToList();
