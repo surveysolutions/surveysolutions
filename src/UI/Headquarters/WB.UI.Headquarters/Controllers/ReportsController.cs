@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return View(new
             {
@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return this.View("CumulativeInterviewChart", new {
                 Templates = questionnaires

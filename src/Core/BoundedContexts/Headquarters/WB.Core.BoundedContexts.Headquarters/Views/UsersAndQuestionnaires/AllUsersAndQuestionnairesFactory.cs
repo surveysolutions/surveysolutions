@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 {
@@ -16,7 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         AllUsersAndQuestionnairesView Load();
         List<TemplateViewItem> GetQuestionnaires();
         List<TemplateViewItem> GetOlderQuestionnairesWithPendingAssignments(Guid id, long version);
-        List<QuestionnaireVersionsComboboxViewItem> GetQuestionnairesList();
+        List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems();
+        List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version);
     }
 
     public class AllUsersAndQuestionnairesFactory : IAllUsersAndQuestionnairesFactory
@@ -77,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
             return questionnaires;
         }
 
-        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnairesList()
+        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems()
         {
             var list = this.questionnairesReader.Query(_ =>
                 _.Where(q => !q.IsDeleted).Select(q => new { q.QuestionnaireId, q.Title, q.Version })).ToList();
@@ -92,6 +94,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                         .Select(v => new ComboboxViewItem{ Key = v.Version.ToString(), Value = $"ver. {v.Version}"})
                         .ToList()
                 }).ToList();
+        }
+
+        public List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version)
+        {
+            return this.questionnairesReader.Query(_ =>
+            {
+                var query = _.Where(q => q.IsDeleted == false);
+
+                if (id != null)
+                {
+                    query = query.Where(q => q.QuestionnaireId == id.Value);
+
+                    if (version != null)
+                    {
+                        query = query.Where(q => q.Version == version.Value);
+                    }
+                }
+
+                return query.Select(q => q.Identity()).ToList();
+            });
         }
 
         public List<TemplateViewItem> GetOlderQuestionnairesWithPendingAssignments(Guid questionnaireId, long version)

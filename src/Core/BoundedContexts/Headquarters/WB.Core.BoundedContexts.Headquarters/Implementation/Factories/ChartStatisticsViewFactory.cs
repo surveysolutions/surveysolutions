@@ -5,8 +5,7 @@ using System.Linq;
 using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -15,12 +14,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
 
-        public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+        public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, 
+            IAllUsersAndQuestionnairesFactory questionnairesFactory)
         {
             this.unitOfWork = unitOfWork;
-            this.questionnaires = questionnaires;
+            this.questionnairesFactory = questionnairesFactory;
         }
 
         private static readonly int[] AllowedStatuses =
@@ -34,22 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var questionnairesList =  this.questionnaires.Query(_ =>
-            {
-                var query = _.Where(q => q.IsDeleted == false);
-
-                if (input.QuestionnaireId != null)
-                {
-                    query = query.Where(q => q.QuestionnaireId == input.QuestionnaireId.Value);
-
-                    if (input.QuestionnaireVersion != null)
-                    {
-                        query = query.Where(q => q.Version == input.QuestionnaireVersion.Value);
-                    }
-                }
-
-                return query.Select(q => q.Id).ToList();
-            });
+            var questionnairesList = this.questionnairesFactory.GetQuestionnaires(input.QuestionnaireId, input.QuestionnaireVersion)
+                .Select(id => id.ToString()).ToList();
 
             // ReSharper disable StringLiteralTypo
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
@@ -107,14 +93,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 }
 
                 var dataSet = statusMap[row.status];
-                dataSet.Add(FormatDate(row.date), row.count);
+                dataSet.AddOrReplaceLast(FormatDate(row.date), row.count);
             }
 
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            //view.StartDate = minDate.HasValue ? FormatDate(minDate.Value.AddDays(-1)) : null;
-
+            
             return view;
         }
 
