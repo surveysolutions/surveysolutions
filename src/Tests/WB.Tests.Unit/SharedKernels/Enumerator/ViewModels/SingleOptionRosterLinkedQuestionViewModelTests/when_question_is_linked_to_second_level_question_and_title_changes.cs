@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
                 Create.Entity.SingleOptionQuestion(questionId: questionId, variable: "q1", linkedToRosterId: linkToRosterId)
             });
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire.PublicKey,
                 Create.Entity.PlainQuestionnaire(questionnaire));

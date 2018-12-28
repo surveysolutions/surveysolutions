@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 })
             });
 
-            interview = Setup.StatefulInterview(questionnaire);
+            interview = SetUp.StatefulInterview(questionnaire);
             BecauseOf();
         }
 

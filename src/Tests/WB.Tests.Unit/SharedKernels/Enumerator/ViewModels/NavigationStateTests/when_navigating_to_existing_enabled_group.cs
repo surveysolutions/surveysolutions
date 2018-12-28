@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                    && _.IsEnabled(existingEnabledGroup) == true);
 
             navigationState = Create.Other.NavigationState(
-                interviewRepository: Setup.StatefulInterviewRepository(interview));
+                interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
             await BecauseOf();

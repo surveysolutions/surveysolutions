@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
                 Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefullInterview = SetUp.StatefulInterview(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
                 Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
                 Create.Entity.TextQuestion(interviewerQuestionIdentity.Id, scope: QuestionScope.Interviewer));
-            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefullInterview = SetUp.StatefulInterview(questionnaireDocument);
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             // arrange
             var identity = Identity.Create(Id.g1, RosterVector.Empty);
 
-            var statefulInterview = Setup.StatefulInterview(
+            var statefulInterview = SetUp.StatefulInterview(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.GpsCoordinateQuestion(identity.Id)));
 
             statefulInterview.AnswerGeoLocationQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, 11.11, 22.22, 5, 6, DateTimeOffset.Now);
@@ -101,7 +101,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             // arrange
             var identity = Identity.Create(Id.g1, RosterVector.Empty);
 
-            var statefulInterview = Setup.StatefulInterview(
+            var statefulInterview = SetUp.StatefulInterview(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.MultimediaQuestion(identity.Id)));
 
             statefulInterview.AnswerPictureQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, "file.name");
@@ -139,7 +139,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                     })
             });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefullInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefullInterview = SetUp.StatefulInterview(questionnaireDocument);
 
             var service = CreateInterviewOverviewService();
 

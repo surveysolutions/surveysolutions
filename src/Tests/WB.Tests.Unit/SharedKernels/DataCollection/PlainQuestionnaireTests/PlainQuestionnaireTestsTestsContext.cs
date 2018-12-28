@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         [NUnit.Framework.OneTimeSetUp]
         public void baseContext()
         {
-            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+            SetUp.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
         }
     }
 }

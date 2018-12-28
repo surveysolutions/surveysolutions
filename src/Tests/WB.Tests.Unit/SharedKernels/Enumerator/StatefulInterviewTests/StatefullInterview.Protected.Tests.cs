@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.YesNoQuestion(questionId, variable: "var1", answers: new []{ 1,2,3,4,5})
                 );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.NumericIntegerQuestion(questionId, variable: "var1")
                 );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.MultipleOptionsQuestion(questionId, variable: "var1", answers: new []{ 1,2,3,4,5})
                 );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {
@@ -148,7 +148,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextListQuestion(questionId, variable: "var1")
                 );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answersToIdentifyingQuestions = new List<InterviewAnswer>
             {

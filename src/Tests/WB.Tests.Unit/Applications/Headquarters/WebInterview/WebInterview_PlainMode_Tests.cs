@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                     Create.Entity.NumericIntegerQuestion(intQuestionId)
                 })
             });
-            var statefulInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
             var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument);
 
             var entities = webInterview.GetSectionEntities(sectionId.FormatGuid());
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 })
             });
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
-            var statefulInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
             var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument, Create.Identity(groupId, Create.RosterVector(1)).ToString());
 
             var navigationButtonState = webInterview.GetNavigationButtonState(Create.Identity(groupId, Create.RosterVector(1)).ToString(), plainQuestionnaire);
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                     })
                 })
             });
-            var statefulInterview = Setup.StatefulInterview(questionnaireDocument);
+            var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
             statefulInterview.CommentAnswer(currentUserId, intQuestionId, Create.RosterVector(1), DateTimeOffset.UtcNow, "comment");
             var webInterview = CreateWebInterview(statefulInterview, questionnaireDocument);
 
@@ -132,8 +132,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             QuestionnaireDocument questionnaireDocument,
             string sectionId = null)
         {
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(statefulInterview);
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocument);
             var webInterviewInterviewEntityFactory = Create.Service.WebInterviewInterviewEntityFactory();
 
             var serviceLocator = Mock.Of<IServiceLocator>(sl =>

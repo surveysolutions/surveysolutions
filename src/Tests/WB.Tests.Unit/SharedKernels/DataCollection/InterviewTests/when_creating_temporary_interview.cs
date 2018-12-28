@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 var userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var questionnaireVersion = 18;
                 
-                var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+                var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                     => _.Version == questionnaireVersion);
 
                 var command = Create.Command.CreateTemporaryInterview(interviewId, userId, Create.Entity.QuestionnaireIdentity(questionnaireId, questionnaireVersion));

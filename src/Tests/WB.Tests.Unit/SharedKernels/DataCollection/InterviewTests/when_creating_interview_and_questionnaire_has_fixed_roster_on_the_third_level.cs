@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(
                 Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
                 Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {

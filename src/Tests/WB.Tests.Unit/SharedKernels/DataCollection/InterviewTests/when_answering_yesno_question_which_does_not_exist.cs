@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.HasQuestion(command.QuestionId) == false
             );
 
-            var interview = Setup.InterviewForQuestionnaire(questionnaire);
+            var interview = SetUp.InterviewForQuestionnaire(questionnaire);
 
             // Act
             var exception = NUnit.Framework.Assert.Throws<InterviewException>(() =>

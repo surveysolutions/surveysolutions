@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     }),
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
+            interview = SetUp.StatefulInterview(questionnaireDocument: questionnaire);
 
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
             

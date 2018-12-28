@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     internal class when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_not_equal_to_group_roster_vector : StatefulInterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IQuestionnaireStorage questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasGroup(@group.Id) == true
                 && _.GetRostersFromTopToSpecifiedGroup(@group.Id) == new Guid[] { rosterId });
 

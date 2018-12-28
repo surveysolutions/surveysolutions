@@ -1,28 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Moq;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Core;
 using MvvmCross.Tests;
 using NUnit.Framework;
-using ReflectionMagic;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInflationServiceTests
@@ -35,6 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         {
             base.Setup();
             Mvx.Resolve<IMvxSettings>().AlwaysRaiseInpcOnUserInterfaceThread = false;
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
         }
 
         [Test]
@@ -282,6 +271,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         [Test]
         public void should_handle_plain_rosters()
         {
+
             var rosterViewModel = Create.ViewModel.RosterViewModel();
             var nestedRoster = Create.ViewModel.RosterViewModel();
             rosterViewModel.RosterInstances.Add(Create.ViewModel.TextQuestionViewModel());

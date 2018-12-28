@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {
     [TestOf(typeof(RosterViewModel))]
-    internal class RosterViewModelTests
+    internal class RosterViewModelTests : BaseMvvmCrossTest
     {
         class FakeGroupViewModel : GroupViewModel
         {
