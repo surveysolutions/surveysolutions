@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj" />
     <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
     <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj" />
