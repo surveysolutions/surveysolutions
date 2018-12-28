@@ -124,10 +124,10 @@
     <value>附录{0}{1}的说明</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>附录{0}{1}的选项筛选器</value>
+    <value>附录{0}{1}类别过滤器</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>附录{0}{1}的选项</value>
+    <value>附录{0}{1}类别</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>附录{0}{1}的验证性条件和信息</value>
@@ -160,7 +160,7 @@
     <value>从未被分享</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>选项：</value>
+    <value>分类：</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>图例和结构信息在本文件中</value>

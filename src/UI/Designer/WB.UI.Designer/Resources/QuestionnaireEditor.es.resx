@@ -454,7 +454,7 @@
     <value>Aplicar</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Sin opciones. Elija archivo separado por tabs. El archivo puede contener hasta {0} opciones</value>
+    <value>Sin categorías. Elija archivo separado por tabs. El archivo puede contener hasta {0} categorías</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valor del padre</value>
@@ -478,7 +478,7 @@
     <value>Adicionar instrucciones al entrevistador</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Adicionar opción</value>
+    <value>Adicionar categoría</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Caja combo en cascada</value>
@@ -532,13 +532,13 @@
     <value>Solamente se permiten enteros</value>
   </data>
   <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>Antes de abrir el editor de opciones, todos los cambios no guardados deben guardarse. Los grabamos ahora?</value>
+    <value>Antes de abrir el editor, todos los cambios no guardados deben guardarse. Los grabamos ahora?</value>
   </data>
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>Se ha grabado exitosamente Se abrirá la ventana para subir archivos.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Como la pregunta se marcó como caja combo o caja combo en cascada mientras se cargaban los detalles de la pregunta y ésta contenía muchas opciones, su valor se redujo hasta {{count}}</value>
+    <value>La pregunta se marcó como "Cuadro combinado" o "Cuadro combinado en cascada" al cargar los detalles de la pregunta y contenía demasiadas categorías, su número se redujo hasta {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Registrar el orden de las respuesta</value>
@@ -559,10 +559,10 @@
     <value>Texto de la pregunta</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>Actualizar opciones</value>
+    <value>Actualizar categorías</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>Cargar nuevas opciones</value>
+    <value>Cargar nuevas categorías</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Usar separador 1000</value>

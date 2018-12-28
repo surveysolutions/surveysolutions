@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Appendix {0} {1} option filters.
+        ///   Looks up a localized string similar to Appendix {0} {1} categories filters.
         /// </summary>
         public static string Appendix_OptionFilters {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Appendix {0} {1} options.
+        ///   Looks up a localized string similar to Appendix {0} {1} categories.
         /// </summary>
         public static string Appendix_Options {
             get {
@@ -394,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options:.
+        ///   Looks up a localized string similar to Categories:.
         /// </summary>
         public static string Options {
             get {

@@ -17,7 +17,7 @@
             <div class="conditions-block">
                 <div class="enabling-group-marker condition-item" ng-if="item.hasCondition"></div>
              </div>
-                <span ng-if="item.isRoster" ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
+                <span ng-bind-html="item.variable | escape | highlight:search.searchText"></span>
             </div>
     </a>
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">

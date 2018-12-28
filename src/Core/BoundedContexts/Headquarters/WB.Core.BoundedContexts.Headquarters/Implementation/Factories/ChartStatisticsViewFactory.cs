@@ -2,106 +2,105 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
     public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
-        private readonly IOldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
 
-        public ChartStatisticsViewFactory(IOldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider)
+        public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, 
+            IAllUsersAndQuestionnairesFactory questionnairesFactory)
         {
-            this.oldschoolChartStatisticsDataProvider = oldschoolChartStatisticsDataProvider;
+            this.unitOfWork = unitOfWork;
+            this.questionnairesFactory = questionnairesFactory;
         }
+
+        private static readonly int[] AllowedStatuses =
+        {
+            (int) InterviewStatus.Completed,
+            (int) InterviewStatus.RejectedBySupervisor,
+            (int) InterviewStatus.ApprovedBySupervisor,
+            (int) InterviewStatus.RejectedByHeadquarters,
+            (int) InterviewStatus.ApprovedByHeadquarters
+        };
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var questionnaireIdentity = input.QuestionnaireId.HasValue
-                ? new QuestionnaireIdentity(input.QuestionnaireId.Value, input.QuestionnaireVersion.Value)
-                : null;
-            StatisticsGroupedByDateAndTemplate collectedStatistics = this.oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireIdentity);
+            var questionnairesList = this.questionnairesFactory.GetQuestionnaires(input.QuestionnaireId, input.QuestionnaireVersion)
+                .Select(id => id.ToString()).ToList();
 
-            if (collectedStatistics == null || collectedStatistics.StatisticsByDate.Count == 0)
-                return new ChartStatisticsView { Lines = new object[0][][] };
+            // ReSharper disable StringLiteralTypo
+            var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
+                "select min(date), max(date) from readside.cumulativereportstatuschanges " +
+                "where questionnaireidentity = any(@questionnairesList)", new { questionnairesList });
 
-            var minCollectedDate = collectedStatistics.StatisticsByDate.Keys.Min();
-            var maxCollectedDate = collectedStatistics.StatisticsByDate.Keys.Max();
-
-            var leftEdge = new[] { input.From ?? minCollectedDate.AddDays(-1), input.To ?? minCollectedDate.AddDays(-1) }.Min();
-            var rightEdge = new[] { input.From ?? maxCollectedDate, input.To ?? maxCollectedDate }.Max();
-
-            return CreateChartStatisticsView(collectedStatistics.StatisticsByDate, leftEdge, rightEdge, minCollectedDate);
-        }
-
-        private static ChartStatisticsView CreateChartStatisticsView(Dictionary<DateTime, QuestionnaireStatisticsForChart> range, DateTime start, DateTime stop, DateTime dataStart)
-        {
-            if (start > stop)
-                new ChartStatisticsView { Lines = new object[0][][] };
-
-            var startValueToFill = range.LastOrDefault(x => x.Key <= start).Value ?? new QuestionnaireStatisticsForChart();
-            var stopValueToFill = range.LastOrDefault(x => x.Key <= stop).Value ?? new QuestionnaireStatisticsForChart();
-
-            var currentDate = start.Date;
-            Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
-
-            var pointToBeSetGraphLooksOk = dataStart.AddDays(-1);
-
-            selectedRange.Add(currentDate, range.ContainsKey(currentDate) ? range[currentDate] : startValueToFill);
-            currentDate = currentDate.AddDays(1);
-
-            while (currentDate < stop)
+            if (dates.min == null && dates.max == null) // we have no data at all
             {
-                if (range.ContainsKey(currentDate))
-                    selectedRange.Add(currentDate, range[currentDate]);
-                else if (currentDate == pointToBeSetGraphLooksOk)
-                    selectedRange.Add(currentDate, new QuestionnaireStatisticsForChart());
-
-                currentDate = currentDate.AddDays(1);
+                return new ChartStatisticsView();
             }
 
-            if (start != stop)
-                selectedRange.Add(stop, range.ContainsKey(stop) ? range[stop] : stopValueToFill);
-
-            IEnumerable<IEnumerable<(DateTime date, int count)>> rangeLines = new[]
+            var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
+            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max() ?? DateTime.MaxValue;
+            
+            var queryParams = new
             {
-                selectedRange.Select(x => (x.Key, x.Value.CompletedCount)),
-                selectedRange.Select(x => (x.Key, x.Value.RejectedBySupervisorCount)),
-                selectedRange.Select(x => (x.Key, x.Value.ApprovedBySupervisorCount)),
-                selectedRange.Select(x => (x.Key, x.Value.RejectedByHeadquartersCount)),
-                selectedRange.Select(x => (x.Key, x.Value.ApprovedByHeadquartersCount)),
+                questionnairesList,
+                AllowedStatuses,
+                // we should always build report from the very beginning, this param will ensure that data accumulated correctly
+                minDateQuery = FormatDate(new[] { input.From ?? dates.min?.AddDays(-1), dates.min }.Min() ?? DateTime.MinValue),
+                minDate = FormatDate(leftEdge),
+                maxDate = FormatDate(rightEdge)
             };
 
-            rangeLines = RemoveEmptyEndingLines(rangeLines);
-
-            var chartLines = rangeLines.Select(ToChartLine).ToArray();
-
-            return new ChartStatisticsView
+            // dates CTE will generate gape-less interval of dates
+            // timespan CTE will produce cross product of dates and available statuses
+            // report CTE will produce report over all data
+            var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
+                @"with 
+                        dates as (select generate_series(@minDateQuery::date,@maxDate::date, interval '1 day')::date as date),
+                        timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
+                        report as 
+                        (
+                            select span.date, span.status, 
+                                    sum(sum(coalesce(cum.changevalue, 0))) over (partition by span.status order by span.date) as count
+                            from timespan as span  
+                            left join readside.cumulativereportstatuschanges cum on cum.date = span.date and cum.status = span.status
+                                and cum.questionnaireidentity = any(@questionnairesList)
+                            group by 1,2 order by 1
+                        )
+                       select date, status, count
+                       from report where date >= @minDate::date and date <= @maxDate::date", queryParams);
+            // ReSharper restore StringLiteralTypo
+            
+            var view = new ChartStatisticsView();
+            var statusMap = new Dictionary<InterviewStatus, ChartStatisticsDataSet>();
+            
+            foreach (var row in rawData)
             {
-                Lines = chartLines,
-                From = FormatDate(start),
-                To = FormatDate(stop),
-                StartDate = FormatDate(pointToBeSetGraphLooksOk)
-            };
-        }
+                if (!statusMap.ContainsKey(row.status))
+                {
+                    var dSet = new ChartStatisticsDataSet {Status = row.status};
+                    statusMap.Add(row.status, dSet);
+                    view.DataSets.Add(dSet);
+                }
 
-        private static IEnumerable<IEnumerable<(DateTime date, int count)>> RemoveEmptyEndingLines(
-            IEnumerable<IEnumerable<(DateTime date, int count)>> rangeLines)
-        {
-            return rangeLines
-                .Reverse()
-                .SkipWhile(line => line.All(point => point.count == 0))
-                .Reverse();
-        }
+                var dataSet = statusMap[row.status];
+                dataSet.AddOrReplaceLast(FormatDate(row.date), row.count);
+            }
 
-        private static object[][] ToChartLine(IEnumerable<(DateTime date, int count)> rangeLine)
-        {
-            return rangeLine
-                .Select(x => new object[] { FormatDate(x.date), x.count })
-                .ToArray();
+            view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
+            view.From = FormatDate(leftEdge);
+            view.To = FormatDate(rightEdge);
+            
+            return view;
         }
 
         private static string FormatDate(DateTime x)

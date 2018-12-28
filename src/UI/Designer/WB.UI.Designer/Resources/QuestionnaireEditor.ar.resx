@@ -430,7 +430,7 @@
     <value>تطبيق </value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>لا يوجد خيارات. اختر ملف فصل علامة تبويب. يمكن أن يحتوي الملف على ما يصل إلى {0} من الخيارات.</value>
+    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {0} فئات كحد أقصى.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>قيمة الأصل</value>
@@ -454,7 +454,7 @@
     <value>إضافة تعليمات الباحث</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>إضافة خيار</value>
+    <value>إضافة فئة</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>مربع التحرير و السرد المتتالي</value>
@@ -508,13 +508,13 @@
     <value>يسمح فقط باعداد صحيحة.</value>
   </data>
   <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>لفتح محرر الخيارات، يجب حفظ جميع التغييرات غير المحفوظة. هل يجب علينا حفظها الآن؟</value>
+    <value>لفتح محرر ، يجب حفظ جميع التغييرات غير المحفوظة. يجب علينا حفظها الآن؟</value>
   </data>
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>تم حفظه بنجاح. سيتم فتح نافذة تحميل الملف.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>نظرا لأن السؤال تم وضع علامة عليه على أنه "مربع تحرير وسرد" أو "المربع تحرير وسرد متتالي" أثناء تحميل تفاصيل السؤال واحتوائه على العديد من الخيارات، فقد تم تخفيض القيمة إلى {{count}}</value>
+    <value>تم وضع علامة على السؤال كـ "مربع تحرير وسرد" أو "مربع تحرير وسرد متتالي" أثناء تحميل تفاصيل السؤال وتضمين عددًا كبيرًا جدًا من الفئات ، وتم تقليل عددهم إلى {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>سجل إجابة النظام</value>
@@ -535,10 +535,10 @@
     <value>نص السؤال</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>لتعليمات التحديث</value>
+    <value>تحديث الفئة</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>تحميل خيارات جديدة</value>
+    <value>تحميل فئات جديدة</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>استخدم 1000 فاصل</value>

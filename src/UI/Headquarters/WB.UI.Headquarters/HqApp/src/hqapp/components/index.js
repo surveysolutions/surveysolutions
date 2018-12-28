@@ -10,6 +10,7 @@ import Typeahead from './Typeahead'
 import TextInput from './TextInput'
 import Checkbox from './Checkbox'
 import Radio from './Radio'
+import DatePicker from './DatePicker'
 
 Vue.component("Confirm", Confirm)
 Vue.component("DataTables", DataTables)
@@ -21,6 +22,7 @@ Vue.component("Typeahead", Typeahead)
 Vue.component("TextInput", TextInput)
 Vue.component("Checkbox", Checkbox)
 Vue.component("Radio", Radio)
+Vue.component("DatePicker", DatePicker)
 
 export default {
     Confirm,
@@ -32,5 +34,6 @@ export default {
     Typeahead,
     TextInput,
     Checkbox,
-    Radio
+    Radio,
+    DatePicker
 }

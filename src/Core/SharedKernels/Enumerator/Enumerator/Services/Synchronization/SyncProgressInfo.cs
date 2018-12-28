@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         public SynchronizationStatus Status { get; set; }
         public SynchronizationStatistics Statistics { get; set; }
         public bool UserIsLinkedToAnotherDevice { get; set; }
+        public bool IsApplicationUpdateRequired { get; set; }
 
         public TransferProgress TransferProgress { get; set; }
 

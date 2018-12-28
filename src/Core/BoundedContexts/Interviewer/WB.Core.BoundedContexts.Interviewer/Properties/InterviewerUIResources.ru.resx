@@ -831,4 +831,8 @@
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
     <value>Состояине Bluetooth передатчика не может быть корректно определено приложением. Пожалуйста перезагрузите оба приложения (Interviewer и Supervisor) и попробуйте синхронизировать</value>
   </data>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Обновить</value>
+    <comment>Обновить</comment>
+  </data>
 </root>

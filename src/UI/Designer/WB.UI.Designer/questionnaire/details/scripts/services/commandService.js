@@ -393,7 +393,7 @@
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
                     rosterTitleQuestionId: null,
-                    variableName: null
+                    variableName: group.variableName
                 };
 
                 return commandCall("UpdateGroup", command);
