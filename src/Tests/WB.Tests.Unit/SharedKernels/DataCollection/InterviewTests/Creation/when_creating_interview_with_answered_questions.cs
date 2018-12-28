@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(q1, variable: "txt", scope: QuestionScope.Interviewer));
 
-            var interview = Setup.StatefulInterview(questionnaire, false);
+            var interview = SetUp.StatefulInterview(questionnaire, false);
             var answers = new List<InterviewAnswer>();
             answers.Add(
                 new InterviewAnswer
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
                     })
             );
 
-            var interview = Setup.StatefulInterview(questionnaire, false);
+            var interview = SetUp.StatefulInterview(questionnaire, false);
             var answers = new List<InterviewAnswer>
             {
                 Create.Entity.InterviewAnswer(identity, Create.Entity.TextQuestionAnswer(textQuestionAnswer))

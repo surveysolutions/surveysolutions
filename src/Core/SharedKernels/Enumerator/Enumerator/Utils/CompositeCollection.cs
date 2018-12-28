@@ -207,7 +207,21 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+            int newCount = 0;
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                using (var enumerator = this.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        newCount++;
+                    }
+                }
+            }
+            else
+            {
+                newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+            }
 
             if (newCount != this.Count)
             {

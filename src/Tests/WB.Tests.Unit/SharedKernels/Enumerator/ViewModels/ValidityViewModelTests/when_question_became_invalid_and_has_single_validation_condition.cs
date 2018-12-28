@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "text answer"));
             interview.Apply(
                 Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                     }
                 }));
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,

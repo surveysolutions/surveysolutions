@@ -17,8 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
     [TestOf(typeof(YesNoQuestionViewModel))]
     public class YesNoQuestionViewModelTests : YesNoQuestionViewModelTestsContext
     {
-        public YesNoQuestionViewModelTests() => base.Setup();
-
         [Test]
         public void when_ToggleAnswerAsync_and_ui_dialog_showed()
         {
@@ -28,11 +26,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.YesNoQuestion(questionId.Id));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1")
             });
@@ -66,11 +64,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.YesNoQuestion(questionId.Id, maxAnswersCount: 2));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -110,11 +108,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.YesNoQuestion(questionId.Id, maxAnswersCount: 2),
                 Create.Entity.MultiRoster(rosterSizeQuestionId: questionId.Id));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2")
@@ -155,11 +153,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 Create.Entity.YesNoQuestion(questionId.Id, maxAnswersCount: 2),
                 Create.Entity.MultiRoster(rosterSizeQuestionId: questionId.Id));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2")
@@ -200,11 +198,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.YesNoQuestion(questionId.Id));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2")
@@ -241,7 +239,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             );
             var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),

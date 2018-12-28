@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     internal class when_cloning_questionnaire_and_its_disabled
     {
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_specific_words () {
-            var questionnaireBrowseItemStorage = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+            var questionnaireBrowseItemStorage = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                 id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(disabled: true));
 
             questionnaire = Create.AggregateRoot.Questionnaire(

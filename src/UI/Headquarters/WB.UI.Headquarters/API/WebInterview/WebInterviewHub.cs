@@ -63,7 +63,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         public SearchResults Search(FilterOption[] flags, int skip = 0, int limit = 50)
         {
             var interview = GetCallerInterview();
-            var result = this.statefullInterviewSearcher.Search(interview, flags, skip, limit);
+            var questionnaire = GetCallerQuestionnaire();
+            var result = this.statefullInterviewSearcher.Search(interview, questionnaire, flags, skip, limit);
             return result;
         }
 

@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -109,8 +111,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             
             if (groupWithAnswersToMonitor != null)
             {
-                IEnumerable<Identity> questionsToListen = statefulInterview.GetChildQuestions(groupWithAnswersToMonitor);
-                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+                //subscribe to all interview answer events
+                //plain rosters could be created with children
+                //only visible questions could produce answer events so no harm
+                this.answerNotifier.Init(this.interviewId); 
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
         }
@@ -132,6 +136,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
+        }
+
+        public void Handle(RosterInstancesAdded @event)
+        {
+            
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+
         }
 
         public virtual void Dispose()

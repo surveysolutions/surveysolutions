@@ -28,11 +28,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 Create.Entity.MultyOptionsQuestion(questionId.Id, linkedToQuestionId: linkedToQuestionId, areAnswersOrdered: true)
                 );
 
-            interview = Setup.StatefulInterview(questionnaire);
+            interview = Abc.SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "option 1");
             interview.AnswerTextQuestion(interviewerId, linkedToQuestionId, Create.Entity.RosterVector(2), DateTime.UtcNow, "option 2");
 
-            var interviews = Setup.StatefulInterviewRepository(interview);
+            var interviews = Abc.SetUp.StatefulInterviewRepository(interview);
             var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
             eventRegistry = Create.Service.LiteEventRegistry();
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             interview.AnswerMultipleOptionsLinkedQuestion(interviewerId, questionId.Id, RosterVector.Empty,
                 DateTime.UtcNow, new RosterVector[] {new decimal[] {2}, new decimal[] {1}});
 
-            Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
         }
 
         [NUnit.Framework.Test] public void should_put_answers_order_on_option1 () => questionViewModel.Options.First().CheckedOrder.Should().Be(2);

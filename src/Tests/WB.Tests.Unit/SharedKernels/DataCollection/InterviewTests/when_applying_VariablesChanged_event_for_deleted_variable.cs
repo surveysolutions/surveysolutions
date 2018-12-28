@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 })
             });
 
-            var interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
+            var interview = SetUp.InterviewForQuestionnaireDocument(questionnaireDocument);
 
             Assert.DoesNotThrow(() => interview.Apply(Create.Event.VariablesChanged(
                 Create.Entity.ChangedVariable(Identity.Create(variableId, Create.Entity.RosterVector(0)), 1))));

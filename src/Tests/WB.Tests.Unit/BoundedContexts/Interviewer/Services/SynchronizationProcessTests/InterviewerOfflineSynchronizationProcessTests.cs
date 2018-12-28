@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var interviewerIdentity = new InterviewerIdentity { Name = "name", PasswordHash = "hash", Token = "Outdated token", SupervisorId = Id.g1 };
 
-            PrincipalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
+            PrincipalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
 
             SynchronizationServiceMock
                 .Setup(x => x.GetCurrentSupervisor(It.IsAny<CancellationToken>(), It.IsAny<RestCredentials>()))
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Mock<IOfflineSynchronizationService> synchronizationServiceMock = new Mock<IOfflineSynchronizationService>();
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
-            var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
+            var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
 
             synchronizationServiceMock
                 .Setup(x => x.LoginAsync(
