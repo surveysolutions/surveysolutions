@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task NavigateToPdfAsync()
         {
             if (this.enumeratorSettings.IsSupportedWebViewer)
-                await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity));
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfViewByStaticText(this.Identity));
             else
                 this.externalAppLauncher.OpenPdf(this.ContentPath);
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -45,6 +46,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             get => attachmentPath;
             set => SetProperty(ref attachmentPath, value);
+        }
+
+        public void ConfigureByAttachmentId(string interviewId, Guid attachmentId)
+        {
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var attachment = questionnaire.GetAttachmentById(attachmentId);
+
+            var attachmentContentPath = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+            this.AttachmentPath = attachmentContentPath;
         }
     }
 

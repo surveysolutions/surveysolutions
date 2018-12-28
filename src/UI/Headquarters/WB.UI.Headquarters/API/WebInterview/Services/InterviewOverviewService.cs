@@ -14,10 +14,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     public class InterviewOverviewService : IInterviewOverviewService
     {
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        private readonly IWebNavigationService webNavigationService;
 
-        public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory)
+        public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IWebNavigationService webNavigationService)
         {
             this.interviewEntityFactory = interviewEntityFactory;
+            this.webNavigationService = webNavigationService;
         }
 
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
@@ -30,11 +33,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 var interviewEntities = isReviewMode
                     ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
                     : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
-
-                interviewEntities = interviewEntities
-                    .Where(e => interview.IsEnabled(e));
-
-                foreach (var interviewEntity in interviewEntities)
+                
+                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
                     yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
             }
         }
@@ -49,13 +49,21 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var question = interview.GetQuestion(identity);
             if (question != null)
             {
-                return new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                var additionalInfo = new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             var staticText = interview.GetStaticText(identity);
             if (staticText != null)
             {
-                return new OverviewItemAdditionalInfo(staticText, interview);
+                var additionalInfo = new OverviewItemAdditionalInfo(staticText, interview);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             return null;
@@ -70,7 +78,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             
             if (question != null)
             {
-                return new OverviewWebQuestionNode(question, interview);
+                var overviewQuestion = new OverviewWebQuestionNode(question, interview);
+                overviewQuestion.Title = this.webNavigationService.ResetNavigationLinksToDefault(overviewQuestion.Title);
+                return overviewQuestion;
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
@@ -79,7 +89,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = staticText.Title.Text,
+                    Title = this.webNavigationService.ResetNavigationLinksToDefault(staticText.Title.Text),
                     AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }

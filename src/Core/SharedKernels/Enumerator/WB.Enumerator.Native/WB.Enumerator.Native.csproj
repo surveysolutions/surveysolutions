@@ -27,6 +27,7 @@
         <PackageReference Include="AutoMapper" Version="7.0.1" />
         <PackageReference Include="CSCore" Version="1.2.1.2" />
         <PackageReference Include="Dapper" Version="1.50.4" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.4.9.5" />
         <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
         <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.0" />
         <PackageReference Include="Microsoft.AspNet.SignalR.SystemWeb" Version="2.4.0" />
@@ -41,6 +42,9 @@
         <PackageReference Include="WebGrease" Version="1.6.0" />
     </ItemGroup>
     <ItemGroup>
+        <Reference Include="CommonMark">
+          <HintPath>..\..\..\..\..\..\..\Users\RLA376582\.nuget\packages\commonmark.net\0.15.1\lib\net45\CommonMark.dll</HintPath>
+        </Reference>
         <Reference Include="System.Configuration" />
         <Reference Include="System.Transactions" />
         <Reference Include="System.Web" />
