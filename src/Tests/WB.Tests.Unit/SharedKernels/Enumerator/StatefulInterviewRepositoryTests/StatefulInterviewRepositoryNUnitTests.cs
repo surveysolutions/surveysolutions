@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             AssemblyContext.SetupServiceLocator();
             var eventStore = Create.Fake.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.StaticText());
-            Setup.InstanceToMockedServiceLocator(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: false));
+            SetUp.InstanceToMockedServiceLocator(Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire, shouldBeInitialized: false));
             var domaiRepository = Create.Service.DomainRepository(serviceLocator: ServiceLocator.Current);
             var aggregateRootRepository = Create.Service.EventSourcedAggregateRootRepository(
                 eventStore: eventStore, repository: domaiRepository);

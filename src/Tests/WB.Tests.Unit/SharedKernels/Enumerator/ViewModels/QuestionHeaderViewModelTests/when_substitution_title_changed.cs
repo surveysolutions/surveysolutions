@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             liteEventBus = Create.Service.LiteEventBus(registry);
 
-            viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
+            viewModel = CreateViewModel(SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
             viewModel.Init("interview", questionWithSubstitutionIdentity, Create.ViewModel.EnablementViewModel());
             BecauseOf();
         }

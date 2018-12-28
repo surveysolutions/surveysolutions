@@ -26,12 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.MultyOptionsQuestion(Id.g1, options),
                 Create.Entity.MultiRoster(Id.g2, rosterSizeQuestionId: Id.g1)
             );
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(options);
+            var filteredOptionsViewModel = SetUp.FilteredOptionsViewModel(options);
 
-            var interview = Setup.StatefulInterview(questionnaire);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interview = SetUp.StatefulInterview(questionnaire);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             userInteractionService = new Mock<IUserInteractionService>();
             userInteractionService

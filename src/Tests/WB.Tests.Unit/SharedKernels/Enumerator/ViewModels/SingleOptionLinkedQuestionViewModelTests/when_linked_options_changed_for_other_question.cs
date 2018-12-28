@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                     Create.Entity.TextQuestion(linkSourceQuestionId)
                 }));
 
-            StatefulInterview interview = Setup.StatefulInterview(questionnaire);
+            StatefulInterview interview = SetUp.StatefulInterview(questionnaire);
 
             interview.AnswerTextQuestion(interviewerId, linkSourceQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, linkedOptionTextInInterview);
 

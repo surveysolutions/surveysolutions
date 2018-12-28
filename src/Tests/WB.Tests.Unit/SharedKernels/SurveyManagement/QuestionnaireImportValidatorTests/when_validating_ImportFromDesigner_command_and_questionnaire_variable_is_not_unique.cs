@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValida
         public void when_questionnaire_variable_is_not_unique() {
             var variable = "qvar";
 
-            var questionnaireBrowseItemStorage = Setup.QuestionnaireBrowseItemRepository(
+            var questionnaireBrowseItemStorage = SetUp.QuestionnaireBrowseItemRepository(
                 Create.Entity.QuestionnaireBrowseItem(variable: variable, questionnaireId: Id.g2),
                 Create.Entity.QuestionnaireBrowseItem(variable: null, questionnaireId: Id.g3)
                 );
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValida
 
         [Test] 
         public void when_questionnaire_variable_is_unique() {
-            var questionnaireBrowseItemStorage = Setup.QuestionnaireBrowseItemRepository(
+            var questionnaireBrowseItemStorage = SetUp.QuestionnaireBrowseItemRepository(
                 Create.Entity.QuestionnaireBrowseItem(variable: "another_var", questionnaireId: Id.g2));
 
             var validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValida
 
         [Test] 
         public void when_questionnaire_variable_is_not_unique_but_questionnaire_is_deleted() {
-            var questionnaireBrowseItemStorage = Setup.QuestionnaireBrowseItemRepository(
+            var questionnaireBrowseItemStorage = SetUp.QuestionnaireBrowseItemRepository(
                 Create.Entity.QuestionnaireBrowseItem(variable: "qvar", questionnaireId: Id.g2, deleted: true));
 
             var validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage);

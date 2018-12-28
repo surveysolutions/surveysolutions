@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 Create.Entity.Variable(substitutedVariable2Identity.Id, VariableType.Double, substitutedVariable2Name),
             });
 
-            interview = Setup.StatefulInterview(questionnaireMock);
+            interview = SetUp.StatefulInterview(questionnaireMock);
             interview.Apply(Create.Event.VariablesChanged(new[]
             {
                 new ChangedVariable(substitutedVariable1Identity,  new DateTime(2016, 1, 31)),

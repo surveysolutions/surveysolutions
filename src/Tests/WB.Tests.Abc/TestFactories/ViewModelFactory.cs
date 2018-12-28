@@ -338,8 +338,8 @@ namespace WB.Tests.Abc.TestFactories
                 };
             }
 
-            Setup.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
-            Setup.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
@@ -367,7 +367,7 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
-            Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
 
 
             var sidebarViewModel = new SideBarSectionsViewModel(
