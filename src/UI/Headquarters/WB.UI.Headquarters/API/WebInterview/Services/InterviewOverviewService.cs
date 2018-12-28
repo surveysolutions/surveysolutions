@@ -46,13 +46,21 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var question = interview.GetQuestion(identity);
             if (question != null)
             {
-                return new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                var additionalInfo = new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             var staticText = interview.GetStaticText(identity);
             if (staticText != null)
             {
-                return new OverviewItemAdditionalInfo(staticText, interview);
+                var additionalInfo = new OverviewItemAdditionalInfo(staticText, interview);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             return null;
@@ -68,8 +76,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (question != null)
             {
                 var overviewQuestion = new OverviewWebQuestionNode(question, interview);
-                overviewQuestion.Title = this.webNavigationService.MakeNavigationLinks(overviewQuestion.Title,
-                    interviewerEntityIdentity, questionnaire, interview, @"Interview/Review");
+                overviewQuestion.Title = this.webNavigationService.ResetNavigationLinksToDefault(overviewQuestion.Title);
                 return overviewQuestion;
             }
 
@@ -79,7 +86,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = this.webNavigationService.MakeNavigationLinks(staticText.Title.Text, interviewerEntityIdentity, questionnaire, interview, @"Interview/Review"),
+                    Title = this.webNavigationService.ResetNavigationLinksToDefault(staticText.Title.Text),
                     AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }
