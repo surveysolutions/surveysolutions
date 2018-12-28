@@ -285,6 +285,9 @@
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Циклические ссылки не разрешены.</value>
   </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Ссылки запрещены на элементах навигации: секциях, подсекциях, ростерах.</value>
+  </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Имя переменной или ID ростера не может быть зарезервированным словом.</value>
   </data>
