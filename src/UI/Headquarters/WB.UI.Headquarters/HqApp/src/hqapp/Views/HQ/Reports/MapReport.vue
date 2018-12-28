@@ -3,19 +3,18 @@
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')" 
-                    :values="questionnaires" :value="questionnaireId" fuzzy noClear
+                    :values="questionnaires" :value="selectedQuestionnaireId" fuzzy noClear
                     @selected="selectQuestionnaire" />
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead :placeholder="$t('Common.AllVersions')" 
-                    :disabled="questionnaireId == null"
-                    :values="questionnaireVersions" :value="questionnaireVersion"
+                    :disabled="selectedQuestionnaireId == null"
+                    :values="questionnaireVersions" :value="selectedVersion"
                      fuzzy @selected="selectQuestionnaireVersion" />
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
-                    :values="gpsQuestions" 
-                    :value="gpsQuestionId" 
+                    :values="gpsQuestions" :value="selectedQuestion"
                     @selected="selectGpsQuestion" />
             </FilterBlock>
             <FilterBlock>
@@ -93,17 +92,44 @@
 <script>
 import * as toastr from "toastr";
 import Vue from "vue";
+import routeSync from "~/shared/routeSync";
+
+const mapStyles = [
+    {
+        url: "../Content/img/google-maps-markers/m1.png",
+        dark: true
+    },
+    {
+        url: "../Content/img/google-maps-markers/m2.png",
+        dark: false
+    },
+    {
+        url: "../Content/img/google-maps-markers/m3.png",
+        dark: true
+    },
+    {
+        url: "../Content/img/google-maps-markers/m4.png",
+        dark: true
+    },
+    {
+        url: "../Content/img/google-maps-markers/m5.png",
+        dark: true
+    }
+]
 
 export default {
+    mixins: [routeSync],
+
     data() {
         return {
-            questionnaireId: null,
-            questionnaireVersion: null,
-            gpsQuestionId: null,
             gpsQuestions: null,
             infoWindow: null,
             selectedTooltip: {},
             readyToUpdate: false,
+
+            // Mark map data as loaded. 
+            // required to be true initially, as Google Maps will call bounds_change upon initial load
+            isMapReloaded: true,
             map: null,
             heatmap: null,
             showHeatmap: false,
@@ -114,45 +140,35 @@ export default {
                 gradient: "",
                 maxIntensity: null
             },
-            totalAnswers: 0,
-            mapClustererOptions: {
-                styles: [
-                    {
-                        url: "../Content/img/google-maps-markers/m1.png",
-                        dark: true
-                    },
-                    {
-                        url: "../Content/img/google-maps-markers/m2.png",
-                        dark: false
-                    },
-                    {
-                        url: "../Content/img/google-maps-markers/m3.png",
-                        dark: true
-                    },
-                    {
-                        url: "../Content/img/google-maps-markers/m4.png",
-                        dark: true
-                    },
-                    {
-                        url: "../Content/img/google-maps-markers/m5.png",
-                        dark: true
-                    }
-                ]
-            }
+            totalAnswers: 0
         };
     },
 
     watch: {
-        questionnaireId(to) {
+        selectedQuestionnaireId(to) {
             if (to == null) {
                 this.showHeatmap = false;
             }
         },
 
-        gpsQuestionId(to) {
+        selectedVersion(to) {
             if (to == null) {
                 this.showHeatmap = false;
             }
+        },
+
+        selectedQuestion(to) {
+            if (to == null) {
+                this.showHeatmap = false;
+            }
+
+            if (_.isNull(to)) {
+                this.readyToUpdate = false;
+                return;
+            }
+
+            this.showPointsOnMap(180, 180, -180, -180, true);
+            this.readyToUpdate = true;
         }
     },
 
@@ -166,16 +182,39 @@ export default {
         },
 
         questionnaireVersions() {
-            if(this.questionnaireId == null) return []
-            return this.questionnaireId.versions;
+            if(this.selectedQuestionnaireId == null) return []
+            return this.selectedQuestionnaireId.versions;
         },
         
-        selectedVersion() {
-            return this.questionnaireVersion == null ? null : this.questionnaireVersion.key
+        selectedVersionValue() {
+            return this.selectedVersion == null ? null : this.selectedVersion.key
         },
 
         api() {
             return this.$hq.Report.MapReport
+        },
+
+        queryString() {
+            return {
+                questionnaireId: this.query.questionnaireId,
+                version: this.query.version,
+                question: this.query.question
+            }
+        },
+
+        selectedQuestionnaireId() {
+            if(this.query.questionnaireId == null) return null;
+            return _.find(this.questionnaires, {key : this.query.questionnaireId})
+        },
+
+        selectedVersion() {
+            if(this.query.version == null) return null;
+            return _.find(this.questionnaireVersions, {key: this.query.version})
+        },
+
+        selectedQuestion() {
+            if(this.query.question == null || this.gpsQuestions == null) return null;
+            return _.find(this.gpsQuestions, {key: this.query.question})
         }
     },
 
@@ -183,8 +222,10 @@ export default {
         this.setMapCanvasStyle();
         this.initializeMap();
 
-        if (this.questionnaires.length > 0) {
-            this.selectQuestionnaire(this.questionnaires[0]);
+        if(this.selectedQuestionnaireId == null && this.questionnaires.length > 0){
+          this.selectQuestionnaire(this.questionnaires[0]);
+        } else if(this.selectedQuestionnaireId != null){
+          this.selectQuestionnaire(this.selectedQuestionnaireId)
         }
     },
 
@@ -212,13 +253,13 @@ export default {
             this.reloadMarkersInBounds();
         },
 
-        async selectQuestionnaireVersion(value) {
+         selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value
-
-            await this.selectQuestionnaire(this.questionnaireId)
+            this.onChange(s => s.version = value == null ? null : value.key)
+            this.selectQuestionnaire(this.questionnaireId)
         },
 
-        async selectQuestionnaire(value) {
+        selectQuestionnaire(value) {
             this.questionnaireId = value;
 
             this.selectGpsQuestion(null);
@@ -226,30 +267,28 @@ export default {
 
             if (_.isNull(value)) return;
 
-            var response = await this.api.GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersion)
+            this.api.GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue).then(response => {
+                this.gpsQuestions = _.chain(response.data)
+                    .filter(d => d != null && d != '')
+                    .map(d => {
+                        return { key: d, value: d }
+                    }).value();
 
-            this.gpsQuestions = _.map(response.data, d => {
-                return { key: d, value: d }
-            });
-
-            if (this.gpsQuestions.length > 0) {
-                if (this.gpsQuestions.length === 1) {
-                    this.selectGpsQuestion(this.gpsQuestions[0]);
+                if (this.gpsQuestions.length > 0) {
+                    if (this.gpsQuestions.length === 1) {
+                        this.selectGpsQuestion(this.gpsQuestions[0]);
+                    }
+                } else {
+                    toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
                 }
-            } else {
-                toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
-            }
+
+                this.onChange(s => s.questionnaireId = value.key)
+            })
         },
 
         selectGpsQuestion(value) {
             this.gpsQuestionId = value;
-            if (_.isNull(value)) {
-                this.readyToUpdate = false;
-                return;
-            }
-
-            this.showPointsOnMap(180, 180, -180, -180, true);
-            this.readyToUpdate = true;
+            this.onChange(s => s.question = value == null ? null : value.key);
         },
 
         getMapOptions() {
@@ -289,21 +328,29 @@ export default {
 
             this.infoWindow = new google.maps.InfoWindow();
 
-            this.map.addListener("zoom_changed", () => {
-                if (this.gpsQuestionId != null) delayedReload();
-            });
+            const delayedMapReload = _.debounce(
+                () =>{
+                    if(this.selectedQuestion == null) return;
 
-            const delayedReload = _.debounce(
-                () => this.reloadMarkersInBounds(),
-                50
-            );
+                    // this is required to separate bounds/zoom change by user or because of map data reload
+                    // i.e. we don't want to load map data twice
+                    if(this.isMapReloaded == true) {
+                        this.isMapReloaded = false; return;
+                    }
 
+                    this.reloadMarkersInBounds()
+                }, 100
+            )
+            
+            let mapInitialized = false
+            this.map.addListener("zoom_changed", () => delayedMapReload());
             this.map.addListener("bounds_changed", () => {
-                if (this.gpsQuestionId != null) delayedReload();
+                if(!mapInitialized) { mapInitialized = true; return; }
+                delayedMapReload();
             });
 
             this.map.data.setStyle(function(feature) {
-                const styles = self.mapClustererOptions.styles;
+                const styles = mapStyles;
                 const count = feature.getProperty("count");
 
                 if (count > 1) {
@@ -411,13 +458,13 @@ export default {
         async showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom();
 
-            if (this.questionnaireId == null || this.gpsQuestionId == null)
+            if (this.selectedQuestionnaireId == null || this.selectedQuestion == null)
                 return;
 
             var request = {
-                Variable: this.gpsQuestionId.key,
-                QuestionnaireId: this.questionnaireId.key,
-                QuestionnaireVersion: this.selectedVersion,
+                Variable: this.selectedQuestion.key,
+                QuestionnaireId: this.selectedQuestionnaireId.key,
+                QuestionnaireVersion: this.selectedVersionValue,
                 Zoom: this.showHeatmap && zoom != -1 ? zoom + 3 : zoom,
                 east,
                 north,
@@ -505,6 +552,7 @@ export default {
                         sw,
                         ne
                     );
+                    this.isMapReloaded = true;
                     self.map.fitBounds(latlngBounds);
                 }
             }
