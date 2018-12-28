@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -28,21 +27,16 @@ namespace WB.UI.Headquarters.Controllers
     [LimitsFilter]
     public class ReportsController : Controller
     {
-        private readonly IMapReport mapReport;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
-        public ReportsController(
-            IMapReport mapReport,
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
+        public ReportsController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
-            this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
@@ -105,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return View(new
             {
@@ -118,7 +112,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnairesList();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return this.View("CumulativeInterviewChart", new {
                 Templates = questionnaires

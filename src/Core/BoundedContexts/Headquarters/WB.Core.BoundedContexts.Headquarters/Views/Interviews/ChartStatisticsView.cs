@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Supercluster.KDBush;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
@@ -11,17 +9,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public List<ChartStatisticsDataSet> DataSets { get; set; } = new List<ChartStatisticsDataSet>();
         public string From { get; set; }
         public string To { get; set; }
-        public string StartDate { get; set; }
     }
 
     public class ChartStatisticsDataSet
     {
+        /// <summary>
+        /// Internal property required for fast filter out empty data sets
+        /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         internal bool AllZeros { get; set; } = true;
+
         public InterviewStatus Status { get; set; }
         public List<Point> Data { get; set; } = new List<Point>();
         
-        public void Add(object x, long y)
+        public void AddOrReplaceLast(string x, long y)
         {
             if (y != 0) AllZeros = false;
 
@@ -37,14 +38,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
 
         public class Point
         {
-            public Point(object x, long y)
+            public Point(string x, long y)
             {
                 X = x;
                 Y = y;
             }
 
             [Newtonsoft.Json.JsonProperty("x")]
-            public object X { get; set; }
+            public string X { get; set; }
 
             [Newtonsoft.Json.JsonProperty("y")]
             public long Y { get; set; }

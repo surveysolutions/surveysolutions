@@ -1447,7 +1447,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add option.
+        ///   Looks up a localized string similar to Add category.
         /// </summary>
         public static string QuestionAddOption {
             get {

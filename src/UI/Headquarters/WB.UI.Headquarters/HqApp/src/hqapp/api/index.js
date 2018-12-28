@@ -42,7 +42,7 @@ class SurveyStatistics {
     }
 
     get Uri() {
-        return this.http.defaults.baseURL + '/' + this.reportPath
+        return this.http.defaults.baseURL + this.reportPath
     }
 }
 
@@ -79,7 +79,7 @@ class Users {
     }
 
     async Supervisors(filter) {
-        return (await this.http.get(`api/v1/users/supervisors`, {
+        return (await this.http.get('api/v1/users/supervisors', {
             params: { filter }
         })).data
     }
