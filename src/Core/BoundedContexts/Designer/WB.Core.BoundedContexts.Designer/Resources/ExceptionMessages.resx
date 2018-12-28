@@ -312,7 +312,7 @@
     <data name="Row" xml:space="preserve">
     <value>row</value>
   </data>
-    <data name="ImportOptions_EmptyValue" xml:space="preserve">
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
     <value>Empty value</value>
   </data>
     <data name="ImportOptions_NotNumber" xml:space="preserve">
@@ -326,5 +326,11 @@
   </data>
     <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
     <value>Parent question '{0}' has {1} options with value '{2}'</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>Title is too long. Title length should be less than {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Duplicated option '{0}' with value '{1}'</value>
   </data>
 </root>

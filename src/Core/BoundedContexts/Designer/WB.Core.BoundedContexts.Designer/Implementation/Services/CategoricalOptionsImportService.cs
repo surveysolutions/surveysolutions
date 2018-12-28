@@ -11,6 +11,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -145,12 +146,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 var nearestParentValues = allValuesByAllParents.Values.First().Select(x => x.value).ToHashSet();
 
                 Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
-                Map(m => m.TitleWithParentIds).Ignore().ConvertUsing(x =>
+                Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
                 {
                     if (!x.TryGetField(1, out string title) || !x.TryGetField(2, out int? parentValue) || !parentValue.HasValue) return null;
 
-                    var nearestParentValue = parentValue;
-                    var titleWithParentIds = title;
+                    if (allImportedOptions.Any(y => y.ParentValue == parentValue && y.Title == title))
+                        throw new CsvReaderException(x.Context.Row, 2,
+                            string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title, parentValue));
+
+                    if (!x.TryGetField(0, out int value)) return null;
+
+                    var valueWithParentValues = new List<int> {value};
 
                     foreach (var parentValues in allValuesByAllParents)
                     {
@@ -162,18 +168,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                     parentValues.Key, parentValuesById.Length, parentValue));
                         }
 
-                        titleWithParentIds += parentValue;
+                        valueWithParentValues.Add(parentValue.Value);
 
                         parentValue = parentValuesById.FirstOrDefault().parentValue;
 
                         if (!parentValue.HasValue) break;
                     }
 
-                    if (allImportedOptions.Any(y => y.TitleWithParentIds == titleWithParentIds))
-                        throw new CsvReaderException(x.Context.Row, 2,
-                            string.Format(ExceptionMessages.ImportOptions_DuplicateByTitleAndParentIds, title, nearestParentValue));
+                    if (allImportedOptions.Any(y => y.ValueWithParentValues.SequenceEqual(valueWithParentValues)))
+                        throw new CsvReaderException(x.Context.Row, 0, string.Format(ExceptionMessages.ImportOptions_ValueIsNotUnique, title, value));
 
-                    return titleWithParentIds;
+                    return valueWithParentValues.ToArray();
                 });
             }
 
@@ -205,16 +210,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public CategoricalOptionMap()
             {
                 Map(m => m.Value).Index(0).TypeConverter<ConvertToInt32OrThrow>();
-                Map(m => m.Title).Index(1).TypeConverter<ConvertToStringOrThrow>();
+                Map(m => m.Title).Index(1).TypeConverter<ValidateTitleOrThrow>();
             }
 
-            private class ConvertToStringOrThrow : DefaultTypeConverter
+            private class ValidateTitleOrThrow : DefaultTypeConverter
             {
                 public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
                 {
-                    return !string.IsNullOrEmpty(text)
-                        ? text
-                        : throw new CsvReaderException(row.Context.Row, memberMapData.Index, ExceptionMessages.ImportOptions_EmptyValue);
+                    if(string.IsNullOrEmpty(text))
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index, ExceptionMessages.ImportOptions_EmptyValue);
+
+                    if (text.Length > AbstractVerifier.MaxOptionLength)
+                        throw new CsvReaderException(row.Context.Row, memberMapData.Index,
+                            string.Format(ExceptionMessages.ImportOptions_TitleTooLong, AbstractVerifier.MaxOptionLength));
+
+                    return text;
                 }
             }
 
