@@ -18,7 +18,6 @@ namespace WB.UI.WebTester
             
             builder.RegisterModule(new NcqrsModule().AsAutofac());
             builder.RegisterModule(new NLogLoggingModule().AsAutofac());
-            builder.RegisterModule(new EventSourcedInfrastructureModule().AsAutofac());
             builder.RegisterModule(new InfrastructureModuleMobile().AsAutofac());
             builder.RegisterModule(new DataCollectionSharedKernelModule().AsAutofac());
             builder.RegisterModule(new CaptchaModule("recaptcha").AsAutofac());
