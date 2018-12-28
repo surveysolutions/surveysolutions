@@ -27,11 +27,10 @@ namespace WB.Infrastructure.Native.Storage
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
-            ISnapshotStore snapshotStore,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
             IAggregateLock aggregateLock)
-            : base(eventStore, snapshotStore, repository)
+            : base(eventStore, repository)
         {
             this.inMemoryEventStore = inMemoryEventStore;
             this.eventBusSettings = eventBusSettings;
@@ -58,7 +57,7 @@ namespace WB.Infrastructure.Native.Storage
                     else
                     {
                         var events = this.inMemoryEventStore.Read(aggregateId, 0);
-                        aggregateRoot = base.repository.Load(aggregateType, aggregateId, null, events);
+                        aggregateRoot = base.repository.Load(aggregateType, aggregateId, events);
                     }
 
                     if (aggregateRoot != null)

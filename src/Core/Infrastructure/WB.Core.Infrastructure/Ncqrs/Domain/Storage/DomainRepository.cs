@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Mapping;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 
@@ -12,26 +8,19 @@ namespace Ncqrs.Domain.Storage
 {
     public class DomainRepository : IDomainRepository
     {
-        private readonly IAggregateSnapshotter _aggregateSnapshotter;
         private readonly IServiceLocator serviceLocator;
 
-        public DomainRepository(IAggregateSnapshotter aggregateSnapshotter, IServiceLocator serviceLocator)
+        public DomainRepository(IServiceLocator serviceLocator)
         {
-            _aggregateSnapshotter = aggregateSnapshotter;
             this.serviceLocator = serviceLocator;
         }
 
-        public IEventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
-            => this.Load(aggreateRootType, eventStream.SourceId, snapshot, eventStream);
+        public IEventSourcedAggregateRoot Load(Type aggreateRootType, CommittedEventStream eventStream)
+            => this.Load(aggreateRootType, eventStream.SourceId, eventStream);
 
-        public IEventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
+        public IEventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
         {
-            EventSourcedAggregateRoot aggregate;
-
-            if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, events, out aggregate))
-            {
-                aggregate = this.GetByIdFromScratch(aggreateRootType, aggregateRootId, events);
-            }
+            var aggregate = this.GetByIdFromScratch(aggreateRootType, aggregateRootId, events);
 
             return aggregate;
         }
@@ -43,16 +32,9 @@ namespace Ncqrs.Domain.Storage
             if (aggregateRoot == null)
                 throw new ArgumentException($"Cannot create new instance of aggregate root of type {aggregateRootType.Name}");
 
-            aggregateRoot.InitializeFromSnapshot(new Snapshot(aggregateRootId, lastEventSequence, null));
+            aggregateRoot.InitializeFromSnapshot(aggregateRootId, lastEventSequence);
 
             return aggregateRoot;
-        }
-
-        public Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot)
-        {
-            Snapshot snapshot = null;
-            _aggregateSnapshotter.TryTakeSnapshot(aggregateRoot, out snapshot);
-            return snapshot;
         }
 
         private EventSourcedAggregateRoot GetByIdFromScratch(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
