@@ -7,6 +7,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
@@ -91,7 +92,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
             var supervisorGroupStateCalculationStrategy = Mock.Of<ISupervisorGroupStateCalculationStrategy>();
             return new WebInterviewInterviewEntityFactory(mapper, 
                 enumeratorGroupStateCalculationStrategy,
-                supervisorGroupStateCalculationStrategy);
+                supervisorGroupStateCalculationStrategy,
+                Mock.Of<IWebNavigationService>());
         }
     }
 }

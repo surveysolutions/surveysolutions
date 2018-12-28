@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneQuestion();
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             });
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
@@ -154,7 +154,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             });
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
@@ -187,7 +187,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             });
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
 
-            var interview = Setup.StatefulInterview(questionnaireDocument);
+            var interview = SetUp.StatefulInterview(questionnaireDocument);
             var webNavigationService = Create.Service.WebNavigationService();
 
             // act
