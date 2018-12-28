@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IOnlineSynchronizationService> synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
 
-            var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
+            var principalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
             
             synchronizationServiceMock
                 .Setup(x => x.CanSynchronizeAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
