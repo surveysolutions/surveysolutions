@@ -54,8 +54,6 @@ import Vue from "vue";
 
 const LineChart = () => import(/* webpackChunkName: "report" */ "./CumulativeChart");
 
-const timeFormat = "MM/DD/YYYY HH:mm";
-
 export default {
     mixins: [routeSync],
     components: { LineChart },
