@@ -1862,11 +1862,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode allowed only for rosters with no more then {0} elements..
+        ///   Looks up a localized string similar to Plain mode allowed only for rosters with no more than {0} elements..
         /// </summary>
-        public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements {
+        public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
             get {
-                return ResourceManager.GetString("WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThenElements", resourceCulture);
+                return ResourceManager.GetString("WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
             }
         }
         
