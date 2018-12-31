@@ -1647,6 +1647,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview contains total number of roster instances and questions exceeding the system limits..
+        /// </summary>
+        public static string Validity_InterviewSizeLimitReached {
+            get {
+                return ResourceManager.GetString("Validity_InterviewSizeLimitReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answer was not saved.
         /// </summary>
         public static string Validity_NotAnswered_InterviewException_ErrorCaption {

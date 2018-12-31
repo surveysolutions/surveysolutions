@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0097", QuestionnaireTitleHasInvalidCharacters, VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
-            Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
-            Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
+            Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
         };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string message)
         {
             return questionnaire =>
                 hasError(questionnaire)
