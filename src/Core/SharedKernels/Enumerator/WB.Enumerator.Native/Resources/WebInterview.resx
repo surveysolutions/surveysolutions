@@ -298,4 +298,7 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (ver. {1})</value>
   </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+     <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
+  </data>
 </root>
