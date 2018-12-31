@@ -34,21 +34,18 @@
                            :fetch-url="config.api.responsible"></Typeahead>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                  <select class="ddl-receivedByTablet"
-                        v-model="receivedByTablet">
-                    <option v-bind:value="'All'" selected="selected">{{ $t("Assignments.ReceivedByTablet_All") }}</option>
-                    <option v-bind:value="'Received'">{{ $t("Assignments.ReceivedByTablet_Received") }}</option>
-                    <option v-bind:value="'NotReceived'">{{ $t("Assignments.ReceivedByTablet_NotReceived") }}</option>
-                </select>
+            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">                                
+                <Typeahead noSearch noClear
+                    :values= "ddlReceivedByTablet" 
+                    :value="receivedByTablet"                    
+                    v-on:selected="receivedByTabletSelected"/>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                <select class="ddl"
-                        v-model="showArchive">
-                    <option v-bind:value="false">{{ $t("Assignments.Active") }}</option>
-                    <option v-bind:value="true">{{ $t("Assignments.Archived") }}</option>
-                </select>
+            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">                
+                <Typeahead  noSearch noClear
+                    :values= "ddlShowArchive" 
+                    :value="showArchive"                    
+                    v-on:selected="showArchiveSelected"/>                              
             </FilterBlock>
         </Filters>
 
@@ -169,15 +166,25 @@ export default {
             isLoading: false,
             selectedRows: [],
             totalRows: 0,
-            showArchive: false,
-            receivedByTablet: 'All',
+            showArchive: null,
+            receivedByTablet: null,
             newResponsibleId: null,
             editedRowId: null,
-            editedQuantity: null
+            editedQuantity: null                     
         }
     },
 
     computed: {
+        ddlReceivedByTablet(){
+            return [{ key: "All", value: this.$t('Assignments.ReceivedByTablet_All')},
+                    { key: "Received", value: this.$t('Assignments.ReceivedByTablet_Received')},
+                    { key: "NotReceived", value: this.$t('Assignments.ReceivedByTablet_NotReceived')}];   
+        },
+        ddlShowArchive(){ 
+            return [{ key: false, value: this.$t("Assignments.Active") },
+                    { key: true, value: this.$t("Assignments.Archived") }];
+        },
+
         title() {
             return this.$t("Assignments.AssignmentsHeader") + " (" + this.formatNumber(this.totalRows) + ")";
         },
@@ -335,11 +342,11 @@ export default {
             requestData.responsibleId = (this.responsibleId || {}).key;
             requestData.questionnaireId = (this.questionnaireId || {}).key;
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key;
-            requestData.showArchive = this.showArchive;
+            requestData.showArchive = (this.showArchive|| {}).key;
             requestData.dateStart = this.dateStart;
             requestData.dateEnd = this.dateEnd;
             requestData.userRole = this.userRole;
-            requestData.receivedByTablet = this.receivedByTablet;
+            requestData.receivedByTablet = (this.receivedByTablet || {}).key;
             requestData.teamId = this.teamId;
         },
 
@@ -359,6 +366,16 @@ export default {
             this.newResponsibleId = newValue;
         },
 
+        receivedByTabletSelected(newValue)
+        {
+            this.receivedByTablet = newValue;
+        },
+        
+        showArchiveSelected(newValue)
+        {
+            this.showArchive = newValue;
+        },
+
         startWatchers(props, watcher) {
             var iterator = (prop) => this.$watch(prop, watcher);
 
@@ -374,7 +391,7 @@ export default {
         },
 
         addParamsToQueryString() {
-            var queryString = { showArchive: this.showArchive };
+            var queryString = { showArchive: this.showArchive.key };
 
             if (this.questionnaireId != null) {
                 queryString.QuestionnaireId = this.questionnaireId.value;
@@ -392,8 +409,8 @@ export default {
                 queryString.dateEnd = this.dateEnd;
             if (this.userRole)
                 queryString.userRole = this.userRole;
-            if (this.receivedByTablet)
-                queryString.receivedByTablet = this.receivedByTablet;
+            if (this.receivedByTablet != null)
+                queryString.receivedByTablet = this.receivedByTablet.key;
             if (this.teamId)
                 queryString.teamId = this.teamId;
 
@@ -538,9 +555,11 @@ export default {
 
         this.dateStart = this.$route.query.dateStart;
         this.dateEnd = this.$route.query.dateEnd;
-        this.userRole = this.$route.query.userRole;
-        this.receivedByTablet = this.$route.query.receivedByTablet;
+        this.userRole = this.$route.query.userRole;        
         this.teamId = this.$route.query.teamId;
+
+        this.receivedByTabletSelected(this.ddlReceivedByTablet[0]);
+        this.showArchiveSelected(this.ddlShowArchive[0]);
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
             if (questionnaireId != undefined) {
@@ -559,10 +578,7 @@ export default {
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
                 self.reloadTable();
-                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));
-
-                $('.ddl').selectpicker('val', self.showArchive.toString());
-                $('.ddl-receivedByTablet').selectpicker('val', self.receivedByTablet);
+                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));                
             });
         });
     }
