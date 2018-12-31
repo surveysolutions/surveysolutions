@@ -81,18 +81,28 @@ export default {
                 scales: {
                     xAxes: [
                         {
-                            type: "time",
+                            type: "time",                            
                             gridLines: {
-                                display: false,
+                                display: true,
                                 tickMarkLength: 10
                             }
                         }
                     ],
                     yAxes: [
-                        {
-                            stacked: true
+                        {                            
+                            type: "linear",
+                            stacked: true,
+                            ticks: {
+                                beginAtZero: true,
+                                userCallback: function(label, index, labels) {
+                                // when the floored value is the same as the value we have a whole number
+                                    if (Math.floor(label) === label) {
+                                    return label;
+                                    }
+                            },
                         }
-                    ]
+                        }
+                     ]
                 }
             }
         };
