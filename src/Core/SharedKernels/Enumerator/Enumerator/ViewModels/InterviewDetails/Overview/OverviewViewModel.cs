@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IAudioService audioService;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IDynamicTextViewModelFactory dynamicTextViewModelFactory;
         private readonly DynamicTextViewModel nameViewModel;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
@@ -30,6 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IAudioService audioService,
             IAudioFileStorage audioFileStorage,
             IUserInteractionService userInteractionService,
+            IDynamicTextViewModelFactory dynamicTextViewModelFactory,
             DynamicTextViewModel nameViewModel)
         {
             this.interviewRepository = interviewRepository;
@@ -38,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.audioService = audioService;
             this.audioFileStorage = audioFileStorage;
             this.userInteractionService = userInteractionService;
+            this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
             this.nameViewModel = nameViewModel;
         }
 
@@ -102,11 +105,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                         Title = group.Title.Text
                     };
                 }
-                return new OverviewGroup(group)
+
+                var overviewGroupViewModel = new OverviewGroupViewModel(@group)
                 {
-                    Id = group.Identity.ToString(),
-                    Title = group.Title.Text
+                    Id = @group.Identity.ToString()
                 };
+                overviewGroupViewModel.Init(interview, dynamicTextViewModelFactory.CreateDynamicTextViewModel(), interviewerEntityIdentity);
+                return overviewGroupViewModel;
             }
 
             throw new NotSupportedException($"Display of {interviewerEntityIdentity} entity is not supported");
