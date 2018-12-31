@@ -154,7 +154,7 @@ export default {
                     if (start != null && end != null) {
                         this.onChange(q => {
                             q.from = moment(start).format("YYYY-MM-DD");
-                            q.to = moment(start).format("YYYY-MM-DD");
+                            q.to = moment(end).format("YYYY-MM-DD");
                         });
                     }
                 }
