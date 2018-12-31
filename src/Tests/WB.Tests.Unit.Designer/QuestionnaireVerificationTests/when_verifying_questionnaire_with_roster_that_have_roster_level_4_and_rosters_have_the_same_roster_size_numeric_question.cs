@@ -51,13 +51,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         private void BecauseOf() =>
-            verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0261 () =>
-            verificationMessages.ShouldContainError("WB0261");
+            verificationMessages.ShouldContainWarning("WB0261");
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0262 () =>
-            verificationMessages.ShouldContainError("WB0262");
+            verificationMessages.ShouldContainWarning("WB0262");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

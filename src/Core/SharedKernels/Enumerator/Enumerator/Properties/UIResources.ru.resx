@@ -680,4 +680,8 @@
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Показать PDF</value>
   </data>
+    <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
+    <comment>Количество ростеров и вопросов в интервью превысило лимиты.</comment>
+  </data>
 </root>

@@ -148,7 +148,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (exception is InterviewException interviewException)
             {
-                this.exceptionErrorMessageFromViewModel = interviewException.Message;
+                switch (interviewException.ExceptionType)
+                {
+                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
+                        this.exceptionErrorMessageFromViewModel = UIResources.Validity_InterviewSizeLimitReached;
+                        break;
+                    default:
+                        this.exceptionErrorMessageFromViewModel = interviewException.Message;
+                        break;
+                }
 
                 if (interviewException.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
                 {
