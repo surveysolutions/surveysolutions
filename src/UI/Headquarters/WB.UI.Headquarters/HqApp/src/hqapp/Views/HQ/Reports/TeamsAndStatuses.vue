@@ -1,5 +1,5 @@
 <template>
-  <HqLayout :title="$t('Reports.TeamsAndStatuses')" :hasFilter="true">
+  <HqLayout :title="$config.model.reportName" :hasFilter="true">
     <Filters slot="filters">
       <FilterBlock
         :title="$t('Common.Questionnaire')">
@@ -46,7 +46,7 @@ export default {
         const self = this
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            if (questionnaireId != undefined) {
+            if (questionnaireId) {
                 self.questionnaireId = {
                     key: questionnaireId,
                     value: questionnaireTitle
@@ -123,7 +123,7 @@ export default {
             const questionnaireId = this.$route.query.questionnaireId
             const version = this.$route.query.questionnaireVersion
 
-            if (questionnaireId != undefined && version != undefined) {
+            if (questionnaireId && version) {
                 requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
                              this.ajaxParams);
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })

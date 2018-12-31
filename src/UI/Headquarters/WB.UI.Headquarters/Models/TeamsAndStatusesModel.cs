@@ -8,5 +8,6 @@
         public string InterviewsUrl { get; set; }
         public string AllTeamsTitle { get; set; }
         public string TeamTitle { get; set; }
+        public string ReportName { get; set; }
     }
 }
