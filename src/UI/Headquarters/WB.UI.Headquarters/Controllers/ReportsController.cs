@@ -72,6 +72,7 @@ namespace WB.UI.Headquarters.Controllers
             model.InterviewsUrl = Url.Action("Interviews", "HQ");
             model.AllTeamsTitle = Strings.AllTeams;
             model.TeamTitle = Users.Supervisors;
+            model.ReportName = Reports.TeamsAndStatuses;
 
             return this.View("TeamsAndStatuses", model);
         }
@@ -91,6 +92,7 @@ namespace WB.UI.Headquarters.Controllers
             model.InterviewsUrl = Url.Action("Interviews", "Survey");
             model.AllTeamsTitle = Strings.AllInterviewers;
             model.TeamTitle = Pages.TeamMember;
+            model.ReportName = Reports.Report_Team_Members_and_Statuses;
 
             return this.View(model);
         }
