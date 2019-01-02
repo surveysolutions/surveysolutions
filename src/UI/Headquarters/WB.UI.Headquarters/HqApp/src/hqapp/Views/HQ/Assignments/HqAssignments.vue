@@ -4,25 +4,21 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead data-vv-name="questionnaireId"
-                           data-vv-as="questionnaire"
-                           :placeholder="$t('Common.AllQuestionnaires')"
+                <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
                            control-id="questionnaireId"
-                           :ajax-params="questionnaireParams"
                            :value="questionnaireId"
-                           v-on:selected="questionnaireSelected"
-                           :fetch-url="config.api.questionnaire" />
+                           :values="config.questionnaires"
+                           :keyFunc="item => item.key + item.value"
+                           v-on:selected="questionnaireSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead data-vv-name="questionnaireVersion"
-                           data-vv-as="questionnaireVersion"
-                           :placeholder="$t('Common.AllVersions')"
+                <Typeahead :placeholder="$t('Common.AllVersions')"
                            control-id="questionnaireVersion"
-                           :ajax-params="questionnaireParams"
+                           :values="questionnaireId == null ? null : questionnaireId.versions"
                            :value="questionnaireVersion"
-                           v-on:selected="questionnaireVersionSelected"
-                           :fetch-url="questionnaireVersionFetchUrl" :disabled="questionnaireVersionFetchUrl == null" />
+                           :disabled="questionnaireId == null"
+                           v-on:selected="questionnaireVersionSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
@@ -34,18 +30,18 @@
                            :fetch-url="config.api.responsible"></Typeahead>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">                                
+            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
                 <Typeahead noSearch noClear
                     :values= "ddlReceivedByTablet" 
-                    :value="receivedByTablet"                    
+                    :value="receivedByTablet"
                     v-on:selected="receivedByTabletSelected"/>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">                
+            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
                 <Typeahead  noSearch noClear
                     :values= "ddlShowArchive" 
-                    :value="showArchive"                    
-                    v-on:selected="showArchiveSelected"/>                              
+                    :value="showArchive"
+                    v-on:selected="showArchiveSelected"/>
             </FilterBlock>
         </Filters>
 
@@ -170,7 +166,7 @@ export default {
             receivedByTablet: null,
             newResponsibleId: null,
             editedRowId: null,
-            editedQuantity: null                     
+            editedQuantity: null
         }
     },
 
