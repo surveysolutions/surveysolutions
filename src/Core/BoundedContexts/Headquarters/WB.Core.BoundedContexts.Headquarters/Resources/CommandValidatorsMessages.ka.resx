@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>თქვენ უკვე გაქვთ შემოტანილი დიზაინერიდან სხვა კითხვარი სათაურით '{0}'. თუ კვლავ გსურთ ამ კონკრეტულის შემოტანა, გთხოვთ, სხვა სახელი მისცეთ დიზაინერში.</value>
-  </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>ამ დავალებაზე პასუხისმგებელ ზედამხედველს შეუძლია გასცეს მხოლოდ პასუხი ზედამხედველის კითხვებს</value>
   </data>

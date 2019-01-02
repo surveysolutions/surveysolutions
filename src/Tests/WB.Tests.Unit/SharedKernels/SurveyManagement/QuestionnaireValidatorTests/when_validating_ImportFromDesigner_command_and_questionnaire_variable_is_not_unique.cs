@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValidatorTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireValidatorTests
 {
     internal class QuestionnaireNameValidatorTests 
     {

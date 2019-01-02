@@ -293,11 +293,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireImportValidator>())
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
-                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
 
             CommandRegistry
                 .Setup<StatefulInterview>()
