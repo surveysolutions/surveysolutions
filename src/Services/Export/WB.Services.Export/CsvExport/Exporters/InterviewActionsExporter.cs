@@ -153,6 +153,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             switch (status)
             {
                 case InterviewExportedAction.Created:
+                case InterviewExportedAction.TranslationSwitched:
                     return GetUserRole(statusChangeOriginatorRole);
                 case InterviewExportedAction.SupervisorAssigned:
                 case InterviewExportedAction.Completed:
