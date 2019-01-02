@@ -156,7 +156,7 @@ export default {
             this.$emit("input", filter);
         },
 
-        "query.questionnaireId"(to) {
+        "query.name"(to) {
             if (this.selectedQuestion == null) {
                 this.loadQuestions(to);
             }
@@ -199,17 +199,18 @@ export default {
             }
         },
 
-        async loadQuestions(questionnaireId = null, version = null) {
-            if (questionnaireId == null && this.query.questionnaireId == null) return;
-            const id = questionnaireId || this.query.questionnaireId;
+        loadQuestions(questionnaireId = null, version = null) {
+            if (questionnaireId == null && this.selectedQuestionnaire == null) return;
+            const id = questionnaireId || this.selectedQuestionnaire.key;
 
             this.loading.questions = true;
 
-            try {
-                this.questions = await this.$hq.Report.SurveyStatistics.Questions(id, version || this.query.version);
-            } finally {
-                this.loading.questions = false;
-            }
+            this.$hq.Report.SurveyStatistics.Questions(id, version || this.query.version)
+                .then(q => {
+                    this.questions = q; 
+                    this.loading.questions = false;
+                })
+                .catch(() => this.loading.questions = false)
         },
 
         async selectQuestionnaire(id) {
@@ -224,7 +225,7 @@ export default {
             await this.loadQuestions(id.key);
 
             this.selectCondition(null);
-            this.onChange(q => (q.questionnaireId = questionnaireId));
+            this.onChange(q => (q.name = id.value));
 
             const question = _.find(this.questionsList, "key", this.query.questionId);
             this.selectQuestion(question);
@@ -274,8 +275,11 @@ export default {
         filter() {
             const state = this.queryString;
 
+
+
             const filter = Object.assign(
                 {
+                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.Id,
                     questionnaire: this.questionnaire,
                     version: this.version,
                     question: this.question,
@@ -290,7 +294,7 @@ export default {
 
         queryString() {
             return {
-                questionnaireId: this.query.questionnaireId,
+                name: this.query.name,
                 questionId: this.query.questionId,
                 conditionId: this.query.conditionId,
                 ans: this.condition != null ? this.selectedAnswers : null,
@@ -405,8 +409,8 @@ export default {
 
         // drop down
         selectedQuestionnaire() {
-            if (this.query.questionnaireId == null) return null;
-            return _.find(this.questionnaireList, { key: this.query.questionnaireId });
+            if (this.query.name == null) return null;
+            return _.find(this.questionnaireList, { value: this.query.name });
         },
 
         selectedQuestionnaireVersion() {

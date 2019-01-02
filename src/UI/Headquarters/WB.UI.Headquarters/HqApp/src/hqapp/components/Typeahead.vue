@@ -27,7 +27,7 @@
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
-                <li v-if="!forceLoadingState" v-for="option in options" :key="option.item.key">
+                <li v-if="!forceLoadingState" v-for="option in options" :key="keyFunc(option.item)">
                     <a 
                        :class="[option.item.iconClass]"
                        href="javascript:void(0);"
@@ -74,7 +74,8 @@ export default {
         fuzzy: {
             type: Boolean,
             default: false
-        }
+        },
+        keyFunc: { type: Function, default: item => item.key }
     },
     watch: {
         fetchUrl (val) {

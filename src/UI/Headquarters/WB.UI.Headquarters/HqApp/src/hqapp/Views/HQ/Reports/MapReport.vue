@@ -7,6 +7,7 @@
                     control-id="questionnaireId"
                     :value="selectedQuestionnaireId"
                     :values="questionnaires"
+                    :keyFunc="item => item.key + item.value"
                     v-on:selected="selectQuestionnaire"/>
             </FilterBlock>
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -150,7 +151,7 @@ export default {
         };
     },
 
-    watch: {       
+    watch: {
         selectedQuestionnaireId(to) {
             if (to == null) {
                 this.showHeatmap = false;
@@ -202,20 +203,20 @@ export default {
 
         queryString() {
             return {
-                questionnaireId: this.query.questionnaireId,
+                name: this.query.name,
                 version: this.query.version,
                 question: this.query.question
             }
         },
 
         selectedQuestionnaireId() {
-            if (this.query == null || this.query.questionnaireId == null) {
+            if (this.query == null || this.query.name == null) {
                 return null;
             }
 
             return _.find(this.model.questionnaires, {
-                key: this.query.questionnaireId
-            });            
+                value: this.query.name
+            });
         },
 
         selectedVersion() {
@@ -281,7 +282,7 @@ export default {
             this.gpsQuestions = [];
 
             this.onChange(q => {
-                q.questionnaireId = value == null ? null : value.key;
+                q.name = value == null ? null : value.value;
             });
 
             if (_.isNull(value)) return;
@@ -301,7 +302,7 @@ export default {
                     toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
                 }
 
-                this.onChange(s => s.questionnaireId = value.key)
+                this.onChange(s => s.name = value.value)
             })
         },
 

@@ -90,10 +90,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                 {
                     Key = g.Key.QuestionnaireId.ToString(),
                     Value = g.Key.Title,
-                    Versions = g.OrderBy(v => v.Version)
+                    Versions = g.OrderByDescending(v => v.Version)
                         .Select(v => new ComboboxViewItem{ Key = v.Version.ToString(), Value = $"ver. {v.Version}"})
                         .ToList()
-                }).ToList();
+                })
+                .OrderBy(q => q.Value)
+                .ToList();
         }
 
         public List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version)
