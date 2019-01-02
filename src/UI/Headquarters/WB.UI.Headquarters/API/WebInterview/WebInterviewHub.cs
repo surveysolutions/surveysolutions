@@ -40,12 +40,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             get
             {
-                var statefulInterview = this.GetCallerInterview();
                 if (IsReviewMode)
                 {
                     return this.authorizedUser.Id;
                 }
 
+                var statefulInterview = this.GetCallerInterview();
                 return statefulInterview.CurrentResponsibleId;
             }
         }
