@@ -7,6 +7,7 @@
           control-id="questionnaireId"
           :value="selectedQuestionnaire"
           :values="model.templates"
+          :keyFunc="item => item.key + item.value"
           v-on:selected="selectQuestionnaire"
         />
       </FilterBlock>
@@ -81,7 +82,7 @@ export default {
                 scales: {
                     xAxes: [
                         {
-                            type: "time",                            
+                            type: "time",
                             gridLines: {
                                 display: true,
                                 tickMarkLength: 10
@@ -89,7 +90,7 @@ export default {
                         }
                     ],
                     yAxes: [
-                        {                            
+                        {
                             type: "linear",
                             stacked: true,
                             ticks: {
@@ -121,7 +122,7 @@ export default {
             if (this.query == null) return {};
 
             return {
-                questionnaireId: this.query.questionnaireId,
+                name: this.query.name,
                 version: this.query.version,
                 from: this.query.from,
                 to: this.query.to
@@ -129,14 +130,13 @@ export default {
         },
 
         selectedQuestionnaire() {
-            if (this.query == null || this.query.questionnaireId == null) {
+            if (this.query == null || this.query.name == null) {
                 return null;
             }
 
             return _.find(this.model.templates, {
-                key: this.query.questionnaireId
+                value: this.query.name
             });
-            return this.model.templates;
         },
 
         selectedVersion() {
@@ -183,7 +183,7 @@ export default {
             if (val == null) this.selectQuestionnaireVersion(null);
 
             this.onChange(q => {
-                q.questionnaireId = val == null ? null : val.key;
+                q.name = val == null ? null : val.value;
             });
         },
 
