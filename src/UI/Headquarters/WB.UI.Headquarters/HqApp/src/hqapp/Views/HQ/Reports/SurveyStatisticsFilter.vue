@@ -205,9 +205,9 @@ export default {
 
             this.loading.questions = true;
 
-            this.$hq.Report.SurveyStatistics.Questions(id, version || this.query.version)
-                .then(q => {
-                    this.questions = q; 
+            return this.$hq.Report.SurveyStatistics.Questions(id, version)
+                .then(questions => {
+                    this.questions = questions; 
                     this.loading.questions = false;
                 })
                 .catch(() => this.loading.questions = false)
@@ -222,8 +222,10 @@ export default {
                 return;
             }
 
-            await this.loadQuestions(id.key);
+            this.selectQuestionnaireVersion(null);
 
+            await this.loadQuestions(id.key, null);
+            
             this.selectCondition(null);
             this.onChange(q => (q.name = id.value));
 
@@ -231,12 +233,12 @@ export default {
             this.selectQuestion(question);
         },
 
-        async selectQuestionnaireVersion(id) {
+        selectQuestionnaireVersion(id) {
             const version = id == null ? null : id.key;
 
-            await this.loadQuestions(this.selectedQuestionnaire.key, version);
-
-            this.onChange(query => (query.version = version));
+            this.loadQuestions(this.selectedQuestionnaire.key, version).then(() => {
+                this.onChange(query => (query.version = version));
+            });
         },
 
         selectQuestion(id) {
@@ -274,8 +276,6 @@ export default {
     computed: {
         filter() {
             const state = this.queryString;
-
-
 
             const filter = Object.assign(
                 {
