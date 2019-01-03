@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 
     public static class InterviewerSettingsExtensions
     {
-        public static bool GetWithDefaultValue(this InterviewerSettings settings)
+        public static bool IsAutoUpdateEnabled(this InterviewerSettings settings)
         {
             if (settings == null) return InterviewerSettings.AutoUpdateEnabledDefault;
 
