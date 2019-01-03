@@ -235,6 +235,9 @@ namespace WB.UI.Headquarters.API.PublicApi
                     : questionnaire.Find<IQuestion>(q => q.StataExportCaption == inputVar).FirstOrDefault();
             }
 
+            if (string.IsNullOrWhiteSpace(query.Question))
+                return ReturnEmptyResult(query);
+
             var question = GetQuestionByGuidOrStataCaption(query.Question);
 
             if (question == null) return ReturnEmptyResult(query);
