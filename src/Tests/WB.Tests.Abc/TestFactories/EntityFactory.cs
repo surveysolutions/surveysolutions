@@ -2334,7 +2334,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false)
         {
-            return new InterviewerSettings()
+            return new InterviewerSettings
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
             };
