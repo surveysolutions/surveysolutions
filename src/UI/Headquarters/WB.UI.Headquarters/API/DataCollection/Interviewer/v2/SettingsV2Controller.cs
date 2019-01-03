@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [HttpGet]
         public override bool AutoUpdateEnabled() =>
-            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)?.AutoUpdateEnabled ?? true;
+            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetWithDefaultValue();
 
         [HttpGet]
         public override string PublicKeyForEncryption() => base.PublicKeyForEncryption();
