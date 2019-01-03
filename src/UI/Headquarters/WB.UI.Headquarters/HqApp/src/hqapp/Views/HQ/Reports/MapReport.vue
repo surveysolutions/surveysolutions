@@ -22,7 +22,7 @@
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
                     :values="gpsQuestions" :value="selectedQuestion"
-                    @selected="selectGpsQuestion" />
+                    @selected="selectGpsQuestion"/>
             </FilterBlock>
             <FilterBlock>
                 <div class="center-block">
@@ -273,17 +273,6 @@ export default {
             this.onChange(s => s.version = value == null ? null : value.key)
             this.selectGpsQuestion(null);
             this.gpsQuestions = [];
-        },
-
-        selectQuestionnaire(value) {
-            this.questionnaireId = value;
-            this.selectQuestionnaireVersion(null);
-            this.selectGpsQuestion(null);
-            this.gpsQuestions = [];
-
-            this.onChange(q => {
-                q.name = value == null ? null : value.value;
-            });
 
             if (_.isNull(value)) return;
 
@@ -301,9 +290,18 @@ export default {
                 } else {
                     toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
                 }
-
-                this.onChange(s => s.name = value.value)
             })
+        },
+
+        selectQuestionnaire(value) {
+            this.questionnaireId = value;
+            this.selectQuestionnaireVersion(null);
+            this.selectGpsQuestion(null);
+            this.gpsQuestions = [];
+
+            this.onChange(q => {
+                q.name = value == null ? null : value.value;
+            });
         },
 
         selectGpsQuestion(value) {
