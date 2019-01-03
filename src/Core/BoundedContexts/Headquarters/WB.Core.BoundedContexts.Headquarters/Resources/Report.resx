@@ -186,4 +186,7 @@
   <data name="COLUMN_DAYS" xml:space="preserve">
     <value>DAYS</value>
   </data>
+  <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+    <value>TEAM SIZE</value>
+  </data>
 </root>

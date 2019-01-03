@@ -112,6 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasUnansweredQuestions(Identity group);
 
         Identity GetParentGroup(Identity groupOrQuestion);
+        Identity[] GetParentGroups(Identity groupOrQuestion);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
         
@@ -124,6 +125,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewTreeSection FirstSection { get; }
 
         Guid CurrentResponsibleId { get; }
+
+        Guid SupervisorId { get; }
 
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
@@ -159,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLastSupervisorComment();
 
-        IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+        List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 

@@ -7,6 +7,7 @@ using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -105,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire =
@@ -199,30 +200,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
-            if (this.userInteraction.HasPendingUserInterations)
-            {
-                await this.userInteraction.WaitPendingUserInteractionsAsync();
-                ResetUiOptions();
-                return;
-            }
-
-            if (this.isRosterSizeQuestion)
-            {
-                var itemsToDelete = PreviousOptionToReset.Where(x => x.Yes)
-                    .Except(selectedOptionsToSave.Where(x => x.Yes)).ToList();
-
-                if (itemsToDelete.Any())
-                {
-                    var amountOfRostersToRemove = itemsToDelete.Count;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    if (!await this.userInteraction.ConfirmAsync(message))
-                    {
-                        ResetUiOptions();
-                        return;
-                    }
-                }
-            }
-
             var command = new AnswerYesNoQuestion(
                 this.interviewId,
                 this.userId,
@@ -260,6 +237,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
         {
+            if (this.userInteraction.HasPendingUserInteractions)
+            {
+                changedModel.Selected = oldValue;
+                return;
+            }
+
             List<YesNoQuestionOptionViewModel> allSelectedOptions =
                 this.AreAnswersOrdered
                     ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList()
@@ -281,6 +264,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable())
                     .ToList()
                 : selectedValuesWithoutJustChanged.ToList();
+
+            if (this.isRosterSizeQuestion && oldValue.HasValue && oldValue.Value && changedModel.NoSelected &&
+                !await this.userInteraction.ConfirmAsync(UIResources.Interview_Questions_RemoveRowFromRosterMessage))
+            {
+                changedModel.Selected = oldValue;
+                return;
+            }
 
             await this.throttlingModel.ExecuteActionIfNeeded();
         }

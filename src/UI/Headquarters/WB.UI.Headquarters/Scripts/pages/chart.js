@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ChartPage = function (interviewChartsUrl, serviceUrl, commandExecutionUrl) {
+Supervisor.VM.ChartPage = function (interviewChartsUrl, serviceUrl, commandExecutionUrl) {
     Supervisor.VM.ChartPage.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
 
     var self = this;
@@ -116,13 +116,11 @@
         self.Plot = $.jqplot('interviewChart',
             self.Stats.Lines,
             {
-                seriesColors: ["#4FADDB", "#FDBD30", "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
+                seriesColors: [ "#86B828", "#F08531", "#13A388", "#E06B5C", "#00647F", "#38407D", "#785C99", "#A30F2C", "#878787", "#414042"],
                 stackSeries: true,
                 gridPadding: { top: 50, right: 50, bottom: 50, left: 50 },
                 showMarker: true,
                 series: [
-                    { label: 'Supervisor assigned' },
-                    { label: 'Interviewer assigned' },
                     { label: 'Completed' },
                     { label: 'Rejected by Supervisor' },
                     { label: 'Approved by Supervisor' },

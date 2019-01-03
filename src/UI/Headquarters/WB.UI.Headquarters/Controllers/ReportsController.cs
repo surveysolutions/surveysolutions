@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
 
@@ -26,85 +21,85 @@ namespace WB.UI.Headquarters.Controllers
     [LimitsFilter]
     public class ReportsController : Controller
     {
-        private readonly IMapReport mapReport;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
-        private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
-        public ReportsController(
-            IMapReport mapReport, 
-            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IAuthorizedUser authorizedUser, 
-            IUserViewFactory userViewFactory, 
-            ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory, 
+        public ReportsController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
+            IAuthorizedUser authorizedUser,
+            IUserViewFactory userViewFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
-            this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
-            this.teamUsersAndQuestionnairesFactory = teamUsersAndQuestionnairesFactory;
             this.interviewStatuses = interviewStatuses;
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult SurveysAndStatuses()
+        [ActivePage(MenuItem.SurveyAndStatuses)]
+        public ActionResult SurveysAndStatuses(SurveysAndStatusesModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
+            return this.View(model);
         }
 
         [AuthorizeOr403(Roles = "Supervisor")]
-        public ActionResult SurveysAndStatusesForSv()
+        [ActivePage(MenuItem.SurveyAndStatuses)]
+        public ActionResult SurveysAndStatusesForSv(SurveysAndStatusesModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Surveys;
-
-            return this.View();
+            return this.View(model);
         }
 
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [ActivePage(MenuItem.Summary)]
         public ActionResult SupervisorsAndStatuses()
         {
-            this.ViewBag.ActivePage = MenuItem.Summary;
+            var model = new TeamsAndStatusesModel();
+            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" });
+            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
+            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
+            model.InterviewsUrl = Url.Action("Interviews", "HQ");
+            model.AllTeamsTitle = Strings.AllTeams;
+            model.TeamTitle = Users.Supervisors;
+            model.ReportName = Reports.TeamsAndStatuses;
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
-
-            return this.View("TeamsAndStatuses", usersAndQuestionnaires.Questionnaires);
+            return this.View("TeamsAndStatuses", model);
         }
 
 
         [AuthorizeOr403(Roles = "Supervisor")]
+        [ActivePage(MenuItem.Summary)]
         public ActionResult TeamMembersAndStatuses()
         {
-            this.ViewBag.ActivePage = MenuItem.Summary;
-            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.authorizedUser.Id));
-            return this.View(usersAndQuestionnaires.Questionnaires);
+            var model = new TeamsAndStatusesModel();
+            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" });
+            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
+            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
+            model.InterviewsUrl = Url.Action("Interviews", "Survey");
+            model.AllTeamsTitle = Strings.AllInterviewers;
+            model.TeamTitle = Pages.TeamMember;
+            model.ReportName = Reports.Report_Team_Members_and_Statuses;
+
+            return this.View(model);
         }
 
         [AuthorizeOr403(Roles = "Administrator, Supervisor, Headquarter")]
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
             return View(new
             {
-                Api = new
-                {
-                    GpsQuestionsByQuestionnaireUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" }),
-                    MapReportUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" }),
-                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" }),
-                    InterviewDetailsUrl = Url.Action("Review", "Interview")
-                },
-                Questionnaires = questionnaires.OrderBy(x => x.Title).ThenBy(x => x.Version)
-                    .Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}"))
-                    .ToArray()
+                Questionnaires = questionnaires
             });
         }
 
@@ -113,15 +108,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
-            AllUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.allUsersAndQuestionnairesFactory.Load();
-
-            return this.View("CumulativeInterviewChart", new DocumentFilter
-            {
-                Templates = usersAndQuestionnaires.Questionnaires,
-                Statuses = statuses
+            return this.View("CumulativeInterviewChart", new {
+                Templates = questionnaires
             });
         }
 
@@ -140,7 +130,8 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
-                Questionnaires = this.GetAllQuestionnaires()
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"})
             });
         }
 
@@ -153,16 +144,7 @@ namespace WB.UI.Headquarters.Controllers
                 isSupervisor = this.authorizedUser.IsSupervisor
             });
         }
-
-        private ComboboxOptionModel[] GetAllQuestionnaires()
-        {
-            List<TemplateViewItem> questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaires();
-
-            return questionnaires.Select(s => new ComboboxOptionModel(
-                new QuestionnaireIdentity(s.TemplateId, s.TemplateVersion).ToString(),
-                $@"(ver. {s.TemplateVersion.ToString()}) {s.TemplateName}")).ToArray();
-        }
-
+        
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
@@ -251,28 +233,29 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.DevicesInterviewers)]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult InterviewersAndDevices()
+        public ActionResult InterviewersAndDevices(Guid? id)
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
-                DataUrl = Url.RouteUrl("DefaultApiWithAction", 
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
                 new
                 {
                     httproute = "",
                     controller = "ReportDataApi",
                     action = "DeviceInterviewers"
                 }),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers")
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
+                InterviewerProfileUrl = Url.Action("Profile", "Interviewer")
             });
         }
 
-        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, 
+        private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName,
             PeriodiceReportType reportType,
-            bool canNavigateToQuantityByTeamMember, 
-            bool canNavigateToQuantityBySupervisors, 
-            string reportName, 
-            string responsibleColumnName, 
-            bool totalRowPresent, 
+            bool canNavigateToQuantityByTeamMember,
+            bool canNavigateToQuantityBySupervisors,
+            string reportName,
+            string responsibleColumnName,
+            bool totalRowPresent,
             Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
@@ -346,7 +329,7 @@ namespace WB.UI.Headquarters.Controllers
                 case PeriodiceReportType.AverageCaseAssignmentDuration:
                     return PeriodicStatusReport.AverageCaseAssignmentDurationDescription;
                 case PeriodiceReportType.AverageInterviewDuration:
-                    return supervisorId.HasValue ?  PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageInterviewDurationForSupervisors;
+                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageInterviewDurationForSupervisors;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
                     return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
                 case PeriodiceReportType.AverageHQProcessingTime:

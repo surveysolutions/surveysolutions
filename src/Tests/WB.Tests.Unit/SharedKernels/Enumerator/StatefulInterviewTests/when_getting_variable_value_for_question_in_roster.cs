@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 })
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument);
+            interview = SetUp.StatefulInterview(questionnaireDocument);
             interview.Apply(Create.Event.VariablesChanged(Create.Entity.ChangedVariable(Create.Identity(variableId, variableRosterVector), expectedVariableValue)));
             BecauseOf();
         }

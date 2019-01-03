@@ -89,12 +89,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
-        public void BindInPerUnitOfWorkOrPerRequestScope<TInterface, TImplementation>() where TImplementation : TInterface
+        public void BindWithConstructorArgument<TInterface1, TInterface2, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface1, TInterface2
         {
-            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
-                .InstancePerMatchingLifetimeScope(
-                    AutofacServiceLocatorConstants.UnitOfWorkScope,
-                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>()
+                .WithParameter(argumentName, argumentValue);
         }
 
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
@@ -213,6 +211,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 containerBuilder.RegisterType(implementation).As(@interface).SingleInstance();
             }
+        }
+
+        public void BindAsSingleton(Type @interface, Type interface2, Type implementation)
+        {
+            containerBuilder.RegisterType(implementation).As(@interface, @interface2);
         }
     }
 }

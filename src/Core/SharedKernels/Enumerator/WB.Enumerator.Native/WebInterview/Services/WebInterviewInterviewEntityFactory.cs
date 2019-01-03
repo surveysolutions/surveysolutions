@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using WB.Core.GenericSubdomains.Portable;
+using CommonMark;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -18,19 +20,23 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly IMapper autoMapper;
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
         private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
+        private readonly IWebNavigationService webNavigationService;
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
         public WebInterviewInterviewEntityFactory(IMapper autoMapper,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
-            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy)
+            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
+            IWebNavigationService webNavigationService)
         {
             this.autoMapper = autoMapper;
             this.enumeratorGroupStateCalculationStrategy = enumeratorGroupStateCalculationStrategy;
             this.supervisorGroupStateCalculationStrategy = supervisorGroupStateCalculationStrategy;
+            this.webNavigationService = webNavigationService;
         }
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
             IStatefulInterview interview, 
+            IQuestionnaire questionnaire, 
             string[] sectionIds, 
             bool isReviewMode)
         {
@@ -56,6 +62,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     : interview.GetGroup(Identity.Parse(parentId))?.Children
                         .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
+                children = children.Where(e => !questionnaire.IsPlainRoster(e.Identity.Id));
+
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
                     var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
@@ -70,6 +78,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
+                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainRoster(c.Identity.Id));
                     });
                 }
             }
@@ -82,6 +91,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             var identity = Identity.Parse(id);
 
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
+
+            var webLinksVirtualDirectory = WebLinksVirtualDirectory(isReviewMode);
 
             if (question != null)
             {
@@ -259,12 +270,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                 }
 
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
                 this.PutHideInstructions(result, identity, questionnaire);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
 
+                result.Instructions = this.webNavigationService.MakeNavigationLinks(result.Instructions, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                
                 return result;
             }
 
@@ -276,8 +290,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
                 result.AttachmentContent = attachment?.ContentId;
 
+                result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
+                this.PutValidationMessages(result.Validity, callerInterview, identity, questionnaire, isReviewMode);
                 return result;
             }
 
@@ -312,10 +328,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
-        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
+        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
+            IQuestionnaire questionnaire, bool isReview)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
-            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
+                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
+
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
+                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
@@ -383,7 +403,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance @group, InterviewTreeGroup treeGroup,
             IStatefulInterview callerInterview, bool isReviewMode)
         {
-            group.Stats = this.GetGroupStatistics(treeGroup, isReviewMode);
             group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode, callerInterview);
         }
 
@@ -391,21 +410,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
             isReviewMode
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor() > 0
                 : group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
-
-        private static bool HasUnansweredQuestions(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.HasUnansweredQuestionsForSupervisor()
-                : group.HasUnansweredQuestions();
-
-        private static int CountEnabledAnsweredQuestions(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.CountEnabledAnsweredQuestionsForSupervisor()
-                : group.CountEnabledAnsweredQuestions();
-
-        private static int CountEnabledInvalidQuestionsAndStaticTexts(InterviewTreeGroup group, bool isReviewMode) =>
-            isReviewMode
-                ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
-                : group.CountEnabledInvalidQuestionsAndStaticTexts();
         
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview)
         {
@@ -439,17 +443,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 : interview.CountActiveAnsweredQuestionsInInterview();
         }
 
-        private InterviewGroupOrRosterInstance.AnswersStats GetGroupStatistics(InterviewTreeGroup group, bool isReviewMode)
+        public Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity)
         {
-            var stats = new InterviewGroupOrRosterInstance.AnswersStats
+            var parent = interview.GetParentGroup(identity);
+            while (parent != null && questionnaire.IsPlainRoster(parent.Id))
             {
-                AnsweredCount = CountEnabledAnsweredQuestions(group, isReviewMode),
-                HasUnanswered = HasUnansweredQuestions(group, isReviewMode),
-                InvalidCount = CountEnabledInvalidQuestionsAndStaticTexts(group, isReviewMode),
-                SubSectionsCount = group.Children.OfType<InterviewTreeGroup>().Count()
-            };
-
-            return stats;
+                parent = interview.GetParentGroup(parent);
+            }
+            return parent;
         }
+        
+        protected virtual string WebLinksVirtualDirectory(bool isReview) => "WebTester/Interview";
     }
 }

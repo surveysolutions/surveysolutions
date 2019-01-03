@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         {
             var exprectedErrorMessageFromServer = "expected error message from server";
 
-            var versionProvider = Setup.SupportedVersionProvider(ApiVersion.MaxQuestionnaireVersion);
+            var versionProvider = SetUp.SupportedVersionProvider(ApiVersion.MaxQuestionnaireVersion);
 
             var mockOfRestService = NSubstitute.Substitute.For<IRestService>();
             mockOfRestService.GetAsync<QuestionnaireCommunicationPackage>(null, null, null, null, null)
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         [Test]
         public async Task when_importing_questionnaire_with_attachments()
         {
-            var versionProvider = Setup.SupportedVersionProvider(1);
+            var versionProvider = SetUp.SupportedVersionProvider(1);
             List<Attachment> questionnaireAttachments =
               new List<Attachment>(new[]
               {
@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                     Create.Entity.Attachment("Content 3")
               });
 
-            var zipUtils = Setup.StringCompressor_Decompress(new QuestionnaireDocument() { Attachments = questionnaireAttachments });
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument() { Attachments = questionnaireAttachments });
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
@@ -119,12 +119,12 @@ namespace WB.Tests.Unit.Applications.Headquarters
         [Test]
         public async Task when_import_questionnaire_with_lookup_tables()
         {
-            var versionProvider = Setup.SupportedVersionProvider(1);
+            var versionProvider = SetUp.SupportedVersionProvider(1);
 
             (Guid id, string content) lookup1 = (Id.g1, "content of lookup1");
             (Guid id, string content) lookup2 = (Id.g2, "content of lookup2");
 
-            var zipUtils = Setup.StringCompressor_Decompress(new QuestionnaireDocument()
+            var zipUtils = SetUp.StringCompressor_Decompress(new QuestionnaireDocument()
             {
                 PublicKey = Id.gA,
                 LookupTables = new Dictionary<Guid, LookupTable>

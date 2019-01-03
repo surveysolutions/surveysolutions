@@ -1,15 +1,9 @@
 using System;
 using Moq;
 using MvvmCross.Base;
-using MvvmCross.Plugin.Messenger;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Abc.TestFactories;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Abc
 {
@@ -36,31 +30,6 @@ namespace WB.Tests.Abc
         public static IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher() =>
             Create.Fake.MvxMainThreadAsyncDispatcher();
 
-
-        public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
-        {
-            var liteEventRegistry = Create.Service.LiteEventRegistry();
-            var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
-            var sideBarSectionViewModel = new SideBarSectionViewModel(
-                Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IMvxMessenger>(),
-                liteEventRegistry,
-                Create.ViewModel.DynamicTextViewModel(liteEventRegistry),
-                Create.Entity.AnswerNotifier(liteEventRegistry));
-            sideBarSectionViewModel.NavigationState = Create.Other.NavigationState();
-            sideBarSectionViewModelsFactory.SetReturnsDefault(sideBarSectionViewModel);
-            return sideBarSectionViewModelsFactory.Object;
-        }
-
-        public static IInterviewExpressionStatePrototypeProvider InterviewExpressionStateProvider()
-        {
-            var expressionState = new InterviewExpressionStateStub();
-            var storage = new InterviewExpressionStorageStub();
-            return Mock.Of<IInterviewExpressionStatePrototypeProvider>(_ 
-                => _.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == expressionState
-                && _.GetExpressionStorage(Moq.It.IsAny<QuestionnaireIdentity>()) == storage);
-        }
 
         internal class StubAggregateLock : IAggregateLock
         {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CommonMark;
+using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
@@ -35,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0097", QuestionnaireTitleHasInvalidCharacters, VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
-            Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
@@ -47,9 +49,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
+            ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
-            Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
+            Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
         };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
@@ -78,6 +81,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     Name = r.VariableName,
                     Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
                 })
+                .Union(questionnaire
+                    .Find<IGroup>(g => !g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                    .Select(r => new
+                    {
+                        Name = r.VariableName,
+                        Reference = QuestionnaireEntityReference.CreateForGroup(r.PublicKey)
+                    }))
                 .Union(questionnaire.Find<IQuestion>(q => true)
                     .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                     .Select(r => new
@@ -240,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
                 
-                if (translatedEntity.Entity is IValidatable entityAsValidatable)
+                if (translatedEntity.Entity is Main.Core.Entities.SubEntities.IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
 
@@ -263,6 +273,65 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByMarkdownText(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var allAllowedVariableNames = questionnaire
+                .Find<IComposite>(x => x is IQuestion || (x is IGroup group && group.IsRoster))
+                .Select(x => x.VariableName?.ToLower())
+                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToArray();
+
+            foreach (var staticTextOrQuestion in questionnaire.Find<IComposite>(x => x is IStaticText || x is IQuestion))
+            {
+                if (staticTextOrQuestion is IStaticText staticText && TextHasMarkdownLinkWithUnknownVariable(staticText.Text, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IQuestion question && TextHasMarkdownLinkWithUnknownVariable(question.QuestionText, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IValidatable entityWithValidation)
+                {
+                    for (int validationConditionIndex = 0; validationConditionIndex < entityWithValidation.ValidationConditions.Count; validationConditionIndex++)
+                    {
+                        var validationCondition = entityWithValidation.ValidationConditions[validationConditionIndex];
+
+                        if (TextHasMarkdownLinkWithUnknownVariable(validationCondition.Message, allAllowedVariableNames))
+                            foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion, validationConditionIndex));
+                    }
+                }
+            }
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
+            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+
+        private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+
+            var markdownDocument = CommonMarkConverter.Parse(text);
+
+            foreach (var node in markdownDocument.AsEnumerable())
+            {
+                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
+
+                var url = node.Inline.TargetUrl.ToLower();
+
+                if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) continue;
+                if (allAllowedVariableNames.Contains(url)) continue;
+                if(new []{ "cover", "complete", "overview" }.Contains(url)) continue;
+
+                return true;
+            }
+
+            return false;
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInVariableLabel(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string variableLabel, MultiLanguageQuestionnaireDocument questionnaire)
@@ -515,7 +584,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string message)
         {
             return questionnaire =>
                 hasError(questionnaire)

@@ -12,6 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class NavigationState
     {
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         protected NavigationState()
@@ -49,9 +50,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public NavigationState(
             IStatefulInterviewRepository interviewRepository,
+            IQuestionnaireStorage questionnaireStorage,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
+            this.questionnaireStorage = questionnaireStorage;
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
@@ -161,6 +164,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var previousStage = this.CurrentScreenType;
             var previousGroup = this.CurrentGroup;
+
+            var interview = this.interviewRepository.Get(this.InterviewId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            if (navigationIdentity.TargetGroup != null && questionnaire.IsPlainRoster(navigationIdentity.TargetGroup.Id))
+            {
+                navigationIdentity.TargetGroup = interview.GetParentGroup(navigationIdentity.TargetGroup);
+            };
 
             this.CurrentGroup = navigationIdentity.TargetGroup;
             this.CurrentScreenType = navigationIdentity.TargetScreen;

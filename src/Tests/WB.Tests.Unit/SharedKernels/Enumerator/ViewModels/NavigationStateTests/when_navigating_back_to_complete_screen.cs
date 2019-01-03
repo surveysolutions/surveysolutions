@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
             interview.IsEnabled(section2Identity)
                      .Returns(true);
 
-            navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
+            navigationState = Create.Other.NavigationState(SetUp.StatefulInterviewRepository(interview));
             await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
             await navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
             await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));

@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int MaxTotalRosterPropagationLimit = 80000;
         protected const int MaxQuestionsCountInSection = 400;
+        protected const int MaxEntitiesInPlainModeGroup = 10;
 
         protected static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
 
@@ -122,19 +123,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == roster.RosterSizeQuestionId);
             int questionMaxAnswersCount = Constants.MaxRosterRowCount;
 
-            var multioptionQuestion = question as MultyOptionsQuestion;
-            if (multioptionQuestion != null)
+            switch (question)
             {
-                questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers?.Count ?? 0;
-            }
-            var textListTrigger = question as TextListQuestion;
-            if (textListTrigger?.MaxAnswerCount != null)
-            {
-                questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                case MultyOptionsQuestion multyOptionsQuestion:
+                    questionMaxAnswersCount = multyOptionsQuestion.MaxAllowedAnswers ?? multyOptionsQuestion.Answers?.Count ?? 0;
+                    break;
+                case TextListQuestion textListTrigger when textListTrigger.MaxAnswerCount != null:
+                    questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                    break;
             }
 
             return questionMaxAnswersCount;
-
         }
 
         protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;

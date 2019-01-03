@@ -1,8 +1,9 @@
-Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier) {
+Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier, $questionnaires) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
-    
+
+    self.$questionnaires = $questionnaires;
     self.Url = new Url(interviewDetailsUrl);
     self.IsResponsiblesLoading = ko.observable(false);
     self.ResponsiblesUrl = responsiblesUrl;
@@ -14,9 +15,16 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         }, true, true, function() {
             self.IsResponsiblesLoading(false);
         });
-    }
+    };
 
-    self.SelectedTemplate = ko.observable('');
+    self.SelectedQuestionnaireId = ko.observable('');
+    self.SelectedQuestionnaireVersion = ko.observable();
+    self.QuestionnaireVersions = ko.observableArray([]);
+
+    self.questionnaires = _.chain($questionnaires).map(function(q) {
+        return { id: q.templateId, title: q.templateName};
+    }).uniqWith(_.isEqual).sortBy(function(q) { return q.templateName}).value();
+
 
     self.SelectedResponsible = ko.observable();
 
@@ -47,12 +55,8 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
     
     self.GetFilterMethod = function () {
 
-        var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
-            ? { templateId: '', version: '' }
-            : JSON.parse(self.SelectedTemplate());
-
-        self.Url.query['templateId'] = selectedTemplate.templateId;
-        self.Url.query['templateVersion'] = selectedTemplate.version;
+        self.Url.query['templateId'] = self.SelectedQuestionnaireId() || "";
+        self.Url.query['templateVersion'] = self.SelectedQuestionnaireVersion() || "";
         self.Url.query['status'] = self.SelectedStatus() || "";
         self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         self.Url.query['searchBy'] = self.SearchBy() || "";
@@ -66,8 +70,8 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         }
 
         return {
-            TemplateId: selectedTemplate.templateId,
-            TemplateVersion: selectedTemplate.version,
+            TemplateId: self.SelectedQuestionnaireId(),
+            TemplateVersion: self.SelectedQuestionnaireVersion(),
             ResponsibleName: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName,
             Status: self.SelectedStatus,
             SearchBy: self.SearchBy,
@@ -78,9 +82,27 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         };
     };
 
+    self.filterQuestionnaireVersions = function() {
+        if (self.SelectedQuestionnaireId()) {
+            var versions = _.chain(self.$questionnaires)
+                .filter({ templateId: self.SelectedQuestionnaireId() })
+                .sortBy(function(q) { return parseInt(q); })
+                .reverse()
+                .map(function(q) { return q.templateVersion; })
+                .value();
+            self.QuestionnaireVersions(versions);
+        } else {
+            self.QuestionnaireVersions([]);
+        }
+    };
+
     self.load = function () {
 
-        self.SelectedTemplate("{\"templateId\": \"" + self.QueryString['templateId'] + "\",\"version\": \"" + self.QueryString['templateVersion'] + "\"}");
+
+        self.SelectedQuestionnaireId( self.QueryString['templateId']);
+        self.filterQuestionnaireVersions();
+
+        self.SelectedQuestionnaireVersion(self.QueryString['templateVersion']);
         self.SelectedStatus(self.QueryString['status']);
 
         if (self.QueryString['responsible']) {
@@ -92,8 +114,6 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         self.UnactiveDateEnd(decodeURIComponent(self.QueryString['unactiveDateEnd']));
         self.TeamId(self.QueryString['teamId']);
 
-        updateTemplateName(self.SelectedTemplate());
-
         self.Url.query['templateId'] = self.QueryString['templateId'] || "";
         self.Url.query['templateVersion'] = self.QueryString['templateVersion'] || "";
         self.Url.query['status'] = self.QueryString['status'] || "";
@@ -104,12 +124,13 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
         self.Url.query['unactiveDateEnd'] = decodeURIComponent(self.QueryString['unactiveDateEnd'] || "");
         self.Url.query['teamId'] = self.QueryString['teamId'] || "";
 
-        self.SelectedTemplate.subscribe(
-            function (value) {
-                updateTemplateName(value);
-                self.filter();
-            });
+        
+        self.SelectedQuestionnaireId.subscribe(function () {
+            self.filterQuestionnaireVersions();
+            self.filter();
+        });
 
+        self.SelectedQuestionnaireVersion.subscribe(self.filter);
         self.SelectedResponsible.subscribe(self.filter);
         self.SelectedStatus.subscribe(self.filter);
         self.AssignmentId.subscribe(self.filter);
@@ -170,10 +191,6 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
                 onSuccessCommandExecuting();
             self.search();
         }, true);
-    };
-
-    var updateTemplateName = function(value) {
-        self.TemplateName($("#templateSelector option[value='" + value + "']").text());
     };
 
     self.ToggleVisiblePrefilledColumns = function () {

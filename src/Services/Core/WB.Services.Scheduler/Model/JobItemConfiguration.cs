@@ -35,6 +35,7 @@ namespace WB.Services.Scheduler.Model
             map.Property(p => p.ScheduleAt).IsRequired(false);
 
             map.HasIndex(nameof(JobItem.Tenant), nameof(JobItem.Status));
+            map.HasIndex(ji => new {ji.Type, ji.Status, ji.Tenant});
         }
     }
 }

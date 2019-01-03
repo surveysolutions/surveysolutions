@@ -256,10 +256,6 @@ namespace WB.Tests.Abc.TestFactories
             interviewRepository = interviewRepository ?? Stub<IStatefulInterviewRepository>.WithNotEmptyValues;
 
             var headerViewModel = new QuestionHeaderViewModel(
-                enablementViewModel: Create.ViewModel.EnablementViewModel(
-                    interviewRepository: interviewRepository,
-                    eventRegistry: liteEventRegistry,
-                    questionnaireRepository: questionnaireRepository),
                 dynamicTextViewModel: Create.ViewModel.DynamicTextViewModel(eventRegistry: liteEventRegistry,
                     interviewRepository: interviewRepository));
 
@@ -268,12 +264,12 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository: interviewRepository,
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
-
+            
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
-                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
-                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
+                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues),
+                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher());
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,
@@ -296,9 +292,11 @@ namespace WB.Tests.Abc.TestFactories
                 warningsViewModel: warningsViewModel);
         }
 
-        private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry, IQuestionnaireStorage questionnaireRepository)
-            => new EnablementViewModel(interviewRepository, eventRegistry, questionnaireRepository);
+        public EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null,
+            ILiteEventRegistry eventRegistry = null, IQuestionnaireStorage questionnaireRepository = null)
+            => new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                eventRegistry ?? Create.Service.LiteEventRegistry(), 
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
 
         public FilteredOptionsViewModel FilteredOptionsViewModel(
             Identity questionId,
@@ -340,8 +338,8 @@ namespace WB.Tests.Abc.TestFactories
                 };
             }
 
-            Setup.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
-            Setup.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
@@ -369,7 +367,7 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
-            Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
 
 
             var sidebarViewModel = new SideBarSectionsViewModel(
@@ -437,9 +435,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public WaitingForSupervisorActionViewModel WaitingForSupervisorActionViewModel(
             IDashboardItemsAccessor dashboardItemsAccessor = null,
-            IInterviewViewModelFactory viewModelFactory = null)
+            IInterviewViewModelFactory viewModelFactory = null,
+            IMvxMessenger messenger = null)
             => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
-                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
+                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory(),
+                messenger ?? Mock.Of<IMvxMessenger>());
 
         public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
             IPrincipal principal = null,
@@ -510,5 +510,35 @@ namespace WB.Tests.Abc.TestFactories
                 identifyingQuestionsRepo ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(m => m.LoadAll() == Enumerable.Empty<PrefilledQuestionView>().ToReadOnlyCollection()),
                 assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>(),
                 messenger ?? Mock.Of<IMvxMessenger>());
+
+        public RosterViewModel RosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+            IInterviewViewModelFactory interviewViewModelFactory = null,
+            ILiteEventRegistry eventRegistry = null,
+            IQuestionnaireStorage questionnaireRepository = null)
+        {
+            return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>());
+        }
+
+        public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
+            IInterviewViewModelFactory viewModelFactory = null,
+            ILiteEventRegistry eventRegistry = null,
+            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+        {
+            return new PlainRosterViewModel(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>()
+                );
+        }
+
+        public PlainRosterTitleViewModel PlainRosterTitleViewModel(IStatefulInterviewRepository statefulInterviewRepository,
+            IQuestionnaireStorage questionnaireStorage)
+        {
+            return new PlainRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
+                Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
+        }
     }
 }

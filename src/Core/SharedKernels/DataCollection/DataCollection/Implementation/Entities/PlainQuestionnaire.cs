@@ -358,6 +358,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return attachment;
         }
 
+        public Guid? GetAttachmentIdByName(string name) 
+            => this.innerDocument.Attachments.Find(x => x.Name.ToLower() == name.ToLower())?.AttachmentId;
+
+        public Attachment GetAttachmentById(Guid attachmentId)
+            => this.innerDocument.Attachments.Find(x => x.AttachmentId == attachmentId);
+
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
@@ -986,7 +992,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
             }
 
-            return (entity as IConditional)?.HideIfDisabled ?? false;
+            var parent = entity.GetParent();
+            bool shouldBeHiddenByParentHideIfDisabled = false;
+            if(IsPlainRoster(parent.PublicKey))
+            {
+                shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
+            }
+
+            return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
+        }
+
+        public bool IsPlainRoster(Guid entityId)
+        {
+            return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)

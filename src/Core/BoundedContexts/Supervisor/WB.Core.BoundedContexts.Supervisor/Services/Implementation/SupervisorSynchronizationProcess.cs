@@ -30,9 +30,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IHttpStatistician httpStatistician,
             IAssignmentDocumentsStorage assignmentsStorage,
             ISupervisorSettings supervisorSettings,
+            IDeviceInformationService deviceInformationService,
             IAuditLogService auditLogService,
             IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
-            interviewViewRepository, auditLogService, supervisorSettings, serviceLocator, userInteractionService,
+            interviewViewRepository, auditLogService, supervisorSettings, serviceLocator, deviceInformationService, userInteractionService,
             assignmentsStorage)
         {
             this.principal = principal;

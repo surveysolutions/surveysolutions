@@ -18,7 +18,7 @@ namespace WB.Enumerator.Native.WebInterview
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
-            registry.Bind<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.Bind<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
                 ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
@@ -43,12 +43,12 @@ namespace WB.Enumerator.Native.WebInterview
         public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {
             var resolver = GlobalHost.DependencyResolver;
-            var pipeline = resolver.Resolve<IHubPipeline>() ?? throw new ArgumentNullException("resolver.Resolve<IHubPipeline>()");
+            var pipeline = resolver.Resolve<IHubPipeline>() ?? throw new ArgumentNullException(@"resolver.Resolve<IHubPipeline>()");
 
             foreach (var moduleType in pipelineModules)
             {
                 var module = resolver.GetService(moduleType) as IHubPipelineModule;
-                if (module == null) throw new ArgumentNullException(nameof(module), $"Tried to resolve type {moduleType}");
+                if (module == null) throw new ArgumentNullException(nameof(module), $@"Tried to resolve type {moduleType}");
                 pipeline.AddModule(module);
             }
 

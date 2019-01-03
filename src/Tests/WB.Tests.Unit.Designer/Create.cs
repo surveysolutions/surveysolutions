@@ -795,7 +795,8 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             IEnumerable<IComposite> children = null,
             Guid? rosterSizeQuestionId = null,
-            Guid? rosterTitleQuestionId = null)
+            Guid? rosterTitleQuestionId = null,
+            bool isPlainMode = false)
         {
             Group roster = Create.Group(
                 groupId: rosterId,
@@ -805,6 +806,7 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             roster.IsRoster = true;
+            roster.IsPlainMode = isPlainMode;
             roster.RosterSizeSource = RosterSizeSourceType.Question;
             roster.RosterSizeQuestionId = rosterSizeQuestionId;
             roster.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1081,10 +1083,10 @@ namespace WB.Tests.Unit.Designer
                 string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
                 string condition = null, bool hideIfDisabled = false, bool isRoster = false,
                 RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null)
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, bool isPlainMode = false)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, isPlainMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {
@@ -1183,9 +1185,9 @@ namespace WB.Tests.Unit.Designer
                 return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
 
-            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
+            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic, string variable = null)
             {
-                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
+                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic, variable);
             }
 
             public static UpdateMultimediaQuestion UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string instructions, string enablementCondition, string variableLabel, bool hideIfDisabled, Guid responsibleId, QuestionScope scope, QuestionProperties properties, bool isSignature)

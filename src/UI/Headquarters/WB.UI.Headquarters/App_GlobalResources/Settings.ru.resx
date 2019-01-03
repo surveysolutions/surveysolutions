@@ -181,35 +181,26 @@
   <data name="GlobalNoteClearingConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить глобальное сообщение?</value>
   </data>
-    <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
     <value>Автоматическое обновление андроид приложений включено</value>
     <comment>Автоматические обновления для CAPI платформы включены</comment>
   </data>
-    <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
     <value>Автоматическое обновление андроид приложений выключено</value>
     <comment>Автоматические обновления для CAPI платформы выключены</comment>
   </data>
-    <data name="InterviewerSettings_Title" xml:space="preserve">
-    <value>Настройки интервьюер приложения</value>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Настройки интервьюер/супервизор приложения</value>
     <comment>CAPI настройки</comment>
   </data>
-    <data name="InterviewerAutoUpdate" xml:space="preserve">
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
     <value>Включить автоматическое обновление</value>
     <comment>Включить автоматическое обновление андроид приложений</comment>
   </data>
-    <data name="InterviewerSettings_Description" xml:space="preserve">
-    <value>Расширенные настройки для андроид версии Interviewer приложения</value>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Расширенные настройки для андроид версии Interviewer/Supervisor приложения</value>
   </data>
-    <data name="AllowedToSync" xml:space="preserve">
-    <value>Разрешить синхронизироваться приложениям версии:</value>
-    <comment>Разрешить синхронизироваться приложениям версии:</comment>
-  </data>
-    <data name="Any" xml:space="preserve">
-    <value>Любой</value>
-    <comment>Любой</comment>
-  </data>
-    <data name="VersionOrNewer" xml:space="preserve">
-    <value>{0} или новее</value>
-    <comment>{0} или новее</comment>
+  <data name="AutoUpdateDescription" xml:space="preserve">
+    <value>Если опция включена, то только последние версии Interviewer и Supervisor приложений смогут синхронизироваться с Headquarters сайтом</value>
   </data>
 </root>

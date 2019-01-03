@@ -75,6 +75,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -261,6 +262,7 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<IComposite> children = null,
             string variable = "roster_var",
             string title = "Roster X",
+            bool isPlainMode = false,
             FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
                         rosterId: rosterId,
                         children: children,
@@ -268,6 +270,7 @@ namespace WB.Tests.Abc.TestFactories
                         variable: variable,
                         enablementCondition: enablementCondition,
                         fixedRosterTitles: fixedTitles,
+                        isPlainMode: isPlainMode,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
 
@@ -1043,7 +1046,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             string enablementCondition = null,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            bool isPlainMode = false)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -1053,6 +1057,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
+            group.IsPlainMode = isPlainMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1072,6 +1077,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
+            bool isPlainMode = false,
             bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(
@@ -1080,7 +1086,7 @@ namespace WB.Tests.Abc.TestFactories
                 variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
-
+            group.IsPlainMode = isPlainMode;
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
             group.HideIfDisabled = hideIfDisabled;
@@ -2279,9 +2285,12 @@ namespace WB.Tests.Abc.TestFactories
                 Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
             };
 
-        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
+        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(
+            IServiceLocator serviceLocator,
+            IViewModelNavigationService viewModelNavigationService = null)
         {
-            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator);
+            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, 
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>());
         }
 
         public DashboardSubTitleViewModel DashboardSubTitleViewModel()
@@ -2323,12 +2332,11 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false, int? howManyMajorReleaseDontNeedUpdate = 0)
+        public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false)
         {
-            return new InterviewerSettings()
+            return new InterviewerSettings
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
-                HowManyMajorReleaseDontNeedUpdate =  howManyMajorReleaseDontNeedUpdate
             };
         }
     }

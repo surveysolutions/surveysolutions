@@ -11,6 +11,7 @@ Vue.component("DateTime",           () => import(/* webpackChunkName: "questions
 Vue.component("Double",             () => import(/* webpackChunkName: "questions" */"./Double"))
 Vue.component("Gps",                () => import(/* webpackChunkName: "questions" */"./Gps"))
 Vue.component("Group",              () => import(/* webpackChunkName: "questions" */"./Group"))
+Vue.component("GroupTitle",         () => import(/* webpackChunkName: "questions" */"./GroupTitle"))
 Vue.component("Integer",            () => import(/* webpackChunkName: "questions" */"./Integer"))
 Vue.component("LinkedMulti",        () => import(/* webpackChunkName: "questions" */"./LinkedMulti"))
 Vue.component("LinkedSingle",       () => import(/* webpackChunkName: "questions" */"./LinkedSingle"))

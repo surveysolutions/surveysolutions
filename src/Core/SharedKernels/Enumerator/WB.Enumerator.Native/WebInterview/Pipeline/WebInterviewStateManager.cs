@@ -1,8 +1,4 @@
 using System;
-using System.Web;
-using Autofac;
-using Autofac.Integration.Owin;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
@@ -30,27 +26,31 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
+            string questionnaireId = null;
 
-            var autofacLifetimeScope = hub.Context.Request.GetHttpContext().GetOwinContext().GetAutofacLifetimeScope();
-            var interviewRepository = autofacLifetimeScope
-                .Resolve<IStatefulInterviewRepository>();
-
-            IStatefulInterview interview = interviewRepository.Get(interviewId);
-
-            if (interview == null)
+            InScopeExecutor.Current.ExecuteActionInScope(ls =>
             {
-                hub.Clients.Caller.shutDown();
-                return;
-            }
+                var interviewRepository = ls.GetInstance<IStatefulInterviewRepository>();
 
-            var isReview = hub.Context.QueryString[@"review"].ToBool(false);
+                IStatefulInterview interview = interviewRepository.Get(interviewId);
 
-            if (!isReview)
-            {
-                hub.Clients.OthersInGroup(interviewId).closeInterview();
-            }
+                if (interview == null)
+                {
+                    hub.Clients.Caller.shutDown();
+                    return;
+                }
 
-            hub.Groups.Add(hub.Context.ConnectionId, interview.QuestionnaireIdentity.ToString());
+                questionnaireId = interview.QuestionnaireIdentity.ToString();
+
+                var isReview = hub.Context.QueryString[@"review"].ToBool(false);
+
+                if (!isReview)
+                {
+                    hub.Clients.OthersInGroup(interviewId).closeInterview();
+                }
+
+                hub.Groups.Add(hub.Context.ConnectionId, questionnaireId);
+            });
 
             base.OnAfterConnect(hub);
         }
@@ -76,9 +76,9 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
 
             if (interviewId != null)
             {
-                context.Hub.Groups.Add(context.Hub.Context.ConnectionId, 
-                    sectionId == null 
-                        ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId)) 
+                context.Hub.Groups.Add(context.Hub.Context.ConnectionId,
+                    sectionId == null
+                        ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId))
                         : Enumerator.Native.WebInterview.WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
 
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);

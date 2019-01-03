@@ -15,7 +15,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     [TestOf(typeof(MultiOptionQuestionViewModel))]
-    internal class MultiOptionQuestionViewModelTestsContext
+    internal class MultiOptionQuestionViewModelTestsContext : BaseMvvmCrossTest
     {
         protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IQuestionnaireStorage questionnaireStorage = null, 

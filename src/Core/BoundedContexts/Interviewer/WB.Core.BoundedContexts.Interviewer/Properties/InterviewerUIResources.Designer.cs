@@ -768,7 +768,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate support package.
+        ///   Looks up a localized string similar to Save all relevant information to the file on this device.
         /// </summary>
         public static string Diagnostics_Support_Package_Title {
             get {
@@ -1722,6 +1722,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Success_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Success_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Synchronization_UpdateApp {
+            get {
+                return ResourceManager.GetString("Synchronization_UpdateApp", resourceCulture);
             }
         }
         

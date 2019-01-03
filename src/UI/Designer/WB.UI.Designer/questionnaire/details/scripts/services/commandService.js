@@ -310,6 +310,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: false,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
@@ -329,6 +330,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: true,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "FixedTitles",
                     fixedRosterTitles: [{ value: 1, title: "First Title" }, { value: 2, title: "Second Title" }],
@@ -386,11 +388,12 @@
                     condition: group.enablementCondition,
                     hideIfDisabled: group.hideIfDisabled,
                     isRoster: false,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
                     rosterTitleQuestionId: null,
-                    variableName: null
+                    variableName: group.variableName
                 };
 
                 return commandCall("UpdateGroup", command);
@@ -406,6 +409,7 @@
                     condition: incomingRoster.enablementCondition,
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
+                    isPlainMode: incomingRoster.isPlainMode,
                     isRoster: true
                 };
 

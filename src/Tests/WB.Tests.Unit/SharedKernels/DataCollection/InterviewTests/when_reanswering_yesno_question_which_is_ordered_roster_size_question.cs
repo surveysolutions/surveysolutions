@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.Roster(rosterId: Id.g2, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1),
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument);
+            interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                 questionId: Id.g1,
                 answeredOptions: new[]

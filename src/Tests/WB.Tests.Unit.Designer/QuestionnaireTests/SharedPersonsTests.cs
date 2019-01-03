@@ -56,6 +56,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         }
 
         [Test]
+        public void RemoveSharedPerson_When_shared_person_is_read_only_Then_raised_ShredPersonFromQuestionnaireRemoved_event_with_specified_person_key()
+        {
+            // arrange
+            Guid personId = Guid.NewGuid();
+            Guid responsibleId = Guid.NewGuid();
+            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
+
+            // act
+            questionnaire.AddSharedPerson(personId, string.Empty, ShareType.View, responsibleId);
+            questionnaire.RemoveSharedPerson(personId, string.Empty, personId);
+
+            // assert
+            var isExistsPerson = questionnaire.SharedPersons.Any(p => p.UserId == personId);
+            Assert.IsFalse(isExistsPerson);
+        }
+
+        [Test]
         public void AddSharedPerson_When_New_Shared_Person_Is_Questionnaire_Owner_Then_DomainException_should_be_thrown()
         {
             // arrange

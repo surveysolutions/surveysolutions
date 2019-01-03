@@ -465,24 +465,33 @@ span.image-zoom-box, span.image-option {
     left: -30px; }
   .question .progress.question-progress {
     bottom: -2px; }
+  .question.roster-title {
+    background-color: #d5ebf8;
+    color: #2d9cdb;
+    font-family: "RobotoRegular"; }
+    .question.roster-title div {
+      margin-left: 10px; }
 
 .information-block {
-  padding: 0 10px;
+  padding: 20px 10px 0;
   font-size: 12px;
   line-height: 14px;
   font-weight: bold;
   color: #a6a8a9; }
+  .information-block:empty {
+    padding: 0; }
   .information-block h6, .information-block .comment label {
-    margin-top: 20px;
     font: 10px/12px "TrebuchetMSBold";
     letter-spacing: 0.5px;
     text-transform: uppercase;
     display: block; }
+    .information-block h6:first-of-type, .information-block .comment label:first-of-type {
+      margin-top: 0px; }
   .information-block p {
     width: 90%;
     font-style: italic; }
-    .information-block p p:last-of-type {
-      margin-bottom: 10px; }
+    .information-block p:last-of-type {
+      margin-bottom: 0; }
   .information-block.instruction {
     color: #2a81cb; }
     .information-block.instruction p {
@@ -496,6 +505,9 @@ span.image-zoom-box, span.image-option {
 
 .comments-block p {
   color: #3f3f3f; }
+  .comments-block p + .enumerators-comment h6,
+  .comments-block p + h6 {
+    margin-top: 20px; }
 
 .comments-block h6 {
   margin-bottom: 5px;
@@ -508,7 +520,10 @@ span.image-zoom-box, span.image-option {
   color: #e3008b; }
 
 .comments-block .comment {
+  padding-top: 20px;
   display: none; }
+  .comments-block .comment:only-of-type {
+    padding-top: 0; }
   .comments-block .comment.active {
     display: block; }
   .comments-block .comment .form-inline {

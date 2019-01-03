@@ -70,8 +70,8 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.vi-VN.resx">
       <Link>TesterUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.zh-CN.resx">
-      <Link>TesterUIResources.zh-CN.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.zh.resx">
+      <Link>TesterUIResources.zh.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

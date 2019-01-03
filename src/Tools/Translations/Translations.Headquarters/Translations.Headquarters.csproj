@@ -139,6 +139,9 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.ru.resx">
       <Link>Report.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Report.zh.resx">
+      <Link>Report.zh.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.fr.resx">
       <Link>Strings.fr.resx</Link>
     </EmbeddedResource>

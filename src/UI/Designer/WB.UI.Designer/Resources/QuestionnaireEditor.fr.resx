@@ -445,7 +445,7 @@
     <value>Appliquer</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Pas d'options. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} options.</value>
+    <value>Pas de catégories. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} catégories.</value>
   </data>
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Valeur parente</value>
@@ -466,7 +466,7 @@
     <value>Ajouter une instruction pour l'enquêteur</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Ajouter une option</value>
+    <value>Ajouter une catégorie</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Cascading combo box</value>
@@ -520,13 +520,13 @@
     <value>Seuls les nombres entiers sont autorisés</value>
   </data>
   <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>Pour ouvrir l'éditeur d'options, toutes les modifications non enregistrées doivent être enregistrées. Devons-nous les sauver maintenant?</value>
+    <value>Pour ouvrir l'éditeur, toutes les modifications non enregistrées doivent être enregistrées. Devons-nous les sauver maintenant?</value>
   </data>
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>Il a été enregistré avec succès. La fenêtre pour le chargement de fichier sera ouverte.</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Comme la question a été marquée comme "Combo box" ou "Cascading combo box" lors du chargement des détails de la question et contenait de nombreuses options, sa valeur a été réduite jusqu'à {{count}}</value>
+    <value>La question était marquée comme "zone de liste déroulante" ou "zone de liste déroulante en cascade" lors du téléchargement des détails de la question. Elle contenait trop de catégories et leur nombre était réduit à {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Enregistrement dans l'ordre de réponse</value>
@@ -547,10 +547,10 @@
     <value>Question de type texte</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>Pour mettre à jour les options</value>
+    <value>Pour mettre à jour les catégories</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>Charger de nouvelles options</value>
+    <value>Charger de nouvelles catégories</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Utilisez le séparateur millier</value>

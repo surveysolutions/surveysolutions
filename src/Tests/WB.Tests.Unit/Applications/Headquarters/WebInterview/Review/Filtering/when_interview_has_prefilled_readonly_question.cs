@@ -17,10 +17,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             var interviewerQuestionId = Id.g1;
             var prefilledReadonlyQuestionId = Id.g2;
 
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(interviewerQuestionId, variable: "interviwer"),
+                Create.Entity.NumericIntegerQuestion(prefilledReadonlyQuestionId, variable: "prefilled", isPrefilled: true));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: Id.gA,
-                questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.NumericIntegerQuestion(interviewerQuestionId, variable: "interviwer"),
-                    Create.Entity.NumericIntegerQuestion(prefilledReadonlyQuestionId, variable: "prefilled", isPrefilled: true)),
+                questionnaire: questionnaireDocument,
                 shouldBeInitialized: false);
 
             interview.CreateInterview(Create.Command.CreateInterview(
@@ -33,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             var searcher = Create.Service.StatefullInterviewSearcher();
 
             // Act
-            SearchResults searchResult = searcher.Search(interview, new[] {FilterOption.ForInterviewer}, 0, 10);
+            SearchResults searchResult = searcher.Search(interview, questionnaire, new[] {FilterOption.ForInterviewer}, 0, 10);
            
             // Assert
             Assert.That(searchResult, Has.Property(nameof(searchResult.TotalCount)).EqualTo(1));
