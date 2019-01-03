@@ -22,6 +22,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         NavigationButton,
         LinkedMulti,
         Audio,
-        Area
+        Area,
+        GroupTitle,
     }
 }

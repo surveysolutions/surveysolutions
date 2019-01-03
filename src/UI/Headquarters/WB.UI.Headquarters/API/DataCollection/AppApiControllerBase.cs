@@ -9,6 +9,8 @@ namespace WB.UI.Headquarters.API.DataCollection
 {
     public class AppApiControllerBase : ApiController
     {
+        private readonly Version LastSupportedVersion = new Version(18, 04, 0, 0); // version from the sky, discussed on scrum 12/19/2018
+
         private readonly IPlainKeyValueStorage<InterviewerSettings> settingsStorage;
 
         public AppApiControllerBase(IPlainKeyValueStorage<InterviewerSettings> settingsStorage)
@@ -22,27 +24,12 @@ namespace WB.UI.Headquarters.API.DataCollection
                 return false;
 
             var interviewerSettings = settingsStorage.GetById(AppSetting.InterviewerSettings);
-            var majorUpdatesToUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue;
-            if (majorUpdatesToUpdate.HasValue)
+            if (interviewerSettings.IsAutoUpdateEnabled())
             {
-                var acceptedInterviewerVersion = hqVersion.Minor - majorUpdatesToUpdate.Value;
-                if (appVersion.Major == hqVersion.Major && appVersion.Minor < acceptedInterviewerVersion)
-                {
-                    return true;
-                }
-
-                if (appVersion.Major == hqVersion.Major - 1)
-                {
-                    var acceptedInterviewerVersionForOldMajorVersion = (hqVersion.Minor + 12) - majorUpdatesToUpdate.Value;
-                    if (appVersion.Minor < acceptedInterviewerVersionForOldMajorVersion)
-                    {
-                        return true;
-                    }
-                }
-
+                return hqVersion != appVersion;
             }
 
-            return false;
+            return appVersion < LastSupportedVersion;
         }
     }
 }

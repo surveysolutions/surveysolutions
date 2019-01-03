@@ -8,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -84,7 +85,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(), QuestionnaireVersion = 1,
                 Question = question
             });
 
@@ -99,7 +100,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                QuestionnaireVersion = 1,
                 Question = question
             });
 
@@ -114,7 +116,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
 
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                QuestionnaireVersion = 1,
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
                 Condition = new[] { (long)Relation.Spouse },
                 Question = question
@@ -129,7 +132,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                QuestionnaireVersion = 1,
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(relationQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Pivot = true
@@ -155,7 +159,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                QuestionnaireVersion = 1,
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Condition = condition.Select(c => (long) c).ToArray()
@@ -169,7 +174,8 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         {
             var report = this.reporter.GetReport(new SurveyStatisticsReportInputModel
             {
-                QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                QuestionnaireVersion = 1,
                 ConditionalQuestion = this.questionnaire.Find<SingleQuestion>(dwellingQuestion),
                 Question = this.questionnaire.Find<SingleQuestion>(sexQuestion),
                 Pivot = true
@@ -222,12 +228,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
                 state.Enablement[question] = true;
                 state.Answers[question] = new InterviewStateAnswer { AsInt = answer };
             }
-        }
-
-        private List<Answer> GetAnswersFromEnum<T>() where T : Enum
-        {
-            var values = Enum.GetValues(typeof(T)).Cast<object>();
-            return values.Select(v => Create.Entity.Answer(v.ToString(), (int)v)).ToList();
         }
     }
 }

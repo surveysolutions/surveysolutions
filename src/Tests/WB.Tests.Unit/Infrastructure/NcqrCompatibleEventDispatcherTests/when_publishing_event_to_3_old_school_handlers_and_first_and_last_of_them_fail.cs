@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
             
-            eventDispatcher.Register(Setup.FailingOldSchoolEventHandlerHavingUniqueType<int>());
+            eventDispatcher.Register(SetUp.FailingOldSchoolEventHandlerHavingUniqueType<int>());
             eventDispatcher.Register(secondEventHandlerMock.Object);
-            eventDispatcher.Register(Setup.FailingOldSchoolEventHandlerHavingUniqueType<bool>());
+            eventDispatcher.Register(SetUp.FailingOldSchoolEventHandlerHavingUniqueType<bool>());
             BecauseOf();
         }
 

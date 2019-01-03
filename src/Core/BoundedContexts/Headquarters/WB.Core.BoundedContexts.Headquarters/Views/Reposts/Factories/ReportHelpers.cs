@@ -3,7 +3,6 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
@@ -26,7 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             string period,
             int columnCount,
             int timezoneAdjastmentMins,
-            QuestionnaireIdentity identity,
+            Guid? questionnaireId,
+            long? questionnaireVersion,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
             var localTo = from.Date.AddDays(1);
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var utcFrom = localFrom.AddMinutes(timezoneAdjastmentMins);
             var utcTo = localTo.AddMinutes(timezoneAdjastmentMins);
 
-            DateTime? utcMinDate = GetFirstInterviewCreatedDate(identity, interviewstatusStorage);
+            DateTime? utcMinDate = GetFirstInterviewCreatedDate(questionnaireId, questionnaireVersion , interviewstatusStorage);
             DateTime? localMinDate = utcMinDate?.AddMinutes(-timezoneAdjastmentMins);
 
             DateTimeRange[] dateTimeRangesLocal =
@@ -76,32 +76,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             throw new ArgumentException($"period '{period}' can't be recognized");
         }
 
-        private static DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire, IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
+        private static DateTime? GetFirstInterviewCreatedDate(Guid? questionnaireId,
+            long? questionnaireVersion, IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
-            DateTime? minDate;
-            if (questionnaire != null && questionnaire.QuestionnaireId != Guid.Empty)
-            {
-                minDate = interviewstatusStorage.Query(_ => _
-                    .Where(x => x.QuestionnaireId == questionnaire.QuestionnaireId &&
-                                x.QuestionnaireVersion == questionnaire.Version)
-                    .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Select(x => (DateTime?)x.Timestamp)
-                    .OrderBy(x => x))
-                    .Take(1)
-                    .FirstOrDefault();
-            }
+            DateTime? minDate = interviewstatusStorage.Query(_ => {
+                    var query = _;
 
-            else
-            {
-                minDate = interviewstatusStorage.Query(_ => _
-                    .SelectMany(x => x.InterviewCommentedStatuses)
-                    .Select(x => (DateTime?)x.Timestamp)
-                    .OrderBy(x => x))
-                    .Take(1)
-                    .FirstOrDefault();
-            }
+                    if (questionnaireId.HasValue)
+                    {
+                        query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                    }
+
+                    if (questionnaireVersion.HasValue)
+                    {
+                        query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                    }
+
+                    return query
+                            .SelectMany(x => x.InterviewCommentedStatuses)
+                        .Select(x => (DateTime?) x.Timestamp)
+                        .OrderBy(x => x);
+                })
+                .Take(1)
+                .FirstOrDefault();
+
             return minDate;
         }
-
     }
 }

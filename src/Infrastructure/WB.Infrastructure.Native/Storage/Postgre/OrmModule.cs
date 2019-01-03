@@ -90,7 +90,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             registry.BindToConstant(() => this.connectionSettings);
             registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory());
-            registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
+            registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
@@ -129,7 +129,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.AddDeserializedMapping(plainMaps, "");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
-            //File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
+            // File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 
             cfg.SessionFactory().GenerateStatistics();
 

@@ -77,6 +77,8 @@ namespace WB.Services.Scheduler.Migrations
 
                     b.HasIndex("Tenant", "Status");
 
+                    b.HasIndex("Type", "Status", "Tenant");
+
                     b.ToTable("jobs");
                 });
 #pragma warning restore 612, 618

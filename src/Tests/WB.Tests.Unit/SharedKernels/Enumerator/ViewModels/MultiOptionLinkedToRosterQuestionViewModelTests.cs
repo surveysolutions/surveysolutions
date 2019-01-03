@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
     [TestOf(typeof(MultiOptionLinkedToRosterQuestionViewModel))]
-    public class MultiOptionLinkedToRosterQuestionViewModelTests
+    public class MultiOptionLinkedToRosterQuestionViewModelTests : BaseMvvmCrossTest
     {
         [Test]
         public void When_section_sections_contains_non_ordered_multi_linked_question_on_roster_Then_options_should_be_without_order_index()
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.Entity.Roster(rosterId, rosterSizeQuestionId: numericQuestionId),
                 Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, linkedToRosterId: rosterId, areAnswersOrdered: false));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), numericQuestionId, RosterVector.Empty, DateTime.UtcNow, 5);
             interview.AnswerMultipleOptionsLinkedQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new RosterVector[]
             {

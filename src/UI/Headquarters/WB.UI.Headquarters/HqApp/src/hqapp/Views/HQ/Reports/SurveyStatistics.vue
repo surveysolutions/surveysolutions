@@ -2,7 +2,7 @@
     <HqLayout has-filter
         :title="$t('MainMenu.SurveyStatistics')">
         <div slot="subtitle">
-            <div class="row">                
+            <div class="row">
                 <div class="col-md-6">
                     <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
                 </div>
@@ -17,10 +17,15 @@
                 :isSupervisor="isSupervisor" />
         </Filters>
        
+        <div class="alert-warning" v-if="warnings.length > 0">
+            {{ $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}
+        </div>
+
         <DataTables ref="table"
             v-if="isFiltersLoaded"
             noSearch exportable multiorder hasTotalRow noSelect
             :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
+            @ajaxComplete="onTableReload"
             :addParamsToRequest="addFilteringParams">
         </DataTables>
     </HqLayout>
@@ -48,7 +53,8 @@ export default {
                 min: this.min,
                 max: this.max,
                 pivot: false
-            },          
+            },
+            warnings: [],
             status: {
                 isRunning: false,
                 lastRefresh: null
@@ -73,7 +79,7 @@ export default {
             }
         },
 
-        filtersLoaded() { 
+        filtersLoaded() {
             this.isFiltersLoaded = true
         },
 
@@ -83,6 +89,7 @@ export default {
             data.expandTeams = this.filter.expandTeams
             data.min = this.filter.min
             data.max = this.filter.max
+            data.version = this.filter.version
 
             if(this.filter.condition != null) {
                 data.ConditionalQuestion = this.filter.condition.Id
@@ -92,10 +99,14 @@ export default {
                     data.Condition = _.map(this.filter.conditionAnswers, 'Answer')
                 }
             }
+        },
+
+        onTableReload(data) {
+            this.warnings = data.warnings || []
         }
     },
 
-    computed: {        
+    computed: {
         isSupervisor() {
             return this.$config.model.isSupervisor
         },
@@ -116,9 +127,9 @@ export default {
                     return [
                         {name: this.$t("Reports.Count"), data: "count"},
                         {name: this.$t("Reports.Average"), data: "average"},
-                        {name: this.$t("Reports.Median"), data: "median"},                        
+                        {name: this.$t("Reports.Median"), data: "median"},
                         {name: this.$t("Reports.Sum"), data: "sum"},
-                        {name: this.$t("Reports.Min"), data: "min"},                        
+                        {name: this.$t("Reports.Min"), data: "min"},
                         {name: this.$t("Reports.Percentile05"), data: "percentile_05"},
                         {name: this.$t("Reports.Percentile50"), data: "percentile_50"},
                         {name: this.$t("Reports.Percentile95"), data: "percentile_95"},
@@ -143,7 +154,7 @@ export default {
             if(this.filter.question == null) return []
 
             if(this.filter.question.HasTotal || this.isPivot){
-                return [{                
+                return [{
                         class: "type-numeric",
                         title: this.$t("Pages.Total"),
                         data: "total",

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
                 Create.Entity.Variable(substitutedVariable2Identity.Id, VariableType.Double, substitutedVariable2Name),
             });
 
-            interview = Setup.StatefulInterview(questionnaireMock);
+            interview = SetUp.StatefulInterview(questionnaireMock);
             interview.Apply(Create.Event.VariablesChanged(new[]
             {
                 new ChangedVariable(substitutedVariable1Identity,  new DateTime(2016, 1, 31)),
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Init("interview", substitutionTargetQuestionIdentity);
+        public void BecauseOf() => viewModel.Init("interview", substitutionTargetQuestionIdentity, Create.ViewModel.EnablementViewModel(), Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_change_item_title () => viewModel.Title.HtmlText.Should().Be("Your first variable is 2016-01-31 and second is 7,77");
 

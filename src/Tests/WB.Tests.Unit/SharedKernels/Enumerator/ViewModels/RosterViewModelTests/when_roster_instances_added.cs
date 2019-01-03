@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     }),
                 Create.Entity.Roster(rosterId, rosterSizeQuestionId: rosterSizeQuestion));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] { 1 });
 
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     }),
                 Create.Entity.Roster(rosterId, rosterSizeQuestionId: rosterSizeQuestion));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
                 DateTime.UtcNow, new[] {1, 3});
 
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
             viewModel.Handle(Create.Event.RosterInstancesAdded(rosterId, new[] { Create.Entity.RosterVector(2) }));
 
-            Assert.That(((CovariantObservableCollection<GroupViewModel>)viewModel.RosterInstances)[1].Identity, Is.EqualTo(Identity.Create(rosterId, Create.Entity.RosterVector(2))));
+            Assert.That(viewModel.RosterInstances[1].Identity, Is.EqualTo(Identity.Create(rosterId, Create.Entity.RosterVector(2))));
         }
     }
 }

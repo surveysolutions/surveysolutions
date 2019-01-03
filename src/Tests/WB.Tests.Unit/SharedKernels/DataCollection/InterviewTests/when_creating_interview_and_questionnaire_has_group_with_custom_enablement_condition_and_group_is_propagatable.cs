@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
             
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _ => _.IsRosterGroup(groupId) == true);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _ => _.IsRosterGroup(groupId) == true);
 
             eventContext = new EventContext();
 

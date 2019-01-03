@@ -15,5 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         T GetNew<T>() where T : class;
         IDashboardItem GetDashboardAssignment(AssignmentDocument assignment);
         IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details);
+        IInterviewEntityViewModel GetEntity(Identity identity, string interviewid, NavigationState navigationState);
     }
 }

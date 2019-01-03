@@ -61,7 +61,9 @@ namespace WB.Services.Export.CsvExport.Exporters
             long totalProcessedCount = 0;
             var api = this.tenantApi.For(tenant);
 
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
+            var batchOptions = new BatchOptions { Max = batchSize };
+
+            foreach (var interviewsBatch in interviewIdsToExport.BatchInTime(batchOptions))
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIdsStrings = interviewsBatch.ToArray();
@@ -151,6 +153,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             switch (status)
             {
                 case InterviewExportedAction.Created:
+                case InterviewExportedAction.TranslationSwitched:
                     return GetUserRole(statusChangeOriginatorRole);
                 case InterviewExportedAction.SupervisorAssigned:
                 case InterviewExportedAction.Completed:

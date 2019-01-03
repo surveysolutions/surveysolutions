@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                         Create.Entity.MultyOptionsQuestion(multiLinkedToListId, linkedToQuestionId: textListQuestionId)
                     }));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answerOnTextList = Create.Entity.AnsweredQuestionSynchronizationDto(questionId: textListQuestionId,
                 answer: new[] {new Tuple<decimal, string>(1, "option 1"), new Tuple<decimal, string>(5, "option 2")});
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.StaticText(staticTextId)
                 }));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answerOnTextList = Create.Entity.AnsweredQuestionSynchronizationDto(
                 questionId: textListQuestionId,
@@ -223,7 +223,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextQuestion(textQuestionId)
                 );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             var answerTextQuestion = Create.Entity.AnsweredQuestionSynchronizationDto(
                 questionId: textQuestionId,

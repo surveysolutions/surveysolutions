@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,13 +13,15 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public abstract partial class WebInterview : Hub, IErrorDetailsProvider
     {
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        protected readonly ICommandService commandService;
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
+        private   IStatefulInterviewRepository statefulInterviewRepository => this.ServiceLocator.GetInstance<IStatefulInterviewRepository>();
+        protected ICommandService commandService => this.ServiceLocator.GetInstance<ICommandService>();
+        private   IQuestionnaireStorage questionnaireRepository => this.ServiceLocator.GetInstance<IQuestionnaireStorage>();
+        private   IWebInterviewNotificationService webInterviewNotificationService => this.ServiceLocator.GetInstance<IWebInterviewNotificationService>();
+        private   IWebInterviewInterviewEntityFactory interviewEntityFactory => this.ServiceLocator.GetInstance<IWebInterviewInterviewEntityFactory>();
+        private   IImageFileStorage imageFileStorage => this.ServiceLocator.GetInstance<IImageFileStorage>();
+        private   IAudioFileStorage audioFileStorage => this.ServiceLocator.GetInstance<IAudioFileStorage>();
+
+        public IServiceLocator ServiceLocator { get; private set; }
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -35,22 +38,8 @@ namespace WB.Enumerator.Native.WebInterview
 
         protected virtual bool IsCurrentUserObserving => false;
 
-        public WebInterview(
-            IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService,
-            IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage)
+        public WebInterview()
         {
-            this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
-            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
-            this.webInterviewNotificationService = webInterviewNotificationService ?? throw new ArgumentNullException(nameof(webInterviewNotificationService));
-            this.interviewEntityFactory = interviewEntityFactory ?? throw new ArgumentNullException(nameof(interviewEntityFactory));
-            this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
-            this.imageFileStorage = imageFileStorage ?? throw new ArgumentNullException(nameof(imageFileStorage));
         }
 
         public void FillExceptionData(Dictionary<string, string> data)
@@ -81,10 +70,17 @@ namespace WB.Enumerator.Native.WebInterview
                         return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
                     case InterviewDomainExceptionType.InterviewRecievedByDevice:
                         return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
+                    case InterviewDomainExceptionType.InterviewSizeLimitReached:
+                        return Enumerator.Native.Resources.WebInterview.InterviewSizeLimitReached;
                 }
             }
 
             return e.Message;
+        }
+
+        public void SetServiceLocator(IServiceLocator serviceLocator)
+        {
+            this.ServiceLocator = serviceLocator;
         }
     }
 }

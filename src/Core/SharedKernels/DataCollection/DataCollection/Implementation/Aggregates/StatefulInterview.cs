@@ -616,6 +616,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Identity GetParentGroup(Identity groupOrQuestion)
             => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent?.Identity;
 
+        public Identity[] GetParentGroups(Identity groupOrQuestion)
+            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parents?.Select(x=>x.Identity).ToArray();
+
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)
                 .OfType<InterviewTreeQuestion>()
@@ -624,7 +627,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private IEnumerable<IInterviewTreeNode> GetAllChildrenOrEmptyList(Identity groupIdentity)
             => this.Tree.GetGroup(groupIdentity)?.Children ?? new List<IInterviewTreeNode>();
 
-        public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
+        public List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.GetAllChildrenOrEmptyList(parentIdentity)
                 .Where(roster => roster.Identity.Id == rosterId)
                 .OfType<InterviewTreeRoster>()
@@ -657,6 +660,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var result = this.properties.InterviewerId ?? this.properties.SupervisorId;
                 if (result == null) throw new InterviewException($"Interview has no responsible assigned. Interview key: {this.interviewKey}");
                 return result.Value;
+            }
+        }
+
+        public Guid SupervisorId
+        {
+            get
+            {
+                if (!this.properties.SupervisorId.HasValue)
+                    throw new InterviewException($"Interview has no supervisor assigned. Interview key: {this.interviewKey}");
+                return this.properties.SupervisorId.Value;
             }
         }
 

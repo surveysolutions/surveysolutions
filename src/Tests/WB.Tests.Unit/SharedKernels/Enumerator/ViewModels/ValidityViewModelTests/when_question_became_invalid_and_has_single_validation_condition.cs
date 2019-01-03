@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "text answer"));
             interview.Apply(
                 Create.Event.AnswersDeclaredInvalid(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
@@ -37,12 +37,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                     }
                 }));
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
-            viewModel.Init("interviewid", questionIdentity);
+            viewModel.Init("interviewid", questionIdentity, Create.Other.NavigationState());
             BecauseOf();
         }
 
@@ -60,10 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                     }
                 }));
         }
-
-        [NUnit.Framework.Test] public void should_set_validation_caption () => viewModel.Error.Caption.Should().Be(UIResources.Validity_Answered_Invalid_ErrorCaption);
-
-        [NUnit.Framework.Test] public void should_show_single_error_message () => viewModel.Error.ValidationErrors.Count.Should().Be(1);
+        
+        [NUnit.Framework.Test] public void should_show_single_error_message () => 
+            viewModel.Error.ValidationErrors.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_show_error_message_without_index_postfix () => viewModel.Error.ValidationErrors.First()?.PlainText.Should().Be("message 1");
 

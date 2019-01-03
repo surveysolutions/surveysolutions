@@ -5,5 +5,5 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     style="@style/Overview_GroupTitle"
-    local:MvxBind="Html Title"/>
+    local:MvxBind="Html SpannableGroupTitle(GroupTitle.PlainText, RosterInstanceTitle);"/>
 

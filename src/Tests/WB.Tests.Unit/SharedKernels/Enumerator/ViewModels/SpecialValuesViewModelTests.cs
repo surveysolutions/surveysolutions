@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             // Act
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             // Act
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 1);
 
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             // Act
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 2);
 
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             // Act
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
@@ -134,7 +134,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 10);
 
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
 
             // Act
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
 
@@ -173,7 +173,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 300);
@@ -198,7 +198,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 2);
 
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
             
@@ -219,7 +219,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
-            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: SetUp.StatefulInterviewRepository(interview));
 
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
 

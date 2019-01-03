@@ -14,6 +14,7 @@
         ExpessionCalculationError,
         DuplicateSyncPackage,
         PackageIsOudated,
-        QuestionIsMissing
+        QuestionIsMissing,
+        InterviewSizeLimitReached
     }
 }

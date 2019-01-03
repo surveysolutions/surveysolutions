@@ -144,6 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 CreationDate = this.clock.UtcNow(),
                 LastEntryDate = this.clock.UtcNow(),
                 CreatedBy = createQuestionnaire.ResponsibleId,
+                VariableName = createQuestionnaire.Variable
             };
 
             this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
@@ -720,7 +721,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
-            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
+            bool isPlainMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -742,7 +744,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableName,
                 description,
                 condition,
-                hideIfDisabled);
+                hideIfDisabled,
+                isPlainMode);
 
             if (isRoster)
             {
@@ -1700,7 +1703,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void RemoveSharedPerson(Guid personId, string email, Guid responsibleId)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(personId, responsibleId);
 
             if (!this.SharedUsersIds.Contains(personId))
             {
@@ -1709,7 +1712,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
-
         }
 
         #endregion
@@ -2051,6 +2053,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+        }
+
+        private void ThrowDomainExceptionIfViewerDoesNotHavePermissionsToUnsharePersonForQuestionnaire(Guid personId, Guid viewerId)
+        {
+            if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+            }
+            if (this.ReadOnlyUsersIds.Contains(viewerId) && personId != viewerId)
+            {
+                throw new QuestionnaireException(
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
         }
 

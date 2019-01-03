@@ -720,7 +720,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options will be available after answering referenced question.
+        ///   Looks up a localized string similar to Categories will be available after answering referenced question.
         /// </summary>
         internal static string OptionsAvailableAfterAnswer {
             get {

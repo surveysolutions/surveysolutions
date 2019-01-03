@@ -10,11 +10,12 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    internal class QuestionnaireImportValidator : ICommandValidator<Questionnaire, ImportFromDesigner>
+    internal class QuestionnaireValidator : ICommandValidator<Questionnaire, ImportFromDesigner>,
+        ICommandValidator<Questionnaire, CloneQuestionnaire>
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
-        public QuestionnaireImportValidator(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
+        public QuestionnaireValidator(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
@@ -32,14 +33,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
         }
 
+        public void Validate(Questionnaire aggregate, CloneQuestionnaire command)
+        {
+            if (this.DoesOtherQuestionnaireWithSameTitleExist(command.QuestionnaireId, command.NewTitle))
+                throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireNameUniqueFormat, command.NewTitle));
+        }
+
         private bool DoesOtherQuestionnaireHasSameQuestionnaireVariable(Guid questionnaireId, string variableName)
         {
-            var questionairesWithSameVariable = this.questionnaireBrowseItemStorage.Query(_ => _
+            var questionnairesWithSameVariable = this.questionnaireBrowseItemStorage.Query(_ => _
                 .Where(questionnaire => !questionnaire.IsDeleted && !(questionnaire.Variable == null || questionnaire.Variable.Trim() == string.Empty))
                 .Where(questionnaire => questionnaire.Variable.ToLower() == variableName.ToLower())
                 .ToList());
 
-            var otherQuestionnairesWithSameTitle = questionairesWithSameVariable
+            var otherQuestionnairesWithSameTitle = questionnairesWithSameVariable
                 .Where(questionnaire => questionnaire.QuestionnaireId != questionnaireId);
 
             return otherQuestionnairesWithSameTitle.Any();
@@ -47,12 +54,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private bool DoesOtherQuestionnaireWithSameTitleExist(Guid questionnaireId, string questionnaireTitle)
         {
-            var questionairesWithSameTitle = this.questionnaireBrowseItemStorage.Query(_ => _
+            var questionnairesWithSameTitle = this.questionnaireBrowseItemStorage.Query(_ => _
                 .Where(questionnaire => !questionnaire.IsDeleted)
                 .Where(questionnaire => questionnaire.Title.ToLower() == questionnaireTitle.ToLower())
                 .ToList());
 
-            var otherQuestionnairesWithSameTitle = questionairesWithSameTitle
+            var otherQuestionnairesWithSameTitle = questionnairesWithSameTitle
                 .Where(questionnaire => questionnaire.QuestionnaireId != questionnaireId);
 
             return otherQuestionnairesWithSameTitle.Any();
