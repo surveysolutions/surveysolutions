@@ -1789,7 +1789,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section name.
+        ///   Looks up a localized string similar to Variable name.
         /// </summary>
         public static string SectionVariableName {
             get {
