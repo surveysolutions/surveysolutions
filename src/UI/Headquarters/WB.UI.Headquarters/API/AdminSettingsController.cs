@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.API
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
             return Request.CreateResponse(new AutoUpdateModel
             {
-                InterviewerAutoUpdatesEnabled = interviewerSettings.GetWithDefaultValue()
+                InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled()
             });
         }
 
