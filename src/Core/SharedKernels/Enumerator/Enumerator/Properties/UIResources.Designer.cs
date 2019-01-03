@@ -801,7 +801,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options will be available after answering referenced question.
+        ///   Looks up a localized string similar to Categories will be available after answering referenced question.
         /// </summary>
         public static string Interview_LinkedQuestion_Empty {
             get {
@@ -810,7 +810,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} out of {1} options selected.
+        ///   Looks up a localized string similar to {0} out of {1} categories selected.
         /// </summary>
         public static string Interview_MaxAnswersCount {
             get {
@@ -909,7 +909,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any option.
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any category.
         /// </summary>
         public static string Interview_Question_Cascading_NoMatchingValue {
             get {
@@ -918,7 +918,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any option.
+        ///   Looks up a localized string similar to Answer &quot;{0}&quot; does not match any category.
         /// </summary>
         public static string Interview_Question_Filter_MatchError {
             get {
