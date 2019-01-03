@@ -461,7 +461,7 @@
     <value>Сохранить нужную информацию в файл на устройстве.</value>
   </data>
     <data name="Diagnostics_Support_Package_Title" xml:space="preserve">
-    <value>Сгенерировать пакет для службы поддержки</value>
+    <value>Сохранить данные приложения в файл на этом устройстве</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>Мы проверим наличие новой версии на сервере</value>

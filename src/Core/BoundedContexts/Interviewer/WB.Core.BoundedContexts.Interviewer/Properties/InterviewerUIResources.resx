@@ -488,7 +488,7 @@ for further instructions</value>
     <value>Save all relevant information to the file on this device.</value>
   </data>
     <data name="Diagnostics_Support_Package_Title" xml:space="preserve">
-    <value>Generate support package</value>
+    <value>Save all relevant information to the file on this device</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>We will check for the newer version on HQ server</value>
