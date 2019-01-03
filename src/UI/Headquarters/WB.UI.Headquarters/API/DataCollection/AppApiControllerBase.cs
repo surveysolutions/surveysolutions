@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 return false;
 
             var interviewerSettings = settingsStorage.GetById(AppSetting.InterviewerSettings);
-            if (interviewerSettings.GetWithDefaultValue())
+            if (interviewerSettings.IsAutoUpdateEnabled())
             {
                 return hqVersion != appVersion;
             }
