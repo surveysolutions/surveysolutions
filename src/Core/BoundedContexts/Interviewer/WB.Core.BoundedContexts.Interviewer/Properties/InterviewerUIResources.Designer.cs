@@ -768,7 +768,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate support package.
+        ///   Looks up a localized string similar to Save all relevant information to the file on this device.
         /// </summary>
         public static string Diagnostics_Support_Package_Title {
             get {
