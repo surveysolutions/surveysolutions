@@ -68,15 +68,15 @@
                     </label>
 
                     <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
-                            v-if="showArchive && config.isHeadquarter"
+                            v-if="showArchive.key && config.isHeadquarter"
                             @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnAssignSelected"
-                            v-if="!showArchive"
+                            v-if="!showArchive.key"
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
-                            v-if="!showArchive && config.isHeadquarter"
+                            v-if="!showArchive.key && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
                 </div>
             </div>
@@ -449,7 +449,7 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive) {
+            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
                 this.$refs.editQuantityModal.modal('show')
@@ -546,8 +546,10 @@ export default {
         $("main").removeClass("hold-transition");
         $("footer").addClass("footer-adaptive");
 
-        this.showArchive = this.$route.query.showArchive != undefined &&
-            this.$route.query.showArchive === "true";
+        if(this.$route.query.showArchive != undefined && this.$route.query.showArchive === "true")
+            this.showArchiveSelected(this.ddlShowArchive[1]);
+        else
+            this.showArchiveSelected(this.ddlShowArchive[0]);
 
         this.dateStart = this.$route.query.dateStart;
         this.dateEnd = this.$route.query.dateEnd;
@@ -555,8 +557,7 @@ export default {
         this.teamId = this.$route.query.teamId;
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0]);
-        this.showArchiveSelected(this.ddlShowArchive[0]);
-
+        
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
             if (questionnaireId != undefined) {
                 self.questionnaireId = {
