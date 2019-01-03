@@ -274,8 +274,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
 
             var rosterViewModel = Create.ViewModel.RosterViewModel();
             var nestedRoster = Create.ViewModel.RosterViewModel();
-            rosterViewModel.RosterInstances.Add(Create.ViewModel.TextQuestionViewModel());
-            rosterViewModel.RosterInstances.Add(nestedRoster);
+            rosterViewModel.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>
+            {
+                Create.ViewModel.TextQuestionViewModel(), nestedRoster
+            };
 
             var service = CreateCompositeCollectionInflationService();
             var viewModels = new List<IInterviewEntityViewModel>{rosterViewModel};

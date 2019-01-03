@@ -518,8 +518,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>());
         }
 
         public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
