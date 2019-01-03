@@ -56,12 +56,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             var keyStoreInfoFile = this.fileSystemAccessor.CombinePath(extractToFolder, "keystore.info");
 
             var encryptedText = this.fileSystemAccessor.ReadAllText(keyStoreInfoFile);
-            var decryptedText = this.encryptionService.Decrypt(encryptedText);
+            try
+            {
+                var decryptedText = this.encryptionService.Decrypt(encryptedText);
 
-            this.fileSystemAccessor.WriteAllText(keyStoreInfoFile, decryptedText);
-
-            this.archiveUtils.ZipDirectoryToFile(extractToFolder, tableInfoFile);
-            this.fileSystemAccessor.DeleteDirectory(extractToFolder);
+                this.fileSystemAccessor.WriteAllText(keyStoreInfoFile, decryptedText);
+            }
+            catch
+            {
+                // encryption keys already encrypted
+                // or backup archive from another server
+                // or archive was broken manually
+            }
+            finally
+            {
+                this.archiveUtils.ZipDirectoryToFile(extractToFolder, tableInfoFile);
+                this.fileSystemAccessor.DeleteDirectory(extractToFolder);
+            }
+            
         }
 
         public List<TabletInformationView> GetAllTabletInformationPackages()

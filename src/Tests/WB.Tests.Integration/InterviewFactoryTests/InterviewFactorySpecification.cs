@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -18,12 +19,14 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
@@ -52,15 +55,16 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
+                    typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AnsweredYesNoOption[]>>(new EntitySerializer<AnsweredYesNoOption[]>());
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
-            Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<AnsweredYesNoOption[]>>(new EntitySerializer<AnsweredYesNoOption[]>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
+            Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
         }
 
         [SetUp]
@@ -128,8 +132,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork,
-                questionnaireItems: Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+                sessionProvider: this.UnitOfWork);
+        }
+        
+        protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T)).Cast<object>();
+            return values
+                .Where(v => exclude.All(e => (int)(object)e != (int) v))
+                .Select(v => Create.Entity.Answer(v.ToString(), (int)v)).ToList();
         }
     }
 }

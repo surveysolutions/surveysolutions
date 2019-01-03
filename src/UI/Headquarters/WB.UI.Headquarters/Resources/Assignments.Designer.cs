@@ -367,6 +367,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a questionnaire version to see its associated assignments. Select “All versions” to see assignments associated with any version of selected questionnaire..
+        /// </summary>
+        public static string Tooltip_Filter_QuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_QuestionnaireVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets..
         /// </summary>
         public static string Tooltip_Filter_Received {

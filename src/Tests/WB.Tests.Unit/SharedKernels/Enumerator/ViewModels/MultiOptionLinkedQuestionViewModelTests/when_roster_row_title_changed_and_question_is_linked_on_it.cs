@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 Create.Entity.MultyOptionsQuestion(questionId.Id, linkedToRosterId: rosterId.Id)
                 );
 
-            interview = Setup.StatefulInterview(questionnaire);
+            interview = Abc.SetUp.StatefulInterview(questionnaire);
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);

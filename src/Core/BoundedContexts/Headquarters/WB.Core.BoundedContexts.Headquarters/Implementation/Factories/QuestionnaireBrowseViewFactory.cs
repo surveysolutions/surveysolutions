@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 if (!string.IsNullOrEmpty(input.SearchFor))
                 {
                     var filterLowerCase = input.SearchFor.ToLower();
-                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase) || 
+                                             (x.Version.ToString().Contains(filterLowerCase) && input.QuestionnaireId != null));
                 }
 
                 if (input.OnlyCensus.HasValue)
@@ -90,5 +91,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     .Select(x => x.Id)
                     .ToArray())
                 .Select(QuestionnaireIdentity.Parse);
+
+        public QuestionnairesList UniqueQuestionnaireIds(string searchFor, int pageSize)
+        {
+            return this.reader.Query(queryable =>
+            {
+                var query = queryable.Where(x => !x.IsDeleted);
+
+                if (!string.IsNullOrEmpty(searchFor))
+                {
+                    var filterLowerCase = searchFor.ToLower();
+                    query = query.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+                }
+
+                var listItems = query
+                    .OrderBy(x => x.Title)
+                    .Select(x => new QuestionnaireListItem
+                    {
+                        Id = x.QuestionnaireId,
+                        Title = x.Title
+                    }).Distinct().ToList();
+                return new QuestionnairesList
+                {
+                    Items = listItems,
+                    TotalCount = listItems.Count
+                };
+            });
+        }
     }
 }

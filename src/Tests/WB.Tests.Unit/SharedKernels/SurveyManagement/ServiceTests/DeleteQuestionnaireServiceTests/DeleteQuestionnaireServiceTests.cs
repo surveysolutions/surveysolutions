@@ -50,8 +50,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             SetupLookupStorage(lookup1);
             SetupLookupStorage(lookup2);
 
-            Setup.InstanceToMockedServiceLocator(questionnaireStorage);
-            Setup.InstanceToMockedServiceLocator(lookupStorage.Object);
+            SetUp.InstanceToMockedServiceLocator(questionnaireStorage);
+            SetUp.InstanceToMockedServiceLocator(lookupStorage.Object);
 
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             questionnaire.LookupTables = new Dictionary<Guid, LookupTable>();
 
             var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
-            Setup.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
+            SetUp.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
 
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 

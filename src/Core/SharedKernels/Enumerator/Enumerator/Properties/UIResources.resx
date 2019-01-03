@@ -190,7 +190,7 @@
     <value>Tap to enter decimal</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove {0} row(s) from each related roster?</value>
+    <value>Are you sure you want to remove related roster?</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
@@ -285,13 +285,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Provided Survey Solutions Designer URL is invalid. Check settings.</value>
   </data>
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Options will be available after answering referenced question</value>
+    <value>Categories will be available after answering referenced question</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Answer "{0}" does not match any option</value>
+    <value>Answer "{0}" does not match any category</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Answer "{0}" does not match any option</value>
+    <value>Answer "{0}" does not match any category</value>
   </data>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Next section</value>
@@ -606,7 +606,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>New answer to a protected question should be greater or equal to {0}</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
-    <value>{0} out of {1} options selected</value>
+    <value>{0} out of {1} categories selected</value>
   </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Overview</value>
@@ -668,5 +668,8 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>Show PDF </value>
+  </data>
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+<value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
   </data>
 </root>

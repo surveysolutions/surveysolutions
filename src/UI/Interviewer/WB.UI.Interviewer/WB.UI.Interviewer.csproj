@@ -87,6 +87,9 @@
       <HintPath>..\..\..\..\packages\Autofac.4.8.1\lib\netstandard1.1\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Extras.MvvmCross, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Autofac.Extras.MvvmCross.5.0.0\lib\netstandard2.0\Autofac.Extras.MvvmCross.dll</HintPath>
+    </Reference>
     <Reference Include="FastAndroidCamera, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FastAndroidCamera.2.0.0\lib\MonoAndroid403\FastAndroidCamera.dll</HintPath>
     </Reference>
@@ -105,50 +108,50 @@
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="Mono.CSharp" />
-    <Reference Include="MvvmCross, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.6.2.1\lib\monoandroid81\MvvmCross.dll</HintPath>
+    <Reference Include="MvvmCross, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.6.2.2\lib\monoandroid81\MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Core.UI, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.UI.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Core.UI.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Core.UI, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.UI.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.Core.UI.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Core.Utils, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.Utils.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Core.Utils.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Core.Utils, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.Utils.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.Core.Utils.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Design, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Design.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Design.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Design, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Design.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.Design.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Fragment, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Fragment.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Fragment.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Fragment, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Fragment.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.Fragment.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.2.2\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.File, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.File.6.2.1\lib\monoandroid81\MvvmCross.Plugin.File.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.File, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.File.6.2.2\lib\monoandroid81\MvvmCross.Plugin.File.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Json, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Json.6.2.1\lib\netstandard2.0\MvvmCross.Plugin.Json.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Json, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Json.6.2.2\lib\netstandard2.0\MvvmCross.Plugin.Json.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Messenger, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Messenger.6.2.1\lib\netstandard2.0\MvvmCross.Plugin.Messenger.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Messenger, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Messenger.6.2.2\lib\netstandard2.0\MvvmCross.Plugin.Messenger.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Network, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Network.6.2.1\lib\monoandroid81\MvvmCross.Plugin.Network.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Network, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Network.6.2.2\lib\monoandroid81\MvvmCross.Plugin.Network.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.PictureChooser, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.6.2.1\lib\monoandroid81\MvvmCross.Plugin.PictureChooser.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.PictureChooser, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.PictureChooser.6.2.2\lib\monoandroid81\MvvmCross.Plugin.PictureChooser.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.ResourceLoader, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.ResourceLoader.6.2.1\lib\monoandroid81\MvvmCross.Plugin.ResourceLoader.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.ResourceLoader, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.ResourceLoader.6.2.2\lib\monoandroid81\MvvmCross.Plugin.ResourceLoader.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Visibility, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.6.2.1\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Visibility, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.6.2.2\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.WebBrowser, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.2.1\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.WebBrowser, Version=6.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.2.2\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
@@ -302,6 +305,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\CreateAndLoadInterviewActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
@@ -312,10 +316,11 @@
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\InterviewerSearchActivity.cs" />
-    <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\LoadingInterviewActivity.cs" />
     <Compile Include="Activities\MapsActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="Activities\ProgressInterviewActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
@@ -389,9 +394,6 @@
     <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
-    <AndroidResource Include="Resources\layout\loading.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />

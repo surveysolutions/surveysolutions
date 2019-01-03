@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Pipeline;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -14,14 +15,14 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<IWebNavigationService, WebNavigationService>();
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IStatefullInterviewSearcher, StatefullInterviewSearcher>();
             registry.Bind<IInterviewOverviewService, InterviewOverviewService>();
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
-                registry.BindAsSingleton(type, type);
+                registry.BindAsSingleton(typeof(IHubPipelineModule), type, type);
             }
         }
 
@@ -29,6 +30,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             typeof(SignalrErrorHandler),
             typeof(HandlePauseEventPipelineModule),
+            typeof(HubLifetimePipelineModule),
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };

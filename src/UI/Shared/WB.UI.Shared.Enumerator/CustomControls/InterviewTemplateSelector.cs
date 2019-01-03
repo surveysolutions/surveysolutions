@@ -57,7 +57,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
-            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner}
+            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
+            {typeof (PlainRosterTitleViewModel), Resource.Layout.interview_group_plain_roster_title}
         };
 
         public int GetItemViewType(object forItemObject)
@@ -68,7 +69,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 typeof(QuestionHeaderViewModel),
                 typeof(GroupViewModel),
-                typeof(StaticTextViewModel)
+                typeof(StaticTextViewModel),
+                typeof(PlainRosterTitleViewModel)
             };
 
             if (disabledViewModelTypes.Contains(typeOfViewModel))
@@ -79,10 +81,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {
                     if (enablementModel.HideIfDisabled) return UnknownViewType;
 
-                    if (typeOfViewModel == typeof(QuestionHeaderViewModel))
+                    if (typeOfViewModel == typeof(QuestionHeaderViewModel) || typeOfViewModel == typeof(PlainRosterTitleViewModel))
                         return Resource.Layout.interview_disabled_question;
 
-                    if (typeOfViewModel == typeof(GroupViewModel))
+                    if (typeOfViewModel == typeof(GroupViewModel) )
                         return Resource.Layout.interview_disabled_group;
 
                     if (typeOfViewModel == typeof(StaticTextViewModel))
@@ -123,6 +125,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return groupViewModel.Enablement;
                 case StaticTextViewModel staticTextViewModel:
                     return staticTextViewModel.QuestionState.Enablement;
+                case PlainRosterTitleViewModel rosterTitleViewModel:
+                    return rosterTitleViewModel.Enablement;
             }
 
             return null;

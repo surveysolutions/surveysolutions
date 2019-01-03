@@ -10,26 +10,18 @@ export default {
         this.$refs.table.reload();
     },
     methods: {
-        renderCell: function(data, row, facet){
+        renderCell(data, row, facet) {
             const formatedNumber = this.formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") {
                 return `<span>${formatedNumber}</span>`;
             }
-            if (row.teamId === '00000000-0000-0000-0000-000000000000') {
-                if (facet) {
-                    return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}'>${formatedNumber}</a>`;
-                }
-                else {
-                    return `<span>${formatedNumber}</span>`;
-                }
+
+            if (!this.supervisorId) {
+                return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}&supervisor=${row.teamName}'>${formatedNumber}</a>`;
             }
-            if(facet) {
-                return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${formatedNumber}</a>`;
-            }
-            else {
-                 return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}'>${formatedNumber}</a>`;
-            }
-        }        ,
+         
+            return this.getLinkToInterviewerProfile(data, row);
+        },
         formatNumber(value) {
             if (value == null || value == undefined)
                 return value;
@@ -37,11 +29,23 @@ export default {
                navigator.language ||  
                navigator.userLanguage; 
             return value.toLocaleString(language);
+        },
+        hasIssue(data) {
+            return data.lowStorageCount || data.wrongDateOnTabletCount
+        },
+        getLinkToInterviewerProfile(data, row){
+            const formatedNumber = this.formatNumber(data)
+            const linkClass = this.hasIssue(row) ? "text-danger" : ""
+
+            return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`;
         }
     },
     computed: {
         config() {
             return this.$config.model;
+        },
+        supervisorId() {
+            return this.$route.params.supervisorId
         },
         tableOptions() {
             var self = this;
@@ -51,10 +55,15 @@ export default {
                     {
                         data: "teamName",
                         name: "TeamName",
-                        title: this.$t("DevicesInterviewers.Teams"),
+                        title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t("DevicesInterviewers.Teams"),
                         orderable: true,
                         render: function(data, type, row) {
-                            return self.renderCell(data, row, null);
+                            if(self.supervisorId) {
+                                return self.getLinkToInterviewerProfile(data, row)
+                            }
+                            
+                            const linkClass = self.hasIssue(row) ? "text-danger" : ""
+                            return `<a href='${window.location}/${row.teamId}'><hi class='${linkClass}'>${data}</hi></a>`
                         }
                     },
                     {
@@ -107,7 +116,7 @@ export default {
                             return self.renderCell(data, row, 'OutdatedApp');
                         }
                     },
-                     {
+                    {
                         data: "oldAndroidCount",
                         name: "OldAndroidCount",
                         "class": "type-numeric",
@@ -116,30 +125,17 @@ export default {
                         render: function(data, type, row) {
                             return self.renderCell(data, row, 'OldAndroid');
                         }
-                     },
-                    // {
-                    //     data: "wrongDateOnTabletCount",
-                    //     name: "WrongDateOnTabletCount",
-                    //     "class": "type-numeric",
-                    //     orderable: true,
-                    //     title: this.$t("DevicesInterviewers.WrongDateOnTablet"),
-                    //     render: function(data, type, row) {
-                    //         return self.renderCell(data, row, 'WrongTime');
-                    //     }
-                    // },
+                    },
                     {
-                        data: "lowStorageCount",
-                        name: "LowStorageCount",
+                        data: "teamSize",
+                        name: "TeamSize",
                         "class": "type-numeric",
                         orderable: true,
-                        title: this.$t("DevicesInterviewers.LowStorage"),
-                        render: function(data, type, row) {
-                            return self.renderCell(data, row, 'LowStorage');
-                        }
+                        title: this.$t("DevicesInterviewers.TeamSize")
                     }
                 ],
                 ajax: {
-                    url: this.$config.model.dataUrl,
+                    url: this.supervisorId ? this.$config.model.dataUrl + '/' + this.supervisorId : this.$config.model.dataUrl,
                     type: "GET",
                     contentType: 'application/json'
                 },

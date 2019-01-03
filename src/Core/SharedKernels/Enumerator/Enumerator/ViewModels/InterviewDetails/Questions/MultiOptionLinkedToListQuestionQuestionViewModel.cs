@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = this.interview.Id;
             this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language));
 
-            this.instructionViewModel.Init(interviewId, entityIdentity);
+            this.instructionViewModel.Init(interviewId, entityIdentity, navigationState);
             
             this.options.CollectionChanged += (sender, args) =>
             {

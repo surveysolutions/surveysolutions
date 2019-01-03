@@ -165,7 +165,6 @@ module.exports = {
                     pages[page].locales
                 );
 
-                //const locales = localizationFiles[page];
                 options.locales = {
                     json: JSON.stringify(locales),
                     dictionary: localization.getDictionaryDefinition(locales)

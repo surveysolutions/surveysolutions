@@ -1,7 +1,6 @@
 ﻿using System;
 using Moq;
 using MvvmCross.Base;
-using MvvmCross.Tests;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,13 +15,8 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
-    internal class TextListQuestionViewModelTestContext : MvxIoCSupportingTest
+    internal class TextListQuestionViewModelTestContext : BaseMvvmCrossTest
     {
-        public TextListQuestionViewModelTestContext()
-        {
-            base.Setup();
-        }
-
         protected static readonly Identity questionIdentity =
             Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
 

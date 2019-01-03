@@ -57,7 +57,7 @@ namespace WB.UI.Designer
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
 
             // override registration
-            registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
+            registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

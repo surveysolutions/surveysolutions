@@ -136,13 +136,13 @@
     <value>Impossible de supprimer l'utilisateur, car il n'existe pas dans la liste de partage</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Les options dans la question en cascade ne peuvent pas avoir une colonne ParentValue vide.</value>
+    <value>Les catégories de la question en cascade ne peuvent pas avoir une colonne Valeur parent vide.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Les options de la question en cascade ne peuvent pas avoir de valeur numérique dans la colonne ParentValue.</value>
+    <value>Les catégories de la question en cascade ne peuvent pas avoir de valeur numérique dans la colonne ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Il y a au moins un doublon de la pair Titre + Parent Value. La liste des options ne doit pas contenir de doublons de ce type.</value>
+    <value>Il y a au moins un doublon de la pair Titre + Parent Value. La liste ne doit pas contenir de doublons de ce type.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>Impossible de trouver la question de type combo box avec la clé publique {0}</value>
@@ -214,7 +214,7 @@
     <value>Seuls les QuestionnaireDocuments sont admisiblses pour le moment</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>La valeur de l'option ne doit comporter que des caractères numériques</value>
+    <value>La valeur de la catégorie ne doit comporter que des caractères numériques</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>La question avec la clé publique {0} est introuvable.</value>

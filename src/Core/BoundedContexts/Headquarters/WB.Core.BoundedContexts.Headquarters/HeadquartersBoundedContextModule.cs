@@ -49,6 +49,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -192,7 +193,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
-            registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
             registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
 
@@ -284,6 +284,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
+
+            registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
@@ -291,11 +293,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireImportValidator>())
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
-                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
 
             CommandRegistry
                 .Setup<StatefulInterview>()

@@ -22,6 +22,7 @@
         <item name="android:layout_marginLeft">@dimen/Interview_Overview_left_margin</item>
         <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
         <item name="android:textColor">@color/recordedAnswerText</item>
+        <item name="android:textColorLink">@color/group_started</item>
         <item name="android:textSize">@dimen/textsize_20</item>
     </style>
     <style name="Overview_Question_Answer" parent="Overview_Question_Title">

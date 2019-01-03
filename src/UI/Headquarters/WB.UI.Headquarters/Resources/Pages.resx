@@ -1202,7 +1202,7 @@
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{0} and {1} more</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s).</value>
   </data>
   <data name="Interviewers_MovingCompleted" xml:space="preserve">

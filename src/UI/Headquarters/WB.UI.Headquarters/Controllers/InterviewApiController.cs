@@ -71,19 +71,14 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public InterviewsDataTableResponse GetInterviews([FromUri] InterviewsDataTableRequest request)
         {
-            QuestionnaireIdentity questionnaireIdentity = null;
-            if (!string.IsNullOrEmpty(request.QuestionnaireId))
-            {
-                QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
-            }
-
+            
             var input = new AllInterviewsInputModel
             {
                 Page = request.PageIndex,
                 PageSize = request.PageSize,
                 Orders = request.GetSortOrderRequestItems(),
-                QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
-                QuestionnaireVersion = questionnaireIdentity?.Version,
+                QuestionnaireId = request.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
                 Statuses = request.Statuses,
                 SearchBy = request.SearchBy ?? request.Search.Value,
                 ResponsibleId = this.authorizedUser.Id,

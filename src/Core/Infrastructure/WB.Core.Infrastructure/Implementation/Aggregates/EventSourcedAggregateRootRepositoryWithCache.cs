@@ -15,9 +15,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         private static readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> MemoryCache 
             = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
 
-        public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, 
+        public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore,  
             IDomainRepository repository, IAggregateLock aggregateLock)
-            : base(eventStore, snapshotStore, repository)
+            : base(eventStore, repository)
         {
             this.aggregateLock = aggregateLock;
         }

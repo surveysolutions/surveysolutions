@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,6 +21,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: Localizable(false)]
 
 namespace WB.Tests.Unit
 {
@@ -120,13 +122,13 @@ public class AssemblyContext
 
         ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
-        Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
-        Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
-        Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
+        SetUp.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+        SetUp.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
+        SetUp.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
-        Setup.InstanceToMockedServiceLocator(Mock.Of<ILogger>());
-        Setup.InstanceToMockedServiceLocator(Mock.Of<IClock>());
-        Setup.InstanceToMockedServiceLocator(Mock.Of<IInterviewUniqueKeyGenerator>());
+        SetUp.InstanceToMockedServiceLocator(Mock.Of<ILogger>());
+        SetUp.InstanceToMockedServiceLocator(Mock.Of<IClock>());
+        SetUp.InstanceToMockedServiceLocator(Mock.Of<IInterviewUniqueKeyGenerator>());
 
         EagerFetchExtensions.FetchingProvider = () => new FakeFetchingProvider();
     }

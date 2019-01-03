@@ -26,11 +26,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var interview = new Mock<IStatefulInterview>();
 
             interview.Setup(x => x.GetRosterInstances(It.IsAny<Identity>(), rosterId))
-                .Returns(new ReadOnlyCollection<Identity>(new List<Identity>
+                .Returns(new List<Identity>
                 {
                     Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)),
                     Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))
-                }));
+                });
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview.Object);
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);

@@ -3,12 +3,29 @@
             :title="$t('Pages.StatusDuration')"
             :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Reports.Questionnaire')">
-                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="questionnaires"
-                           :value="questionnaireId"
-                           noSearch
-                           @selected="selectQuestionnaire" />
+            <FilterBlock
+                :title="$t('Common.Questionnaire')">
+                <Typeahead
+                data-vv-name="questionnaireId"
+                data-vv-as="questionnaire"
+                :placeholder="$t('Common.AllQuestionnaires')"
+                control-id="questionnaireId"
+                :value="questionnaireId"
+                v-on:selected="selectQuestionnaire"
+                :fetch-url="$config.model.questionnairesUrl" />
+            </FilterBlock>
+
+            <FilterBlock
+                :title="$t('Common.QuestionnaireVersion')">
+                <Typeahead
+                data-vv-name="questionnaireVersion"
+                data-vv-as="questionnaireVersion"
+                :placeholder="$t('Common.AllVersions')"
+                control-id="questionnaireVersion"
+                :value="questionnaireVersion"
+                v-on:selected="questionnaireVersionSelected"
+                :fetch-url="questionnaireVersionFetchUrl"
+                :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
             <FilterBlock :title="$t('Strings.Teams')">
                  <Typeahead :placeholder="$t('Strings.AllTeams')"
@@ -50,6 +67,7 @@ export default {
     data() {
         return {
             questionnaireId: null,
+            questionnaireVersion: null,
             supervisorId: null,
             supervisorsParams: { limit: 10 },
             loading : {
@@ -61,6 +79,9 @@ export default {
         questionnaireId: function () {
             this.reload();
         },
+        questionnaireVersion: function () {
+            this.reload();
+        },
         supervisorId: function () {
             this.reload();
         }
@@ -69,8 +90,10 @@ export default {
         this.reload();
     },
     computed: {
-        questionnaires() {
-            return this.$config.model.questionnaires
+        questionnaireVersionFetchUrl() {
+             if(this.questionnaireId && this.questionnaireId.key)
+                return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
+            return null
         },
         supervisorsUrl() {
             return this.$hq.Users.SupervisorsUri
@@ -198,15 +221,17 @@ export default {
         selectQuestionnaire(value) {
             this.questionnaireId = value;
         },
+        questionnaireVersionSelected(value){
+            this.questionnaireVersion = value;
+        },
  
         selectSupervisor(value) {
             this.supervisorId = value;
         },
 
         addFilteringParams(data) {
-            if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId.key;
-            }
+            data.questionnaireId = (this.questionnaireId || {}).key;
+            data.questionnaireVersion = (this.questionnaireVersion || {}).key;
             if (this.supervisorId) {
                 data.supervisorId = this.supervisorId.key;
             }

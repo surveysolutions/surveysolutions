@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 {
     [TestOf(typeof(RosterViewModel))]
-    internal class RosterViewModelTests
+    internal class RosterViewModelTests : BaseMvvmCrossTest
     {
         class FakeGroupViewModel : GroupViewModel
         {
@@ -27,19 +27,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
         protected RosterViewModel CreateViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            ILiteEventRegistry eventRegistry = null, 
-            IQuestionnaireStorage questionnaireRepository = null)
+            ILiteEventRegistry eventRegistry = null)
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<GroupViewModel>())
                 .Returns(() => new FakeGroupViewModel());
 
-            var questionnaireRepositoryMock = new Mock<IQuestionnaireStorage>{DefaultValue = DefaultValue.Mock };
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? viewModelFactory.Object,
-                eventRegistry ?? Create.Service.LiteEventRegistry(),
-                Stub.MvxMainThreadAsyncDispatcher(),
-                questionnaireRepository ?? questionnaireRepositoryMock.Object);
+                eventRegistry ?? Create.Service.LiteEventRegistry());
         }
     }
 }

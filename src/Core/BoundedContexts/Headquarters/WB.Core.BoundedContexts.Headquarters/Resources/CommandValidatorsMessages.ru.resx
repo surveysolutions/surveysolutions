@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Вы уже импотрировали другой опросник с таким заголовком '{0}'. Пожалуйста переименуйте этот опросник на Дизайнере, если хотите импортировать его.</value>
+    <value>Опросник '{0}' уже существует. Пожалуйста выберите другое имя.</value>
   </data>
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
     <value>Вы уже импотрировали другой опросник с таким именем переменной опросника: '{0}'. Пожалуйста задайте другое имя перемененной опросника на Дизайнере, если хотите импортировать его.</value>

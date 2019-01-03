@@ -36,7 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
             var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
-                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+                Mock.Of<IMvxMessenger>(),
+                new SynchronizationCompleteSource(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<ILogger>());
 
             var viewModel = CreateDashboardViewModel(
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
@@ -74,7 +77,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     permissionsService: Mock.Of<IPermissionsService>(), 
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
                     restService: Mock.Of<IRestService>(), 
-                    syncClient: Mock.Of<IOfflineSyncClient>());
+                    syncClient: Mock.Of<IOfflineSyncClient>(),
+                    userInteractionService: Mock.Of<IUserInteractionService>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

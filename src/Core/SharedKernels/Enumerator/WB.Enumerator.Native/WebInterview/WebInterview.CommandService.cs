@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -26,7 +27,10 @@ namespace WB.Enumerator.Native.WebInterview
         {
             try
             {
-                this.commandService.Execute(command);
+                InScopeExecutor.Current.ExecuteActionInScope(sl =>
+                {
+                    sl.GetInstance<ICommandService>().Execute(command);
+                });
             }
             catch (Exception e)
             {
@@ -36,8 +40,11 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         public void ChangeLanguage(ChangeLanguageRequest request)
-            => this.commandService.Execute(new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
-                this.CommandResponsibleId));
+        {
+            this.commandService.Execute(
+                    new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
+                    this.CommandResponsibleId));
+        }
 
         public void AnswerTextQuestion(string questionIdenty, string text)
         {
@@ -167,6 +174,7 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var identity = Identity.Parse(questionIdentity);
             var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, comment);
+
             this.commandService.Execute(command);
         }
     }

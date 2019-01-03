@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
             interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: questionId, answer: -1));
 
-            var questionnaireStorage = Abc.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-            var interviewRepository = Abc.Setup.StatefulInterviewRepository(interview);
+            var questionnaireStorage = Abc.SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var interviewRepository = Abc.SetUp.StatefulInterviewRepository(interview);
 
             FilteredOptionsViewModel optionsViewModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
 

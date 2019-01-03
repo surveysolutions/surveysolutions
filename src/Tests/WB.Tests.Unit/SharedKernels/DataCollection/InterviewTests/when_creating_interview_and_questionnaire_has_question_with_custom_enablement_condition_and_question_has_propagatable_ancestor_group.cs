@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Guid questionId = Guid.Parse("22220000111111111111111111111111");
             Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _
                 => _.GetRostersFromTopToSpecifiedQuestion(questionId) == new [] { parentPropagatableGroupId });
 
             eventContext = new EventContext();
