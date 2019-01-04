@@ -297,4 +297,8 @@
   <data name="AllGpsQuestions" xml:space="preserve">
     <value>全部GPS问题</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>选择问卷</value>
+      <comment>选择问卷</comment>
+  </data>
 </root>

@@ -381,6 +381,9 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Common.designer.cs</LastGenOutput>
     </Content>
+    <Content Include="App_GlobalResources\Common.ro.resx">
+      <DependentUpon>Common.resx</DependentUpon>
+    </Content>
     <Content Include="App_GlobalResources\Common.ru.resx">
       <DependentUpon>Common.resx</DependentUpon>
       <SubType>Designer</SubType>
@@ -813,10 +816,6 @@
     <Content Include="App_GlobalResources\BatchUpload.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>BatchUpload.ro.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ro.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.ro.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Dashboard.ro.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1971,11 +1970,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.ro.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Common.ro.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.ro.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Dashboard.ar.designer.cs">
       <AutoGen>True</AutoGen>

@@ -268,7 +268,7 @@
     <value>Question</value>
   </data>
   <data name="SelectQuestion" xml:space="preserve">
-    <value>Select question</value>
+    <value></value>
   </data>
   <data name="ConditionQuestion" xml:space="preserve">
     <value>Condition Question</value>
