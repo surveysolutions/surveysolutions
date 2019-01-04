@@ -59,7 +59,10 @@ export default {
 
     props: {
         fetchUrl: String,
-        controlId: String,
+        controlId: {
+            type: String,
+            required: true
+        },
         value: Object,
         placeholder: String,
         ajaxParams: Object,

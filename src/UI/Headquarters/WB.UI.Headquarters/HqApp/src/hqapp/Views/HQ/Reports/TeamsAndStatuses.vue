@@ -3,11 +3,10 @@
     <Filters slot="filters">
       <FilterBlock
         :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead control-id="questionnaireId"
           data-vv-name="questionnaireId"
           data-vv-as="questionnaire"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="questionnaireId"
           v-on:selected="questionnaireSelected"
           :fetch-url="$config.model.questionnairesUrl"
@@ -16,11 +15,10 @@
 
       <FilterBlock
         :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
           data-vv-name="questionnaireVersion"
           data-vv-as="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="questionnaireVersion"
           v-on:selected="questionnaireVersionSelected"
           :fetch-url="questionnaireVersionFetchUrl"
