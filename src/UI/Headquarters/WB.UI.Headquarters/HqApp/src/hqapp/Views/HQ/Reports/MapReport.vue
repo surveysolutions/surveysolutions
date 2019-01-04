@@ -2,9 +2,8 @@
   <HqLayout :hasFilter="true" :hasHeader="false">
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead control-id="questionnaireId"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="selectedQuestionnaireId"
           :values="questionnaires"
           :keyFunc="item => item.key + item.value"
@@ -12,9 +11,8 @@
         />
       </FilterBlock>
       <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="selectedVersion"
           :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
           v-on:selected="selectQuestionnaireVersion"
@@ -22,9 +20,9 @@
         />
       </FilterBlock>
       <FilterBlock :title="$t('Reports.Variables')">
-        <Typeahead
+        <Typeahead control-id="gpsQuestion"
           :placeholder="$t('Common.AllGpsQuestions')"
-          noSearch
+          noSearch 
           :values="gpsQuestions"
           :value="selectedQuestion"
           @selected="selectGpsQuestion"

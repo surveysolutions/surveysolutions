@@ -20,7 +20,11 @@
         <div class="row-fluid">
             <div class="col-sm-12">
                 <h3>{{$t('Assignments.SelectQuestionnaireToUpgradeFrom')}}</h3>
-                <Typeahead :placeholder="$t('Common.Questionnaire')" :values="questionnaires" :value="questionnaireId" noSearch @selected="selectQuestionnaire" />
+                <Typeahead control-id="questionnaire" noSearch 
+                    :placeholder="$t('Common.Questionnaire')" 
+                    :values="questionnaires" 
+                    :value="questionnaireId" 
+                    @selected="selectQuestionnaire" />
             </div>
         </div>
         <form method="post">

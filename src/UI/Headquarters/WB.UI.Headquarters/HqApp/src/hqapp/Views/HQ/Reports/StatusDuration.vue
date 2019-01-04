@@ -5,36 +5,35 @@
         <Filters slot="filters">
             <FilterBlock
                 :title="$t('Common.Questionnaire')">
-                <Typeahead
-                data-vv-name="questionnaireId"
-                data-vv-as="questionnaire"
-                :placeholder="$t('Common.AllQuestionnaires')"
-                control-id="questionnaireId"
-                :value="questionnaireId"
-                v-on:selected="selectQuestionnaire"
-                :fetch-url="$config.model.questionnairesUrl" />
+                <Typeahead control-id="questionnaireId"
+                    data-vv-name="questionnaireId"
+                    data-vv-as="questionnaire"
+                    :placeholder="$t('Common.AllQuestionnaires')"
+                    :value="questionnaireId"
+                    v-on:selected="selectQuestionnaire"
+                    :fetch-url="$config.model.questionnairesUrl" />
             </FilterBlock>
 
             <FilterBlock
                 :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                data-vv-name="questionnaireVersion"
-                data-vv-as="questionnaireVersion"
-                :placeholder="$t('Common.AllVersions')"
-                control-id="questionnaireVersion"
-                :value="questionnaireVersion"
-                v-on:selected="questionnaireVersionSelected"
-                :fetch-url="questionnaireVersionFetchUrl"
-                :disabled="questionnaireVersionFetchUrl == null" />
+                <Typeahead control-id="questionnaireVersion"
+                    data-vv-name="questionnaireVersion"
+                    data-vv-as="questionnaireVersion"
+                    :placeholder="$t('Common.AllVersions')"
+                    :value="questionnaireVersion"
+                    v-on:selected="questionnaireVersionSelected"
+                    :fetch-url="questionnaireVersionFetchUrl"
+                    :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
             <FilterBlock :title="$t('Strings.Teams')">
-                 <Typeahead :placeholder="$t('Strings.AllTeams')"
-                           :value="supervisorId"
-                           @selected="selectSupervisor"
-                           :ajax-params="supervisorsParams"
-                           :fetch-url="supervisorsUrl"
-                           data-vv-name="UserId"
-                           data-vv-as="UserName" />
+                 <Typeahead control-id="teams"
+                        :placeholder="$t('Strings.AllTeams')"
+                        :value="supervisorId"
+                        @selected="selectSupervisor"
+                        :ajax-params="supervisorsParams"
+                        :fetch-url="supervisorsUrl"
+                        data-vv-name="UserId"
+                        data-vv-as="UserName" />
             </FilterBlock>
         </Filters>
         <DataTables ref="table"
