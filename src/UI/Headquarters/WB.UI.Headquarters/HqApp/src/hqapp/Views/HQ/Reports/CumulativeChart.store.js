@@ -1,7 +1,4 @@
 import Vue from "vue";
-import Vuex from "vuex";
-
-Vue.use(Vuex);
 
 const dataSetInfo = [
     {status: 100, label: Vue.$t('Strings.InterviewStatus_Completed'), backgroundColor: "#86B828" },

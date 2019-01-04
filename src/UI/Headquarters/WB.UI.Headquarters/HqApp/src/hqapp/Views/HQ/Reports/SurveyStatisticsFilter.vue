@@ -1,7 +1,7 @@
 <template>
   <div>
     <FilterBlock :title="$t('Reports.Questionnaire')">
-      <Typeahead
+      <Typeahead control-id="questionnaire"
         :placeholder="selectedQuestionnairePlaceholder"
         fuzzy
         noClear
@@ -13,7 +13,7 @@
     </FilterBlock>
 
     <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-      <Typeahead
+      <Typeahead control-id="version"
         :placeholder="$t('Common.AllVersions')"
         noSearch
         :values="questionnaireVersionsList"
@@ -24,7 +24,7 @@
       />
     </FilterBlock>
     <FilterBlock :title="$t('Reports.Question')">
-      <Typeahead
+      <Typeahead control-id="question"
         :placeholder="selectedQuestionPlaceholder"
         fuzzy
         noClear
@@ -97,7 +97,7 @@
 
     <template v-if="question != null && question.SupportConditions">
       <FilterBlock :title="$t('Reports.ConditionQuestion')">
-        <Typeahead
+        <Typeahead control-id="condition"
           :placeholder="$t('Reports.SelectConditionQuestion')"
           :values="conditionVariablesList"
           :value="selectedCondition"
@@ -235,6 +235,7 @@ export default {
 
         selectQuestionnaireVersion(id) {
             const version = id == null ? null : id.key;
+            if(this.selectedQuestionnaire == null) return;
 
             this.loadQuestions(this.selectedQuestionnaire.key, version).then(() => {
                 this.onChange(query => (query.version = version));
