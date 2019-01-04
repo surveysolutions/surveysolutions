@@ -529,6 +529,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire.
+        /// </summary>
+        internal static string SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {

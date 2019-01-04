@@ -565,7 +565,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select question.
+        ///   Looks up a localized string similar to .
         /// </summary>
         internal static string SelectQuestion {
             get {

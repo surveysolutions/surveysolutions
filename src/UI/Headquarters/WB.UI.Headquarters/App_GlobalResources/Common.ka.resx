@@ -282,4 +282,8 @@
   <data name="НasErrors" xml:space="preserve">
     <value>შეცდომები აქვს</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>აირჩიეთ კითხვარი</value>
+      <comment>აირჩიეთ კითხვარი</comment>
+  </data>
 </root>
