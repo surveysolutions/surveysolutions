@@ -69,7 +69,7 @@
             <form v-if="interviewerShouldbeSelected" onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{ $t("Details.ChooseResponsibleInterviewer") }}</label>
-                    <Typeahead :placeholder="$t('Common.Responsible')" control-id="newResponsibleId" :value="newResponsibleId" @selected="newResponsibleSelected" :fetch-url="this.$config.model.approveReject.interviewersListUrl">
+                    <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')" :value="newResponsibleId" @selected="newResponsibleSelected" :fetch-url="this.$config.model.approveReject.interviewersListUrl">
                     </Typeahead>
                 </div>
             </form>

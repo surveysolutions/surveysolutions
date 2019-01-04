@@ -4,8 +4,8 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           control-id="questionnaireId"
+                <Typeahead control-id="questionnaireId"
+                           :placeholder="$t('Common.AllQuestionnaires')"
                            :value="questionnaireId"
                            :values="config.questionnaires"
                            :keyFunc="item => item.key + item.value"
@@ -13,8 +13,8 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead :placeholder="$t('Common.AllVersions')"
-                           control-id="questionnaireVersion"
+                <Typeahead control-id="questionnaireVersion"
+                           :placeholder="$t('Common.AllVersions')"
                            :values="questionnaireId == null ? null : questionnaireId.versions"
                            :value="questionnaireVersion"
                            :disabled="questionnaireId == null"
@@ -22,8 +22,8 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
-                <Typeahead :placeholder="$t('Common.AllResponsible')"
-                           control-id="responsibleId"
+                <Typeahead control-id="responsibleId"
+                           :placeholder="$t('Common.AllResponsible')"
                            :value="responsibleId"
                            :ajax-params="responsibleParams"
                            v-on:selected="userSelected"
@@ -31,14 +31,14 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                <Typeahead noSearch noClear
-                    :values= "ddlReceivedByTablet" 
+                <Typeahead control-id="recieved-by-tablet" noSearch noClear
+                    :values= "ddlReceivedByTablet"
                     :value="receivedByTablet"
                     v-on:selected="receivedByTabletSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                <Typeahead  noSearch noClear
+                <Typeahead control-id="show_archived" noSearch noClear
                     :values= "ddlShowArchive" 
                     :value="showArchive"
                     v-on:selected="showArchiveSelected"/>
@@ -89,8 +89,8 @@
                 <div class="form-group">
                     <label class="control-label"
                            for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
-                    <Typeahead :placeholder="$t('Common.Responsible')"
-                               control-id="newResponsibleId"
+                    <Typeahead control-id="newResponsibleId"
+                               :placeholder="$t('Common.Responsible')"
                                :value="newResponsibleId"
                                :ajax-params="{ }"
                                @selected="newResponsibleSelected"
