@@ -1,74 +1,113 @@
 <template>
-    <HqLayout :hasFilter="true" :hasHeader="false">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    control-id="questionnaireId"
-                    :value="selectedQuestionnaireId"
-                    :values="questionnaires"
-                    :keyFunc="item => item.key + item.value"
-                    v-on:selected="selectQuestionnaire"/>
-            </FilterBlock>
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    :placeholder="$t('Common.AllVersions')"
-                    control-id="questionnaireVersion"
-                    :value="selectedVersion"
-                    :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
-                    v-on:selected="selectQuestionnaireVersion"
-                    :disabled="selectedQuestionnaireId == null"/>
+  <HqLayout :hasFilter="true" :hasHeader="false">
+    <Filters slot="filters">
+      <FilterBlock :title="$t('Common.Questionnaire')">
+        <Typeahead
+          :placeholder="$t('Common.AllQuestionnaires')"
+          control-id="questionnaireId"
+          :value="selectedQuestionnaireId"
+          :values="questionnaires"
+          :keyFunc="item => item.key + item.value"
+          v-on:selected="selectQuestionnaire"
+        />
       </FilterBlock>
-            <FilterBlock :title="$t('Reports.Variables')">
-                <Typeahead :placeholder="$t('Common.AllGpsQuestions')" noSearch
-                    :values="gpsQuestions" :value="selectedQuestion"
-                    @selected="selectGpsQuestion"/>
-            </FilterBlock>
-            <FilterBlock>
-                <div class="center-block">
-                  <Checkbox :label="$t('Reports.HeatMapView')" name="pivot"
-                    :value="showHeatmap" @input="toggleHeatMap" />
-                </div>
-             </FilterBlock>
-             <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
-                <input type="range" min="1" max="200" value="50" class="slider" id="myRange" v-model="heatMapOptions.radius" @change="updateHeatMap" />
-             </FilterBlock>
-             <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
-                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar" 
-                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%" ></div>
-                </div>
-             </FilterBlock>
-            <div class="preset-filters-container">
-                <div class="center-block" style="margin-left: 0">
-                    <button class="btn btn-default btn-lg" 
-                        id="reloadMarkersInBounds" 
-                        v-if="readyToUpdate" 
-                        @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
-                </div>
-            </div>
-             
-        </Filters>
-        <div style="display:none;">
-            <div ref="tooltip">
-                <div class="row-fluid">
-                    <strong>{{$t("Common.InterviewKey")}}:</strong>&nbsp;{{selectedTooltip.InterviewKey}}</div>
-                <div class="row-fluid">
-                    <strong>{{$t("Common.Responsible")}}:</strong>&nbsp;{{selectedTooltip.InterviewerName}}</div>
-                <div class="row-fluid">
-                    <strong>{{$t("Users.Supervisor")}}:</strong>&nbsp;{{selectedTooltip.SupervisorName}}</div>
-                <div class="row-fluid">
-                    <strong>{{$t("Common.Status")}}:</strong>&nbsp;{{selectedTooltip.LastStatus}}</div>
-                <div class="row-fluid">
-                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
-                <div class="row-fluid" style="white-space:nowrap;">
-                    <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
-                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.InterviewId)" target="_blank">{{$t("MapReport.details")}}</a>
-                </div>
-            </div>
+      <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+        <Typeahead
+          :placeholder="$t('Common.AllVersions')"
+          control-id="questionnaireVersion"
+          :value="selectedVersion"
+          :values="selectedQuestionnaireId == null ? null : selectedQuestionnaireId.versions"
+          v-on:selected="selectQuestionnaireVersion"
+          :disabled="selectedQuestionnaireId == null"
+        />
+      </FilterBlock>
+      <FilterBlock :title="$t('Reports.Variables')">
+        <Typeahead
+          :placeholder="$t('Common.AllGpsQuestions')"
+          noSearch
+          :values="gpsQuestions"
+          :value="selectedQuestion"
+          @selected="selectGpsQuestion"
+        />
+      </FilterBlock>
+      <FilterBlock>
+        <div class="center-block">
+          <Checkbox
+            :label="$t('Reports.HeatMapView')"
+            name="pivot"
+            :value="showHeatmap"
+            @input="toggleHeatMap"
+          />
         </div>
-        <div id="map-canvas"></div>
-    </HqLayout>
+      </FilterBlock>
+      <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
+        <input
+          type="range"
+          min="1"
+          max="200"
+          value="50"
+          class="slider"
+          id="myRange"
+          v-model="heatMapOptions.radius"
+          @change="updateHeatMap"
+        >
+      </FilterBlock>
+      <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped active"
+            role="progressbar"
+            aria-valuenow="100"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style="width: 100%"
+          ></div>
+        </div>
+      </FilterBlock>
+      <div class="preset-filters-container">
+        <div class="center-block" style="margin-left: 0">
+          <button
+            class="btn btn-default btn-lg"
+            id="reloadMarkersInBounds"
+            v-if="readyToUpdate"
+            @click="reloadMarkersInBounds"
+          >{{$t("MapReport.ReloadMarkers")}}</button>
+        </div>
+      </div>
+    </Filters>
+    <div style="display:none;">
+      <div ref="tooltip">
+        <div class="row-fluid">
+          <strong>{{$t("Common.InterviewKey")}}:</strong>
+          &nbsp;{{selectedTooltip.InterviewKey}}
+        </div>
+        <div class="row-fluid">
+          <strong>{{$t("Common.Responsible")}}:</strong>
+          &nbsp;{{selectedTooltip.InterviewerName}}
+        </div>
+        <div class="row-fluid">
+          <strong>{{$t("Users.Supervisor")}}:</strong>
+          &nbsp;{{selectedTooltip.SupervisorName}}
+        </div>
+        <div class="row-fluid">
+          <strong>{{$t("Common.Status")}}:</strong>
+          &nbsp;{{selectedTooltip.LastStatus}}
+        </div>
+        <div class="row-fluid">
+          <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>
+          &nbsp;{{selectedTooltip.LastUpdatedDate}}
+        </div>
+        <div class="row-fluid" style="white-space:nowrap;">
+          <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
+          <a
+            v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.InterviewId)"
+            target="_blank"
+          >{{$t("MapReport.details")}}</a>
+        </div>
+      </div>
+    </div>
+    <div id="map-canvas"></div>
+  </HqLayout>
 </template>
 <style>
 .progress {
@@ -90,10 +129,18 @@
 }
 
 @keyframes dotdotdot {
-    0%  { content: "..."; }
-    25% { content: ""; }
-    50% { content: "."; }
-    75% { content: ".."; }
+    0% {
+        content: "...";
+    }
+    25% {
+        content: "";
+    }
+    50% {
+        content: ".";
+    }
+    75% {
+        content: "..";
+    }
 }
 </style>
 <script>
@@ -122,7 +169,7 @@ const mapStyles = [
         url: "../Content/img/google-maps-markers/m5.png",
         dark: true
     }
-]
+];
 
 export default {
     mixins: [routeSync],
@@ -134,7 +181,7 @@ export default {
             selectedTooltip: {},
             readyToUpdate: false,
 
-            // Mark map data as loaded. 
+            // Mark map data as loaded.
             // required to be true initially, as Google Maps will call bounds_change upon initial load
             isMapReloaded: true,
             map: null,
@@ -185,20 +232,20 @@ export default {
         },
 
         questionnaires() {
-            return this.model.questionnaires
+            return this.model.questionnaires;
         },
 
         questionnaireVersions() {
-            if(this.selectedQuestionnaireId == null) return []
+            if (this.selectedQuestionnaireId == null) return [];
             return this.selectedQuestionnaireId.versions;
         },
-        
+
         selectedVersionValue() {
-            return this.selectedVersion == null ? null : this.selectedVersion.key
+            return this.selectedVersion == null ? null : this.selectedVersion.key;
         },
 
         api() {
-            return this.$hq.Report.MapReport
+            return this.$hq.Report.MapReport;
         },
 
         queryString() {
@@ -206,7 +253,7 @@ export default {
                 name: this.query.name,
                 version: this.query.version,
                 question: this.query.question
-            }
+            };
         },
 
         selectedQuestionnaireId() {
@@ -228,8 +275,8 @@ export default {
         },
 
         selectedQuestion() {
-            if(this.query.question == null || this.gpsQuestions == null) return null;
-            return _.find(this.gpsQuestions, {key: this.query.question})
+            if (this.query.question == null || this.gpsQuestions == null) return null;
+            return _.find(this.gpsQuestions, { key: this.query.question });
         }
     },
 
@@ -237,10 +284,10 @@ export default {
         this.setMapCanvasStyle();
         this.initializeMap();
 
-        if(this.selectedQuestionnaireId == null && this.questionnaires.length > 0){
-          this.selectQuestionnaire(this.questionnaires[0]);
-        } else if(this.selectedQuestionnaireId != null){
-          this.selectQuestionnaire(this.selectedQuestionnaireId)
+        if (this.selectedQuestionnaireId == null && this.questionnaires.length > 0) {
+            this.selectQuestionnaire(this.questionnaires[0]);
+        } else if (this.selectedQuestionnaireId != null) {
+            this.selectQuestionnaire(this.selectedQuestionnaireId);
         }
     },
 
@@ -249,10 +296,7 @@ export default {
             $("body").addClass("map-report");
             var windowHeight = $(window).height();
             var navigationHeight = $(".navbar.navbar-fixed-top").height();
-            $("#map-canvas").css(
-                "min-height",
-                windowHeight - navigationHeight + "px"
-            );
+            $("#map-canvas").css("min-height", windowHeight - navigationHeight + "px");
         },
 
         updateHeatMap() {
@@ -268,9 +312,9 @@ export default {
             this.reloadMarkersInBounds();
         },
 
-         selectQuestionnaireVersion(value) {
-            this.questionnaireVersion = value
-            this.onChange(s => s.version = value == null ? null : value.key)
+        selectQuestionnaireVersion(value) {
+            this.questionnaireVersion = value;
+            this.onChange(s => (s.version = value == null ? null : value.key));
             this.selectGpsQuestion(null);
             this.gpsQuestions = [];
 
@@ -278,10 +322,11 @@ export default {
 
             this.api.GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue).then(response => {
                 this.gpsQuestions = _.chain(response.data)
-                    .filter(d => d != null && d != '')
+                    .filter(d => d != null && d != "")
                     .map(d => {
-                        return { key: d, value: d }
-                    }).value();
+                        return { key: d, value: d };
+                    })
+                    .value();
 
                 if (this.gpsQuestions.length > 0) {
                     if (this.gpsQuestions.length === 1) {
@@ -290,7 +335,7 @@ export default {
                 } else {
                     toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
                 }
-            })
+            });
         },
 
         selectQuestionnaire(value) {
@@ -306,7 +351,7 @@ export default {
 
         selectGpsQuestion(value) {
             this.gpsQuestionId = value;
-            this.onChange(s => s.question = value == null ? null : value.key);
+            this.onChange(s => (s.question = value == null ? null : value.key));
         },
 
         getMapOptions() {
@@ -335,10 +380,7 @@ export default {
         initializeMap() {
             const self = this;
 
-            this.map = new google.maps.Map(
-                document.getElementById("map-canvas"),
-                this.getMapOptions()
-            );
+            this.map = new google.maps.Map(document.getElementById("map-canvas"), this.getMapOptions());
 
             this.heatmap = new google.maps.visualization.HeatmapLayer({
                 map: this.map
@@ -346,24 +388,26 @@ export default {
 
             this.infoWindow = new google.maps.InfoWindow();
 
-            const delayedMapReload = _.debounce(
-                () =>{
-                    if(this.selectedQuestion == null) return;
+            const delayedMapReload = _.debounce(() => {
+                if (this.selectedQuestion == null) return;
 
-                    // this is required to separate bounds/zoom change by user or because of map data reload
-                    // i.e. we don't want to load map data twice
-                    if(this.isMapReloaded == true) {
-                        this.isMapReloaded = false; return;
-                    }
+                // this is required to separate bounds/zoom change by user or because of map data reload
+                // i.e. we don't want to load map data twice
+                if (this.isMapReloaded == true) {
+                    this.isMapReloaded = false;
+                    return;
+                }
 
-                    this.reloadMarkersInBounds()
-                }, 100
-            )
-            
-            let mapInitialized = false
+                this.reloadMarkersInBounds();
+            }, 100);
+
+            let mapInitialized = false;
             this.map.addListener("zoom_changed", () => delayedMapReload());
             this.map.addListener("bounds_changed", () => {
-                if(!mapInitialized) { mapInitialized = true; return; }
+                if (!mapInitialized) {
+                    mapInitialized = true;
+                    return;
+                }
                 delayedMapReload();
             });
 
@@ -375,10 +419,7 @@ export default {
                     const max = self.totalAnswers;
                     const percent = (count / max) * styles.length;
 
-                    const index = Math.min(
-                        styles.length - 1,
-                        Math.round(percent)
-                    );
+                    const index = Math.min(styles.length - 1, Math.round(percent));
 
                     const style = styles[index];
 
@@ -386,10 +427,7 @@ export default {
                     const extend = 20;
                     const radius = 60 + index * extend * ratio;
                     style.scaledSize = new google.maps.Size(radius, radius);
-                    style.anchor = new google.maps.Point(
-                        radius / 2,
-                        radius / 2
-                    );
+                    style.anchor = new google.maps.Point(radius / 2, radius / 2);
 
                     return {
                         label: {
@@ -411,7 +449,7 @@ export default {
                 } else {
                     const interviewId = event.feature.getProperty("interviewId");
 
-                    const response = await this.api.InteriewSummaryUrl(interviewId)
+                    const response = await this.api.InteriewSummaryUrl(interviewId);
                     const data = response.data;
 
                     if (data == undefined || data == null) return;
@@ -421,9 +459,7 @@ export default {
                     self.selectedTooltip = data;
 
                     Vue.nextTick(function() {
-                        self.infoWindow.setContent(
-                            $(self.$refs.tooltip).html()
-                        );
+                        self.infoWindow.setContent($(self.$refs.tooltip).html());
                         self.infoWindow.setPosition(event.latLng);
                         self.infoWindow.setOptions({
                             pixelOffset: new google.maps.Size(0, -30)
@@ -433,22 +469,14 @@ export default {
                 }
             });
 
-            var washingtonCoordinates = new google.maps.LatLng(
-                38.895111,
-                -77.036667
-            );
+            var washingtonCoordinates = new google.maps.LatLng(38.895111, -77.036667);
 
             if (!("geolocation" in navigator)) {
                 this.map.setCenter(washingtonCoordinates);
             } else {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        self.map.setCenter(
-                            new google.maps.LatLng(
-                                position.coords.latitude,
-                                position.coords.longitude
-                            )
-                        );
+                        self.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
                     },
                     () => {
                         self.map.setCenter(washingtonCoordinates);
@@ -476,8 +504,7 @@ export default {
         async showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom();
 
-            if (this.selectedQuestionnaireId == null || this.selectedQuestion == null)
-                return;
+            if (this.selectedQuestionnaireId == null || this.selectedQuestion == null) return;
 
             var request = {
                 Variable: this.selectedQuestion.key,
@@ -499,8 +526,8 @@ export default {
                 if (stillLoading == true) this.isLoading = true;
             }, 5000);
 
-            const response = await this.api.Report(request)
-                
+            const response = await this.api.Report(request);
+
             const toRemove = {};
             stillLoading = false;
             this.isLoading = false;
@@ -529,10 +556,7 @@ export default {
                 const count = feature.properties.count || 1;
 
                 heatmapData.data.push({
-                    location: new google.maps.LatLng(
-                        coords[1],
-                        coords[0]
-                    ),
+                    location: new google.maps.LatLng(coords[1], coords[0]),
                     weight: count
                 });
             });
@@ -558,18 +582,9 @@ export default {
                 } else {
                     const bounds = response.data.InitialBounds;
 
-                    const sw = new google.maps.LatLng(
-                        bounds.South,
-                        bounds.West
-                    );
-                    const ne = new google.maps.LatLng(
-                        bounds.North,
-                        bounds.East
-                    );
-                    const latlngBounds = new google.maps.LatLngBounds(
-                        sw,
-                        ne
-                    );
+                    const sw = new google.maps.LatLng(bounds.South, bounds.West);
+                    const ne = new google.maps.LatLng(bounds.North, bounds.East);
+                    const latlngBounds = new google.maps.LatLngBounds(sw, ne);
                     this.isMapReloaded = true;
                     self.map.fitBounds(latlngBounds);
                 }
