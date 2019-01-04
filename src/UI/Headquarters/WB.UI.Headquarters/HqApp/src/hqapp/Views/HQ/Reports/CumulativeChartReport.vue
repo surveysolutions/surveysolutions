@@ -41,7 +41,6 @@
     <LineChart
       id="interviewChart"
       :chartData="state.chartData"
-      :options="chartOptions"
       v-if="state.hasData"
     ></LineChart>
   </HqLayout>
@@ -60,50 +59,7 @@ export default {
     data() {
         return {
             isLoading: false,
-            startDate: null,
-
-            chartOptions: {
-                elements: {
-                    point: { radius: 0 },
-                    line: { fill: true }
-                },
-                responsive: true,
-                maintainAspectRatio: false,
-                tooltips: {
-                    mode: "x",
-                    intersect: false
-                },
-                hover: {
-                    mode: "index",
-                    intersect: false
-                },
-                scales: {
-                    xAxes: [
-                        {
-                            type: "time",
-                            gridLines: {
-                                display: true,
-                                tickMarkLength: 10
-                            }
-                        }
-                    ],
-                    yAxes: [
-                        {
-                            type: "linear",
-                            stacked: true,
-                            ticks: {
-                                beginAtZero: true,
-                                userCallback: function(label, index, labels) {
-                                // when the floored value is the same as the value we have a whole number
-                                    if (Math.floor(label) === label) {
-                                    return label;
-                                    }
-                            },
-                        }
-                        }
-                     ]
-                }
-            }
+            startDate: null
         };
     },
 
@@ -171,8 +127,17 @@ export default {
     },
 
     watch: {
-        queryString() {
+        queryString(to, from) {
+            if(from.to == null && to.to != null) return
+            if(from.from == null && to.from != null) return
             this.refreshData();
+        },
+
+        ["state.chartData"]({from , to}) {
+              this.onChange(q => {
+                 q.from = from;
+                 q.to= to;
+             });
         }
     },
 
@@ -182,12 +147,16 @@ export default {
 
             this.onChange(q => {
                 q.name = val == null ? null : val.value;
+                q.from = null;
+                q.to = null;
             });
         },
 
         selectQuestionnaireVersion(val) {
             this.onChange(q => {
                 q.version = val == null ? null : val.key;
+                q.from = null;
+                q.to = null;
             });
         },
 
@@ -203,7 +172,7 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("queryChartData", this.queryString);
+        this.refreshData();
     }
 };
 </script>
