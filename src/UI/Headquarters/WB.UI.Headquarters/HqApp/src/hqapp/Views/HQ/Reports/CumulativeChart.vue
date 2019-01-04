@@ -2,20 +2,71 @@
 import { Line } from "vue-chartjs";
 import Vue from "vue";
 
+const chartOptions = {
+    chartId: "interviewChart",
+    elements: {
+        point: { radius: 0 },
+        line: { fill: true }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+        mode: "x",
+        intersect: false
+    },
+    hover: {
+        mode: "index",
+        intersect: false
+    },
+    scales: {
+        xAxes: [
+            {
+                type: "time",
+                gridLines: {
+                    display: true,
+                    tickMarkLength: 10
+                }
+            }
+        ],
+        yAxes: [
+            {
+                type: "linear",
+                stacked: true,
+                ticks: {
+                    beginAtZero: true,
+                    userCallback: function(label, index, labels) {
+                        // when the floored value is the same as the value we have a whole number
+                        if (Math.floor(label) === label) {
+                            return label;
+                        }
+                    }
+                }
+            }
+        ]
+    }
+};
+
 export default {
     extends: Line,
     props: {
-        options: { required: true },
-        chartData: { required: true }
+        options: { required: false },
+        chartData: { required: true },
+        height: 600
     },
 
     mounted() {
-        this.renderChart(this.chartData, this.options);
+        this.render();
+    },
+
+    methods: {
+        render() {
+            this.renderChart(this.chartData, _.assign(chartOptions, this.options));
+        }
     },
 
     watch: {
         chartData() {
-            this.renderChart(this.chartData, this.options);
+            this.render();
         }
     }
 };
