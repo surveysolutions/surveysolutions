@@ -2,9 +2,8 @@
   <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')">
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead  control-id="questionnaireId"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="selectedQuestionnaire"
           :values="model.templates"
           :keyFunc="item => item.key + item.value"
@@ -13,9 +12,8 @@
       </FilterBlock>
 
       <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="selectedVersion"
           :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
           v-on:selected="selectQuestionnaireVersion"
