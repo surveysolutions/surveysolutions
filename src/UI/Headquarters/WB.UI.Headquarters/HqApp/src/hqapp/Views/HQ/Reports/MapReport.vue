@@ -315,27 +315,7 @@ export default {
         selectQuestionnaireVersion(value) {
             this.questionnaireVersion = value;
             this.onChange(s => (s.version = value == null ? null : value.key));
-            this.selectGpsQuestion(null);
-            this.gpsQuestions = [];
-
-            if (_.isNull(value)) return;
-
-            this.api.GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue).then(response => {
-                this.gpsQuestions = _.chain(response.data)
-                    .filter(d => d != null && d != "")
-                    .map(d => {
-                        return { key: d, value: d };
-                    })
-                    .value();
-
-                if (this.gpsQuestions.length > 0) {
-                    if (this.gpsQuestions.length === 1) {
-                        this.selectGpsQuestion(this.gpsQuestions[0]);
-                    }
-                } else {
-                    toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
-                }
-            });
+            this.loadQuestions()
         },
 
         selectQuestionnaire(value) {
@@ -347,6 +327,32 @@ export default {
             this.onChange(q => {
                 q.name = value == null ? null : value.value;
             });
+
+            if (_.isNull(value)) return;
+            this.loadQuestions().then(() => this.onChange(s => (s.name = value.value)));
+        },
+
+        loadQuestions() {
+            if(this.questionnaireId == null) return;
+
+            return this.api
+                .GpsQuestionsByQuestionnaire(this.questionnaireId.key, this.selectedVersionValue)
+                .then(response => {
+                    this.gpsQuestions = _.chain(response.data)
+                        .filter(d => d != null && d != "")
+                        .map(d => {
+                            return { key: d, value: d };
+                        })
+                        .value();
+
+                    if (this.gpsQuestions.length > 0) {
+                        if (this.gpsQuestions.length === 1) {
+                            this.selectGpsQuestion(this.gpsQuestions[0]);
+                        }
+                    } else {
+                        toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
+                    }
+                });
         },
 
         selectGpsQuestion(value) {
