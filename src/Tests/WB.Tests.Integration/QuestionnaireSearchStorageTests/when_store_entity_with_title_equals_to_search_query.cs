@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
                 questionnaireListViewItemRepository.Store(CreateQuestionnaireListViewItem(questionnaireId, questionnaireTitle), questionnaireId.FormatGuid());
 
                 var searchStorage = sl.GetInstance<IQuestionnaireSearchStorage>();
-                searchStorage.AddOrUpdateEntity(questionnaireId, new TextQuestion("question text") { PublicKey = questionId });
+                searchStorage.AddOrUpdateEntity(questionnaireId, Abc.Create.Entity.TextQuestion(questionId, text: "question text"));
             });
 
             RunActionInScope(sl =>
@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
 
                 Assert.That(searchResult.Items.Count, Is.EqualTo(1));
                 Assert.That(searchResult.Items.Single().EntityId, Is.EqualTo(questionId));
-                Assert.That(searchResult.Items.Single().EntityType, Is.EqualTo("Question"));
+                Assert.That(searchResult.Items.Single().EntityType, Is.EqualTo(QuestionType.Text.ToString()));
                 Assert.That(searchResult.Items.Single().QuestionnaireId, Is.EqualTo(questionnaireId));
                 Assert.That(searchResult.Items.Single().QuestionnaireTitle, Is.EqualTo(questionnaireTitle));
             });
