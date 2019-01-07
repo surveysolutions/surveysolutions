@@ -127,7 +127,7 @@ export default {
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
-                    onDone(response.data.id, response.data.title, response.data.version);
+                    onDone(questionnaireId, response.data.title, response.data.version);
                 }
 
             } else onDone();
