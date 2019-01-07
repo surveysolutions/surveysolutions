@@ -85,20 +85,8 @@
                 }
             };
 
-            $scope.getItemUiType =  function(searchResult) {
-                switch (searchResult.itemType) {
-                    case 'Group': return $i18next.t("group");
-                    case 'Roster': return $i18next.t("roster");
-                    case 'StaticText': return $i18next.t('StaticText'); 
-                    case 'Chapter':  return $i18next.t('group');
-                    case 'Variable': return $i18next.t('variable');
-                    default :return $i18next.t('question');
-                }
-            };
-
             $scope.getLink=  function(searchResult) {
-                var urlItemType = $scope.getType(searchResult);
-                return '../../questionnaire/details/'+searchResult.questionnaireId +'/nosection/' + urlItemType + '/' + searchResult.itemId;
+                return '../../questionnaire/details/'+searchResult.questionnaireId +'/nosection/' + searchResult.type + '/' + searchResult.itemId;
             };
 
             $scope.pasteEntity = function(searchResult) {
