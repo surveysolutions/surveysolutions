@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonMark;
+using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -46,11 +48,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Error<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
+            Warning<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(PlainModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
             Error<IGroup>(PlainModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
+            Error<IGroup>(LinksAreProhibitedOnNavigationElements, "WB0057", VerificationMessages.WB0057_LinksAreProhibitedOnNavigationElements),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
@@ -75,6 +78,31 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.TextList,
             QuestionType.QRBarcode
         };
+
+        private static bool LinksAreProhibitedOnNavigationElements(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var links = GetMarkdownLinksFromText(group.Title).ToList();
+            return links.Any();
+        }
+
+        private static IEnumerable<string> GetMarkdownLinksFromText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) yield break;
+
+            var markdownDocument = CommonMarkConverter.Parse(text);
+
+            foreach (var node in markdownDocument.AsEnumerable())
+            {
+                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
+
+                var url = node.Inline.TargetUrl.ToLower();
+
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    yield return url;
+                }
+            }
+        }
 
         private static bool RosterInRosterWithSameSourceQuestion(IGroup group)
         {
@@ -360,7 +388,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool LongListRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return questionnaire.Questionnaire.IsRosterByQuestion(@group) && IsLongRosterHasNestedRosters(group, questionnaire, (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as TextListQuestion)?.MaxAnswerCount);
+            return questionnaire.Questionnaire.IsRosterByQuestion(@group) 
+                   && IsLongRosterHasNestedRosters(group, questionnaire, 
+                       (g, q) => (questionnaire.Questionnaire.GetRosterSizeQuestion(g) as TextListQuestion)?.MaxAnswerCount);
         }
 
         private static bool LongFixedRosterCannotHaveNestedRosters(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)

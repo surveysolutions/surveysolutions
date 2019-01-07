@@ -1,13 +1,12 @@
 <template>
-  <HqLayout :title="$t('Reports.TeamsAndStatuses')" :hasFilter="true">
+  <HqLayout :title="$config.model.reportName" :hasFilter="true">
     <Filters slot="filters">
       <FilterBlock
         :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead control-id="questionnaireId"
           data-vv-name="questionnaireId"
           data-vv-as="questionnaire"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="questionnaireId"
           v-on:selected="questionnaireSelected"
           :fetch-url="$config.model.questionnairesUrl"
@@ -16,11 +15,10 @@
 
       <FilterBlock
         :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
           data-vv-name="questionnaireVersion"
           data-vv-as="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="questionnaireVersion"
           v-on:selected="questionnaireVersionSelected"
           :fetch-url="questionnaireVersionFetchUrl"
@@ -46,7 +44,7 @@ export default {
         const self = this
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            if (questionnaireId != undefined) {
+            if (questionnaireId) {
                 self.questionnaireId = {
                     key: questionnaireId,
                     value: questionnaireTitle
@@ -123,7 +121,7 @@ export default {
             const questionnaireId = this.$route.query.questionnaireId
             const version = this.$route.query.questionnaireVersion
 
-            if (questionnaireId != undefined && version != undefined) {
+            if (questionnaireId && version) {
                 requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
                              this.ajaxParams);
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })

@@ -616,6 +616,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public Identity GetParentGroup(Identity groupOrQuestion)
             => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parent?.Identity;
 
+        public Identity[] GetParentGroups(Identity groupOrQuestion)
+            => this.Tree.GetNodeByIdentity(groupOrQuestion)?.Parents?.Select(x=>x.Identity).ToArray();
+
         public IEnumerable<Identity> GetChildQuestions(Identity groupIdentity)
             => this.GetAllChildrenOrEmptyList(groupIdentity)
                 .OfType<InterviewTreeQuestion>()

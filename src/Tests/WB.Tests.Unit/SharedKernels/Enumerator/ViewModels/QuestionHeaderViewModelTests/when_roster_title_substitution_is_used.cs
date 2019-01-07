@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         }
 
         public void BecauseOf() => 
-            viewModel.Init("interview", Create.Identity(substitutionTargetQuestionId, Create.Entity.RosterVector(0)), Create.ViewModel.EnablementViewModel());
+            viewModel.Init("interview", Create.Identity(substitutionTargetQuestionId, Create.Entity.RosterVector(0)), Create.ViewModel.EnablementViewModel(),
+                Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_substitute_roster_title_value () => 
             viewModel.Title.HtmlText.Should().Be("title with Fixed Roster 1");

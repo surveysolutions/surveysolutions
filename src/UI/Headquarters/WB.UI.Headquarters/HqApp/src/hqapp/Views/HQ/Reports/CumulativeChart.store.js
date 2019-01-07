@@ -1,7 +1,4 @@
 import Vue from "vue";
-import Vuex from "vuex";
-
-Vue.use(Vuex);
 
 const dataSetInfo = [
     {status: 100, label: Vue.$t('Strings.InterviewStatus_Completed'), backgroundColor: "#86B828" },
@@ -23,11 +20,9 @@ export default {
             const response = await Vue.$hq.Report.Chart(queryString);
             dispatch('hideProgress')
 
-            let dataSets = response.data.DataSets;
-
             const datasets = [];
 
-            _.forEach(dataSets, set => {
+            _.forEach(response.data.DataSets, set => {
                 const infoIndex = _.findIndex(dataSetInfo, {status: set.Status})
                 const info = dataSetInfo[infoIndex]
 
@@ -40,9 +35,7 @@ export default {
                 );
             });
 
-            dataSets = _.sortBy(dataSets, 'index')
-
-            commit("SET_CHART_DATA", { datasets });
+            commit("SET_CHART_DATA", { datasets: _.sortBy(datasets, 'index') });
         }
     },
 

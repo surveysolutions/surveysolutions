@@ -10,6 +10,7 @@
                            Tag Format('Show_Instruction_{0}', Identity)"/>
   <TextView
       style="@style/Interview_Question_Instruction_Details"
-      local:MvxBind="Html Instruction.HtmlText; Visible Not(IsInstructionsHidden);
+      local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Instruction.HtmlText, .);
+                     Visible Not(IsInstructionsHidden);
                      Tag Format('Instruction_{0}', Identity)" />
 </LinearLayout>

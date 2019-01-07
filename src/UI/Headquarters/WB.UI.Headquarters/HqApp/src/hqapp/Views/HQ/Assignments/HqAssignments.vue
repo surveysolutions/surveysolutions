@@ -4,30 +4,26 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead data-vv-name="questionnaireId"
-                           data-vv-as="questionnaire"
+                <Typeahead control-id="questionnaireId"
                            :placeholder="$t('Common.AllQuestionnaires')"
-                           control-id="questionnaireId"
-                           :ajax-params="questionnaireParams"
                            :value="questionnaireId"
-                           v-on:selected="questionnaireSelected"
-                           :fetch-url="config.api.questionnaire" />
+                           :values="config.questionnaires"
+                           :keyFunc="item => item.key + item.value"
+                           v-on:selected="questionnaireSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead data-vv-name="questionnaireVersion"
-                           data-vv-as="questionnaireVersion"
+                <Typeahead control-id="questionnaireVersion"
                            :placeholder="$t('Common.AllVersions')"
-                           control-id="questionnaireVersion"
-                           :ajax-params="questionnaireParams"
+                           :values="questionnaireId == null ? null : questionnaireId.versions"
                            :value="questionnaireVersion"
-                           v-on:selected="questionnaireVersionSelected"
-                           :fetch-url="questionnaireVersionFetchUrl" :disabled="questionnaireVersionFetchUrl == null" />
+                           :disabled="questionnaireId == null"
+                           v-on:selected="questionnaireVersionSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
-                <Typeahead :placeholder="$t('Common.AllResponsible')"
-                           control-id="responsibleId"
+                <Typeahead control-id="responsibleId"
+                           :placeholder="$t('Common.AllResponsible')"
                            :value="responsibleId"
                            :ajax-params="responsibleParams"
                            v-on:selected="userSelected"
@@ -35,20 +31,17 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                  <select class="ddl-receivedByTablet"
-                        v-model="receivedByTablet">
-                    <option v-bind:value="'All'" selected="selected">{{ $t("Assignments.ReceivedByTablet_All") }}</option>
-                    <option v-bind:value="'Received'">{{ $t("Assignments.ReceivedByTablet_Received") }}</option>
-                    <option v-bind:value="'NotReceived'">{{ $t("Assignments.ReceivedByTablet_NotReceived") }}</option>
-                </select>
+                <Typeahead control-id="recieved-by-tablet" noSearch noClear
+                    :values= "ddlReceivedByTablet"
+                    :value="receivedByTablet"
+                    v-on:selected="receivedByTabletSelected"/>
             </FilterBlock>
 
             <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                <select class="ddl"
-                        v-model="showArchive">
-                    <option v-bind:value="false">{{ $t("Assignments.Active") }}</option>
-                    <option v-bind:value="true">{{ $t("Assignments.Archived") }}</option>
-                </select>
+                <Typeahead control-id="show_archived" noSearch noClear
+                    :values= "ddlShowArchive" 
+                    :value="showArchive"
+                    v-on:selected="showArchiveSelected"/>
             </FilterBlock>
         </Filters>
 
@@ -75,15 +68,15 @@
                     </label>
 
                     <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
-                            v-if="showArchive && config.isHeadquarter"
+                            v-if="showArchive.key && config.isHeadquarter"
                             @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnAssignSelected"
-                            v-if="!showArchive"
+                            v-if="!showArchive.key"
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
-                            v-if="!showArchive && config.isHeadquarter"
+                            v-if="!showArchive.key && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
                 </div>
             </div>
@@ -96,8 +89,8 @@
                 <div class="form-group">
                     <label class="control-label"
                            for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
-                    <Typeahead :placeholder="$t('Common.Responsible')"
-                               control-id="newResponsibleId"
+                    <Typeahead control-id="newResponsibleId"
+                               :placeholder="$t('Common.Responsible')"
                                :value="newResponsibleId"
                                :ajax-params="{ }"
                                @selected="newResponsibleSelected"
@@ -169,8 +162,8 @@ export default {
             isLoading: false,
             selectedRows: [],
             totalRows: 0,
-            showArchive: false,
-            receivedByTablet: 'All',
+            showArchive: null,
+            receivedByTablet: null,
             newResponsibleId: null,
             editedRowId: null,
             editedQuantity: null
@@ -178,6 +171,16 @@ export default {
     },
 
     computed: {
+        ddlReceivedByTablet(){
+            return [{ key: "All", value: this.$t('Assignments.ReceivedByTablet_All')},
+                    { key: "Received", value: this.$t('Assignments.ReceivedByTablet_Received')},
+                    { key: "NotReceived", value: this.$t('Assignments.ReceivedByTablet_NotReceived')}];   
+        },
+        ddlShowArchive(){ 
+            return [{ key: false, value: this.$t("Assignments.Active") },
+                    { key: true, value: this.$t("Assignments.Archived") }];
+        },
+
         title() {
             return this.$t("Assignments.AssignmentsHeader") + " (" + this.formatNumber(this.totalRows) + ")";
         },
@@ -335,11 +338,11 @@ export default {
             requestData.responsibleId = (this.responsibleId || {}).key;
             requestData.questionnaireId = (this.questionnaireId || {}).key;
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key;
-            requestData.showArchive = this.showArchive;
+            requestData.showArchive = (this.showArchive|| {}).key;
             requestData.dateStart = this.dateStart;
             requestData.dateEnd = this.dateEnd;
             requestData.userRole = this.userRole;
-            requestData.receivedByTablet = this.receivedByTablet;
+            requestData.receivedByTablet = (this.receivedByTablet || {}).key;
             requestData.teamId = this.teamId;
         },
 
@@ -359,6 +362,16 @@ export default {
             this.newResponsibleId = newValue;
         },
 
+        receivedByTabletSelected(newValue)
+        {
+            this.receivedByTablet = newValue;
+        },
+        
+        showArchiveSelected(newValue)
+        {
+            this.showArchive = newValue;
+        },
+
         startWatchers(props, watcher) {
             var iterator = (prop) => this.$watch(prop, watcher);
 
@@ -374,7 +387,7 @@ export default {
         },
 
         addParamsToQueryString() {
-            var queryString = { showArchive: this.showArchive };
+            var queryString = { showArchive: this.showArchive.key };
 
             if (this.questionnaireId != null) {
                 queryString.QuestionnaireId = this.questionnaireId.value;
@@ -392,8 +405,8 @@ export default {
                 queryString.dateEnd = this.dateEnd;
             if (this.userRole)
                 queryString.userRole = this.userRole;
-            if (this.receivedByTablet)
-                queryString.receivedByTablet = this.receivedByTablet;
+            if (this.receivedByTablet != null)
+                queryString.receivedByTablet = this.receivedByTablet.key;
             if (this.teamId)
                 queryString.teamId = this.teamId;
 
@@ -436,7 +449,7 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive) {
+            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
                 this.$refs.editQuantityModal.modal('show')
@@ -533,15 +546,18 @@ export default {
         $("main").removeClass("hold-transition");
         $("footer").addClass("footer-adaptive");
 
-        this.showArchive = this.$route.query.showArchive != undefined &&
-            this.$route.query.showArchive === "true";
+        if(this.$route.query.showArchive != undefined && this.$route.query.showArchive === "true")
+            this.showArchiveSelected(this.ddlShowArchive[1]);
+        else
+            this.showArchiveSelected(this.ddlShowArchive[0]);
 
         this.dateStart = this.$route.query.dateStart;
         this.dateEnd = this.$route.query.dateEnd;
-        this.userRole = this.$route.query.userRole;
-        this.receivedByTablet = this.$route.query.receivedByTablet;
+        this.userRole = this.$route.query.userRole;        
         this.teamId = this.$route.query.teamId;
 
+        this.receivedByTabletSelected(this.ddlReceivedByTablet[0]);
+        
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
             if (questionnaireId != undefined) {
                 self.questionnaireId = {
@@ -559,10 +575,7 @@ export default {
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
                 self.reloadTable();
-                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));
-
-                $('.ddl').selectpicker('val', self.showArchive.toString());
-                $('.ddl-receivedByTablet').selectpicker('val', self.receivedByTablet);
+                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));                
             });
         });
     }

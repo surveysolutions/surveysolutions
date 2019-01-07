@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ObservableCollection<ErrorMessageViewModel> ValidationErrors { get; } = new ObservableCollection<ErrorMessageViewModel>();
         
-        public void ChangeValidationErrors(IEnumerable<string> errors, Identity entityIdentity)
+        public void ChangeValidationErrors(IEnumerable<string> errors, string interviewId, Identity identity, NavigationState navigationState)
         {
             this.ValidationErrors.ForEach(x => x.Dispose());
             this.ValidationErrors.Clear();
@@ -39,8 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var errorText = string.IsNullOrWhiteSpace(error)
                     ? UIResources.Error
                     : error;
+                errorViewModel.InitializeNavigation(interviewId, identity, navigationState);
 
-                errorViewModel.InitAsStatic(errorText, entityIdentity);
+                errorViewModel.InitAsStatic(errorText, identity);
                 
 
                 this.ValidationErrors.Add(errorViewModel);

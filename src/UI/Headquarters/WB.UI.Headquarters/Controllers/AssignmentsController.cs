@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,37 +26,40 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser currentUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
             IStatefulInterviewRepository interviews,
             IQuestionnaireStorage questionnaireStorage,
             IAuthorizedUser currentUser, 
-            IPlainStorageAccessor<Assignment> assignmentsStorage)
+            IPlainStorageAccessor<Assignment> assignmentsStorage, IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory)
             : base(commandService, logger)
         {
             this.interviews = interviews;
             this.questionnaireStorage = questionnaireStorage;
             this.currentUser = currentUser;
             this.assignmentsStorage = assignmentsStorage;
+            this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
         }
         
         [Localizable(false)]
         [ActivePage(MenuItem.Assignments)]
         public ActionResult Index()
         {
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+
             var model = new AssignmentsFilters 
             {
                 IsSupervisor = this.currentUser.IsSupervisor,
                 IsObserver = this.currentUser.IsObserver,
                 IsObserving = this.currentUser.IsObserving,
-                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator
+                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
+                Questionnaires = questionnaires
             };
 
             model.Api = new AssignmentsFilters.ApiEndpoints
             {
-                Questionnaire = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
-                QuestionnaireById = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
                 Responsible = model.IsSupervisor
                     ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})
                     : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
@@ -94,6 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         public ApiEndpoints Api { get; set; }
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
+        public List<QuestionnaireVersionsComboboxViewItem> Questionnaires { get; set; }
 
         public class ApiEndpoints
         {
@@ -101,11 +108,7 @@ namespace WB.UI.Headquarters.Controllers
 
             public string Profile { get; set; }
             public string Interviews { get; set; }
-            public string Questionnaire { get; set; }
-            public string QuestionnaireById { get; set; }
             public string Responsible { get; set; }
         }
     }
-
-
 }

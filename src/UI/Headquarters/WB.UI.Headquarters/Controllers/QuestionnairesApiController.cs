@@ -119,7 +119,8 @@ namespace WB.UI.Headquarters.Controllers
                     IsAdminMode = true,
                     Order = nameof(QuestionnaireBrowseItem.Version) + " DESC"
                 });
-                return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Version.ToString(), x.Version.ToString())).ToArray(), questionnaires.TotalCount);
+                return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Version.ToString(),
+                    $"ver. {x.Version}")).ToArray(), questionnaires.TotalCount);
             }
 
             var questionnaireNames = this.questionnaireBrowseViewFactory.UniqueQuestionnaireIds(query, pageSize);
