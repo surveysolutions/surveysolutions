@@ -1592,12 +1592,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .item.roster .item-text {
   color: #2075bf;
 }
-.item.roster .item-text .roster-marker {
-  text-transform: capitalize;
-  font-weight: normal;
-  font-style: italic;
-  font-family: Georgia, serif;
-}
 .item .handler {
   position: absolute;
   top: 0;
@@ -1783,4 +1777,10 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 .pointer {
   cursor: pointer;
+}
+.roster-marker {
+  text-transform: capitalize;
+  font-weight: normal;
+  font-style: italic;
+  font-family: Georgia, serif;
 }
