@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no any Geo Locations in chosen questionnaire.
+        ///   Looks up a localized string similar to There are no GPS type questions in the selected questionnaire.
         /// </summary>
         internal static string NoGpsQuestionsByQuestionnaire {
             get {

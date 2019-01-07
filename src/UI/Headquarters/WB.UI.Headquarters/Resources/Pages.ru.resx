@@ -360,6 +360,12 @@
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
   </data>
+  <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+    <value>Репорт состояния созданных и собранных интервью отображает колличество интервью в каждом из статусов по обследованиям</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+    <value>Репорт состояния созданных и собранных интервью отображает колличество интервью в каждом из статусов по обследованиям, в которых задействован супервизор</value>
+  </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} интервью</value>
   </data>
