@@ -28,6 +28,15 @@
                     });
             };
 
+            var getIconClass = function(type, entity) {
+                if (type === "question")
+                    return $rootScope.answerTypeClass[entity.itemType];
+                if (type ===  'static-text') 
+                    return "icon-statictext";
+                if (type === 'variable')
+                    return "icon-variable";
+                return null;
+            }
             var search = function($scope) {
                 $scope.$apply(function() {
                     var searchText = $scope.searchText.toLowerCase();
@@ -44,6 +53,8 @@
                             var results = response.data.entities;
                             _.forEach(results, function(entity) {
                                 entity.hasFolder = (entity.folder || null) != null;
+                                entity.type = $scope.getType(entity);
+                                entity.icon = getIconClass(entity.type, entity);
                             });
                             var half = Math.ceil(results.length / 2);
                             $scope.searchResult1 = results.slice(0, half);
@@ -53,6 +64,7 @@
                 });
             };
 
+           
             var searchThrottled = _.debounce(search, 1000);
 
             $scope.$watch('searchText', function(){searchThrottled($scope);});
@@ -62,15 +74,30 @@
                 searchThrottled($scope);
             };
 
-            $scope.getLink=  function(searchResult) {
-                var urlItemType = '';
+            $scope.getType =  function(searchResult) {
                 switch (searchResult.itemType) {
-                    case 'Question': urlItemType = 'question'; break;
-                    case 'Group': urlItemType =(searchResult.isRoster ? "roster" : "group"); break;
-                    case 'StaticText': urlItemType = 'static-text'; break;
-                    case 'Chapter':  urlItemType ='group';break;
-                    case 'Variable': urlItemType ='variable';break;
+                    case 'Group': return "group"; 
+                    case 'Roster': return "roster"; 
+                    case 'StaticText': return 'static-text'; 
+                    case 'Chapter': return 'group';
+                    case 'Variable': return 'variable';
+                    default: return 'question';
                 }
+            };
+
+            $scope.getItemUiType =  function(searchResult) {
+                switch (searchResult.itemType) {
+                    case 'Group': return $i18next.t("group");
+                    case 'Roster': return $i18next.t("roster");
+                    case 'StaticText': return $i18next.t('StaticText'); 
+                    case 'Chapter':  return $i18next.t('group');
+                    case 'Variable': return $i18next.t('variable');
+                    default :return $i18next.t('question');
+                }
+            };
+
+            $scope.getLink=  function(searchResult) {
+                var urlItemType = $scope.getType(searchResult);
                 return '../../questionnaire/details/'+searchResult.questionnaireId +'/nosection/' + urlItemType + '/' + searchResult.itemId;
             };
 
