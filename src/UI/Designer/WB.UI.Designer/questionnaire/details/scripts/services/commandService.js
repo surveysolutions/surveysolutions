@@ -30,6 +30,15 @@
                 return commandCall(type, command);
             };
 
+            commandService.replaceOptionsWithClassification = function (questionnaireId, questionId, classificationId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    questionId: questionId,
+                    classificationId: classificationId
+                };
+                return commandCall("ReplaceOptionsWithClassification", command);
+            };
+
             commandService.updateAttachment = function (questionnaireId, attachmentId, attachment) {
                 blockUI.start();
 

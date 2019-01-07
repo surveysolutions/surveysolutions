@@ -56,32 +56,42 @@
             link: linkFn
         };
     }).directive('dragAndDrop', function () {
-
-        var linkFn = function (scope, element, attrs) {
-            element.bind("mousedown", function (event) {
-                if ($(event.target).is('input')) {
-                    event.stopPropagation();
-                    return;
+            var linkFn = function(scope, element, attrs) {
+                var handler = $(element).find(".handle");
+                if (handler.length === 0) {
+                    handler = element;
+                } else {
+                    handler = handler.get(0);
                 }
 
-                var offset = $(element).offset();
-                var x = event.pageX - offset.left;
-                var y = event.pageY - offset.top;
+                $(handler).bind("mousedown",
+                    function(event) {
+                        if ($(event.target).is('input')) {
+                            event.stopPropagation();
+                            return;
+                        }
 
-                element.addClass('draggable').parents().on('mousemove', function (e) {
-                    $('.draggable').offset({
-                        top: e.pageY - y,
-                        left: e.pageX - x
-                    }).on('mouseup', function () {
+                        var offset = $(element).offset();
+                        var x = event.pageX - offset.left;
+                        var y = event.pageY - offset.top;
+
+                        element.addClass('draggable').parents()
+                            .on('mousemove', function(e) {
+                                $('.draggable').offset({
+                                    top: e.pageY - y,
+                                    left: e.pageX - x
+                                })
+                                .on('mouseup', function() {
+                                    element.removeClass('draggable');
+                                });
+                            });
+                    });
+
+                $(handler).bind("mouseup",
+                    function(event) {
                         element.removeClass('draggable');
                     });
-                });
-            });
-
-            element.bind("mouseup", function (event) {
-                element.removeClass('draggable');
-            });
-        };
+            };
 
         return {
             restrict: 'AC',

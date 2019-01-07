@@ -1170,6 +1170,38 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 : (Guid?) null;
         }
 
+        public void ReplaceOptionsWithClassification(ReplaceOptionsWithClassification command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(command.QuestionId,
+                categoricalOneAnswerQuestion.QuestionType,
+                categoricalOneAnswerQuestion.QuestionScope,
+                categoricalOneAnswerQuestion.QuestionText,
+                categoricalOneAnswerQuestion.StataExportCaption,
+                categoricalOneAnswerQuestion.VariableLabel,
+                categoricalOneAnswerQuestion.ConditionExpression,
+                categoricalOneAnswerQuestion.HideIfDisabled,
+                null,
+                categoricalOneAnswerQuestion.Featured,
+                categoricalOneAnswerQuestion.Instructions,
+                categoricalOneAnswerQuestion.Properties,
+                null,
+                ConvertOptionsToAnswers(command.Options),
+                categoricalOneAnswerQuestion.LinkedToQuestionId,
+                categoricalOneAnswerQuestion.LinkedToRosterId,
+                null, null, null, null, null,
+                true,
+                null/*categoricalOneAnswerQuestion.CascadeFromQuestionId*/,
+                null,
+                categoricalOneAnswerQuestion.ValidationConditions,
+                null,
+                false);
+
+            this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
+        }
+
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);

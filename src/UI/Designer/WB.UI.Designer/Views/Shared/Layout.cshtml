@@ -64,6 +64,7 @@
                 @Html.MenuActionLink(QuestionnaireController.MyQuestionnaires, "Index", "Questionnaire", "presentation")
                 @Html.MenuActionLink(QuestionnaireController.SharedQuestionnaires, "Shared", "Questionnaire", "presentation")
                 @Html.MenuActionLink(QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
+                @Html.MenuActionLink(QuestionnaireController.Classifications, "Index", "Classifications", "presentation")
                 @if (userHelper.WebUser.IsAdmin)
                 {
                     @Html.MenuActionLink(QuestionnaireController.QuestionnaireTreeFolders, "PublicFolders", "Questionnaire", "presentation")

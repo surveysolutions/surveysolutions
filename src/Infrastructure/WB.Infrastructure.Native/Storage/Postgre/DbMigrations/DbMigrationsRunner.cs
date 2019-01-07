@@ -16,6 +16,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                 // Logging is the replacement for the old IAnnouncer
                 .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
                 .AddSingleton<LegacyAssemblySettings>((s) => ServiceLocator.Current.GetInstance<LegacyAssemblySettings>())
+                .AddSingleton<IServiceLocator>((s) => ServiceLocator.Current.GetInstance<IServiceLocator>())
                 .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
                 .Configure<TypeFilterOptions>(opt => { opt.Namespace = dbUpgradeSettings.MigrationsNamespace; })
