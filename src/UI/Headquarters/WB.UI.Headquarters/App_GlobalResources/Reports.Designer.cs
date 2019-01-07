@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Cumulative Interview Chart shows evolution of the number of interviews in each status over time.
+        /// </summary>
+        internal static string CumulativeInterviewChartSubtitle {
+            get {
+                return ResourceManager.GetString("CumulativeInterviewChartSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dates range.
         /// </summary>
         internal static string DatesRange {
@@ -651,6 +660,24 @@ namespace Resources {
         internal static string TeamsAndStatuses {
             get {
                 return ResourceManager.GetString("TeamsAndStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Teams and Statuses report shows the number of interviews in each status by teams.
+        /// </summary>
+        internal static string TeamsAndStatuses_HeadquartersSubtitle {
+            get {
+                return ResourceManager.GetString("TeamsAndStatuses_HeadquartersSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Teams and Statuses report shows the number of interviews in each status by interviewer.
+        /// </summary>
+        internal static string TeamsAndStatuses_SupervisorSubtitle {
+            get {
+                return ResourceManager.GetString("TeamsAndStatuses_SupervisorSubtitle", resourceCulture);
             }
         }
         
