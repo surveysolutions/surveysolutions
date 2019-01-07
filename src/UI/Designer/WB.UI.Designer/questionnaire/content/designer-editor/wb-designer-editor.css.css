@@ -1016,7 +1016,7 @@
 #designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons {
   border-top: 2px solid #edeff1;
   margin-top: 2px;
-  padding: 8px 24px 0 18px;
+  padding: 8px 24px 30px 18px;
 }
 #designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons .btn {
   margin-bottom: 10px;

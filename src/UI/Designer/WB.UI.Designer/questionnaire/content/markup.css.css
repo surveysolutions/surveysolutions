@@ -7166,7 +7166,6 @@ input.wb-radio:checked:disabled + label > span {
 .form-group.input-variable-name {
   position: relative;
 }
-
 .form-group.input-variable-name > input {
   color: #3da802;
 }
@@ -9042,7 +9041,7 @@ textarea#edit-group-description {
 #designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons {
   border-top: 2px solid #edeff1;
   margin-top: 2px;
-  padding: 8px 24px 0 18px;
+  padding: 8px 24px 30px 18px;
 }
 #designer-editor.container section#main > .questionnaire-tree .chapter-level-buttons .btn {
   margin-bottom: 10px;
@@ -10312,6 +10311,12 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
 }
 .add-classification-modal .modal-dialog {
   width: 800px;
+}
+.add-classification-modal .icon {
+  display: inline-block;
+  line-height: 18px;
+  margin-bottom: -5px;
+  margin-right: 5px;
 }
 .add-classification-modal .modal-body {
   padding-left: 20px;

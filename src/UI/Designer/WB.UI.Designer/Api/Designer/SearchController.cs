@@ -59,10 +59,9 @@ namespace WB.UI.Designer.Api.Designer
                         ItemType = i.EntityType,
                         SectionId = i.SectionId.FormatGuid(),
                         Title = i.Title,
-                        IsRoster = false,
                         Folder = !i.FolderId.HasValue
                             ? null
-                            : new QuestionnaireListViewFolder()
+                            : new QuestionnaireListViewFolder
                             {
                                 Title = i.FolderName,
                                 PublicId = i.FolderId.Value
@@ -87,9 +86,8 @@ namespace WB.UI.Designer.Api.Designer
         public QuestionnaireListViewFolder Folder { get; set; }
         public string QuestionnaireId { get; set; }
         public string SectionId { get; set; }
-        public string  ItemId  { get; set; }
+        public string ItemId  { get; set; }
         public string ItemType { get; set; }
-        public bool IsRoster { get; set; }
     }
 
     public class SearchQueryModel
