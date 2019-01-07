@@ -593,6 +593,12 @@
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Surveys and Statuses</value>
   </data>
+  <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+    <value>The Surveys and Statuses report shows number of interviews in each status by surveys</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+    <value>The Surveys and Statuses report shows number of interviews in each status for surveys in which this supervisor is involved</value>
+  </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} interviews</value>
   </data>
@@ -1063,6 +1069,9 @@
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Devices/Interviewers</value>
+  </data>
+  <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+    <value>The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>

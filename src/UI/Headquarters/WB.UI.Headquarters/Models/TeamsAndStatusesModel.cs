@@ -9,5 +9,6 @@
         public string AllTeamsTitle { get; set; }
         public string TeamTitle { get; set; }
         public string ReportName { get; set; }
+        public string Subtitle { get; set; }
     }
 }

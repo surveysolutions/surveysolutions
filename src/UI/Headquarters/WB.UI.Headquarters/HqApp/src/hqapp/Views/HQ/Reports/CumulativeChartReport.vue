@@ -1,5 +1,5 @@
 <template>
-  <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')">
+  <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')" :subtitle="$t('Reports.CumulativeInterviewChartSubtitle')">
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
         <Typeahead  control-id="questionnaireId"
@@ -34,7 +34,7 @@
     </Filters>
     <div class="clearfix">
       <div class="col-sm-8">
-        <h2>{{this.selectedQuestionnaire == null ? $t('Common.AllQuestionnaires') : this.selectedQuestionnaire.value}}</h2>
+        <h4>{{this.selectedQuestionnaire == null ? $t('Common.AllQuestionnaires') : this.selectedQuestionnaire.value}}, {{this.selectedVersion == null ? $t('Common.AllVersions') : this.selectedVersion.value}} </h4>
         <h2 v-if="!state.hasData">{{ $t('Common.NoResultsFound') }}</h2>
       </div>
     </div>
