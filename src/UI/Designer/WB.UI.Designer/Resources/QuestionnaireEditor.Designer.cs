@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {
@@ -124,6 +133,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All classifications.
+        /// </summary>
+        public static string AllClassifications {
+            get {
+                return ResourceManager.GetString("AllClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All folders.
+        /// </summary>
+        public static string AllFolders {
+            get {
+                return ResourceManager.GetString("AllFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment preview.
         /// </summary>
         public static string AttachmentPreview {
@@ -156,6 +183,87 @@ namespace WB.UI.Designer.Resources {
         public static string ChangePassword {
             get {
                 return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add classification.
+        /// </summary>
+        public static string ClassificationAdd {
+            get {
+                return ResourceManager.GetString("ClassificationAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add group.
+        /// </summary>
+        public static string ClassificationAddGroup {
+            get {
+                return ResourceManager.GetString("ClassificationAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups.
+        /// </summary>
+        public static string ClassificationGroupBreadcrumbs {
+            get {
+                return ResourceManager.GetString("ClassificationGroupBreadcrumbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group title.
+        /// </summary>
+        public static string ClassificationGroupTitle {
+            get {
+                return ResourceManager.GetString("ClassificationGroupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show categories.
+        /// </summary>
+        public static string ClassificationShowCategories {
+            get {
+                return ResourceManager.GetString("ClassificationShowCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to classifications.
+        /// </summary>
+        public static string ClassificationsSearchEntities {
+            get {
+                return ResourceManager.GetString("ClassificationsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter categories.
+        /// </summary>
+        public static string ClassificationsStringOptionsEditorPlaceholder {
+            get {
+                return ResourceManager.GetString("ClassificationsStringOptionsEditorPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank. Classifications.
+        /// </summary>
+        public static string ClassificationsTitle {
+            get {
+                return ResourceManager.GetString("ClassificationsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classification title.
+        /// </summary>
+        public static string ClassificationTitle {
+            get {
+                return ResourceManager.GetString("ClassificationTitle", resourceCulture);
             }
         }
         
@@ -1159,6 +1267,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My classifications.
+        /// </summary>
+        public static string MyClassifications {
+            get {
+                return ResourceManager.GetString("MyClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
         /// </summary>
         public static string NoPermissions {
@@ -1200,6 +1317,15 @@ namespace WB.UI.Designer.Resources {
         public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the first {{count}} categories will be taken for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string OnlyFirstOptionsWillBeTakenConfirmation {
+            get {
+                return ResourceManager.GetString("OnlyFirstOptionsWillBeTakenConfirmation", resourceCulture);
             }
         }
         
@@ -1317,6 +1443,15 @@ namespace WB.UI.Designer.Resources {
         public static string PublicAccessSettings {
             get {
                 return ResourceManager.GetString("PublicAccessSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for classification.
+        /// </summary>
+        public static string QuestionAddClassification {
+            get {
+                return ResourceManager.GetString("QuestionAddClassification", resourceCulture);
             }
         }
         
@@ -1591,6 +1726,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to search results.
+        /// </summary>
+        public static string QuestionsSearchEntities {
+            get {
+                return ResourceManager.GetString("QuestionsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank.
+        /// </summary>
+        public static string QuestionsSearchTitle {
+            get {
+                return ResourceManager.GetString("QuestionsSearchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question text.
         /// </summary>
         public static string QuestionText {
@@ -1668,6 +1821,15 @@ namespace WB.UI.Designer.Resources {
         public static string Recompile {
             get {
                 return ResourceManager.GetString("Recompile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to replace existing categories for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string ReplaceOptionsConfirmation {
+            get {
+                return ResourceManager.GetString("ReplaceOptionsConfirmation", resourceCulture);
             }
         }
         
@@ -1791,9 +1953,36 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Variable name.
         /// </summary>
+        public static string SearchClassification {
+            get {
+                return ResourceManager.GetString("SearchClassification", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Search classification.
+        /// </summary>
         public static string SectionVariableName {
             get {
                 return ResourceManager.GetString("SectionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for question.
+        /// </summary>
+        public static string SearchForQuestion {
+            get {
+                return ResourceManager.GetString("SearchForQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for a question.
+        /// </summary>
+        public static string SearchQuestionPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchQuestionPlaceholder", resourceCulture);
             }
         }
         

@@ -50,6 +50,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
                     { "UpdateAreaQuestion", typeof (UpdateAreaQuestion) },
                     { "UpdateAudioQuestion", typeof (UpdateAudioQuestion) },
+                    { "ReplaceOptionsWithClassification", typeof(ReplaceOptionsWithClassification)},
                     
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticText) },

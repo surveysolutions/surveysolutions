@@ -19,5 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string questionnaireId, Guid rosterId, Guid rosterSizeQuestionId);
 
         VariableView GetVariableEditView(string questionnaireId, Guid variableId);
+
+        Guid GetSectionIdForItem(string questionnaireId, Guid? entityid);
     }
 }

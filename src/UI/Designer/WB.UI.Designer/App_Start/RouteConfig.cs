@@ -11,6 +11,11 @@ namespace WB.UI.Designer
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
             routes.MapRouteLowercase(
+                name: "QuestionnaireDetailsNoSection",
+                url: "questionnaire/details/{id}/nosection/{entityType}/{entityId}",
+                defaults: new { controller = "Questionnaire", action = "DetailsNoSection" });
+
+            routes.MapRouteLowercase(
                 name: "QuestionnaireDetails",
                 url: "questionnaire/details/{id}/chapter/{chapterId}/{entityType}/{entityId}",
                 defaults: new { controller = "Questionnaire", action = "Details" });

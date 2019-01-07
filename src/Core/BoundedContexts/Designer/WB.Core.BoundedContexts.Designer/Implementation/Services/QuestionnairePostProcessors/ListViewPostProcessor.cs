@@ -70,6 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateLookupTable>,
         ICommandPostProcessor<Questionnaire, DeleteLookupTable>,
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
+        ICommandPostProcessor<Questionnaire, ReplaceOptionsWithClassification>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
@@ -298,6 +299,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, UpdateLookupTable command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteLookupTable command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, ReplaceOptionsWithClassification command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
