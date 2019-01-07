@@ -143,7 +143,7 @@ export default {
 
     methods: {
         selectQuestionnaire(val) {
-            if (val == null) this.selectQuestionnaireVersion(null);
+            this.selectQuestionnaireVersion(null);
 
             this.onChange(q => {
                 q.name = val == null ? null : val.value;
