@@ -358,6 +358,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return attachment;
         }
 
+        public Guid? GetAttachmentIdByName(string name) 
+            => this.innerDocument.Attachments.Find(x => x.Name.ToLower() == name.ToLower())?.AttachmentId;
+
+        public Attachment GetAttachmentById(Guid attachmentId)
+            => this.innerDocument.Attachments.Find(x => x.AttachmentId == attachmentId);
+
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)

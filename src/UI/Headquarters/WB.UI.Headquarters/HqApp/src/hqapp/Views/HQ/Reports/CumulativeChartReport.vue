@@ -2,19 +2,18 @@
   <HqLayout :hasFilter="true" :title="$t('Reports.CumulativeInterviewChart')">
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead  control-id="questionnaireId"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="selectedQuestionnaire"
           :values="model.templates"
+          :keyFunc="item => item.key + item.value"
           v-on:selected="selectQuestionnaire"
         />
       </FilterBlock>
 
       <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="selectedVersion"
           :values="selectedQuestionnaire == null ? null : selectedQuestionnaire.versions"
           v-on:selected="selectQuestionnaireVersion"
@@ -83,16 +82,26 @@ export default {
                         {
                             type: "time",
                             gridLines: {
-                                display: false,
+                                display: true,
                                 tickMarkLength: 10
                             }
                         }
                     ],
                     yAxes: [
                         {
-                            stacked: true
+                            type: "linear",
+                            stacked: true,
+                            ticks: {
+                                beginAtZero: true,
+                                userCallback: function(label, index, labels) {
+                                // when the floored value is the same as the value we have a whole number
+                                    if (Math.floor(label) === label) {
+                                    return label;
+                                    }
+                            },
                         }
-                    ]
+                        }
+                     ]
                 }
             }
         };
@@ -111,7 +120,7 @@ export default {
             if (this.query == null) return {};
 
             return {
-                questionnaireId: this.query.questionnaireId,
+                name: this.query.name,
                 version: this.query.version,
                 from: this.query.from,
                 to: this.query.to
@@ -119,14 +128,13 @@ export default {
         },
 
         selectedQuestionnaire() {
-            if (this.query == null || this.query.questionnaireId == null) {
+            if (this.query == null || this.query.name == null) {
                 return null;
             }
 
             return _.find(this.model.templates, {
-                key: this.query.questionnaireId
+                value: this.query.name
             });
-            return this.model.templates;
         },
 
         selectedVersion() {
@@ -154,7 +162,7 @@ export default {
                     if (start != null && end != null) {
                         this.onChange(q => {
                             q.from = moment(start).format("YYYY-MM-DD");
-                            q.to = moment(start).format("YYYY-MM-DD");
+                            q.to = moment(end).format("YYYY-MM-DD");
                         });
                     }
                 }
@@ -173,7 +181,7 @@ export default {
             if (val == null) this.selectQuestionnaireVersion(null);
 
             this.onChange(q => {
-                q.questionnaireId = val == null ? null : val.key;
+                q.name = val == null ? null : val.value;
             });
         },
 

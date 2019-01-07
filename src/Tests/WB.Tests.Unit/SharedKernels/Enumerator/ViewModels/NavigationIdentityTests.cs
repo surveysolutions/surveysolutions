@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var targetStaticText = Create.Identity(Id.gA);
 
             // Act
-            var navigationIdentity = NavigationIdentity.CreateForPdfView(targetStaticText);
+            var navigationIdentity = NavigationIdentity.CreateForPdfViewByStaticText(targetStaticText);
 
             // Assert
             Assert.That(navigationIdentity.AnchoredElementIdentity, Is.EqualTo(targetStaticText));

@@ -6,7 +6,6 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,8 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class RosterViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
-        ILiteEventHandler<YesNoQuestionAnswered>,
-        ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable,
         IInterviewEntityViewModel
     {
@@ -27,23 +24,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly ILiteEventRegistry eventRegistry;
         private string interviewId;
         private NavigationState navigationState;
-        public CovariantObservableCollection<IInterviewEntityViewModel> RosterInstances { get; }
-        private readonly IQuestionnaireStorage questionnaireRepository;
+
+        private readonly SynchronizedList<IInterviewEntityViewModel> synchronizedItems = new SynchronizedList<IInterviewEntityViewModel>();
+
+        private CovariantObservableCollection<IInterviewEntityViewModel> rosterInstances;
+        public CovariantObservableCollection<IInterviewEntityViewModel> RosterInstances
+        {
+            get => this.rosterInstances;
+            set => this.RaiseAndSetIfChanged(ref this.rosterInstances, value);
+        }
 
         public Identity Identity { get; private set; }
-        private bool isTriggeredByOrderedMultiQuestion = false;
-        private Guid rosterSizeQuestionId = Guid.Empty;
 
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
-            ILiteEventRegistry eventRegistry,
-            IQuestionnaireStorage questionnaireRepository)
+            ILiteEventRegistry eventRegistry)
         {
             this.interviewRepository = interviewRepository;
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.eventRegistry = eventRegistry;
-            this.questionnaireRepository = questionnaireRepository;
-            this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
         }
 
         public void Init(string interviewId, Identity entityId, NavigationState navigationState)
@@ -54,19 +53,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-            this.isTriggeredByOrderedMultiQuestion = questionnaire.IsRosterTriggeredByOrderedMultiQuestion(entityId.Id);
-            if (this.isTriggeredByOrderedMultiQuestion)
-            {
-                this.rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(entityId.Id);
-            }
-
+            this.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>();
             this.UpdateFromInterview();
         }
 
         public void Handle(RosterInstancesRemoved @event)
+        {
+            if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
+                this.UpdateFromInterview();
+        }
+
+        public void Handle(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
                 this.UpdateFromInterview();
@@ -79,58 +76,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var interviewRosterInstances = statefulInterview
                 .GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
                 .ToList();
-            var rosterIdentitiesByViewModels =
-                this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
-            var notChangedRosterInstances =
-                rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
+
+            this.UpdateViewModels(interviewRosterInstances);
+            this.UpdateUi();
+        }
+
+        private void UpdateViewModels(IList<Identity> interviewRosterInstances)
+        {
+            var rosterIdentitiesByViewModels = this.synchronizedItems.Select(viewModel => viewModel.Identity).ToList();
+            var notChangedRosterInstances = rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
 
             var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
             var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
 
-            this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances,
-                this.RosterInstances);
-        }
-
-        private void UpdateViewModels(List<Identity> removedRosterInstances, List<Identity> addedRosterInstances,
-            List<Identity> interviewRosterInstances, 
-            CovariantObservableCollection<IInterviewEntityViewModel> target)
-        {
-            InvokeOnMainThread(() =>
+            foreach (var removedRosterInstance in removedRosterInstances)
             {
-                foreach (var removedRosterInstance in removedRosterInstances)
-                {
-                    var rosterInstanceViewModel =
-                        this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
-                    rosterInstanceViewModel.DisposeIfDisposable();
-                    target.Remove(rosterInstanceViewModel);
-                }
+                var removedViewModel = this.synchronizedItems.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));
+                if (removedViewModel == null) continue;
 
-                foreach (var addedRosterInstance in addedRosterInstances)
-                {
-                    target.Insert(interviewRosterInstances.IndexOf(addedRosterInstance),
-                        this.GetGroupViewModel(addedRosterInstance));
-                }
+                removedViewModel.DisposeIfDisposable();
+                this.synchronizedItems.Remove(removedViewModel);
+            }
 
-                // change order
-                for (int i = 0; i < interviewRosterInstances.Count; i++)
-                {
-                    var rosterInstanceViewModel =
-                        this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(interviewRosterInstances[i]));
-
-                    if (rosterInstanceViewModel == null)
-                        continue;
-
-                    target.Remove(rosterInstanceViewModel);
-                    target.Insert(i, rosterInstanceViewModel);
-                }
-            });
+            foreach (var addedRosterInstance in addedRosterInstances)
+            {
+                if (this.isDisposed) return;
+                this.synchronizedItems.Insert(interviewRosterInstances.IndexOf(addedRosterInstance), this.GetGroupViewModel(addedRosterInstance));
+            }
         }
 
-        public void Handle(RosterInstancesAdded @event)
-        {
-            if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                this.UpdateFromInterview();
-        }
+        private void UpdateUi() => this.InvokeOnMainThread(() => this.RosterInstances.ReplaceWith(this.synchronizedItems));
 
         private GroupViewModel GetGroupViewModel(Identity identity)
         {
@@ -139,36 +114,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             return groupViewModel;
         }
 
+        private bool isDisposed;
         public void Dispose()
         {
+            if (this.isDisposed) return;
+
+            this.isDisposed = true;
             this.eventRegistry.Unsubscribe(this);
 
-            foreach (var rosterInstance in this.RosterInstances.ToList())
-            {
-                rosterInstance.DisposeIfDisposable();
-            }
-        }
-
-        public void Handle(YesNoQuestionAnswered @event)
-        {
-            if (!isTriggeredByOrderedMultiQuestion)
-                return;
-
-            if (@event.QuestionId != this.rosterSizeQuestionId)
-                return;
-
-            this.UpdateFromInterview();
-        }
-
-        public void Handle(MultipleOptionsQuestionAnswered @event)
-        {
-            if (!isTriggeredByOrderedMultiQuestion)
-                return;
-
-            if (@event.QuestionId != this.rosterSizeQuestionId)
-                return;
-
-            this.UpdateFromInterview();
+            this.RosterInstances?.ForEach(viewModel => viewModel.DisposeIfDisposable());
         }
     }
 }

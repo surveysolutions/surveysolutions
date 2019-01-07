@@ -83,6 +83,7 @@ namespace WB.Services.Scheduler
                 try
                 {
                     await db.AcquireLockAsync(LockValueForMigration);
+                    await db.Database.EnsureCreatedAsync(cancellationToken);
                     await db.Database.GetDbConnection().ExecuteAsync("create schema if not exists public");
                     await db.Database.MigrateAsync(cancellationToken);
                 }
