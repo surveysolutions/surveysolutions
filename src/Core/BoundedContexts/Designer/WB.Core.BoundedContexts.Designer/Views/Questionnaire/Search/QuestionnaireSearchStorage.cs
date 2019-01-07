@@ -54,14 +54,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
         private string GetEntityType(IComposite composite)
         {
-            if (composite is IQuestion)
-                return ChapterItemType.Question.ToString();
+            if (composite is IQuestion question)
+                return question.QuestionType.ToString(); //ChapterItemType.Question.ToString();
             if (composite is IVariable)
                 return ChapterItemType.Variable.ToString();
             if (composite is IStaticText)
                 return ChapterItemType.StaticText.ToString();
-            if (composite is IGroup)
-                return ChapterItemType.Group.ToString();
+
+            if (composite is IGroup group)
+            {
+                return group.IsRoster
+                    ? ChapterItemType.Roster.ToString()
+                    : ChapterItemType.Group.ToString();
+            }
 
             throw new ArgumentException("Unsupported entity type: " + composite.GetType().Name);
         }

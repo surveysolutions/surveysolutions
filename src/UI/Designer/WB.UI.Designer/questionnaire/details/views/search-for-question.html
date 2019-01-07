@@ -39,8 +39,8 @@
     <perfect-scrollbar class="scroller">
         <div class="tile-wrapper">
             <div class="tile-column">
-                <div class="tile" ng-repeat="searchResult in searchResult1">
-                    <h4><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
+                <div class="tile" ng-class="searchResult.type" ng-repeat="searchResult in searchResult1">
+                    <h4><div ng-if="searchResult.icon !== null" class="icon {{searchResult.icon}}"></div><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
                     <h5>{{searchResult.questionnaireTitle}}</h5>
                     <div class="tile-footer clearfix">
                         <a ng-if="searchResult.hasFolder" class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
@@ -49,8 +49,8 @@
                 </div>
             </div>
             <div class="tile-column">
-                <div class="tile" ng-repeat="searchResult in searchResult2">
-                    <h4><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
+                <div class="tile" ng-class="searchResult.type" ng-repeat="searchResult in searchResult2">
+                    <h4><div ng-if="searchResult.icon !== null" class="icon {{searchResult.icon}}"></div><a target="_blank" ng-href="{{getLink(searchResult)}}">{{searchResult.title}}</a></h4>
                     <h5>{{searchResult.questionnaireTitle}}</h5>
                     <div class="tile-footer clearfix">
                         <a ng-if="searchResult.hasFolder" class="bg-info" ng-click="changeFilter(searchResult.folder)">{{searchResult.folder.title}}</a>
