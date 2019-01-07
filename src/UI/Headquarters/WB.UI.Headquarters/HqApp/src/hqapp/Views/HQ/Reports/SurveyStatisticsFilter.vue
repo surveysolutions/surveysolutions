@@ -1,7 +1,7 @@
 <template>
   <div>
     <FilterBlock :title="$t('Reports.Questionnaire')">
-      <Typeahead
+      <Typeahead control-id="questionnaire"
         :placeholder="selectedQuestionnairePlaceholder"
         fuzzy
         noClear
@@ -13,7 +13,7 @@
     </FilterBlock>
 
     <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-      <Typeahead
+      <Typeahead control-id="version"
         :placeholder="$t('Common.AllVersions')"
         noSearch
         :values="questionnaireVersionsList"
@@ -24,7 +24,7 @@
       />
     </FilterBlock>
     <FilterBlock :title="$t('Reports.Question')">
-      <Typeahead
+      <Typeahead control-id="question"
         :placeholder="selectedQuestionPlaceholder"
         fuzzy
         noClear
@@ -97,7 +97,7 @@
 
     <template v-if="question != null && question.SupportConditions">
       <FilterBlock :title="$t('Reports.ConditionQuestion')">
-        <Typeahead
+        <Typeahead control-id="condition"
           :placeholder="$t('Reports.SelectConditionQuestion')"
           :values="conditionVariablesList"
           :value="selectedCondition"
@@ -156,7 +156,7 @@ export default {
             this.$emit("input", filter);
         },
 
-        "query.questionnaireId"(to) {
+        "query.name"(to) {
             if (this.selectedQuestion == null) {
                 this.loadQuestions(to);
             }
@@ -199,17 +199,18 @@ export default {
             }
         },
 
-        async loadQuestions(questionnaireId = null, version = null) {
-            if (questionnaireId == null && this.query.questionnaireId == null) return;
-            const id = questionnaireId || this.query.questionnaireId;
+        loadQuestions(questionnaireId = null, version = null) {
+            if (questionnaireId == null && this.selectedQuestionnaire == null) return;
+            const id = questionnaireId || this.selectedQuestionnaire.key;
 
             this.loading.questions = true;
 
-            try {
-                this.questions = await this.$hq.Report.SurveyStatistics.Questions(id, version || this.query.version);
-            } finally {
-                this.loading.questions = false;
-            }
+            return this.$hq.Report.SurveyStatistics.Questions(id, version)
+                .then(questions => {
+                    this.questions = questions; 
+                    this.loading.questions = false;
+                })
+                .catch(() => this.loading.questions = false)
         },
 
         async selectQuestionnaire(id) {
@@ -221,21 +222,24 @@ export default {
                 return;
             }
 
-            await this.loadQuestions(id.key);
+            this.selectQuestionnaireVersion(null);
 
+            await this.loadQuestions(id.key, null);
+            
             this.selectCondition(null);
-            this.onChange(q => (q.questionnaireId = questionnaireId));
+            this.onChange(q => (q.name = id.value));
 
             const question = _.find(this.questionsList, "key", this.query.questionId);
             this.selectQuestion(question);
         },
 
-        async selectQuestionnaireVersion(id) {
+        selectQuestionnaireVersion(id) {
             const version = id == null ? null : id.key;
+            if(this.selectedQuestionnaire == null) return;
 
-            await this.loadQuestions(this.selectedQuestionnaire.key, version);
-
-            this.onChange(query => (query.version = version));
+            this.loadQuestions(this.selectedQuestionnaire.key, version).then(() => {
+                this.onChange(query => (query.version = version));
+            });
         },
 
         selectQuestion(id) {
@@ -276,6 +280,7 @@ export default {
 
             const filter = Object.assign(
                 {
+                    questionnaireId: this.questionnaire == null ? null : this.questionnaire.Id,
                     questionnaire: this.questionnaire,
                     version: this.version,
                     question: this.question,
@@ -290,7 +295,7 @@ export default {
 
         queryString() {
             return {
-                questionnaireId: this.query.questionnaireId,
+                name: this.query.name,
                 questionId: this.query.questionId,
                 conditionId: this.query.conditionId,
                 ans: this.condition != null ? this.selectedAnswers : null,
@@ -405,8 +410,8 @@ export default {
 
         // drop down
         selectedQuestionnaire() {
-            if (this.query.questionnaireId == null) return null;
-            return _.find(this.questionnaireList, { key: this.query.questionnaireId });
+            if (this.query.name == null) return null;
+            return _.find(this.questionnaireList, { value: this.query.name });
         },
 
         selectedQuestionnaireVersion() {

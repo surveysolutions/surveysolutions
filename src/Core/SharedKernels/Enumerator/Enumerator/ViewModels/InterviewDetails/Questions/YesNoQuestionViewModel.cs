@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire =

@@ -123,19 +123,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == roster.RosterSizeQuestionId);
             int questionMaxAnswersCount = Constants.MaxRosterRowCount;
 
-            var multioptionQuestion = question as MultyOptionsQuestion;
-            if (multioptionQuestion != null)
+            switch (question)
             {
-                questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers?.Count ?? 0;
-            }
-            var textListTrigger = question as TextListQuestion;
-            if (textListTrigger?.MaxAnswerCount != null)
-            {
-                questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                case MultyOptionsQuestion multyOptionsQuestion:
+                    questionMaxAnswersCount = multyOptionsQuestion.MaxAllowedAnswers ?? multyOptionsQuestion.Answers?.Count ?? 0;
+                    break;
+                case TextListQuestion textListTrigger when textListTrigger.MaxAnswerCount != null:
+                    questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                    break;
             }
 
             return questionMaxAnswersCount;
-
         }
 
         protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;

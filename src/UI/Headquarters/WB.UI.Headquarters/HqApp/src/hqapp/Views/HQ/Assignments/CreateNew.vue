@@ -30,8 +30,8 @@
                                 <div class="options-group">
                                     <div class="form-group">
                                         <div class="field" :class="{answered: newResponsibleId != null}">
-                                            <Typeahead :placeholder="$t('Common.Responsible')"
-                                                    control-id="newResponsibleId"
+                                            <Typeahead control-id="newResponsibleId"
+                                                    :placeholder="$t('Common.Responsible')"
                                                     :value="newResponsibleId"
                                                     :ajax-params="{ }"
                                                     @selected="newResponsibleSelected"

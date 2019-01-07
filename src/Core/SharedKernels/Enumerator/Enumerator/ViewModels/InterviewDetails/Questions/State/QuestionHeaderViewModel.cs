@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class QuestionHeaderViewModel : MvxNotifyPropertyChanged,
         ICompositeEntity,
+        IInterviewEntity,
         IDisposable
     {
         public event EventHandler ShowComments;
@@ -15,7 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public DynamicTextViewModel Title { get; }
         public EnablementViewModel Enablement { get; private set; }
 
+        public string InterviewId { get; private set; }
         public Identity Identity { get; private set; }
+        public NavigationState NavigationState { get; private set; }
 
         public QuestionHeaderViewModel(
             DynamicTextViewModel dynamicTextViewModel)
@@ -23,11 +26,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Title = dynamicTextViewModel;
         }
 
-        public void Init(string interviewId, Identity questionIdentity, EnablementViewModel enablement)
+        public void Init(string interviewId, Identity questionIdentity, EnablementViewModel enablement,
+        	NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
+            this.InterviewId = interviewId;
+            this.NavigationState = navigationState;
             this.Identity = questionIdentity;
 
             this.Enablement = enablement;

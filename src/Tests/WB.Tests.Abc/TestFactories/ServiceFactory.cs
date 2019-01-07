@@ -112,6 +112,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -257,9 +258,9 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
-        public QuestionnaireImportValidator QuestionnaireNameValidator(
+        public QuestionnaireValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-            => new QuestionnaireImportValidator(
+            => new QuestionnaireValidator(
                 questionnaireBrowseItemStorage ??
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
@@ -966,7 +967,8 @@ namespace WB.Tests.Abc.TestFactories
             return new WebInterviewInterviewEntityFactory(
                 autoMapper ?? Mock.Of<IMapper>(),
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
-                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>());
+                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
+                Mock.Of<IWebNavigationService>());
         }
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
@@ -996,6 +998,14 @@ namespace WB.Tests.Abc.TestFactories
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>()
             );
+        }
+
+        public WebNavigationService WebNavigationService()
+        {
+            var mockOfVirtualPathService = new Mock<IVirtualPathService>();
+            mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
+
+            return new WebNavigationService(mockOfVirtualPathService.Object);
         }
     }
 

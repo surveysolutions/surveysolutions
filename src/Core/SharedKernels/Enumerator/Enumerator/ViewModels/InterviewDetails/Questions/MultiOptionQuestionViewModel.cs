@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.instructionViewModel.Init(interviewId, entityIdentity);
+            this.instructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
 
             this.questionIdentity = entityIdentity;

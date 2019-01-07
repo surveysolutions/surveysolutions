@@ -503,7 +503,7 @@
     <value>Ростер ID</value>
   </data>
   <data name="SectionVariableName" xml:space="preserve">
-    <value>Имя секции</value>
+    <value>Имя переменной</value>
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
