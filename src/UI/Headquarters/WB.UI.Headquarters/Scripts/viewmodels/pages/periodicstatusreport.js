@@ -1,4 +1,4 @@
-﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl, $questionnaires) {
+﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl, allQuestionnariesCaption, allVersionCaption, $questionnaires) {
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
@@ -8,8 +8,11 @@
 
     self.Url = new Url(window.location.href);
 
-    self.SelectedQuestionnaireId = ko.observable('');
+    self.SelectedQuestionnaire = ko.observable('');
     self.SelectedQuestionnaireVersion = ko.observable('');
+
+    self.AllQuestionnariesCaption = allQuestionnariesCaption;
+    self.AllVersionsCaption = allVersionCaption;
 
     self.SelectedType = ko.observable(null);
 
@@ -24,6 +27,7 @@
     self.TotalRow = ko.observable(null);
 
     self.QuestionnaireName = ko.observable();
+    self.QuestionnaireVersion = ko.observable();
 
     self.ReportTypeName = ko.observable();
 
@@ -64,9 +68,9 @@
 
     
     self.filterQuestionnaireVersions = function() {
-        if (self.SelectedQuestionnaireId()) {
+        if (self.SelectedQuestionnaire()) {
             var versions = _.chain(self.$questionnaires)
-                .filter({ templateId: self.SelectedQuestionnaireId() })
+                .filter({ templateId: self.SelectedQuestionnaire().id })
                 .sortBy(function(q) { return parseInt(q); })
                 .reverse()
                 .map(function(q) { return q.templateVersion; })
@@ -88,7 +92,10 @@
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
         self.Url.query['reportType'] = self.QueryString['reportType'] || "";
 
-        self.SelectedQuestionnaireId(self.QueryString['questionnaireId']);
+        if (self.QueryString['questionnaireId'] !== undefined) {
+            self.SelectedQuestionnaire(_.find(this.questionnaires, { id: self.QueryString['questionnaireId'] }));
+        }
+        
         self.filterQuestionnaireVersions();
         self.SelectedQuestionnaireVersion(self.QueryString['questionnaireVersion']);
         self.SelectedType(self.Url.query['reportType']);
@@ -106,15 +113,16 @@
 
         self.initReport();
 
-        self.SelectedQuestionnaireId.subscribe(function (value) {
+        self.SelectedQuestionnaire.subscribe(function (value) {
             if (value) {
                 var versions = _.chain(self.$questionnaires)
-                                .filter({ templateId: value })
+                                .filter({ templateId: value.id })
                                 .sortBy(function(q) { return parseInt(q); })
                                 .reverse()
                                 .map(function (q) { return q.templateVersion; })
                                 .value();
                 self.QuestionnaireVersions(versions);
+
             } else {
                 self.QuestionnaireVersions([]);
             }
@@ -157,7 +165,7 @@
     self.GetFilterMethod = function () {
         var startDate = moment(self.FromDate());
 
-        self.Url.query['questionnaireId'] = self.SelectedQuestionnaireId() || '';
+        self.Url.query['questionnaireId'] = _.isUndefined(self.SelectedQuestionnaire()) ? "" : self.SelectedQuestionnaire().id;
         self.Url.query['questionnaireVersion'] = self.SelectedQuestionnaireVersion() || '';
         self.Url.query['from'] = startDate.format(dateFormat);
         self.Url.query['period'] = self.Period();
@@ -168,7 +176,7 @@
             window.history.pushState({}, "Charts", self.Url.toString());
         }
         return {
-            questionnaireId: self.SelectedQuestionnaireId() || '',
+            questionnaireId: _.isUndefined(self.SelectedQuestionnaire()) ? "" : self.SelectedQuestionnaire().id,
             questionnaireVersion: self.SelectedQuestionnaireVersion() || '',
             from: startDate.format(dateFormat),
             period: self.Period(),

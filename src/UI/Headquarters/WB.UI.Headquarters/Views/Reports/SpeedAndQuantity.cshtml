@@ -1,4 +1,5 @@
-﻿@using Newtonsoft.Json
+﻿@using System.Globalization
+@using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.UI.Headquarters.Code
@@ -37,7 +38,10 @@
         }
         $(function () {
             var $questionnaires = @Model.Questionnaires.AsJsonValue();
-            var model = new Supervisor.VM.PeriodicStatusReport('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName.ToString() })',
+            var model = new Supervisor.VM.PeriodicStatusReport(
+                '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = Model.ReportName + Model.WebApiActionName.ToString() })',
+                '@Html.ToSafeJavascriptMessage(Strings.AllQuestionnaires)',
+                '@Html.ToSafeJavascriptMessage(Common.AllVersions)',
                 $questionnaires);
             ko.applyBindings(model);
             model.load();
@@ -71,22 +75,21 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" 
-                                data-bind="value: SelectedQuestionnaireId, 
+                                data-bind="value: SelectedQuestionnaire, 
                                            selectPicker: {}, 
                                            options: questionnaires,
                                            optionsText: 'title',
-                                           optionsCaption: '@Html.ToSafeJavascriptMessage(Strings.AllQuestionnaires)',
-                                           optionsValue: 'id' ">
+                                           optionsCaption: AllQuestionnariesCaption">
                         </select>
                     </div>
                     <div class="block-filter">
                         <h5>@Common.QuestionnaireVersion</h5>
                         <select id="questionnaireVersionSelector" 
-                                data-bind="enable: SelectedQuestionnaireId, 
+                                data-bind="enable: SelectedQuestionnaire, 
                                            value: SelectedQuestionnaireVersion, 
                                            selectPicker: {}, 
                                            options: QuestionnaireVersions,
-                                           optionsCaption: '@Html.ToSafeJavascriptMessage(Common.AllVersions)',">
+                                           optionsCaption: AllVersionsCaption,">
                         </select>
                     </div>
 
@@ -126,24 +129,24 @@
             <div class="main-information">
                 <div class="page-header">
                     <h1>
-                        <span data-bind="text: ReportTypeName"></span>
+                        <span>@(String.Compare(Model.ReportName,"speed", CultureInfo.InvariantCulture,CompareOptions.IgnoreCase) == 0? MainMenu.Speed : MainMenu.Quantity ): </span><span data-bind="text: ReportTypeName"></span>
                         @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
                     </h1>
                     <i>@Model.ReportNameDescription</i>
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-8">
-                        
-                        <h4 data-bind="text: QuestionnaireName"></h4>
+
+                        <h4 data-bind="text: (SelectedQuestionnaire() == undefined ? AllQuestionnariesCaption : SelectedQuestionnaire().title) + ', ' + (SelectedQuestionnaireVersion() == undefined ? AllVersionsCaption : 'ver.' + SelectedQuestionnaireVersion())" ></h4>
 
                         @if (Model.CanNavigateToQuantityBySupervisors)
                         {
                             <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
                         }
 
-                        <p data-bind="visible: Pager().TotalItemCount() == 0">
+                        <h2 data-bind="visible: Pager().TotalItemCount() == 0">
                             @Pages.NoResults
-                        </p>
+                        </h2>
                     </div>
                 </div>
                 <div class="dataTables_wrapper no-footer">
