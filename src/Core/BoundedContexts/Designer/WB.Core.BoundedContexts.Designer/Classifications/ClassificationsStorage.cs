@@ -30,11 +30,18 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 .Where(x => x.UserId == null || x.UserId == userId)
                 .OrderBy(x => x.Title)
                 .ToList());
+            
+            var classificationCounts = classificationsStorage.Query(_ => _.Where(x => x.Type == ClassificationEntityType.Classification)
+                .GroupBy(x => x.Parent)
+                .Select(x => new {Id = x.Key, Count = x.Count()})
+                .ToList())
+                .ToDictionary(x => x.Id, x => x.Count);
 
             var groups = dbEntities.Select(x => new ClassificationGroup
             {
                 Id = x.Id,
-                Title = x.Title
+                Title = x.Title,
+                Count = classificationCounts.ContainsKey(x.Id) ? classificationCounts[x.Id] : 0
             });
 
             return Task.FromResult(groups);
