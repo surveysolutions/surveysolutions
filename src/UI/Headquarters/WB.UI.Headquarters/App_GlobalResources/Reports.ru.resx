@@ -171,6 +171,12 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Команды и статусы</value>
   </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают колличество интервью в каждом статусе по интервьюверу</value>
+  </data>
+    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают колличество интервью в каждом статусе по командам</value>
+  </data>
   <data name="Variables" xml:space="preserve">
     <value>Переменные</value>
   </data>
