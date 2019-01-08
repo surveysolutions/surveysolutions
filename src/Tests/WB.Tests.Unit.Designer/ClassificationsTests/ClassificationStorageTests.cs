@@ -17,20 +17,19 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_updating_categories()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
                 Entity.Classification.Classification(Id.g2, "A", userId: Id.gA, parent: Id.g1));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
             await classificationStorage.UpdateCategories(Id.g2, new []
                 {
                     new Category{ Id = Id.g3, Parent = Id.g2, Title = "Yes", Value = 1 }, 
                     new Category{ Id = Id.g4, Parent = Id.g2, Title = "No", Value = 2 }, 
                     new Category{ Id = Id.g5, Parent = Id.g2, Title = "Don't know", Value = 3 }, 
-                });
+                }, userId:Id.gA, isAdmin: false);
 
             var category1 = storage.GetById(Id.g3);
             Assert.That(category1, Is.Not.Null);
@@ -64,18 +63,17 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_creating_classification()
         {
-            var storage = Create.ClassificationsStorage(Entity.Classification.Group(Id.g1, title: "Z"));
+            var storage = Create.ClassificationsAccessor(Entity.Classification.Group(Id.g1, title: "Z"));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
             await classificationStorage.CreateClassification(new Classification
             {
                 Id = Id.g2,
                 Title = "New classification",
                 Parent = Id.g1
-            });
+            }, userId:Id.gA);
 
             Assert.That(storage.GetById(Id.g2).Type, Is.EqualTo(ClassificationEntityType.Classification));
             Assert.That(storage.GetById(Id.g2).Title, Is.EqualTo( "New classification"));
@@ -87,54 +85,50 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_non_admin_is_updating_public_classification()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
                 Entity.Classification.Classification(Id.g2, "A", userId: null, parent: Id.g1));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
             Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(new Classification
             {
                 Id = Id.g2
-            }));
+            },userId:Id.gA, isAdmin: false));
         }
 
         [Test]
         public async Task When_non_admin_is_updating_others_classification()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
                 Entity.Classification.Classification(Id.g2, "A", userId: Id.gB, parent: Id.g1));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
             Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassification(new Classification
             {
                 Id = Id.g2
-            }));
+            }, userId:Id.gA, isAdmin: false));
         }
 
         [Test]
         public async Task When_admin_is_updating_public_classification()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
                 Entity.Classification.Classification(Id.g2, "A", userId: null, parent: Id.g1));
 
-            var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: true));
+            var classificationStorage = Create.ClassificationStorage(classificationsAccessor: storage);
 
             await classificationStorage.UpdateClassification(new Classification
             {
                 Id = Id.g2,
                 Title = "New classification",
                 Parent = Id.g1
-            });
+            }, userId:Id.gA, isAdmin: true);
 
             Assert.That(storage.GetById(Id.g2).Type, Is.EqualTo(ClassificationEntityType.Classification));
             Assert.That(storage.GetById(Id.g2).Title, Is.EqualTo( "New classification"));
@@ -146,17 +140,15 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_creating_classification_groups()
         {
-            var storage = Create.ClassificationsStorage();
+            var storage = Create.ClassificationsAccessor();
 
-            var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: true));
+            var classificationStorage = Create.ClassificationStorage(classificationsAccessor: storage);
 
             await classificationStorage.CreateClassificationGroup(new ClassificationGroup
             {
                 Id = Id.g1,
                 Title = "New group"
-            });
+            }, isAdmin: true);
 
             Assert.That(storage.GetById(Id.g1).Type, Is.EqualTo(ClassificationEntityType.Group));
             Assert.That(storage.GetById(Id.g1).Title, Is.EqualTo("New group"));
@@ -167,7 +159,7 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_deleting_classification()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(id: Id.g1, title: "group A"),
                 Entity.Classification.Classification(id: Id.g2, title: $"B", parent: Id.g1),
                 Entity.Classification.Classification(id: Id.g3, title: $"C", parent: Id.g1),
@@ -179,10 +171,9 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
             );
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: true));
+                classificationsAccessor: storage);
 
-            await classificationStorage.DeleteClassification(Id.g2);
+            await classificationStorage.DeleteClassification(Id.g2, userId:Id.gA, isAdmin: true);
 
             CollectionAssert.AreEqual(new []{ Id.g1, Id.g3, Id.g4}, storage.Query(_ => _.Select(x => x.Id)).ToArray());
         }
@@ -190,15 +181,14 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         [Test]
         public async Task When_non_admin_is_deleting_classification()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(Id.g1, title: "Z"),
                 Entity.Classification.Classification(Id.g2, "A", userId: null, parent: Id.g1));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: false));
+                classificationsAccessor: storage);
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassification(Id.g2));
+            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassification(Id.g2, userId:Id.gA, isAdmin: false));
         }
 
 
@@ -206,26 +196,24 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         public async Task When_non_admin_is_creating_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: Create.ClassificationsStorage(),
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: false));
+                classificationsAccessor: Create.ClassificationsAccessor());
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.CreateClassificationGroup(new ClassificationGroup()));
+            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.CreateClassificationGroup(new ClassificationGroup(), isAdmin: false));
         }
 
         [Test]
-        public async Task When_updating_classification_group()
+        public async Task When_admin_updating_classification_group()
         {
-            var storage = Create.ClassificationsStorage(Entity.Classification.Group(Id.g1, title: "Z"));
+            var storage = Create.ClassificationsAccessor(Entity.Classification.Group(Id.g1, title: "Z"));
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: true));
+                classificationsAccessor: storage);
 
             await classificationStorage.UpdateClassificationGroup(new ClassificationGroup
             {
                 Id = Id.g1,
                 Title = "New group"
-            });
+            }, isAdmin: true);
 
             Assert.That(storage.Query(_ => _.Count()), Is.EqualTo(1));
             Assert.That(storage.GetById(Id.g1).Type, Is.EqualTo(ClassificationEntityType.Group));
@@ -237,20 +225,19 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         public async Task When_non_admin_is_updating_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: Create.ClassificationsStorage(),
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: false));
+                classificationsAccessor: Create.ClassificationsAccessor());
 
             Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.UpdateClassificationGroup(new ClassificationGroup
             {
                 Id = Id.g1,
                 Title = "New group"
-            }));
+            }, isAdmin: false));
         }
 
         [Test]
         public async Task When_deleting_classification_group()
         {
-            var storage = Create.ClassificationsStorage(
+            var storage = Create.ClassificationsAccessor(
                 Entity.Classification.Group(id: Id.g1, title: "group A"),
                 Entity.Classification.Classification(id: Id.g2, title: $"B", parent: Id.g1),
                 Entity.Classification.Classification(id: Id.g3, title: $"C", parent: Id.g1),
@@ -262,10 +249,9 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                 );
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: true));
+                classificationsAccessor: storage);
 
-            await classificationStorage.DeleteClassificationGroup(Id.g1);
+            await classificationStorage.DeleteClassificationGroup(Id.g1, true);
 
             Assert.That(storage.Query(_ => _.Count()), Is.EqualTo(0));
         }
@@ -274,61 +260,37 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
         public async Task When_non_admin_is_deleting_classification_group()
         {
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: Create.ClassificationsStorage(),
-                membershipUserService: Create.MembershipUserService(Id.gA, isAdmin: false));
+                classificationsAccessor: Create.ClassificationsAccessor());
 
-            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationGroup(Id.g1));
+            Assert.ThrowsAsync<ClassificationException>(async () => await classificationStorage.DeleteClassificationGroup(Id.g1, isAdmin: false));
         }
 
         [Test]
         public async Task When_getting_classification_groups_for_user()
         {
-            var storage = Create.ClassificationsStorage(
-                Entity.Classification.Group(title: "Z"),
+            var storage = Create.ClassificationsAccessor(
+                Entity.Classification.Group(id: Id.g2, title: "Z"),
                 Entity.Classification.Group(title: "G"),
                 Entity.Classification.Group(title: "K"),
                 Entity.Classification.Group(title: "A"),
                 Entity.Classification.Group(title: "B", userId: Id.gA),
                 Entity.Classification.Group(id: Id.g1, title: "C", userId: Id.gB),
-                Entity.Classification.Classification(),
+                Entity.Classification.Classification(parent: Id.g2),
+                Entity.Classification.Classification(parent: Id.g2),
                 Entity.Classification.Category()
             );
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
-            var groups = (await classificationStorage.GetClassificationGroups()).ToList();
+            var groups = (await classificationStorage.GetClassificationGroups(userId:Id.gA)).ToList();
 
             Assert.That(groups.Count, Is.EqualTo(5));
             CollectionAssert.IsOrdered(groups.Select(x => x.Title));
             CollectionAssert.DoesNotContain(groups.Select(x => x.Id), Id.g1);
             CollectionAssert.AllItemsAreInstancesOfType(groups,  typeof(ClassificationGroup));
-        }
+            Assert.That(groups.Last().Count, Is.EqualTo(2));
 
-        [Test]
-        public async Task When_getting_classifications_for_user()
-        {
-            var storage = Create.ClassificationsStorage(
-                Entity.Classification.Group(id: Id.g1, title: "A"),
-                Entity.Classification.Group(id: Id.g2, title: "B"),
-                Entity.Classification.Classification(id: Id.g5, title: "E", userId: Id.gA, parent: Id.g1),
-                Entity.Classification.Classification(id: Id.g3, title: "C", parent: Id.g1),
-                Entity.Classification.Classification(id: Id.g4, title: "D", userId: Id.gB, parent: Id.g1),
-                Entity.Classification.Classification(id: Id.g6, title: "F", parent: Id.g2),
-                Entity.Classification.Category()
-            );
-
-            var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
-
-            var classifications = (await classificationStorage.GetClassifications(Id.g1)).ToList();
-
-            Assert.That(classifications.Count, Is.EqualTo(2));
-            CollectionAssert.IsOrdered(classifications.Select(x => x.Title));
-            CollectionAssert.DoesNotContain(classifications.Select(x => x.Id), Id.g4);
-            CollectionAssert.AllItemsAreInstancesOfType(classifications,  typeof(Classification));
         }
 
         [Test]
@@ -345,11 +307,10 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                     .Range(1, Constants.MaxLongRosterRowCount + 10)
                     .Select(i => Entity.Classification.Category(title: $"c {i}", parent: Id.g2, index: orders[i-1], value: i)));
 
-            var storage = Create.ClassificationsStorage(entities.ToArray());
+            var storage = Create.ClassificationsAccessor(entities.ToArray());
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
             var categories = (await classificationStorage.GetCategories(Id.g2)).ToList();
 
@@ -389,13 +350,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                 Entity.Classification.Category(title: $"FFF", userId: Id.gA, parent: Id.g6),
             };
 
-            var storage = Create.ClassificationsStorage(entities.ToArray());
+            var storage = Create.ClassificationsAccessor(entities.ToArray());
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
-            var searchResult= await classificationStorage.SearchAsync(query, null, false);
+            var searchResult= await classificationStorage.SearchAsync(query, null, false, userId:Id.gA);
 
             Assert.That(searchResult.Classifications.Count, Is.EqualTo(3));
             Assert.That(searchResult.Total, Is.EqualTo(3));
@@ -439,13 +399,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                 Entity.Classification.Category(title: $"FFF", userId: Id.gA, parent: Id.g6),
             };
 
-            var storage = Create.ClassificationsStorage(entities.ToArray());
+            var storage = Create.ClassificationsAccessor(entities.ToArray());
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
-            var searchResult= await classificationStorage.SearchAsync(query, Id.g1, false);
+            var searchResult= await classificationStorage.SearchAsync(query, Id.g1, false, userId:Id.gA);
 
             Assert.That(searchResult.Classifications.Count, Is.EqualTo(2));
             Assert.That(searchResult.Total, Is.EqualTo(2));
@@ -488,13 +447,12 @@ namespace WB.Tests.Unit.Designer.ClassificationsTests
                 Entity.Classification.Category(title: $"FFF", userId: Id.gA, parent: Id.g6),
             };
 
-            var storage = Create.ClassificationsStorage(entities.ToArray());
+            var storage = Create.ClassificationsAccessor(entities.ToArray());
 
             var classificationStorage = Create.ClassificationStorage(
-                classificationsStorage: storage,
-                membershipUserService: Create.MembershipUserService(Id.gA));
+                classificationsAccessor: storage);
 
-            var searchResult= await classificationStorage.SearchAsync(query, Id.g1, privateOnly: true);
+            var searchResult= await classificationStorage.SearchAsync(query, Id.g1, privateOnly: true, userId: Id.gA);
 
             Assert.That(searchResult.Classifications.Count, Is.EqualTo(1));
             Assert.That(searchResult.Total, Is.EqualTo(1));

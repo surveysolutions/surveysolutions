@@ -128,10 +128,15 @@
                 var self = this;
                 this.$validator.validate().then(function(result) {
                     if (result) {
-                        store.dispatch('updateCategories', self.$store.state.activeClassification.id).then(
-                            function() {
-
+                        store.dispatch('updateCategories', self.$store.state.activeClassification.id).then(function() {
+                            self.$validator.pause();
+                            self.$nextTick(() => {
+                                self.$validator.fields.items.forEach(field => field.reset());
+                                self.$validator.reset();
+                                self.$validator.errors.clear();
+                                self.$validator.resume();
                             });
+                        });
                     }
                 });
             },

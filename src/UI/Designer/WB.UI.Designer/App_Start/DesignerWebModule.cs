@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.WebPages;
+using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -45,6 +46,7 @@ namespace WB.UI.Designer
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
+            registry.Bind<IClassificationsStorage, ClassificationsStorage>();
 
             registry.BindToMethod<WebTesterSettings>(() =>
             {

@@ -6,17 +6,17 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 {
     public interface IClassificationsStorage
     {
-        Task<IEnumerable<ClassificationGroup>> GetClassificationGroups();
-        Task<IEnumerable<Classification>> GetClassifications(Guid? groupId);
-        Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly);
+        Task<IEnumerable<ClassificationGroup>> GetClassificationGroups(Guid userId);
+        Task<IEnumerable<Classification>> GetClassifications(Guid? groupId, Guid userId);
+        Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly, Guid userId);
         void Store(ClassificationEntity[] bdEntities);
         Task<List<Category>> GetCategories(Guid classificationId);
-        Task CreateClassification(Classification classification);
-        Task UpdateClassification(Classification classification);
-        Task DeleteClassification(Guid classificationId);
-        Task CreateClassificationGroup(ClassificationGroup group);
-        Task UpdateClassificationGroup(ClassificationGroup group);
-        Task DeleteClassificationGroup(Guid groupId);
-        Task UpdateCategories(Guid classificationId, Category[] categories);
+        Task CreateClassification(Classification classification, Guid userId);
+        Task UpdateClassification(Classification classification, Guid userId, bool isAdmin);
+        Task DeleteClassification(Guid classificationId, Guid userId, bool isAdmin);
+        Task CreateClassificationGroup(ClassificationGroup group, bool isAdmin);
+        Task UpdateClassificationGroup(ClassificationGroup group, bool isAdmin);
+        Task DeleteClassificationGroup(Guid groupId, bool isAdmin);
+        Task UpdateCategories(Guid classificationId, Category[] categories, Guid userId, bool isAdmin);
     }
 }

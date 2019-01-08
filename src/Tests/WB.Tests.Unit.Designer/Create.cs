@@ -1,14 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs;
+using NHibernate;
+using NHibernate.Cfg;
+using NHibernate.Cfg.MappingSchema;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
@@ -58,6 +65,8 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -1444,12 +1453,12 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static ClassificationsStorage ClassificationStorage(
-            IPlainStorageAccessor<ClassificationEntity> classificationsStorage = null, 
-            IMembershipUserService membershipUserService = null)
+            IPlainStorageAccessor<ClassificationEntity> classificationsAccessor = null,
+            IUnitOfWork unitOfWork = null)
         {
             return new ClassificationsStorage(
-                classificationsStorage ??  new TestPlainStorage<ClassificationEntity>(), 
-                membershipUserService ?? Mock.Of<IMembershipUserService>());
+                classificationsAccessor ??  new TestPlainStorage<ClassificationEntity>(), 
+                unitOfWork ?? Mock.Of<IUnitOfWork>());
         }
 
         public static IMembershipUserService MembershipUserService(Guid userId, bool isAdmin = false)
@@ -1459,7 +1468,7 @@ namespace WB.Tests.Unit.Designer
                      && _.WebServiceUser == Mock.Of<IMembershipWebServiceUser>(u => u.UserId == userId && u.IsAdmin == isAdmin));
         }
 
-        public static IPlainStorageAccessor<ClassificationEntity> ClassificationsStorage(params ClassificationEntity[] entities)
+        public static IPlainStorageAccessor<ClassificationEntity> ClassificationsAccessor(params ClassificationEntity[] entities)
         {
             var storage = new TestPlainStorage<ClassificationEntity>();
             storage.Store(entities.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)));
