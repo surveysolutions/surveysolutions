@@ -22,7 +22,7 @@
       <FilterBlock :title="$t('Reports.Variables')">
         <Typeahead control-id="gpsQuestion"
           :placeholder="$t('Common.AllGpsQuestions')"
-          noSearch 
+          no-search no-clear
           :values="gpsQuestions"
           :value="selectedQuestion"
           @selected="selectGpsQuestion"
@@ -344,9 +344,7 @@ export default {
                         .value();
 
                     if (this.gpsQuestions.length > 0) {
-                        if (this.gpsQuestions.length === 1) {
                             this.selectGpsQuestion(this.gpsQuestions[0]);
-                        }
                     } else {
                         toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
                     }
@@ -508,7 +506,13 @@ export default {
         async showPointsOnMap(east, north, west, south, extendBounds) {
             const zoom = extendBounds ? -1 : this.map.getZoom();
 
-            if (this.selectedQuestionnaireId == null || this.selectedQuestion == null) return;
+            if (this.selectedQuestionnaireId == null || this.selectedQuestion == null) {
+                this.setMapData({
+                    FeatureCollection: [],
+                    TotalPoint: 0
+                })
+                return;
+            }
 
             var request = {
                 Variable: this.selectedQuestion.key,
@@ -531,13 +535,18 @@ export default {
             }, 5000);
 
             const response = await this.api.Report(request);
+            
+            this.setMapData(response.data, extendBounds)
 
-            const toRemove = {};
             stillLoading = false;
             this.isLoading = false;
+        },
 
-            this.totalAnswers = response.data.TotalPoint;
-            const features = response.data.FeatureCollection.features;
+        setMapData(data, extendBounds) {
+            const toRemove = {};
+
+            this.totalAnswers = data.TotalPoint;
+            const features = data.FeatureCollection.features;
             const heatmapData = { data: [] };
 
             this.map.data.forEach(feature => {
@@ -565,7 +574,7 @@ export default {
                 });
             });
 
-            if (self.showHeatmap) {
+            if (this.showHeatmap) {
                 this.map.data.forEach(feature => {
                     this.map.data.remove(feature);
                 });
@@ -577,20 +586,20 @@ export default {
             }
 
             _.forEach(Object.keys(toRemove), key => {
-                self.map.data.remove(toRemove[key]);
+                this.map.data.remove(toRemove[key]);
             });
 
             if (extendBounds) {
                 if (this.totalAnswers === 0) {
-                    self.map.setZoom(1);
+                    this.map.setZoom(1);
                 } else {
-                    const bounds = response.data.InitialBounds;
+                    const bounds = data.InitialBounds;
 
                     const sw = new google.maps.LatLng(bounds.South, bounds.West);
                     const ne = new google.maps.LatLng(bounds.North, bounds.East);
                     const latlngBounds = new google.maps.LatLngBounds(sw, ne);
                     this.isMapReloaded = true;
-                    self.map.fitBounds(latlngBounds);
+                    this.map.fitBounds(latlngBounds);
                 }
             }
         }
