@@ -1080,6 +1080,9 @@
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
   </data>
+  <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+    <value>Отчет Устройства/Интервьюеры отражает количество учетных записей интервьюеров на сервере, связаных с каждой проблемой</value>
+  </data>
   <data name="DownloadReport" xml:space="preserve">
     <value>Экспортировать отчет в</value>
     <comment>Экспортировать отчет в</comment>
