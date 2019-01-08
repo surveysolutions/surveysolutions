@@ -26,12 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         public Guid? UserId { get;set; }
         public ClassificationGroup Group { get; set; }
         public int CategoriesCount { get; set; }
+        public int Count { get; set; } = 0;
     }
 
     public class ClassificationGroup : IClassificationEntity
     {
         public Guid Id { get; set;}
         public string Title { get; set;}
+        public int Count { get; set; }
     }
 
     public class MysqlClassificationEntity
