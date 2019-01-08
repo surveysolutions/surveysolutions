@@ -41,6 +41,7 @@ namespace WB.Tests.Abc.TestFactories
                 new AllUsersAndQuestionnairesView() { Questionnaires = new TemplateViewItem[0] }),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                Mock.Of<IChartStatisticsViewFactory>(),
                 new TestInMemoryWriter<InterviewSummary>());
         }
 
