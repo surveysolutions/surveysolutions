@@ -19,7 +19,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         List<TemplateViewItem> GetOlderQuestionnairesWithPendingAssignments(Guid id, long version);
         List<QuestionnaireIdentity> GetQuestionnaires(string name, long? version);
 
+        /// <summary>
+        /// Return bindable on UI list of questionnaires
+        /// </summary>
+        /// <param name="questionnaireBrowseItems"></param>
+        /// <returns></returns>
         List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems();
+
+        /// <summary>
+        /// Return bindable on UI list of questionnaires by questionnaire browse items list
+        /// </summary>
+        /// <param name="questionnaireBrowseItems"></param>
+        /// <returns></returns>
+        List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems(List<QuestionnaireBrowseItem> questionnaireBrowseItems);
         List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version);
     }
 
@@ -83,21 +95,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 
         public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems()
         {
-            var list = this.questionnairesReader.Query(_ =>
-                _.Where(q => !q.IsDeleted).Select(q => new { q.QuestionnaireId, q.Title, q.Version })).ToList();
+            List<QuestionnaireBrowseItem> list = this.questionnairesReader.Query(_ =>
+                _.Where(q => !q.IsDeleted).ToList());
 
-            return list
-                .GroupBy(questionnaire => new {questionnaire.QuestionnaireId, questionnaire.Title})
-                .Select(g => new QuestionnaireVersionsComboboxViewItem
-                {
-                    Key = g.Key.QuestionnaireId.ToString(),
-                    Value = g.Key.Title,
-                    Versions = g.OrderByDescending(v => v.Version)
-                        .Select(v => new ComboboxViewItem{ Key = v.Version.ToString(), Value = $"ver. {v.Version}"})
-                        .ToList()
-                })
-                .OrderBy(q => q.Value)
-                .ToList();
+            return GetQuestionnaireComboboxViewItems(list);
+        }
+
+        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems(List<QuestionnaireBrowseItem> questionnaireBrowseItems)
+        {
+            return questionnaireBrowseItems
+                 .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title })
+                 .Select(g => new QuestionnaireVersionsComboboxViewItem
+                 {
+                     Key = g.Key.QuestionnaireId.ToString(),
+                     Value = g.Key.Title,
+                     Versions = g.OrderByDescending(v => v.Version)
+                         .Select(v => new ComboboxViewItem { Key = v.Version.ToString(), Value = $"ver. {v.Version}" })
+                         .ToList()
+                 })
+                 .OrderBy(q => q.Value)
+                 .ToList();
         }
 
         public List<QuestionnaireIdentity> GetQuestionnaires(string name, long? version)

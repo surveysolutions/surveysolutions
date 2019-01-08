@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             
             mock.Setup(s => s.GetQuestionnaires(It.IsAny<string>(), It.IsAny<long?>()))
-                .Returns<Guid?, long?>((id, ver) => questionnairesList.ToList());
+                .Returns<string, long?>((id, ver) => questionnairesList.ToList());
 
             this.questionnaires = mock.Object;
         }
@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
         protected ChartStatisticsViewFactory CreateChartStatisticsViewFactory()
         {
-            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires);
+            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires, null, null);
         }
 
         protected void CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(QuestionnaireIdentity questionnaireId, DateTime date, int count)
