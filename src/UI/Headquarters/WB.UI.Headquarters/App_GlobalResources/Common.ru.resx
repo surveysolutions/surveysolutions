@@ -316,4 +316,8 @@
   <data name="QuestionnaireVersion" xml:space="preserve">
     <value>Версия опросника</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>Выберите опросник</value>
+      <comment>Выберите опросник</comment>
+  </data>
 </root>

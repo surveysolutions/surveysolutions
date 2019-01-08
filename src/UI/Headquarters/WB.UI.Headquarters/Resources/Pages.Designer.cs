@@ -2077,6 +2077,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue.
+        /// </summary>
+        public static string InterviewersAndDevicesSubtitle {
+            get {
+                return ResourceManager.GetString("InterviewersAndDevicesSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Devices/Interviewers.
         /// </summary>
         public static string InterviewersAndDevicesTitle {
@@ -3104,6 +3113,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status by surveys.
+        /// </summary>
+        public static string SurveysAndStatuses_HeadquartersDescription {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_HeadquartersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} interviews.
         /// </summary>
         public static string SurveysAndStatuses_InterviewerStatisticsFormat {
@@ -3127,6 +3145,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveysAndStatuses_Overview {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status for surveys in which this supervisor is involved.
+        /// </summary>
+        public static string SurveysAndStatuses_SupervisorDescription {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_SupervisorDescription", resourceCulture);
             }
         }
         

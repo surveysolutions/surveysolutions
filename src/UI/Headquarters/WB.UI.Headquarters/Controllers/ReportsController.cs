@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.Controllers
             model.AllTeamsTitle = Strings.AllTeams;
             model.TeamTitle = Users.Supervisors;
             model.ReportName = Reports.TeamsAndStatuses;
-
+            model.Subtitle = Reports.TeamsAndStatuses_HeadquartersSubtitle;
             return this.View("TeamsAndStatuses", model);
         }
 
@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
             model.AllTeamsTitle = Strings.AllInterviewers;
             model.TeamTitle = Pages.TeamMember;
             model.ReportName = Reports.Report_Team_Members_and_Statuses;
-
+            model.Subtitle = Reports.TeamsAndStatuses_SupervisorSubtitle;
             return this.View(model);
         }
 
