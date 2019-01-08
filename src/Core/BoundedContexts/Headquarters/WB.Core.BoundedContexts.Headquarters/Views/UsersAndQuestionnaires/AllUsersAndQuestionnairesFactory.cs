@@ -24,12 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         /// <returns></returns>
         List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems();
 
-        /// <summary>
-        /// Return bindable on UI list of questionnaires by questionnaire browse items list
-        /// </summary>
-        /// <param name="questionnaireBrowseItems"></param>
-        /// <returns></returns>
-        List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems(List<QuestionnaireBrowseItem> questionnaireBrowseItems);
         List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version);
     }
 
@@ -93,26 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 
         public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems()
         {
-            List<QuestionnaireBrowseItem> list = this.questionnairesReader.Query(_ =>
-                _.Where(q => !q.IsDeleted).ToList());
-
-            return GetQuestionnaireComboboxViewItems(list);
-        }
-
-        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems(List<QuestionnaireBrowseItem> questionnaireBrowseItems)
-        {
-            return questionnaireBrowseItems
-                 .GroupBy(questionnaire => new { questionnaire.QuestionnaireId, questionnaire.Title })
-                 .Select(g => new QuestionnaireVersionsComboboxViewItem
-                 {
-                     Key = g.Key.QuestionnaireId.ToString(),
-                     Value = g.Key.Title,
-                     Versions = g.OrderByDescending(v => v.Version)
-                         .Select(v => new ComboboxViewItem { Key = v.Version.ToString(), Value = $"ver. {v.Version}" })
-                         .ToList()
-                 })
-                 .OrderBy(q => q.Value)
-                 .ToList();
+            return this.questionnairesReader.Query(_ =>
+                _.Where(q => !q.IsDeleted).ToList()).GetQuestionnaireComboboxViewItems();
         }
 
         public List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version)
