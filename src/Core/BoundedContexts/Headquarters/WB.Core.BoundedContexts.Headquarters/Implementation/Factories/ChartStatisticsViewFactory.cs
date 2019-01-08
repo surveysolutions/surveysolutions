@@ -50,10 +50,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     .Where(q => AllowedStatuses.Contains((int)q.Status))
                     .Select(q => q.QuestionnaireIdentity).Distinct().ToList());
 
-            var questionnaires = this.questionnaireRepository
-                .Query(q => q.Where(item => !item.IsDeleted && questionnaireListWithData.Contains(item.Id)).ToList());
-
-            return this.questionnairesFactory.GetQuestionnaireComboboxViewItems(questionnaires);
+            return this.questionnaireRepository
+                .Query(q => q.Where(item => !item.IsDeleted && questionnaireListWithData.Contains(item.Id)).ToList())
+                .GetQuestionnaireComboboxViewItems();
         }
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)

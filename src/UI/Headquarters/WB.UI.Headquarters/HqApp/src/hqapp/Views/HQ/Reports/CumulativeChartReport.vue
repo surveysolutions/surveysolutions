@@ -167,7 +167,12 @@ export default {
         },
 
         refreshData() {
-            this.$store.dispatch("queryChartData", this.queryString);
+            this.$store.dispatch("queryChartData", {
+                from: this.queryString.from,
+                to: this.queryString.to,
+                version: this.queryString.version,
+                questionnaireId: this.selectedQuestionnaire == null ? null : this.selectedQuestionnaire.key
+            });
         }
     },
 
