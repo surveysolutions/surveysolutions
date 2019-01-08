@@ -45,8 +45,9 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             questionnairesList = new HashSet<QuestionnaireIdentity>();
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             
-            mock.Setup(s => s.GetQuestionnaires(It.IsAny<Guid?>(), It.IsAny<long?>()))
+            mock.Setup(s => s.GetQuestionnaires(It.IsAny<string>(), It.IsAny<long?>()))
                 .Returns<Guid?, long?>((id, ver) => questionnairesList.ToList());
+
             this.questionnaires = mock.Object;
         }
         

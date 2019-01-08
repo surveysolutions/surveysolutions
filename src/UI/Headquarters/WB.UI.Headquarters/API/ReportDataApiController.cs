@@ -491,7 +491,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             var input = new ChartStatisticsInputModel
             {
-                QuestionnaireId = data.TemplateId,
+                QuestionnaireName = data.TemplateName,
                 QuestionnaireVersion = data.TemplateVersion,
                 CurrentDate = DateTime.Now,
                 From = data.From,

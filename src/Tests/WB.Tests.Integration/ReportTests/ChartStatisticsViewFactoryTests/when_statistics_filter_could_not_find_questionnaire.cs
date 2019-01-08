@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 {
@@ -21,7 +22,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = baseDate,
-                QuestionnaireId = questionnaireId,
+                QuestionnaireName = questionnaireId.FormatGuid(),
                 QuestionnaireVersion = questionnaireVersion,
                 From = baseDate.AddDays(-2),
                 To = baseDate
