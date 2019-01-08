@@ -7,7 +7,7 @@
                     <div class="page-header clearfix" v-if="hasHeader">
                       <slot name="headers">
                         <h1>{{title}}</h1>
-                        <h3 v-if="subtitle">{{ subtitle }}</h3>
+                        <i v-if="subtitle">{{ subtitle }}</i>
                       </slot>
                       <slot name="subtitle" />
                     </div>

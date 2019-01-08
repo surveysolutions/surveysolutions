@@ -27,14 +27,16 @@
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
-                <li v-if="!forceLoadingState" v-for="option in options" :key="keyFunc(option.item)">
-                    <a 
-                       :class="[option.item.iconClass]"
-                       href="javascript:void(0);"
-                        @click="selectOption(option.item)" 
-                       v-html="highlight(option, searchTerm)"
-                       @keydown.up="onOptionUpKey"></a>
-                </li>
+                <template v-if="!forceLoadingState" >
+                    <li v-for="option in options" :key="keyFunc(option.item)">
+                        <a 
+                        :class="[option.item.iconClass]"
+                        href="javascript:void(0);"
+                            @click="selectOption(option.item)" 
+                        v-html="highlight(option, searchTerm)"
+                        @keydown.up="onOptionUpKey"></a>
+                    </li>
+                </template>
                 <li v-if="isLoading">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>

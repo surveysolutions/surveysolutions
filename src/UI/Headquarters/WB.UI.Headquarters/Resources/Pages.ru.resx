@@ -360,6 +360,12 @@
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
   </data>
+  <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+    <value>Репорт состояния созданных и собранных интервью отображает колличество интервью в каждом из статусов по обследованиям</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+    <value>Репорт состояния созданных и собранных интервью отображает колличество интервью в каждом из статусов по обследованиям, в которых задействован супервизор</value>
+  </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} интервью</value>
   </data>
@@ -1073,6 +1079,9 @@
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
+  </data>
+  <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+    <value>Отчет Устройства/Интервьюеры отражает количество учетных записей интервьюеров на сервере, связаных с каждой проблемой</value>
   </data>
   <data name="DownloadReport" xml:space="preserve">
     <value>Экспортировать отчет в</value>

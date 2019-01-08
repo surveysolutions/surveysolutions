@@ -25,23 +25,23 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(It.IsAny<string>())).Returns(false);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(It.IsAny<string>())).Returns(new[] { fileName, "2.txt" });
 
-
             var commentedStatuses = new List<InterviewSummary>
             {
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.Created),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.SupervisorAssigned),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.Completed),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.RejectedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.Completed),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.Restarted),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.InterviewerAssigned),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.Completed),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.ApprovedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.RejectedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.ApprovedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.ApprovedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
-                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, status: InterviewExportedAction.UnapprovedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Created),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.SupervisorAssigned),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.InterviewerAssigned),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Completed),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.RejectedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Completed),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Restarted),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.InterviewerAssigned),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Completed),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.ApprovedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.RejectedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.ApprovedBySupervisor, originatorName: "supervisor", originatorRole: UserRoles.Supervisor),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.ApprovedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.UnapprovedByHeadquarter, originatorName: "hq", originatorRole: UserRoles.Headquarter),
+                Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.TranslationSwitched, originatorName: "hq", originatorRole: UserRoles.Headquarter, interviewerName: "hq"),
             };
 
             foreach (var commentedStatus in commentedStatuses)
@@ -81,7 +81,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(tenant, questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData.Count, Is.EqualTo(14 /*statuses*/ + 1 /*header*/));
+            Assert.That(fileData.Count, Is.EqualTo(15 /*statuses*/ + 1 /*header*/));
         }
 
         [Test]
@@ -217,6 +217,19 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             Assert.That(fileData[14], Is.EqualTo(new[] { InterviewKey, "22222222222222222222222222222222", "2017-12-31", "14:45:30", "11",
                 "hq", "Headquarter", "supervisor", "Supervisor" }));
+        }
+
+        [Test]
+        public async Task should_record_row_about_translation_switch()
+        {
+            await actionsExporter.ExportAsync(tenant, questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
+
+            Assert.That(fileData[15], Is.EqualTo(new[] { InterviewKey,
+                "22222222222222222222222222222222",
+                "2017-12-31",
+                "14:45:30",
+                InterviewExportedAction.TranslationSwitched.ToString("D"),
+                "hq", "Headquarter", "hq", "Headquarter"}));
         }
 
         private static InterviewActionsExporter actionsExporter;

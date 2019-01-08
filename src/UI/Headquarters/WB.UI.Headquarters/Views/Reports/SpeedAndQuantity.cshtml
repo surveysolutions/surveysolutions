@@ -129,11 +129,13 @@
                         <span data-bind="text: ReportTypeName"></span>
                         @(Model.SupervisorId.HasValue ? string.Format(PeriodicStatusReport.InTheSupervisorTeamFormat, @Model.SupervisorName) : "")
                     </h1>
+                    <i>@Model.ReportNameDescription</i>
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-8">
-                        <h2 data-bind="text: QuestionnaireName"></h2>
-                        <h3>@Model.ReportNameDescription</h3>
+                        
+                        <h4 data-bind="text: QuestionnaireName"></h4>
+
                         @if (Model.CanNavigateToQuantityBySupervisors)
                         {
                             <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>

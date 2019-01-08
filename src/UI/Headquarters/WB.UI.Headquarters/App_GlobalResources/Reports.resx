@@ -120,6 +120,9 @@
   <data name="CumulativeInterviewChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>The Cumulative Interview Chart shows evolution of the number of interviews in each status over time</value>
+  </data>
   <data name="InterviewChart" xml:space="preserve">
     <value>Interview Chart</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>The Teams and Statuses report shows the number of interviews in each status by interviewer</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>The Teams and Statuses report shows the number of interviews in each status by teams</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Count Days of interview in Status</value>
