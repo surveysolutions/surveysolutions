@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
@@ -20,7 +21,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
-                QuestionnaireId = qid.QuestionnaireId,
+                QuestionnaireName = qid.Id,
                 QuestionnaireVersion = qid.Version,
                 From = new DateTime(2014, 8, 19),
                 To = new DateTime(2014, 8, 22),
