@@ -147,8 +147,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
-            this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted).ToList());
+        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions()
+        {
+            var questionnaireIds = this.questionnaireItems.Query(q =>
+            {
+                return q.Where(item => item.QuestionType == QuestionType.GpsCoordinates)
+                    .Select(item => item.QuestionnaireIdentity)
+                    .Distinct().ToList();
+            });
+
+            return this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted && questionnaireIds.Contains(x.Id)).ToList());
+        }
 
         private struct MapReportCacheLine
         {
