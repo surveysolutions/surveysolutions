@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -14,13 +13,13 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
         public void Establish()
         {
             var qid = Create.Entity.QuestionnaireIdentity();
-
+            
             CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(qid, new DateTime(2014,8,21), 1);
 
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
-                QuestionnaireId = qid.QuestionnaireId,
+                QuestionnaireName = qid.Id,
                 QuestionnaireVersion = qid.Version,
                 From = null,
                 To = new DateTime(2014, 8, 22),
