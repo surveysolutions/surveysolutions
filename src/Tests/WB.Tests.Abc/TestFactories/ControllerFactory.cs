@@ -42,7 +42,7 @@ namespace WB.Tests.Abc.TestFactories
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 Mock.Of<IChartStatisticsViewFactory>(),
-                new TestInMemoryWriter<InterviewSummary>());
+                new TestInMemoryWriter<InterviewSummary>(), null);
         }
 
         public InterviewerApiController InterviewerApiController(
