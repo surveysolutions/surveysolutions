@@ -145,7 +145,7 @@
                 </form>
             </div>
             <div v-else class="line-wrapper">
-                <a @@click="select()">{{ group.title }}</a>
+                <a @@click="select()">{{ title }} <span class="badge pull-right">{{group.count}}</span></a>
             </div>
         </div>
     </script>
@@ -162,7 +162,7 @@
                 </form>
             </div>
             <div v-else class="line-wrapper" :class="{'private': isPrivate}">
-                <a @@click="select()"> {{ title }}</a>
+                <a @@click="select()">{{ title }} <span class="badge pull-right">{{classification.count}}</span></a>
             </div>
         </div>
     </script>
