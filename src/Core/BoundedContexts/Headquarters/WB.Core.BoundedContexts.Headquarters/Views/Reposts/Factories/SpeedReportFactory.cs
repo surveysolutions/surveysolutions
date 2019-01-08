@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
                     .ToArray();
 
-            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, allInterviewsInStatus)).ToArray();
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, allInterviewsInStatus)).OrderBy(x =>x.ResponsibleName).ToArray();
 
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in ranges.ColumnRangesUtc)
