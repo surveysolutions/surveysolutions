@@ -130,7 +130,10 @@
     <value>Дата завершения</value>
   </data>
   <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>График</value>
+    <value>Накопительный График Интервью</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Накопительный График Интервью отображает изменение колличества интервью по каждому статусу с течением времени</value>
   </data>
   <data name="DatesRange" xml:space="preserve">
     <value>Период</value>
@@ -167,6 +170,12 @@
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Команды и статусы</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают колличество интервью в каждом статусе по интервьюверу</value>
+  </data>
+    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают колличество интервью в каждом статусе по командам</value>
   </data>
   <data name="Variables" xml:space="preserve">
     <value>Переменные</value>

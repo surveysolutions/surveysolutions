@@ -1,5 +1,5 @@
 <template>
-  <HqLayout :title="$config.model.reportName" :hasFilter="true">
+  <HqLayout :title="$config.model.reportName" :subtitle="$config.model.subtitle" :hasFilter="true">
     <Filters slot="filters">
       <FilterBlock
         :title="$t('Common.Questionnaire')">
@@ -26,6 +26,11 @@
         />
       </FilterBlock>
     </Filters>
+    <div class="clearfix">
+      <div class="col-sm-8">
+        <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions') : this.questionnaireVersion.value}} </h4>        
+      </div>
+    </div>
     <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true" exportable hasTotalRow></DataTables>
   </HqLayout>
 </template>
@@ -127,7 +132,7 @@ export default {
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
-                    onDone(response.data.id, response.data.title, response.data.version);
+                    onDone(questionnaireId, response.data.title, response.data.version);
                 }
 
             } else onDone();

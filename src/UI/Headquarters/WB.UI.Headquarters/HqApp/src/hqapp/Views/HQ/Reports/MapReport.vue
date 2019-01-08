@@ -2,8 +2,8 @@
   <HqLayout :hasFilter="true" :hasHeader="false">
     <Filters slot="filters">
       <FilterBlock :title="$t('Common.Questionnaire')">
-        <Typeahead control-id="questionnaireId"
-          :placeholder="$t('Common.AllQuestionnaires')"
+        <Typeahead control-id="questionnaireId" no-clear
+          :placeholder="$t('Common.SelectQuestionnaire')"
           :value="selectedQuestionnaireId"
           :values="questionnaires"
           :keyFunc="item => item.key + item.value"
