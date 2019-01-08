@@ -4,9 +4,14 @@ using System.Globalization;
 using System.Linq;
 using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
@@ -15,12 +20,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
+        private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, 
-            IAllUsersAndQuestionnairesFactory questionnairesFactory)
+            IAllUsersAndQuestionnairesFactory questionnairesFactory, 
+            INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
         {
             this.unitOfWork = unitOfWork;
             this.questionnairesFactory = questionnairesFactory;
+            this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private static readonly int[] AllowedStatuses =
@@ -31,6 +42,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             (int) InterviewStatus.RejectedByHeadquarters,
             (int) InterviewStatus.ApprovedByHeadquarters
         };
+
+        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireListWithData()
+        {
+            var questionnaireListWithData = cumulativeReportStatusChangeStorage
+                .Query(_ => _
+                    .Where(q => AllowedStatuses.Contains((int)q.Status))
+                    .Select(q => q.QuestionnaireIdentity).Distinct().ToList());
+
+            var questionnaires = this.questionnaireRepository
+                .Query(q => q.Where(item => !item.IsDeleted && questionnaireListWithData.Contains(item.Id)).ToList());
+
+            return this.questionnairesFactory.GetQuestionnaireComboboxViewItems(questionnaires);
+        }
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
