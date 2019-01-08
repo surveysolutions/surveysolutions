@@ -1896,5 +1896,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0280_TextContainsLinkToUnknownQuestionOrGroup", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview will contains a lot of questions, please decrease same roster sizes..
+        /// </summary>
+        public static string WB0281_QuestionnaireExceededEntitiesLimit {
+            get {
+                return ResourceManager.GetString("WB0281_QuestionnaireExceededEntitiesLimit", resourceCulture);
+            }
+        }
     }
 }

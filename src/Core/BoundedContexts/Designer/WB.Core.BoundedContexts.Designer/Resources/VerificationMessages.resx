@@ -729,4 +729,7 @@
   <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
     <value>Links are prohibited on navigation elements: sections, sub-sections, rosters</value>
   </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Interview will contains a lot of questions, please decrease same roster sizes.</value>
+  </data>
 </root>
