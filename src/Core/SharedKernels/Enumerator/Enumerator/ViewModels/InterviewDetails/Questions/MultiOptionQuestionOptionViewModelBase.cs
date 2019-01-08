@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -29,45 +30,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool Checked
         {
             get => this.@checked;
-            set
-            {
-                if (this.@checked == value) return;
-                this.@checked = value;
-                if (QuestionViewModel.AreAnswersOrdered)
-                {
-                    if (value)
-                    {
-                        this.CheckedOrder = this.QuestionViewModel.Options
-                                                .Select(x => x.CheckedOrder ?? 0)
-                                                .DefaultIfEmpty(0)
-                                                .Max() + 1;
-                    }
-                    else
-                    {
-                        if (this.CheckedOrder.HasValue)
-                        {
-                            this.QuestionViewModel.Options
-                                .Where(x => x.CheckedOrder > this.CheckedOrder)
-                                .ForEach(x => x.CheckedOrder -= 1);
-                        }
-
-                        this.CheckedOrder = null;
-                    }
-                }
-
-                this.RaisePropertyChanged();
-            }
+            set => this.SetProperty(ref this.@checked, value);
         }
 
         public int? CheckedOrder
         {
             get => this.checkedOrder;
-            set
-            {
-                if (this.checkedOrder == value) return;
-                this.checkedOrder = value; 
-                this.RaisePropertyChanged();
-            }
+            set => this.SetProperty(ref this.checkedOrder, value);
         }
 
         public bool IsProtected
@@ -82,11 +51,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref this.canBeChecked, value);
         }
 
-        public IMvxAsyncCommand CheckAnswerCommand
+        public bool IsRosterSize { get; set; }
+
+        public IMvxAsyncCommand CheckAnswerCommand => new MvxAsyncCommand(CheckAnswerAsync, () => CanBeChecked && !IsProtected);
+
+        protected virtual async Task CheckAnswerAsync()
         {
-            get
+            this.SortCheckedOptions();
+            await this.QuestionViewModel.ToggleAnswerAsync(this);
+        }
+
+        protected void SortCheckedOptions()
+        {
+            if (!QuestionViewModel.AreAnswersOrdered) return;
+
+            if (this.Checked)
             {
-                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked && !IsProtected);
+                this.CheckedOrder = this.QuestionViewModel.Options
+                                        .Select(x => x.CheckedOrder ?? 0)
+                                        .DefaultIfEmpty(0)
+                                        .Max() + 1;
+            }
+            else
+            {
+                if (this.CheckedOrder.HasValue)
+                {
+                    this.QuestionViewModel.Options
+                        .Where(x => x.CheckedOrder > this.CheckedOrder)
+                        .ForEach(x => x.CheckedOrder -= 1);
+                }
+
+                this.CheckedOrder = null;
             }
         }
     }

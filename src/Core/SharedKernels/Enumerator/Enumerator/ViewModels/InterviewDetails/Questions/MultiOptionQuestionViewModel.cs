@@ -177,7 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterview interview)
         {
             var answer = multiOptionAnswer ?? new int[] {};
-            var result = new MultiOptionQuestionOptionViewModel(this)
+            var result = new MultiOptionQuestionOptionViewModel(this, this.userInteraction)
             {
                 Value = model.Value,
                 Title = model.Title,
@@ -188,6 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
             result.QuestionState = this.questionState;
             result.IsProtected = interview.IsAnswerProtected(this.questionIdentity, result.Value);
+            result.IsRosterSize = this.isRosterSizeQuestion;
             result.CanBeChecked = result.Checked || !this.maxAllowedAnswers.HasValue || answer.Length < this.maxAllowedAnswers;
 
             return result;
@@ -204,28 +205,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
-            if (this.userInteraction.HasPendingUserInteractions)
-            {
-                await this.userInteraction.WaitPendingUserInteractionsAsync();
-                ResetUiOptions();
-                return;
-            }
-
-            if (this.isRosterSizeQuestion)
-            {
-                var itemsToDelete = PreviousOptionsToReset.Except(selectedOptionsToSave).ToList();
-                if (itemsToDelete.Any())
-                {
-                    var amountOfRostersToRemove = itemsToDelete.Count;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    if (!await this.userInteraction.ConfirmAsync(message))
-                    {
-                        ResetUiOptions();
-                        return;
-                    }
-                }
-            }
-
             var selectedValues = selectedOptionsToSave.ToArray();
 
             var command = new AnswerMultipleOptionsQuestionCommand(
