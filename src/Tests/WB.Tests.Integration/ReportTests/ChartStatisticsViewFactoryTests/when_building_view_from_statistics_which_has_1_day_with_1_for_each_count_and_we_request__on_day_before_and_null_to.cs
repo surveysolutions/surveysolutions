@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
-                QuestionnaireName = qId.Id,
+                QuestionnaireId = qId.QuestionnaireId,
                 QuestionnaireVersion = qId.Version,
                 From = new DateTime(2014, 8, 20),
                 To = null,
