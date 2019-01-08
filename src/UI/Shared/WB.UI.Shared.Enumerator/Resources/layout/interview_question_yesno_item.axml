@@ -11,13 +11,13 @@
   
   <RadioButton
     style="@style/Interview_Question_Answer_YesNo_Option"
-    local:MvxBind="HideKeyboardOnClick .; Checked YesSelected; Tag YesItemTag; Enabled And(YesCanBeChecked, Not(IsProtected))" />
+    local:MvxBind="HideKeyboardOnClick .; Checked YesSelected; Click SetYesAnswerCommand; Tag YesItemTag; Enabled And(YesCanBeChecked, Not(IsProtected))" />
 
   <TextView style="@style/Interview_Question_Answer_YesNo_Option" android:text="/" />
   
   <RadioButton
     style="@style/Interview_Question_Answer_YesNo_Option"
-    local:MvxBind="HideKeyboardOnClick .; Checked NoSelected; Tag NoItemTag; Enabled Not(IsProtected)" />
+    local:MvxBind="HideKeyboardOnClick .; Checked NoSelected; Click SetNoAnswerCommand; Tag NoItemTag; Enabled Not(IsProtected)" />
 
   <TextView style="@style/Interview_Question_Answer_Option_Input"
     local:MvxBind="HideKeyboardOnClick .; Text Title; Bold Or(YesSelected, NoSelected); IsSelectedYesNoOptionColor Or(YesSelected, NoSelected);"/>
