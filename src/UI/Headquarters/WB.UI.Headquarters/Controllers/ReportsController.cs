@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,18 +30,21 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory userViewFactory;
         private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
+        private readonly IMapReport mapReport;
 
         public ReportsController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
             IChartStatisticsViewFactory chartStatisticsViewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses, 
+            IMapReport mapReport)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.interviewStatuses = interviewStatuses;
+            this.mapReport = mapReport;
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
@@ -100,11 +105,11 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithGpsQuestions();
 
             return View(new
             {
-                Questionnaires = questionnaires
+                Questionnaires = questionnaires.GetQuestionnaireComboboxViewItems()
             });
         }
 
