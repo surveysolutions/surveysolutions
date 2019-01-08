@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Designer.Classifications;
 
-namespace WB.Tests.Unit.Designer
+namespace WB.Tests.Abc
 {
     internal static partial class  Entity
     {

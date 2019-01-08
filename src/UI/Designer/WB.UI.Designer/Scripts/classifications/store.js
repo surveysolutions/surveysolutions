@@ -48,6 +48,7 @@
         },
         addClassification: function(state, classification) {
             state.classifications.push(classification);
+            state.activeGroup.count++;
         },
         addCategory: function(state, category) {
             state.categories.push(category);
@@ -59,8 +60,10 @@
         },
         deleteClassification: function(state, index) {
             state.classifications.splice(index, 1);
+            state.activeGroup.count--;
         },
         updateCategories: function(state) {
+            state.activeClassification.count = state.categories.length;
         },
         deleteCategory: function(state, index) {
             state.categories.splice(index, 1);

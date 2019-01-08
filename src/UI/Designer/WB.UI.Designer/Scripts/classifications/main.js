@@ -58,11 +58,11 @@
         },
         methods: {
             addGroup() {
-                this.$store.dispatch('addGroup', { id: guid(), isNew: true, title: '' });
+                this.$store.dispatch('addGroup', { id: guid(), isNew: true, title: '', count: 0 });
             },
             addClassification() {
                 this.$store.dispatch('addClassification',
-                    { id: guid(), isNew: true, title: '', parent: this.activeGroup.id, userId: Vue.$config.userId });
+                    { id: guid(), isNew: true, title: '', parent: this.activeGroup.id, userId: Vue.$config.userId, count: 0 });
             }
         }
     });
