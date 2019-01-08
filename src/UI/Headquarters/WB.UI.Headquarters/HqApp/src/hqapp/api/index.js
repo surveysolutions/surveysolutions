@@ -103,9 +103,9 @@ class Reports {
         return new MapsReport(this.http)
     }
 
-    Chart({name, version, from, to}) {
+    Chart({questionnaireId, version, from, to}) {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
-            templateName: name,
+            templateId: questionnaireId,
             templateVersion: version,
             from, to
         })

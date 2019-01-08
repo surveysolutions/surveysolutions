@@ -17,8 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         AllUsersAndQuestionnairesView Load();
         List<TemplateViewItem> GetQuestionnaires();
         List<TemplateViewItem> GetOlderQuestionnairesWithPendingAssignments(Guid id, long version);
-        List<QuestionnaireIdentity> GetQuestionnaires(string name, long? version);
-
         /// <summary>
         /// Return bindable on UI list of questionnaires
         /// </summary>
@@ -115,26 +113,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
                  })
                  .OrderBy(q => q.Value)
                  .ToList();
-        }
-
-        public List<QuestionnaireIdentity> GetQuestionnaires(string name, long? version)
-        {
-            return this.questionnairesReader.Query(_ =>
-            {
-                var query = _.Where(q => q.IsDeleted == false);
-
-                if (!string.IsNullOrWhiteSpace(name))
-                {
-                    query = query.Where(q => q.Title == name);
-
-                    if (version != null)
-                    {
-                        query = query.Where(q => q.Version == version.Value);
-                    }
-                }
-
-                return query.Select(q => q.Identity()).ToList();
-            });
         }
 
         public List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version)
