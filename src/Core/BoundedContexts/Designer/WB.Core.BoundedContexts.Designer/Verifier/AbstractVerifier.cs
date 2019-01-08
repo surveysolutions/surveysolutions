@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int RosterVariableNameLimit = 28;
 
         protected const int MaxRosterPropagationLimit = 10000;
-        protected const int MaxTotalRosterPropagationLimit = 80000;
+        protected const int MaxTotalRosterPropagationLimit = Constants.MaxTotalRosterPropagationLimit;
         protected const int MaxQuestionsCountInSection = 400;
         protected const int MaxEntitiesInPlainModeGroup = 10;
 
