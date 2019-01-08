@@ -19,8 +19,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        
-
         public PostgreReadSideStorage(
             IUnitOfWork unitOfWork, 
             ILogger logger,
