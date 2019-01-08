@@ -58,8 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            var questionnairesList = this.questionnairesFactory
-                                .GetQuestionnaires(input.QuestionnaireName, input.QuestionnaireVersion)
+            var questionnairesList = this.questionnairesFactory.GetQuestionnaires(input.QuestionnaireId, input.QuestionnaireVersion)
                 .Select(id => id.ToString()).ToList();
 
             // ReSharper disable StringLiteralTypo

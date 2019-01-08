@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class InterviewsStatisticsInputModel
     {
-        public string TemplateName { get; set; }
+        public Guid? TemplateId { get; set; }
         public long? TemplateVersion { get; set; }
 
         public DateTime? From { get; set; }
