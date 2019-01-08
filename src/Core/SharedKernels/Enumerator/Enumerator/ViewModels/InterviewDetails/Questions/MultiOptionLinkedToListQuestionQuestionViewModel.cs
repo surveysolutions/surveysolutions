@@ -378,7 +378,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
-            => new MultiOptionQuestionOptionViewModel(this)
+            => new MultiOptionQuestionOptionViewModel(this, null)
             {
                 Title = optionValue.Text,
                 Value = Convert.ToInt32(optionValue.Value),
