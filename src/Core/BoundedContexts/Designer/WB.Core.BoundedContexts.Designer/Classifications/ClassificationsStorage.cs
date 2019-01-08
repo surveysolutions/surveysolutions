@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Storage.Postgre;
+using Dapper;
 
 namespace WB.Core.BoundedContexts.Designer.Classifications
 {
     public class ClassificationsStorage : IClassificationsStorage
     {
         private readonly IPlainStorageAccessor<ClassificationEntity> classificationsStorage;
-        private readonly IMembershipUserService membershipUserService;
+        private readonly IUnitOfWork unitOfWork;
 
         public ClassificationsStorage(
             IPlainStorageAccessor<ClassificationEntity> classificationsStorage, 
-            IMembershipUserService membershipUserService)
+            IUnitOfWork unitOfWork)
         {
             this.classificationsStorage = classificationsStorage;
-            this.membershipUserService = membershipUserService;
+            this.unitOfWork = unitOfWork;
         }
 
-        public Task<IEnumerable<ClassificationGroup>> GetClassificationGroups()
+        public Task<IEnumerable<ClassificationGroup>> GetClassificationGroups(Guid userId)
         {
-            var userId = membershipUserService.WebUser.UserId;
             var dbEntities = classificationsStorage.Query(_ => _
                 .Where(x => x.Type == ClassificationEntityType.Group)
                 .Where(x => x.UserId == null || x.UserId == userId)
@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 .ToList());
             
             var classificationCounts = classificationsStorage.Query(_ => _.Where(x => x.Type == ClassificationEntityType.Classification)
+                .Where(x => x.Parent!=null)
                 .GroupBy(x => x.Parent)
                 .Select(x => new {Id = x.Key, Count = x.Count()})
                 .ToList())
@@ -47,37 +48,34 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(groups);
         }
 
-        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
+        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId, Guid userId)
         {
-            var userId = membershipUserService.WebUser.UserId;
-            var dbEntities = classificationsStorage.Query(_ =>
-            {
-                var query = _
-                    .Where(x => x.Type == ClassificationEntityType.Classification)
-                    .Where(x => x.UserId == null || x.UserId == userId);
-                if (groupId.HasValue)
-                {
-                    query = query.Where(x => x.Parent == groupId);
-                }
+            var tableNameWithSchema = "plainstore.classificationentities";
 
-                return query.OrderBy(x => x.Title).ToList();
+            var sqlSelect =
+                $"SELECT c.id, c.title, c.parent, c.userid, d.count " +
+                $"FROM {tableNameWithSchema} as c LEFT JOIN " +
+                $"(select parent, count(*) as count from {tableNameWithSchema} where type = @childtype group by parent) as d ON d.parent = c.id " +
+                $"WHERE c.type = @entitytype AND (userid IS NULL OR userid = @userid) " +
+                (groupId.HasValue ? " AND c.parent = @groupid " : "") +
+                $"ORDER BY c.title"; 
+            
+            var classifications = unitOfWork.Session.Connection.Query<Classification>(sqlSelect, new
+            {
+                entitytype = ClassificationEntityType.Classification,
+                childtype = ClassificationEntityType.Category,
+                userid = userId,
+                groupid = groupId
             });
 
-            var classifications = dbEntities.Select(x => new Classification
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Parent = x.Parent,
-                UserId = x.UserId
-            });
             return Task.FromResult(classifications);
         }
 
-        public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly)
+        public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly, Guid userId)
         {
             var dbEntities = classificationsStorage.Query(_ =>
             {
-                var searchQuery = ApplySearchFilter(_, query, groupId, privateOnly);
+                var searchQuery = ApplySearchFilter(_, query, groupId, privateOnly, userId);
 
                 var ids = searchQuery.Select(x => x.ClassificationId)
                     .Distinct()
@@ -118,7 +116,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                     Parent = x.Parent
                 }).ToList();
 
-            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId, privateOnly)
+            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId, privateOnly, userId)
                 .Select(x => x.ClassificationId)
                 .Distinct()
                 .Count());
@@ -131,9 +129,8 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         }
 
         private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
-            string query, Guid? groupId, bool privateOnly)
+            string query, Guid? groupId, bool privateOnly, Guid userId)
         {
-            var userId = membershipUserService.WebUser.UserId;
             var searchQuery = privateOnly
                 ? entities.Where(x => x.UserId == userId)
                 : entities.Where(x => x.UserId == null || x.UserId == userId);
@@ -175,7 +172,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(categories);
         }
 
-        public Task CreateClassification(Classification classification)
+        public Task CreateClassification(Classification classification, Guid userId)
         {
             var entity = new ClassificationEntity
             {
@@ -184,18 +181,18 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 Parent =  classification.Parent,
                 Type = ClassificationEntityType.Classification,
                 ClassificationId = classification.Id,
-                UserId = this.membershipUserService.WebUser.UserId
+                UserId = userId
             };
 
             this.classificationsStorage.Store(entity, entity.Id);
             return Task.CompletedTask;
         }
 
-        public Task UpdateClassification(Classification classification)
+        public Task UpdateClassification(Classification classification, Guid userId, bool isAdmin)
         {
             var entity = this.classificationsStorage.GetById(classification.Id);
-            ThrowIfUserDoesNotHaveAccessToPublicEntity(entity);
-            ThrowIfUserDoesNotHaveAccessToPrivate(entity);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(entity, isAdmin);
+            ThrowIfUserDoesNotHaveAccessToPrivate(entity, userId);
 
             entity.Parent = classification.Parent;
             entity.Title = classification.Title;
@@ -205,20 +202,20 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.CompletedTask;
         }
 
-        public Task DeleteClassification(Guid classificationId)
+        public Task DeleteClassification(Guid classificationId, Guid userId, bool isAdmin)
         {
             var classification = this.classificationsStorage.GetById(classificationId);
-            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
-            ThrowIfUserDoesNotHaveAccessToPrivate(classification);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
+            ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
             
             this.DeleteClassification(classification);
             
             return Task.CompletedTask;
         }
 
-        public Task CreateClassificationGroup(ClassificationGroup group)
+        public Task CreateClassificationGroup(ClassificationGroup group, bool isAdmin)
         {
-            if (!membershipUserService.WebUser.IsAdmin)
+            if (!isAdmin)
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot create public groups");
             this.classificationsStorage.Store(new ClassificationEntity
             {
@@ -229,9 +226,9 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.CompletedTask;
         }
 
-        public Task UpdateClassificationGroup(ClassificationGroup group)
+        public Task UpdateClassificationGroup(ClassificationGroup group, bool isAdmin)
         {
-            if (!membershipUserService.WebUser.IsAdmin)
+            if (!isAdmin)
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot change public records");
 
             var entity = this.classificationsStorage.GetById(group.Id);
@@ -240,9 +237,9 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.CompletedTask;
         }
 
-        public Task DeleteClassificationGroup(Guid groupId)
+        public Task DeleteClassificationGroup(Guid groupId, bool isAdmin)
         {
-            if (!membershipUserService.WebUser.IsAdmin)
+            if (!isAdmin)
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot change public records");
 
             var classificationsToDelete = this.classificationsStorage.Query(_ => _.Where(x => x.Parent == groupId).ToList());
@@ -262,12 +259,12 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             this.classificationsStorage.Remove(classificationEntity.Id);
         }
 
-        public Task UpdateCategories(Guid classificationId, Category[] categories)
+        public Task UpdateCategories(Guid classificationId, Category[] categories, Guid userId, bool isAdmin)
         {
             var classification = this.classificationsStorage.GetById(classificationId);
 
-            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification);
-            ThrowIfUserDoesNotHaveAccessToPrivate(classification);
+            ThrowIfUserDoesNotHaveAccessToPublicEntity(classification, isAdmin);
+            ThrowIfUserDoesNotHaveAccessToPrivate(classification, userId);
 
             var a = categories.Select(x => x.Id).ToList();
 
@@ -298,16 +295,16 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.CompletedTask;
         }
 
-        private void ThrowIfUserDoesNotHaveAccessToPublicEntity(ClassificationEntity entity)
+        private void ThrowIfUserDoesNotHaveAccessToPublicEntity(ClassificationEntity entity, bool isAdmin)
         {
-            if (!entity.UserId.HasValue && !membershipUserService.WebUser.IsAdmin)
+            if (!entity.UserId.HasValue && !isAdmin)
             {
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot change public records");
             }
         }
-        private void ThrowIfUserDoesNotHaveAccessToPrivate(ClassificationEntity entity)
+        private void ThrowIfUserDoesNotHaveAccessToPrivate(ClassificationEntity entity, Guid userId)
         {
-            if (entity.UserId.HasValue && entity.UserId != membershipUserService.WebUser.UserId)
+            if (entity.UserId.HasValue && entity.UserId != userId)
             {
                 throw new ClassificationException(ClassificationExceptionType.NoAccess, "Cannot change private records");
             }

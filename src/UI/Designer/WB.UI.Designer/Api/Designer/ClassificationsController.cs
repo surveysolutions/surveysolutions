@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using System.Web.Http.Filters;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -38,10 +39,14 @@ namespace WB.UI.Designer.Api.Designer
     public class ClassificationsController : ApiController
     {
         private readonly IClassificationsStorage classificationsStorage;
+        private readonly IMembershipUserService membershipUserService;
 
-        public ClassificationsController(IClassificationsStorage classificationsStorage)
+        public ClassificationsController(
+            IClassificationsStorage classificationsStorage, 
+            IMembershipUserService membershipUserService)
         {
             this.classificationsStorage = classificationsStorage;
+            this.membershipUserService = membershipUserService;
         }
 
         [HttpGet]
@@ -49,21 +54,21 @@ namespace WB.UI.Designer.Api.Designer
         [ResponseType(typeof(IEnumerable<Classification>))]
         public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
         {
-            return classificationsStorage.GetClassifications(groupId);
+            return classificationsStorage.GetClassifications(groupId, membershipUserService.WebUser.UserId);
         }
 
         [HttpGet]
         [Route("groups")]
         public Task<IEnumerable<ClassificationGroup>> GetGroups()
         {
-            return classificationsStorage.GetClassificationGroups();
+            return classificationsStorage.GetClassificationGroups(membershipUserService.WebUser.UserId);
         }
 
         [HttpGet]
         [Route("classifications/search")]
         public Task<ClassificationsSearchResult> Search([FromUri] ClassificationSearchQueryModel model)
         {
-            return classificationsStorage.SearchAsync(model.Query, model.GroupId, model.PrivateOnly);
+            return classificationsStorage.SearchAsync(model.Query, model.GroupId, model.PrivateOnly, membershipUserService.WebUser.UserId);
         }
 
         [HttpGet]
@@ -77,49 +82,49 @@ namespace WB.UI.Designer.Api.Designer
         [Route("classification/{id}")]
         public Task UpdateClassification(Classification classification)
         {
-            return classificationsStorage.UpdateClassification(classification);
+            return classificationsStorage.UpdateClassification(classification, membershipUserService.WebUser.UserId, membershipUserService.WebUser.IsAdmin);
         }
 
         [HttpPost]
         [Route("classification")]
         public Task CreateClassification(Classification classification)
         {
-            return classificationsStorage.CreateClassification(classification);
+            return classificationsStorage.CreateClassification(classification, membershipUserService.WebUser.UserId);
         }
 
         [HttpDelete]
         [Route("classification/{id}")]
         public Task DeleteClassification([FromUri] Guid id)
         {
-            return classificationsStorage.DeleteClassification(id);
+            return classificationsStorage.DeleteClassification(id, membershipUserService.WebUser.UserId, membershipUserService.WebUser.IsAdmin);
         }
 
         [HttpPatch]
         [Route("group/{id}")]
         public Task UpdateClassificationGroup([FromUri] Guid id, ClassificationGroup group)
         {
-            return classificationsStorage.UpdateClassificationGroup(group);
+            return classificationsStorage.UpdateClassificationGroup(group, membershipUserService.WebUser.IsAdmin);
         }
 
         [HttpPost]
         [Route("group")]
         public Task CreateClassificationGroup(ClassificationGroup group)
         {
-            return classificationsStorage.CreateClassificationGroup(group);
+            return classificationsStorage.CreateClassificationGroup(group, membershipUserService.WebUser.IsAdmin);
         }
 
         [HttpDelete]
         [Route("group/{id}")]
         public Task DeleteClassificationGroup([FromUri] Guid id)
         {
-            return classificationsStorage.DeleteClassificationGroup(id);
+            return classificationsStorage.DeleteClassificationGroup(id, membershipUserService.WebUser.IsAdmin);
         }
 
         [HttpPost]
         [Route("classification/{id}/categories")]
         public Task UpdateCategories([FromUri] Guid id, Category[] categories)
         {
-            return classificationsStorage.UpdateCategories(id, categories);
+            return classificationsStorage.UpdateCategories(id, categories, membershipUserService.WebUser.UserId, membershipUserService.WebUser.IsAdmin);
         }
     }
 
