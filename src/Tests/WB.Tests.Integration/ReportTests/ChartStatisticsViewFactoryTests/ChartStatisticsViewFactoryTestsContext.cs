@@ -8,12 +8,15 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -25,7 +28,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
     {
         private string connectionString;
         private ISessionFactory sessionFactory;
-        private HashSet<QuestionnaireIdentity> questionnairesList;
+        protected IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -41,14 +44,18 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                 UnitOfWork, 
                 Mock.Of<ILogger>(), 
                 Mock.Of<IServiceLocator>());
-
-            questionnairesList = new HashSet<QuestionnaireIdentity>();
+            
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             
             mock.Setup(s => s.GetQuestionnaires(It.IsAny<string>(), It.IsAny<long?>()))
-                .Returns<string, long?>((id, ver) => questionnairesList.ToList());
+                .Returns<string, long?>((id, ver) 
+                    => this.questionnaireRepository
+                        .Query(_ => _.Where(q => q.IsDeleted == false)
+                            .Select(q => QuestionnaireIdentity.Parse(q.Id)).ToList()));
 
-            this.questionnaires = mock.Object;
+            this.questionnaires = mock;
+
+            this.questionnaireRepository = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
         }
         
         protected IUnitOfWork NewUnitOfWork() => IntegrationCreate.UnitOfWork(sessionFactory);
@@ -60,7 +67,9 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
         protected ChartStatisticsViewFactory CreateChartStatisticsViewFactory()
         {
-            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires, null, null);
+            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires.Object, 
+                cumulativeReportStatusChangeStorage, 
+                questionnaireRepository);
         }
 
         protected void CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(QuestionnaireIdentity questionnaireId, DateTime date, int count)
@@ -89,12 +98,24 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
         protected void MarkQuestionnaireDeleted(QuestionnaireIdentity questionnaireId)
         {
-            this.questionnairesList.Remove(questionnaireId);
+            var q = this.questionnaireRepository.GetById(questionnaireId.Id);
+            q.IsDeleted = true;
+            this.questionnaireRepository.Store(q ,q.Id);
         }
 
         protected void EnsureQuestionnaireExists(QuestionnaireIdentity questionnaireId)
         {
-            this.questionnairesList.Add(questionnaireId);
+            var q = this.questionnaireRepository.GetById(questionnaireId.Id);
+            if (q == null)
+            {
+                this.questionnaireRepository.Store(new QuestionnaireBrowseItem
+                {
+                    Id = questionnaireId.Id,
+                    Title = questionnaireId.Id,
+                    Version = questionnaireId.Version,
+                    QuestionnaireId = questionnaireId.QuestionnaireId
+                }, questionnaireId.Id);
+            }
         }
 
         protected void AddInterviewStatuses(
@@ -131,8 +152,8 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             }
         }
 
-        private IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
-        private IAllUsersAndQuestionnairesFactory questionnaires;
+        private PostgreReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        protected Mock<IAllUsersAndQuestionnairesFactory> questionnaires;
 
         protected void AddStatusChangeLine(Guid entryId, QuestionnaireIdentity questionnaireId, Guid interviewId, DateTime date, InterviewStatus status, int changeValue)
         {
