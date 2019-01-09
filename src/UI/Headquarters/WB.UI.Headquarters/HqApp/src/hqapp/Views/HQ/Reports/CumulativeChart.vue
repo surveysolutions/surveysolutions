@@ -6,7 +6,7 @@ const chartOptions = {
     chartId: "interviewChart",
     elements: {
         point: { radius: 0 },
-        line: { fill: true }
+        line: { fill: true, tension: 0 }
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -22,9 +22,21 @@ const chartOptions = {
         xAxes: [
             {
                 type: "time",
+
                 gridLines: {
                     display: true,
                     tickMarkLength: 10
+                },
+
+                ticks: {
+                    source: "data",
+                    autoSkipPadding: 20,
+                    maxRotation: 0,
+                    autoSkip: true
+                },
+                time: {
+                    bounds: "ticks",
+                    minUnit: "week"
                 }
             }
         ],
