@@ -8749,7 +8749,7 @@ body > .ui-pnotify {
   .table-bordered > tfoot > tr > td,
   .table-bordered > tfoot > tr > th {
     border-bottom: none;
-    border-right-color: transparent;
+    border-right: none;
     border-left: 1px solid #f8f9f9; }
     .table-bordered > thead > tr > td:first-child, .table-bordered > thead > tr > th:first-child,
     .table-bordered > tbody > tr > td:first-child,
