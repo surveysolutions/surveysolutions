@@ -51,7 +51,6 @@
                 <th rowspan="2" class="vertical-align-middle text-center">{{$t("Strings.Days")}}</th>
                 <th colspan="2" class="type-numeric sorting_disabled text-center">{{$t("Strings.Assignments")}}</th>
                 <th colspan="5" class="type-numeric sorting_disabled text-center">{{$t("Strings.Interviews")}}</th>
-                <th rowspan="2" class="type-numeric sorting_disabled vertical-align-middle text-center">{{$t("Strings.Total")}}</th>
             </tr>
             <tr slot="header">
                 <th></th>
@@ -67,6 +66,8 @@
 </template>
 
 <script>
+import { formatNumber } from "./helpers"
+
 export default {
     data() {
         return {
@@ -190,15 +191,6 @@ export default {
                         render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
-                    },
-                    {
-                        data: "totalCount",
-                        className: "type-numeric",
-                        title: this.$t("Strings.Total"),
-                        orderable: false,
-                        render: function(data) {
-                            return `<span>${self.formatNumber(data)}</span>`;
-                        }
                     }
                 ],
                 ajax: {
@@ -243,7 +235,7 @@ export default {
         },
 
         renderAssignmentsUrl(row, data, userRole){
-            const formatedNumber = this.formatNumber(data);
+            const formatedNumber = formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
@@ -271,7 +263,7 @@ export default {
         },
 
         renderInterviewsUrl(row, data, status){
-            const formatedNumber = this.formatNumber(data);
+            const formatedNumber = formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
@@ -303,14 +295,6 @@ export default {
             parts.push(guid.slice(16,20));
             parts.push(guid.slice(20,32));
             return parts.join('-'); 
-        },
-        formatNumber(value) {
-            if (value == null || value == undefined)
-                return value;
-            var language = navigator.languages && navigator.languages[0] || 
-               navigator.language || 
-               navigator.userLanguage; 
-            return value.toLocaleString(language);
         },
         encodeQueryData(data) {
             let ret = [];
