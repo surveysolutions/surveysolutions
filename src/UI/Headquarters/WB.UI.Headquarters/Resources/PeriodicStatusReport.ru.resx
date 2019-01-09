@@ -136,7 +136,10 @@
     <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Средняя продолжительность заполнения с момента создания интервью до его завершения.</value>
+    <value>Средняя продолжительность заполнения с момента создания интервью до его завершения по интервьюеру.</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Средняя продолжительность времени, затраченного на заполнение интервью на команду.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Среднее время обработки</value>
@@ -168,8 +171,11 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Количество завершенных интервью</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Количество завершенных интервью командой. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+    <value>Количество интервью, завершенных командой. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+    <value>Количество интервью, завершенных интервьювером. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Количество интервью, утвержденных хедквотером</value>
@@ -237,9 +243,5 @@
   </data>
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>Начиная с</value>
-  </data>
-  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Средняя продолжительность времени затраченного на заполнение интервью по каждому супервизору.
-</value>
   </data>
 </root>
