@@ -755,6 +755,11 @@
     <Content Include="Configuration\SPuV.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\qbank\FoldersAndQuestionnaires.json" />
+    <Content Include="Content\qbank\Options.json" />
+    <Content Include="Content\qbank\Questions.json" />
+    <Content Include="Content\qbank\Sections.json" />
+    <Content Include="Content\qbank\SectionToQuestionnaires.json" />
     <None Include="packages.config" />
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
