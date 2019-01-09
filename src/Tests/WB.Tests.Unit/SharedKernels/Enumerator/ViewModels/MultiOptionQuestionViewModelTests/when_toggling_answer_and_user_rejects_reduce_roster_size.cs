@@ -48,6 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.First().Checked = false;
+            viewModel.Options.First().CheckAnswerCommand.Execute();
 
             await BecauseOf();
         }

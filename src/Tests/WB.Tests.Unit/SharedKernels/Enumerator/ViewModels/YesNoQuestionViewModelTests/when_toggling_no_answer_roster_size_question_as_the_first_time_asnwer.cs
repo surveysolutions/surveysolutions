@@ -60,12 +60,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init(interviewIdAsString, questionId, Create.Other.NavigationState());
-            viewModel.Options.First().Selected = false;
+            
 
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.First(), null).Wait();
+        public void BecauseOf()
+        {
+            viewModel.Options.First().NoSelected = true;
+            viewModel.Options.First().SetNoAnswerCommand.Execute();
+        }
 
         [NUnit.Framework.Test] public void should_send_answering_command () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);
