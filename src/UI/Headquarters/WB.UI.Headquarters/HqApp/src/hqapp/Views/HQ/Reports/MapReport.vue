@@ -6,7 +6,6 @@
           :placeholder="$t('Common.SelectQuestionnaire')"
           :value="selectedQuestionnaireId"
           :values="questionnaires"
-          :keyFunc="item => item.key + item.value"
           v-on:selected="selectQuestionnaire"
         />
       </FilterBlock>
