@@ -8,7 +8,6 @@
                            :placeholder="$t('Common.AllQuestionnaires')"
                            :value="questionnaireId"
                            :values="config.questionnaires"
-                           :keyFunc="item => item.key + item.value"
                            v-on:selected="questionnaireSelected" />
             </FilterBlock>
 
