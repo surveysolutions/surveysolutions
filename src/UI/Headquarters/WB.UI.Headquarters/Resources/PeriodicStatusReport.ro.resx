@@ -180,7 +180,7 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Numărul de interviuri finalizate</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>Numărul total de interviuri realizate de o echipă. Interviurile respinse și apoi finalizate sunt considerate evenimente separate de completare.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Număr de interviuri gestionate de Controlor</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>Numărul de aprobări și respingeri din partea Controlorului pentru interviurile colectate de {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
