@@ -207,4 +207,7 @@
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Обновить задания</value>
   </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Вести аудио запись</value>
+  </data>
 </root>

@@ -30,6 +30,7 @@
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
         var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
+        var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
@@ -129,6 +130,20 @@
                                 callback: model.webInterviewSetup
                             }
                         }
+                        if (!selectedRow.isDisabled) {
+                            items["recordAudio"] = {
+                                name: "RecordAudio",
+                                type: 'checkbox',
+                                selected: selectedRow.isAudioRecordingEnabled,
+                                events: {
+                                    change: function() {
+                                        model.recordAudio(selectedRow, this.checked);
+                                    }
+                                }
+                            }
+                        }
+
+
                         </text>
                     }
 
