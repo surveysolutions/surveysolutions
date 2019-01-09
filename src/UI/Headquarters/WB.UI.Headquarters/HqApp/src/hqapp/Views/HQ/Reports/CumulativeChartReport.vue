@@ -23,13 +23,6 @@
 
       <FilterBlock :title="$t('Reports.DatesRange')">
         <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
-        <div class="block-filter">
-          <button
-            type="button"
-            class="btn btn-default input-group"
-            @click="refreshData"
-          >{{$t('Common.Refresh')}}</button>
-        </div>
       </FilterBlock>
     </Filters>
     <div class="clearfix">
