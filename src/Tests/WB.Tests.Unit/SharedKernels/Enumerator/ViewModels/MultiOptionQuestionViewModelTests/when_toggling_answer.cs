@@ -58,6 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void BecauseOf() 
         {
             viewModel.Options.Second().Checked = true;
+            viewModel.Options.Second().CheckAnswerCommand.Execute();
             viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
         }
 
