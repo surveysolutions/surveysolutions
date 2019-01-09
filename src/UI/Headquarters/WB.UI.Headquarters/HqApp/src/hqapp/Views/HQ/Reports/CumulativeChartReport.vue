@@ -21,7 +21,11 @@
       </FilterBlock>
 
       <FilterBlock :title="$t('Reports.DatesRange')">
-        <DatePicker :config="datePickerConfig" :value="selectedDateRange"></DatePicker>
+        <DatePicker with-clear
+            :config="datePickerConfig" 
+            :value="selectedDateRange"
+            @clear="selectDateRange(null)"
+            :clear-label="$t('Common.Reset')"></DatePicker>
       </FilterBlock>
     </Filters>
     <div class="clearfix">
@@ -108,10 +112,7 @@ export default {
                     const end = selectedDates.length > 1 ? selectedDates[1] : null;
 
                     if (start != null && end != null) {
-                        this.onChange(q => {
-                            q.from = moment(start).format("YYYY-MM-DD");
-                            q.to = moment(end).format("YYYY-MM-DD");
-                        });
+                        this.selectDateRange({from: start, to: end})
                     }
                 }
             };
@@ -152,9 +153,13 @@ export default {
             });
         },
 
-        selectDateRange(val) {
+        selectDateRange(value) {
+            const from = value == null ? null : value.from;
+            const to = value == null ? null : value.to;
+
             this.onChange(q => {
-                q.dateRange = val;
+                q.from = from == null ? null : moment(from).format("YYYY-MM-DD");
+                q.to = to == null ? null :moment(to).format("YYYY-MM-DD");
             });
         },
 
