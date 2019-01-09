@@ -50,16 +50,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock = new Mock<IUserInteractionService>();
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
-                userInteractionService: userInteractionServiceMock.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            viewModel.Options.Last().Selected = false;
+            viewModel.Options.Last().SetNoAnswerCommand.Execute();
 
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last(), null).Wait();
+        public void BecauseOf() => viewModel.UpdateOptionsToSaveAsync(viewModel.Options.Last()).Wait();
 
         [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().YesSelected.Should().BeFalse();
 

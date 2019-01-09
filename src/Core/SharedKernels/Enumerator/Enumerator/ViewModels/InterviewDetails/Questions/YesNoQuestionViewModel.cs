@@ -222,7 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateOptionsFromInterview();
+            this.UpdateViewModelsByAnsweredOptions(@event.AnsweredOptions);
         }
 
         public IObservableCollection<ICompositeEntity> Children

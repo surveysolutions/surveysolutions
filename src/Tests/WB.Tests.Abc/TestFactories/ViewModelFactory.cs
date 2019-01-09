@@ -540,5 +540,8 @@ namespace WB.Tests.Abc.TestFactories
             return new PlainRosterTitleViewModel(Create.ViewModel.DynamicTextViewModel(interviewRepository: statefulInterviewRepository),
                 Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
+
+        public YesNoQuestionOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
+            => new YesNoQuestionOptionViewModel(userInteractionService);
     }
 }
