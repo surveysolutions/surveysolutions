@@ -174,7 +174,7 @@
   <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>Количество интервью, завершенных командой. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
     <value>Количество интервью, завершенных интервьювером. Отклоненные и затем завершенные интервью считаются как отдельный случай.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
@@ -192,8 +192,11 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Количество интервью обработанных супервизором</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>Количество утвержденных и отклоненных интервью, выполненных супервизором на опроснике, который собрала {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>Количество утвержденных и отклоненных интервью, выполненных супервизором на опроснике, который собрал интервьюер.</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Период</value>

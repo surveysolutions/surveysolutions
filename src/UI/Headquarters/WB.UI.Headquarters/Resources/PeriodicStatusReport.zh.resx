@@ -183,7 +183,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>督导员进行的访谈处理数量</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>督导员对一个{0}收集的访谈进行通过审核和驳回操作的数量</value>
   </data>
   <data name="Period" xml:space="preserve">
@@ -219,7 +219,7 @@
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>在{0}的团队中</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>一个已经完成的访谈数量。驳回后完成的访谈另计。</value>
   </data>
   <data name="InterviewActions" xml:space="preserve">
