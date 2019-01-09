@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,16 +25,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, CloneQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateQuestionnaire>,
         ICommandPostProcessor<Questionnaire, DeleteQuestionnaire>,
+        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
+
         ICommandPostProcessor<Questionnaire, AddStaticText>,
         ICommandPostProcessor<Questionnaire, UpdateStaticText>,
         ICommandPostProcessor<Questionnaire, DeleteStaticText>,
+
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
+
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, DeleteGroup>,
+
         ICommandPostProcessor<Questionnaire, PasteAfter>,
         ICommandPostProcessor<Questionnaire, PasteInto>,
+
         ICommandPostProcessor<Questionnaire, AddDefaultTypeQuestion>,
         ICommandPostProcessor<Questionnaire, DeleteQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMultimediaQuestion>,
@@ -46,12 +53,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateMultiOptionQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateSingleOptionQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateCascadingComboboxOptions>,
-        ICommandPostProcessor<Questionnaire, ReplaceOptionsWithClassification>,
         ICommandPostProcessor<Questionnaire, UpdateFilteredComboboxOptions>,
-        ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
-        ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>
+        ICommandPostProcessor<Questionnaire, ReplaceOptionsWithClassification>,
+
+        ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
+
+        ICommandPostProcessor<Questionnaire, AddVariable>,
+        ICommandPostProcessor<Questionnaire, UpdateVariable>,
+        ICommandPostProcessor<Questionnaire, DeleteVariable>
     {
         private IQuestionnaireSearchStorage GetSearchStorage() =>
             ServiceLocator.Current.GetInstance<IQuestionnaireSearchStorage>();
@@ -216,13 +227,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             RewriteQuestionnaireEntities(aggregate.QuestionnaireDocument);
         }
 
+        public void Process(Questionnaire aggregate, AddVariable command)
+        {
+            UpdateEntity(aggregate.QuestionnaireDocument, command.EntityId);
+        }
+
+        public void Process(Questionnaire aggregate, UpdateVariable command)
+        {
+            UpdateEntity(aggregate.QuestionnaireDocument, command.EntityId);
+        }
+
+        public void Process(Questionnaire aggregate, DeleteVariable command)
+        {
+            GetSearchStorage().Remove(aggregate.Id, command.EntityId);
+        }
+
         private void UpdateEntity(QuestionnaireDocument questionnaireDocument, Guid entityId)
         {
             if (!questionnaireDocument.IsPublic)
                 return;
 
             var entity = questionnaireDocument.Find<IComposite>(entityId);
-            GetSearchStorage().AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
+            var title = GetEntityTitle(entity);
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                GetSearchStorage().AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
+            }
         }
 
         private void RewriteQuestionnaireEntities(QuestionnaireDocument questionnaireDocument)
@@ -236,18 +266,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var entities = questionnaireDocument.Children.TreeToEnumerable(e => e.Children);
             foreach (var entity in entities)
             {
-                if (entity is IQuestion
-                    || entity is IVariable
-                    || entity is IGroup
-                    || entity is IStaticText)
-                {
-                    var title = entity.GetTitle();
-                    if (string.IsNullOrWhiteSpace(title))
-                        continue;
+                var title = GetEntityTitle(entity);
+                if (string.IsNullOrWhiteSpace(title))
+                    continue;
 
-                    questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
-                }
+                questionnaireSearchStorage.AddOrUpdateEntity(questionnaireDocument.PublicKey, entity);
             }
         }
+
+        public static string GetEntityTitle(IQuestionnaireEntity entity)
+            => (entity as IQuestion)?.QuestionText
+               ?? (entity as IStaticText)?.Text
+               ?? (entity as IGroup)?.Title
+               ?? (entity as IVariable)?.Label;
     }
 }
