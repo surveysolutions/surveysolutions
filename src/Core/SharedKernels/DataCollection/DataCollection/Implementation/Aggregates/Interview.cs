@@ -1481,7 +1481,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void CreateTemporaryInterview(CreateTemporaryInterviewCommand command)
         {
             this.QuestionnaireIdentity = command.QuestionnaireId;
-            
+
+            InterviewTree changedInterviewTree = this.Tree.Clone();
+            changedInterviewTree.ActualizeTree();
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
+            IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
+
             //apply events
             this.ApplyEvent(new InterviewCreated(
                 command.UserId,
@@ -1490,6 +1497,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 null,
                 command.OriginDate,
                 true));
+
+            this.ApplyEvents(treeDifference, command.UserId);
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
             this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));

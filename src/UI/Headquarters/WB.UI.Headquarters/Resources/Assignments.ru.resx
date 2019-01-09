@@ -289,4 +289,8 @@
   <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
     <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
   </data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Ошибка создания задания: </value>
+    <comment>Ошибка создания задания: </comment>
+  </data>
 </root>
