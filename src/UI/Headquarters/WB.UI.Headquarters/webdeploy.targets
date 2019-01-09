@@ -4,6 +4,7 @@
   <Target Name="CollectHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollectHqApp_CustomFiles Include="HqApp\dist\**\*.js;HqApp\dist\**\*.css;HqApp\dist\**\*.json" />
+      <CollectHqApp_CustomFiles Include="HqApp\dist\**\*.map"  Condition="'$(GIT_BRANCH)' != 'release'"/>
 
       <FilesForPackagingFromProject Include="%(CollectHqApp_CustomFiles.Identity)">
         <DestinationRelativePath>HqApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
