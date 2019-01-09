@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
             
             mock.Setup(s => s.GetQuestionnaires(It.IsAny<Guid?>(), It.IsAny<long?>()))
-                .Returns<string, long?>((id, ver) 
+                .Returns<Guid?, long?>((id, ver) 
                     => this.questionnaireRepository
                         .Query(_ => _.Where(q => q.IsDeleted == false)
                             .Select(q => QuestionnaireIdentity.Parse(q.Id)).ToList()));
