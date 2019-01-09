@@ -127,6 +127,7 @@
                 </div>
             </div>
             <div class="form-buttons-holder">
+                <input type="hidden" name="collectionSizeTracker" v-validate />
                 <button type="button" class="btn btn-lg" :class="{'btn-success' : isFormDirty }" :disabled="!isFormDirty" @@click="save">@QuestionnaireEditor.Save</button>
             </div>
         </form>

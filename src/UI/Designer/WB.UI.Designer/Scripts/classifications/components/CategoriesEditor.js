@@ -23,6 +23,9 @@
             },
             isFormDirty() {
                 return Object.keys(this.fields).some(key => this.fields[key].dirty);
+            },
+            validator() {
+                return this.$validator;
             }
         },
         watch: {
@@ -74,6 +77,7 @@
             },
             deleteCategory(index) {
                 this.$store.dispatch('deleteCategory', index);
+                this.$validator.flag('collectionSizeTracker', { dirty: true });
             },
             showStrings() {
                 this.stringifyCategories();
@@ -128,7 +132,7 @@
                 var self = this;
                 this.$validator.validate().then(function(result) {
                     if (result) {
-                        store.dispatch('updateCategories', self.$store.state.activeClassification.id).then(function() {
+                        self.$store.dispatch('updateCategories', self.$store.state.activeClassification.id).then(function() {
                             self.$validator.pause();
                             self.$nextTick(() => {
                                 self.$validator.fields.items.forEach(field => field.reset());
@@ -141,7 +145,7 @@
                 });
             },
             addCategory() {
-                store.dispatch('addCategory',
+                this.$store.dispatch('addCategory',
                     {
                         id: guid(),
                         isNew: true,
@@ -149,6 +153,7 @@
                         value: null,
                         parent: this.$store.state.activeClassification.id
                     });
+                this.$validator.flag('collectionSizeTracker', { dirty: true });
             }
         }
     });
