@@ -8,6 +8,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
         public Guid? FolderId { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; } = 20;
-        public string OrderBy { get; set; }
     }
 }
