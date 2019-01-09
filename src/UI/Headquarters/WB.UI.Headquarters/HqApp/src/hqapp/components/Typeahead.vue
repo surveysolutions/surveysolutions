@@ -177,7 +177,9 @@ export default {
             this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
-                    this.options = this.setOptions(response.data.options || []);
+                    if(response != null && response.data != null) {
+                        this.options = this.setOptions(response.data.options || []);
+                    }
                     this.isLoading = false;
                 })
                 .catch(() => (this.isLoading = false));
@@ -186,12 +188,12 @@ export default {
         setOptions(values, wrap = true) {
             if (wrap == false) return values;
 
-            return _.map(values, v => {
+            return _.chain(values).filter(v => v != null).map(v => {
                 return {
                     item: v,
                     matches: null
                 };
-            });
+            }).value();
         },
 
         clear() {
