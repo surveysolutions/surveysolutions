@@ -192,6 +192,9 @@
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Web interview setup</value>
   </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Record audio</value>
+  </data>
   <data name="UploadAssignments" xml:space="preserve">
     <value>Upload assignments</value>
   </data>

@@ -5,6 +5,7 @@ using System.Web.Http.Hosting;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -12,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -50,7 +52,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 serializer: Mock.Of<ISerializer>(),
-                questionnaireStorage: Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage: Mock.Of<IQuestionnaireStorage>(),
+                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
         }
 
         protected static InterviewsController CreateInterviewsController(

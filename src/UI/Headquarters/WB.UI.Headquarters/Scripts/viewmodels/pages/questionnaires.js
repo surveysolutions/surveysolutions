@@ -45,7 +45,18 @@
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
         var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
         window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
-        console.log(selectedRow);
+    };
+
+    self.recordAudio = function(selectedRow, checked) {
+        var url = $questionnairesApiEndpoint + "/" + selectedRow.questionnaireId + "/" + selectedRow.version + "/recordAudio";
+
+        self.SendRequest(url,
+            { enabled: checked },
+            function() {
+                selectedRow.isAudioRecordingEnabled = checked;
+            },
+            false,
+            false);
     };
 
     self.interviewsBatchUpload = function (key, opt) {

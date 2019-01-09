@@ -21,5 +21,7 @@ namespace WB.UI.Headquarters.Models.Template
         public virtual DateTime LastEntryDate { get; set; }
 
         public virtual DateTime? ImportDate { get; set; }
+
+        public virtual bool IsAudioRecordingEnabled { get; set; }
     }
 }
