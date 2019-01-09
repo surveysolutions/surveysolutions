@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
 
@@ -153,7 +154,15 @@ namespace WB.UI.Headquarters.Controllers
             var identity = QuestionnaireIdentity.Parse(questionnaireId);
             var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
 
-            this.CommandService.Execute(command);
+            try
+            {
+                this.CommandService.Execute(command);
+            }
+            catch (InterviewException ie)
+            {
+                Error(Assignments.ErrorToCreateAssignment + ie.Message);
+                return this.RedirectToAction("Index", "SurveySetup");
+            }
 
             return this.RedirectToAction("TakeNewAssignment", new {id = newInterviewId.FormatGuid()});
         }

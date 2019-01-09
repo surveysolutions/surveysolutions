@@ -196,6 +196,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It&apos;s impossible to create an assignment: .
+        /// </summary>
+        public static string ErrorToCreateAssignment {
+            get {
+                return ResourceManager.GetString("ErrorToCreateAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         public static string IdentifyingQuestions {
