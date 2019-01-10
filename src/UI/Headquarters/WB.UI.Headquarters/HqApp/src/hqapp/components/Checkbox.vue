@@ -30,7 +30,7 @@ export default {
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", {
+            this.$emit("input", ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
                 name: this.name
