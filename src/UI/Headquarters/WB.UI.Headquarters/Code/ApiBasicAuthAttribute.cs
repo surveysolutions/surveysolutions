@@ -27,7 +27,10 @@ namespace WB.UI.Headquarters.Code
         public ApiBasicAuthAttribute(params UserRoles[] roles)
         {
             this.roles = roles;
-            this.basicAuth = new AuthorizeAttribute();
+            this.basicAuth = new AuthorizeAttribute
+            {
+                Roles = string.Join(",", roles)
+            };
         }
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
