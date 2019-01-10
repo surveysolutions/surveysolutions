@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent question don&apos;t have an option with value &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Parent question doesn&apos;t have an option with value &apos;{0}&apos;.
         /// </summary>
         public static string ImportOptions_ParentValueNotFound {
             get {
