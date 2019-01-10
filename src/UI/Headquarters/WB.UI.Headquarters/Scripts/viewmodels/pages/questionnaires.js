@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl,
     $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl,
-    $migrateAssignmentsUrl) {
+    $migrateAssignmentsUrl, $questionnairesApiEndpoint) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -47,9 +47,10 @@
         window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
     };
 
-    self.recordAudio = function(selectedRow, checked) {
+    self.recordAudio = function(key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
         var url = $questionnairesApiEndpoint + "/" + selectedRow.questionnaireId + "/" + selectedRow.version + "/recordAudio";
-
+        var checked = !opt.$selected.find('input:checkbox').prop('checked');
         self.SendRequest(url,
             { enabled: checked },
             function() {
