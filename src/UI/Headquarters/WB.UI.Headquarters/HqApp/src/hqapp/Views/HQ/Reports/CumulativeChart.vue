@@ -18,6 +18,7 @@ const chartOptions = {
         mode: "index",
         intersect: false
     },
+    
     scales: {
         xAxes: [
             {
@@ -30,7 +31,7 @@ const chartOptions = {
 
                 ticks: {
                     source: "data",
-                    autoSkipPadding: 20,
+                    autoSkipPadding: 10,
                     maxRotation: 0,
                     autoSkip: true
                 },
@@ -72,7 +73,19 @@ export default {
 
     methods: {
         render() {
-            this.renderChart(this.chartData, _.assign(chartOptions, this.options));
+            this.renderChart(this.chartData, _.assign(chartOptions, {
+                animation: {
+                    onComplete: () => {
+                        this.$emit("ready");
+                    }
+                },
+            }, this.options));
+        },
+
+        getImage(){
+            if(this.$data._chart == null) return null;
+
+            return this.$data._chart.canvas.toDataURL("image/png");
         }
     },
 

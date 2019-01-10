@@ -174,7 +174,7 @@
   <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
     <value>Команды и статусы отображают количество интервью в каждом статусе по интервьюверу</value>
   </data>
-    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
     <value>Команды и статусы отображают количество интервью в каждом статусе по командам</value>
   </data>
   <data name="Variables" xml:space="preserve">
@@ -352,5 +352,8 @@
   </data>
   <data name="ToAllQuestionnaires" xml:space="preserve">
     <value>Назад к опросникам</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Сохранить как картинку</value>
   </data>
 </root>
