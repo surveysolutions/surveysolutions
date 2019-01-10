@@ -172,7 +172,7 @@
     <value>Команды и статусы</value>
   </data>
   <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
-    <value>Команды и статусы отображают количество интервью в каждом статусе по интервьюверу</value>
+    <value>Команды и статусы отображают количество интервью в каждом статусе по интервьюеру</value>
   </data>
   <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
     <value>Команды и статусы отображают количество интервью в каждом статусе по командам</value>
