@@ -38,7 +38,7 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
                 $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl);
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -87,6 +87,19 @@
                 ];
             };
 
+            $.contextMenu.types.wbCheckbox = function(item) {
+                $('<input class="checkbox-filter single-checkbox" id="isEnabled" type="checkbox">' +
+                        '<label for="isEnabled">' +
+                        '<span class="tick"></span>@Html.ToSafeJavascriptMessage(Dashboard.RecordAudio)' +
+                        '</label>')
+                    .appendTo(this);
+
+                $(this)
+                    .prop('title', '@Html.ToSafeJavascriptMessage(Dashboard.RecordAudioTitle)')
+                    .find('input:checkbox')
+                    .prop('checked', item.selected);
+            };
+
             model.onTableInitCompleteExtra = function () {
 
                 var buildMenuItem = function(selectedRow) {
@@ -133,16 +146,11 @@
                         if (!selectedRow.isDisabled) {
                             items["recordAudio"] = {
                                 name: "RecordAudio",
-                                type: 'checkbox',
+                                type: 'wbCheckbox',
                                 selected: selectedRow.isAudioRecordingEnabled,
-                                events: {
-                                    change: function() {
-                                        model.recordAudio(selectedRow, this.checked);
-                                    }
-                                }
-                            }
+                                callback: model.recordAudio
+                            };
                         }
-
 
                         </text>
                     }
