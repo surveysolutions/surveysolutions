@@ -137,7 +137,7 @@
                 <div class="clearfix">
                     <div class="col-sm-8">
 
-                        <h4 data-bind="text: (SelectedQuestionnaire() == undefined ? AllQuestionnariesCaption : SelectedQuestionnaire().title) + ', ' + (SelectedQuestionnaireVersion() == undefined ? AllVersionsCaption : 'ver.' + SelectedQuestionnaireVersion())" ></h4>
+                        <h4 data-bind="text: (SelectedQuestionnaire() == undefined ? AllQuestionnariesCaption : SelectedQuestionnaire().title) + ', ' + (SelectedQuestionnaireVersion() == undefined ? AllVersionsCaption.toLowerCase() : 'ver.' + SelectedQuestionnaireVersion())" ></h4>
 
                         @if (Model.CanNavigateToQuantityBySupervisors)
                         {

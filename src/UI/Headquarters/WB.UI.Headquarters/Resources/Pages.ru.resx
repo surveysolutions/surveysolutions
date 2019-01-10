@@ -1062,6 +1062,9 @@
     <value>Количество дней когда интервью находятся в их текущем статусе</value>
     <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
   </data>
+  <data name="SurveyStatisticsDescription" xml:space="preserve">
+    <value>Отчет отображает основные показатели, одно- и двумерные таблицы, построенные по собранным данным</value>
+  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Задания</value>
   </data>
