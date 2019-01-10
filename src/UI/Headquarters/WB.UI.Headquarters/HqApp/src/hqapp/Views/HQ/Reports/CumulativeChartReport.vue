@@ -37,6 +37,11 @@
       </FilterBlock>
     </Filters>
     <div class="clearfix">
+            <div class="col-sm-8">
+                <h4>{{this.selectedQuestionnaire == null ? $t('Common.AllQuestionnaires') : this.selectedQuestionnaire.value}}, {{this.selectedVersion == null ? $t('Common.AllVersions').toLowerCase() : this.selectedVersion.value}} </h4>        
+            </div>
+    </div>
+    <div class="clearfix">
       <div class="col-sm-8">
         <h2 v-if="!hasData">{{ $t('Common.NoResultsFound') }}</h2>
       </div>
@@ -54,7 +59,7 @@
       @ready="chartUpdated"
       v-if="hasData"
     ></LineChart>
-    <div v-if="base64Encoded != null">
+    <div v-if="base64Encoded != null && hasData">
       <a
         id="link"
         :download="chartTitle  +'.png'"
