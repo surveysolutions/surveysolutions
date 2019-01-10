@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.Code;
@@ -12,10 +11,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(new[] { UserRoles.Supervisor })]
     public class SettingsV1Controller : SettingsControllerBase
     {
-        public SettingsV1Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
-            ISecureStorage secureStorage,
-            IPlainKeyValueStorage<InterviewerSettings> mobileAppsSettingsStorage)
-            : base(appSettingsStorage, secureStorage, mobileAppsSettingsStorage)
+        public SettingsV1Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, ISecureStorage secureStorage)
+            : base(appSettingsStorage, secureStorage)
         {
         }
 
