@@ -1556,10 +1556,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-autonumeric@4.2.12:
-  version "4.2.12"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.2.12.tgz#0d5cefc9ec36f0e625231462c64bed245b149f79"
-  integrity sha512-9TDcpk8bnTh9rMoch8xsreB18zpU0UBgX4dDm9CsHbOfd3lJg1UBjs4Nl0XFwqiSG3+12OETsixSUAbYJpHsNA==
+autonumeric@^4.5.3:
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.5.3.tgz#8f244aca5e50fee3b723dc10751e59cbaeee6781"
+  integrity sha512-MPl+P5Ssa6xQyPfGJjPKZFpzddxGSvAEgkZsvtW8HOG92BcBeWb74MhvVx23+ww+62U3aWC5O/WUjeX2HlN38g==
 
 autoprefixer@^8.6.5:
   version "8.6.5"
