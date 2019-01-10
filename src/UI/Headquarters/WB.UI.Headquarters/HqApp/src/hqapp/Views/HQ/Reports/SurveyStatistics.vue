@@ -1,7 +1,8 @@
 <template>
     <HqLayout has-filter
-        :title="$t('MainMenu.SurveyStatistics')">
-        <div slot="subtitle">
+        :title="$t('MainMenu.SurveyStatistics')"
+        :subtitle="$t('Pages.SurveyStatisticsDescription')">        
+        <div >
             <div class="row">
                 <div class="col-md-6">
                     <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
@@ -10,13 +11,12 @@
                      <QuestionDetail :question="filter.condition" :title="$t('Reports.ConditionQuestion')"></QuestionDetail>
                 </div>
             </div>
-        </div>
+        </div> 
 
         <Filters slot="filters">
             <SurveyStatisticsFilter @input="filterChanged" @mounted="filtersLoaded"
                 :isSupervisor="isSupervisor" />
-        </Filters>
-       
+        </Filters>       
         <div class="alert-warning" v-if="warnings.length > 0">
             {{ $t('Reports.QuestionnaireCompatibilityIssues_UnknownAnswer')}}
         </div>
