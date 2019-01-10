@@ -292,6 +292,6 @@
     <value>Select a questionnaire version to see its associated assignments. Select “All versions” to see assignments associated with any version of selected questionnaire.</value>
   </data>
   <data name="ErrorToCreateAssignment" xml:space="preserve">
-    <value>It's impossible to create an assignment: </value>
+    <value>Assignment can not be created. </value>
   </data>
 </root>
