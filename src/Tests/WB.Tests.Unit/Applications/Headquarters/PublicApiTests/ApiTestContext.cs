@@ -45,15 +45,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IAllInterviewsFactory allInterviewsViewFactory = null)
+            IAllInterviewsFactory allInterviewsViewFactory = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
         {
-            return new QuestionnairesController(
+            var questionnairesController = new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 serializer: Mock.Of<ISerializer>(),
                 questionnaireStorage: Mock.Of<IQuestionnaireStorage>(),
-                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+                questionnaireBrowseItems ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            questionnairesController.Request = new HttpRequestMessage();
+            questionnairesController.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, 
+                new HttpConfiguration());
+            return questionnairesController;
         }
 
         protected static InterviewsController CreateInterviewsController(
