@@ -17,12 +17,15 @@ namespace WB.UI.Headquarters.API.DataCollection
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
         private readonly ISecureStorage secureStorage;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> mobileAppsSettingsStorage;
 
         protected SettingsControllerBase(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
-            ISecureStorage secureStorage)
+            ISecureStorage secureStorage,
+            IPlainKeyValueStorage<InterviewerSettings> mobileAppsSettingsStorage)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.secureStorage = secureStorage;
+            this.mobileAppsSettingsStorage = mobileAppsSettingsStorage;
         }
 
         public virtual HttpResponseMessage CompanyLogo()
@@ -46,7 +49,8 @@ namespace WB.UI.Headquarters.API.DataCollection
             return response;
         }
 
-        public virtual bool AutoUpdateEnabled() => false;
+        public virtual bool AutoUpdateEnabled() =>
+            this.mobileAppsSettingsStorage.GetById(AppSetting.InterviewerSettings).IsAutoUpdateEnabled();
 
         public virtual string PublicKeyForEncryption() =>
             Convert.ToBase64String(this.secureStorage.Retrieve(RsaEncryptionService.PublicKey));
