@@ -13,22 +13,17 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class SettingsV2Controller : SettingsControllerBase
     {
-        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
-
         public SettingsV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            ISecureStorage secureStorage) : base(appSettingsStorage, secureStorage)
+            IPlainKeyValueStorage<InterviewerSettings> mobileAppsSettingsStorage,
+            ISecureStorage secureStorage) : base(appSettingsStorage, secureStorage, mobileAppsSettingsStorage)
         {
-            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
-
 
         [HttpGet]
         public override HttpResponseMessage CompanyLogo() => base.CompanyLogo();
 
         [HttpGet]
-        public override bool AutoUpdateEnabled() =>
-            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).IsAutoUpdateEnabled();
+        public override bool AutoUpdateEnabled() => base.AutoUpdateEnabled();
 
         [HttpGet]
         public override string PublicKeyForEncryption() => base.PublicKeyForEncryption();
