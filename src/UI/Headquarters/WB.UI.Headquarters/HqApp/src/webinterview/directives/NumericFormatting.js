@@ -1,5 +1,5 @@
 import Vue from "vue";
-import AutoNumeric from "autonumeric";
+import AutoNumeric from "autonumeric/src/main";
 
 const defaults = {
   digitGroupSeparator: "",
