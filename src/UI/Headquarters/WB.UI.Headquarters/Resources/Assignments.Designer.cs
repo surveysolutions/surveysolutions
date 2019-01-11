@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It&apos;s impossible to create an assignment: .
+        ///   Looks up a localized string similar to Assignment can not be created. .
         /// </summary>
         public static string ErrorToCreateAssignment {
             get {

@@ -177,7 +177,7 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Número de entrevistas completadas</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>Número de entrevistas completadas por equipo. Las entrevistas rechazadas y completadas son contadas como eventos separados</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
@@ -195,7 +195,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Número de transacciones de entrevistas por supervisor</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>Número de aprobaciones y rechazos por supervisor de las entrevistas colectadas por {0}</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">

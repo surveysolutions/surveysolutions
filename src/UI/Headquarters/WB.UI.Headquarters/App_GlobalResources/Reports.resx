@@ -351,4 +351,7 @@
   <data name="ToAllQuestionnaires" xml:space="preserve">
     <value>Back to questionnaires</value>
   </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Save as image</value>
+  </data>
 </root>

@@ -62,8 +62,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             // ReSharper disable StringLiteralTypo
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
-                "select min(date), max(date) from readside.cumulativereportstatuschanges " +
-                "where questionnaireidentity = any(@questionnairesList)", new { questionnairesList });
+                @"select min(date), max(date) from readside.cumulativereportstatuschanges
+                      where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)", 
+                 new { questionnairesList, AllowedStatuses });
 
             if (dates.min == null && dates.max == null) // we have no data at all
             {

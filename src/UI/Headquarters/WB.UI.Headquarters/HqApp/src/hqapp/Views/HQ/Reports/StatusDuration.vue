@@ -38,7 +38,7 @@
         </Filters>
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions') : this.questionnaireVersion.value}} </h4>        
+                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}} </h4>        
             </div>
         </div>
         <DataTables ref="table"

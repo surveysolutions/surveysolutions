@@ -49,6 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false);
 
+        Guid? GetSectionIdByVariable(string variable);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
