@@ -35,6 +35,15 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
+            var cookiePrincipal = actionContext.ControllerContext.RequestContext.Principal;
+
+            if (cookiePrincipal != null && cookiePrincipal.Identity.IsAuthenticated && FallbackToCookieAuth)
+            {
+                await basicAuth.OnAuthorizationAsync(actionContext, cancellationToken);
+                appendBasicAuthHeader(actionContext);
+                return;
+            }
+
             if (actionContext.Request.Headers?.Authorization == null)
             {
                 if (FallbackToCookieAuth)
