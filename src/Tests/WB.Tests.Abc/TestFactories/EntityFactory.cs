@@ -145,9 +145,10 @@ namespace WB.Tests.Abc.TestFactories
                 Content = content,
             };
 
-        public AttachmentContentMetadata AttachmentContentMetadata(string contentType)
+        public AttachmentContentMetadata AttachmentContentMetadata(string contentType, string id = null)
             => new AttachmentContentMetadata
             {
+                Id = id ?? Guid.NewGuid().ToString(),
                 ContentType = contentType,
             };
 
