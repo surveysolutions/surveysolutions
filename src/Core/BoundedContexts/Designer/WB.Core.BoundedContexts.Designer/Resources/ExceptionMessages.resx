@@ -312,6 +312,9 @@
     <data name="Row" xml:space="preserve">
     <value>row</value>
   </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Some column(s) are missing. Make sure that you upload file with required columns</value>
+  </data>
   <data name="ImportOptions_EmptyValue" xml:space="preserve">
     <value>Empty value</value>
   </data>

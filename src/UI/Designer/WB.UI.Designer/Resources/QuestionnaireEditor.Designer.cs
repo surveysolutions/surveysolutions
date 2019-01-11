@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit cascading categories.
+        /// </summary>
+        public static string CascadingOptionsWindowTitle {
+            get {
+                return ResourceManager.GetString("CascadingOptionsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string ChangePassword {
@@ -1402,6 +1411,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit categories.
+        /// </summary>
+        public static string OptionsWindowTitle {
+            get {
+                return ResourceManager.GetString("OptionsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste.
         /// </summary>
         public static string Paste {
@@ -1951,20 +1969,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable name.
+        ///   Looks up a localized string similar to Search classification.
         /// </summary>
         public static string SearchClassification {
             get {
                 return ResourceManager.GetString("SearchClassification", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Search classification.
-        /// </summary>
-        public static string SectionVariableName {
-            get {
-                return ResourceManager.GetString("SectionVariableName", resourceCulture);
             }
         }
         
@@ -1983,6 +1992,15 @@ namespace WB.UI.Designer.Resources {
         public static string SearchQuestionPlaceholder {
             get {
                 return ResourceManager.GetString("SearchQuestionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        public static string SectionVariableName {
+            get {
+                return ResourceManager.GetString("SectionVariableName", resourceCulture);
             }
         }
         
