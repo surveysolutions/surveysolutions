@@ -67,7 +67,7 @@
                             <classification-editor :classification="classification" :index="index"></classification-editor>
                         </li>
                     </ul>
-                    <button type="button" class="btn lighter-hover" @@click="addClassification()">@QuestionnaireEditor.ClassificationAdd</button>
+                    <button v-if="activeGroup.id" type="button" class="btn lighter-hover" @@click="addClassification()">@QuestionnaireEditor.ClassificationAdd</button>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                     <li>{{activeGroup.title}}</li>
                     <li class="active">{{activeClassification.title}}</li>
                 </ul>
-                <div class="categories-holder">
+                <div class="categories-holder" v-if="activeClassification.id">
                     <div v-if="!isEditMode" class="categories-holder-body readonly">
                         <div class="option-cell" v-for="(category, index) in categories" :key="category.id">
                             <span>{{category.title}} <span>...</span></span>
