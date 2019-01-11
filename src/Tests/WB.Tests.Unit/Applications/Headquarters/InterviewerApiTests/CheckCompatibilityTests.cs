@@ -52,6 +52,31 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         }
 
         [Test]
+        public void when_assignment_has_audio_recording_enabled_should_force_client_upgrade()
+        {
+            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
+
+            var synchronizedUserId = Id.gA;
+            var assignments =
+                Mock.Of<IAssignmentsService>(x => x.HasAssignmentWithAudioRecordingEnabled(synchronizedUserId) == true);
+
+            var deviceId = "device";
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
+
+            var interviewerApiController = Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                productVersion: productVersion,
+                assignmentsService: assignments,
+                authorizedUser: authorizedUser);
+
+            // Act
+            HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7080);
+
+            // Assert
+            Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
+        }
+
+        [Test]
         public void when_assignment_has_protected_questions_and_client_doesnt_support_Should_require_upgrade()
         {
             var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
