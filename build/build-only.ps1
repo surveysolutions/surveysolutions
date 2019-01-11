@@ -84,6 +84,7 @@ try {
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName $ExtPackageName `
             -branch $branch `
+            -NoCleanUp `
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
          CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | % { if (-not $_) { Exit } }
@@ -103,6 +104,7 @@ try {
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName $PackageName `
+            -NoCleanUp `
             -ExcludeExtra $true | % { if (-not $_) { Exit } }
 
         CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | % { if (-not $_) { Exit } }
@@ -117,6 +119,7 @@ try {
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName $SuperPackageName `
+            -NoCleanUp `
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
         CopyCapi -Project $ProjectHeadquarters -source $SuperPackageName -cleanUp $false | % { if (-not $_) { Exit } }
