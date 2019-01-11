@@ -289,9 +289,6 @@
   <data name="ErrorToCreateAssignment" xml:space="preserve">
     <value>Ошибка создания задания: </value>
   </data>
-  <data name="AudioRecordingExplanation" xml:space="preserve">
-    <value>Когда включено, приложение interviewer будет вести аудио запись интервью</value>
-  </data>
   <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
     <value>Настройки записи аудио для задания {{id}}</value>
   </data>
