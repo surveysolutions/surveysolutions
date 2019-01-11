@@ -73,26 +73,6 @@ try {
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
         RunConfigTransform $ProjectWebTester $BuildConfiguration
 
-        $ExtPackageName = 'WBCapi.Ext.apk'
-        . "$scriptFolder\build-android-package.ps1" `
-            -VersionName $versionString `
-            -VersionCode $BuildNumber `
-            -BuildConfiguration $BuildConfiguration `
-            -KeystorePassword $KeystorePassword `
-            -KeystoreName 'WBCapi.keystore' `
-            -KeystoreAlias 'wbcapipublish' `
-            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
-            -OutFileName $ExtPackageName `
-            -branch $branch `
-            -ExcludeExtra $false | % { if (-not $_) { Exit } }
-
-         CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | % { if (-not $_) { Exit } }
-
-        #remove leftovers after previous build
-
-        #CleanFolders 'bin' | %{ if (-not $_) { Exit } }
-        #CleanFolders 'obj' | %{ if (-not $_) { Exit } }
-
         $PackageName = 'WBCapi.apk'
         . "$scriptFolder\build-android-package.ps1" `
             -VersionName $versionString `
@@ -107,6 +87,27 @@ try {
 
         CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | % { if (-not $_) { Exit } }
 
+        $ExtPackageName = 'WBCapi.Ext.apk'
+        . "$scriptFolder\build-android-package.ps1" `
+            -VersionName $versionString `
+            -VersionCode $BuildNumber `
+            -BuildConfiguration $BuildConfiguration `
+            -KeystorePassword $KeystorePassword `
+            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreAlias 'wbcapipublish' `
+            -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
+            -OutFileName $ExtPackageName `
+            -branch $branch `
+            -NoCleanUp `
+            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+
+         CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | % { if (-not $_) { Exit } }
+
+        #remove leftovers after previous build
+
+        #CleanFolders 'bin' | %{ if (-not $_) { Exit } }
+        #CleanFolders 'obj' | %{ if (-not $_) { Exit } }
+
         $SuperPackageName = 'Supervisor.apk'
         . "$scriptFolder\build-android-package.ps1" `
             -VersionName $versionString `
@@ -117,6 +118,7 @@ try {
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName $SuperPackageName `
+            -NoCleanUp `
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
         CopyCapi -Project $ProjectHeadquarters -source $SuperPackageName -cleanUp $false | % { if (-not $_) { Exit } }

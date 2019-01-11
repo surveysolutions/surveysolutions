@@ -79,8 +79,7 @@ export default {
         fuzzy: {
             type: Boolean,
             default: false
-        },
-        keyFunc: { type: Function, default: item => item.key }
+        }
     },
     watch: {
         fetchUrl (val) {
@@ -226,6 +225,9 @@ export default {
                     option.matches[0].indices
                 );
             }
+        },
+        keyFunc(item) {
+            return item == null ? 'null' : item.key + "$" + item.value 
         }
     }
 };

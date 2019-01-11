@@ -92,6 +92,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             }
         }
 
+        protected void MarkStaticTextAsInvalid(params Identity[] ids)
+        {
+            foreach (var identity in ids)
+            {
+                var failedConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+                {
+                    {
+                        identity,
+                        new List<FailedValidationCondition> {new FailedValidationCondition(0)}
+                    }
+                };
+
+                CurrentInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(ids));
+            }
+        }
+
         protected InterviewGroupOrRosterInstance GetGroupDetails(Identity id, bool asReviewer)
         {
             if (asReviewer)

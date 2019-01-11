@@ -82,20 +82,24 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                 if (attachmentId.HasValue)
                     NavigateToAttachment(sourceEntity, attachmentId, questionnaire);
                 else
-                    NavigateToQuestionOrRoster(entityVariable, sourceEntity, questionnaire, interview);
+                    NavigateToQuestionOrRosterOrSection(entityVariable, sourceEntity, questionnaire, interview);
             }
         }
 
-        private static void NavigateToQuestionOrRoster(string entityVariable, IInterviewEntity sourceEntity,
+        private static void NavigateToQuestionOrRosterOrSection(string entityVariable, IInterviewEntity sourceEntity,
             IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
-            var rosterId = questionnaire.GetRosterIdByVariableName(entityVariable, true);
+            Guid? rosterOdGroupId = null;
 
-            if (!questionId.HasValue && !rosterId.HasValue) return;
+            if (questionId == null)
+                rosterOdGroupId = questionnaire.GetRosterIdByVariableName(entityVariable, true) 
+                                  ?? questionnaire.GetSectionIdByVariable(entityVariable);
+
+            if (!questionId.HasValue && !rosterOdGroupId.HasValue) return;
 
             Identity nearestInterviewEntity = null;
-            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterId.Value)
+            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterOdGroupId.Value)
                 .Where(interview.IsEnabled).ToArray();
 
             if (interviewEntities.Length == 1)
@@ -114,7 +118,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                         interview.GetParentGroups(sourceEntity.Identity).Select(x => x.RosterVector).ToArray();
 
                     nearestInterviewEntity = interviewEntities.FirstOrDefault(x =>
-                                                 x.Id == (questionId ?? rosterId.Value) &&
+                                                 x.Id == (questionId ?? rosterOdGroupId.Value) &&
                                                  sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
                                              interviewEntities.FirstOrDefault();
                 }
@@ -133,12 +137,12 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                     AnchoredElementIdentity = nearestInterviewEntity
                 });
             }
-            else if (rosterId.HasValue)
+            else if (rosterOdGroupId.HasValue)
             {
                 sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {
                     TargetScreen = ScreenType.Group,
-                    TargetGroup = interview.GetParentGroup(nearestInterviewEntity),
+                    TargetGroup = interview.GetParentGroup(nearestInterviewEntity) ?? nearestInterviewEntity, //for section(chapter) it would be opened
                     AnchoredElementIdentity = nearestInterviewEntity
                 });
             }

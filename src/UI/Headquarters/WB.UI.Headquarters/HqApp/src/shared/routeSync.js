@@ -59,9 +59,9 @@ export default {
         },
 
         
-        checkedChange(ev) {
+        checkedChange(value, el) {
             this.onChange(q => {
-                q[ev.name] = ev.checked;
+                q[el.name] = value;
             });
         },
 

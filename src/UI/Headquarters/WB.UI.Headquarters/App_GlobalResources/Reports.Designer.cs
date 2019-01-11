@@ -565,6 +565,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as image.
+        /// </summary>
+        internal static string SaveAsImage {
+            get {
+                return ResourceManager.GetString("SaveAsImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select condition question.
         /// </summary>
         internal static string SelectConditionQuestion {
