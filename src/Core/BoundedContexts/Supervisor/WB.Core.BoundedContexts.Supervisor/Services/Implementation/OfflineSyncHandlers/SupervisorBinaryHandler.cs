@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             requestHandler.RegisterHandler<UploadInterviewImageRequest, OkResponse>(UploadImage);
             requestHandler.RegisterHandler<UploadInterviewAudioRequest, OkResponse>(UploadAudio);
+            requestHandler.RegisterHandler<UploadInterviewAudioRequest, OkResponse>(UploadAudioAudit);
         }
 
         public Task<GetCompanyLogoResponse> GetCompanyLogo(GetCompanyLogoRequest request)
@@ -59,6 +60,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     HasCustomLogo = true
                 }
             });
+        }
+        
+        private Task<OkResponse> UploadAudioAudit(UploadInterviewAudioRequest request)
+        {
+            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
+                request.InterviewAudio.FileName,
+                Convert.FromBase64String(request.InterviewAudio.Data), 
+                request.InterviewAudio.ContentType);
+
+            return Task.FromResult(new OkResponse());
         }
 
         private Task<OkResponse> UploadAudio(UploadInterviewAudioRequest request)
