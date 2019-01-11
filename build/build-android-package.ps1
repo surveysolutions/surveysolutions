@@ -135,7 +135,7 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject, $bra
 
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi){
 
-    Write-Host "##teamcity[blockOpened name='Building Android project']"
+    Write-Host "##teamcity[blockOpened name='Building Android project: $AndroidProject']"
     Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
 
     if($NoCleanUp.IsPreset -eq $False) {
@@ -176,7 +176,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
     }
 
     Write-Host "##teamcity[progressFinish 'Building |'$AndroidProject|' project']"
-    Write-Host "##teamcity[blockClosed name='Building Android project']"
+    Write-Host "##teamcity[blockClosed name='Building Android project: $AndroidProject']"
 
     return $wasBuildSuccessfull
 }
