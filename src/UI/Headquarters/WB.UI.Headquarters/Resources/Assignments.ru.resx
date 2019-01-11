@@ -292,4 +292,16 @@
   <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
     <value>Настройки записи аудио для задания {{id}}</value>
   </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Вести аудио запись</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Вести аудио запись во время интервью</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Вести аудио запись</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Вести аудио запись во время интервью</value>
+  </data>
 </root>
