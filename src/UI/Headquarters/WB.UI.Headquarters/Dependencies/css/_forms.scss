@@ -313,7 +313,8 @@ input.radio-row{
 		}
 	} 
 }
-.bootstrap-select.btn-group{
+.bootstrap-select.btn-group,
+.bootstrap-select.dropdown{
 	width: $form-width !important;	
 	.dropdown-toggle{
 		box-shadow: none;
@@ -514,7 +515,11 @@ ul.typeahead.dropdown-menu {
 	}
 }
 .block-filter {
-	.btn-group.bootstrap-select, .combo-box, .input-group, .field{
+	.btn-group.bootstrap-select, 
+	.dropdown.bootstrap-select, 
+	.combo-box, 
+	.input-group, 
+	.field{
 		margin-left: 0;
 	}
 	.field{
