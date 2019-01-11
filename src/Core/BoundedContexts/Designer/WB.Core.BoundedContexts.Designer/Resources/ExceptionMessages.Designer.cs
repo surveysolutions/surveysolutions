@@ -214,6 +214,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some column(s) are missing. Make sure that you upload file with required columns.
+        /// </summary>
+        public static string ImportOptions_MissingRequiredColumns {
+            get {
+                return ResourceManager.GetString("ImportOptions_MissingRequiredColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid 32 bit integer value &apos;{0}&apos;. Value should be between -2147483647 and 2147483647.
         /// </summary>
         public static string ImportOptions_NotNumber {
