@@ -1,7 +1,12 @@
 <template>
     <HqLayout has-filter
         :title="$t('MainMenu.SurveyStatistics')"
-        :subtitle="$t('Pages.SurveyStatisticsDescription')">        
+        :subtitle="$t('Pages.SurveyStatisticsDescription')">
+        <div class="clearfix">
+            <div class="col-sm-8">
+                <h4>{{this.filter.questionnaire == null ? $t('Common.AllQuestionnaires') : this.filter.questionnaire.Title}}, {{this.filter.version == null ? $t('Common.AllVersions').toLowerCase() : ('ver. ' + this.filter.version)}} </h4>        
+            </div>
+        </div>
         <div >
             <div class="row">
                 <div class="col-md-6">
