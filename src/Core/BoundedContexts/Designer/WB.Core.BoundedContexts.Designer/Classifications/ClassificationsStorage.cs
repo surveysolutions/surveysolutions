@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(groups);
         }
 
-        public Task<IEnumerable<Classification>> GetClassifications(Guid groupId, Guid userId)
+        public async Task<IEnumerable<Classification>> GetClassifications(Guid groupId, Guid userId)
         {
             var tableNameWithSchema = "plainstore.classificationentities";
 
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 $"WHERE c.type = @entitytype AND (userid IS NULL OR userid = @userid) AND c.parent = @groupid " +
                 $"ORDER BY c.title"; 
             
-            var classifications = unitOfWork.Session.Connection.QueryAsync<Classification>(sqlSelect, new
+            var classifications = await unitOfWork.Session.Connection.QueryAsync<Classification>(sqlSelect, new
             {
                 entitytype = ClassificationEntityType.Classification,
                 childtype = ClassificationEntityType.Category,
