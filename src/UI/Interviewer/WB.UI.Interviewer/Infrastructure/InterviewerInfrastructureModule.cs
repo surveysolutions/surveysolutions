@@ -57,10 +57,12 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
+            registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
-
+            registry.BindAsSingleton<IAudioAuditService, AudioAuditService>();
+            
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 

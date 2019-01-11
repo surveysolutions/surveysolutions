@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
@@ -26,12 +27,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IImageFileStorage imagesStorage,
             IAudioFileStorage audioFileStorage,
             ISynchronizationService synchronizationService,
+            IAudioAuditFileStorage audioAuditFileStorage,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage ?? throw new ArgumentNullException(nameof(interviewMultimediaViewStorage));
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         public override async Task ExecuteAsync()
@@ -73,6 +76,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Context.Progress, Context.CancellationToken);
 
                     await this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
+                        Context.Progress, Context.CancellationToken);
+
+                    await this.UploadAudioAuditByCompletedInterviewAsync(completedInterview.InterviewId, uploadState,
                         Context.Progress, Context.CancellationToken);
 
                     if (!uploadState.IsEventsUploaded)
@@ -132,6 +138,32 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
                 this.imagesStorage.RemoveInterviewBinaryData(interviewId, imageView.FileName);
+            }
+        }
+        
+        private async Task UploadAudioAuditByCompletedInterviewAsync(Guid interviewId, InterviewUploadState uploadState,
+            IProgress<SyncProgressInfo> progress,
+            CancellationToken cancellationToken)
+        {
+            var auditFiles = this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var transferProgress = progress.AsTransferReport();
+
+            foreach (var auditFile in auditFiles)
+            {
+                if (uploadState.AudioFilesNames.Contains(auditFile.FileName)) continue;
+
+                cancellationToken.ThrowIfCancellationRequested();
+                var fileData = auditFile.GetData();
+
+                await this.synchronizationService.UploadInterviewAudioAuditAsync(
+                    auditFile.InterviewId,
+                    auditFile.FileName,
+                    auditFile.ContentType,
+                    fileData,
+                    transferProgress,
+                    cancellationToken);
+
+                this.audioAuditFileStorage.RemoveInterviewBinaryData(auditFile.InterviewId, auditFile.FileName);
             }
         }
 

@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.topActivity = topActivity;
         }
         
-        public event EventHandler OnCanelRecording;
+        public event EventHandler OnCancelRecording;
         public event EventHandler OnRecorded;
 
         public void ShowAndStartRecording(string title)
@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ViewModel_OnCancel(object sender, EventArgs e)
         {
             this.HideAndStopRecording();
-            this.OnCanelRecording?.Invoke(sender, e);
+            this.OnCancelRecording?.Invoke(sender, e);
         }
 
         private void HideAndStopRecording()

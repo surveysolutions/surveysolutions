@@ -4,6 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -22,6 +23,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
+        private readonly IAudioAuditService audioAuditService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -40,13 +42,15 @@ namespace WB.UI.Interviewer.ViewModel
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService, 
+            IAudioAuditService audioAuditService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.auditLogService = auditLogService;
+            this.audioAuditService = audioAuditService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
@@ -89,25 +93,29 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewAppeared()
         {
+            var interviewId = Guid.Parse(InterviewId);
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId));
+                commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
             }
 
-            auditLogService.Write(new OpenInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString(), assignmentId));
+            audioAuditService.StartRecordingAsync(interviewId);
+            auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
 
             base.ViewAppeared();
         }
 
         public override void ViewDisappearing()
         {
+            var interviewId = Guid.Parse(InterviewId);
             var interview = interviewRepository.Get(this.InterviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId));
+                commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
             }
 
-            auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));
+            auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
+            audioAuditService.StopRecordingAsync(interviewId);
 
             base.ViewDisappearing();
         }
