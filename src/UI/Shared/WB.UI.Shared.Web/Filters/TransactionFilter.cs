@@ -10,7 +10,12 @@ namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {
-        public IUnitOfWork UnitOfWork { get; set; }
+        private readonly IUnitOfWork unitOfWork;
+
+        public TransactionFilter(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
@@ -18,11 +23,11 @@ namespace WB.UI.Shared.Web.Filters
             
             if (filterContext.Exception == null)
             {
-                UnitOfWork.AcceptChanges();
+                unitOfWork.AcceptChanges();
             }
             else
             {
-                UnitOfWork.Dispose();
+                unitOfWork.Dispose();
             }
         }
     }
