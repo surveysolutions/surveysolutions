@@ -154,8 +154,7 @@
           <Checkbox
             :label="$t('Assignments.AudioRecordingEnable')"
             name="audioRecordingEnabled"
-            :value="editedAudioRecordingEnabled"
-            @input="val => editedAudioRecordingEnabled = val.checked"
+            v-model="editedAudioRecordingEnabled"
           />
         </div>
       </form>
