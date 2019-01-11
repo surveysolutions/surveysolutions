@@ -216,7 +216,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
+        public void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire,
+            bool isAudioRecordingEnabled)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
@@ -233,6 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
+            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, null);
 
