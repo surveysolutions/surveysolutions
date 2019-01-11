@@ -51,5 +51,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         [JsonProperty("rname")]
         public string ResponsibleName { get; set; }
+
+        [JsonProperty("audio")]
+        public bool IsAudioRecordingEnabled { get; set; }
     }
 }
