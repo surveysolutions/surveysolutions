@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser currentUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
 
         public AssignmentsController(ICommandService commandService,
@@ -33,7 +36,9 @@ namespace WB.UI.Headquarters.Controllers
             IStatefulInterviewRepository interviews,
             IQuestionnaireStorage questionnaireStorage,
             IAuthorizedUser currentUser, 
-            IPlainStorageAccessor<Assignment> assignmentsStorage, IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory)
+            IPlainStorageAccessor<Assignment> assignmentsStorage, 
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
             : base(commandService, logger)
         {
             this.interviews = interviews;
@@ -41,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             this.currentUser = currentUser;
             this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.questionnaires = questionnaires;
         }
         
         [Localizable(false)]
@@ -84,9 +90,14 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
+                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
+                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
+
             var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
             assignment.UpdateQuantity(size);
             assignment.Reassign(responsibleId);
+            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, null);
 
