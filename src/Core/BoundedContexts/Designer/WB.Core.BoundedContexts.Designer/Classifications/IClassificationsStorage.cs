@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     public interface IClassificationsStorage
     {
         Task<IEnumerable<ClassificationGroup>> GetClassificationGroups(Guid userId);
-        Task<IEnumerable<Classification>> GetClassifications(Guid? groupId, Guid userId);
+        Task<IEnumerable<Classification>> GetClassifications(Guid groupId, Guid userId);
         Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly, Guid userId);
         void Store(ClassificationEntity[] bdEntities);
         Task<List<Category>> GetCategories(Guid classificationId);
