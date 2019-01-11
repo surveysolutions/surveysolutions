@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
 
+        public bool IsAudioRecordingEnabled { get; set; }
+
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
 
