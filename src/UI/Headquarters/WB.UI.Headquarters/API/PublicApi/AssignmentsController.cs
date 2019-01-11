@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -41,6 +42,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -52,7 +54,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPreloadedDataVerifier verifier,
-            ICommandTransformator commandTransformator) : base(logger)
+            ICommandTransformator commandTransformator, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -63,6 +66,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
+            this.questionnaires = questionnaires;
         }
 
         /// <summary>
@@ -240,12 +244,17 @@ namespace WB.UI.Headquarters.API.PublicApi
                 });
             }
 
+            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
+                .Where(q => q.Id == questionnaireId.ToString())
+                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
+
             List<IdentifyingAnswer> identifyingAnswers =
                 answers.Where(x => identifyingQuestionIds.Contains(x.Identity.Id))
                     .Select(a => IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
                     .ToList();
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
+            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
 
             var result = verifier.VerifyWithInterviewTree(answers, responsible.Id, questionnaire);
 
