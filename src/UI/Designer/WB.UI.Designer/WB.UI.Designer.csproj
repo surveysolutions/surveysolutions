@@ -760,6 +760,7 @@
     <Content Include="Content\qbank\Questions.json" />
     <Content Include="Content\qbank\Sections.json" />
     <Content Include="Content\qbank\SectionToQuestionnaires.json" />
+    <Content Include="Content\QbankClassifications.json" />
     <None Include="packages.config" />
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
