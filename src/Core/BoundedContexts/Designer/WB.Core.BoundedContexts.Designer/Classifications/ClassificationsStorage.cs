@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             return Task.FromResult(groups);
         }
 
-        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId, Guid userId)
+        public Task<IEnumerable<Classification>> GetClassifications(Guid groupId, Guid userId)
         {
             var tableNameWithSchema = "plainstore.classificationentities";
 
@@ -56,11 +56,10 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 $"SELECT c.id, c.title, c.parent, c.userid, d.count " +
                 $"FROM {tableNameWithSchema} as c LEFT JOIN " +
                 $"(select parent, count(*) as count from {tableNameWithSchema} where type = @childtype group by parent) as d ON d.parent = c.id " +
-                $"WHERE c.type = @entitytype AND (userid IS NULL OR userid = @userid) " +
-                (groupId.HasValue ? " AND c.parent = @groupid " : "") +
+                $"WHERE c.type = @entitytype AND (userid IS NULL OR userid = @userid) AND c.parent = @groupid " +
                 $"ORDER BY c.title"; 
             
-            var classifications = unitOfWork.Session.Connection.Query<Classification>(sqlSelect, new
+            var classifications = unitOfWork.Session.Connection.QueryAsync<Classification>(sqlSelect, new
             {
                 entitytype = ClassificationEntityType.Classification,
                 childtype = ClassificationEntityType.Category,
@@ -68,7 +67,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                 groupid = groupId
             });
 
-            return Task.FromResult(classifications);
+            return classifications;
         }
 
         public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId, bool privateOnly, Guid userId)
