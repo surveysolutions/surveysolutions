@@ -71,7 +71,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             // Assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(questionnaireBrowseItem.IsAudioRecordingEnabled, Is.True);
-            Assert.That(questionnaireBrowseItem.QuestionnaireSettingsVersion, Is.EqualTo(1), "Should increment settings version for synchronization");
         }
     }
 }

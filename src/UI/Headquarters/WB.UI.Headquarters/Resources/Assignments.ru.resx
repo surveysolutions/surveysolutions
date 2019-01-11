@@ -289,8 +289,20 @@
   <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
     <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
   </data>
-    <data name="ErrorToCreateAssignment" xml:space="preserve">
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
     <value>Ошибка создания задания: </value>
     <comment>Ошибка создания задания: </comment>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Когда включено, приложение interviewer будет вести аудио запись интервью</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Настройки записи аудио для задания {{id}}</value>
+  </data>
+  <data name="QuestionnaireHasAudioDisabled" xml:space="preserve">
+    <value>Ведение аудио записи выключено на уровне опросника</value>
+  </data>
+  <data name="QuestionnaireHasAudioEnabled" xml:space="preserve">
+    <value>Ведение аудио записи включено на уровне опросника</value>
   </data>
 </root>
