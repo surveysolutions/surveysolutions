@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
             unitOfWork.Session.Connection.Execute(sql, new
             {
-                title = composite.GetTitle(),
+                title = GetTitle(composite),
                 questionnaireId = questionnaireId,
                 entityId = composite.PublicKey,
                 entityType = GetEntityType(composite),
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
         private string GetTextUsedForSearch(IComposite composite)
         {
-            var textUsedForSearch = composite.GetTitle();
+            var textUsedForSearch = GetTitle(composite);
             if (composite is IQuestion question)
             {
                 if (question.QuestionType == QuestionType.SingleOption
@@ -84,6 +84,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             }
             return textUsedForSearch;
         }
+
+        public static string GetTitle(IQuestionnaireEntity entity)
+            => (entity as IQuestion)?.QuestionText
+            ?? (entity as IStaticText)?.Text
+            ?? (entity as IGroup)?.Title
+            ?? (entity as IVariable)?.Label;
+
 
         public void Remove(Guid questionnaireId, Guid entityId)
         {
@@ -110,24 +117,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
 
         public SearchResult Search(SearchInput input)
         {
+            var textSearchQuery = CreateTextSearchQuery(input.Query);
+
             var sqlSelect = $"SELECT s.title, s.questionnaireid, s.entityid, s.entitytype, " +
-                      $"       li.folderid, li.title as questionnairetitle, f.title as foldername" +
+                      $"       li.folderid, li.title as questionnairetitle, f.title as foldername, " +
+                      $"       ts_rank_cd(s.searchtext, to_tsquery(@query)) AS rank" +
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE (@query IS NULL OR s.searchtext @@ plainto_tsquery(@query))" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ to_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) " +
-                      $" ORDER BY @order ASC" +
+                      $" ORDER BY rank DESC" +
                       $" LIMIT @pageSize" +
                       $" OFFSET @offset ";
 
             var searchResultEntities = unitOfWork.Session.Connection.Query<SearchResultEntity>(sqlSelect, new
             {
-                query = input.Query,
+                query = textSearchQuery,
                 folderid = input.FolderId,
                 folderpathquery = "%" +input.FolderId + "%",
                 pageSize = input.PageSize,
-                order = input.OrderBy ?? "title",
                 offset = input.PageIndex * input.PageSize
             }).ToList();
 
@@ -135,11 +144,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
                       $" FROM {TableNameWithSchema} s " +
                       $"    INNER JOIN plainstore.questionnairelistviewitems li ON s.questionnaireid = li.publicid" +
                       $"     LEFT JOIN plainstore.questionnairelistviewfolders f ON f.id = li.folderid" +
-                      $" WHERE (@query IS NULL OR s.searchtext @@ plainto_tsquery(@query))" +
+                      $" WHERE (@query IS NULL OR s.searchtext @@ to_tsquery(@query))" +
                       $"   AND (@folderid IS NULL OR li.folderid = @folderid OR f.path like @folderpathquery) ";
             var count = unitOfWork.Session.Connection.ExecuteScalar<int>(sqlCount, new
             {
-                query = input.Query,
+                query = textSearchQuery,
                 folderid = input.FolderId,
                 folderpathquery = "%" + input.FolderId + "%",
             });
@@ -148,6 +157,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search
             searchResult.Items = searchResultEntities;
             searchResult.TotalCount = count;
             return searchResult;
+        }
+
+        private string CreateTextSearchQuery(string inputQuery)
+        {
+            inputQuery = inputQuery?.Trim().ToLower();
+            if (string.IsNullOrEmpty(inputQuery))
+                return inputQuery;
+
+            var words = inputQuery.Split(' ');
+            if (words.Length == 1)
+            {
+                return $"{words[0]}:*"; // search word as like
+            }
+
+            return string.Join(" & ", words); // use logic AND
         }
     }
 }

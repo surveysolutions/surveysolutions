@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -319,5 +319,8 @@
   <data name="SelectQuestionnaire" xml:space="preserve">
       <value>Выберите опросник</value>
       <comment>Выберите опросник</comment>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Сбросить</value>
   </data>
 </root>

@@ -307,7 +307,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var allAllowedVariableNames = questionnaire
-                .Find<IComposite>(x => x is IQuestion || (x is IGroup group && group.IsRoster))
+                .Find<IComposite>(x => x is IQuestion || x is IGroup group)
                 .Select(x => x.VariableName?.ToLower())
                 .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
                 .Where(x => !string.IsNullOrEmpty(x))

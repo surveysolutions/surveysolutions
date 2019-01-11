@@ -548,10 +548,7 @@ span.image-zoom-box, span.image-option {
     white-space: normal;
     text-align: left; }
 
-
-.roster-section-block.answered .options-group, .question-editor.roster-section-block.has-error .options-group,
-.question-editor.roster-section-block.started .options-group,
-.disabled-question .question-editor.roster-section-block .options-group {
+.roster-section-block.answered .options-group, .question-editor.roster-section-block.has-error .options-group, .question-editor.roster-section-block.started .options-group, .disabled-question .question-editor.roster-section-block .options-group {
   background-color: transparent; }
 
 .question-editor.roster-section-block.has-error.answered .roster-section-info,

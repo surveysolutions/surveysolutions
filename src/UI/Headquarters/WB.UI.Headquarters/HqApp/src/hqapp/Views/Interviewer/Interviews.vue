@@ -9,7 +9,6 @@
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
                     v-on:selected="questionnaireSelected"
-                    :keyFunc="item => item.key + item.value"
                     :fetch-url="$config.model.questionnairesUrl" />
             </FilterBlock>
 

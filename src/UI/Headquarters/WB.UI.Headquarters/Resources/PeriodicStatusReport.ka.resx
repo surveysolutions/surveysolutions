@@ -177,7 +177,7 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>დასრულებული ინტერვიუების რაოდენობა</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>გუნდის ინტერვიუების დასრულების რაოდენობა. უარყოფილი და შემდეგ დასრულებული ინტერვიუები ჩაითვლება ცალკეული დასრულებულ ღონისძიებებად.</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
@@ -195,7 +195,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>ზედამხედველის მიერ ინტერვიუს ოპერაციების რაოდენობა</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>ზედამხედველის მიერ დამტკიცებული ან უარყოფილი ინტერვიუები შეგროვებული {0} -ს მიერ.</value>
   </data>
   <data name="Period" xml:space="preserve">

@@ -6,7 +6,6 @@
           :placeholder="$t('Common.SelectQuestionnaire')"
           :value="selectedQuestionnaireId"
           :values="questionnaires"
-          :keyFunc="item => item.key + item.value"
           v-on:selected="selectQuestionnaire"
         />
       </FilterBlock>
@@ -33,8 +32,7 @@
           <Checkbox
             :label="$t('Reports.HeatMapView')"
             name="pivot"
-            :value="showHeatmap"
-            @input="toggleHeatMap"
+            v-model="showHeatmap"
           />
         </div>
       </FilterBlock>
@@ -221,6 +219,10 @@ export default {
 
             this.showPointsOnMap(180, 180, -180, -180, true);
             this.readyToUpdate = true;
+        },
+
+        showHeatmap() {
+            this.reloadMarkersInBounds();
         }
     },
 
@@ -303,11 +305,6 @@ export default {
                 dissipating: this.heatMapOptions.dissipating,
                 maxIntensity: this.heatMapOptions.maxIntensity
             });
-        },
-
-        toggleHeatMap() {
-            this.showHeatmap = !this.showHeatmap;
-            this.reloadMarkersInBounds();
         },
 
         selectQuestionnaireVersion(value) {

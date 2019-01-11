@@ -319,7 +319,7 @@
     <value>Invalid 32 bit integer value '{0}'. Value should be between -2147483647 and 2147483647</value>
   </data>
     <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
-    <value>Parent question don't have an option with value '{0}'</value>
+    <value>Parent question doesn't have an option with value '{0}'</value>
   </data>
     <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
     <value>Duplicated option '{0}' with parent value '{1}'</value>
