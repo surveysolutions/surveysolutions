@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
@@ -106,7 +107,8 @@ namespace WB.Tests.Abc.TestFactories
                 auditLog,
                 interviewCreatorFromAssignment,
                 verifier,
-                commandTransformator);
+                commandTransformator,
+                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());
 
