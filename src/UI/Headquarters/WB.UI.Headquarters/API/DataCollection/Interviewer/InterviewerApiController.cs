@@ -244,6 +244,14 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced)
+            {
+                if (this.assignmentsService.HasAssignmentWithAudioRecordingEnabled(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            }
+
             if (deviceSyncProtocolVersion == 7070) // KP-11462
             {
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
