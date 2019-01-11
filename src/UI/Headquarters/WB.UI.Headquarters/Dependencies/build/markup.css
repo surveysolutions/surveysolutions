@@ -5873,7 +5873,12 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
     -webkit-box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #a6a8a9;
             box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #a6a8a9; }
 
-.combo-box .dropdown-toggle:hover, .field .field-to-fill:hover, .combo-box .dropdown-toggle:focus, .field .field-to-fill:focus, .combo-box .dropdown-toggle:active, .field .field-to-fill:active, .combo-box .dropdown-toggle:active:focus, .form-control:hover, .form-control:focus, .form-control:active, .form-control:active:focus, .has-error .information-block .form-control:hover, .has-error .information-block .form-control:focus, .has-error .information-block .form-control:active, .has-error .information-block .form-control:active:focus, .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active, .bootstrap-select.btn-group .dropdown-toggle:active:focus, .bootstrap-select.btn-group.open .dropdown-toggle, .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus, .btn-input .dropdown-toggle:active, .btn-input .dropdown-toggle:active:focus, .btn-input.open .dropdown-toggle {
+.combo-box .dropdown-toggle:hover, .field .field-to-fill:hover, .combo-box .dropdown-toggle:focus, .field .field-to-fill:focus, .combo-box .dropdown-toggle:active, .field .field-to-fill:active, .combo-box .dropdown-toggle:active:focus, .form-control:hover, .form-control:focus, .form-control:active, .form-control:active:focus, .has-error .information-block .form-control:hover, .has-error .information-block .form-control:focus, .has-error .information-block .form-control:active, .has-error .information-block .form-control:active:focus, .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active, .bootstrap-select.btn-group .dropdown-toggle:active:focus,
+.bootstrap-select.dropdown .dropdown-toggle:hover,
+.bootstrap-select.dropdown .dropdown-toggle:focus,
+.bootstrap-select.dropdown .dropdown-toggle:active,
+.bootstrap-select.dropdown .dropdown-toggle:active:focus, .bootstrap-select.btn-group.open .dropdown-toggle,
+.bootstrap-select.dropdown.open .dropdown-toggle, .btn-input .dropdown-toggle:hover, .btn-input .dropdown-toggle:focus, .btn-input .dropdown-toggle:active, .btn-input .dropdown-toggle:active:focus, .btn-input.open .dropdown-toggle {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
 
@@ -5929,7 +5934,13 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
   margin-left: 0; }
   .filters-container > .block-filter > *, .preset-filters-container > .block-filter > * {
     margin-left: 10px; }
-  .filters-container > .block-filter .btn-group.bootstrap-select, .preset-filters-container > .block-filter .btn-group.bootstrap-select, .filters-container > .block-filter .combo-box, .preset-filters-container > .block-filter .combo-box, .filters-container > .block-filter .input-group, .preset-filters-container > .block-filter .input-group, .filters-container > .block-filter .field, .preset-filters-container > .block-filter .field {
+  .filters-container > .block-filter .btn-group.bootstrap-select, .preset-filters-container > .block-filter .btn-group.bootstrap-select,
+  .filters-container > .block-filter .dropdown.bootstrap-select,
+  .preset-filters-container > .block-filter .dropdown.bootstrap-select,
+  .filters-container > .block-filter .combo-box,
+  .preset-filters-container > .block-filter .combo-box,
+  .filters-container > .block-filter .input-group,
+  .preset-filters-container > .block-filter .input-group, .filters-container > .block-filter .field, .preset-filters-container > .block-filter .field {
     margin-left: 0 !important; }
 
 .btn {
@@ -7374,9 +7385,11 @@ input.radio-row:checked:focus + label .tick {
       .input-group .input-group-btn .btn span:after {
         top: 4px; }
 
-.bootstrap-select.btn-group {
+.bootstrap-select.btn-group,
+.bootstrap-select.dropdown {
   width: 295px !important; }
-  .bootstrap-select.btn-group .dropdown-toggle {
+  .bootstrap-select.btn-group .dropdown-toggle,
+  .bootstrap-select.dropdown .dropdown-toggle {
     -webkit-box-shadow: none;
             box-shadow: none;
     background-color: transparent;
@@ -7387,15 +7400,21 @@ input.radio-row:checked:focus + label .tick {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     border-color: #dbdfe2;
     height: 40px; }
-    .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active, .bootstrap-select.btn-group .dropdown-toggle:active:focus {
+    .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active, .bootstrap-select.btn-group .dropdown-toggle:active:focus,
+    .bootstrap-select.dropdown .dropdown-toggle:hover,
+    .bootstrap-select.dropdown .dropdown-toggle:focus,
+    .bootstrap-select.dropdown .dropdown-toggle:active,
+    .bootstrap-select.dropdown .dropdown-toggle:active:focus {
       outline: none !important;
       background-color: transparent;
       border-color: #dbdfe2; }
-    .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+    .bootstrap-select.btn-group .dropdown-toggle .filter-option,
+    .bootstrap-select.dropdown .dropdown-toggle .filter-option {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap; }
-    .bootstrap-select.btn-group .dropdown-toggle .bs-caret .caret {
+    .bootstrap-select.btn-group .dropdown-toggle .bs-caret .caret,
+    .bootstrap-select.dropdown .dropdown-toggle .bs-caret .caret {
       right: 10px;
       top: 39%;
       width: 0;
@@ -7405,16 +7424,23 @@ input.radio-row:checked:focus + label .tick {
       border-right: 7px solid transparent;
       border-left: 7px solid transparent;
       border-bottom: none; }
-  .bootstrap-select.btn-group .dropdown-menu {
+  .bootstrap-select.btn-group .dropdown-menu,
+  .bootstrap-select.dropdown .dropdown-menu {
     width: 100%; }
-    .bootstrap-select.btn-group .dropdown-menu > li > a {
+    .bootstrap-select.btn-group .dropdown-menu > li > a,
+    .bootstrap-select.dropdown .dropdown-menu > li > a {
       padding: 10px;
       white-space: normal; }
-      .bootstrap-select.btn-group .dropdown-menu > li > a span.text {
+      .bootstrap-select.btn-group .dropdown-menu > li > a span.text,
+      .bootstrap-select.dropdown .dropdown-menu > li > a span.text {
         display: block !important; }
-      .bootstrap-select.btn-group .dropdown-menu > li > a:hover, .bootstrap-select.btn-group .dropdown-menu > li > a:focus, .bootstrap-select.btn-group .dropdown-menu > li > a:active {
+      .bootstrap-select.btn-group .dropdown-menu > li > a:hover, .bootstrap-select.btn-group .dropdown-menu > li > a:focus, .bootstrap-select.btn-group .dropdown-menu > li > a:active,
+      .bootstrap-select.dropdown .dropdown-menu > li > a:hover,
+      .bootstrap-select.dropdown .dropdown-menu > li > a:focus,
+      .bootstrap-select.dropdown .dropdown-menu > li > a:active {
         color: #000; }
-  .bootstrap-select.btn-group.open .bs-caret .caret {
+  .bootstrap-select.btn-group.open .bs-caret .caret,
+  .bootstrap-select.dropdown.open .bs-caret .caret {
     border-top: none;
     border-bottom: 12px solid #a6a8a9; }
 
@@ -7579,7 +7605,11 @@ ul.typeahead.dropdown-menu {
       .active-search .search .btn-search:hover {
         background-position: -60px 10px; }
 
-.block-filter .btn-group.bootstrap-select, .block-filter .combo-box, .block-filter .input-group, .block-filter .field {
+.block-filter .btn-group.bootstrap-select,
+.block-filter .dropdown.bootstrap-select,
+.block-filter .combo-box,
+.block-filter .input-group,
+.block-filter .field {
   margin-left: 0; }
 
 .block-filter .field {
@@ -7819,7 +7849,8 @@ textarea.field-to-fill {
   border-left: 12px solid #dbdfe2; }
   .filters .input-group.date {
     margin-left: 0 !important; }
-  .filters .bootstrap-select.btn-group {
+  .filters .bootstrap-select.btn-group,
+  .filters .dropdown.bootstrap-select {
     width: 100% !important; }
   .filters .input-group, .filters .combo-box, .filters .btn-input .dropdown-toggle {
     width: 100%; }
