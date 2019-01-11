@@ -1,7 +1,7 @@
 param([string]$VersionName,
 [INT]$VersionCode,
 [string]$BuildConfiguration='release',
-[string]$KeystorePassword,
+[string]$KeystorePassword = $null,
 [string]$KeystoreName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
@@ -11,289 +11,119 @@ param([string]$VersionName,
 [string]$PlatformsOverride,
 [Switch]$NoCleanUp)
 
-if(!$VersionCode){
-    Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"
-    Exit
-}
-
-#do not allow empty KeystorePassword
-if([string]::IsNullOrWhiteSpace($KeystorePassword)){
-    Write-Host "##teamcity[buildProblem description='VersionPrefix param is not set']"
-    Exit
-}
 
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
-function GetPathToJarsigner() {
-    if (Test-Path 'C:\Program Files\Java\jdk1.8.0_181\bin\jarsigner.exe'){
-        return 'C:\Program Files\Java\jdk1.8.0_181\bin\jarsigner.exe'
-    }	
-    if (Test-Path 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'){
-        return 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'
-    }
-    if (Test-Path 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'){
-        return 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'
-    }
 
-    if (Test-Path 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe') {
-        return 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe'
-    }
-    if (Test-Path 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe') {
-        return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
-    }
-
-    throw [System.IO.FileNotFoundException] "jarsigner.exe not found, see script for details"
+if(!$VersionCode){
+    Log-Error "VersionCode param is not set"
+    Exit
 }
 
-function GetPathToZipalign() {
-    if (Test-Path 'C:\Android-sdk\build-tools\27.0.3\zipalign.exe') {
-        return 'C:\Android-sdk\build-tools\27.0.3\zipalign.exe'
-    }
-    
-    if (Test-Path 'C:\Program Files (x86)\Android\android-sdk\build-tools\26.0.3\zipalign.exe') {
-        return 'C:\Program Files (x86)\Android\android-sdk\build-tools\26.0.3\zipalign.exe'
-    }
+#do not allow empty KeystorePassword
+# if([string]::IsNullOrWhiteSpace($KeystorePassword)){
+#     Log-Error "KeystorePassword param is not set"
+#     Exit
+# }
 
-    if (Test-Path 'C:\Android\android-sdk\build-tools\26.0.3\zipalign.exe') {
-        return 'C:\Android\android-sdk\build-tools\26.0.3\zipalign.exe'
-    }
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $OutFileName) {
+    Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
+        
+        $buildArgs = @(
+            $AndroidProject, "/p:Configuration=$BuildConfiguration", 
+            '/v:q', '/m:8', '/nologo','/p:CodeContractsRunCodeAnalysis=false', 
+            # '/clp:ForceConsoleColor;ErrorsOnly', 
+            "/p:VersionCode=$VersionCode"
+        )
 
-    if (Test-Path 'C:\Android\android-sdk\build-tools\25.0.3\zipalign.exe') {
-        return 'C:\Android\android-sdk\build-tools\25.0.3\zipalign.exe'
-    }
-
-    if (Test-Path 'C:\Android\android-sdk\build-tools\25.0.2\zipalign.exe') {
-        return 'C:\Android\android-sdk\build-tools\25.0.2\zipalign.exe'
-    }
-
-    if (Test-Path 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe') {
-        return 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe'
-    }
-    if (Test-Path 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe') {
-        return 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe'
-    }
-
-    throw [System.IO.FileNotFoundException] "zipalign.exe not found, see script for details"
-}
-
-function GetPathToManifest([string]$CapiProject) {
-    $file = get-childitem $CapiProject
-    return ($file.directoryname + "\Properties\AndroidManifest.xml")
-}
-
-function GetPackageName([string]$CapiProject) {
-    [xml] $xam = Get-Content -Path (GetPathToManifest $CapiProject)
-
-    $res = Select-Xml -xml $xam -Xpath '/manifest/@package' -namespace @{android='http://schemas.android.com/apk/res/android'}
-    return ($res.Node.Value)
-}
-
-function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject, $branchName){
-    Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
-    Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
-
-    Write-Host "##teamcity[message text='VersionCode = $VersionCode']"
-    
-    $PahToManifest = (GetPathToManifest $CapiProject)
-
-    [xml] $xam = Get-Content -Path ($PahToManifest)
-
-    $name = Select-Xml -xml $xam -Xpath '/manifest/@android:versionName' -namespace @{android='http://schemas.android.com/apk/res/android'}
-    $name.Node.Value = $VersionName
-
-    $code = Select-Xml -xml $xam  -Xpath '/manifest/@android:versionCode' -namespace @{android='http://schemas.android.com/apk/res/android'}
-    $code.Node.Value = $VersionCode
-
-    $hockeyApp = Select-Xml -xml $xam `
-        -Xpath '/manifest/application/meta-data[@android:name="net.hockeyapp.android.appIdentifier"]' `
-        -namespace @{android='http://schemas.android.com/apk/res/android'};
-
-    $projectname = GetPackageName $CapiProject
-    switch ($projectname) {
-        "org.worldbank.solutions.interviewer" {
-            if ($branchName -eq "release") {
-                $hockeyApp.Node.SetAttribute('android:value', 'bd034ac8bec541d783f7e40c1300fd10')
-            }
-            else {
-                $hockeyApp.Node.SetAttribute('android:value', '1d21a663e5fc45359b254f22d6fa2b31')
-            }
+        if($env:TEAMCITY_VERSION -eq $null) {
+            $buildArgs += '/clp:ForceConsoleColor;ErrorsOnly'
         }
-        "org.worldbank.solutions.supervisor" {
-            $hockeyApp.Node.SetAttribute('android:value', '80bf6bc07188459192130d4895a5e041')
+
+        # $buildArgs += '/bl /clp:ForceConsoleColor;PerformanceSummary;NoSummary;ErrorsOnly' # to show perf summary
+        $binLogPath = "$([System.IO.Path]::GetFileName($OutFileName)).msbuild.binlog"
+        $buildArgs += "/bl:$binLogPath"
+                
+        if(-not $NoCleanUp.IsPresent) {
+            $buildArgs += '/t:Clean'
         }
-        "org.worldbank.solutions.Vtester" {
-            $hockeyApp.Node.SetAttribute('android:value', 'e77a488dd76b43009a378716f5b2faa7')
+        
+        $buildArgs += '/t:SignAndroidPackage;MoveApkFile'
+        
+        #$buildArgs += '/p:DeployOnBuild=True'
+        
+        # if key store password not provided msbuild will sign with default dev keys
+        if([string]::IsNullOrWhiteSpace($KeystorePassword) -eq $False) {
+            Log-Message "Signing with $KeyStoreName"
+            $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
+            $buildArgs += '/p:AndroidUseApkSigner=true'
+            $buildArgs += '/p:AndroidKeyStore=True'
+            $buildArgs += "/p:AndroidSigningKeyAlias=$KeystoreAlias"
+            $buildArgs += "/p:AndroidSigningKeyPass=$KeystorePassword"
+            $buildArgs += "/p:AndroidSigningKeyStore=$PathToKeystore"
+            $buildArgs += "/p:AndroidSigningStorePass=$KeystorePassword"
         }
-    }
 
-    $xam.Save($PahToManifest)
-
-    Write-Host "##teamcity[progressFinish 'Updating Android App Manifest']"
-    Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
-}
-
-function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi){
-
-    Write-Host "##teamcity[blockOpened name='Building Android project: $AndroidProject']"
-    Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
-
-    if($NoCleanUp.IsPreset -eq $False) {
-        & (GetPathToMSBuild) $AndroidProject "/p:Configuration=$BuildConfiguration" /t:Clean /nologo /v:q /m:4  | Write-Host
-    }
-    
-    if($ExcludeExtensions)
-    {
-        Write-Host "##teamcity[message text='Building apk excluding extra']"
-
-        & (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' "/p:Configuration=$BuildConfiguration" `
-            /p:CodeContractsRunCodeAnalysis=false --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
+        if($ExcludeExtensions -eq $True) {
+            $buildArgs += "/p:ExcludeExtensions=$ExcludeExtensions"
+            $buildArgs += "/p:DefineConstants=EXCLUDEEXTENSIONS"
         }
-    else
-    {
-        Write-Host "##teamcity[message text='Building apk with extra']"
-        if([string]::IsNullOrWhiteSpace($TargetAbi))
+        if($null -eq $env:GIT_BRANCH) {
+            $buildArgs += "/p:GIT_BRANCH=$branch"
+        }
+
+        if([string]::IsNullOrWhiteSpace($TargetAbi) -eq $False)
         {
-            & (GetPathToMSBuild) $AndroidProject /t:PackageForAndroid /v:m /nologo `
-                /p:CodeContractsRunCodeAnalysis=false `
-                /p:Configuration=$BuildConfiguration | Write-Host
+            $buildArgs += "/p:AndroidSupportedAbis=$TargetAbi"
         }
-        else
-        {
-            & (GetPathToMSBuild) $AndroidProject `
-                /t:PackageForAndroid /v:m /nologo `
-                /p:CodeContractsRunCodeAnalysis=false `
-                /p:Configuration=$BuildConfiguration `
-                /p:AndroidSupportedAbis=$TargetAbi | Write-Host
+
+        $buildArgs += "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
+
+        # Executing MSBUILD
+        & (GetPathToMSBuild) $buildArgs | Out-Host
+        
+        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+
+        if (-not $wasBuildSuccessfull) {
+            Log-Error "Failed to build |'$AndroidProject' | project"
+            
+            Start-Sleep -Seconds 1 # binlog is still writing at this moment
+            Publish-Artifact "$binLogPath"
+            throw "Failed to build |'$AndroidProject' | project"
         }
+
+        return $wasBuildSuccessfull
     }
-    
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build |'$AndroidProject|' project']"
-        Write-Host "##teamcity[buildProblem description='Failed to build |'$AndroidProject|' project']"
-    }
-
-    Write-Host "##teamcity[progressFinish 'Building |'$AndroidProject|' project']"
-    Write-Host "##teamcity[blockClosed name='Building Android project: $AndroidProject']"
-
-    return $wasBuildSuccessfull
-}
-
-function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $OutFileName){
-
-    Write-Host "##teamcity[blockOpened name='Signing and Zipaligning Android package']"
-    Write-Host "##teamcity[progressStart 'Signing and Zipaligning Android package']"
-
-    If (Test-Path "$OutFileName"){
-        Remove-Item "$OutFileName" -Force
-    }
-    
-    if ($env:SavePasswords) {
-        $KeyStorePass | Out-File "C:\Temp\$($KeyStoreName).txt" -Force
-    }
-
-    $PathToFinalCapi = PathToFinalCapi $CapiProject
-
-    $PahToSigned = "$PathToFinalCapi" + "-signed.apk"
-    $PahToCreated = "$PathToFinalCapi" + ".apk"
-    $PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
-    $pathToJarsigner = GetPathToJarsigner
-
-    Write-Host "##teamcity[message text='Signing package using $pathToJarsigner']"
-
-    & ($pathToJarsigner) '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
-        '-keystore' "$PahToKeystore" '-storepass' "$KeyStorePass" `
-        '-signedjar' "$PahToSigned" "$PahToCreated" "$Alias" | Write-Host
-
-    $wasOperationSuccessfull = $LASTEXITCODE -eq 0
-
-    if (-not $wasOperationSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to sign Android package']"
-        Write-Host "##teamcity[buildProblem description='Failed to sign Android package']"
-
-        Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
-        Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Android package']"
-
-        return $wasOperationSuccessfull
-    }
-
-    $pathToZipalign = GetPathToZipalign
-
-    Write-Host "##teamcity[message text='Zipaligning package using $pathToZipalign']"
-
-    & ($pathToZipalign) '-f' '-v' '4' "$PahToSigned" "$OutFileName" | Write-Host
-
-    $wasOperationSuccessfull = $LASTEXITCODE -eq 0
-
-    if (-not $wasOperationSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to zipalign Android package']"
-        Write-Host "##teamcity[buildProblem description='Failed to zipalign Android package']"
-    }
-
-    Write-Host "##teamcity[progressFinish 'Signing and Zipaligning Android package']"
-    Write-Host "##teamcity[blockClosed name='Signing and Zipaligning Android package']"
-
-    return $wasOperationSuccessfull
-}
-
-function PathToFinalCapi($CapiProject) {
-    $file = get-childitem $CapiProject
-    $PathToFinalCapi = $file.directoryname + "\bin\" + $BuildConfiguration + "\" + (GetPackageName $CapiProject)
-    return $PathToFinalCapi
 }
 
 # Main part
 $ErrorActionPreference = "Stop"
 
-if([string]::IsNullOrWhiteSpace($VersionName)){
-    $VersionName = (GetVersionString 'src')
-}
+Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
+    Log-Message "PlatformsOverride = $PlatformsOverride"
 
-if($ExcludeExtra)
-{
-    $VersionName = $VersionName + " (build " + $VersionCode + ")"
-}
-else
-{
-    $VersionName = $VersionName + " (build " + $VersionCode + ") with Maps"
-}
-        
-Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"
-        
-if([string]::IsNullOrWhiteSpace($PlatformsOverride))
-{
-    UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject -branchName $branch
-    
-
-    if (Test-Path $OutFileName) {
-        Remove-Item $OutFileName -Force
-    }
-
-    BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
-
-    SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
-        -Alias $KeystoreAlias -CapiProject $CapiProject `
-        -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
-}
-else
-{
-    $TargetAbis =  ($PlatformsOverride -split ';').Trim()
-    $IndexToAdd = 0 
-    Foreach ($TargetAbi in $TargetAbis)
+    if([string]::IsNullOrWhiteSpace($PlatformsOverride))
     {
-        $IndexToAdd = $IndexToAdd + 1
-        UpdateAndroidAppManifest -VersionName $VersionName -VersionCode "$VersionCode$IndexToAdd" -CapiProject $CapiProject -branchName $branch
-    
-        if (Test-Path "$TargetAbi$OutFileName") {
-            Remove-Item "$TargetAbi$OutFileName" -Force
+        if (Test-Path $OutFileName) {
+            Remove-Item $OutFileName -Force
         }
-    
-        BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi | %{ if (-not $_) { Exit } }
 
-        SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
-            -Alias $KeystoreAlias -CapiProject $CapiProject `
-            -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }
-}
+        BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
+    }
+    else
+    {
+        $TargetAbis =  ($PlatformsOverride -split ';').Trim()
+        $IndexToAdd = 0 
+        Foreach ($TargetAbi in $TargetAbis)
+        {
+            $IndexToAdd = $IndexToAdd + 1
+
+            if (Test-Path "$TargetAbi$OutFileName") {
+                Remove-Item "$TargetAbi$OutFileName" -Force
+            }
+
+            BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }    
+        }
+    }
 }

@@ -83,46 +83,77 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockClosed name='$Filter']"
 }
 
-function CleanBinAndObjFolders() {
-    Write-Host "##teamcity[blockOpened name='Cleaning folders']"
-
-    CleanFolders 'bin'
-    CleanFolders 'obj'
-    CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
-    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
-    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
-
-    Write-Host "##teamcity[blockClosed name='Cleaning folders']"
+function Publish-Artifact($artifactSpec) {
+    Write-Host "##teamcity[publishArtifacts '$artifactSpec']"
 }
 
-function versionCheck() {
-    Write-Host "Node version:"
-    &node -v | Write-Host 
-
-    Write-Host "NPM version:"
-    &npm --version | Write-Host 
-
-    Write-Host "Yarn version:"
-    &yarn --version | Write-Host 
-}
-
-function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
-    Write-Host "##teamcity[blockOpened name='$blockName']"
-    Write-Host "##teamcity[progressStart '$blockName']"
-
-    Write-Host "Pushing location to $targetLocation"
-    Push-Location -Path $targetLocation
+function Log-Block($logBlockName, [ScriptBlock] $logBlock) {
+    Log-StartBlock $logBlockName
+    Log-StartProgress $logBlockName
 
     try {
-        $result = & $block
+        $result = & $logBlock
         return $result
     }
     finally {
-        Pop-Location
-
-        Write-Host "##teamcity[progressFinish '$blockName']"
-        Write-Host "##teamcity[blockClosed name='$blockName']"
+        Log-EndProgress $logBlockName
+        Log-EndBlock $logBlockName
     }
+}
+
+function Log-StartBlock($blockStartName) {
+    "##teamcity[blockOpened name='$(TeamCityEncode $blockStartName)']" | Write-Host
+}
+
+function Log-EndBlock($blockEndName) {
+    "##teamcity[blockClosed name='$(TeamCityEncode $blockEndName)']" | Write-Host
+}
+
+function Log-Message($message) {
+    "##teamcity[message text='$(TeamCityEncode $message)']" | Write-Host
+}
+
+function Log-Error($errorMessage) {
+    "##teamcity[message status='ERROR' text='$(TeamCityEncode $errorMessage)']" | Write-Host
+    "##teamcity[buildProblem description='$(TeamCityEncode $errorMessage)']" | Write-Host
+}
+
+function Log-Progress($progressMessage, [ScriptBlock] $progressBlock) {
+    Log-StartProgress $progressMessage
+
+    try {
+        $result = & $progressBlock
+        return $result
+    }
+    finally {
+        Log-EndProgress $progressMessage
+    }
+}
+
+function Log-StartProgress($startProgressMessage) {
+    "##teamcity[progressStart name='$(TeamCityEncode $startProgressMessage)']" | Write-Host
+}
+
+function Log-EndProgress($endProgressMessage) {
+    "##teamcity[progressFinish name='$(TeamCityEncode $endProgressMessage)']" | Write-Host
+}
+
+function CleanBinAndObjFolders() {
+    Log-Block "Cleaning folders" {
+        CleanFolders 'bin'
+        CleanFolders 'obj'
+        CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
+        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
+        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
+    }
+}
+
+function versionCheck() {
+    Write-Host "Node version: $(&node -v)"
+    Write-Host "NPM version: $(&npm --version)"
+    Write-Host "Yarn version: $(&yarn --version)"
+    Write-host "MsBuild version: $(& (GetPathToMSBuild) /version /nologo)"
+    Write-Host "Dotnet CLI version: $(dotnet --version)"
 }
 
 ##############################
@@ -150,28 +181,32 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 # to execute pre build step - use script with name `preproduction`
 ##############################
 function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
-    return RunBlock "Building static files: $blockName" $targetLocation -block {
-        Write-Host "Running npm install"
-
-        #install node js dependencies
-        &yarn install --no-optional | Write-Host
-        
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-        if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
-            return $wasBuildSuccessfull
+    Push-Location $targetLocation
+    try {
+        Log-Block $blockName {
+            Log-Message "yarn install"
+            #install node js dependencies
+            &yarn install --no-optional | Write-Host
+            
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Log-Error "Failed to run yarn"
+                return $wasBuildSuccessfull
+            }
+    
+            Log-Message "Running gulp --production"
+            &node_modules\.bin\gulp --production | Write-Host
+    
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Log-Error "Failed to run gulp --production"
+                return $wasBuildSuccessfull
+            }
+    
+            return $true
         }
-
-        Write-Host "Running gulp --production"
-        &node_modules\.bin\gulp --production | Write-Host
-
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-        if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
-            return $wasBuildSuccessfull
-        }
-
-        return $true
+    } finally {
+        Pop-Location
     }
 }
 
@@ -390,4 +425,17 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration) {
     MoveArtifacts $destZipFile "Tools"
 
     Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
+}
+function GetPathToManifest([string]$CapiProject) {
+    $file = get-childitem $CapiProject
+    return ($file.directoryname + "\Properties\AndroidManifest.xml")
+}
+
+function GetPackageName([string]$CapiProject) {
+    if((Test-Path (GetPathToManifest $CapiProject)) -eq $False) { return "no" }
+
+    [xml] $xam = Get-Content -Path (GetPathToManifest $CapiProject)
+
+    $res = Select-Xml -xml $xam -Xpath '/manifest/@package' -namespace @{android='http://schemas.android.com/apk/res/android'}
+    return ($res.Node.Value)
 }
