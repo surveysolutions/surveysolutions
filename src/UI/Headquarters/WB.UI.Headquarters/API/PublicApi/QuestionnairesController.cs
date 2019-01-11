@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            questionnaire.ToggleIsAudioRecordingEnabled(requestData.Enabled);
+            questionnaire.IsAudioRecordingEnabled = requestData.Enabled;
 
             var httpResponseMessage = Request.CreateResponse(HttpStatusCode.OK, string.Empty, new MediaTypeHeaderValue("application/json"));
             return httpResponseMessage;

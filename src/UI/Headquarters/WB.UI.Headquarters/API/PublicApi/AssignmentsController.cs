@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -28,7 +29,6 @@ using WB.UI.Headquarters.Code.CommandTransformation;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
     [RoutePrefix("api/v1/assignments")]
     public class AssignmentsController : BaseApiServiceController
     {
@@ -72,6 +72,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public FullAssignmentDetails Details(int id)
         {
             Assignment assignment = assignmentsStorage.GetById(id)
@@ -89,6 +90,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route("")]
         [Localizable(false)]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public AssignmentsListView List([FromUri(SuppressPrefixCheck = true, Name = "")] AssignmentsListFilter filter)
         {
             filter = filter ?? new AssignmentsListFilter
@@ -157,6 +159,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
         [Route]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public CreateAssignmentResult Create(CreateAssignmentApiRequest createItem)
         {
             var responsible = this.GetResponsibleIdPersonFromRequestValue(createItem?.Responsible);
@@ -282,6 +285,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="406">Assignee cannot be assigned to assignment</response>
         [HttpPatch]
         [Route("{id:int}/assign")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public AssignmentDetails Assign(int id, [FromBody] AssignmentAssignRequest assigneeRequest)
         {
             var assignment = assignmentsStorage.GetById(id) ??
@@ -330,10 +334,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <param name="quantity">New limit on created interviews</param>
-        /// <response code="200">Assingment details with updated quantity</response>
+        /// <response code="200">Assignment details with updated quantity</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/changeQuantity")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public AssignmentDetails ChangeQuantity(int id, [FromBody] int? quantity)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -349,10 +354,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// Archive assignment
         /// </summary>
         /// <param name="id">Assignment id</param>
-        /// <response code="200">Assingment details</response>
+        /// <response code="200">Assignment details</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/archive")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public AssignmentDetails Archive(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -372,6 +378,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/unarchive")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
         public AssignmentDetails Unarchive(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -381,6 +388,47 @@ namespace WB.UI.Headquarters.API.PublicApi
             assignmentsStorage.Store(assignment, id);
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
+        }
+
+        /// <summary>
+        /// Gets status of audio recording for provided assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200"></response>
+        /// <response code="404">Assignment not found</response>
+        [HttpGet]
+        [Route("{id:int}/recordAudio")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        public AssignmentAudioRecordingEnabled AudioRecoding(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return new AssignmentAudioRecordingEnabled
+            {
+                Enabled = assignment.IsAudioRecordingEnabled
+            };
+        }
+
+        /// <summary>
+        /// Set audio recording setting for assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="request"></param>
+        /// <response code="200">Audio recording updated</response>
+        /// <response code="404">Assignment not found</response>
+        [HttpPatch]
+        [Route("{id:int}/recordAudio")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        public HttpResponseMessage AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            assignment.ToggleAudioRecordingEnabled(request.Enabled);
+
+            this.assignmentsStorage.Store(assignment, assignment.Id);
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

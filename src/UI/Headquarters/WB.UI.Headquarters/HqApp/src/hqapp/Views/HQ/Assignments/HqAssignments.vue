@@ -1,155 +1,215 @@
 <template>
-    <HqLayout :title="title"
-            :hasFilter="true">
+  <HqLayout :title="title" :hasFilter="true">
+    <Filters slot="filters">
+      <FilterBlock
+        :title="$t('Common.Questionnaire')"
+        :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')"
+      >
+        <Typeahead
+          control-id="questionnaireId"
+          :placeholder="$t('Common.AllQuestionnaires')"
+          :value="questionnaireId"
+          :values="config.questionnaires"
+          :keyFunc="item => item.key + item.value"
+          v-on:selected="questionnaireSelected"
+        />
+      </FilterBlock>
 
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead control-id="questionnaireId"
-                           :placeholder="$t('Common.AllQuestionnaires')"
-                           :value="questionnaireId"
-                           :values="config.questionnaires"
-                           :keyFunc="item => item.key + item.value"
-                           v-on:selected="questionnaireSelected" />
-            </FilterBlock>
+      <FilterBlock
+        :title="$t('Common.QuestionnaireVersion')"
+        :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')"
+      >
+        <Typeahead
+          control-id="questionnaireVersion"
+          :placeholder="$t('Common.AllVersions')"
+          :values="questionnaireId == null ? null : questionnaireId.versions"
+          :value="questionnaireVersion"
+          :disabled="questionnaireId == null"
+          v-on:selected="questionnaireVersionSelected"
+        />
+      </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead control-id="questionnaireVersion"
-                           :placeholder="$t('Common.AllVersions')"
-                           :values="questionnaireId == null ? null : questionnaireId.versions"
-                           :value="questionnaireVersion"
-                           :disabled="questionnaireId == null"
-                           v-on:selected="questionnaireVersionSelected" />
-            </FilterBlock>
+      <FilterBlock
+        :title="$t('Common.Responsible')"
+        :tooltip="$t('Assignments.Tooltip_Filter_Responsible')"
+      >
+        <Typeahead
+          control-id="responsibleId"
+          :placeholder="$t('Common.AllResponsible')"
+          :value="responsibleId"
+          :ajax-params="responsibleParams"
+          v-on:selected="userSelected"
+          :fetch-url="config.api.responsible"
+        ></Typeahead>
+      </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
-                <Typeahead control-id="responsibleId"
-                           :placeholder="$t('Common.AllResponsible')"
-                           :value="responsibleId"
-                           :ajax-params="responsibleParams"
-                           v-on:selected="userSelected"
-                           :fetch-url="config.api.responsible"></Typeahead>
-            </FilterBlock>
+      <FilterBlock
+        :title="$t('Assignments.ReceivedByTablet')"
+        :tooltip="$t('Assignments.Tooltip_Filter_Received')"
+      >
+        <Typeahead
+          control-id="recieved-by-tablet"
+          noSearch
+          noClear
+          :values="ddlReceivedByTablet"
+          :value="receivedByTablet"
+          v-on:selected="receivedByTabletSelected"
+        />
+      </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
-                <Typeahead control-id="recieved-by-tablet" noSearch noClear
-                    :values= "ddlReceivedByTablet"
-                    :value="receivedByTablet"
-                    v-on:selected="receivedByTabletSelected"/>
-            </FilterBlock>
+      <FilterBlock
+        :title="$t('Assignments.ShowArchived')"
+        :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')"
+      >
+        <Typeahead
+          control-id="show_archived"
+          noSearch
+          noClear
+          :values="ddlShowArchive"
+          :value="showArchive"
+          v-on:selected="showArchiveSelected"
+        />
+      </FilterBlock>
+    </Filters>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
-                <Typeahead control-id="show_archived" noSearch noClear
-                    :values= "ddlShowArchive" 
-                    :value="showArchive"
-                    v-on:selected="showArchiveSelected"/>
-            </FilterBlock>
-        </Filters>
+    <DataTables
+      ref="table"
+      :tableOptions="tableOptions"
+      :addParamsToRequest="addParamsToRequest"
+      :wrapperClass=" { 'table-wrapper': true }"
+      @cell-clicked="cellClicked"
+      @selectedRowsChanged="rows => selectedRows = rows"
+      @totalRows="(rows) => totalRows = rows"
+      @ajaxComlpete="isLoading = false"
+      @page="resetSelection"
+      :selectable="showSelectors"
+    >
+      <div class="panel panel-table" id="pnlAssignmentsContextActions" v-if="selectedRows.length">
+        <div class="panel-body">
+          <input class="double-checkbox-white" type="checkbox" checked disabled>
+          <label>
+            <span class="tick"></span>
+            {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
+          </label>
+          
+          <button
+            class="btn btn-lg btn-primary"
+            id="btnUnarchiveSelected"
+            v-if="showArchive.key && config.isHeadquarter"
+            @click="unarchiveSelected"
+          >{{ $t("Assignments.Unarchive") }}</button>
+          
+          <button
+            class="btn btn-lg btn-primary"
+            id="btnAssignSelected"
+            v-if="!showArchive.key"
+            @click="assignSelected"
+          >{{ $t("Common.Assign") }}</button>
+          
+          <button
+            class="btn btn-lg btn-danger"
+            id="btnArchiveSelected"
+            v-if="!showArchive.key && config.isHeadquarter"
+            @click="archiveSelected"
+          >{{ $t("Assignments.Archive") }}</button>
+        </div>
+      </div>
+    </DataTables>
 
-        <DataTables ref="table"
-                    :tableOptions="tableOptions"
-                    :addParamsToRequest="addParamsToRequest"
-                    :wrapperClass=" { 'table-wrapper': true }"
-                    @cell-clicked="cellClicked"
-                    @selectedRowsChanged="rows => selectedRows = rows"
-                    @totalRows="(rows) => totalRows = rows"
-                    @ajaxComlpete="isLoading = false"
-                    @page="resetSelection"
-                    :selectable="showSelectors">
-            <div class="panel panel-table" id="pnlAssignmentsContextActions"
-                 v-if="selectedRows.length">
-                <div class="panel-body">
-                    <input class="double-checkbox-white"
-                           type="checkbox"
-                           checked=""
-                           disabled>
-                    <label>
-                        <span class="tick"></span>
-                        {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
-                    </label>
+    <ModalFrame ref="assignModal" :title="$t('Pages.ConfirmationNeededTitle')">
+      <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
+      <form onsubmit="return false;">
+        <div class="form-group">
+          <label
+            class="control-label"
+            for="newResponsibleId"
+          >{{ $t("Assignments.SelectResponsible") }}</label>
+          <Typeahead
+            control-id="newResponsibleId"
+            :placeholder="$t('Common.Responsible')"
+            :value="newResponsibleId"
+            :ajax-params="{ }"
+            @selected="newResponsibleSelected"
+            :fetch-url="config.api.responsible"
+          ></Typeahead>
+        </div>
+      </form>
+      <div slot="actions">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="assign"
+          :disabled="!newResponsibleId"
+        >{{ $t("Common.Assign") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+      </div>
+    </ModalFrame>
 
-                    <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
-                            v-if="showArchive.key && config.isHeadquarter"
-                            @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
+    <ModalFrame
+      ref="editAudioEnabledModal"
+      :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )"
+    >
+      <p>{{ $t("Assignments.AudioRecordingExplanation")}}</p>
+      <form onsubmit="return false;">
+        <div class="form-group">
+          <Checkbox
+            :label="$t('Assignments.AudioRecordingEnable')"
+            name="audioRecordingEnabled"
+            :value="editedAudioRecordingEnabled"
+            @input="val => editedAudioRecordingEnabled = val.checked"
+          />
+        </div>
+      </form>
+      <div slot="actions">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="upateAudioRecording"
+        >{{ $t("Common.Save") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+      </div>
+    </ModalFrame>
 
-                    <button class="btn btn-lg btn-primary" id="btnAssignSelected"
-                            v-if="!showArchive.key"
-                            @click="assignSelected">{{ $t("Common.Assign") }}</button>
+    <ModalFrame
+      ref="editQuantityModal"
+      :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )"
+    >
+      <p>{{ $t("Assignments.SizeExplanation")}}</p>
+      <form onsubmit="return false;">
+        <div class="form-group" v-bind:class="{'has-error': errors.has('editedQuantity')}">
+          <label class="control-label" for="newQuantity">{{$t("Assignments.Size")}}</label>
+          
+          <input
+            type="text"
+            class="form-control"
+            v-model.trim="editedQuantity"
+            name="editedQuantity"
+            number
+            v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
+            :data-vv-as="$t('Assignments.Size')"
+            maxlength="9"
+            autocomplete="off"
+            @keyup.enter="updateQuantity"
+            id="newQuantity"
+            placeholder="1"
+          >
 
-                    <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
-                            v-if="!showArchive.key && config.isHeadquarter"
-                            @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
-                </div>
-            </div>
-        </DataTables>
-
-        <ModalFrame ref="assignModal"
-                    :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
-            <form onsubmit="return false;">
-                <div class="form-group">
-                    <label class="control-label"
-                           for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
-                    <Typeahead control-id="newResponsibleId"
-                               :placeholder="$t('Common.Responsible')"
-                               :value="newResponsibleId"
-                               :ajax-params="{ }"
-                               @selected="newResponsibleSelected"
-                               :fetch-url="config.api.responsible">
-                    </Typeahead>
-                </div>
-            </form>
-            <div slot="actions">
-                <button type="button"
-                        class="btn btn-primary"
-                        @click="assign"
-                        :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
-                <button type="button"
-                        class="btn btn-link"
-                        data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
-        </ModalFrame>
-
-        <ModalFrame ref="editQuantityModal"
-                    :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
-            <p>{{ $t("Assignments.SizeExplanation")}}</p>
-            <form onsubmit="return false;">
-                <div class="form-group"
-                     v-bind:class="{'has-error': errors.has('editedQuantity')}">
-
-                    <label class="control-label"
-                           for="newQuantity">{{$t("Assignments.Size")}}</label>
-                           
-                    <input type="text"
-                           class="form-control"
-                           v-model.trim="editedQuantity"
-                           name="editedQuantity"
-                           number
-                           v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
-                           :data-vv-as="$t('Assignments.Size')"
-                           maxlength="9"
-                           autocomplete="off"
-                           @keyup.enter="updateQuantity"
-                           id="newQuantity"
-                           placeholder="1">
-
-                    <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
-                </div>
-            </form>
-            <div class="modal-footer">
-                <button type="button"
-                        class="btn btn-primary"
-                        @click="updateQuantity">{{$t("Common.Save")}}</button>
-                <button type="button"
-                        class="btn btn-link"
-                        data-dismiss="modal">{{$t("Common.Cancel")}}</button>
-            </div>
-        </ModalFrame>
-
-    </HqLayout>
+          <p
+            v-for="error in errors.collect('editedQuantity')"
+            :key="error"
+            class="text-danger"
+          >{{error}}</p>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" @click="updateQuantity">{{$t("Common.Save")}}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+      </div>
+    </ModalFrame>
+  </HqLayout>
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -166,30 +226,35 @@ export default {
             receivedByTablet: null,
             newResponsibleId: null,
             editedRowId: null,
-            editedQuantity: null
-        }
+            editedQuantity: null,
+            editedAudioRecordingEnabled: null
+        };
     },
 
     computed: {
-        ddlReceivedByTablet(){
-            return [{ key: "All", value: this.$t('Assignments.ReceivedByTablet_All')},
-                    { key: "Received", value: this.$t('Assignments.ReceivedByTablet_Received')},
-                    { key: "NotReceived", value: this.$t('Assignments.ReceivedByTablet_NotReceived')}];   
+        ddlReceivedByTablet() {
+            return [
+                { key: "All", value: this.$t("Assignments.ReceivedByTablet_All") },
+                { key: "Received", value: this.$t("Assignments.ReceivedByTablet_Received") },
+                { key: "NotReceived", value: this.$t("Assignments.ReceivedByTablet_NotReceived") }
+            ];
         },
-        ddlShowArchive(){ 
-            return [{ key: false, value: this.$t("Assignments.Active") },
-                    { key: true, value: this.$t("Assignments.Archived") }];
+        ddlShowArchive() {
+            return [
+                { key: false, value: this.$t("Assignments.Active") },
+                { key: true, value: this.$t("Assignments.Archived") }
+            ];
         },
 
         title() {
             return this.$t("Assignments.AssignmentsHeader") + " (" + this.formatNumber(this.totalRows) + ")";
         },
-        config(){
+        config() {
             return this.$config.model;
         },
 
         questionnaireVersionFetchUrl() {
-            if(this.questionnaireId && this.questionnaireId.key)
+            if (this.questionnaireId && this.questionnaireId.key)
                 return `${this.config.api.questionnaire}/${this.questionnaireId.key}`;
             return null;
         },
@@ -203,7 +268,8 @@ export default {
                     name: "Id",
                     title: "Id",
                     responsivePriority: 2
-                }, {
+                },
+                {
                     data: "responsible",
                     name: "Responsible.Name",
                     title: this.$t("Common.Responsible"),
@@ -211,15 +277,17 @@ export default {
                     responsivePriority: 3,
                     render(data, type, row) {
                         var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
-                        if (row.responsibleRole === 'Interviewer') {
-                            resultString += '<a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
+                        if (row.responsibleRole === "Interviewer") {
+                            resultString +=
+                                '<a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
                         } else {
                             resultString += data;
                         }
-                        resultString += '</span>';
+                        resultString += "</span>";
                         return resultString;
                     }
-                }, {
+                },
+                {
                     data: "quantity",
                     name: "Quantity",
                     class: "type-numeric pointer",
@@ -230,7 +298,8 @@ export default {
                     if() {
                         return self.config.isHeadquarter;
                     }
-                }, {
+                },
+                {
                     data: "interviewsCount",
                     name: "InterviewsCount",
                     class: "type-numeric",
@@ -239,14 +308,16 @@ export default {
                     orderable: true,
                     searchable: false,
                     render(data, type, row) {
-                        var result = "<a href='" + self.config.api.interviews + "?assignmentId=" + row.id + "'>" + data + "</a>";
+                        var result =
+                            "<a href='" + self.config.api.interviews + "?assignmentId=" + row.id + "'>" + data + "</a>";
                         return result;
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
                         return self.config.isHeadquarter;
                     }
-                }, {
+                },
+                {
                     data: "interviewsCount",
                     name: "InterviewsCount",
                     class: "type-numeric",
@@ -262,7 +333,8 @@ export default {
                     if() {
                         return !self.config.isHeadquarter;
                     }
-                }, {
+                },
+                {
                     data: "identifyingQuestions",
                     title: this.$t("Assignments.IdentifyingQuestions"),
                     tooltip: this.$t("Assignments.Tooltip_Table_IdentifyingQuestions"),
@@ -270,11 +342,14 @@ export default {
                     orderable: false,
                     searchable: false,
                     render(data) {
-                        const questionsWithTitles = _.map(data, (question) => { return question.title + ": " + question.answer });
+                        const questionsWithTitles = _.map(data, question => {
+                            return question.title + ": " + question.answer;
+                        });
                         return _.join(questionsWithTitles, ", ");
                     },
                     responsivePriority: 4
-                }, {
+                },
+                {
                     data: "updatedAtUtc",
                     name: "UpdatedAtUtc",
                     title: this.$t("Assignments.UpdatedAt"),
@@ -284,7 +359,8 @@ export default {
                         var date = moment.utc(data);
                         return date.local().format(global.input.settings.clientDateTimeFormat);
                     }
-                }, {
+                },
+                {
                     data: "createdAtUtc",
                     name: "CreatedAtUtc",
                     title: this.$t("Assignments.CreatedAt"),
@@ -294,8 +370,18 @@ export default {
                         var date = moment.utc(data);
                         return date.local().format(global.input.settings.clientDateTimeFormat);
                     }
+                },
+                {
+                    data: "isAudioRecordingEnabled",
+                    name: "IsAudioRecordingEnabled",
+                    title: this.$t("Assignments.IsAudioRecordingEnabled"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_IsAudioRecordingEnabled"),
+                    searchable: false,
+                    render(data) {
+                        return data ? self.$t("Common.Yes") : self.$t("Common.No");
+                    }
                 }
-            ]
+            ];
         },
 
         showSelectors() {
@@ -303,27 +389,29 @@ export default {
         },
 
         tableOptions() {
-            const columns = this.tableOptionsraw
-                .filter(x => x.if == null || x.if())
+            const columns = this.tableOptionsraw.filter(x => x.if == null || x.if());
 
-            var defaultSortIndex = _.findIndex(columns, {name: "UpdatedAtUtc"});
-            if(this.showSelectors) defaultSortIndex += 1;
+            var defaultSortIndex = _.findIndex(columns, { name: "UpdatedAtUtc" });
+            if (this.showSelectors) defaultSortIndex += 1;
 
             var tableOptions = {
                 rowId: "id",
                 deferLoading: 0,
-                order: [[defaultSortIndex, 'desc']],
+                order: [[defaultSortIndex, "desc"]],
                 columns,
                 ajax: { url: this.config.api.assignments, type: "GET" },
                 select: {
-                    style: 'multi',
-                    selector: 'td>.checkbox-filter',
+                    style: "multi",
+                    selector: "td>.checkbox-filter",
                     info: false
                 },
                 sDom: 'fr<"table-with-scroll"t>ip',
-                headerCallback: (thead) => {
-                    for(let i=0;i<columns.length;i++){
-                        $(thead).find('th').eq(i).attr("title", columns[i].tooltip);
+                headerCallback: thead => {
+                    for (let i = 0; i < columns.length; i++) {
+                        $(thead)
+                            .find("th")
+                            .eq(i)
+                            .attr("title", columns[i].tooltip);
                     }
                 },
                 searchHighlight: true
@@ -338,7 +426,7 @@ export default {
             requestData.responsibleId = (this.responsibleId || {}).key;
             requestData.questionnaireId = (this.questionnaireId || {}).key;
             requestData.questionnaireVersion = (this.questionnaireVersion || {}).key;
-            requestData.showArchive = (this.showArchive|| {}).key;
+            requestData.showArchive = (this.showArchive || {}).key;
             requestData.dateStart = this.dateStart;
             requestData.dateEnd = this.dateEnd;
             requestData.userRole = this.userRole;
@@ -354,7 +442,7 @@ export default {
             this.questionnaireId = newValue;
         },
 
-        questionnaireVersionSelected(newValue){
+        questionnaireVersionSelected(newValue) {
             this.questionnaireVersion = newValue;
         },
 
@@ -362,18 +450,16 @@ export default {
             this.newResponsibleId = newValue;
         },
 
-        receivedByTabletSelected(newValue)
-        {
+        receivedByTabletSelected(newValue) {
             this.receivedByTablet = newValue;
         },
-        
-        showArchiveSelected(newValue)
-        {
+
+        showArchiveSelected(newValue) {
             this.showArchive = newValue;
         },
 
         startWatchers(props, watcher) {
-            var iterator = (prop) => this.$watch(prop, watcher);
+            var iterator = prop => this.$watch(prop, watcher);
 
             props.forEach(iterator, this);
         },
@@ -391,44 +477,42 @@ export default {
 
             if (this.questionnaireId != null) {
                 queryString.QuestionnaireId = this.questionnaireId.value;
-                
             }
-            if(this.questionnaireVersion != null) {
+            if (this.questionnaireVersion != null) {
                 queryString.questionnaireVersion = this.questionnaireVersion.key;
             }
 
-            if (this.responsibleId)
-                queryString.responsible = this.responsibleId.value;
-            if (this.dateStart)
-                queryString.dateStart = this.dateStart;
-            if (this.dateEnd)
-                queryString.dateEnd = this.dateEnd;
-            if (this.userRole)
-                queryString.userRole = this.userRole;
-            if (this.receivedByTablet != null)
-                queryString.receivedByTablet = this.receivedByTablet.key;
-            if (this.teamId)
-                queryString.teamId = this.teamId;
+            if (this.responsibleId) queryString.responsible = this.responsibleId.value;
+            if (this.dateStart) queryString.dateStart = this.dateStart;
+            if (this.dateEnd) queryString.dateEnd = this.dateEnd;
+            if (this.userRole) queryString.userRole = this.userRole;
+            if (this.receivedByTablet != null) queryString.receivedByTablet = this.receivedByTablet.key;
+            if (this.teamId) queryString.teamId = this.teamId;
 
             this.$router.push({ query: queryString });
         },
 
         async archiveSelected() {
             await this.$http({
-                method: 'delete',
+                method: "delete",
                 url: this.config.api.assignments,
                 data: this.selectedRows
-            })
+            });
 
             this.reloadTable();
         },
 
         async unarchiveSelected() {
-            await this.$http.post(this.config.api.assignments + "/Unarchive",
-                this.selectedRows
-            )
+            await this.$http.post(this.config.api.assignments + "/Unarchive", this.selectedRows);
 
             this.reloadTable();
+        },
+
+        upateAudioRecording() {
+            this.$http.patch(this.assignmentAudioEndpoint(this.editedRowId), {enabled: this.editedAudioRecordingEnabled}).then(() => {
+                this.$refs.editAudioEnabledModal.hide();
+                this.reloadTable();
+            });
         },
 
         assignSelected() {
@@ -441,7 +525,7 @@ export default {
             await this.$http.post(this.config.api.assignments + "/Assign", {
                 responsibleId: this.newResponsibleId.key,
                 ids: this.selectedRows
-            })
+            });
 
             this.$refs.assignModal.hide();
             this.newResponsibleId = null;
@@ -449,20 +533,34 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive.key) {
+            if (columnName === "Quantity" && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
-                this.$refs.editQuantityModal.modal('show')
+                this.$refs.editQuantityModal.modal("show");
+            }
+            if (columnName === "IsAudioRecordingEnabled" && this.config.isHeadquarter && !this.showArchive.key) {
+                this.editedRowId = rowId;
+
+                this.$http.get(this.assignmentAudioEndpoint(rowId)).then(data => {
+                    if (data.status == 200) {
+                        this.editedAudioRecordingEnabled = data.data.Enabled;
+                        this.$refs.editAudioEnabledModal.modal("show");
+                    }
+                });
             }
         },
 
-        async updateQuantity() {
-            const validationResult = await this.$validator.validateAll()
+        assignmentAudioEndpoint(assignmentId) {
+            return `${this.$config.model.api.assignmentsApiEndpoint}/${assignmentId}/recordAudio`;
+        },
 
-            if(validationResult == false) {
+        async updateQuantity() {
+            const validationResult = await this.$validator.validateAll();
+
+            if (validationResult == false) {
                 return false;
             }
-            
+
             const patchQuantityUrl = this.config.api.assignments + "/" + this.editedRowId + "/SetQuantity";
 
             let targetQuantity = null;
@@ -476,34 +574,39 @@ export default {
             }
 
             const self = this;
-            this.$http.patch(patchQuantityUrl, {
-                quantity: targetQuantity
-            })
-            .then(() => {
-                this.$refs.editQuantityModal.hide();
-                this.editedQuantity = this.editedRowId = null;
-                this.reloadTable();
-            })
-            .catch(error => {
-                self.errors.clear();
-                self.errors.add({
-                    field: 'editedQuantity',
-                    msg: error.response.data.message,
-                    id: error.toString()
+            this.$http
+                .patch(patchQuantityUrl, {
+                    quantity: targetQuantity
                 })
-            })
+                .then(() => {
+                    this.$refs.editQuantityModal.hide();
+                    this.editedQuantity = this.editedRowId = null;
+                    this.reloadTable();
+                })
+                .catch(error => {
+                    self.errors.clear();
+                    self.errors.add({
+                        field: "editedQuantity",
+                        msg: error.response.data.message,
+                        id: error.toString()
+                    });
+                });
 
             return false;
         },
 
         async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {
+                const requestParams = Object.assign(
+                    {
+                        query: this.$route.query.responsible,
+                        pageSize: 1,
+                        cache: false
+                    },
+                    this.ajaxParams
+                );
 
-                const requestParams = Object.assign({
-                    query: this.$route.query.responsible, pageSize: 1, cache: false
-                }, this.ajaxParams);
-
-                const response = await this.$http.get(this.config.api.responsible, { params: requestParams })
+                const response = await this.$http.get(this.config.api.responsible, { params: requestParams });
 
                 onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
             } else onDone();
@@ -512,30 +615,29 @@ export default {
         async loadQuestionnaireId(onDone) {
             let requestParams = null;
 
-            const questionnaireId = this.$route.query.questionnaireId
-            const version = this.$route.query.questionnaireVersion
+            const questionnaireId = this.$route.query.questionnaireId;
+            const version = this.$route.query.questionnaireVersion;
 
             if (questionnaireId != undefined && version != undefined) {
-                requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
-                             this.ajaxParams);
-                const response = await this.$http.get(this.config.api.questionnaireById, { params: requestParams })
+                requestParams = Object.assign(
+                    { questionnaireIdentity: questionnaireId + "$" + version, cache: false },
+                    this.ajaxParams
+                );
+                const response = await this.$http.get(this.config.api.questionnaireById, { params: requestParams });
 
                 if (response.data) {
                     onDone(response.data.id, response.data.title, response.data.version);
                 }
-
             } else onDone();
         },
-        
+
         resetSelection() {
-            this.selectedRows.splice(0,this.selectedRows.length);
+            this.selectedRows.splice(0, this.selectedRows.length);
         },
         formatNumber(value) {
-            if (value == null || value == undefined)
-                return value;
-            var language = navigator.languages && navigator.languages[0] || 
-               navigator.language || 
-               navigator.userLanguage; 
+            if (value == null || value == undefined) return value;
+            var language =
+                (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage;
             return value.toLocaleString(language);
         }
     },
@@ -546,39 +648,40 @@ export default {
         $("main").removeClass("hold-transition");
         $("footer").addClass("footer-adaptive");
 
-        if(this.$route.query.showArchive != undefined && this.$route.query.showArchive === "true")
+        if (this.$route.query.showArchive != undefined && this.$route.query.showArchive === "true")
             this.showArchiveSelected(this.ddlShowArchive[1]);
-        else
-            this.showArchiveSelected(this.ddlShowArchive[0]);
+        else this.showArchiveSelected(this.ddlShowArchive[0]);
 
         this.dateStart = this.$route.query.dateStart;
         this.dateEnd = this.$route.query.dateEnd;
-        this.userRole = this.$route.query.userRole;        
+        this.userRole = this.$route.query.userRole;
         this.teamId = this.$route.query.teamId;
 
         this.receivedByTabletSelected(this.ddlReceivedByTablet[0]);
-        
+
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
             if (questionnaireId != undefined) {
                 self.questionnaireId = {
                     key: questionnaireId,
                     value: questionnaireTitle
-                }
+                };
                 self.questionnaireVersion = {
                     key: version,
                     value: version
-                }
+                };
             }
 
-            self.loadResponsibleIdByName((responsibleId) => {
+            self.loadResponsibleIdByName(responsibleId => {
                 if (responsibleId != undefined)
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
                 self.reloadTable();
-                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'], self.reloadTable.bind(self));                
+                self.startWatchers(
+                    ["responsibleId", "questionnaireId", "showArchive", "receivedByTablet", "questionnaireVersion"],
+                    self.reloadTable.bind(self)
+                );
             });
         });
     }
-}
-
+};
 </script>
