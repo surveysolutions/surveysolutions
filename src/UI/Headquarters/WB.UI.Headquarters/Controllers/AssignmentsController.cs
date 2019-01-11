@@ -65,7 +65,8 @@ namespace WB.UI.Headquarters.Controllers
                     : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 Assignments = Url.Content(@"~/api/Assignments"),
                 Interviews = model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"),
-                Profile = Url.Action("Profile", "Interviewer")
+                Profile = Url.Action("Profile", "Interviewer"),
+                AssignmentsApiEndpoint = Url.Content("~/api/v1/assignments")
             };
 
             return View(model);
@@ -109,6 +110,7 @@ namespace WB.UI.Headquarters.Controllers
             public string Profile { get; set; }
             public string Interviews { get; set; }
             public string Responsible { get; set; }
+            public string AssignmentsApiEndpoint { get; set; }
         }
     }
 }

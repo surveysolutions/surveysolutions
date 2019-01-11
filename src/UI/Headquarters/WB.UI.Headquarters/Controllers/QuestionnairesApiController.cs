@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Controllers
                     LastEntryDate = x.LastEntryDate,
                     ImportDate = x.ImportDate,
                     IsDisabled = x.Disabled,
-                    IsAudioRecordingEnabled = x.IsAudioRecordingEnabled.GetValueOrDefault()
+                    IsAudioRecordingEnabled = x.IsAudioRecordingEnabled
                 })
             };
         }
