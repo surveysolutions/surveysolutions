@@ -116,7 +116,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 CreatedAtUtc = assignment.CreatedAtUtc,
                 ProtectedVariables = assignment.ProtectedVariables,
                 ResponsibleId = assignment.ResponsibleId,
-                ResponsibleName = assignment.Responsible.Name
+                ResponsibleName = assignment.Responsible.Name,
+                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
