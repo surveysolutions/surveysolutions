@@ -48,40 +48,4 @@ namespace WB.UI.Shared.Web.Modules.Filters
             return Task.CompletedTask;
         }
     }
-
-    public class WebApiActionFilterWhenControllerOrActionHasAttribute : ActionFilterAttribute, IAutofacActionFilter
-    {
-        public WebApiActionFilterWhenControllerOrActionHasAttribute(ActionFilterAttribute filter, Type attributeType)
-        {
-            this.filter = filter;
-            this.attributeType = attributeType;
-        }
-
-        private readonly ActionFilterAttribute filter;
-        private readonly Type attributeType;
-
-        public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
-        {
-            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
-
-            if (shouldExecute)
-            {
-                return filter.OnActionExecutingAsync(actionContext, cancellationToken);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public override Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
-        {
-            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
-
-            if (shouldExecute)
-            {
-                return filter.OnActionExecutedAsync(actionExecutedContext, cancellationToken);
-            }
-
-            return Task.CompletedTask;
-        }
-    }
 }
