@@ -304,7 +304,7 @@
     <value>Header {0} was not found in excel file</value>
   </data>
     <data name="NoParentCascadingOptions" xml:space="preserve">
-    <value>No options for parent cascading question '{0}' found</value>
+    <value>No categories for parent cascading question '{0}' found</value>
   </data>
     <data name="Column" xml:space="preserve">
     <value>column</value>
@@ -322,18 +322,18 @@
     <value>Invalid 32 bit integer value '{0}'. Value should be between -2147483647 and 2147483647</value>
   </data>
     <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
-    <value>Parent question doesn't have an option with value '{0}'</value>
+    <value>Parent question doesn't have an category with value '{0}'</value>
   </data>
     <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
-    <value>Duplicated option '{0}' with parent value '{1}'</value>
+    <value>Duplicated category '{0}' with parent value '{1}'</value>
   </data>
     <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
-    <value>Parent question '{0}' has {1} options with value '{2}'</value>
+    <value>Parent question '{0}' has {1} categories with value '{2}'</value>
   </data>
   <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Title is too long. Title length should be less than {0}</value>
   </data>
   <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
-    <value>Duplicated option '{0}' with value '{1}'</value>
+    <value>Duplicated category '{0}' with value '{1}'</value>
   </data>
 </root>
