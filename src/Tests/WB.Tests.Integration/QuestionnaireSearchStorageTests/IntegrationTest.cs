@@ -132,5 +132,18 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
                 serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
             }
         }
+
+        protected async Task RunActionInScopeAsync(Func<IServiceLocator, Task> action)
+        {
+            var lifetimeScope = ServiceLocator.Current.GetInstance<ILifetimeScope>();
+            using (var scope = lifetimeScope.BeginLifetimeScope())
+            {
+                var serviceLocatorLocal = scope.Resolve<IServiceLocator>();
+
+                await action(serviceLocatorLocal);
+
+                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
+            }
+        }
     }
 }
