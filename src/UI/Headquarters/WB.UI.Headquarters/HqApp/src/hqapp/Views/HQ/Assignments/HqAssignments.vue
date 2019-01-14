@@ -507,7 +507,7 @@ export default {
         },
 
         upateAudioRecording() {
-            this.$http.patch(this.assignmentAudioEndpoint(this.editedRowId), {enabled: this.editedAudioRecordingEnabled}).then(() => {
+            this.$hq.Assignments.setAudioSettings(this.editedRowId, this.editedAudioRecordingEnabled).then(() => {
                 this.$refs.editAudioEnabledModal.hide();
                 this.reloadTable();
             });
@@ -538,18 +538,11 @@ export default {
             }
             if (columnName === "IsAudioRecordingEnabled" && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = rowId;
-
-                this.$http.get(this.assignmentAudioEndpoint(rowId)).then(data => {
-                    if (data.status == 200) {
-                        this.editedAudioRecordingEnabled = data.data.Enabled;
-                        this.$refs.editAudioEnabledModal.modal("show");
-                    }
+                this.$hq.Assignments.audioSettings(rowId).then(data => {
+                    this.editedAudioRecordingEnabled = data.Enabled;
+                    this.$refs.editAudioEnabledModal.modal("show");
                 });
             }
-        },
-
-        assignmentAudioEndpoint(assignmentId) {
-            return `${this.$config.model.api.assignmentsApiEndpoint}/${assignmentId}/recordAudio`;
         },
 
         async updateQuantity() {

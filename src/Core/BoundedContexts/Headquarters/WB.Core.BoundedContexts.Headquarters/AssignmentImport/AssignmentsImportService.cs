@@ -234,7 +234,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
-            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
+            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, null);
 
