@@ -20,7 +20,7 @@ using WB.UI.Tester.ServiceLocation;
 
 namespace WB.UI.Tester
 {
-    public class TesterSetup : EnumeratorSetup<TesterMvxApplication>
+    public class Setup : EnumeratorSetup<TesterMvxApplication>
     {
         protected override IMvxIoCProvider CreateIocProvider()
         {

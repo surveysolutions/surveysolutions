@@ -284,7 +284,7 @@
     <Compile Include="ServiceLocation\IoCAdapterSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="TesterSetup.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="Activities\DashboardActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\SplashActivity.cs" />

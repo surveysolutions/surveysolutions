@@ -20,10 +20,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnCreate(Bundle bundle)
         {
-            var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
-            setup.EnsureInitialized();
-            CrossCurrentActivity.Current.Init(this, bundle);
             base.OnCreate(bundle);
+            CrossCurrentActivity.Current.Init(this, bundle);
         }
 
         protected override void OnResume()

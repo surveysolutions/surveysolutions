@@ -8,7 +8,7 @@ namespace WB.UI.Tester.Activities
         MainLauncher = true, 
         ScreenOrientation = ScreenOrientation.Portrait, 
         Theme = "@style/AppTheme")]
-    public class SplashActivity : MvxSplashScreenAppCompatActivity<TesterSetup, TesterMvxApplication>
+    public class SplashActivity : MvxSplashScreenAppCompatActivity<Setup, TesterMvxApplication>
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {
