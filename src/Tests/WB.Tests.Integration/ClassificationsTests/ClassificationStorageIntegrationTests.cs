@@ -37,7 +37,7 @@ namespace WB.Tests.Integration.ClassificationsTests
 
             List<Classification> classifications = null;
 
-            RunActionInScope(async locator =>
+            await RunActionInScopeAsync(async locator =>
             {
                 var classificationStorage = locator.GetInstance<IClassificationsStorage>();
                 classifications = (await classificationStorage.GetClassifications(Id.g1, userId: Id.gA)).ToList();

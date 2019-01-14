@@ -142,15 +142,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
         }
 
-        public IEnumerable<string> EnumerateCache()
+        public async Task<IEnumerable<string>> EnumerateCacheAsync()
         {
+            await this.permissionsService.AssureHasPermission(Permission.Storage);
+            List<string> result = new List<string>();
+
             if (this.files.IsDirectoryExists(FileCacheDirectory))
             {
                 foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
                 {
-                    yield return Path.GetFileNameWithoutExtension(file);
+                    result.Add(Path.GetFileNameWithoutExtension(file));
                 }
             }
+
+            return result;
         }
     }
 }
