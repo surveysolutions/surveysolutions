@@ -254,7 +254,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     .ToList();
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
-            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
+            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             var result = verifier.VerifyWithInterviewTree(answers, responsible.Id, questionnaire);
 
@@ -407,7 +407,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpGet]
         [Route("{id:int}/recordAudio")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public AssignmentAudioRecordingEnabled AudioRecoding(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -428,13 +428,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
-        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
             if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            assignment.ToggleAudioRecordingEnabled(request.Enabled);
+            assignment.SetAudioRecordingEnabled(request.Enabled);
 
             this.assignmentsStorage.Store(assignment, assignment.Id);
             return Request.CreateResponse(HttpStatusCode.OK);

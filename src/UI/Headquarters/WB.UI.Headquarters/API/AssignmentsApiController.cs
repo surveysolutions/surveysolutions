@@ -229,7 +229,7 @@ namespace WB.UI.Headquarters.API
 
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
-            assignment.ToggleAudioRecordingEnabled(isAudioRecordingEnabled);
+            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
             
