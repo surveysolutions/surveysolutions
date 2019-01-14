@@ -136,9 +136,6 @@ namespace WB.UI.Headquarters.Injections
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
-            GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
-
             return Task.CompletedTask;
         }
 

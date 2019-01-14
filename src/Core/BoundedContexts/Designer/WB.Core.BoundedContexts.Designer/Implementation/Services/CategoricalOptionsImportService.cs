@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using MissingFieldException = CsvHelper.MissingFieldException;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -60,6 +61,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     try
                     {
                         importedOptions.Add(csvReader.GetRecord<QuestionnaireCategoricalOption>());
+                    }
+                    catch (MissingFieldException)
+                    {
+                        importErrors.Add(ExceptionMessages.ImportOptions_MissingRequiredColumns);
+                        break;
                     }
                     catch (Exception e)
                     {
@@ -143,7 +149,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public CascadingOptionMap(): this(null, null) { }
             public CascadingOptionMap(Dictionary<string, (int value, int? parentValue)[]> allValuesByAllParents, List<QuestionnaireCategoricalOption> allImportedOptions)
             {
-                var nearestParentValues = allValuesByAllParents.Values.First().Select(x => x.value).ToHashSet();
+                var nearestParentValues = allValuesByAllParents?.Values?.FirstOrDefault()?.Select(x => x.value)?.ToHashSet() ?? new HashSet<int>();
 
                 Map(m => m.ParentValue).Index(2).TypeConverter(new ConvertToInt32AndCheckParentOptionValueOrThrow(nearestParentValues));
                 Map(m => m.ValueWithParentValues).Ignore().ConvertUsing(x =>
