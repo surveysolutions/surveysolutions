@@ -279,7 +279,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 requiredAttachments.Add(attachment.ContentId);
             }
 
-            foreach (var contentId in this.attachmentContentStorage.EnumerateCache())
+            foreach (var contentId in await this.attachmentContentStorage.EnumerateCacheAsync())
             {
                 if (!requiredAttachments.Contains(contentId))
                     this.attachmentContentStorage.Remove(contentId);

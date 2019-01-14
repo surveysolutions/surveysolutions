@@ -8,8 +8,8 @@
                     data-vv-as="questionnaire"
                     :placeholder="$t('Common.AllQuestionnaires')"
                     :value="questionnaireId"
-                    v-on:selected="questionnaireSelected"
-                    :fetch-url="$config.model.questionnairesUrl" />
+                    :values="this.$config.model.questionnaires"
+                    v-on:selected="questionnaireSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -17,10 +17,10 @@
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
+                    :disabled="questionnaireId == null "
                     :value="questionnaireVersion"
-                    v-on:selected="questionnaireVersionSelected"
-                    :fetch-url="questionnaireVersionFetchUrl"
-                    :disabled="questionnaireVersionFetchUrl == null" />
+                    :values="questionnaireId == null ? [] : questionnaireId.versions"
+                    v-on:selected="questionnaireVersionSelected"/>
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
@@ -94,12 +94,7 @@ export default {
     },
 
     computed: {
-        questionnaireVersionFetchUrl() {
-             if(this.questionnaireId && this.questionnaireId.key)
-                return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
-            return null
-        },
-
+  
         title() {
             return this.$config.title;
         },
@@ -125,8 +120,10 @@ export default {
 
     methods: {
         questionnaireSelected(newValue) {
-            this.questionnaireId = newValue
+            this.questionnaireId = newValue;
+            this.questionnaireVersion = null;
         },
+
         questionnaireVersionSelected(newValue){
             this.questionnaireVersion = newValue
         },
