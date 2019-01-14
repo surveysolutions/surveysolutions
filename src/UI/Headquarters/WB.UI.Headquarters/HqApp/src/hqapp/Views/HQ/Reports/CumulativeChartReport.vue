@@ -37,11 +37,6 @@
       </FilterBlock>
     </Filters>
     <div class="clearfix">
-            <div class="col-sm-8">
-                <h4>{{this.selectedQuestionnaire == null ? $t('Common.AllQuestionnaires') : this.selectedQuestionnaire.value}}, {{this.selectedVersion == null ? $t('Common.AllVersions').toLowerCase() : this.selectedVersion.value}} </h4>        
-            </div>
-    </div>
-    <div class="clearfix">
       <div class="col-sm-8">
         <h2 v-if="!hasData">{{ $t('Common.NoResultsFound') }}</h2>
       </div>
@@ -108,7 +103,7 @@ export default {
                 this.selectedQuestionnaire == null
                     ? this.$t("Common.AllQuestionnaires")
                     : this.selectedQuestionnaire.value
-            }, ${this.selectedVersion == null ? this.$t("Common.AllVersions") : this.selectedVersion.value}`;
+            }, ${this.selectedVersion == null ? this.$t("Common.AllVersions").toLowerCase() : this.selectedVersion.value}`;
         },
 
         queryString() {

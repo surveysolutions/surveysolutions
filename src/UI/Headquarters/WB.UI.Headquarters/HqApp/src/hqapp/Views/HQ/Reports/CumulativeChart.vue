@@ -43,6 +43,9 @@ const chartOptions = {
         ],
         yAxes: [
             {
+                afterDataLimits: function(axis) {
+                    axis.max += 1; // add 1px to top
+                },
                 type: "linear",
                 stacked: true,
                 ticks: {
