@@ -306,42 +306,35 @@
   </data>
     <data name="Column" xml:space="preserve">
     <value>столбец</value>
-    <comment>столбец</comment>
   </data>
     <data name="Row" xml:space="preserve">
     <value>строка</value>
-    <comment>строка</comment>
   </data>
     <data name="ImportOptions_EmptyValue" xml:space="preserve">
     <value>Пустое значение</value>
-    <comment>Пустое значение</comment>
   </data>
     <data name="ImportOptions_NotNumber" xml:space="preserve">
     <value>Неверное 32-разрядное целочисленное значение '{0}'. Значение должно быть в пределах от -2147483647 до 2147483647</value>
-    <comment>Неверное 32-разрядное целочисленное значение '{0}'. Значение должно быть в пределах от -2147483647 до 2147483647</comment>
   </data>
     <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
-    <value>Родительский вопрос не содержит опцию со значением '{0}'</value>
-    <comment>Родительский вопрос не содержит опцию со значением '{0}'</comment>
+    <value>Родительский вопрос не содержит категорию со значением '{0}'</value>
   </data>
     <data name="NoParentCascadingOptions" xml:space="preserve">
-    <value>У родительского вопроса '{0}' отсутствуют опции</value>
-    <comment>У родительского вопроса '{0}' отсутствуют опции</comment>
+    <value>У родительского вопроса '{0}' отсутствуют категории</value>
   </data>
     <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
-    <value>Дубрикат опции '{0}' с родительским значением '{1}'</value>
-    <comment>Дубрикат опции '{0}' с родительским значением '{1}'</comment>
+    <value>Дубрикат категории '{0}' с родительским значением '{1}'</value>
   </data>
     <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
-    <value>Родительский вопрос '{0}' содержит {1} опции со значением '{2}'</value>
-    <comment>Родительский вопрос '{0}' содержит {1} опции со значением '{2}'</comment>
+    <value>Родительский вопрос '{0}' содержит {1} категории со значением '{2}'</value>
   </data>
     <data name="ImportOptions_TitleTooLong" xml:space="preserve">
     <value>Название слишком длинное. Название должно быть не больше {0} символов</value>
-    <comment>Название слишком длинное. Название должно быть не больше {0} символов</comment>
   </data>
     <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
-    <value>Дубликат опции '{0}' со значением '{1}'</value>
-    <comment>Дубликат опции '{0}' со значением '{1}'</comment>
+    <value>Дубликат категории '{0}' со значением '{1}'</value>
+  </data>
+    <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Некоторые колонки отсутствуют. Убедитесь что файл который Вы загружаете содержит обязательные поля</value>
   </data>
 </root>

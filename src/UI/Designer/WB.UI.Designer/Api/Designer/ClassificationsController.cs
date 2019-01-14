@@ -52,7 +52,7 @@ namespace WB.UI.Designer.Api.Designer
         [HttpGet]
         [Route("classifications")]
         [ResponseType(typeof(IEnumerable<Classification>))]
-        public Task<IEnumerable<Classification>> GetClassifications(Guid? groupId)
+        public Task<IEnumerable<Classification>> GetClassifications(Guid groupId)
         {
             return classificationsStorage.GetClassifications(groupId, membershipUserService.WebUser.UserId);
         }

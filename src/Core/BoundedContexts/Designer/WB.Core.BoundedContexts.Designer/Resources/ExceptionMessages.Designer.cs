@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicated option &apos;{0}&apos; with parent value &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Duplicated category &apos;{0}&apos; with parent value &apos;{1}&apos;.
         /// </summary>
         public static string ImportOptions_DuplicateByTitleAndParentIds {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent question &apos;{0}&apos; has {1} options with value &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Parent question &apos;{0}&apos; has {1} categories with value &apos;{2}&apos;.
         /// </summary>
         public static string ImportOptions_DuplicatedParentValues {
             get {
@@ -214,6 +214,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Some column(s) are missing. Make sure that you upload file with required columns.
+        /// </summary>
+        public static string ImportOptions_MissingRequiredColumns {
+            get {
+                return ResourceManager.GetString("ImportOptions_MissingRequiredColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid 32 bit integer value &apos;{0}&apos;. Value should be between -2147483647 and 2147483647.
         /// </summary>
         public static string ImportOptions_NotNumber {
@@ -223,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent question doesn&apos;t have an option with value &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Parent question doesn&apos;t have an category with value &apos;{0}&apos;.
         /// </summary>
         public static string ImportOptions_ParentValueNotFound {
             get {
@@ -241,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicated option &apos;{0}&apos; with value &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Duplicated category &apos;{0}&apos; with value &apos;{1}&apos;.
         /// </summary>
         public static string ImportOptions_ValueIsNotUnique {
             get {
@@ -430,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No options for parent cascading question &apos;{0}&apos; found.
+        ///   Looks up a localized string similar to No categories for parent cascading question &apos;{0}&apos; found.
         /// </summary>
         public static string NoParentCascadingOptions {
             get {

@@ -1229,4 +1229,12 @@
   <data name="QuestionsSearchTitle" xml:space="preserve">
     <value>Банк вопросов</value>
   </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать категории</value>
+    <comment>Редактировать категории</comment>
+  </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать каскадные категории </value>
+    <comment>Редактировать каскадные категории </comment>
+  </data>
 </root>
