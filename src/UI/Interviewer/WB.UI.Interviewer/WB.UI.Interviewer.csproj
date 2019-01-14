@@ -343,7 +343,7 @@
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InterviewerSetup.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\InterviewViewModel.cs" />
     <Compile Include="ViewModel\PrefilledQuestionsViewModel.cs" />

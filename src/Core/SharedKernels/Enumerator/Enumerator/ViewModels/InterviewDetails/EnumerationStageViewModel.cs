@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Name = dynamicTextViewModel;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
+            this.Items = new CompositeCollection<ICompositeEntity>();
         }
 
         public void Configure(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -74,7 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.groupId = groupId;
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
-            this.Items = new CompositeCollection<ICompositeEntity>();
 
             liteEventRegistry.Subscribe(this, interviewId);
 
