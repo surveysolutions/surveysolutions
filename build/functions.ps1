@@ -1,5 +1,11 @@
 $vswhere = [io.path]::combine(${env:ProgramFiles(x86)}, "Microsoft Visual Studio", "Installer", "vswhere.exe")
 
+$verbosity = "q"
+
+if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
+    $verbosity = $env:MSBUILD_VERBOSITY
+}
+
 function GetPathRelativeToCurrectLocation($FullPath) {
     return $FullPath.Substring((Get-Location).Path.Length + 1)
 }
@@ -246,22 +252,22 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
     $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
 
+    $binLogPath = "$([System.IO.Path]::GetFileName($Solution)).msbuild.binlog"
+
     Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
     Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    $verbosity = "minimal"
-
-    if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
-        $verbosity = $env:MSBUILD_VERBOSITY
-    }
-
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /m /v:$verbosity /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /m `
+        /v:$verbosity /p:CodeContractsRunCodeAnalysis=false `
+        /bl:$binLogPath `
+        /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to build solution $Solution']"
 
+        Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
         if (-not $MultipleSolutions) {
             Write-Host "##teamcity[buildProblem description='Failed to build solution $Solution']"
         }
@@ -316,39 +322,26 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
+    $binLogPath = "$([System.IO.Path]::GetFileName($Project)).msbuild.binlog"
+
+    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true `
+        /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" `
+        /bl:$binLogPath `
+        /v:$verbosity /nologo | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
         Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
+        
+        Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
     }
 
     Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
     Write-Host "##teamcity[blockClosed name='Building web package for project $Project']"
 
     return $wasBuildSuccessfull
-}
-
-function CopyCapi($Project, $source, $cleanUp) {
-    $file = get-childitem $Project
-    $DestinationFolder = $file.directoryname + "\Externals"
-
-    Write-Host "##teamcity[message text='Prepare to copy apk with option cleanUp = $cleanUp']"
-
-    if ($cleanUp) {
-        if (Test-Path "$DestinationFolder") {
-            Write-Host "##teamcity[message text='Clean up target folder $DestinationFolder']"
-  
-            Remove-Item "$DestinationFolder" -Force -Recurse
-        }
-        New-Item -ItemType directory -Path "$DestinationFolder"
-    }
-
-    Write-Host "##teamcity[message text='Copy apk with option clean from $source']"
-
-    Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
