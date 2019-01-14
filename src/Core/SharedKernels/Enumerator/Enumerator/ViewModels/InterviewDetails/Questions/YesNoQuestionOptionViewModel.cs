@@ -104,13 +104,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SetNoAsync()
         {
+            var prevState = new {isYes = this.YesSelected, isNo = false};
+
             if (await this.HasConfirmationByRemovingRosterInstanceAsync())
             {
+                this.NoSelected = true;
                 this.YesSelected = false;
                 this.setAnswer?.Invoke();
             }
             else
-                this.NoSelected = false;
+            {
+                this.NoSelected = prevState.isNo;
+                this.YesSelected = prevState.isYes;
+            }
         }
 
         private async Task<bool> HasConfirmationByRemovingRosterInstanceAsync()
