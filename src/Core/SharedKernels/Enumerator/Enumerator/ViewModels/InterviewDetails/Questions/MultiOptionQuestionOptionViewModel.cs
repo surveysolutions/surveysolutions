@@ -24,12 +24,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override async Task CheckAnswerAsync()
         {
-            if (await this.HasConfirmationByRemovingRosterInstanceAsync())
+            var isCurrentlyChecked = this.Checked;
+
+            if (!await this.HasConfirmationByRemovingRosterInstanceAsync())
+                this.Checked = !isCurrentlyChecked;
+            else
             {
+                this.Checked = isCurrentlyChecked;
                 base.SortCheckedOptions();
                 await this.QuestionViewModel.ToggleAnswerAsync(this);
             }
-            else this.Checked = !this.Checked;
         }
 
         private async Task<bool> HasConfirmationByRemovingRosterInstanceAsync()
