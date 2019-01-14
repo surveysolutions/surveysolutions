@@ -28,72 +28,40 @@ if(!$VersionCode){
 # }
 
 function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $OutFileName) {
-    Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
-        
-        $buildArgs = @(
-            $AndroidProject, "/p:Configuration=$BuildConfiguration", 
-            '/v:q', '/m:8', '/nologo','/p:CodeContractsRunCodeAnalysis=false', 
-            # '/clp:ForceConsoleColor;ErrorsOnly', 
+    return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
+        return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
-        )
+            '/t:SignAndroidPackage;MoveApkFile'
+            "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
 
-        if($env:TEAMCITY_VERSION -eq $null) {
-            $buildArgs += '/clp:ForceConsoleColor;ErrorsOnly'
-        }
-
-        # $buildArgs += '/bl /clp:ForceConsoleColor;PerformanceSummary;NoSummary;ErrorsOnly' # to show perf summary
-        $binLogPath = "$([System.IO.Path]::GetFileName($OutFileName)).msbuild.binlog"
-        $buildArgs += "/bl:$binLogPath"
-                
-        if(-not $NoCleanUp.IsPresent) {
-            $buildArgs += '/t:Clean'
-        }
-        
-        $buildArgs += '/t:SignAndroidPackage;MoveApkFile'
-        
-        #$buildArgs += '/p:DeployOnBuild=True'
-        
-        # if key store password not provided msbuild will sign with default dev keys
-        if([string]::IsNullOrWhiteSpace($KeystorePassword) -eq $False) {
-            Log-Message "Signing with $KeyStoreName"
-            $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
-            $buildArgs += '/p:AndroidUseApkSigner=true'
-            $buildArgs += '/p:AndroidKeyStore=True'
-            $buildArgs += "/p:AndroidSigningKeyAlias=$KeystoreAlias"
-            $buildArgs += "/p:AndroidSigningKeyPass=$KeystorePassword"
-            $buildArgs += "/p:AndroidSigningKeyStore=$PathToKeystore"
-            $buildArgs += "/p:AndroidSigningStorePass=$KeystorePassword"
-        }
-
-        if($ExcludeExtensions -eq $True) {
-            $buildArgs += "/p:ExcludeExtensions=$ExcludeExtensions"
-            $buildArgs += "/p:DefineConstants=EXCLUDEEXTENSIONS"
-        }
-        if($null -eq $env:GIT_BRANCH) {
-            $buildArgs += "/p:GIT_BRANCH=$branch"
-        }
-
-        if([string]::IsNullOrWhiteSpace($TargetAbi) -eq $False)
-        {
-            $buildArgs += "/p:AndroidSupportedAbis=$TargetAbi"
-        }
-
-        $buildArgs += "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
-
-        # Executing MSBUILD
-        & (GetPathToMSBuild) $buildArgs | Out-Host
-        
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
-        if (-not $wasBuildSuccessfull) {
-            Log-Error "Failed to build |'$AndroidProject' | project"
+            if(-not $NoCleanUp.IsPresent) {
+                '/t:Clean'
+            }
             
-            Start-Sleep -Seconds 1 # binlog is still writing at this moment
-            Publish-Artifact "$binLogPath"
-            throw "Failed to build |'$AndroidProject' | project"
-        }
+            if($ExcludeExtensions -eq $True) {
+                "/p:ExcludeExtensions=$ExcludeExtensions;DefineConstants=EXCLUDEEXTENSIONS"
+            }
 
-        return $wasBuildSuccessfull
+            if([string]::IsNullOrWhiteSpace($KeystorePassword) -eq $False) {
+                Log-Message "Signing with $KeyStoreName"
+                $PathToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
+                '/p:AndroidUseApkSigner=true'
+                '/p:AndroidKeyStore=True'
+                "/p:AndroidSigningKeyAlias=$KeystoreAlias"
+                "/p:AndroidSigningKeyPass=$KeystorePassword"
+                "/p:AndroidSigningKeyStore=$PathToKeystore"
+                "/p:AndroidSigningStorePass=$KeystorePassword"
+            }
+
+            if($null -eq $env:GIT_BRANCH) {
+                "/p:GIT_BRANCH=$branch"
+            }
+
+            if([string]::IsNullOrWhiteSpace($TargetAbi) -eq $False)
+            {
+                "/p:AndroidSupportedAbis=$TargetAbi"
+            }
+        )
     }
 }
 

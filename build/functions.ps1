@@ -119,9 +119,14 @@ function Log-Message($message) {
     "##teamcity[message text='$(TeamCityEncode $message)']" | Write-Host
 }
 
-function Log-Error($errorMessage) {
-    "##teamcity[message status='ERROR' text='$(TeamCityEncode $errorMessage)']" | Write-Host
-    "##teamcity[buildProblem description='$(TeamCityEncode $errorMessage)']" | Write-Host
+function Log-Error($errorMessage, $details = $null) {
+    if($details -eq $null) {
+        $details = $errorMessage
+    }
+    $details = TeamCityEncode $details
+    $errMsg = TeamCityEncode $errorMessage
+    "##teamcity[message status='ERROR' text='$errMsg' errorDetails='$details' ]" | Write-Host
+    "##teamcity[buildProblem description='$errMsg']" | Write-Host
 }
 
 function Log-Progress($progressMessage, [ScriptBlock] $progressBlock) {
@@ -248,37 +253,11 @@ function TeamCityEncode([string]$value) {
     $result
 }
 
-function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
-    $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
-    $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
-
-    $binLogPath = "$([System.IO.Path]::GetFileName($Solution)).msbuild.binlog"
-
-    Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
-    Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
-
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /m `
-        /v:$verbosity /p:CodeContractsRunCodeAnalysis=false `
-        /bl:$binLogPath `
-        /p:Configuration=$BuildConfiguration | Write-Host
-
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build solution $Solution']"
-
-        Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
-        if (-not $MultipleSolutions) {
-            Write-Host "##teamcity[buildProblem description='Failed to build solution $Solution']"
-        }
+function BuildSolution($Solution, $BuildConfiguration) {
+    return Log-Block "Building solution $Solution in configuration '$BuildConfiguration'" {
+        return Execute-MSBuild $Solution $BuildConfiguration
     }
-
-    Write-Host "##teamcity[progressFinish '$(TeamCityEncode $progressMessage)']"
-    Write-Host "##teamcity[blockClosed name='$(TeamCityEncode $blockMessage)']"
-
-    return $wasBuildSuccessfull
 }
-
 
 function RunConfigTransform($Project, $BuildConfiguration) {
     $file = get-childitem $Project
@@ -318,30 +297,57 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
-function BuildWebPackage($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
-    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
+function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
+    $build = @(
+        $ProjectFile
+        "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
+        '/p:DebugSymbols=false;CodeContractsRunCodeAnalysis=false;ExcludeGeneratedDebugSymbol=true',
+        '/flp2:errorsonly;logfile=msbuild.err'
+    )
 
-    $binLogPath = "$([System.IO.Path]::GetFileName($Project)).msbuild.binlog"
+    if(Test-Path msbuild.err  -PathType Leaf) {
+        Remove-Item msbuild.err
+    }
 
-    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true `
-        /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" `
-        /bl:$binLogPath `
-        /v:$verbosity /nologo | Write-Host
+    if($env:TEAMCITY_VERSION -eq $null) {
+        $build += '/clp:ForceConsoleColor;ErrorsOnly'
+    }
+
+    if($buildArgs -ne $null) {
+        $build = ($build + $buildArgs | select -uniq)
+    }
+
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
+
+    $build += "/bl:'$binLogPath'"
+    
+    & (GetPathToMSBuild) $build | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
-        Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
-        
-        Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+        $errors = Get-Content msbuild.err
+
+        Log-Error "Failed to build '$ProjectFile'. See $binLogPath in artifacts for details" (Get-Content msbuild.err)
+
+        if(Test-Path $binLogPath -PathType Leaf) {
+            Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+            Remove-Item $binLogPath
+        }
+
+        throw "$(Get-Content msbuild.err)"
     }
 
-    Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
-    Write-Host "##teamcity[blockClosed name='Building web package for project $Project']"
-
     return $wasBuildSuccessfull
+}
+
+function BuildWebPackage($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
+    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
+
+    return Log-Block "Building web package for project $Project" {
+        return Execute-MSBuild $Project $BuildConfiguration '/t:Package'
+    }
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
