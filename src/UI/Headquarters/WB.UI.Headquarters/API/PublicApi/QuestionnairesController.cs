@@ -143,10 +143,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         public HttpResponseMessage RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
         {
-            var questionnaire = this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(x => x.QuestionnaireId == id
-                                                                                                && x.Version == version
-                                                                                                && x.IsDeleted == false
-                                                                                                && x.Disabled == false
+            var questionnaire = 
+                this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
+                    x => x.QuestionnaireId == id
+                        && x.Version == version
+                        && x.IsDeleted == false
+                        && x.Disabled == false
             ));
             
             if (questionnaire == null)
