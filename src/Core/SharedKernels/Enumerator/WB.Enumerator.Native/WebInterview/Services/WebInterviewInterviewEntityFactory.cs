@@ -74,8 +74,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     opts.AfterMap((g, sidebarPanel) =>
                     {
-                        this.ApplyValidity(sidebarPanel.Validity, g, interview, isReviewMode);
                         sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
+
+                        this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                         sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled() && !questionnaire.IsPlainRoster(c.Identity.Id));
@@ -304,7 +305,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, group, callerInterview, isReviewMode);
-                this.ApplyValidity(result.Validity, group, callerInterview, isReviewMode);
+                this.ApplyValidity(result.Validity, result.Status);
                 return result;
             }
 
@@ -315,7 +316,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode);
-                this.ApplyValidity(result.Validity, roster, callerInterview, isReviewMode);
+                this.ApplyValidity(result.Validity, result.Status);
                 return result;
             }
 
@@ -394,10 +395,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 .ToArray();
         }
 
-        public void ApplyValidity(Validity validity, InterviewTreeGroup group, IStatefulInterview callerInterview,
-            bool isReviewMode)
+        public void ApplyValidity(Validity validity, GroupStatus status)
         {
-            validity.IsValid = !HasQuestionsWithInvalidAnswers(group, isReviewMode);
+            validity.IsValid = !(status == GroupStatus.StartedInvalid || status == GroupStatus.CompletedInvalid);
         }
 
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance @group, InterviewTreeGroup treeGroup,

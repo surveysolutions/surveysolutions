@@ -29,25 +29,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             else
                 status = GroupStatus.Completed;
 
-            foreach (var subGroup in GetSubgroupStatuses())
+            foreach (var subGroup in interview.GetEnabledSubgroupsAndRosters(groupIdentity))
             {
+                var subGroupStatus = CalculateDetailedStatus(subGroup.Key, interview);
+
+                if (subGroup.Value == true && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                    return GroupStatus.StartedInvalid;
+
                 switch (status)
                 {
-                    case GroupStatus.Completed when subGroup != GroupStatus.Completed:
+                    case GroupStatus.Completed when subGroupStatus != GroupStatus.Completed:
                         return GroupStatus.Started;
-                    case GroupStatus.NotStarted when subGroup != GroupStatus.NotStarted:
+                    case GroupStatus.NotStarted when subGroupStatus != GroupStatus.NotStarted:
                         return GroupStatus.Started;
                 }
             }
 
             return status;
-
-            IEnumerable<GroupStatus> GetSubgroupStatuses()
-            {
-                return group.Children.OfType<InterviewTreeGroup>()
-                    .Where(c => c.IsDisabled() == false)
-                    .Select(subgroup => this.CalculateDetailedStatus(subgroup.Identity, interview));
-            }
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WB.Enumerator.Native.WebInterview
         InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, bool isReviewMode);
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview);
         GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode);
-        void ApplyValidity(Validity validity, InterviewTreeGroup group, IStatefulInterview interview, bool isReviewMode);
+        void ApplyValidity(Validity validity, GroupStatus status);
         Identity GetParentWithoutPlainModeFlag(IStatefulInterview interview, IQuestionnaire questionnaire, Identity identity);
     }
 }
