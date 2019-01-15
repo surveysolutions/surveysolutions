@@ -116,7 +116,7 @@ export default {
     computed: {
         sizeValidations(){
             return {
-                numeric: true,
+                regex: "^-?([0-9]+)$",
                 min_value: -1,
                 max_value: this.config.maxInterviewsByAssignment
             };
