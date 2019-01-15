@@ -233,7 +233,10 @@ export default {
                         );
                     });
 
-                    self.chartData = { datasets, from: response.data.From, to: response.data.To };
+                    self.chartData = { 
+                        datasets: _.sortBy(datasets, "index"),
+                        from: response.data.From, 
+                        to: response.data.To };
                     self.hasData = datasets.length > 0;
                 })
                 .finally(() => self.$store.dispatch("hideProgress"));
