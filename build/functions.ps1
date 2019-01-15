@@ -336,7 +336,6 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
 
         if(Test-Path $binLogPath -PathType Leaf) {
             Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
-            Remove-Item $binLogPath
         }
 
         throw "$errors"
