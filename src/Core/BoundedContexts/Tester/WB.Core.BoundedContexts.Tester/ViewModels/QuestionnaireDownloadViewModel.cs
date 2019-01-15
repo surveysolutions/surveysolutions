@@ -220,7 +220,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
-                assignmentId: null));
+                assignmentId: null,
+                isAudioRecordingEnabled:false));
 
             return interviewId;
         }

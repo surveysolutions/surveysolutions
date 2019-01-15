@@ -943,6 +943,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.AssignmentId;
         }
 
+        public bool? GetIsAudioRecordingEnabled()
+        {
+            return this.properties.IsAudioRecordingEnabled;
+        }
+
         public bool IsParentOf(Identity parentIdentity, Identity childIdentity)
         {
             if ((parentIdentity ?? childIdentity) == null)
