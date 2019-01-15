@@ -635,10 +635,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(roster => roster.Identity)
                 .ToList();
 
-        public IEnumerable<Identity> GetEnabledSubgroups(Identity group)
+        public Dictionary<Identity, bool?> GetEnabledSubgroupsAndRosters(Identity group)
             => this.GetGroupsAndRostersInGroup(group)
                 .Where(groupOrRoster => !groupOrRoster.IsDisabled())
-                .Select(groupOrRoster => groupOrRoster.Identity);
+                .ToDictionary(groupOrRoster => groupOrRoster.Identity, groupOrRoster => (groupOrRoster as InterviewTreeRoster)?.IsPlain);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];

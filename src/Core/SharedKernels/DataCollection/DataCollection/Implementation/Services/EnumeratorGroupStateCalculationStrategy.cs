@@ -20,21 +20,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             if (interview.HasUnansweredQuestions(groupIdentity))
                 groupStatus = answeredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
 
-            var subgroupStatuses = interview.GetEnabledSubgroups(groupIdentity)
-                .Select(subgroup => CalculateDetailedStatus(subgroup, interview));
+            var subgroups = interview.GetEnabledSubgroupsAndRosters(groupIdentity);
 
-            foreach (var subGroupStatus in subgroupStatuses)
+            foreach (var subGroup in subgroups)
             {
+                var subGroupStatus = CalculateDetailedStatus(subGroup.Key, interview);
+
+                if (subGroup.Value == true && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                    return GroupStatus.StartedInvalid;
+
                 switch (groupStatus)
                 {
                     case GroupStatus.Completed when subGroupStatus != GroupStatus.Completed:
-                        return GroupStatus.Started;
-                    case GroupStatus.NotStarted when subGroupStatus != GroupStatus.NotStarted:
-                        return GroupStatus.Started;
+                            return GroupStatus.Started;
+                    case GroupStatus.NotStarted
+                    when subGroupStatus != GroupStatus.NotStarted:
+                            return GroupStatus.Started;
                 }
             }
-
-            ;
 
             return groupStatus;
         }

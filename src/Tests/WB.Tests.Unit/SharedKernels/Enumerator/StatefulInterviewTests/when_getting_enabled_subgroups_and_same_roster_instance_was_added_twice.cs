@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
-            enabledSubgroupsIdentities = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
+            enabledSubgroupsIdentities = statefulInterview.GetEnabledSubgroupsAndRosters(selectedGroupIdentity).Keys.ToArray();
         }
 
         [NUnit.Framework.Test] public void should_contain_1_identity () =>

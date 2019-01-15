@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsEntityValid(Identity identity);
         bool IsEntityPlausible(Identity identity);
 
-        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaultErrorMessageFallback);
 
         IEnumerable<string> GetFailedWarningMessages(Identity identity, string defaultText);
 
@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
         
-        IEnumerable<Identity> GetEnabledSubgroups(Identity group);
+        Dictionary<Identity, bool?> GetEnabledSubgroupsAndRosters(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
 

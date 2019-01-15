@@ -219,7 +219,7 @@ namespace WB.Enumerator.Native.WebInterview
                     ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
                     : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview);
 
-                this.interviewEntityFactory.ApplyValidity(button.Validity, target, statefulInterview, IsReviewMode);
+                this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);
 
                 return button;
             }
@@ -363,8 +363,8 @@ namespace WB.Enumerator.Native.WebInterview
                 Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode, statefulInterview),
                 IsRoster = currentTreeGroupAsRoster != null
             };
-
-            this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, statefulInterview, IsReviewMode);
+            
+            this.interviewEntityFactory.ApplyValidity(info.Validity, info.Status);
 
             return info;
         }

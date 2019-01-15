@@ -16,11 +16,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             RosterType rosterType = RosterType.Fixed,
             Guid? rosterSizeQuestion = null,
             Identity rosterTitleQuestionIdentity = null,
+            bool isPlain = false,
             IEnumerable<QuestionnaireItemReference> childrenReferences = null)
             : base(identity, title, childrenReferences)
         {
             this.RosterTitle = rosterTitle;
             this.SortIndex = sortIndex;
+            this.IsPlain = isPlain;
+
             switch (rosterType)
             {
                 case RosterType.Fixed:
@@ -44,6 +47,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string RosterTitle { get; set; }
         public int SortIndex { get; set; } = 0;
+
+        public bool IsPlain { get; set; }
 
         public InterviewTreeNumericRoster AsNumeric { get; private set; }
         public InterviewTreeListRoster AsList { get; private set; }
