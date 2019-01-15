@@ -41,7 +41,8 @@ namespace WB.Tests.Integration.WebTester.Services
                 Guid.NewGuid(),
                 null,
                 Create.Entity.InterviewKey(),
-                null));
+                null,
+                false));
 
             // assert
             Assert.That(events, Is.Not.Empty);
