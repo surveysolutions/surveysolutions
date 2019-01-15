@@ -122,10 +122,9 @@
                            class="form-control"
                            v-model.trim="editedQuantity"
                            name="editedQuantity"
-                           number
-                           v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
+                           v-validate="quantityValidations"
                            :data-vv-as="$t('Assignments.Size')"
-                           maxlength="9"
+                           maxlength="5"
                            autocomplete="off"
                            @keyup.enter="updateQuantity"
                            id="newQuantity"
@@ -170,6 +169,13 @@ export default {
     },
 
     computed: {
+        quantityValidations(){
+            return {
+                regex: "^-?([0-9]+)$",
+                min_value: -1,
+                max_value: this.config.maxInterviewsByAssignment
+            };
+        },
         ddlReceivedByTablet(){
             return [{ key: "All", value: this.$t('Assignments.ReceivedByTablet_All')},
                     { key: "Received", value: this.$t('Assignments.ReceivedByTablet_Received')},
@@ -454,7 +460,6 @@ export default {
                 this.$refs.editQuantityModal.modal('show')
             }
         },
-
         async updateQuantity() {
             const validationResult = await this.$validator.validateAll()
 
