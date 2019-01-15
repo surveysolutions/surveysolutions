@@ -319,23 +319,27 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
 
     $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
 
-    $build += "/bl:'$binLogPath'"
+    $build += "/bl:$binLogPath"
     
     & (GetPathToMSBuild) $build | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        $errors = Get-Content msbuild.err
+        $errors = $null
+        
+        if(Test-Path msbuild.err -PathType Leaf){
+            $errors = Get-Content msbuild.err
+        } 
 
-        Log-Error "Failed to build '$ProjectFile'. See $binLogPath in artifacts for details" (Get-Content msbuild.err)
+        Log-Error "Failed to build '$ProjectFile'. See $binLogPath in artifacts for details" errors
 
         if(Test-Path $binLogPath -PathType Leaf) {
             Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
             Remove-Item $binLogPath
         }
 
-        throw "$(Get-Content msbuild.err)"
+        throw "$errors"
     }
 
     return $wasBuildSuccessfull
