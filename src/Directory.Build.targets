@@ -17,11 +17,11 @@
     </ReadLinesFromFile>
 
     <PropertyGroup Condition="$(VersionName) == ''">
-      <VersionName Condition="'$(ExcludeExtensions)' == 'True'">$(VersionNumber) (build $(VersionCode))"</VersionName>
-      <VersionName Condition="'$(ExcludeExtensions)' != 'True'">$(VersionNumber) (build $(VersionCode)) with Maps"</VersionName>
+      <VersionName Condition="'$(ExcludeExtensions)' == 'True'">$(VersionNumber) (build $(VersionCode))</VersionName>
+      <VersionName Condition="'$(ExcludeExtensions)' != 'True'">$(VersionNumber) (build $(VersionCode)) with Maps</VersionName>
     </PropertyGroup>
 
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Properties\AndroidManifest.xml" DestinationFolder="$(IntermediateOutputPath)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Properties\AndroidManifest.xml" DestinationFolder="$(MSBuildProjectDirectory)\$(IntermediateOutputPath)" />
 
     <PropertyGroup>
       <AndroidManifest>$(IntermediateOutputPath)AndroidManifest.xml</AndroidManifest>
@@ -31,8 +31,8 @@
       </_AndroidNS>
     </PropertyGroup>
   
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
-    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)\$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)\$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
