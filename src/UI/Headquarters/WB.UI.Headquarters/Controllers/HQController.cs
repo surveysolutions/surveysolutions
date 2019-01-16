@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
@@ -176,7 +177,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 id = id,
                 responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
-                createNewAssignmentUrl = Url.RouteUrl(new {controller = "Assignments", action = "Create", id = id})
+                createNewAssignmentUrl = Url.RouteUrl(new {controller = "Assignments", action = "Create", id = id}),
+                maxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment
             });
         }
         

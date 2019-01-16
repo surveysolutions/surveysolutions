@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.CommentAnswer(interviewerId, questionid, RosterVector.Empty, DateTime.Now, "in comment");
 
-            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer();
+            var commentedBySupervisorQuestionsInInterview = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer();
             Assert.That(commentedBySupervisorQuestionsInInterview, Is.Empty);
 
             var questionComments = interview.GetQuestionComments(Create.Entity.Identity(questionid, RosterVector.Empty));

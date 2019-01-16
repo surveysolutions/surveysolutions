@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
@@ -61,7 +62,8 @@ namespace WB.UI.Headquarters.Controllers
                 IsObserver = this.currentUser.IsObserver,
                 IsObserving = this.currentUser.IsObserving,
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
-                Questionnaires = questionnaires
+                Questionnaires = questionnaires,
+                MaxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment
             };
 
             model.Api = new AssignmentsFilters.ApiEndpoints
@@ -112,6 +114,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
         public List<QuestionnaireVersionsComboboxViewItem> Questionnaires { get; set; }
+        public int MaxInterviewsByAssignment { get; set; }
 
         public class ApiEndpoints
         {

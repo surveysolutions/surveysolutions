@@ -127,8 +127,8 @@ namespace WB.Tests.Abc.TestFactories
 
             var statefulInterview = new StatefulInterview(
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder()
-                );
+                Create.Service.InterviewTreeBuilder());
+
             statefulInterview.ServiceLocatorInstance = serviceLocator.Object;
 
             if (shouldBeInitialized)
