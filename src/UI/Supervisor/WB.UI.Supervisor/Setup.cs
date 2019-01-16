@@ -45,7 +45,7 @@ using WB.UI.Supervisor.Services.Implementation;
 
 namespace WB.UI.Supervisor
 {
-    public class SupervisorSetup : EnumeratorSetup<SupervisorMvxApplication>
+    public class Setup : EnumeratorSetup<SupervisorMvxApplication>
     {
         protected override void InitializeViewLookup()
         {
@@ -159,7 +159,7 @@ namespace WB.UI.Supervisor
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(SupervisorSetup).Assembly,
+                typeof(Setup).Assembly,
                 typeof(DashboardViewModel).Assembly
             });
         }

@@ -9,6 +9,7 @@
         public static readonly string HtmlRemovalPattern = "<.*?>";
         public static readonly int ThrottlePeriod = 500;
         public const int MaxRosterPropagationLimit = 10000;
+        public const int MaxInterviewsCountByAssignment = 10000;
         public const int MaxTotalRosterPropagationLimit = 80000;
     }
 }

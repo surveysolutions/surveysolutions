@@ -44,7 +44,7 @@ using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer
 {
-    public class InterviewerSetup : EnumeratorSetup<InterviewerMvxApplication>
+    public class Setup : EnumeratorSetup<InterviewerMvxApplication>
     {
         protected override void InitializeViewLookup()
         {
@@ -160,7 +160,7 @@ namespace WB.UI.Interviewer
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(InterviewerSetup).Assembly,
+                typeof(Setup).Assembly,
                 typeof(LoginViewModel).Assembly,
 #if !EXCLUDEEXTENSIONS
                 typeof(Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly

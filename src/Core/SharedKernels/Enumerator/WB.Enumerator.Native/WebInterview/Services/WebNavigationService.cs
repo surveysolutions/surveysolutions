@@ -81,11 +81,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             IQuestionnaire questionnaire, IStatefulInterview interview, string virtualDirectoryName)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(text);
-            var rosterId = questionnaire.GetRosterIdByVariableName(text, true);
+            var rosterOrGroupId = questionnaire.GetRosterIdByVariableName(text, true) ?? questionnaire.GetSectionIdByVariable(text);
 
-            if (!questionId.HasValue && !rosterId.HasValue) return null;
+            if (!questionId.HasValue && !rosterOrGroupId.HasValue) return null;
 
-            var nearestInterviewEntity = GetNearestInterviewEntity(sourceEntity, interview, questionId ?? rosterId.Value);
+            var nearestInterviewEntity = GetNearestInterviewEntity(sourceEntity, interview, questionId ?? rosterOrGroupId.Value);
             if (nearestInterviewEntity == null) return null;
 
             if (questionId.HasValue)
@@ -93,8 +93,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     ? GenerateInterviewUrl("cover", interview.Id, virtualDirectoryName)
                     : GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
 
-            if (rosterId.HasValue)
-                return GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity), nearestInterviewEntity);
+            if (rosterOrGroupId.HasValue)
+                return GenerateInterviewUrl("section", interview.Id, virtualDirectoryName, interview.GetParentGroup(nearestInterviewEntity) ?? nearestInterviewEntity, nearestInterviewEntity);
 
             return null;
         }
