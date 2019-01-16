@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Target Name="MoveApkFile" Condition="$(ApkOutputPath) != '' AND $(ApkFileSigned) != ''">
-        <Move SourceFiles="$(MSBuildProjectDirectory)\$(ApkFileSigned)"
-              DestinationFiles="$(ApkOutputPath)" 
-              OverwriteReadOnlyFiles="True" />
-   </Target>
-    
-  <Target Name="PrepareManifest" BeforeTargets="CoreBuild" Condition="'$(VersionCode)' != '' and '$(AndroidManifest)' != ''">
+  <Target Name="MoveApkFile" Condition="$(ApkOutputPath) != '' AND $(ApkFileSigned) != ''">
+    <Move SourceFiles="$(MSBuildProjectDirectory)\$(ApkFileSigned)" DestinationFiles="$(ApkOutputPath)" OverwriteReadOnlyFiles="True" />
+  </Target>
 
+  <Target Name="PrepareManifest" BeforeTargets="CoreBuild" Condition="'$(VersionCode)' != '' and '$(AndroidManifest)' != ''">
     <PropertyGroup>
       <VersionFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)/'))</VersionFile>
     </PropertyGroup>
@@ -21,18 +18,14 @@
       <VersionName Condition="'$(ExcludeExtensions)' != 'True'">$(VersionNumber) (build $(VersionCode)) with Maps</VersionName>
     </PropertyGroup>
 
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Properties\AndroidManifest.xml" DestinationFolder="$(MSBuildProjectDirectory)\$(IntermediateOutputPath)" />
-
     <PropertyGroup>
-      <AndroidManifest>$(IntermediateOutputPath)AndroidManifest.xml</AndroidManifest>
-
       <_AndroidNS>
         <Namespace Prefix="android" Uri="http://schemas.android.com/apk/res/android" />
       </_AndroidNS>
     </PropertyGroup>
-  
-    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)\$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
-    <XmlPoke XmlInputPath="$(MSBuildProjectDirectory)\$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
+
+    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionCode" Value="$(VersionCode)" Namespaces="$(_AndroidNS)" />
+    <XmlPoke XmlInputPath="$(AndroidManifest)" Query="manifest/@android:versionName" Value="$(VersionName)" Namespaces="$(_AndroidNS)" />
 
   </Target>
 </Project>
