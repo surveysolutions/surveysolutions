@@ -24,5 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         void Reassign(int assignmentId, Guid responsibleId);
 
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
+        bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
     }
 }

@@ -49,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual DateTime? ReceivedByTabletAtUtc { get; protected set; }
 
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
+
+        public virtual bool IsAudioRecordingEnabled { get; protected set; }
         
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
@@ -71,6 +73,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
 
+
+        public virtual void SetAudioRecordingEnabled(bool enabled)
+        {
+            this.IsAudioRecordingEnabled = enabled;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
 
         public virtual void Archive()
         {
@@ -158,5 +166,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         public virtual string Title { get; set; }
         public virtual string Id { get; set; }
+        public virtual bool? IsAudioRecordingEnabled { get; set; }
     }
 }

@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.Infrastructure
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: Create.Entity.InterviewKey(),
-                assignmentId: null);
+                assignmentId: null,
+                false);
 
             string serializeObject = JsonConvert.SerializeObject(command, Formatting.Indented, new JsonSerializerSettings());
 

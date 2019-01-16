@@ -198,6 +198,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsAnswerProtected(Identity questionIdentity, decimal value);
 
-
+        bool? GetIsAudioRecordingEnabled();
     }
 }

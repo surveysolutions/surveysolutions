@@ -6,8 +6,10 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -32,6 +34,7 @@ namespace WB.UI.Headquarters.API
         private readonly IAuditLog auditLog;
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -40,7 +43,8 @@ namespace WB.UI.Headquarters.API
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IAuditLog auditLog,
             IPreloadedDataVerifier verifier,
-            ICommandTransformator commandTransformator)
+            ICommandTransformator commandTransformator, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -50,6 +54,7 @@ namespace WB.UI.Headquarters.API
             this.auditLog = auditLog;
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
+            this.questionnaires = questionnaires;
         }
         
         [Route("")]
@@ -218,8 +223,13 @@ namespace WB.UI.Headquarters.API
             if (error != null)
                 return Content(HttpStatusCode.Forbidden, error.ErrorMessage);
 
+            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
+                .Where(q => q.Id == questionnaireIdentity.ToString())
+                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
+
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
+            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
             

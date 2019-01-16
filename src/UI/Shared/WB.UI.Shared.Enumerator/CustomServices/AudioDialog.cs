@@ -22,19 +22,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAudioService audioService;
-        private readonly IMvxAndroidCurrentTopActivity topActivity;
+        
 
         public AudioDialog(
             IInterviewViewModelFactory viewModelFactory, 
-            IAudioService audioService,
-            IMvxAndroidCurrentTopActivity topActivity)
+            IAudioService audioService)
         {
             this.viewModelFactory = viewModelFactory;
             this.audioService = audioService;
-            this.topActivity = topActivity;
         }
         
-        public event EventHandler OnCanelRecording;
+        public event EventHandler OnCancelRecording;
         public event EventHandler OnRecorded;
 
         public void ShowAndStartRecording(string title)
@@ -93,16 +91,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void ViewModel_OnCancel(object sender, EventArgs e)
         {
             this.HideAndStopRecording();
-            this.OnCanelRecording?.Invoke(sender, e);
+            this.OnCancelRecording?.Invoke(sender, e);
         }
 
         private void HideAndStopRecording()
         {
             //unsubscribe first before stopping service
-            this.durationTimer.Dispose();
+            this.durationTimer?.Dispose();
             this.durationTimer = null;
 
-            this.noiseTimer.Dispose();
+            this.noiseTimer?.Dispose();
             this.noiseTimer = null;
             
             this.audioService.StopRecording();

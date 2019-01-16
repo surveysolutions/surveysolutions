@@ -86,6 +86,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
 
         [HttpPost]
+        public void PostAudioAudit(PostFileRequest request)
+        {
+            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+                Convert.FromBase64String(request.Data), request.ContentType);
+        }
+
+        [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
         public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
             => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
