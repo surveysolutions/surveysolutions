@@ -255,9 +255,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
-        private Task LoadQuestionnaireAsync(QuestionnaireListItem questionnaireListItem)
+        private async Task LoadQuestionnaireAsync(QuestionnaireListItem questionnaireListItem)
         {
-            if (this.IsInProgress) return Task.CompletedTask;
+            if (this.IsInProgress) return;
 
             this.tokenSource = new CancellationTokenSource();
             this.IsInProgress = true;
@@ -266,7 +266,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                return this.QuestionnaireDownloader
+                await this.QuestionnaireDownloader
                     .LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
                         this.tokenSource.Token);
             }
