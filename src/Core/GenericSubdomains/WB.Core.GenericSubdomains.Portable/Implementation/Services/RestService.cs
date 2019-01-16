@@ -12,7 +12,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class RestService : IRestService
@@ -23,7 +22,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
         private readonly IHttpClientFactory httpClientFactory;
-
+        private readonly IFastBinaryFilesHttpHandler fileDownloader;
+        
         public RestService(
             IRestServiceSettings restServiceSettings,
             INetworkService networkService,
@@ -31,7 +31,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
             IHttpStatistician httpStatistician,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory, IFastBinaryFilesHttpHandler fileDownloader)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
@@ -39,12 +39,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
             this.httpClientFactory = httpClientFactory;
+            this.fileDownloader = fileDownloader;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
         }
 
-        private Task<HttpResponseMessage> ExecuteRequestAsync(
+        private Task<ExecuteRequestResult> ExecuteRequestAsync(
             string url,
             HttpMethod method,
             object queryString = null,
@@ -60,7 +61,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 customHeaders, userCancellationToken, progress);
         }
 
-        private async Task<HttpResponseMessage> ExecuteRequestAsync(
+        private async Task<ExecuteRequestResult> ExecuteRequestAsync(
             string url,
             HttpMethod method,
             object queryString = null,
@@ -89,9 +90,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
-            httpClient.Timeout = this.restServiceSettings.Timeout;
+            //var httpMessageHandler = httpClientFactory.CreateMessageHandler();
+            //HttpClient httpClient = httpClientFactory.CreateClient(httpMessageHandler, httpStatistician);
+            //httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
             {
@@ -130,14 +131,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
+                var httpClient = this.httpClientFactory.CreateClient(httpStatistician);
 
-                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
+                var httpResponseMessage = await
+                    httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token)
+                        .ConfigureAwait(false);
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
                     || httpResponseMessage.StatusCode == HttpStatusCode.NoContent)
                 {
-                    return httpResponseMessage;
+                    return new ExecuteRequestResult(httpClient, httpResponseMessage);
                 }
 
                 throw new RestException(httpResponseMessage.ReasonPhrase, statusCode: httpResponseMessage.StatusCode);
@@ -212,25 +216,25 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 userCancellationToken: token);
         }
 
-        public Task<T> GetAsync<T>(string url,
+        public async Task<T> GetAsync<T>(string url,
             IProgress<TransferProgress> transferProgress, object queryString = null,
             RestCredentials credentials = null, CancellationToken? token = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
+            var response = await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
                 userCancellationToken: token, request: null);
 
-            return this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
+            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);
         }
 
-        public Task<T> PostAsync<T>(string url,
+        public async Task<T> PostAsync<T>(string url,
             IProgress<TransferProgress> transferProgress, object request,
             RestCredentials credentials = null, CancellationToken? token = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
+            var response = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
                 request: request ?? string.Empty, progress: transferProgress, userCancellationToken: token);
 
-            return this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
+            return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);
         }
 
@@ -240,11 +244,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             CancellationToken? token = null,
             Dictionary<string, string> customHeaders = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token, request: null, customHeaders: customHeaders);
+            var response = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
+                userCancellationToken: token, request: null, customHeaders: customHeaders).ConfigureAwait(false);
 
-            var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
-                        transferProgress: transferProgress).ConfigureAwait(false);
+            var restResponse = await this.ReceiveBytesWithProgressAsync(response,
+                        transferProgress: transferProgress, token: token ?? default(CancellationToken)).ConfigureAwait(false);
 
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
 
@@ -256,15 +260,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null,
             CancellationToken? ctoken = null, object queryString = null, Dictionary<string, string> customHeaders = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
+            var (_, response) = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
                 userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders);
+            
+            var contentLength = response.Content.Headers.ContentLength;
 
-            var responseMessage = await response.ConfigureAwait(false);
-            var contentLength = responseMessage.Content.Headers.ContentLength;
+            var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);
 
-            var contentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
-
-            var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             switch (contentCompressionType)
             {
@@ -307,7 +310,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                     await this.ExecuteRequestAsync(url: url, queryString: null, credentials: credentials,
                         method: HttpMethod.Post, forceNoCache: true, userCancellationToken: token,
-                        customHeaders: customHeaders, httpContent: multipartFormDataContent).ConfigureAwait(false);
+                        customHeaders: customHeaders, httpContent: multipartFormDataContent)
+                        .ConfigureAwait(false);
                 }
             }
         }
@@ -320,60 +324,21 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     new StringContent(this.synchronizationSerializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
         }
 
-        private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
+        private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(ExecuteRequestResult response,
             CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            var restResponse = await this.ReceiveBytesWithProgressAsync(token, transferProgress, response).ConfigureAwait(false);
+            var restResponse = await this.ReceiveBytesWithProgressAsync(response, transferProgress, token).ConfigureAwait(false);
 
             return this.GetDecompressedJsonFromHttpResponseMessage<T>(restResponse);
         }
 
-        private async Task<RestResponse> ReceiveBytesWithProgressAsync(CancellationToken token, IProgress<TransferProgress> transferProgress,
-            Task<HttpResponseMessage> response)
+        private async Task<RestResponse> ReceiveBytesWithProgressAsync(ExecuteRequestResult result,
+            IProgress<TransferProgress> transferProgress,
+            CancellationToken token)
         {
-            var responseMessage = await response.ConfigureAwait(false);
-            byte[] responseContent;
-            var contentLength = responseMessage.Content.Headers.ContentLength;
-
-            using (var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+            var responseMessage = result.Response;
+            var restResponse = new RestResponse
             {
-                if (token.IsCancellationRequested)
-                {
-                    token.ThrowIfCancellationRequested();
-                }
-
-                var buffer = new byte[this.restServiceSettings.BufferSize];
-                var downloadProgressChangedEventArgs = new TransferProgress
-                {
-                    TotalBytesToReceive = contentLength
-                };
-                using (var ms = new MemoryStream())
-                {
-                    int read;
-                    while ((read = await responseStream.ReadAsync(buffer, 0, buffer.Length, token).ConfigureAwait(false)) > 0)
-                    {
-                        if (token.IsCancellationRequested)
-                        {
-                            token.ThrowIfCancellationRequested();
-                        }
-
-                        ms.Write(buffer, 0, read);
-
-                        if (transferProgress == null) continue;
-
-                        if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal)(100 * ms.Length) / contentLength.Value, 2);
-
-                        downloadProgressChangedEventArgs.BytesReceived = ms.Length;
-                        transferProgress.Report(downloadProgressChangedEventArgs);
-                    }
-                    responseContent = ms.ToArray();
-                }
-            }
-
-            return new RestResponse
-            {
-                Response = responseContent,
                 ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType?.MediaType),
                 ContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers),
                 RawContentType = responseMessage.Content?.Headers?.ContentType?.MediaType,
@@ -382,6 +347,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 FileName = responseMessage.Content?.Headers?.ContentDisposition?.FileName,
                 StatusCode = responseMessage.StatusCode
             };
+
+            restResponse.Response = await fileDownloader.DownloadBinaryDataAsync(result.HttpClient, result.Response, transferProgress, token);
+
+            return restResponse;
         }
 
         private RestContentType GetContentType(string mediaType)
@@ -418,6 +387,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             try
             {
                 var responseContent = GetDecompressedContentFromHttpResponseMessage(restResponse);
+                // Debug.WriteLine($"JSON: {System.Text.Encoding.UTF8.GetString(responseContent)}");
                 return this.synchronizationSerializer.Deserialize<T>(responseContent);
             }
             catch (JsonDeserializationException ex)
@@ -460,7 +430,26 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             public HttpStatusCode StatusCode { get; set; }
         }
 
+        internal class ExecuteRequestResult
+        {
+            public ExecuteRequestResult(HttpClient httpClient, HttpResponseMessage httpResponseMessage)
+            {
+                Response = httpResponseMessage;
+                HttpClient = httpClient;
+            }
+
+            public void Deconstruct(out HttpClient http, out HttpResponseMessage response)
+            {
+                http = HttpClient;
+                response = Response;
+            }
+
+            public HttpClient HttpClient { get; }
+            public HttpResponseMessage Response { get;  }
+        }
+
         internal enum RestContentType { Unknown, Json }
         internal enum RestContentCompressionType { None, GZip, Deflate }
     }
+
 }

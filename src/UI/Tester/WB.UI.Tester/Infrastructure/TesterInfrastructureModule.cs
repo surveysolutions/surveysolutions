@@ -64,6 +64,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IRestServicePointManager, RestServicePointManager>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.Bind<IRestService, RestService>();
+            registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer,PortableInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
