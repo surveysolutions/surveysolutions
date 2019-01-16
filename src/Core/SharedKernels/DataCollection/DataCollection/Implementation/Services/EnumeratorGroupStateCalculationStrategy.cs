@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+﻿using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -7,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
     public class EnumeratorGroupGroupStateCalculationStrategy : IEnumeratorGroupStateCalculationStrategy
     {
-        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
+        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var questionsCount = interview.CountEnabledQuestions(groupIdentity);
             var answeredQuestionsCount = interview.CountEnabledAnsweredQuestions(groupIdentity);
@@ -24,9 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
             foreach (var subGroup in subgroups)
             {
-                var subGroupStatus = CalculateDetailedStatus(subGroup.Key, interview);
+                var subGroupStatus = CalculateDetailedStatus(subGroup, interview, questionnaire);
 
-                if (subGroup.Value == true && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                if (questionnaire.IsPlainRoster(subGroup.Id) && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
                     return GroupStatus.StartedInvalid;
 
                 switch (groupStatus)

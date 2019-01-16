@@ -211,13 +211,14 @@ namespace WB.Enumerator.Native.WebInterview
             var statefulInterview = this.GetCallerInterview();
             if (statefulInterview == null) return null;
 
+            var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
             ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
             {
                 button.Id = id;
                 button.Target = target.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
                     ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
-                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview);
+                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview, questionnaire);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, button.Status);
 
@@ -225,7 +226,7 @@ namespace WB.Enumerator.Native.WebInterview
             }
 
             var sectionId = CallerSectionid;
-            var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
+            
             
             var sections = callerQuestionnaire.GetAllSections()
                 .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
@@ -360,7 +361,7 @@ namespace WB.Enumerator.Native.WebInterview
                 Title = currentTreeGroup?.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
-                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode, statefulInterview),
+                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode, statefulInterview, questionnaire),
                 IsRoster = currentTreeGroupAsRoster != null
             };
             
@@ -469,7 +470,7 @@ namespace WB.Enumerator.Native.WebInterview
             if (questionnaire == null) return null;
 
             var allCommented = IsReviewMode ? interview.GetAllCommentedEnabledQuestions().ToList() : 
-                                              interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToList();
+                                              interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().ToList();
 
             var commentedQuestionsCount = allCommented.Count;
             var commentedQuestions = allCommented.Take(30).ToArray();

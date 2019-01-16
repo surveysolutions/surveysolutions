@@ -74,7 +74,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     opts.AfterMap((g, sidebarPanel) =>
                     {
-                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
+                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview, questionnaire);
 
                         this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
@@ -304,7 +304,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.ApplyGroupStateData(result, group, callerInterview, isReviewMode);
+                this.ApplyGroupStateData(result, group, callerInterview, isReviewMode, questionnaire);
                 this.ApplyValidity(result.Validity, result.Status);
                 return result;
             }
@@ -315,7 +315,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(roster);
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode);
+                this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode, questionnaire);
                 this.ApplyValidity(result.Validity, result.Status);
                 return result;
             }
@@ -401,9 +401,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
         }
 
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance @group, InterviewTreeGroup treeGroup,
-            IStatefulInterview callerInterview, bool isReviewMode)
+            IStatefulInterview callerInterview, bool isReviewMode, IQuestionnaire questionnaire)
         {
-            group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode, callerInterview);
+            group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode, callerInterview, questionnaire);
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group, bool isReviewMode) =>
@@ -411,14 +411,14 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor() > 0
                 : group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
         
-        public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview)
+        public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (isReviewMode)
             {
-                return this.supervisorGroupStateCalculationStrategy.CalculateDetailedStatus(group.Identity, interview);
+                return this.supervisorGroupStateCalculationStrategy.CalculateDetailedStatus(group.Identity, interview, questionnaire);
             }
 
-            return this.enumeratorGroupStateCalculationStrategy.CalculateDetailedStatus(@group.Identity, interview);
+            return this.enumeratorGroupStateCalculationStrategy.CalculateDetailedStatus(@group.Identity, interview, questionnaire);
         }
 
         public GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode)
