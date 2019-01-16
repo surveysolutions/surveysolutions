@@ -573,7 +573,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasUnansweredQuestions(Identity group) 
             => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
-        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer()
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer()
         {
             var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -635,10 +635,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(roster => roster.Identity)
                 .ToList();
 
-        public Dictionary<Identity, bool?> GetEnabledSubgroupsAndRosters(Identity group)
+        public IEnumerable<Identity> GetEnabledSubgroupsAndRosters(Identity group)
             => this.GetGroupsAndRostersInGroup(group)
                 .Where(groupOrRoster => !groupOrRoster.IsDisabled())
-                .ToDictionary(groupOrRoster => groupOrRoster.Identity, groupOrRoster => (groupOrRoster as InterviewTreeRoster)?.IsPlain);
+                .Select(x => x.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];

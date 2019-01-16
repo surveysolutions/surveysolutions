@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            this.HasChildren = interview.GetEnabledSubgroupsAndRosters(this.SectionIdentity).Any(x => x.Value == true);
+            this.HasChildren = interview.GetEnabledSubgroupsAndRosters(this.SectionIdentity).Any(x => !questionnaire.IsPlainRoster(x.Id));
         }
 
         private void UpdateSubGroups(Identity[] addedSubGroups)
