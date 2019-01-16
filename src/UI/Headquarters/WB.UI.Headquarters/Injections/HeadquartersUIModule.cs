@@ -82,6 +82,8 @@ namespace WB.UI.Headquarters.Injections
                 new ConstructorArgument("restServicePointManager", _ => null),
                 new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
+            registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();
+
             registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
             registry.BindWebApiFilter<UnderConstructionHttpFilter>();
             registry.BindMvcActionFilter<GlobalNotificationAttribute>();

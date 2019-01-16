@@ -76,6 +76,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public int MaxDegreeOfParallelism { get; } = 6;
+
         public Version GetSupportedQuestionnaireContentVersion() => null;
 
         public int GpsReceiveTimeoutSec

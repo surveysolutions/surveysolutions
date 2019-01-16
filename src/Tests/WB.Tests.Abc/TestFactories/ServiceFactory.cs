@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -1003,7 +1004,8 @@ namespace WB.Tests.Abc.TestFactories
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                httpClientFactory ?? Mock.Of<IHttpClientFactory>()
+                httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
+                new SimpleFileHandler()
             );
         }
 
@@ -1018,6 +1020,15 @@ namespace WB.Tests.Abc.TestFactories
         public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
         {
             return new EnumeratorGroupGroupStateCalculationStrategy();
+        }
+    }
+
+    internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
+    {
+        public Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response, IProgress<TransferProgress> transferProgress,
+            CancellationToken token)
+        {
+            return response.Content.ReadAsByteArrayAsync();
         }
     }
 

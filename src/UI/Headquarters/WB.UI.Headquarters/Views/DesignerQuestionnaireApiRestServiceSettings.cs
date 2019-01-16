@@ -75,5 +75,7 @@ namespace WB.UI.Headquarters.Views
                 return _userAgent;
             }
         }
+
+        public int MaxDegreeOfParallelism { get; } = 10;
     }
 }
