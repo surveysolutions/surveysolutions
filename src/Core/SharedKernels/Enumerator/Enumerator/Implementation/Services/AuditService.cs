@@ -9,18 +9,18 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class AudioAuditService : IAudioAuditService
+    public class AuditService : IAuditService
     {
-        private readonly IAudioService audioService;
+        private readonly IAudioAuditService audioAuditService;
         private string fileNamePrefix = "audio-audit";
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IPermissionsService permissions;
-        public AudioAuditService(
-            IAudioService audioService, 
+        public AuditService(
+            IAudioAuditService audioAuditService, 
             IAudioAuditFileStorage audioAuditFileStorage, 
             IPermissionsService permissions)
         {
-            this.audioService = audioService;
+            this.audioAuditService = audioAuditService;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.permissions = permissions;
         }
@@ -28,17 +28,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private string currentAuditFileName = null;
         private string currentAuditFilePath = null;
 
-        public async Task StartRecordingAsync(Guid interviewId)
+        public async Task StartAudioRecordingAsync(Guid interviewId)
         {
             Debug.WriteLine("!!!!!!!!!!! StartRecording");
 
             await this.permissions.AssureHasPermission(Permission.Microphone);
             await this.permissions.AssureHasPermission(Permission.Storage);
             
-            currentAuditFileName = $"{fileNamePrefix}-{interviewId.FormatGuid()}-{DateTime.Now:ddMMyyyy_HHmmss}";
+            currentAuditFileName = $"{fileNamePrefix}-{interviewId.FormatGuid()}-{DateTime.Now:yyyyMMdd_HHmmss}";
             try
             {
-                currentAuditFilePath = audioService.StartRecording(currentAuditFileName);
+                currentAuditFilePath = audioAuditService.StartRecording(currentAuditFileName);
             }
             catch (Exception e)
             {
@@ -47,13 +47,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task StopRecordingAsync(Guid interviewId)
+        public Task StopAudioRecordingAsync(Guid interviewId)
         {
             Debug.WriteLine("!!!!!!!!!!! StopRecording");
 
-            audioService.StopRecording(currentAuditFileName);
-            var audioStream = audioService.GetRecord(currentAuditFilePath);
-            var mimeType = this.audioService.GetMimeType();
+            audioAuditService.StopRecording(currentAuditFileName);
+            var audioStream = audioAuditService.GetRecord(currentAuditFilePath);
+            var mimeType = this.audioAuditService.GetMimeType();
             using (var audioMemoryStream = new MemoryStream())
             {
                 audioStream.CopyTo(audioMemoryStream);

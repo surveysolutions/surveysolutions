@@ -22,7 +22,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
-        private readonly IAudioAuditService audioAuditService;
+        private readonly IAuditService audioAuditService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -42,7 +42,7 @@ namespace WB.UI.Interviewer.ViewModel
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
             IAuditLogService auditLogService, 
-            IAudioAuditService audioAuditService)
+            IAuditService audioAuditService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
@@ -99,7 +99,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
 
             if (IsAudioRecordingEnabled == true)
-                audioAuditService.StartRecordingAsync(interviewId);
+                audioAuditService.StartAudioRecordingAsync(interviewId);
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
 
@@ -118,7 +118,7 @@ namespace WB.UI.Interviewer.ViewModel
             auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
             if (IsAudioRecordingEnabled == true)
-                audioAuditService.StopRecordingAsync(interviewId);
+                audioAuditService.StopAudioRecordingAsync(interviewId);
 
             base.ViewDisappearing();
         }
