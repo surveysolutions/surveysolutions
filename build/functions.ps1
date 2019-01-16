@@ -310,7 +310,7 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
     }
 
     if($env:TEAMCITY_VERSION -eq $null) {
-        $build += '/clp:ForceConsoleColor;ErrorsOnly'
+        $build += '/clp:ForceConsoleColor'
     }
 
     if($buildArgs -ne $null) {
@@ -341,7 +341,7 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         throw "$errors"
     } else {
         if($env:MSBUILD_BINLOG -eq $True) {
-            Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+            Start-Sleep -Seconds 3; Publish-Artifact "$binLogPath"
         }
     }
 
