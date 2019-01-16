@@ -339,6 +339,10 @@ function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
         }
 
         throw "$errors"
+    } else {
+        if($env:MSBUILD_BINLOG -eq $True) {
+            Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+        }
     }
 
     return $wasBuildSuccessfull
