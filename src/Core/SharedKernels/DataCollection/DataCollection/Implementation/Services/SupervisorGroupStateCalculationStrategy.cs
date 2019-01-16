@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+﻿using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -9,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
     public class SupervisorGroupStateCalculationStrategy : ISupervisorGroupStateCalculationStrategy
     {
-        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
+        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             GroupStatus status;
             var group = interview.GetGroup(groupIdentity);
@@ -31,9 +28,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
             foreach (var subGroup in interview.GetEnabledSubgroupsAndRosters(groupIdentity))
             {
-                var subGroupStatus = CalculateDetailedStatus(subGroup.Key, interview);
+                var subGroupStatus = CalculateDetailedStatus(subGroup, interview, questionnaire);
 
-                if (subGroup.Value == true && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                if (questionnaire.IsPlainRoster(subGroup.Id) && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
                     return GroupStatus.StartedInvalid;
 
                 switch (status)

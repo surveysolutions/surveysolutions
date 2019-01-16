@@ -25,7 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.Services
             
             // Act
             interview.AnswerTextQuestion(Id.gC, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, "a");
-            GroupStatus calculateDetailedStatus = new EnumeratorGroupGroupStateCalculationStrategy().CalculateDetailedStatus(Create.Identity(Id.gA), interview);
+            GroupStatus calculateDetailedStatus = 
+                new EnumeratorGroupGroupStateCalculationStrategy()
+                    .CalculateDetailedStatus(Create.Identity(Id.gA), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(calculateDetailedStatus, Is.EqualTo(GroupStatus.Started));

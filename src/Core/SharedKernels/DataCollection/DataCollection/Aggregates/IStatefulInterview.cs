@@ -115,8 +115,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         Identity[] GetParentGroups(Identity groupOrQuestion);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
-        
-        Dictionary<Identity, bool?> GetEnabledSubgroupsAndRosters(Identity group);
+
+        IEnumerable<Identity> GetEnabledSubgroupsAndRosters(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
 
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
 
-        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
+        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer();
 
         IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
 
