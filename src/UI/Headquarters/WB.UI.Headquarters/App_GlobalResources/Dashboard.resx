@@ -192,6 +192,9 @@
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Web interview setup</value>
   </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Record audio</value>
+  </data>
   <data name="UploadAssignments" xml:space="preserve">
     <value>Upload assignments</value>
   </data>
@@ -203,5 +206,8 @@
   </data>
   <data name="UpgradeAssignments" xml:space="preserve">
     <value>Upgrade assignments</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>When enabled, interviewer application will record interview process </value>
   </data>
 </root>

@@ -46,7 +46,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     ResponsibleId = ass.ResponsibleId,
                     ResponsibleName = ass.ResponsibleName,
                     Quantity = ass.Quantity.HasValue ? ass.Quantity - ass.CreatedInterviewsCount : ass.Quantity,
-                    QuestionnaireId = QuestionnaireIdentity.Parse(ass.QuestionnaireId)
+                    QuestionnaireId = QuestionnaireIdentity.Parse(ass.QuestionnaireId),
+                    IsAudioRecordingEnabled = ass.IsAudioRecordingEnabled
                 }).ToList()
             };
             return Task.FromResult(result);

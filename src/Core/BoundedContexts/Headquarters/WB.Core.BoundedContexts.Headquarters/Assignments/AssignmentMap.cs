@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.CreatedAtUtc);
             Property(x => x.UpdatedAtUtc);
             Property(x => x.ReceivedByTabletAtUtc);
+            Property(x => x.IsAudioRecordingEnabled);
 
             Component(x => x.QuestionnaireId, cmp =>
             {
@@ -104,6 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
             Id(x => x.Id);
             Property(x => x.Title);
+            Property(x => x.IsAudioRecordingEnabled);
         }
     }
 }

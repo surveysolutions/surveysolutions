@@ -112,6 +112,28 @@ class Reports {
     }
 }
 
+class AssignmentsApi {
+    constructor(http) {
+        this.http = http
+        this.base = "api/v1/assignments"
+    }
+
+    async audioSettings(assignmentId) {
+        var url = `${this.base}/${assignmentId}/recordAudio`
+
+        const response = await this.http.get(url)
+        const responseData = response.data
+
+        return responseData
+    }
+
+    setAudioSettings(assignmentId, isEnabled) {
+        var url = `${this.base}/${assignmentId}/recordAudio`
+
+        return this.http.patch(url,  {enabled: isEnabled})
+    }
+}
+
 class HqApiClient {
     constructor(basePath) {
         this.basePath = basePath;
@@ -128,6 +150,8 @@ class HqApiClient {
     get Report() { return new Reports(this.http) }
 
     get Users() { return new Users(this.http) }
+
+    get Assignments() { return new AssignmentsApi(this.http) }
 }
 
 /*  the Plugin */

@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -22,6 +28,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems;
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
         private readonly ISerializer serializer;
         protected readonly IQuestionnaireStorage questionnaireStorage;
@@ -30,13 +37,15 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IAllInterviewsFactory allInterviewsViewFactory,
             ISerializer serializer,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems)
             : base(logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.serializer = serializer;
             this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireBrowseItems = questionnaireBrowseItems;
         }
 
         /// <summary>
@@ -121,6 +130,44 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new InterviewApiView(interviews);
         }
+
+        /// <summary>
+        /// Sets audio recording enabled setting for provided questionnaire
+        /// </summary>
+        /// <param name="id">Questionnaire guid</param>
+        /// <param name="version">Questionnaire version</param>
+        /// <param name="requestData"></param>
+        /// <response code="200">Questionnaire setting updated</response>
+        /// <response code="404">Questionnaire cannot be found</response>
+        [HttpPost]
+        [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        public HttpResponseMessage RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
+        {
+            var questionnaire = 
+                this.questionnaireBrowseItems.Query(_ => _.FirstOrDefault(
+                    x => x.QuestionnaireId == id
+                        && x.Version == version
+                        && x.IsDeleted == false
+                        && x.Disabled == false
+            ));
+            
+            if (questionnaire == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            questionnaire.IsAudioRecordingEnabled = requestData.Enabled;
+
+            var httpResponseMessage = Request.CreateResponse(HttpStatusCode.OK, string.Empty, new MediaTypeHeaderValue("application/json"));
+            return httpResponseMessage;
+        }
     }
 
+    public class RecordAudioRequest
+    {
+        /// <summary>
+        /// Enable or disable recording
+        /// </summary>
+        public bool Enabled { get; set; }
+    }
 }

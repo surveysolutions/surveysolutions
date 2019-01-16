@@ -202,7 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Storage);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
-                this.audioDialog.OnCanelRecording += AudioDialog_OnCancel;
+                this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
             catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UnhandleDialog()
         {
             this.audioDialog.OnRecorded -= this.AudioDialog_OnRecorded;
-            this.audioDialog.OnCanelRecording -= this.AudioDialog_OnCancel;
+            this.audioDialog.OnCancelRecording -= this.AudioDialog_OnCancel;
         }
 
         private async Task RemoveAnswerAsync()
@@ -274,7 +274,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void StoreAudioToPlainStorage()
         {
-            var audioStream = this.audioService.GetLastRecord();
+            var audioStream = this.audioService.GetRecord();
 
             using (var audioMemoryStream = new MemoryStream())
             {
