@@ -40,6 +40,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void Stop();
     }
 
+    public interface IAudioAuditService : IAudioService
+    {
+    }
+
     public class PlaybackCompletedEventArgs : EventArgs
     {
         public PlaybackCompletedEventArgs(Identity questionIdentity)

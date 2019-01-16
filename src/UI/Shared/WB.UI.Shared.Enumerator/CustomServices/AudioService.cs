@@ -16,7 +16,7 @@ using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class AudioService : IAudioService
+    public class AudioService : IAudioService, IAudioAuditService
     {
         private bool disposed = false;
         private object lockObject = new object();
