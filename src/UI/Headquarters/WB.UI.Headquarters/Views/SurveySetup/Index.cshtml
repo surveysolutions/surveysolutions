@@ -30,6 +30,7 @@
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
         var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
+        var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
@@ -37,7 +38,7 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
                 $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl);
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -86,6 +87,19 @@
                 ];
             };
 
+            $.contextMenu.types.wbCheckbox = function(item) {
+                $('<input class="checkbox-filter single-checkbox" id="isEnabled" type="checkbox">' +
+                        '<label for="isEnabled">' +
+                        '<span class="tick"></span>@Html.ToSafeJavascriptMessage(Dashboard.RecordAudio)' +
+                        '</label>')
+                    .appendTo(this);
+
+                $(this)
+                    .prop('title', '@Html.ToSafeJavascriptMessage(Dashboard.RecordAudioTitle)')
+                    .find('input:checkbox')
+                    .prop('checked', item.selected);
+            };
+
             model.onTableInitCompleteExtra = function () {
 
                 var buildMenuItem = function(selectedRow) {
@@ -129,6 +143,15 @@
                                 callback: model.webInterviewSetup
                             }
                         }
+                        if (!selectedRow.isDisabled) {
+                            items["recordAudio"] = {
+                                name: "RecordAudio",
+                                type: 'wbCheckbox',
+                                selected: selectedRow.isAudioRecordingEnabled,
+                                callback: model.recordAudio
+                            };
+                        }
+
                         </text>
                     }
 

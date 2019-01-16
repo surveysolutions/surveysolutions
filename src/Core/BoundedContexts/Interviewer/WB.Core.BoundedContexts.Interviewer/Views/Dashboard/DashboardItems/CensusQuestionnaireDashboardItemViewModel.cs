@@ -96,7 +96,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interviewerIdentity.SupervisorId,
                 interviewerIdentity.UserId,
                 keyGenerator.Get(),
-                null);
+                null,
+                isAudioRecordingEnabled:false);
             await this.commandService.ExecuteAsync(createInterviewCommand);
             await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
         }

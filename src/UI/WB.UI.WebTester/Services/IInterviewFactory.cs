@@ -59,7 +59,8 @@ namespace WB.UI.WebTester.Services
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),
-                assignmentId: null);
+                assignmentId: null,
+                isAudioRecordingEnabled:false);
 
             this.commandService.Execute(createInterview);
         }

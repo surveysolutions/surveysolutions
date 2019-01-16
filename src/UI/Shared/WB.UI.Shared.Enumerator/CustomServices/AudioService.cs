@@ -16,23 +16,13 @@ using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class AudioService : IAudioService
+    public class AudioService : IAudioService, IAudioAuditService
     {
         private bool disposed = false;
         private object lockObject = new object();
 
         private readonly IAudioFileStorage audioFileStorage;
-        
-        private class AudioRecorderInfoLisener : Java.Lang.Object, MediaRecorder.IOnInfoListener
-        {
-            public event EventHandler OnMaxDurationReached;
-            public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
-            {
-                if(what == MediaRecorderInfo.MaxDurationReached)
-                    this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
+       
         private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
         private const double MaxReportableDb = 90.3087f;
@@ -43,9 +33,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
+        private readonly string pathToAudioDirectory;
 
         private MediaRecorder recorder;
-        private AudioRecorderInfoLisener audioRecorderInfoLisener;
+        private AudioRecorderInfoListener audioRecorderInfoListener;
         private readonly string tempFileName;
         private Identity playingIdentity;
         readonly MediaPlayer mediaPlayer = new MediaPlayer();
@@ -56,6 +47,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.audioFileStorage = audioFileStorage;
+            this.pathToAudioDirectory = pathToAudioDirectory;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
@@ -109,23 +101,36 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             if (this.recorder != null) return;
 
-            this.recorder = new MediaRecorder();
-
             if (this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
                 this.fileSystemAccessor.DeleteFile(this.pathToAudioFile);
-            
+
+            Record(this.pathToAudioFile);
+        }
+
+        public string StartRecording(string fileName)
+        {
+            var fileNameWithExtension = $"{fileName}.{AudioFileExtension}";
+            var fullPath = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, fileNameWithExtension);
+            Record(fullPath);
+            return fullPath;
+        }
+
+        private void Record(string audioFilePath)
+        {
+            this.recorder = new MediaRecorder();
+
             this.recorder.SetAudioSource(AudioSource.Mic);
             this.recorder.SetOutputFormat(OutputFormat.Mpeg4);
             this.recorder.SetAudioEncoder(AudioEncoder.Aac);
             this.recorder.SetAudioChannels(1);
             this.recorder.SetAudioSamplingRate(44100);
             this.recorder.SetAudioEncodingBitRate(64000);
-            this.recorder.SetOutputFile(this.pathToAudioFile);
+            this.recorder.SetOutputFile(audioFilePath);
             this.recorder.SetMaxDuration(MaxDuration);
 
-            this.audioRecorderInfoLisener = new AudioRecorderInfoLisener();
-            this.audioRecorderInfoLisener.OnMaxDurationReached += this.AudioRecorderInfoLisener_OnMaxDurationReached;
-            this.recorder.SetOnInfoListener(audioRecorderInfoLisener);
+            this.audioRecorderInfoListener = new AudioRecorderInfoListener();
+            this.audioRecorderInfoListener.OnMaxDurationReached += this.AudioRecorderInfoListenerOnMaxDurationReached;
+            this.recorder.SetOnInfoListener(audioRecorderInfoListener);
 
             try
             {
@@ -145,7 +150,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
-        private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e)
+        private void AudioRecorderInfoListenerOnMaxDurationReached(object sender, EventArgs e)
             => this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
 
         public void StopRecording()
@@ -158,11 +163,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.ReleaseAudioRecorder();
         }
 
+        public void StopRecording(string fileName)
+        {
+            StopRecording();
+        }
+
         public bool IsRecording() => this.recorder != null;
 
-        public Stream GetLastRecord()
-            => this.fileSystemAccessor.IsFileExists(this.pathToAudioFile)
-                ? this.fileSystemAccessor.ReadFile(this.pathToAudioFile)
+        public Stream GetRecord(string fileName = null)
+            => this.fileSystemAccessor.IsFileExists(fileName ?? this.pathToAudioFile)
+                ? this.fileSystemAccessor.ReadFile(fileName ?? this.pathToAudioFile)
                 : null;
 
         public TimeSpan GetLastRecordDuration() => this.duration.Elapsed;
@@ -234,11 +244,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void ReleaseAudioRecorder()
         {
-            if (this.audioRecorderInfoLisener != null)
+            if (this.audioRecorderInfoListener != null)
             {
-                this.audioRecorderInfoLisener.OnMaxDurationReached -= this.AudioRecorderInfoLisener_OnMaxDurationReached;
-                this.audioRecorderInfoLisener.Dispose();
-                this.audioRecorderInfoLisener = null;
+                this.audioRecorderInfoListener.OnMaxDurationReached -= this.AudioRecorderInfoListenerOnMaxDurationReached;
+                this.audioRecorderInfoListener.Dispose();
+                this.audioRecorderInfoListener = null;
             }
 
             this.recorder?.Reset();
@@ -262,6 +272,16 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         protected virtual void OnOnPlaybackCompleted(PlaybackCompletedEventArgs e)
         {
             OnPlaybackCompleted?.Invoke(this, e);
+        }
+    }
+
+    public class AudioRecorderInfoListener : Java.Lang.Object, MediaRecorder.IOnInfoListener
+    {
+        public event EventHandler OnMaxDurationReached;
+        public void OnInfo(MediaRecorder mr, MediaRecorderInfo what, int extra)
+        {
+            if(what == MediaRecorderInfo.MaxDurationReached)
+                this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -90,5 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual bool AllowExportVariables { get; set; }
 
         public virtual QuestionnaireIdentity Identity() => new QuestionnaireIdentity(QuestionnaireId, Version);
+
+        public virtual bool IsAudioRecordingEnabled { get; set; }
     }
 }

@@ -6,5 +6,6 @@
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=5654D65D7FAF084288B2BABE385FCCFD/RelativePath/@EntryValue">..\Tests\Test.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5654D65D7FAF084288B2BABE385FCCFD/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File5654D65D7FAF084288B2BABE385FCCFD/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=assignee/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Autofac/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Denormalizer/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

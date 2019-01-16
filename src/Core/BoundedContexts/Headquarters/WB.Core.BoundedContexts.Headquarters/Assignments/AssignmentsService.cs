@@ -55,6 +55,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return this.assignmentsAccessor.GetById(id);
         }
 
+        public bool HasAssignmentWithAudioRecordingEnabled(Guid responsible)
+        {
+            bool result = this.assignmentsAccessor.Query(_ => _
+                .Any(a =>
+                    a.ResponsibleId == responsible
+                    && !a.Archived
+                    && a.IsAudioRecordingEnabled));
+
+            return result;
+        }
+
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
         {
             List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _
@@ -105,7 +116,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 CreatedAtUtc = assignment.CreatedAtUtc,
                 ProtectedVariables = assignment.ProtectedVariables,
                 ResponsibleId = assignment.ResponsibleId,
-                ResponsibleName = assignment.Responsible.Name
+                ResponsibleName = assignment.Responsible.Name,
+                IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);

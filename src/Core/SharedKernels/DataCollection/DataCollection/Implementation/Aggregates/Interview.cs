@@ -123,6 +123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
             this.properties.AssignmentId = @event.AssignmentId;
+            this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
         }
 
         public virtual void Apply(InterviewOnClientCreated @event)
@@ -130,6 +131,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.QuestionnaireIdentity = new QuestionnaireIdentity(@event.QuestionnaireId, @event.QuestionnaireVersion);
             this.UsesExpressionStorage = @event.UsesExpressionStorage;
             this.properties.AssignmentId = @event.AssignmentId;
+            this.properties.IsAudioRecordingEnabled = @event.IsAudioRecordingEnabled;
         }
 
         public virtual void Apply(InterviewFromPreloadedDataCreated @event)
@@ -662,6 +664,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public QuestionnaireIdentity QuestionnaireIdentity { get; protected set; }
 
         public bool UsesExpressionStorage { get; protected set; } = false;
+        
         public string QuestionnaireId => this.QuestionnaireIdentity?.ToString();
 
         protected IQuestionnaire GetQuestionnaireOrThrow() => this.GetQuestionnaireOrThrow(this.Language);
@@ -1495,6 +1498,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.QuestionnaireId,
                 this.QuestionnaireIdentity.Version,
                 null,
+                false,
                 command.OriginDate,
                 true));
 
@@ -1525,6 +1529,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.QuestionnaireId,
                 this.QuestionnaireIdentity.Version,
                 command.AssignmentId,
+                command.IsAudioRecordingEnabled,
                 command.OriginDate,
                 questionnaire.IsUsingExpressionStorage()));
 

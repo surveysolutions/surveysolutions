@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public int? AssignmentId { get; }
         public bool UsesExpressionStorage { get; set; }
 
+        public bool? IsAudioRecordingEnabled { get; set; }
+
         public InterviewOnClientCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
             int? assignmentId, DateTimeOffset originDate, bool usesExpressionStorage = false)
             : base(userId, originDate)
