@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Name = dynamicTextViewModel;
             this.compositeCollectionInflationService = compositeCollectionInflationService;
+            this.Items = new CompositeCollection<ICompositeEntity>();
         }
 
         public void Configure(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
@@ -74,7 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.groupId = groupId;
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
-            this.Items = new CompositeCollection<ICompositeEntity>();
 
             liteEventRegistry.Subscribe(this, interviewId);
 
@@ -109,26 +109,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 this.userInterfaceStateService.NotifyRefreshStarted();
-
-                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
-
+                
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {
                     interviewItemViewModel.Dispose();
                 }
 
-                var entities = this.interviewViewModelFactory.GetEntities(
+                var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
+                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+
+                List<IInterviewEntityViewModel> entities = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
                     navigationState: this.navigationState);
+                entities.Add(previousGroupNavigationViewModel);
 
-                var newGroupItems = entities.Concat(
-                        previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>()).ToList();
-
-                this.InterviewEntities = newGroupItems;
+                this.InterviewEntities = entities;
                 
-                this.Items = this.compositeCollectionInflationService.GetInflatedCompositeCollection(newGroupItems);
+                this.Items = this.compositeCollectionInflationService.GetInflatedCompositeCollection(entities);
             }
             finally
             {

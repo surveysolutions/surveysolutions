@@ -28,7 +28,7 @@
 
   <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
-      <CustomCollectFilesToExternals_CustomFiles Include="Externals\**\*" />
+      <CustomCollectFilesToExternals_CustomFiles Include="Client\**\*" />
       <FilesForPackagingFromProject Include="%(CustomCollectFilesToExternals_CustomFiles.Identity)">
         <DestinationRelativePath>Client\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>

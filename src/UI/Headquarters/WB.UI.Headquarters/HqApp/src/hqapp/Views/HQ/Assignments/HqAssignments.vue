@@ -1,150 +1,114 @@
-<template>
-  <HqLayout :title="title" :hasFilter="true">
-    <Filters slot="filters">
-      <FilterBlock
-        :title="$t('Common.Questionnaire')"
-        :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')"
-      >
-        <Typeahead
-          control-id="questionnaireId"
-          :placeholder="$t('Common.AllQuestionnaires')"
-          :value="questionnaireId"
-          :values="config.questionnaires"
-          v-on:selected="questionnaireSelected"
-        />
-      </FilterBlock>
+<template>  
+    <HqLayout :title="title"
+            :hasFilter="true">
 
-      <FilterBlock
-        :title="$t('Common.QuestionnaireVersion')"
-        :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')"
-      >
-        <Typeahead
-          control-id="questionnaireVersion"
-          :placeholder="$t('Common.AllVersions')"
-          :values="questionnaireId == null ? null : questionnaireId.versions"
-          :value="questionnaireVersion"
-          :disabled="questionnaireId == null"
-          v-on:selected="questionnaireVersionSelected"
-        />
-      </FilterBlock>
+        <Filters slot="filters">
+            <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
+                <Typeahead control-id="questionnaireId"
+                           :placeholder="$t('Common.AllQuestionnaires')"
+                           :value="questionnaireId"
+                           :values="config.questionnaires"
+                           v-on:selected="questionnaireSelected" />
+            </FilterBlock>
 
-      <FilterBlock
-        :title="$t('Common.Responsible')"
-        :tooltip="$t('Assignments.Tooltip_Filter_Responsible')"
-      >
-        <Typeahead
-          control-id="responsibleId"
-          :placeholder="$t('Common.AllResponsible')"
-          :value="responsibleId"
-          :ajax-params="responsibleParams"
-          v-on:selected="userSelected"
-          :fetch-url="config.api.responsible"
-        ></Typeahead>
-      </FilterBlock>
+            <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
+                <Typeahead control-id="questionnaireVersion"
+                           :placeholder="$t('Common.AllVersions')"
+                           :values="questionnaireId == null ? null : questionnaireId.versions"
+                           :value="questionnaireVersion"
+                           :disabled="questionnaireId == null"
+                           v-on:selected="questionnaireVersionSelected" />
+            </FilterBlock>
 
-      <FilterBlock
-        :title="$t('Assignments.ReceivedByTablet')"
-        :tooltip="$t('Assignments.Tooltip_Filter_Received')"
-      >
-        <Typeahead
-          control-id="recieved-by-tablet"
-          noSearch
-          noClear
-          :values="ddlReceivedByTablet"
-          :value="receivedByTablet"
-          v-on:selected="receivedByTabletSelected"
-        />
-      </FilterBlock>
+            <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
+                <Typeahead control-id="responsibleId"
+                           :placeholder="$t('Common.AllResponsible')"
+                           :value="responsibleId"
+                           :ajax-params="responsibleParams"
+                           v-on:selected="userSelected"
+                           :fetch-url="config.api.responsible"></Typeahead>
+            </FilterBlock>
 
-      <FilterBlock
-        :title="$t('Assignments.ShowArchived')"
-        :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')"
-      >
-        <Typeahead
-          control-id="show_archived"
-          noSearch
-          noClear
-          :values="ddlShowArchive"
-          :value="showArchive"
-          v-on:selected="showArchiveSelected"
-        />
-      </FilterBlock>
-    </Filters>
+            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
+                <Typeahead control-id="recieved-by-tablet" noSearch noClear
+                    :values= "ddlReceivedByTablet"
+                    :value="receivedByTablet"
+                    v-on:selected="receivedByTabletSelected"/>
+            </FilterBlock>
 
-    <DataTables
-      ref="table"
-      :tableOptions="tableOptions"
-      :addParamsToRequest="addParamsToRequest"
-      :wrapperClass=" { 'table-wrapper': true }"
-      @cell-clicked="cellClicked"
-      @selectedRowsChanged="rows => selectedRows = rows"
-      @totalRows="(rows) => totalRows = rows"
-      @ajaxComlpete="isLoading = false"
-      @page="resetSelection"
-      :selectable="showSelectors"
-    >
-      <div class="panel panel-table" id="pnlAssignmentsContextActions" v-if="selectedRows.length">
-        <div class="panel-body">
-          <input class="double-checkbox-white" type="checkbox" checked disabled>
-          <label>
-            <span class="tick"></span>
-            {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
-          </label>
-          
-          <button
-            class="btn btn-lg btn-primary"
-            id="btnUnarchiveSelected"
-            v-if="showArchive.key && config.isHeadquarter"
-            @click="unarchiveSelected"
-          >{{ $t("Assignments.Unarchive") }}</button>
-          
-          <button
-            class="btn btn-lg btn-primary"
-            id="btnAssignSelected"
-            v-if="!showArchive.key"
-            @click="assignSelected"
-          >{{ $t("Common.Assign") }}</button>
-          
-          <button
-            class="btn btn-lg btn-danger"
-            id="btnArchiveSelected"
-            v-if="!showArchive.key && config.isHeadquarter"
-            @click="archiveSelected"
-          >{{ $t("Assignments.Archive") }}</button>
-        </div>
-      </div>
-    </DataTables>
+            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
+                <Typeahead control-id="show_archived" noSearch noClear
+                    :values= "ddlShowArchive" 
+                    :value="showArchive"
+                    v-on:selected="showArchiveSelected"/>
+            </FilterBlock>
+        </Filters>
 
-    <ModalFrame ref="assignModal" :title="$t('Pages.ConfirmationNeededTitle')">
-      <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
-      <form onsubmit="return false;">
-        <div class="form-group">
-          <label
-            class="control-label"
-            for="newResponsibleId"
-          >{{ $t("Assignments.SelectResponsible") }}</label>
-          <Typeahead
-            control-id="newResponsibleId"
-            :placeholder="$t('Common.Responsible')"
-            :value="newResponsibleId"
-            :ajax-params="{ }"
-            @selected="newResponsibleSelected"
-            :fetch-url="config.api.responsible"
-          ></Typeahead>
-        </div>
-      </form>
-      <div slot="actions">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="assign"
-          :disabled="!newResponsibleId"
-        >{{ $t("Common.Assign") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-      </div>
-    </ModalFrame>
+        <DataTables ref="table"
+                    :tableOptions="tableOptions"
+                    :addParamsToRequest="addParamsToRequest"
+                    :wrapperClass=" { 'table-wrapper': true }"
+                    @cell-clicked="cellClicked"
+                    @selectedRowsChanged="rows => selectedRows = rows"
+                    @totalRows="(rows) => totalRows = rows"
+                    @ajaxComlpete="isLoading = false"
+                    @page="resetSelection"
+                    :selectable="showSelectors">
+            <div class="panel panel-table" id="pnlAssignmentsContextActions"
+                 v-if="selectedRows.length">
+                <div class="panel-body">
+                    <input class="double-checkbox-white"
+                           type="checkbox"
+                           checked=""
+                           disabled>
+                    <label>
+                        <span class="tick"></span>
+                        {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
+                    </label>
 
-    <ModalFrame
+                    <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
+                            v-if="showArchive.key && config.isHeadquarter"
+                            @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnAssignSelected"
+                            v-if="!showArchive.key"
+                            @click="assignSelected">{{ $t("Common.Assign") }}</button>
+
+                    <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
+                            v-if="!showArchive.key && config.isHeadquarter"
+                            @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
+                </div>
+            </div>
+        </DataTables>
+
+        <ModalFrame ref="assignModal"
+                    :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label"
+                           for="newResponsibleId">{{ $t("Assignments.SelectResponsible") }}</label>
+                    <Typeahead control-id="newResponsibleId"
+                               :placeholder="$t('Common.Responsible')"
+                               :value="newResponsibleId"
+                               :ajax-params="{ }"
+                               @selected="newResponsibleSelected"
+                               :fetch-url="config.api.responsible">
+                    </Typeahead>
+                </div>
+            </form>
+            <div slot="actions">
+                <button type="button"
+                        class="btn btn-primary"
+                        @click="assign"
+                        :disabled="!newResponsibleId">{{ $t("Common.Assign") }}</button>
+                <button type="button"
+                        class="btn btn-link"
+                        data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+            </div>
+        </ModalFrame>
+
+        <ModalFrame
       ref="editAudioEnabledModal"
       :title="$t('Assignments.ChangeAudioRecordingModalTitle', {id: editedRowId} )"
     >
@@ -168,43 +132,42 @@
       </div>
     </ModalFrame>
 
-    <ModalFrame
-      ref="editQuantityModal"
-      :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )"
-    >
-      <p>{{ $t("Assignments.SizeExplanation")}}</p>
-      <form onsubmit="return false;">
-        <div class="form-group" v-bind:class="{'has-error': errors.has('editedQuantity')}">
-          <label class="control-label" for="newQuantity">{{$t("Assignments.Size")}}</label>
-          
-          <input
-            type="text"
-            class="form-control"
-            v-model.trim="editedQuantity"
-            name="editedQuantity"
-            number
-            v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
-            :data-vv-as="$t('Assignments.Size')"
-            maxlength="9"
-            autocomplete="off"
-            @keyup.enter="updateQuantity"
-            id="newQuantity"
-            placeholder="1"
-          >
+        <ModalFrame ref="editQuantityModal"
+                    :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
+            <p>{{ $t("Assignments.SizeExplanation")}}</p>
+            <form onsubmit="return false;">
+                <div class="form-group"
+                     v-bind:class="{'has-error': errors.has('editedQuantity')}">
 
-          <p
-            v-for="error in errors.collect('editedQuantity')"
-            :key="error"
-            class="text-danger"
-          >{{error}}</p>
-        </div>
-      </form>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" @click="updateQuantity">{{$t("Common.Save")}}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{$t("Common.Cancel")}}</button>
-      </div>
-    </ModalFrame>
-  </HqLayout>
+                    <label class="control-label"
+                           for="newQuantity">{{$t("Assignments.Size")}}</label>
+                           
+                    <input type="text"
+                           class="form-control"
+                           v-model.trim="editedQuantity"
+                           name="editedQuantity"
+                           v-validate="quantityValidations"
+                           :data-vv-as="$t('Assignments.Size')"
+                           maxlength="5"
+                           autocomplete="off"
+                           @keyup.enter="updateQuantity"
+                           id="newQuantity"
+                           placeholder="1">
+
+                    <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-primary"
+                        @click="updateQuantity">{{$t("Common.Save")}}</button>
+                <button type="button"
+                        class="btn btn-link"
+                        data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+            </div>
+        </ModalFrame>
+
+    </HqLayout>
 </template>
 
 <script>
@@ -230,12 +193,17 @@ export default {
     },
 
     computed: {
-        ddlReceivedByTablet() {
-            return [
-                { key: "All", value: this.$t("Assignments.ReceivedByTablet_All") },
-                { key: "Received", value: this.$t("Assignments.ReceivedByTablet_Received") },
-                { key: "NotReceived", value: this.$t("Assignments.ReceivedByTablet_NotReceived") }
-            ];
+        quantityValidations(){
+            return {
+                regex: "^-?([0-9]+)$",
+                min_value: -1,
+                max_value: this.config.maxInterviewsByAssignment
+            };
+        },
+        ddlReceivedByTablet(){
+            return [{ key: "All", value: this.$t('Assignments.ReceivedByTablet_All')},
+                    { key: "Received", value: this.$t('Assignments.ReceivedByTablet_Received')},
+                    { key: "NotReceived", value: this.$t('Assignments.ReceivedByTablet_NotReceived')}];   
         },
         ddlShowArchive() {
             return [
@@ -544,7 +512,6 @@ export default {
                 });
             }
         },
-
         async updateQuantity() {
             const validationResult = await this.$validator.validateAll();
 

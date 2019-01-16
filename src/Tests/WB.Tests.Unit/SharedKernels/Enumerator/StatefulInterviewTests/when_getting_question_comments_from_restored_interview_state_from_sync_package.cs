@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
 
         private void BecauseOf() =>
-            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToArray();
+            commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().ToArray();
 
         [NUnit.Framework.Test] public void should_return_2_commented_by_supervisor_questions () =>
             commentedQuestionsIdentities.Length.Should().Be(2);

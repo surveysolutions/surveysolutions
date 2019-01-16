@@ -276,6 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Errors<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
+            Error<AssignmentQuantity>(Quantity_ExceedsMaxInterviewsCount, "PL0054", string.Format(messages.PL0054_MaxInterviewsCountByAssignmentExeeded, Constants.MaxInterviewsCountByAssignment)),
         };
 
         private IEnumerable<InterviewImportReference> OrphanFirstLevelRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
@@ -776,6 +777,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         
         private bool Quantity_IsNegative(AssignmentQuantity quantity)
             => quantity.Quantity.HasValue && quantity.Quantity < -1;
+
+        private bool Quantity_ExceedsMaxInterviewsCount(AssignmentQuantity quantity)
+            => quantity.Quantity.HasValue && quantity.Quantity > Constants.MaxInterviewsCountByAssignment;
+
 
         private bool Quantity_IsNotInteger(AssignmentQuantity quantity)
             => !string.IsNullOrWhiteSpace(quantity.Value) && !quantity.Quantity.HasValue;

@@ -10,6 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     {
         [TestCase(InterviewStatus.InterviewerAssigned)]
         [TestCase(InterviewStatus.RejectedBySupervisor)]
+        [TestCase(InterviewStatus.RejectedByHeadquarters)]
         public void should_allow_command_in_status(InterviewStatus targetStatus)
         {
             var interview = Create.AggregateRoot.StatefulInterview(Id.gA);
@@ -23,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         }
 
         [TestCase(InterviewStatus.ApprovedByHeadquarters)]
-        [TestCase(InterviewStatus.RejectedByHeadquarters)]
         [TestCase(InterviewStatus.ApprovedBySupervisor)]
         [TestCase(InterviewStatus.Completed)]
         public void should_not_allow_command_in_statuses(InterviewStatus targetStatus)

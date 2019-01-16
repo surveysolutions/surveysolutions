@@ -90,16 +90,16 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             IQuestionnaire questionnaire, IStatefulInterview interview)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(entityVariable);
-            Guid? rosterOdGroupId = null;
+            Guid? rosterOrGroupId = null;
 
             if (questionId == null)
-                rosterOdGroupId = questionnaire.GetRosterIdByVariableName(entityVariable, true) 
+                rosterOrGroupId = questionnaire.GetRosterIdByVariableName(entityVariable, true) 
                                   ?? questionnaire.GetSectionIdByVariable(entityVariable);
 
-            if (!questionId.HasValue && !rosterOdGroupId.HasValue) return;
+            if (!questionId.HasValue && !rosterOrGroupId.HasValue) return;
 
             Identity nearestInterviewEntity = null;
-            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterOdGroupId.Value)
+            var interviewEntities = interview.GetAllIdentitiesForEntityId(questionId ?? rosterOrGroupId.Value)
                 .Where(interview.IsEnabled).ToArray();
 
             if (interviewEntities.Length == 1)
@@ -118,7 +118,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                         interview.GetParentGroups(sourceEntity.Identity).Select(x => x.RosterVector).ToArray();
 
                     nearestInterviewEntity = interviewEntities.FirstOrDefault(x =>
-                                                 x.Id == (questionId ?? rosterOdGroupId.Value) &&
+                                                 x.Id == (questionId ?? rosterOrGroupId.Value) &&
                                                  sourceEntityParentRosterVectors.Contains(x.RosterVector)) ??
                                              interviewEntities.FirstOrDefault();
                 }
@@ -137,7 +137,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
                     AnchoredElementIdentity = nearestInterviewEntity
                 });
             }
-            else if (rosterOdGroupId.HasValue)
+            else if (rosterOrGroupId.HasValue)
             {
                 sourceEntity.NavigationState.NavigateTo(new NavigationIdentity
                 {

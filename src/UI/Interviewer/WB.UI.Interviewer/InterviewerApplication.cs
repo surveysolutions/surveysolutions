@@ -6,7 +6,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 namespace WB.UI.Interviewer
 {
     [Application]
-    public class InterviewerApplication : MvxAppCompatApplication<InterviewerSetup, InterviewerMvxApplication>
+    public class InterviewerApplication : MvxAppCompatApplication<Setup, InterviewerMvxApplication>
     {
         public InterviewerApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {

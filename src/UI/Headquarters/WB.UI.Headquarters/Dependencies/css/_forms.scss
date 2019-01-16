@@ -333,7 +333,10 @@ input.radio-row{
 			@extend %shadow;
 		}
 		.filter-option{
-			@include text-overflow();
+            @include text-overflow();
+            .filter-option-inner{
+                padding-right: 18px;
+            }
 		}
 		.bs-caret .caret{
 		    right: 10px;
