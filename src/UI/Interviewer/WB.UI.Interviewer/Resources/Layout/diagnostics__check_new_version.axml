@@ -28,6 +28,9 @@
     <TextView
      style="@style/Diagnostics_Subsection_Title"
      local:MvxBind="Text CheckNewVersion.CheckNewVersionResult" />
+    <TextView
+        style="@style/Diagnostics_Section_Description" 
+        local:MvxBind="Text CheckNewVersion.CheckNewVersionDetails" />
     <Button
          style="@style/Diagnostic_Transparent_Button"
          local:MvxBind="Text Localization('Cancel'); Click CheckNewVersion.CancelUpgrade; Visible CheckNewVersion.IsVersionCheckInProgress" />

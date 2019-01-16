@@ -20,6 +20,8 @@ namespace WB.Core.GenericSubdomains.Portable
             sum = 0;
         }
 
+        public double Average { get; private set; }
+
         public double Add(double newValue)
         {
             // calculate new value to add to sum by subtracting the 
@@ -34,7 +36,8 @@ namespace WB.Core.GenericSubdomains.Portable
             if (valueCount < size)
                 valueCount++;
 
-            return sum / valueCount;
+            Average = sum / valueCount;
+            return Average;
         }
     }
 }
