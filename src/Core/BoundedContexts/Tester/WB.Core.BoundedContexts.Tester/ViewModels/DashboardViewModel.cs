@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
-        private readonly IAsyncRunner asyncRunner;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
@@ -44,7 +43,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
-            IAsyncRunner asyncRunner,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(principal, viewModelNavigationService)
         {
@@ -54,7 +52,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
-            this.asyncRunner = asyncRunner;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
@@ -66,7 +63,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             
             if (!localQuestionnaires.Any())
             {
-                this.asyncRunner.RunAsync(this.LoadServerQuestionnairesAsync);
+#pragma warning disable 4014 // we want fire and forget action here
+                Task.Run(this.LoadServerQuestionnairesAsync);
+#pragma warning restore 4014
             }
             else
             {
