@@ -56,12 +56,8 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
-            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
-            registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
             registry.BindAsSingletonWithConstructorArgument<IAudioAuditService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audit"));
             registry.BindAsSingleton<IAuditService, AuditService>();
             
