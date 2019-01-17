@@ -138,8 +138,6 @@ namespace WB.Tests.Abc.TestFactories
                 aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
 
-        public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
-
         public AttachmentContentService AttachmentContentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
             => new AttachmentContentService(
