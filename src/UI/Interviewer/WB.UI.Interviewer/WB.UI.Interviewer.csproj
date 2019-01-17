@@ -353,7 +353,6 @@
     <None Include="Directory.Build.props">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Directory.Build.targets" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -43,7 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
-            registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
             registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
             registry.Bind<IInterviewsRemover, Implementation.Services.Synchronization.Steps.InterviewsRemover>();
