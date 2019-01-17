@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -74,6 +75,30 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 
             // Assert
             Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.UpgradeRequired));
+        }
+
+        [Test]
+        public async Task when_assignment_has_no_audio_recording_user_should_be_able_synchronize()
+        {
+            var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "19.10.0.23853 (build 23853)");
+
+            var synchronizedUserId = Id.gA;
+
+            var deviceId = "device";
+            var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.DeviceId == deviceId && x.Id == synchronizedUserId);
+
+            var interviewerApiController = Create.Controller.InterviewerApiController(
+                syncVersionProvider: new InterviewerSyncProtocolVersionProvider(),
+                productVersion: productVersion,
+                authorizedUser: authorizedUser);
+
+            // Act
+            HttpResponseMessage httpResponseMessage = interviewerApiController.CheckCompatibility(deviceId, 7080);
+
+            // Assert
+            Assert.That(httpResponseMessage.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            var response = await httpResponseMessage.Content.ReadAsStringAsync();
+            Assert.That(response, Is.EqualTo("\"449634775\""));
         }
 
         [Test]
