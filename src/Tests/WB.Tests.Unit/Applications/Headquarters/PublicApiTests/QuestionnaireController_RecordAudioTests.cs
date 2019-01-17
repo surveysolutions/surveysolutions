@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.API.PublicApi.Models;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {

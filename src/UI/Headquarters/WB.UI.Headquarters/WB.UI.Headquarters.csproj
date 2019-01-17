@@ -1996,6 +1996,7 @@
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
+    <Compile Include="API\PublicApi\Models\RecordAudioRequest.cs" />
     <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
     <Compile Include="API\PublicApi\Models\UpdateRecordingRequest.cs" />
     <Compile Include="API\PublicApi\StatisticsController.cs" />
