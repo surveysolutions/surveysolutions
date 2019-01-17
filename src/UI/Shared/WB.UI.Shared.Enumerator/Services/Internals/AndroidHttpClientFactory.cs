@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using Android.OS;
 using ModernHttpClient;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -19,24 +20,40 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         public HttpClient CreateClient(Url url, HttpMessageHandler handler, IHttpStatistician statistician)
         {
             var httpClient = new HttpClient(new ExtendedMessageHandler(handler, statistician));
-            httpClient.DefaultRequestHeaders.ConnectionClose = true;
-            //httpClient.DefaultRequestHeaders.Add("Connection", "close");
             return httpClient;
         }
 
         public HttpMessageHandler CreateMessageHandler()
         {
-            var messageHandler = new NativeMessageHandler()
+            if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
             {
-                Timeout = restServiceSettings.Timeout,
-                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
-                DisableCaching = true,
-                AutomaticDecompression = DecompressionMethods.None,
-                AllowAutoRedirect = true,
-                Proxy = WebRequest.GetSystemWebProxy()
-            };
+                var messageHandler = new NativeMessageHandler
+                {
+                    Timeout = restServiceSettings.Timeout,
+                    EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
+                    DisableCaching = true,
+                    AutomaticDecompression = DecompressionMethods.None,
+                    AllowAutoRedirect = true,
+                    Proxy = WebRequest.GetSystemWebProxy()
+                };
 
-            return messageHandler;
+                return messageHandler;
+            }
+            else
+            {
+                var messageHandler = new Xamarin.Android.Net.AndroidClientHandler()
+                {
+                    AutomaticDecompression = DecompressionMethods.None,
+                    AllowAutoRedirect = true,
+                    Proxy = WebRequest.GetSystemWebProxy()
+                };
+                if (restServiceSettings.AcceptUnsignedSslCertificate)
+                {
+                    messageHandler.ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true;
+                }
+
+                return messageHandler;
+            }
         }
     }
 }
