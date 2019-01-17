@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage), 
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
-                new InterviewStatusTimeSpanDenormalizer());
+                new InterviewStatusTimeSpanDenormalizer(),
+                Mock.Of<SpeedReportDenormalizerFunctional>());
         }
 
         public static StatusChangeHistoryDenormalizerFunctional CreateStatusChangeHistoryDenormalizerFunctional()
