@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -60,6 +61,11 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
 
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
+
+            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
+            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
+            registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
+            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
 
             RegisterViewModels(registry);
         }
