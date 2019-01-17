@@ -24,7 +24,6 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.PublicApi
 {
     [RoutePrefix("api/v1/questionnaires")]
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -55,6 +54,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="offset">Skip rows</param>
         [HttpGet]
         [Route("")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public QuestionnaireApiView Questionnaires(int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel()
@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/{version:long?}")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public QuestionnaireApiView Questionnaires(Guid id, long? version = null, int limit = 10, int offset = 1)
         {
             var input = new QuestionnaireBrowseInputModel()
@@ -92,6 +93,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route("statuses")]
         [ResponseType(typeof(InterviewStatus))]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public IEnumerable<string> QuestionnairesStatuses()
         {
             return Enum.GetNames(typeof(InterviewStatus));
@@ -99,6 +101,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/{version:long}/document")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage QuestionnaireDocument(Guid id, long version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
@@ -116,6 +119,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpGet]
         [Route("{id:guid}/{version:long}/interviews")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public InterviewApiView Interviews(Guid id, long version, int limit = 10, int offset = 1)
         {
             var input = new AllInterviewsInputModel
@@ -141,6 +145,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpPost]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
         {
             var questionnaire = 
@@ -161,13 +166,5 @@ namespace WB.UI.Headquarters.API.PublicApi
             var httpResponseMessage = Request.CreateResponse(HttpStatusCode.OK, string.Empty, new MediaTypeHeaderValue("application/json"));
             return httpResponseMessage;
         }
-    }
-
-    public class RecordAudioRequest
-    {
-        /// <summary>
-        /// Enable or disable recording
-        /// </summary>
-        public bool Enabled { get; set; }
     }
 }
