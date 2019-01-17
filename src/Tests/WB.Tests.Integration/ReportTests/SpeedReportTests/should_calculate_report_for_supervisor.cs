@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SpeedReportTests
@@ -24,7 +27,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 
             interviewSummaries.Store(interview, interview.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries);
+            var report = CreateSpeedReport(interviewSummaries, Mock.Of<IQueryableReadSideRepositoryReader<SpeedReportInterviewItem>>());
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
@@ -59,7 +62,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             interviewSummaries.Store(interview1, interview1.SummaryId);
             interviewSummaries.Store(interview2, interview2.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries);
+            var report = CreateSpeedReport(interviewSummaries, Mock.Of<IQueryableReadSideRepositoryReader<SpeedReportInterviewItem>>());
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
