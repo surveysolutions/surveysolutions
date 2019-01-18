@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             var response = controller.AudioRecodingPatch(15, new UpdateRecordingRequest{Enabled = true});
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             Assert.That(assignment.IsAudioRecordingEnabled, Is.True);
         }
     }
