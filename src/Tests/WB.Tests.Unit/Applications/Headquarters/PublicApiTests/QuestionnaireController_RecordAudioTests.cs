@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             });
 
             // Assert
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
             Assert.That(questionnaireBrowseItem.IsAudioRecordingEnabled, Is.True);
         }
     }
