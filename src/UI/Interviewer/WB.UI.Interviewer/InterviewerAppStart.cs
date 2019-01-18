@@ -51,6 +51,8 @@ namespace WB.UI.Interviewer
             applicationCypher.EncryptAppData();
 
             this.BackwardCompatibility();
+
+            this.CheckAndProcessAudit();
            
             return base.ApplicationStartup(hint);
         }
@@ -112,6 +114,12 @@ namespace WB.UI.Interviewer
             
             optionsStorage.Store(allOptions);
 
+        }
+
+        private void CheckAndProcessAudit()
+        {
+            var auditService = Mvx.IoCProvider.Resolve<IAuditService>();
+            auditService.CheckAndProcessAllAuditFiles();
         }
     }
 }
