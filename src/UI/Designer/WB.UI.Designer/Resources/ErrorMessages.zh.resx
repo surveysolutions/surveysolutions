@@ -250,7 +250,7 @@
     <value>全名不能包含超过 {1} 个字符</value>
   </data>
   <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
-    <value>变量名称和二维表的ID为1-32个字符</value>
+    <value>变量名称和二维表的ID为1-{1}个字符</value>
   </data>
   <data name="QuestionnaireVariable_required" xml:space="preserve">
     <value>问卷变量是必须的</value>
