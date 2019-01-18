@@ -29,11 +29,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("supervisorname").AsString().Nullable();
 
 
-            Create.ForeignKey("fk_speedreportinterviewitems_interviewid_interviewsummaries")
-                .FromTable("speedreportinterviewitems").ForeignColumn("interviewid")
-                .ToTable("interviewsummaries").PrimaryColumn("summaryid")
-                .OnDelete(Rule.Cascade);
-
             Execute.Sql(@"
                 INSERT INTO readside.speedreportinterviewitems (interviewid, questionnaireid, questionnaireversion, createddate, firstanswerdate, supervisorid, supervisorname, interviewerid, interviewername)
                 SELECT isum.summaryid as interviewid, 
