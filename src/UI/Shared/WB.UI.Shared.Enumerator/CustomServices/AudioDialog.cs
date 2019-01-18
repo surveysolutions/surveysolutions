@@ -76,7 +76,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void StopRecordingAndSaveResult()
         {
-            if (this.audioService.IsRecording())
+            if (this.audioService.IsAnswerRecording())
                 this.ViewModel_OnDone(this, EventArgs.Empty);
         }
 
