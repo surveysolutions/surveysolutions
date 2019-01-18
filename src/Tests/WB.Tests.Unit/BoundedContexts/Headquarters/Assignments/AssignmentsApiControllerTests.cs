@@ -34,7 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IAuditLog>(),
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<ICommandTransformator>(),
-                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>()
+                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                Create.Service.AssignmentFactory()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

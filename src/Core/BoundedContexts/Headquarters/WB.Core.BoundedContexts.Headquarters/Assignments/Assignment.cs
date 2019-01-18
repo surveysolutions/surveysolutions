@@ -25,11 +25,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.ProtectedVariables = new List<string>();
         }
 
-        public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
+        internal Assignment(QuestionnaireIdentity questionnaireId,
+            Guid responsibleId, 
+            int? quantity,
+            bool isAudioRecordingEnabled) : this()
         {
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
+            this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
         }
 
         public virtual int Id { get; protected set; }
