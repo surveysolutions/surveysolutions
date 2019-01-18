@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
-    [TestOf(typeof(MultiOptionLinkedToRosterQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToQuestionViewModel))]
     public class MultiOptionLinkedToRosterQuestionViewModelTests : BaseMvvmCrossTest
     {
         [Test]

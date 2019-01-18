@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
         [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().Checked.Should().BeFalse();
 
-        private static MultiOptionQuestionViewModel viewModel;
+        private static CategoricalMultiViewModel viewModel;
         private static Identity questionId;
         private static Guid questionGuid;
     }

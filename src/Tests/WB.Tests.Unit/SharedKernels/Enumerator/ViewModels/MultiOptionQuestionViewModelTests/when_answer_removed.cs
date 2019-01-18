@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_answer_removed : MultiOptionQuestionViewModelTestsContext
     {
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
         static Guid questionGuid;
         static readonly Guid userId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

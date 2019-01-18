@@ -6,7 +6,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToListViewModel))]
     public class when_text_list_enabled : BaseMvvmCrossTest
     {
         [Test]

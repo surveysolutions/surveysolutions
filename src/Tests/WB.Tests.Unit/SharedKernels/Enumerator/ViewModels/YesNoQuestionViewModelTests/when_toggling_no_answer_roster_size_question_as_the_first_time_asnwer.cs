@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().Yes.Should().BeFalse();
 
         private static AnswerQuestionCommand answerCommand;
-        private static YesNoQuestionViewModel viewModel;
+        private static CategoricalYesNoViewModel viewModel;
         private static Identity questionId;
         private static Guid questionGuid;
         private static Mock<IStatefulInterviewRepository> interviewRepository;

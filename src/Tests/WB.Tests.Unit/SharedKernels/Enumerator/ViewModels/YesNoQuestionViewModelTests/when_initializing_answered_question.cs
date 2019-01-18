@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         [NUnit.Framework.Test] public void should_subscribe_model_in_events_registry () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static string interviewId;
         static Identity questionId;
         static NavigationState navigationState;

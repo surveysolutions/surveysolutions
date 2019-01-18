@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    [TestOf(typeof(YesNoQuestionOptionViewModel))]
+    [TestOf(typeof(CategoricalYesNoOptionViewModel))]
     public class YesNoQuestionOptionViewModelTests
     {
 
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.Identity(Guid.Parse("11111111111111111111111111111111")),
+            viewModel.Init(
                 Create.Entity.CategoricalQuestionOption(1, "title"),
                 Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), true, false,
                 mockOfAction.Object);
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.Identity(Guid.Parse("11111111111111111111111111111111")),
+            viewModel.Init(
                 Create.Entity.CategoricalQuestionOption(1, "title"),
                 Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), true, false,
                 mockOfAction.Object);
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.Identity(Guid.Parse("11111111111111111111111111111111")),
+            viewModel.Init(
                 Create.Entity.CategoricalQuestionOption(1, "title"),
                 Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), true, false,
                 mockOfAction.Object);
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.Identity(Guid.Parse("11111111111111111111111111111111")),
+            viewModel.Init(
                 Create.Entity.CategoricalQuestionOption(1, "title"),
                 Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), true, false,
                 mockOfAction.Object);
@@ -128,7 +128,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var mockOfAction = new Mock<Action>();
             var viewModel = Create.ViewModel.YesNoQuestionOptionViewModel(userInteractionService);
 
-            viewModel.Init(Create.Identity(Guid.Parse("11111111111111111111111111111111")),
+            viewModel.Init(
                 Create.Entity.CategoricalQuestionOption(1, "title"),
                 Create.ViewModel.QuestionState<YesNoQuestionAnswered>(), true, false,
                 mockOfAction.Object);

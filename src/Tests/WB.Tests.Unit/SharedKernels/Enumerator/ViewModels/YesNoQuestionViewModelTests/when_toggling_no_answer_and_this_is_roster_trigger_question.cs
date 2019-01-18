@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         [NUnit.Framework.Test] public void should_dont_call_userInteractionService_for_reduce_roster_size () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never());
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Mock<IUserInteractionService> userInteractionServiceMock;
         static Identity questionId;
         private static Guid questionGuid;

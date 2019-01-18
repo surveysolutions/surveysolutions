@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             userInteractionService.Verify(x => x.ConfirmAsync(message, "", null, null, true), Times.Once);
         }
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         private Mock<IUserInteractionService> userInteractionService;
     }
 }

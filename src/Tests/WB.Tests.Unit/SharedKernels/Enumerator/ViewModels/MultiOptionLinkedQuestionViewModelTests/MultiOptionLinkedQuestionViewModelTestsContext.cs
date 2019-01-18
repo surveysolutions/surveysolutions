@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 Create.ViewModel.ThrottlingViewModel());
         }
 
-        protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
+        protected static CategoricalMultiLinkedToQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return
-                new MultiOptionLinkedToRosterQuestionViewModel(
+                new CategoricalMultiLinkedToQuestionViewModel(
                     questionState ??
                     Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(
                         x => x.Validity == Mock.Of<ValidityViewModel>()),
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                     Create.ViewModel.ThrottlingViewModel());
         }
-        protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
+        protected static CategoricalMultiLinkedToQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
             IQuestionnaire questionnaire,
             IStatefulInterview statefulInterview)
         {

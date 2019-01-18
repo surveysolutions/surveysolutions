@@ -5,6 +5,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -110,12 +111,12 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<FilteredSingleOptionQuestionViewModel>();
             registry.Bind<GpsCoordinatesQuestionViewModel>();
             registry.Bind<MultimediaQuestionViewModel>();
-            registry.Bind<MultiOptionLinkedQuestionOptionViewModel>();
-            registry.Bind<MultiOptionLinkedToListQuestionQuestionViewModel>();
-            registry.Bind<MultiOptionLinkedToRosterQuestionQuestionViewModel>();
-            registry.Bind<MultiOptionQuestionOptionViewModel>();
-            registry.Bind<MultiOptionLinkedToRosterQuestionViewModel>();
-            registry.Bind<MultiOptionQuestionViewModel>();
+            registry.Bind<CategoricalMultiLinkedToListViewModel>();
+            registry.Bind<CategoricalMultiOptionViewModel<int>>();
+            registry.Bind<CategoricalMultiOptionViewModel<RosterVector>>();
+            registry.Bind<CategoricalMultiLinkedToQuestionViewModel>();
+            registry.Bind<CategoricalMultiLinkedToRosterTitleViewModel>();
+            registry.Bind<CategoricalMultiViewModel>();
             registry.Bind<QRBarcodeQuestionViewModel>();
             registry.Bind<RealQuestionViewModel>();
             registry.Bind<IntegerQuestionViewModel>();
@@ -129,8 +130,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<TextListQuestionViewModel>();
             registry.Bind<TextQuestionViewModel>();
             registry.Bind<TimestampQuestionViewModel>();
-            registry.Bind<YesNoQuestionOptionViewModel>();
-            registry.Bind<YesNoQuestionViewModel>();
+            registry.Bind<CategoricalYesNoOptionViewModel>();
+            registry.Bind<CategoricalYesNoViewModel>();
             
             // question state
             registry.Bind<AnswersRemovedNotifier>();
