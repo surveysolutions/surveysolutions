@@ -418,7 +418,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <param name="request"></param>
-        /// <response code="200">Audio recording updated</response>
+        /// <response code="204">Audio recording updated</response>
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
@@ -431,7 +431,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             assignment.SetAudioRecordingEnabled(request.Enabled);
 
             this.assignmentsStorage.Store(assignment, assignment.Id);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
     }
 }
