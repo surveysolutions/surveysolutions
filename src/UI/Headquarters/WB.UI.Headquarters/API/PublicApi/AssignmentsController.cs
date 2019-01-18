@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -422,6 +423,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment not found</response>
         [HttpPatch]
         [Route("{id:int}/recordAudio")]
+        [ObserverNotAllowedApi]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
         public HttpResponseMessage AudioRecodingPatch(int id, [FromBody] UpdateRecordingRequest request)
         {
