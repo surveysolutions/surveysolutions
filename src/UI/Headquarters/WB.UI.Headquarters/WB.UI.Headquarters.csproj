@@ -1119,6 +1119,7 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.zh.resx" />
     <EmbeddedResource Include="Resources\Interviews.ar.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -1229,6 +1230,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
