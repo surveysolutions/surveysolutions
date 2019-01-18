@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 using AutoMapper;
@@ -18,7 +19,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
@@ -108,7 +108,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewCreatorFromAssignment,
                 verifier,
                 commandTransformator,
-                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+                Create.Service.AssignmentFactory());
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());
 

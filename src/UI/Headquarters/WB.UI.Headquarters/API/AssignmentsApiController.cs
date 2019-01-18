@@ -35,6 +35,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IAssignmentFactory assignmentFactory;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -44,7 +45,8 @@ namespace WB.UI.Headquarters.API
             IAuditLog auditLog,
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
+            IAssignmentFactory assignmentFactory)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -55,6 +57,7 @@ namespace WB.UI.Headquarters.API
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
             this.questionnaires = questionnaires;
+            this.assignmentFactory = assignmentFactory;
         }
         
         [Route("")]
@@ -200,7 +203,7 @@ namespace WB.UI.Headquarters.API
                     break;
             }
 
-            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 
@@ -223,13 +226,8 @@ namespace WB.UI.Headquarters.API
             if (error != null)
                 return Content(HttpStatusCode.Forbidden, error.ErrorMessage);
 
-            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
-                .Where(q => q.Id == questionnaireIdentity.ToString())
-                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
-
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
-            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
             
