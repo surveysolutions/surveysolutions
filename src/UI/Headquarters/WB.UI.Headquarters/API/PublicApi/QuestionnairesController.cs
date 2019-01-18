@@ -142,7 +142,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">Questionnaire guid</param>
         /// <param name="version">Questionnaire version</param>
         /// <param name="requestData"></param>
-        /// <response code="200">Questionnaire setting updated</response>
+        /// <response code="204">Questionnaire setting updated</response>
         /// <response code="404">Questionnaire cannot be found</response>
         [HttpPost]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
@@ -165,8 +165,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             questionnaire.IsAudioRecordingEnabled = requestData.Enabled;
 
-            var httpResponseMessage = Request.CreateResponse(HttpStatusCode.OK, string.Empty, new MediaTypeHeaderValue("application/json"));
-            return httpResponseMessage;
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
     }
 }
