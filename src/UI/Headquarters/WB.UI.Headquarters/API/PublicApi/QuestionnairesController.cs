@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -146,6 +147,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpPost]
         [Route("{id:guid}/{version:long}/recordAudio", Name = "RecordAudioSetting")]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        [ObserverNotAllowedApi]
         public HttpResponseMessage RecordAudio(Guid id, long version, [FromBody]RecordAudioRequest requestData)
         {
             var questionnaire = 
