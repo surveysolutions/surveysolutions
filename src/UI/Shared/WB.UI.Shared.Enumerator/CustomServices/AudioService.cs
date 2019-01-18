@@ -16,7 +16,7 @@ using Stream = System.IO.Stream;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class AudioService : IAudioService, IAudioAuditService
+    public class AudioService : IAudioService
     {
         private bool disposed = false;
         private object lockObject = new object();
@@ -28,18 +28,24 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private const double MaxReportableDb = 90.3087f;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
-        
+        private const string AuditFolderName = "audit";
+        private string auditFilePrefix;
+        private readonly string pathToAudioAuditDirectory;
+
         private readonly Stopwatch duration = new Stopwatch();
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
-        private readonly string pathToAudioDirectory;
 
         private MediaRecorder recorder;
         private AudioRecorderInfoListener audioRecorderInfoListener;
+
         private readonly string tempFileName;
         private Identity playingIdentity;
         readonly MediaPlayer mediaPlayer = new MediaPlayer();
+
+        private bool isAuditShouldBeRestarted = false;
+        private bool isAuditRecording = false;
 
         public AudioService(string pathToAudioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
@@ -47,10 +53,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.audioFileStorage = audioFileStorage;
-            this.pathToAudioDirectory = pathToAudioDirectory;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
+
+            this.pathToAudioAuditDirectory = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, AuditFolderName);
         }
 
         private void MediaPlayerOnCompletion(object sender, EventArgs eventArgs)
@@ -97,25 +104,43 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             }
         }
 
+        public string GetAuditPath()
+        {
+            return pathToAudioAuditDirectory;
+        }
+
         public void StartRecording()
         {
-            if (this.recorder != null) return;
+            if (isAuditShouldBeRestarted && this.recorder != null)
+                StopRecording();
+
+            if (this.recorder != null)
+                return;
 
             if (this.fileSystemAccessor.IsFileExists(this.pathToAudioFile))
                 this.fileSystemAccessor.DeleteFile(this.pathToAudioFile);
 
-            Record(this.pathToAudioFile);
+            isAuditRecording = false;
+            Record(this.pathToAudioFile, MaxDuration);
         }
 
-        public string StartRecording(string fileName)
+        public void StartAuditRecording(string fileNamePrefix)
         {
-            var fileNameWithExtension = $"{fileName}.{AudioFileExtension}";
-            var fullPath = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, fileNameWithExtension);
-            Record(fullPath);
-            return fullPath;
+            isAuditShouldBeRestarted = true;
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToAudioAuditDirectory))
+                this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
+
+            this.auditFilePrefix = fileNamePrefix;
+            var fileNameWithExtension = $"{this.auditFilePrefix}-{DateTime.Now:yyyyMMdd_HHmmssfff}.{AudioFileExtension}";
+
+            var fullPath = this.fileSystemAccessor.CombinePath(pathToAudioAuditDirectory, fileNameWithExtension);
+
+            isAuditRecording = true;
+            Record(fullPath, int.MaxValue);
         }
 
-        private void Record(string audioFilePath)
+        private void Record(string audioFilePath, int maxDuration)
         {
             this.recorder = new MediaRecorder();
 
@@ -126,7 +151,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.SetAudioSamplingRate(44100);
             this.recorder.SetAudioEncodingBitRate(64000);
             this.recorder.SetOutputFile(audioFilePath);
-            this.recorder.SetMaxDuration(MaxDuration);
+            this.recorder.SetMaxDuration(maxDuration);
 
             this.audioRecorderInfoListener = new AudioRecorderInfoListener();
             this.audioRecorderInfoListener.OnMaxDurationReached += this.AudioRecorderInfoListenerOnMaxDurationReached;
@@ -155,7 +180,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void StopRecording()
         {
-            if (!this.IsRecording()) return;
+            StopRecordingInt();
+
+            if (isAuditShouldBeRestarted)
+                StartAuditRecording(auditFilePrefix);
+        }
+
+
+        private void StopRecordingInt()
+        {
+            if (this.recorder == null)
+                return;
 
             this.recorder.Stop();
 
@@ -163,12 +198,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.ReleaseAudioRecorder();
         }
 
-        public void StopRecording(string fileName)
+        public void StopAuditRecording()
         {
-            StopRecording();
+            StopRecordingInt();
         }
 
-        public bool IsRecording() => this.recorder != null;
+        public bool IsAnswerRecording() => (this.recorder != null && !isAuditRecording);
 
         public Stream GetRecord(string fileName = null)
             => this.fileSystemAccessor.IsFileExists(fileName ?? this.pathToAudioFile)
@@ -198,7 +233,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public double GetNoiseLevel()
         {
-            if (!this.IsRecording()) return 0;
+            if (!this.IsAnswerRecording()) return 0;
             return MaxReportableDb + 20 * Math.Log10(this.GetMaxAmplitude() / MaxReportableAmp);
         }
 

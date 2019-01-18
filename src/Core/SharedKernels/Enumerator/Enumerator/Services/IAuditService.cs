@@ -7,5 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         Task StartAudioRecordingAsync(Guid interviewId);
         Task StopAudioRecordingAsync(Guid interviewId);
+
+        void CheckAndProcessAllAuditFiles();
     }
 }

@@ -4,6 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -99,7 +100,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
 
             if (IsAudioRecordingEnabled == true)
-                audioAuditService.StartAudioRecordingAsync(interviewId);
+                Task.Run(()=>audioAuditService.StartAudioRecordingAsync(interviewId)); 
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
 
@@ -118,7 +119,7 @@ namespace WB.UI.Interviewer.ViewModel
             auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
             if (IsAudioRecordingEnabled == true)
-                audioAuditService.StopAudioRecordingAsync(interviewId);
+                Task.Run(()=>audioAuditService.StopAudioRecordingAsync(interviewId));
 
             base.ViewDisappearing();
         }
