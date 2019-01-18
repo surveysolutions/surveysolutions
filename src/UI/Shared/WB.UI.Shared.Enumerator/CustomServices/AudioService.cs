@@ -28,12 +28,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private const double MaxReportableDb = 90.3087f;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
-        private const string AuditFolderName = "audit";
+
         private string auditFilePrefix;
         private readonly string pathToAudioAuditDirectory;
 
         private readonly Stopwatch duration = new Stopwatch();
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToAudioFile;
 
@@ -57,7 +56,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
 
-            this.pathToAudioAuditDirectory = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, AuditFolderName);
+            this.pathToAudioAuditDirectory = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, "audit");
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToAudioAuditDirectory))
+                this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
         }
 
         private void MediaPlayerOnCompletion(object sender, EventArgs eventArgs)
@@ -111,7 +113,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void StartRecording()
         {
-            if (isAuditShouldBeRestarted && this.recorder != null)
+            if (isAuditRecording && this.recorder != null)
                 StopRecordingInt();
 
             if (this.recorder != null)
@@ -121,15 +123,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 this.fileSystemAccessor.DeleteFile(this.pathToAudioFile);
 
             isAuditRecording = false;
+            this.duration.Restart();
             Record(this.pathToAudioFile, MaxDuration);
         }
 
         public void StartAuditRecording(string fileNamePrefix)
         {
             isAuditShouldBeRestarted = true;
-
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToAudioAuditDirectory))
-                this.fileSystemAccessor.CreateDirectory(pathToAudioAuditDirectory);
 
             this.auditFilePrefix = fileNamePrefix;
             var fileNameWithExtension = $"{this.auditFilePrefix}-{DateTime.Now:yyyyMMdd_HHmmssfff}.{AudioFileExtension}";
@@ -161,7 +161,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 this.recorder.Prepare();
                 this.recorder.Start();
-                this.duration.Restart();
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {

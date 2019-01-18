@@ -32,31 +32,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task StartAudioRecordingAsync(Guid interviewId)
         {
-            Debug.WriteLine("!!!!!!!!!!! StartAuditRecording");
-
             await this.permissions.AssureHasPermission(Permission.Microphone);
             await this.permissions.AssureHasPermission(Permission.Storage);
-            
-            try
-            {
-                audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw;
-            }
+
+            audioAuditService.StartAuditRecording($"{interviewId.FormatGuid()}-{fileNamePrefix}");
         }
 
         public Task StopAudioRecordingAsync(Guid interviewId)
         {
-            Debug.WriteLine("!!!!!!!!!!! StopRecording");
-
             audioAuditService.StopAuditRecording();
-
-            var files = fileSystemAccessor.GetFilesInDirectory(audioAuditService.GetAuditPath());
-
-            ProcessAllFiles(files);
+            CheckAndProcessAllAuditFiles();
 
             return Task.CompletedTask;
         }
