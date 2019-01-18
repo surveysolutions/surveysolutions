@@ -112,7 +112,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public void StartRecording()
         {
             if (isAuditShouldBeRestarted && this.recorder != null)
-                StopRecording();
+                StopRecordingInt();
 
             if (this.recorder != null)
                 return;
@@ -193,7 +193,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 return;
 
             this.recorder.Stop();
-
             this.duration.Stop();
             this.ReleaseAudioRecorder();
         }
