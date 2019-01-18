@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         [Test] 
         public void should_insert_new_option () => viewModel.Options.Count.Should().Be(1);
 
-        static MultiOptionLinkedToRosterQuestionViewModel viewModel;
+        static CategoricalMultiLinkedToQuestionViewModel viewModel;
         static StatefulInterview interview;
         static Identity questionId;
         static Identity rosterId;

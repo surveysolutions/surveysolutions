@@ -14,10 +14,10 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiViewModel))]
     internal class MultiOptionQuestionViewModelTestsContext : BaseMvvmCrossTest
     {
-        protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
+        protected static CategoricalMultiViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IQuestionnaireStorage questionnaireStorage = null, 
             ILiteEventRegistry eventRegistry = null, 
             IStatefulInterviewRepository interviewRepository = null, 
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             QuestionInstructionViewModel instructionViewModel = null,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
-            return new MultiOptionQuestionViewModel(
+            return new CategoricalMultiViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),

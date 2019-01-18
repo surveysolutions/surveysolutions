@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void should_set_not_set_checked_order_to_options () 
             => viewModel.Options.First().CheckedOrder.Should().BeNull();
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }

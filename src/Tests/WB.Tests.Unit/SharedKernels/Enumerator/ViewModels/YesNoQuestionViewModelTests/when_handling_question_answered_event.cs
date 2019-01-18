@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         public void should_mark_options_as_checked () => 
             viewModel.Options.Count(x => x.YesSelected).Should().Be(2);
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }

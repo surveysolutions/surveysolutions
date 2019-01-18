@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         }
 
         static Mock<AnsweringViewModel> answering;
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }
