@@ -109,7 +109,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<TextQuestionAnswered> TextQuestionAnswered(Guid? interviewId = null, string userId = null, DateTimeOffset? originDate = null)
             => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], originDate ?? DateTimeOffset.Now, "tttt")
-                .ToPublishedEvent();
+                .ToPublishedEvent(eventSourceId: interviewId);
 
         private static Guid? ToGuid(string stringGuid)
             => string.IsNullOrEmpty(stringGuid)
