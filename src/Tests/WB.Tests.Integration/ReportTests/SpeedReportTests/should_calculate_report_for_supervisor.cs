@@ -15,6 +15,12 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
     [TestFixture]
     internal class should_calculate_report_for_supervisor : SpeedReportContext
     {
+        [SetUp]
+        public void Setup()
+        {
+            SetupSessionFactory();
+        }
+
         [Test]
         public void should_calculate_interview_duration_for_supervisor_with_one_interviewer()
         {
@@ -23,11 +29,13 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var reportEndDate = new DateTime(2010, 10, 30);
 
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), supervisorId, interviewerId, reportEndDate);
-            var interviewSummaries =  CreateInterviewSummaryRepository();
+            var interviewSummaries = CreateInterviewSummaryRepository();
+            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
 
             interviewSummaries.Store(interview, interview.SummaryId);
+            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview), interview.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, Mock.Of<IQueryableReadSideRepositoryReader<SpeedReportInterviewItem>>());
+            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
@@ -57,12 +65,15 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview1 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(firstInterviewDuration), supervisorId, interviewer1Id, reportEndDate);
             var interview2 = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(secondInterviewDuration), supervisorId, interviewer2Id, reportEndDate);
 
-            var interviewSummaries =  CreateInterviewSummaryRepository();
+            var interviewSummaries = CreateInterviewSummaryRepository();
+            var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
 
             interviewSummaries.Store(interview1, interview1.SummaryId);
             interviewSummaries.Store(interview2, interview2.SummaryId);
+            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview1), interview1.SummaryId);
+            speedReportRepository.Store(CreateSpeedReportItemForInterview(interview2), interview2.SummaryId);
 
-            var report = CreateSpeedReport(interviewSummaries, Mock.Of<IQueryableReadSideRepositoryReader<SpeedReportInterviewItem>>());
+            var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel

@@ -41,5 +41,10 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             interview.InterviewCommentedStatuses.Add(interviewCommentedStatus);
             return interview;
         }
+
+        protected static SpeedReportInterviewItem CreateSpeedReportItemForInterview(InterviewSummary interview)
+        {
+            return Create.Entity.SpeedReportInterviewItem(interview);
+        }
     }
 }
