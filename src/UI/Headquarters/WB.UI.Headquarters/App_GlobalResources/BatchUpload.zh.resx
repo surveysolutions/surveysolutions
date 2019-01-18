@@ -367,7 +367,7 @@
     <value>找到1个访谈的数据</value>
   </data>
   <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>问卷设计网站中标记为识别问题的变量。下载</value>
+    <value>在问卷设计器中被标记为识别型问题的变量。下载一个</value>
   </data>
   <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
     <value>.tab模板。</value>
@@ -551,5 +551,26 @@
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>上传包含识别数据的文件以创建新任务。给定督导员或调查员的用户名可以设置批量任务。</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>隐藏问题</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>识别型问题</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>必须明确问卷负责人</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>二维表来源问题</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>指定默认的负责人（必须的）</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>如果分配任务的批量文件中没有问卷负责人，则指定此督导员/调查员的账号：</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>查看前导值列表</value>
   </data>
 </root>

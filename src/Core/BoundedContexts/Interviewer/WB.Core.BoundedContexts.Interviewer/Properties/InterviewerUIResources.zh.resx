@@ -254,7 +254,6 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0}（版本{1}）</value>
   </data>
-
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>保存时间：</value>
   </data>
@@ -729,5 +728,63 @@
   </data>
   <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>以{2}收到{1}中的{0}({3}%)</value>
+  </data>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>蓝牙的状态服务不由app决定。请同时重启调研员和督导员app并重新尝试同步</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>请检查督导员的设备的WiFi和蓝牙已打开，并确保您离该设备在数米范围之内。</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>请确认两个设备距离较近；两个设备的WiFi和蓝牙都处于启用状态；督导员的app应该由督导员的设备启动。</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>已连接至督导员的设备</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>正在等待督导员的连接批准</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>已发现督导员的设备。正在请求连接。</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>查找督导员的设备</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>正在将全部已完成的面访移动到督导员的设备</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>正在移动全部已完成的面访至 '{0}'</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>注意：此操作将花费较多时间，请勿关机。</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>重试</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>一些面访目前正在别的设备</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>转换已经开始。
+督导员的设备无法被定位。</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>转移被第二个设备放弃。</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>转移已完成。所有已完成的面访现在已经位于另外一个设备。</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>转移已完成。 {0} 个面访同步失败</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>转移正在处理</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>转换已被终止</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>上传审计信息</value>
   </data>
 </root>

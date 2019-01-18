@@ -124,10 +124,10 @@
     <value>附录{0}{1}的说明</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>附录{0}{1}类别过滤器</value>
+    <value>附录{0}{1}的选项筛选器</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>附录{0}{1}类别</value>
+    <value>附录{0}{1}的选项</value>
   </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>附录{0}{1}的验证性条件和信息</value>
@@ -160,7 +160,7 @@
     <value>从未被分享</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>分类：</value>
+    <value>选项：</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>图例和结构信息在本文件中</value>
@@ -262,7 +262,7 @@
     <value>无二维表</value>
   </data>
   <data name="Stat_NoSubsections" xml:space="preserve">
-    <value>无子模块</value>
+    <value>无问卷子块</value>
   </data>
   <data name="Stat_Questions" xml:space="preserve">
     <value>问题：{0}</value>
@@ -283,10 +283,10 @@
     <value>静态文本:{0}</value>
   </data>
   <data name="Stat_Subsections" xml:space="preserve">
-    <value>问卷子模块：{0}</value>
+    <value>问卷问卷子块：{0}</value>
   </data>
   <data name="Stat_Variables" xml:space="preserve">
-    <value>变量：{0}</value>
+    <value>计算变量：{0}</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>静态文本</value>
