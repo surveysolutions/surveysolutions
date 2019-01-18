@@ -28,7 +28,6 @@ namespace WB.Services.Scheduler
         {
             modelBuilder.UseSnakeCaseNaming();
             modelBuilder.HasDefaultSchema(jobSettings.Value.SchemaName);
-
             modelBuilder.ApplyConfiguration(new JobItemConfiguration());
         }
     }
