@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void should_undo_checked_property_change () 
             => viewModel.Options.First().Checked.Should().BeTrue();
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
     }
 }

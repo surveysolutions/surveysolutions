@@ -6,7 +6,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToListViewModel))]
     public class when_title_of_textlist_item_changed
     {
         [Test]

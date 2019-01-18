@@ -9,7 +9,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    [TestOf(typeof(YesNoQuestionViewModel))]
+    [TestOf(typeof(CategoricalYesNoViewModel))]
     public class YesNoQuestionViewModelTests : YesNoQuestionViewModelTestsContext
     {
         [Test]

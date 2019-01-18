@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         [NUnit.Framework.Test] public void should_set_not_set_checked_order_to_options () => viewModel.Options.First().YesAnswerCheckedOrder.Should().BeNull();
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }

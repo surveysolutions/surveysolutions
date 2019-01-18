@@ -137,13 +137,13 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.ThrottlingViewModel());
 
-        public MultiOptionLinkedToListQuestionQuestionViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
+        public CategoricalMultiLinkedToListViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
-            => new MultiOptionLinkedToListQuestionQuestionViewModel(
+            => new CategoricalMultiLinkedToListViewModel(
                 questionState ?? Stub<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
@@ -382,13 +382,13 @@ namespace WB.Tests.Abc.TestFactories
             return sidebarViewModel;
         }
 
-        public MultiOptionLinkedToRosterQuestionViewModel MultiOptionLinkedToRosterQuestionViewModel(
+        public CategoricalMultiLinkedToQuestionViewModel MultiOptionLinkedToRosterQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
-            => new MultiOptionLinkedToRosterQuestionViewModel(
+            => new CategoricalMultiLinkedToQuestionViewModel(
                 questionState ?? Stub<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 Mock.Of<QuestionInstructionViewModel>(),
@@ -541,7 +541,7 @@ namespace WB.Tests.Abc.TestFactories
                 Create.ViewModel.EnablementViewModel(statefulInterviewRepository, questionnaireRepository: questionnaireStorage));
         }
 
-        public YesNoQuestionOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
-            => new YesNoQuestionOptionViewModel(userInteractionService);
+        public CategoricalYesNoOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
+            => new CategoricalYesNoOptionViewModel(userInteractionService);
     }
 }

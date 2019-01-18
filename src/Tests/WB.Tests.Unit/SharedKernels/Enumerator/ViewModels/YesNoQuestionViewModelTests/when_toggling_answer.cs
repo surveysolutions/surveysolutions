@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             c.AnsweredOptions[0].Yes && c.AnsweredOptions[0].OptionValue == 2
         )));
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         static Guid questionGuid;
         static Mock<AnsweringViewModel> answeringMock;
