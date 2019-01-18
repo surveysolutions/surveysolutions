@@ -156,4 +156,7 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>问卷模板：{{ name }}</value>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>问卷概览</value>
+  </data>
 </root>

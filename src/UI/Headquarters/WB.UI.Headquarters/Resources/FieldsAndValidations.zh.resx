@@ -246,4 +246,7 @@
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>用户已被总部锁定</value>
   </data>
+  <data name="MandatoryField" xml:space="preserve">
+    <value>必须指定</value>
+  </data>
 </root>

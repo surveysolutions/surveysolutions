@@ -121,7 +121,7 @@
     <value>完成注册</value>
   </data>
   <data name="ConfirmationEmail" xml:space="preserve">
-    <value>{0}您好，请点击此关联完成注册过程：</value>
+    <value>{0}您好，请点击此链接完成注册过程：</value>
   </data>
   <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
     <value>查看</value>

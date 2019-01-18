@@ -222,4 +222,73 @@
   <data name="UpdatedAt" xml:space="preserve">
     <value>更新于</value>
   </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>分配给</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>基于问卷 {{questionnaire}} 创新新的任务</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>平板电脑已收到</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>显示全部</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>平板电脑未收到</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>平板电脑已收到</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>选定已有的问卷去升级任务自</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>选定问卷升级至</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>选中某个版本的问卷以查看相关的任务。选择“全部版本”以查看任意版本问卷相关的任务</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>仅显示那些已经被或者没有被平板电脑接收的任务。</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>升级</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>升级终止</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>已有的未完成的任务将由被选中的问卷升级并存档</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>下载列表</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>等待另一个升级完成</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>成功升级。{{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>由 {{from}} 到 {{to}} 的升级已完成</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>未完成的升级数量：{{count}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>升级{{totalCount}} 的 {{processed}} 中</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>任务将由{{from}} 升级至 {{to}}</value>
+  </data>
 </root>

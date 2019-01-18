@@ -117,25 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Capi" xml:space="preserve">
-    <value>CAPI</value>
-  </data>
-  <data name="Cati" xml:space="preserve">
-    <value>CATI</value>
-  </data>
-  <data name="FaceToFace" xml:space="preserve">
-    <value>Тет-а-тет</value>
-  </data>
-  <data name="FocusGroup" xml:space="preserve">
-    <value>Фокус-группа</value>
-  </data>
-  <data name="Internet" xml:space="preserve">
-    <value>Интернет</value>
-  </data>
-  <data name="Mail" xml:space="preserve">
-    <value>Почта</value>
-  </data>
-  <data name="Other" xml:space="preserve">
-    <value>Другое</value>
-  </data>
 </root>
