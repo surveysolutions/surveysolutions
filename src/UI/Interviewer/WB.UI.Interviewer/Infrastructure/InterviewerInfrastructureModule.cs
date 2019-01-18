@@ -58,7 +58,6 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingletonWithConstructorArgument<IAudioAuditService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audit"));
             registry.BindAsSingleton<IAuditService, AuditService>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();

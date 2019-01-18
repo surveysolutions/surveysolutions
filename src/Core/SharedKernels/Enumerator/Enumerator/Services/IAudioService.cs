@@ -23,9 +23,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void StartRecording();
         void StopRecording();
-        string StartRecording(string fileName);
-        void StopRecording(string fileName);
-        bool IsRecording();
+        void StartAuditRecording(string fileNamePrefix);
+        void StopAuditRecording();
+        bool IsAnswerRecording();
         Stream GetRecord(string fileName = null);
         TimeSpan GetLastRecordDuration();
         TimeSpan GetAudioRecordDuration();
@@ -38,12 +38,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
         void Play(Guid interviewId, Identity questionId, string fileName);
         void Stop();
-    }
 
-    public interface IAudioAuditService : IAudioService
-    {
+        string GetAuditPath();
     }
-
+    
     public class PlaybackCompletedEventArgs : EventArgs
     {
         public PlaybackCompletedEventArgs(Identity questionIdentity)

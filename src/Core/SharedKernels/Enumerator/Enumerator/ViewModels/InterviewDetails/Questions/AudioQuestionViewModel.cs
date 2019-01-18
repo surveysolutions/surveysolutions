@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RecordAudioAsync()
         {
-            if (this.audioService.IsRecording()) return;
+            if (this.audioService.IsAnswerRecording()) return;
             this.audioService.Stop();
             this.IsPlaying = false;
 
