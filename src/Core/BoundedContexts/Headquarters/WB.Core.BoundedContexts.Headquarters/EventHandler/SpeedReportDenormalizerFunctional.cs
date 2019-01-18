@@ -12,8 +12,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class SpeedReportDenormalizerFunctional :
-        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public interface ISpeedReportDenormalizerFunctional : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>> { }
+
+    public class SpeedReportDenormalizerFunctional : ISpeedReportDenormalizerFunctional,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewDeleted>,
@@ -122,12 +123,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             var reportInterviewItem = new SpeedReportInterviewItem();
             var createdStatusRecord = state.InterviewCommentedStatuses.First(s => s.Status == InterviewExportedAction.Created);
-            var firstAnswerSetStatusRecord = state.InterviewCommentedStatuses.First(s => s.Status == InterviewExportedAction.FirstAnswerSet);
             reportInterviewItem.InterviewId = state.SummaryId;
             reportInterviewItem.CreatedDate = createdStatusRecord.Timestamp;
-            reportInterviewItem.FirstAnswerDate = firstAnswerSetStatusRecord.Timestamp;
-            reportInterviewItem.SupervisorId = firstAnswerSetStatusRecord.SupervisorId;
-            reportInterviewItem.InterviewerId = firstAnswerSetStatusRecord.InterviewerId;
+
+            var firstAnswerSetStatusRecord = state.InterviewCommentedStatuses.FirstOrDefault(s => s.Status == InterviewExportedAction.FirstAnswerSet);
+            if (firstAnswerSetStatusRecord != null)
+            {
+                reportInterviewItem.FirstAnswerDate = firstAnswerSetStatusRecord.Timestamp;
+                reportInterviewItem.SupervisorId = firstAnswerSetStatusRecord.SupervisorId;
+                reportInterviewItem.InterviewerId = firstAnswerSetStatusRecord.InterviewerId;
+            }
+
             speedReportRepository.Store(reportInterviewItem, state.SummaryId);
 
             return state;
