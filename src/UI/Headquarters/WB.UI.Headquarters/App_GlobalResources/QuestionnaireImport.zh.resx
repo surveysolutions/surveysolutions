@@ -139,7 +139,7 @@
     <value>创建于</value>
   </data>
   <data name="Gropus" xml:space="preserve">
-    <value>子部分</value>
+    <value>问卷子块</value>
   </data>
   <data name="ImportAsNewVersion" xml:space="preserve">
     <value>创建一个新版本（#{0}）</value>
@@ -176,5 +176,8 @@
   </data>
   <data name="RegularImportTitle" xml:space="preserve">
     <value>导入</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>升级任务</value>
   </data>
 </root>

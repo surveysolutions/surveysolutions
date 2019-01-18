@@ -117,127 +117,91 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Average" xml:space="preserve">
-    <value>平均</value>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>面访 {0} 已被批准 </value>
   </data>
-  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>案例任务平均持续时间</value>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>将负责人 {0} 指派给 任务  #{1}</value>
   </data>
-  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>从访谈被分配给调查员到调查员在平板电脑上点击完成之间的时间。</value>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>将负责人 {0} 指派给 任务  #{1}</value>
   </data>
-  <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>总部平均处理时间</value>
+  <data name="CloseInterview" xml:space="preserve">
+    <value>面访 {0} 已关闭</value>
   </data>
-  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>从督导员通过审核问卷到总部通过审核或驳回问卷之间的时间。</value>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>面访 {0} 已完成</value>
   </data>
-  <data name="AverageInterviewDuration" xml:space="preserve">
-    <value>访谈平均持续时间</value>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve">
+    <value>面访 {0} 基于任务 {1} 已新建</value>
   </data>
-  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
-    <value>整体平均案例处理时间</value>
+  <data name="DeleteInterview" xml:space="preserve">
+    <value>面访 {0} 已删除</value>
   </data>
-  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>从首次分配到访谈被总部通过审核的时间。</value>
+  <data name="DetailedActionLog" xml:space="preserve">
+    <value>详细的操作日志</value>
   </data>
-  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>督导员平均处理时间</value>
+  <data name="DownloadTabLog" xml:space="preserve">
+    <value>以Tab格式下载完成日志</value>
   </data>
-  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>从点击完成到督导员通过审核或驳回之间的时间。</value>
+  <data name="Login" xml:space="preserve">
+    <value>用户 {0} 已登录</value>
   </data>
-  <data name="BackToSupervisors" xml:space="preserve">
-    <value>回到督导员</value>
+  <data name="Logout" xml:space="preserve">
+    <value>用户 {0} 已注销</value>
   </data>
-  <data name="By" xml:space="preserve">
-    <value>操作人</value>
+  <data name="OpenApplication" xml:space="preserve">
+    <value>App已打开</value>
   </data>
-  <data name="Day" xml:space="preserve">
-    <value>日</value>
+  <data name="OpenInterview" xml:space="preserve">
+    <value>面访 {0} 已打开</value>
   </data>
-  <data name="From" xml:space="preserve">
-    <value>开始日期</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>操作日志</value>
   </data>
-  <data name="InThe" xml:space="preserve">
-    <value>在</value>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>面访 {0} 已被驳回</value>
   </data>
-  <data name="Month" xml:space="preserve">
-    <value>月</value>
+  <data name="Relink" xml:space="preserve">
+    <value>用户已经于新的平板电脑登录</value>
   </data>
-  <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>已完成的访谈数量</value>
+  <data name="RocordsMissing" xml:space="preserve">
+    <value>目前尚无记录</value>
   </data>
-  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>总部通过审核的访谈数量</value>
+  <data name="ShowPrevious7Days" xml:space="preserve">
+    <value>显示前7个活动日</value>
   </data>
-  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>总部对一个{0}收集的访谈通过审核的数量</value>
+  <data name="SynchronizationCanceled" xml:space="preserve">
+    <value>同步取消</value>
   </data>
-  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>总部进行的访谈处理数量</value>
+  <data name="SynchronizationCompleted" xml:space="preserve">
+    <value>同步完成：</value>
   </data>
-  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>总部对一个{0}收集的访谈进行通过审核和驳回操作的数量</value>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>{0} 个新任务下载完成</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>督导员进行的访谈处理数量</value>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>{0} 个任务已被移除</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>督导员对一个{0}收集的访谈进行通过审核和驳回操作的数量</value>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>{0}  个面访下载完成</value>
   </data>
-  <data name="Period" xml:space="preserve">
-    <value>时期</value>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+    <value>{0} 个面访已被驳回</value>
   </data>
-  <data name="PeriodCount" xml:space="preserve">
-    <value>时期数</value>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+    <value>{0} 个面访已被移除</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>问卷</value>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+    <value>{0} 个面访已被上传</value>
   </data>
-  <data name="Team" xml:space="preserve">
-    <value>团队</value>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+    <value>没有任何信息被同步</value>
   </data>
-  <data name="TeamMember" xml:space="preserve">
-    <value>团队成员</value>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Sad！同步失败</value>
   </data>
-  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
-    <value>完成访谈的平均时间</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>合计</value>
-  </data>
-  <data name="Type" xml:space="preserve">
-    <value>类型</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>版本</value>
-  </data>
-  <data name="Week" xml:space="preserve">
-    <value>周</value>
-  </data>
-  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
-    <value>在{0}的团队中</value>
-  </data>
-  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>一个已经完成的访谈数量。驳回后完成的访谈另计。</value>
-  </data>
-  <data name="InterviewActions" xml:space="preserve">
-    <value>访谈行动</value>
-  </data>
-  <data name="LastDateToShowLabel" xml:space="preserve">
-    <value>从此开始</value>
-  </data>
-  <data name="OverTheLast" xml:space="preserve">
-    <value>完成最后一个</value>
-  </data>
-  <data name="PeriodUnit" xml:space="preserve">
-    <value>时期单位</value>
-  </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>从平板电脑上记录第一个答案到点击完成之间的时间。</value>
-  </data>
-  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>从调查员在平板电脑上记录第一个答案到点击“完成”按钮的平均时间。</value>
+  <data name="SynchronizationStarted" xml:space="preserve">
+    <value>同步已经开始 {{0}}</value>
   </data>
 </root>

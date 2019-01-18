@@ -178,7 +178,7 @@
     <value>提供的用户名无效。请检查并重试。</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>法律</value>
+    <value>法律声明</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>登录</value>
@@ -263,5 +263,20 @@
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>欢迎来到Survey Solutions</value>
+  </data>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>账号信息已成功更新</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>编辑个人资料</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>全名 </value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>管理账号</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>显示密码</value>
   </data>
 </root>
