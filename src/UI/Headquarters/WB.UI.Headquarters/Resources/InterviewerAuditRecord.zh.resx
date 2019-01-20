@@ -202,6 +202,6 @@
     <value>Sad！同步失败</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>同步已经开始 {{0}}</value>
+    <value>同步已经开始({0})</value>
   </data>
 </root>
