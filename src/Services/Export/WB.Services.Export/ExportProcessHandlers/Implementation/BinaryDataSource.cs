@@ -120,7 +120,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     {
                         try
                         {
-                            var audioContent = await api.GetInterviewAudioAsync(audioAuditInfo.InterviewId, fileName);
+                            var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
                             var content = await audioContent.ReadAsByteArrayAsync();
 
                             await audioAuditAction(new BinaryData
