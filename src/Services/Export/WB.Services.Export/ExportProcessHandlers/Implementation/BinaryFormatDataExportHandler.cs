@@ -33,12 +33,21 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            await binaryDataSource.ForEachMultimediaAnswerAsync(settings,  data =>
-            {
-                var path = this.fileSystemAccessor.CombinePath(data.InterviewId.FormatGuid(), data.Answer);
-                archive.CreateEntry(path, data.Content);
-                return Task.CompletedTask;
-            }, progress, cancellationToken);
+            await binaryDataSource.ForEachInterviewMultimediaAsync(settings,  
+                data =>
+                {
+                    var path = this.fileSystemAccessor.CombinePath(data.InterviewId.FormatGuid(), data.Answer);
+                    archive.CreateEntry(path, data.Content);
+                    return Task.CompletedTask;
+                },
+                audioAuditRecord =>
+                {
+                    var path = this.fileSystemAccessor.CombinePath(audioAuditRecord.InterviewId.FormatGuid(), "Recording");
+                    archive.CreateEntry(path, audioAuditRecord.Content);
+                    return Task.CompletedTask;
+                },
+                progress, 
+                cancellationToken);
         }
     }
 }
