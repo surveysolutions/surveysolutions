@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             }));
         }
 
-        [NUnit.Framework.Test] public void should_set_not_set_checked_order_to_options () => viewModel.Options.First().YesAnswerCheckedOrder.Should().BeNull();
+        [NUnit.Framework.Test] public void should_set_not_set_checked_order_to_options () => viewModel.Options.First().CheckedOrder.Should().BeNull();
 
         static CategoricalYesNoViewModel viewModel;
         static Identity questionId;

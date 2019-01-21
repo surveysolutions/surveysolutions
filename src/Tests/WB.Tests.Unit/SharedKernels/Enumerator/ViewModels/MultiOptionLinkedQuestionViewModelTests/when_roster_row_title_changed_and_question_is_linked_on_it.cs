@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
-            viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(interviewRepository: interviewRepository, questionnaireStorage: questionnaireRepository);
+            viewModel = CreateViewModel(interviewRepository: interviewRepository, questionnaireStorage: questionnaireRepository);
             viewModel.Init("interview", questionId, Create.Other.NavigationState());
             viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title", outerRosterVector: rosterId.RosterVector, instanceId: 1));
         }
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         [Test] 
         public void should_insert_new_option () => viewModel.Options.Count.Should().Be(1);
 
-        static CategoricalMultiLinkedToQuestionViewModel viewModel;
+        static CategoricalMultiLinkedToRosterTitleViewModel viewModel;
         static StatefulInterview interview;
         static Identity questionId;
         static Identity rosterId;

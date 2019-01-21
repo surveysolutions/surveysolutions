@@ -24,23 +24,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
            QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null,
            FilteredOptionsViewModel filteredOptionsViewModel = null,
            ThrottlingViewModel throttlingModel = null,
-           IInterviewViewModelFactory viewModelFactory = null)
+           IInterviewViewModelFactory viewModelFactory = null,
+           IUserInteractionService userInteraction = null)
         {
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+
             var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
             mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalYesNoOptionViewModel>()).Returns(() =>
-                new CategoricalYesNoOptionViewModel(Mock.Of<IUserInteractionService>()));
+                new CategoricalYesNoOptionViewModel(userInteraction));
+
+            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+
+            var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
+            var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
 
             return new CategoricalYesNoViewModel(
+                questionStateViewmodel ?? Create.ViewModel.QuestionState<YesNoQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
+                questionnaireRepository,
+                liteEventRegistry,
+                statefulInterviewRepository,
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadAsyncDispatcher(),
-                questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
-                answeringViewModel ?? Mock.Of<AnsweringViewModel>(), TODO,
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                userInteraction: userInteraction,
+                answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
-                throttlingModel ?? Create.ViewModel.ThrottlingViewModel());
+                throttlingModel ?? Create.ViewModel.ThrottlingViewModel(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
         }
     }
 }

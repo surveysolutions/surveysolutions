@@ -64,8 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         public void BecauseOf()
         {
-            viewModel.Options.Single(o => o.Value == 4).YesSelected = true;
-            viewModel.Options.Single(o => o.Value == 4).SetYesAnswerCommand.Execute();
+            viewModel.Options.Single(o => o.Value == 4).Checked = true;
+            viewModel.Options.Single(o => o.Value == 4).CheckAnswerCommand.Execute();
         }
 
 
