@@ -7,6 +7,7 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
@@ -46,18 +47,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (mapContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(mapContent)
-            };
-
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                Public = true,
-                MaxAge = TimeSpan.FromDays(10)
-            };
-
-            return response;
+            return this.AsProgressiveDownload(mapContent, @"application/octet-stream");
         }
     }
 }
