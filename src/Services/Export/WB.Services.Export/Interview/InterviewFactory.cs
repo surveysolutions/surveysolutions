@@ -118,6 +118,9 @@ namespace WB.Services.Export.Interview
 
             var api = this.tenantApi.For(tenant);
 
+            if (!entities.Any())
+                return new List<MultimediaAnswer>();
+
             var answerLines = await api.GetInterviewBatchAsync(interviewIds, entities.Keys.ToArray());
 
             IEnumerable<MultimediaAnswer> ToMultimediaAnswer()
