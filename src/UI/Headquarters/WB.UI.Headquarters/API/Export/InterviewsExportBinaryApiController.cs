@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterviews([FromUri]Guid[] id)
+        public HttpResponseMessage GetAudioAuditDescriptorsForInterviews([FromUri]Guid[] id)
         {
             var audioAuditInfo = id.Select(interviewId =>
             {
@@ -98,6 +98,23 @@ namespace WB.UI.Headquarters.API.Export
             }).OrderBy(x => x.InterviewId).ToArray();
 
             return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo);
+        }
+
+        [Route("api/export/v1/interview/{interviewId}/audioAudit/{fileName}")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetAudioAudit(Guid interviewId, string fileName)
+        {
+            var descriptors = this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var file = descriptors.FirstOrDefault(d => d.FileName == fileName);
+
+            if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(file.GetData());
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            return response;
         }
     }
 }

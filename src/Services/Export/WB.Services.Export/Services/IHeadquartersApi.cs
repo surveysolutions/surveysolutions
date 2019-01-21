@@ -54,5 +54,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interviews/batch/audioAudit")]
         Task<List<AudioAuditView>> GetAudioAuditInterviewsAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
+
+        [Get("/api/export/v1/interview/{interviewId}/audioAudit/{audio}")]
+        Task<HttpContent> GetAudioAuditAsync(Guid interviewId, string audio);
     }
 }
