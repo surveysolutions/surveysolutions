@@ -18,12 +18,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.SupervisorId);
             Property(x => x.SupervisorName);
 
-            OneToOne(x => x.InterviewSummary, mto =>
+            ManyToOne(x => x.InterviewSummary, mto =>
             {
-                mto.Lazy(LazyRelation.Proxy);
-                mto.PropertyReference(sum => sum.SummaryId);
+                mto.Access(Accessor.ReadOnly);
+                mto.Column("InterviewId");
+                mto.NotFound(NotFoundMode.Ignore);
                 mto.Cascade(Cascade.None);
-                mto.ForeignKey("fk_speedreportinterviewitems_interviewid_interviewsummaries");
+                mto.Update(false);
+                mto.Insert(false);
             });
         }
     }

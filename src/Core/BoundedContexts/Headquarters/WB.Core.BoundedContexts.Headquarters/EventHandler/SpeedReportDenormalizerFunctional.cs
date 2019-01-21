@@ -106,14 +106,21 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeleted> @event)
         {
-            speedReportRepository.Remove(@event.EventSourceId.FormatGuid());
+            RemoveSpeedReportItem(@event.EventSourceId);
             return state;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewHardDeleted> @event)
         {
-            speedReportRepository.Remove(@event.EventSourceId.FormatGuid());
+            RemoveSpeedReportItem(@event.EventSourceId);
             return state;
+        }
+
+        private void RemoveSpeedReportItem(Guid interviewId)
+        {
+            var item = speedReportRepository.GetById(interviewId.FormatGuid());
+            if (item != null)
+                speedReportRepository.Remove(interviewId.FormatGuid());
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestored> @event)
