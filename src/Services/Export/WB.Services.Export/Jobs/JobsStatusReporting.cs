@@ -130,7 +130,7 @@ namespace WB.Services.Export.Jobs
                     allProcesses)
             };
 
-            if (exportSettings.ExportFormat == DataExportFormat.Binary &&
+            /*if (exportSettings.ExportFormat == DataExportFormat.Binary &&
                 !questionnaire.HeaderToLevelMap.Values.SelectMany(l =>
                     l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q =>
                         q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
@@ -138,7 +138,7 @@ namespace WB.Services.Export.Jobs
                 dataExportView.CanRefreshBeRequested = false;
                 dataExportView.HasAnyDataToBePrepared = false;
             }
-            else
+            else*/
             {
                 dataExportView.HasAnyDataToBePrepared = true;
                 var process = allProcesses.FirstOrDefault(p =>
