@@ -416,6 +416,32 @@ namespace WB.Tests.Abc.TestFactories
                 Create.ViewModel.ThrottlingViewModel());
         }
 
+        public CategoricalMultiLinkedToRosterTitleViewModel MultiOptionLinkedToRosterTitleViewModel(
+            IQuestionnaire questionnaire = null,
+            IStatefulInterview interview = null,
+            ILiteEventRegistry eventRegistry = null,
+            QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null)
+        {
+            var statefulInterviewRepository = Mock.Of<IStatefulInterviewRepository>(_ =>
+                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>()));
+
+            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(_ =>
+                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
+                (questionnaire ?? Mock.Of<IQuestionnaire>()));
+
+            return new CategoricalMultiLinkedToRosterTitleViewModel(
+                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(eventRegistry, statefulInterviewRepository, questionnaireRepository),
+                questionnaireRepository,
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                statefulInterviewRepository,
+                Mock.Of<IPrincipal>(_ =>
+                    _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                Mock.Of<QuestionInstructionViewModel>(),
+                Create.ViewModel.ThrottlingViewModel());
+        }
+
         public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
             IEnumeratorSettings enumeratorSettings = null, IVirbationService vibrationService = null)
             => new VibrationViewModel(

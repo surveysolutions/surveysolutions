@@ -3,8 +3,9 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
-
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 );
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: interviewerId);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: interviewerId);
             interview.AnswerTextListQuestion(interviewerId, level1TriggerId, RosterVector.Empty, DateTime.UtcNow,
                 new[] { new Tuple<decimal, string>(1, "person 1"), new Tuple<decimal, string>(2, "person 2"), });
 
@@ -57,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             
         }
 
-        public void BecauseOf() => questionViewModel.Init(null, linkedQuestionIdentity, Create.Other.NavigationState());
+        public void BecauseOf() => questionViewModel.Init(interview.Id.FormatGuid(), linkedQuestionIdentity, Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_substitute_titles_from_both_questions () => questionViewModel.Options.First().Title.Should().Be("person 1: child 1: pet 1");
 
@@ -66,6 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity linkedQuestionIdentity;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
+        static StatefulInterview interview;
     }
 }
 

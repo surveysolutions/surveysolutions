@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 new decimal[] { 2 }, 
             });
 
-            var viewModel = Create.ViewModel.MultiOptionLinkedToRosterQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
+            var viewModel = Create.ViewModel.MultiOptionLinkedToRosterTitleViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
 
             //act
             viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());

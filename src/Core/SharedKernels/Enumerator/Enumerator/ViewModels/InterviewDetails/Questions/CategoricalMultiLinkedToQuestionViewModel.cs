@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiLinkedToQuestionViewModel : CategoricalMultiViewModelBase<RosterVector, RosterVector>,
         ILiteEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        ILiteEventHandler<LinkedOptionsChanged>
+        ILiteEventHandler<LinkedOptionsChanged>,
+        ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private RosterVector[] selectedOptionsToSave;
-        protected Guid linkedToRosterId;
-        protected HashSet<Guid> parentRosters;
+        private HashSet<Guid> parentRosters;
 
         public CategoricalMultiLinkedToQuestionViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
@@ -33,14 +33,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new CovariantObservableCollection<CategoricalMultiOptionViewModel<RosterVector>>();
         }
 
-        protected override bool IsInterviewAnswer(RosterVector interviewAnswer, RosterVector optionValue)
-            => interviewAnswer == optionValue;
-
         protected override void Init(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            this.linkedToRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(this.Identity.Id);
-            this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
+            var linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
+            this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(linkedToQuestionId).ToHashSet();
         }
+
+        protected override bool IsInterviewAnswer(RosterVector interviewAnswer, RosterVector optionValue)
+            => interviewAnswer == optionValue;
 
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<RosterVector>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => x.Value).ToArray();
@@ -83,6 +83,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
+
+            this.UpdateViewModels();
+        }
+
+        public virtual void Handle(RosterInstancesTitleChanged @event)
+        {
+            if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
             this.UpdateViewModels();
         }
