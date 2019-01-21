@@ -3,6 +3,7 @@ using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
@@ -12,6 +13,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         public static void MigrateToLatest(string connectionString, string schemaName,
             DbUpgradeSettings dbUpgradeSettings)
         {
+            var npgConnBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            npgConnBuilder.CommandTimeout = 0;
+
             var serviceProvider = new ServiceCollection()
                 // Logging is the replacement for the old IAnnouncer
                 .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
@@ -28,7 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         // Add Postgres
                         .AddPostgres(schemaName)
                         // The Postgres connection string
-                        .WithGlobalConnectionString(connectionString)
+                        .WithGlobalConnectionString(npgConnBuilder.ConnectionString)
                         // Specify the assembly with the migrations
                         .ScanIn(dbUpgradeSettings.MigrationsAssembly)
                         .For.Migrations()
