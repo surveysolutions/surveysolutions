@@ -46,13 +46,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
-        public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
+        public override HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
         [HttpPost]
-        public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
 
         [HttpPost]
-        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
+        public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]

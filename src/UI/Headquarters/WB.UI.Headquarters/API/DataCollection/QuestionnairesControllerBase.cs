@@ -131,13 +131,15 @@ namespace WB.UI.Headquarters.API.DataCollection
         }
         
         [WriteToSyncLog(SynchronizationLogType.QuestionnaireProcessed)]
-        public virtual void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
+        public virtual HttpResponseMessage LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
         {
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
         
         [WriteToSyncLog(SynchronizationLogType.QuestionnaireAssemblyProcessed)]
-        public virtual void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
+        public virtual HttpResponseMessage LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
     }
 }
