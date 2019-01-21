@@ -29,58 +29,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private GpsLocation answer;
         public GpsLocation Answer
         {
-            get { return this.answer; }
-            set { this.answer = value; this.RaisePropertyChanged(); }
+            get => this.answer;
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public bool ShowLocationOnMap => this.settings.ShowLocationOnMap;
 
-        private IMvxCommand saveAnswerCommand;
-        public IMvxCommand SaveAnswerCommand
-        {
-            get
-            {
-                return this.saveAnswerCommand ??
-                       (this.saveAnswerCommand =
-                           new MvxAsyncCommand(async () => await this.SaveAnswerAsync().ConfigureAwait(false),
-                               () => !this.Answering.InProgress));
-            }
-        }
-
-        private IMvxCommand answerRemoveCommand;
-
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
-            }
-        }
-
-        private async Task RemoveAnswer()
-        {
-            try
-            {
-                var command = new RemoveAnswerCommand(
-                    this.interviewId,
-                    this.userId,
-                    new Identity(this.questionIdentity.Id,
-                    this.questionIdentity.RosterVector));
-                await this.Answering.SendRemoveAnswerCommandAsync(command);
-
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-                this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
-            }
-            catch (InterviewException ex)
-            {
-                this.QuestionState.Validity.ProcessException(ex);
-            }
-
-        }
+        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SaveAnswerAsync, () => !this.Answering.InProgress);
+        public IMvxCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
         private readonly Guid userId;
-        public event EventHandler AnswerRemoved;
         private readonly ILogger logger;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
@@ -149,19 +107,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private async Task RemoveAnswerAsync()
+        {
+            try
+            {
+                var command = new RemoveAnswerCommand(this.interviewId, this.userId, this.questionIdentity);
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
         private async Task SaveAnswerAsync()
         {
             this.Answering.StartInProgressIndicator();
             this.userInterfaceStateService.NotifyRefreshStarted();
             try
             {
-                var mvxGeoLocation =
-                    await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
-                            this.settings.GpsDesiredAccuracy)
-                        .ConfigureAwait(false);
+                var mvxGeoLocation = await this.locationService.GetLocation(this.settings.GpsReceiveTimeoutSec,
+                    this.settings.GpsDesiredAccuracy).ConfigureAwait(false);
 
                 this.userInterfaceStateService.NotifyRefreshFinished();
-                await this.SetGeoLocationAnswerAsync(mvxGeoLocation).ConfigureAwait(false);
+                await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
             catch (GeolocationException e)
             {
