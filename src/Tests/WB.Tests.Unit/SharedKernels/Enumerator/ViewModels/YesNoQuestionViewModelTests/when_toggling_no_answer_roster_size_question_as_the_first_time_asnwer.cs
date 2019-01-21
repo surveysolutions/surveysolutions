@@ -67,8 +67,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         public void BecauseOf()
         {
-            viewModel.Options.First().NoSelected = true;
-            viewModel.Options.First().SetNoAnswerCommand.Execute();
+            var yesNoOption = viewModel.Options.First() as CategoricalYesNoOptionViewModel;
+            yesNoOption.NoSelected = true;
+            yesNoOption.SetNoAnswerCommand.Execute();
         }
 
         [NUnit.Framework.Test] public void should_send_answering_command () =>

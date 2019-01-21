@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void BecauseOf() 
         {
             viewModel.Options.First().Checked = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
+            viewModel.Options.First().CheckAnswerCommand.Execute();
         }
 
         [NUnit.Framework.Test] public void should_execute_command_with_checked_values_2_and_1 () =>

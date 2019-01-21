@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var viewModel = Create.ViewModel.MultiOptionLinkedToRosterQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
 
             //act
-            viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
 
             //assert
             Assert.That(viewModel.Options.Count, Is.EqualTo(5));

@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         [NUnit.Framework.Test] public void should_substitute_titles_all_roster_combinations () => questionViewModel.Options.Count.Should().Be(4);
 
-        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
+        static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity linkedQuestionIdentity;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
     }

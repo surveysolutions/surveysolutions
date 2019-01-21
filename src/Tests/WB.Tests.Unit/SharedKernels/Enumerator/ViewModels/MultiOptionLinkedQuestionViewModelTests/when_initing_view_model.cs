@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         [NUnit.Framework.Test] public void should_use_question_answer_as_title () => questionViewModel.Options.Second().Title.Should().Be("answer 2");
 
-        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
+        static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity linkedQuestionIdentity;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid RosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
