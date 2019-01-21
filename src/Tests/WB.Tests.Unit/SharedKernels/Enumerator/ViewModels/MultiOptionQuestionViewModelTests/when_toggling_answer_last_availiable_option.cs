@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var option = viewModel.Options.Second();
             option.Checked = true;
-            await viewModel.ToggleAnswerAsync(option);
+            option.CheckAnswerCommand.Execute();
         }
 
         [Test] 

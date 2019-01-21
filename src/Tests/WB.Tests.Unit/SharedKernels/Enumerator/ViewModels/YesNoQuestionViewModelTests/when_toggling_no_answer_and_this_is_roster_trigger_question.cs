@@ -53,14 +53,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            viewModel.Options.Last().SetNoAnswerCommand.Execute();
 
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.UpdateOptionsToSaveAsync(viewModel.Options.Last()).Wait();
+        public void BecauseOf() => viewModel.Options.Last().CheckAnswerCommand.Execute();
 
-        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().YesSelected.Should().BeFalse();
+        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().Checked.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_dont_call_userInteractionService_for_reduce_roster_size () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never());

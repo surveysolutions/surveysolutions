@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_toggling_answer_and_max_answers_count_reached : MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public async Task context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -47,10 +47,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.Second().Checked = true;
 
-            await BecauseOf();
+            BecauseOf();
         }
 
-        public async Task BecauseOf() => await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
+        public void BecauseOf() => viewModel.Options.Second().CheckAnswerCommand.Execute();
 
         [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().Checked.Should().BeFalse();
 

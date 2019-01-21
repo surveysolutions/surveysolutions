@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             // Assert
             var firstOption = viewModel.Options.First();
-            Assert.That(firstOption, Has.Property(nameof(firstOption.YesAnswerCheckedOrder)).Null);
+            Assert.That(firstOption, Has.Property(nameof(firstOption.CheckedOrder)).Null);
         }
 
         [Test]
@@ -85,9 +85,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             Abc.SetUp.ApplyInterviewEventsToViewModels(interview, eventRegistry, interview.Id);
 
             // assert
-            viewModel.Options[0].YesCanBeChecked.Should().BeTrue();
-            viewModel.Options[1].YesCanBeChecked.Should().BeTrue();
-            viewModel.Options[2].YesCanBeChecked.Should().BeFalse();
+            viewModel.Options[0].CanBeChecked.Should().BeTrue();
+            viewModel.Options[1].CanBeChecked.Should().BeTrue();
+            viewModel.Options[2].CanBeChecked.Should().BeFalse();
         }
     }
 }
