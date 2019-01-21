@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -39,20 +38,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
             interviewRepository.SetReturnsDefault(interview);
-
+            
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
-            viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            viewModel.Options.Second().Checked = true;
-
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Options.Second().CheckAnswerCommand.Execute();
+        public void BecauseOf() => viewModel.Init("blah", questionId, Create.Other.NavigationState());
 
-        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().Checked.Should().BeFalse();
+        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().CheckAnswerCommand.CanExecute().Should().BeFalse();
 
         private static CategoricalMultiViewModel viewModel;
         private static Identity questionId;

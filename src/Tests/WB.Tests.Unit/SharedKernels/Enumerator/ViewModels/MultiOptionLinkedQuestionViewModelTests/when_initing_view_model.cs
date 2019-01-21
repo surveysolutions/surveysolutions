@@ -3,7 +3,9 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
@@ -23,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: interviewerId);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, userId: interviewerId);
 
             interview.AnswerTextListQuestion(interviewerId, RosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow,
                 new[] { new Tuple<decimal, string>(1, "roster 1"), new Tuple<decimal, string>(2, "roster 2"), });
@@ -38,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         }
 
         public void BecauseOf() => 
-            questionViewModel.Init(null, linkedQuestionIdentity, Create.Other.NavigationState());
+            questionViewModel.Init(interview.Id.FormatGuid(), linkedQuestionIdentity, Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_fill_options_from_linked_question () => questionViewModel.Options.Count.Should().Be(2);
 
@@ -52,6 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         private static readonly Guid RosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static readonly Guid LinkedToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Identity Identity = linkedQuestionIdentity = Identity.Create(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), RosterVector.Empty);
+        private static StatefulInterview interview;
     }
 }
 

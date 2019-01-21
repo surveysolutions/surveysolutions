@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
         }
 
-        protected static CategoricalMultiLinkedToRosterTitleViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
+        protected static CategoricalMultiLinkedToQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
             AnsweringViewModel answering = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             IQuestionnaireStorage questionnaireStorage = null, 
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
 
-            return new CategoricalMultiLinkedToRosterTitleViewModel(
+            return new CategoricalMultiLinkedToQuestionViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
                 questionnaireRepository,
                 liteEventRegistry,
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 Create.ViewModel.ThrottlingViewModel());
         }
 
-        protected static CategoricalMultiLinkedToQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
+        protected static CategoricalMultiLinkedToRosterTitleViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -57,26 +57,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             ILiteEventRegistry eventRegistry = null,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
+            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+            var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
+
+            var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
             return
-                new CategoricalMultiLinkedToQuestionViewModel(
-                    questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
-                    questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                    eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                    interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                new CategoricalMultiLinkedToRosterTitleViewModel(
+                    questionState ?? Create.ViewModel.QuestionState<MultipleOptionsLinkedQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
+                    questionnaireRepository,
+                    liteEventRegistry,
+                    statefulInterviewRepository,
                     userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                     answering ?? Mock.Of<AnsweringViewModel>(),
                     Mock.Of<QuestionInstructionViewModel>(),
                     Create.ViewModel.ThrottlingViewModel());
-        }
-
-        protected static CategoricalMultiLinkedToQuestionViewModel CreateViewModel(
-            IQuestionnaire questionnaire, 
-            IStatefulInterview statefulInterview,
-            AnswerNotifier answerNotifier = null)
-        {
-            return CreateViewModel(questionnaireStorage: Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == questionnaire),
-                interviewRepository: Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == statefulInterview),
-                answerNotifier: answerNotifier);
         }
     }
 }
