@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
-        public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
+        public override HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
@@ -81,15 +81,17 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         }
 
         [HttpPost]
-        public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
-        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
+        public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
 
         [HttpPost]
-        public void PostAudioAudit(PostFileRequest request)
+        public HttpResponseMessage PostAudioAudit(PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
+
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
 
         [HttpPost]
