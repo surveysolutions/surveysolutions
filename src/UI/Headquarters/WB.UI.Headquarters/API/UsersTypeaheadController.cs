@@ -1,19 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
  
 namespace WB.UI.Headquarters.API
 {
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     [RoutePrefix("api/v1/users")]
     public class UsersTypeaheadController : ApiController
     {
