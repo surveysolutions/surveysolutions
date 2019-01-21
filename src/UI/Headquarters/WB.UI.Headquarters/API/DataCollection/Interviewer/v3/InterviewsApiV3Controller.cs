@@ -25,8 +25,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
 
         public InterviewsApiV3Controller(
             IImageFileStorage imageFileStorage,
@@ -37,13 +36,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore) :
+            IHeadquartersEventStore eventStore,
+            IAudioAuditFileStorage audioAuditFileStorage) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
                 synchronizationSerializer, eventStore)
         {
-            this.imageFileStorage = imageFileStorage;
-            this.audioFileStorage = audioFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         [HttpGet]
@@ -88,7 +87,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         [HttpPost]
         public HttpResponseMessage PostAudioAudit(PostFileRequest request)
         {
-            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
 
             return Request.CreateResponse(HttpStatusCode.NoContent);
