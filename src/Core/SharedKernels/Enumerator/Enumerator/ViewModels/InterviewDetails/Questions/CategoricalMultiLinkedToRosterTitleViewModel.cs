@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -7,9 +11,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class CategoricalMultiLinkedToRosterTitleViewModel : CategoricalMultiLinkedToQuestionViewModel,
-        ILiteEventHandler<RosterInstancesTitleChanged>
+    public class CategoricalMultiLinkedToRosterTitleViewModel : CategoricalMultiLinkedToQuestionViewModel
     {
+        private Guid linkedToRosterId;
+        private HashSet<Guid> parentRosters;
+
         public CategoricalMultiLinkedToRosterTitleViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionStateViewModel,
             IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry eventRegistry,
@@ -20,12 +26,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
         }
 
-        public void Handle(RosterInstancesTitleChanged @event)
+        protected override void Init(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
-                                                                             this.parentRosters.Contains(x.RosterInstance.GroupId));
-            if (optionListShouldBeUpdated)
-                this.UpdateViewModels();
+            this.linkedToRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(this.Identity.Id);
+            this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
+        }
+
+        public override void Handle(RosterInstancesTitleChanged @event)
+        {
+            if (!@event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
+                                                  this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
+
+            this.UpdateViewModels();
         }
     }
 }
