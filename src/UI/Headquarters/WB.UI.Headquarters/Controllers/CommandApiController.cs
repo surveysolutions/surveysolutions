@@ -101,8 +101,7 @@ namespace WB.UI.Headquarters.Controllers
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error(DefaultErrorMessage, e);
-                        response.DomainException = Strings.UnexpectedErrorOccurred;
+                        throw new Exception(Strings.UnexpectedErrorOccurred, e);
                     }
                     else
                     {
