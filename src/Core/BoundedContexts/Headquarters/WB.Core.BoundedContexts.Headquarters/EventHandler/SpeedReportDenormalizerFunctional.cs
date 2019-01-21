@@ -118,9 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private void RemoveSpeedReportItem(Guid interviewId)
         {
-            var item = speedReportRepository.GetById(interviewId.FormatGuid());
-            if (item != null)
-                speedReportRepository.Remove(interviewId.FormatGuid());
+            speedReportRepository.Remove(interviewId.FormatGuid());
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestored> @event)
