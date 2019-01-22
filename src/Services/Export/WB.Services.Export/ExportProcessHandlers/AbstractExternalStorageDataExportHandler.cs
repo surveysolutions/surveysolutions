@@ -43,15 +43,14 @@ namespace WB.Services.Export.ExportProcessHandlers
                     async data =>
                     {
                         var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
-                        await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
+                        await this.UploadFileAsync(interviewFolderPath, data.Content, data.FileName);
 
                     }, 
                     async audioAuditRecord =>
                     {
                         var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(audioAuditRecord.InterviewId));
                         var audioFolder = await this.CreateFolderAsync(interviewFolderPath, "Recording");
-                        var fileName = audioAuditRecord.Answer + ".mp4";
-                        await this.UploadFileAsync(audioFolder, audioAuditRecord.Content, fileName);
+                        await this.UploadFileAsync(audioFolder, audioAuditRecord.Content, audioAuditRecord.FileName);
                     }, 
                     progress, cancellationToken);
             }
