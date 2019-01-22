@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public List<ChartStatisticsDataSet> DataSets { get; set; } = new List<ChartStatisticsDataSet>();
         public string From { get; set; }
         public string To { get; set; }
+        public string MinDate { get; set; }
+        public string MaxDate { get; set; }
     }
 
     public class ChartStatisticsDataSet

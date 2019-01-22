@@ -27,13 +27,23 @@
       </FilterBlock>
 
       <FilterBlock :title="$t('Reports.DatesRange')">
-        <DatePicker
-          with-clear
+        <DatePicker 
           :config="datePickerConfig"
           :value="selectedDateRange"
-          @clear="selectDateRange(null)"
-          :clear-label="$t('Common.Reset')"
         ></DatePicker>
+      </FilterBlock>
+      
+      <FilterBlock :title="$t('Reports.QuickRanges')">
+        <ul class="list-group small">
+          <li
+            class="list-group-item pointer"
+            v-for="range in quickRanges"
+            :key="range.title"
+            :class="{ 'list-group-item-success': isSelectedRange(range)}"
+            @click="quickRange(range)"
+          >{{ range.title }}</li>
+        </ul>
+        <Checkbox name="relativeRange" :label="$t('Reports.RangeRelativeToData')" v-model="relativeToData"></Checkbox>
       </FilterBlock>
     </Filters>
     <div class="clearfix">
@@ -89,7 +99,8 @@ export default {
             chartData: null,
             hasData: false,
             base64Encoded: null,
-            chart: null
+            chart: null,
+            relativeToData: false
         };
     },
 
@@ -154,6 +165,56 @@ export default {
                     }
                 }
             };
+        },
+
+        quickRanges() {
+            const now = this.relativeToData ? moment(this.chartData.max) : moment();
+            return [
+                {
+                    id: 'thisWeek', 
+                    title: this.relativeToData ? this.$t('Reports.LastWeek') : this.$t('Reports.ThisWeek'), 
+                    range: [moment(now).startOf('isoWeek'), moment(now)]
+                },
+                {
+                    id: 'previousWeek', 
+                    title: this.$t('Reports.PreviousWeek'), 
+                    range: [moment(now).subtract(1,'week').startOf('isoWeek'), 
+                            moment(now).subtract(1,'week').endOf('isoWeek')]
+                },
+                {
+                    id: 'lastMonth', 
+                    title: this.relativeToData ? this.$t('Reports.LastMonth') : this.$t('Reports.ThisMonth'),
+                    range: [moment(now).startOf('month'), moment(now)]
+                },
+                {
+                    id: 'previousMonth', 
+                    title: this.$t('Reports.PreviousMonth'), 
+                    range: [moment(now).subtract(1,'month').startOf('month'), 
+                            moment(now).subtract(1,'month').endOf('month')]
+                },
+                {
+                    id: 'last7Days', 
+                    title: this.$t('Reports.LastNDays', {days: 7}), 
+                    range: [moment(now).subtract(7, 'days'), moment(now)]
+                },
+                {
+                    id: 'last30Days', 
+                    title: this.$t('Reports.LastNDays', {days: 30}), 
+                    range: [moment(now).subtract(30, 'days'), moment(now)]
+                },
+                {
+                    id: 'last90Days', 
+                    title: this.$t('Reports.LastNDays', {days: 90}), 
+                    range: [moment(now).subtract(90, 'days'), moment(now)]
+                },
+                {
+                    id: 'reset', 
+                    title: this.relativeToData ? this.$t('Reports.AllData') : this.$t('Common.Reset'), 
+                    range: this.relativeToData 
+                        ? [moment(this.chartData.min), moment(this.chartData.max)]
+                        : [null, null]
+                }
+            ]
         }
     },
 
@@ -210,6 +271,20 @@ export default {
             });
         },
 
+        quickRange({ range }) {
+            this.selectDateRange({
+                from: range[0], to: range[1]
+            })
+        },
+
+        isSelectedRange(range) {
+            if(range == null || this.chartData == null) return false;
+            if(range.range[0] == null || range.range[1] == null) return false;
+
+            return range.range[0].format("YYYY-MM-DD") == this.chartData.from
+                && range.range[1].format("YYYY-MM-DD") == this.chartData.to
+        },
+
         chartUpdated() {
             this.base64Encoded = this.$refs.chart.getImage();
         },
@@ -235,8 +310,8 @@ export default {
 
                     self.chartData = { 
                         datasets: _.sortBy(datasets, "index"),
-                        from: response.data.From, 
-                        to: response.data.To };
+                        from: response.data.From, to: response.data.To,
+                        min: response.data.MinDate, max: response.data.MaxDate };
                     self.hasData = datasets.length > 0;
                 })
                 .finally(() => self.$store.dispatch("hideProgress"));
