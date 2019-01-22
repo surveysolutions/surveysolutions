@@ -2365,5 +2365,27 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewSummary = interviewSummary
             };
         }
+
+        public InterviewGpsAnswerWithTimeStamp InterviewGpsAnswerWithTimeStamp(
+            Guid interviewId,
+            double latitude,
+            double longitude,
+            Guid entityId,
+            DateTime? timestamp = null,
+            InterviewStatus status = InterviewStatus.Completed,
+            bool idenifying = false)
+
+        {
+            return new InterviewGpsAnswerWithTimeStamp
+            {
+                InterviewId = interviewId,
+                Latitude = latitude,
+                Longitude = longitude,
+                EntityId = entityId,
+                Timestamp = timestamp ?? DateTime.Now,
+                Status = status,
+                Idenifying = idenifying
+            };
+        }
     }
 }

@@ -7,6 +7,8 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 
@@ -14,6 +16,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
 {
     public class InterviewerProfileFactoryTests
     {
+        [Test]
+        public async Task When_getting_interviewers_check_in_points()
+        {
+            var rawPoints = new InterviewGpsAnswerWithTimeStamp[]
+            {
+                Create.Entity.InterviewGpsAnswerWithTimeStamp(Id.g1, 10.10, 20.20, Id.g7, idenifying: true),
+                Create.Entity.InterviewGpsAnswerWithTimeStamp(Id.g2, 11.11, 21.21, Id.g7,  idenifying: true),
+                Create.Entity.InterviewGpsAnswerWithTimeStamp(Id.g1, 12.12, 22.22, Id.g8, idenifying: false),
+                Create.Entity.InterviewGpsAnswerWithTimeStamp(Id.g2, 13.13, 23.23, Id.g8, idenifying: false),
+            };
+            var interviewFactory = Mock.Of<IInterviewFactory>(x => x.GetGpsAnswersForInterviewer(Id.gA) == rawPoints);
+
+            var factory = Create.Service.InterviewerProfileFactory(interviewFactory: interviewFactory, currentUser: Mock.Of<IAuthorizedUser>(x => x.IsAdministrator == true));
+
+            var points = factory.GetInterviewerCheckInPoints(Id.gA);
+
+            Assert.That(points.CheckInPoints.Count, Is.EqualTo(2));
+            CollectionAssert.AreEqual(points.CheckInPoints.Select(x => x.Latitude).ToArray(), new double[] { 12.12, 13.13 });
+            CollectionAssert.AreEqual(points.CheckInPoints.Select(x => x.Longitude).ToArray(), new double[] { 22.22, 23.23 });
+            
+            Assert.That(points.TargetLocations.Count, Is.EqualTo(2));
+            CollectionAssert.AreEqual(points.TargetLocations.Select(x => x.Latitude).ToArray(), new double[] { 10.10, 11.11 });
+            CollectionAssert.AreEqual(points.TargetLocations.Select(x => x.Longitude).ToArray(), new double[] { 20.20, 21.21 });
+            
+        }
+
         [Test]
         public async Task When_getting_traffic_usage()
         {
