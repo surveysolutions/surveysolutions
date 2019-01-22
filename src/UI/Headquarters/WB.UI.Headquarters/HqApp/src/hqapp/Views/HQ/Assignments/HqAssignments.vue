@@ -4,7 +4,7 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
-                <Typeahead control-id="questionnaireId"
+                <Typeahead control-id="questionnaireId" fuzzy
                            :placeholder="$t('Common.AllQuestionnaires')"
                            :value="questionnaireId"
                            :values="config.questionnaires"
@@ -12,7 +12,7 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')" :tooltip="$t('Assignments.Tooltip_Filter_QuestionnaireVersion')">
-                <Typeahead control-id="questionnaireVersion"
+                <Typeahead control-id="questionnaireVersion" fuzzy
                            :placeholder="$t('Common.AllVersions')"
                            :values="questionnaireId == null ? null : questionnaireId.versions"
                            :value="questionnaireVersion"
