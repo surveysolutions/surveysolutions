@@ -95,7 +95,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         await answersAction(new BinaryData
                         {
                             InterviewId = answer.InterviewId,
-                            Answer = answer.Answer,
+                            FileName = answer.Answer,
                             Content = content
                         });
 
@@ -126,7 +126,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             await audioAuditAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
-                                Answer = fileName,
+                                FileName = fileName,
                                 Content = content
                             });
 
