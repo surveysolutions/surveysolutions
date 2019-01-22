@@ -613,7 +613,8 @@ namespace WB.Tests.Abc.TestFactories
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
             IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
             IInterviewerVersionReader interviewerVersionReader = null,
-            IInterviewFactory interviewFactory = null)
+            IInterviewFactory interviewFactory = null,
+            IAuthorizedUser currentUser = null)
         {
             var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
             return new InterviewerProfileFactory(
@@ -622,7 +623,7 @@ namespace WB.Tests.Abc.TestFactories
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                Mock.Of<IAuthorizedUser>(),
+                currentUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IQRCodeHelper>());
         }
 
