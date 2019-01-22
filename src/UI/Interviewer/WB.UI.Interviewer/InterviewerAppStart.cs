@@ -118,7 +118,7 @@ namespace WB.UI.Interviewer
 
         private void CheckAndProcessAudit()
         {
-            var auditService = Mvx.IoCProvider.Resolve<IAuditService>();
+            var auditService = Mvx.IoCProvider.Resolve<IAudioAuditService>();
             auditService.CheckAndProcessAllAuditFiles();
         }
     }
