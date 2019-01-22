@@ -573,7 +573,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool HasUnansweredQuestions(Identity group) 
             => this.Tree.GetGroup(group)?.HasUnansweredQuestions() ?? false;
 
-        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer()
+        public IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer()
         {
             var allCommentedQuestions = this.GetCommentedBySupervisorAllQuestions();
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -635,10 +635,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Select(roster => roster.Identity)
                 .ToList();
 
-        public IEnumerable<Identity> GetEnabledSubgroups(Identity group)
+        public IEnumerable<Identity> GetEnabledSubgroupsAndRosters(Identity group)
             => this.GetGroupsAndRostersInGroup(group)
                 .Where(groupOrRoster => !groupOrRoster.IsDisabled())
-                .Select(groupOrRoster => groupOrRoster.Identity);
+                .Select(x => x.Identity);
 
         private IEnumerable<InterviewTreeGroup> GetGroupsAndRostersInGroup(Identity group)
             => this.Tree.GetGroup(group)?.Children?.OfType<InterviewTreeGroup>() ?? new InterviewTreeGroup[0];
@@ -941,6 +941,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int? GetAssignmentId()
         {
             return this.properties.AssignmentId;
+        }
+
+        public bool? GetIsAudioRecordingEnabled()
+        {
+            return this.properties.IsAudioRecordingEnabled;
         }
 
         public bool IsParentOf(Identity parentIdentity, Identity childIdentity)

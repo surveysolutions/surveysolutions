@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -28,14 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(interviewRepository: interviewRepository, questionnaireStorage: questionnaireRepository);
-            viewModel.Init("interview", questionId, Create.Other.NavigationState());
+            viewModel.Init(interview.Id.FormatGuid(), questionId, Create.Other.NavigationState());
             viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title", outerRosterVector: rosterId.RosterVector, instanceId: 1));
         }
 
         [Test] 
         public void should_insert_new_option () => viewModel.Options.Count.Should().Be(1);
 
-        static MultiOptionLinkedToRosterQuestionViewModel viewModel;
+        static CategoricalMultiLinkedToRosterTitleViewModel viewModel;
         static StatefulInterview interview;
         static Identity questionId;
         static Identity rosterId;

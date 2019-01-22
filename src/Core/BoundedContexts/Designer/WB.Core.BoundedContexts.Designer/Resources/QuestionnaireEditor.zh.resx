@@ -154,7 +154,7 @@
     <value>多选</value>
   </data>
   <data name="QuestionTypeNumeric" xml:space="preserve">
-    <value>数子</value>
+    <value>数字</value>
   </data>
   <data name="QuestionTypePicture" xml:space="preserve">
     <value>图片</value>
@@ -164,5 +164,8 @@
   </data>
   <data name="QuestionTypeText" xml:space="preserve">
     <value>文本</value>
+  </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>地理</value>
   </data>
 </root>

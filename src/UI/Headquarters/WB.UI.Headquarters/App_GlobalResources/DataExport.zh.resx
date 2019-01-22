@@ -160,7 +160,7 @@
     <value>二进制数据存档（图片等）</value>
   </data>
   <data name="Bytes" xml:space="preserve">
-    <value>兆</value>
+    <value>MB</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>已完成</value>

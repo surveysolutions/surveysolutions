@@ -84,22 +84,24 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
-        
-        public virtual void LogInterviewAsSuccessfullyHandled(Guid id)
+        public virtual HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id)
         {
             this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
         
-        public virtual void PostImage(PostFileRequest request)
+        public virtual HttpResponseMessage PostImage(PostFileRequest request)
         {
             this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), null);
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
-        public virtual void PostAudio(PostFileRequest request)
+        public virtual HttpResponseMessage PostAudio(PostFileRequest request)
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
         protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)

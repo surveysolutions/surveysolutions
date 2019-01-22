@@ -244,12 +244,22 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
-            if (deviceSyncProtocolVersion == 7070) // KP-11462
+            if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.AudioRecordingIntroduced)
+            {
+                if (this.assignmentsService.HasAssignmentWithAudioRecordingEnabled(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            }
+
+            if (deviceSyncProtocolVersion == 7080) // release previous to audio recording enabled that is allowed to be synchronized
+            {
+            }
+            else if (deviceSyncProtocolVersion == 7070) // KP-11462
             {
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
-
-            if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
+            else if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
             {
                 if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced
                     && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))

@@ -256,5 +256,28 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.ShouldNotContainError("WB0280");
         }
+
+        [Test]
+        public void when_verifying_entities_count_on_nested_fixed_rosters()
+        {
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                {
+                    Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                    {
+                        Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                        {
+                            Create.TextQuestion()
+                        })
+                    })
+                })
+            }));
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            verificationMessages.ShouldContainError("WB0281");
+        }
     }
 }

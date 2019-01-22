@@ -135,13 +135,7 @@
         FilteredComboboxQuestionOptionsMaxLength,
 
         CategoricalQuestionHasMoreThan200Options,
-
-        CategoricalCascadingOptionsCantContainsEmptyParentValueField,
-
-        CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
-
-        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
-
+        
         CategoricalCascadingQuestionOptionsMaxLength,
 
         MacroIsAbsent,
@@ -163,5 +157,6 @@
         GroupYouAreLinkedToIsNotRoster,
 
         VariableLabelContainsSubstitutionReference,
+        CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair
     }
 }

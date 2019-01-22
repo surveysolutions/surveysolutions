@@ -39,12 +39,20 @@ namespace WB.Services.Export.ExportProcessHandlers
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
 
-                await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
-                {
-                    var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
-                    await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
+                await binaryDataSource.ForEachInterviewMultimediaAsync(settings, 
+                    async data =>
+                    {
+                        var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
+                        await this.UploadFileAsync(interviewFolderPath, data.Content, data.FileName);
 
-                }, progress, cancellationToken);
+                    }, 
+                    async audioAuditRecord =>
+                    {
+                        var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(audioAuditRecord.InterviewId));
+                        var audioFolder = await this.CreateFolderAsync(interviewFolderPath, interviewDataExportSettings.Value.AudioAuditFolderName);
+                        await this.UploadFileAsync(audioFolder, audioAuditRecord.Content, audioAuditRecord.FileName);
+                    }, 
+                    progress, cancellationToken);
             }
         }
 

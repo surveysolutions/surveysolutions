@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
 
         private void BecauseOf() =>
-            enabledSubgroupsIds = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
+            enabledSubgroupsIds = statefulInterview.GetEnabledSubgroupsAndRosters(selectedGroupIdentity).ToArray();
 
         [NUnit.Framework.Test] public void should_contains_3_identities () =>
             enabledSubgroupsIds.Should().BeEquivalentTo(

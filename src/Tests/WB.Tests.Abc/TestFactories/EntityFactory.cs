@@ -40,6 +40,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -145,9 +146,10 @@ namespace WB.Tests.Abc.TestFactories
                 Content = content,
             };
 
-        public AttachmentContentMetadata AttachmentContentMetadata(string contentType)
+        public AttachmentContentMetadata AttachmentContentMetadata(string contentType, string id = null)
             => new AttachmentContentMetadata
             {
+                Id = id ?? Guid.NewGuid().ToString(),
                 ContentType = contentType,
             };
 
@@ -2337,6 +2339,30 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewerSettings
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
+            };
+        }
+
+        public SpeedReportInterviewItem SpeedReportInterviewItem(InterviewSummary interviewSummary)
+        {
+            var firstAnswerSet = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.FirstAnswerSet);
+            var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.Created);
+
+            return new SpeedReportInterviewItem()
+            {
+                InterviewId = interviewSummary.SummaryId,
+                QuestionnaireId = interviewSummary.QuestionnaireId,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
+
+                CreatedDate = created?.Timestamp ?? DateTime.UtcNow,
+                FirstAnswerDate = firstAnswerSet?.Timestamp,
+                InterviewerName = firstAnswerSet?.InterviewerName,
+                InterviewerId = firstAnswerSet?.InterviewerId,
+                SupervisorName = firstAnswerSet?.SupervisorName,
+                SupervisorId = firstAnswerSet?.SupervisorId,
+
+                InterviewSummary = interviewSummary
             };
         }
     }

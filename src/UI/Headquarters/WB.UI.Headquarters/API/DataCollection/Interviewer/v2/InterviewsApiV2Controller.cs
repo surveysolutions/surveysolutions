@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
-        public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
+        public override HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
@@ -93,8 +93,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             return this.Ok ();
         }
         [HttpPost]
-        public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
-        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
+        public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
     }
 }

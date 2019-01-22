@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
-    [TestOf(typeof(MultiOptionLinkedToRosterQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToQuestionViewModel))]
     public class MultiOptionLinkedToRosterQuestionViewModelTests : BaseMvvmCrossTest
     {
         [Test]
@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 new decimal[] { 2 }, 
             });
 
-            var viewModel = Create.ViewModel.MultiOptionLinkedToRosterQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
+            var viewModel = Create.ViewModel.MultiOptionLinkedToRosterTitleViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
 
             //act
-            viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
 
             //assert
             Assert.That(viewModel.Options.Count, Is.EqualTo(5));

@@ -304,6 +304,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MembershipProvider\Roles\" />

@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var option = viewModel.Options.First();
             option.Checked = false;
-            await viewModel.ToggleAnswerAsync(option);
+            option.CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             userInteractionService.Verify(x => x.ConfirmAsync(message, "", null, null, true), Times.Once);
         }
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         private Mock<IUserInteractionService> userInteractionService;
     }
 }

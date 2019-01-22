@@ -4,9 +4,14 @@ using System.Globalization;
 using System.Linq;
 using Dapper;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
@@ -15,12 +20,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
+        private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         public ChartStatisticsViewFactory(IUnitOfWork unitOfWork, 
-            IAllUsersAndQuestionnairesFactory questionnairesFactory)
+            IAllUsersAndQuestionnairesFactory questionnairesFactory, 
+            INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
         {
             this.unitOfWork = unitOfWork;
             this.questionnairesFactory = questionnairesFactory;
+            this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private static readonly int[] AllowedStatuses =
@@ -32,6 +43,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             (int) InterviewStatus.ApprovedByHeadquarters
         };
 
+        public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireListWithData()
+        {
+            var questionnaireListWithData = cumulativeReportStatusChangeStorage
+                .Query(_ => _
+                    .Where(q => AllowedStatuses.Contains((int)q.Status))
+                    .Select(q => q.QuestionnaireIdentity).Distinct().ToList());
+
+            return this.questionnaireRepository
+                .Query(q => q.Where(item => !item.IsDeleted && questionnaireListWithData.Contains(item.Id)).ToList())
+                .GetQuestionnaireComboboxViewItems();
+        }
+
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
             var questionnairesList = this.questionnairesFactory.GetQuestionnaires(input.QuestionnaireId, input.QuestionnaireVersion)
@@ -39,8 +62,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
             // ReSharper disable StringLiteralTypo
             var dates = this.unitOfWork.Session.Connection.QuerySingle<(DateTime? min, DateTime? max)>(
-                "select min(date), max(date) from readside.cumulativereportstatuschanges " +
-                "where questionnaireidentity = any(@questionnairesList)", new { questionnairesList });
+                @"select min(date), max(date) from readside.cumulativereportstatuschanges
+                      where questionnaireidentity = any(@questionnairesList) and status = any(@allowedStatuses)", 
+                 new { questionnairesList, AllowedStatuses });
 
             if (dates.min == null && dates.max == null) // we have no data at all
             {
@@ -48,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             }
 
             var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
-            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max() ?? DateTime.MaxValue;
+            var rightEdge = new[] {input.From ?? dates.min ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
             
             var queryParams = new
             {
@@ -65,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // report CTE will produce report over all data
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 @"with 
-                        dates as (select generate_series(@minDateQuery::date,@maxDate::date, interval '1 day')::date as date),
+                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
                         (
@@ -99,7 +123,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            
+            view.MaxDate = FormatDate(dates.max.Value);
+            view.MinDate = FormatDate(dates.min.Value);
+
             return view;
         }
 

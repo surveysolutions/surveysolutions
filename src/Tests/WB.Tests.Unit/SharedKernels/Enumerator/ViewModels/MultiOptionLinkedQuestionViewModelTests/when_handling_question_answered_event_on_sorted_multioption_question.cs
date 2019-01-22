@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         [NUnit.Framework.Test] public void should_put_answers_order_on_option2 () => questionViewModel.Options.Second().CheckedOrder.Should().Be(1);
         [NUnit.Framework.Test] public void should_put_checked_on_checked_items () => questionViewModel.Options.Count(x => x.Checked).Should().Be(2);
 
-        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
+        static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity questionId;
         static StatefulInterview interview;
         static LiteEventRegistry eventRegistry;

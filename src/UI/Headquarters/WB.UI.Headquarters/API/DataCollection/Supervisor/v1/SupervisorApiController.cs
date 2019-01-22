@@ -93,13 +93,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            string pathToInterviewerApp =
+            string pathToSupervisorApp =
                 this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory),
-                    ClientApkInfo.InterviewerFileName);
+                    ClientApkInfo.SupervisorFileName);
 
-            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+            return !this.fileSystemAccessor.IsFileExists(pathToSupervisorApp)
                 ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+                : this.androidPackageReader.Read(pathToSupervisorApp).Version;
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]

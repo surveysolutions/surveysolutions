@@ -97,7 +97,8 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 command.SupervisorId,
                 null,
                 interviewKey,
-                null);
+                null,
+                isAudioRecordingEnabled:false);
 
             return resultCommand;
         }

@@ -118,6 +118,7 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion: questionnaireVersion ?? 7,
                 assignmentId: null,
+                isAudioRecordingEnabled:false,
                 originDate: originDate ?? DateTimeOffset.Now,
                 usesExpressionStorage: true);
 

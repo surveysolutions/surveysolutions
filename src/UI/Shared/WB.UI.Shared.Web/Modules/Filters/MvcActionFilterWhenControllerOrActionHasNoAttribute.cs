@@ -3,19 +3,19 @@ using System.Web.Mvc;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class MvcActionFilterWhenControllerOrActionHasNoAttribute : ActionFilterAttribute
+    public class MvcActionFilterWhenControllerOrActionHasNoAttribute<TFilter, TAttribute> : IActionFilter, IResultFilter
+        where TFilter : System.Web.Mvc.ActionFilterAttribute
+        where TAttribute : Attribute
     {
-        private readonly ActionFilterAttribute filterInstance;
-        private readonly Type attribute;
+        private readonly TFilter filterInstance;
         private bool shouldExecute;
 
-        public MvcActionFilterWhenControllerOrActionHasNoAttribute(ActionFilterAttribute filterInstance, Type attribute)
+        public MvcActionFilterWhenControllerOrActionHasNoAttribute(TFilter filterInstance)
         {
             this.filterInstance = filterInstance;
-            this.attribute = attribute;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             shouldExecute = ShouldExecute(filterContext.ActionDescriptor, filterContext.Controller);
 
@@ -23,46 +23,36 @@ namespace WB.UI.Shared.Web.Modules.Filters
             {
                 filterInstance.OnActionExecuting(filterContext);
             }
-
-            base.OnActionExecuting(filterContext);
         }
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        public void OnActionExecuted(ActionExecutedContext filterContext)
         {
             if (shouldExecute)
             {
                 filterInstance.OnActionExecuted(filterContext);
             }
-
-            base.OnActionExecuted(filterContext);
         }
 
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
+        public void OnResultExecuting(ResultExecutingContext filterContext)
         {
             if (shouldExecute)
             {
                 filterInstance.OnResultExecuting(filterContext);
             }
-
-
-            base.OnResultExecuting(filterContext);
         }
 
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        public void OnResultExecuted(ResultExecutedContext filterContext)
         {
             if (shouldExecute)
             {
                 filterInstance.OnResultExecuted(filterContext);
             }
-
-            base.OnResultExecuted(filterContext);
         }
-
 
         private bool ShouldExecute(ActionDescriptor actionDescriptor, ControllerBase baseController)
         {
-            var actionAttributes = actionDescriptor.GetCustomAttributes(attribute, true);
-            var controllerAttributes = baseController.GetType().GetCustomAttributes(attribute, true);
+            var actionAttributes = actionDescriptor.GetCustomAttributes(typeof(TAttribute), true);
+            var controllerAttributes = baseController.GetType().GetCustomAttributes(typeof(TAttribute), true);
             bool shouldExecute = (actionAttributes == null || actionAttributes.Length == 0)
                                  && (controllerAttributes == null || controllerAttributes.Length == 0);
             return shouldExecute;

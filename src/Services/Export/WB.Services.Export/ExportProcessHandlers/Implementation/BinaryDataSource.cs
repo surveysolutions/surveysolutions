@@ -37,8 +37,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public async Task ForEachMultimediaAnswerAsync(ExportSettings settings, 
-            Func<BinaryData, Task> action, 
+        public async Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
+            Func<BinaryData, Task> answersAction, 
+            Func<BinaryData, Task> audioAuditAction, 
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
@@ -63,6 +64,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var audioAuditInfos = await this.interviewFactory.GetAudioAuditInfos(settings.Tenant, interviewIds, cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                double totalFiles = allMultimediaAnswers.Count + audioAuditInfos.Sum(ai => ai.FileNames.Length);
                 long filesUploaded = 0;
                 var interviewProgress = interviewsProcessed.PercentOf(interviewsToExport.Count);
 
@@ -86,16 +92,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                                 continue;
                         }
                         
-                        await action(new BinaryData
+                        await answersAction(new BinaryData
                         {
                             InterviewId = answer.InterviewId,
-                            Answer = answer.Answer,
+                            FileName = answer.Answer,
                             Content = content
                         });
 
                         filesUploaded++;
 
-                        var filesPercent = filesUploaded / (double) allMultimediaAnswers.Count;
+                        var filesPercent = filesUploaded / totalFiles;
                         var batchProgress = (long) (interviewIds.Length * filesPercent );
                         var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
                         
@@ -104,6 +110,39 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                     {
                         logger.LogWarning("[{statusCode}] Cannot download file for {interviewId} - {answer}", e.StatusCode, answer.InterviewId, answer.Answer);
+                    }
+                }
+
+
+                foreach (var audioAuditInfo in audioAuditInfos)
+                {
+                    foreach (var fileName in audioAuditInfo.FileNames)
+                    {
+                        try
+                        {
+                            var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
+                            var content = await audioContent.ReadAsByteArrayAsync();
+
+                            await audioAuditAction(new BinaryData
+                            {
+                                InterviewId = audioAuditInfo.InterviewId,
+                                FileName = fileName,
+                                Content = content
+                            });
+
+                            filesUploaded++;
+
+                            var filesPercent = filesUploaded / totalFiles;
+                            var batchProgress = (long)(interviewIds.Length * filesPercent);
+                            var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
+
+                            progress.Report(interviewProgress + batchInterviewsProgress);
+
+                        }
+                        catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            logger.LogWarning("[{statusCode}] Cannot download audio audit record for interview: {interviewId} - {fileName}", e.StatusCode, audioAuditInfo.InterviewId, fileName);
+                        }
                     }
                 }
 

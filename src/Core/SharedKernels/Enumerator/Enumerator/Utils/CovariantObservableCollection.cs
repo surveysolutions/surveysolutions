@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -14,6 +16,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public CovariantObservableCollection(IEnumerable<T> collection) : base(collection)
         {
+        }
+
+        protected override Task InvokeOnMainThread(Action action)
+        {
+            action();
+            return Task.CompletedTask;
         }
     }
 }

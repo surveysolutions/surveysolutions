@@ -135,7 +135,7 @@ h5{
     	margin-top: 15px;
 	}
 	.neighbor-block-to-search{
-		padding-right: 365px; 
+		padding-right: 330px; 
 		&.row-without-padding{
 			padding-right: 0;
 		}
@@ -518,6 +518,19 @@ main.hidden.display-block{
 .add-transition{
 	@include transition(all, 0.2s);
 }
+.contains-search{
+	.page-header{
+		padding-right: 310px;
+	}
+}
+@media (max-width: $screen-sm-min){
+	.contains-search{
+		.page-header{
+			padding-right: 0;
+		}
+	}
+}
+
 @media (max-width: $screen-md-min){
 	html body {
 		padding-top: 70px;
@@ -538,11 +551,6 @@ main.hidden.display-block{
 	}
 	.main-information-no-filter{
 		padding: 0 10px;
-	}
-	.page-header {
-		.neighbor-block-to-search{
-			padding-right: 255px;
-		}
 	}
 }
 @media (max-width: $screen-sm-min){

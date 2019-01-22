@@ -98,6 +98,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }, token, transferProgress);
         }
 
+        public Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
+        {
+            return this.syncClient.SendAsync(new UploadInterviewAudioAuditRequest
+            {
+                InterviewAudio = new PostFileApiView()
+                {
+                    FileName = fileName,
+                    InterviewId = interviewId,
+                    ContentType = contentType,
+                    Data = Convert.ToBase64String(fileData)
+                },
+            }, token, transferProgress);
+        }
+
         public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire,
             IProgress<TransferProgress> transferProgress,
             CancellationToken token)

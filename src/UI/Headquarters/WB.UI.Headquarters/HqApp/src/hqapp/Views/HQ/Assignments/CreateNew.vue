@@ -57,8 +57,8 @@
                                         <div class="field answered">
                                             <input v-model="sizeQuestion.answer" 
                                                 :title="this.$t('Assignments.SizeExplanation')"
-                                                v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
-                                                maxlength="9"
+                                                v-validate="sizeValidations"
+                                                maxlength="5"
                                                 type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
                                         </div>
                                     </div>
@@ -114,6 +114,13 @@ export default {
         };
     },
     computed: {
+        sizeValidations(){
+            return {
+                regex: "^-?([0-9]+)$",
+                min_value: -1,
+                max_value: this.config.maxInterviewsByAssignment
+            };
+        },
         entities() {
             return this.$store.state.takeNew.takeNew.entities;
         },

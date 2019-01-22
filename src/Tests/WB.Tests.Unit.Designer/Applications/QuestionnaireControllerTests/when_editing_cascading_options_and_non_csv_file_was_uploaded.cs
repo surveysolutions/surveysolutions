@@ -1,3 +1,6 @@
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Web;
@@ -15,7 +18,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             controller = CreateQuestionnaireController();
             SetControllerContextWithSession(controller, "options", new QuestionnaireController.EditOptionsViewModel());
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes("Simple text file")) {Position = 0};
+            var stream = new MemoryStream();
+
+            var imageInBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=";
+            var imageStream = new MemoryStream(Convert.FromBase64String(imageInBase64));
+            Image.FromStream(imageStream).Save(stream, ImageFormat.Jpeg);
+
+            stream.Position = 0;
             postedFile = Mock.Of<HttpPostedFileBase>(pf => pf.InputStream == stream);
             BecauseOf();
         }

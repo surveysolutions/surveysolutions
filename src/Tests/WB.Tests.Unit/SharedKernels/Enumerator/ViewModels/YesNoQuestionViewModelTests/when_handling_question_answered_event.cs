@@ -71,16 +71,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         [Test] 
         public void should_set_checked_order_to_yes_options () 
         {
-            viewModel.Options[4].YesAnswerCheckedOrder.Should().Be(1);
-            viewModel.Options[1].YesAnswerCheckedOrder.Should().Be(null);
-            viewModel.Options[0].YesAnswerCheckedOrder.Should().Be(2);
+            viewModel.Options[4].CheckedOrder.Should().Be(1);
+            viewModel.Options[1].CheckedOrder.Should().Be(null);
+            viewModel.Options[0].CheckedOrder.Should().Be(2);
         }
 
         [Test] 
         public void should_mark_options_as_checked () => 
-            viewModel.Options.Count(x => x.YesSelected).Should().Be(2);
+            viewModel.Options.Count(x => x.Checked).Should().Be(2);
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }

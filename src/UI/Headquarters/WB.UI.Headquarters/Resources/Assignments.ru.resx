@@ -177,18 +177,15 @@
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Начать новое интервью</value>
-    <comment>Начать новое интервью</comment>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник</value>
-    <comment>Опросник</comment>
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>Все задачи</value>
   </data>
   <data name="InterviewsNeeded" xml:space="preserve">
     <value>Необходимо интервью</value>
-    <comment>Необходимо интервью</comment>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>Показывает состояние задания. Может быть активным или заархивированным.</value>
@@ -288,5 +285,23 @@
   </data>
   <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
     <value>Выберите версию опросника, чтобы посмотреть созданные по нему задания. Выберите "Любая версия", чтобы увидеть задания по всем версиям опросника</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Ошибка создания задания: </value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Настройки записи аудио для задания {{id}}</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Вести аудио запись</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>Вести аудио запись во время интервью</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Вести аудио запись</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Вести аудио запись во время интервью</value>
   </data>
 </root>
