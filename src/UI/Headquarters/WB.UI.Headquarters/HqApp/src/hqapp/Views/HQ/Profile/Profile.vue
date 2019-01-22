@@ -51,6 +51,7 @@
 <script>
     import MarkerClusterer from "@google/markerclustererplus";
     import Vue from "vue";
+    import * as toastr from "toastr";
 
     export default {
         data: function() {
@@ -101,11 +102,18 @@
                 this.$http
                     .get(this.model.api.interviewerPoints + "/" + this.interviewerId)
                     .then(response => {
-                        var points = response.data || [];
+                        var data = response.data || { CheckInPoints: [], TargetLocations: []};
+                        var points = data.CheckInPoints || [];
+                        var locations = data.TargetLocations || [];
                         if (points.length > 0) {
                             self.showPointsOnMap(points);
                         } else {
                             toastr.error(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
+                        }
+
+                        if (locations.length > 0)
+                        {
+                            self.showLocationsOnMap(locations);
                         }
                     });
             },
@@ -116,6 +124,30 @@
                 
                 return is_ie; 
             },
+            showLocationsOnMap(locations){
+                const self = this;
+                locations.forEach(point => {
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(
+                            point.Latitude,
+                            point.Longitude,
+                        ),
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: '#2a81cb',
+                            strokeColor: '#2a81cb'
+                        },
+                        map: self.map,
+                        opacity: 1,
+                        zIndex: 999
+                    });
+                    marker.set("id", point.InterviewIds[0]);
+
+                    self.addDetailsOnClick(marker, point);
+                });
+            },
+
             showPointsOnMap(points){
                 const self = this;
                
@@ -142,13 +174,8 @@
                     });
                     marker.set("id", point.Index);
 
-                    google.maps.event.addListener(marker, "click",
-                        (function(marker, point) {
-                            return function() { 
-                                self.loadPointDetails(point.InterviewIds, marker);
-                            };
-                        })(marker, point)
-                    );
+                    self.addDetailsOnClick(marker, point);
+
                     markers.push(marker);
                     bounds.extend(marker.getPosition());
 
@@ -176,6 +203,16 @@
                 });
                 
                 this.map.fitBounds(bounds);
+            },
+            addDetailsOnClick: function(marker, point){
+                const self = this;
+                google.maps.event.addListener(marker, "click",
+                    (function(marker, point) {
+                        return function() { 
+                            self.loadPointDetails(point.InterviewIds, marker);
+                        };
+                    })(marker, point)
+                );
             },
             drawLines(){
                 if (!this.markerCluster)
