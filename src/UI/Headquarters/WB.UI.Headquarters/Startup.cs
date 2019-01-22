@@ -121,11 +121,14 @@ namespace WB.UI.Headquarters
             logger.Info($@"Starting Headquarters {container.Resolve<IProductVersion>()}");
 
             ConfigureAuth(app);
-            InitializeAppShutdown(app);
+            
             InitializeMVC();
             ConfigureWebApi(app, config);
 
             app.UseWebApi(config);
+
+
+            InitializeAppShutdown(app, ServiceLocator.Current.GetInstance<IScheduler>());
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
@@ -234,15 +237,15 @@ namespace WB.UI.Headquarters
             return next.Invoke();
         }
 
-        private static void InitializeAppShutdown(IAppBuilder app)
+        private static void InitializeAppShutdown(IAppBuilder app, IScheduler scheduler)
         {
             var properties = new AppProperties(app.Properties);
             CancellationToken token = properties.OnAppDisposing;
             if (token != CancellationToken.None)
-                token.Register(OnShutdown);
+                token.Register(()=> OnShutdown(scheduler));
         }
 
-        private static void OnShutdown()
+        private static void OnShutdown(IScheduler scheduler)
         {
             CommonMetrics.StateFullInterviewsCount.Set(0);
 
@@ -251,7 +254,7 @@ namespace WB.UI.Headquarters
             logger.Info(@"Ending application.");
             logger.Info(@"ShutdownReason: " + HostingEnvironment.ShutdownReason);
 
-            ServiceLocator.Current.GetInstance<IScheduler>()?.Shutdown();
+            scheduler?.Shutdown();
 
             if (HostingEnvironment.ShutdownReason != ApplicationShutdownReason.HostingEnvironment) return;
 
