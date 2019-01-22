@@ -7,8 +7,7 @@ $.fn.preventDoubleSubmission = function () {
         if ($form.data('submitted') === true) {
             // Previously submitted - don't submit again
             e.preventDefault();
-        } else if ($form.valid()) {
-            // Mark it so that the next submit can be ignored
+        } else {
             $form.data('submitted', true);
         }
     });

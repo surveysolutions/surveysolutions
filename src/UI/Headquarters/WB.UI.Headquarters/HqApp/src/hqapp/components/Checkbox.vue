@@ -12,7 +12,7 @@
 <script>
 export default {
     props: {
-        enabled: {tyep: Boolean, default: true},
+        enabled: {type: Boolean, default: true},
 
         name: {
             type: String,
@@ -30,7 +30,7 @@ export default {
 
     methods: {
         checkedChange(ev) {
-            this.$emit("input", {
+            this.$emit("input", ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
                 name: this.name

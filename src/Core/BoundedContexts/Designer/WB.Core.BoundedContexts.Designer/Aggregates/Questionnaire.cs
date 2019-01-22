@@ -1170,10 +1170,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 : (Guid?) null;
         }
 
-        public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
+        public void ReplaceOptionsWithClassification(ReplaceOptionsWithClassification command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(command.QuestionId,
+                categoricalOneAnswerQuestion.QuestionType,
+                categoricalOneAnswerQuestion.QuestionScope,
+                categoricalOneAnswerQuestion.QuestionText,
+                categoricalOneAnswerQuestion.StataExportCaption,
+                categoricalOneAnswerQuestion.VariableLabel,
+                categoricalOneAnswerQuestion.ConditionExpression,
+                categoricalOneAnswerQuestion.HideIfDisabled,
+                null,
+                categoricalOneAnswerQuestion.Featured,
+                categoricalOneAnswerQuestion.Instructions,
+                categoricalOneAnswerQuestion.Properties,
+                null,
+                ConvertOptionsToAnswers(command.Options),
+                categoricalOneAnswerQuestion.LinkedToQuestionId,
+                categoricalOneAnswerQuestion.LinkedToRosterId,
+                null, null, null, null, null,
+                true,
+                null/*categoricalOneAnswerQuestion.CascadeFromQuestionId*/,
+                null,
+                categoricalOneAnswerQuestion.ValidationConditions,
+                null,
+                false);
+
+            this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
+        }
+
+        public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, QuestionnaireCategoricalOption[] options)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId, options);
+            this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
             IQuestion newQuestion = CreateQuestion(questionId,
@@ -1203,12 +1235,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
 
-        public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
+        public void UpdateCascadingComboboxOptions(Guid questionId, Guid responsibleId, QuestionnaireCategoricalOption[] options)
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId, options);
-            ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
-            ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
+            ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId);
             ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
@@ -2070,7 +2100,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId, Option[] options)
+        private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId)
         {
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
             if (categoricalOneAnswerQuestion == null)
@@ -2086,11 +2116,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionIsNotAFilteredCombobox,
                     string.Format(ExceptionMessages.QuestionIsNotCombobox, FormatQuestionForException(questionId, this.innerDocument)));
             }
-
-            ThrowIfOptionsCanNotBeParsed(options);
         }
 
-        private void ThrowDomainExceptionIfCascadingComboboxIsInvalid(Guid questionId, Option[] options)
+        private void ThrowDomainExceptionIfCascadingComboboxIsInvalid(Guid questionId)
         {
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
             if (categoricalOneAnswerQuestion == null)
@@ -2099,44 +2127,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionNotFound,
                     string.Format(ExceptionMessages.ComboboxCannotBeFound, questionId));
             }
-            
-            ThrowIfOptionsCanNotBeParsed(options);
         }
 
-        private static void ThrowIfOptionsCanNotBeParsed(Option[] options)
-        {
-            var numberStyles = NumberStyles.None | NumberStyles.AllowLeadingSign | NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingWhite;
-            if (options.Any(x => !int.TryParse(x.Value,
-                numberStyles,
-                CultureInfo.InvariantCulture, out int _)))
-            {
-                throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters,
-                    ExceptionMessages.OptionValuesShouldBeNumbers);
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasEmptyParentValue(Option[] options)
-        {
-            if (options.Select(x => x.ParentValue).Any(string.IsNullOrWhiteSpace))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsCantContainsEmptyParentValueField,
-                    ExceptionMessages.CategoricalCascadingOptionsCantContainsEmptyParentValueField);
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(Option[] options)
-        {
-            decimal d;
-            if (options.Select(x => x.ParentValue).Any(number => !Decimal.TryParse(number, out d)))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
-                    ExceptionMessages.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField);
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(Option[] options)
+        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(QuestionnaireCategoricalOption[] options)
         {
 
             if (options.Select(x => x.ParentValue + "$" + x.Title).Distinct().Count() != options.Length)
@@ -2157,24 +2150,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title?.Trim();
         }
 
-        
-        private static Answer[] ConvertOptionsToAnswers(Option[] options)
-        {
-            if (options == null)
-                return null;
 
-            return options.Select(ConvertOptionToAnswer).ToArray();
-        }
+        private static Answer[] ConvertOptionsToAnswers(QuestionnaireCategoricalOption[] options)
+            => options?.Select(ConvertOptionToAnswer).ToArray();
 
-        private static Answer ConvertOptionToAnswer(Option option)
+        private static Answer ConvertOptionToAnswer(QuestionnaireCategoricalOption option) => new Answer
         {
-            return new Answer
-            {
-                AnswerValue = option.Value,
-                AnswerText = option.Title,
-                ParentValue = option.ParentValue
-            };
-        }
+            AnswerCode = option.Value,
+            AnswerText = option.Title,
+            ParentCode = option.ParentValue,
+            ParentValue = option.ParentValue?.ToString(),
+            AnswerValue = option.Value.ToString()
+        };
+
+        private static Answer[] ConvertOptionsToAnswers(Option[] options) 
+            => options?.Select(ConvertOptionToAnswer).ToArray();
+
+        private static Answer ConvertOptionToAnswer(Option option) => new Answer
+        {
+            AnswerValue = option.Value,
+            AnswerText = option.Title,
+            ParentValue = option.ParentValue
+        };
 
         private IQuestion GetQuestion(Guid questionId)
         {

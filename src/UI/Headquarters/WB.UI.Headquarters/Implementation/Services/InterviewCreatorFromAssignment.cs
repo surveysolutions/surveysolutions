@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -39,27 +36,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.userViewFactory = userViewFactory;
             this.authorizedUser = authorizedUser;
         }
-
-        public void CreateInterviewIfQuestionnaireIsOld(HqUser responsible, QuestionnaireIdentity questionnaireIdentity, int assignmentId, IList<IdentifyingAnswer> identifyingData)
-        {
-            if (this.IsSupportAssignments(questionnaireIdentity))
-                return;
-
-            var responsibleSupervisorId = responsible.IsInRole(UserRoles.Interviewer) ? responsible.Profile.SupervisorId.Value : responsible.Id;
-            var responsibleInterviewerId = responsible.IsInRole(UserRoles.Interviewer) ? responsible.Id : (Guid?)null;
-
-            List<InterviewAnswer> answers = identifyingData
-                .Select(ia => new InterviewAnswer
-                {
-                    Identity = ia.Identity,
-                    Answer = this.answerSerializer.Deserialize<AbstractAnswer>(ia.Answer)
-                })
-                .Where(x => x.Answer != null)
-                .ToList();
-
-            this.ExecuteCreateInterviewCommand(questionnaireIdentity, assignmentId, responsibleSupervisorId, responsibleInterviewerId, answers);
-        }
-
+        
         public void CreateInterviewIfQuestionnaireIsOld(Guid responsibleId, QuestionnaireIdentity questionnaireIdentity, int assignmentId,
             List<InterviewAnswer> interviewAnswers)
         {
@@ -88,7 +65,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                 answers: answers,
                 protectedVariables: new List<string>(),
                 interviewKey: this.interviewKeyGenerator.Get(),
-                assignmentId: assignmentId);
+                assignmentId: assignmentId,
+                isAudioRecordingEnabled:false); //old Questionnaire, setting is not set
 
             this.commandService.Execute(command); 
         }

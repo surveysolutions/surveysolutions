@@ -340,6 +340,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                 ?.PublicKey;
 
+        public Guid? GetSectionIdByVariable(string variableName)
+            => this.GroupCache.Values.SingleOrDefault(x =>
+                    string.Equals(x.VariableName, variableName, StringComparison.InvariantCultureIgnoreCase))
+                ?.PublicKey;
+
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
         public string GetQuestionVariableName(Guid questionId) => this.GetQuestionOrThrow(questionId).StataExportCaption;

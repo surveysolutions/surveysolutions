@@ -31,6 +31,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IEncryptionService encryptionService;
         private readonly ISerializer serializer;
         private readonly IUserInteractionService userInteractionService;
+        private readonly string sendTabletInfoRelativeUrl;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -45,7 +46,8 @@ namespace WB.UI.Shared.Enumerator.Services
             ISecureStorage secureStorage,
             IEncryptionService encryptionService,
             ISerializer serializer,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            string sendTabletInfoRelativeUrl)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -59,6 +61,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.encryptionService = encryptionService;
             this.serializer = serializer;
             this.userInteractionService = userInteractionService;
+            this.sendTabletInfoRelativeUrl = sendTabletInfoRelativeUrl;
         }
 
         public async Task<string> BackupAsync()
@@ -146,7 +149,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     await this.restService.SendStreamAsync(
                         stream: fileStream,
                         customHeaders: backupHeaders,
-                        url: "api/interviewer/v2/tabletInfo",
+                        url: this.sendTabletInfoRelativeUrl,
                         credentials:
                         this.principal.IsAuthenticated
                             ? new RestCredentials

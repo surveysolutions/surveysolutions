@@ -216,22 +216,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 Headers = new[]
                 {
                     Report.COLUMN_DAYS, Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED, Report.COLUMN_COMPLETED,
-                    Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
-                    Report.COLUMN_TOTAL
+                    Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR, Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ
                 },
                 Data = new[]
                 {
                     new object[]
                     {
                         view.TotalRow.RowHeader, view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount, view.TotalRow.CompletedCount,
-                        view.TotalRow.RejectedBySupervisorCount, view.TotalRow.ApprovedBySupervisorCount, view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
-                        view.TotalRow.TotalCount
+                        view.TotalRow.RejectedBySupervisorCount, view.TotalRow.ApprovedBySupervisorCount, view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
                     x.RowHeader, x.SupervisorAssignedCount, x.InterviewerAssignedCount, x.CompletedCount,
-                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
-                    x.TotalCount
+                    x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount, x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount
                 })).ToArray()
             };
         }

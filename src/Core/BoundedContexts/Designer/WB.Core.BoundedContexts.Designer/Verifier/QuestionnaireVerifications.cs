@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w, \-\(\)\\/]*$");
+        public const string QuestionnaireTitleRegularExpression = @"^(?!.*[_]{2})[_A-Za-z0-9 \-\(\)\\/]*$";
+        private static readonly Regex QuestionnaireNameRegex = new Regex(QuestionnaireTitleRegularExpression);
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
@@ -37,8 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0097", QuestionnaireTitleHasInvalidCharacters, VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
-            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
+            Error("WB0281", QuestionnaireExceededEntitiesLimit, string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, MaxTotalRosterPropagationLimit)),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
@@ -52,6 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
+
+            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
             Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
         };
 
@@ -205,6 +208,30 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return Char.IsDigit(variable[0]) || variable[0] == '_';
         }
 
+        private static bool QuestionnaireExceededEntitiesLimit(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var questionnaireDocument = questionnaire.Questionnaire.Questionnaire;
+            var entitiesCount = GetMaxElementsCount(questionnaireDocument, levelMultiplier: 1);
+            return entitiesCount > MaxTotalRosterPropagationLimit;
+        }
+
+        private static int GetMaxElementsCount(IComposite entity, int levelMultiplier)
+        {
+            int count = 1 * levelMultiplier;
+
+            foreach (var child in entity.Children)
+            {
+                if (child is IGroup group && group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                {
+                    levelMultiplier = levelMultiplier * group.FixedRosterTitles.Length;
+                }
+
+                count += GetMaxElementsCount(child, levelMultiplier);
+            }
+
+            return count;
+        }
+
         private static bool VariableNameEndWithUnderscore(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(entity.VariableName))
@@ -280,7 +307,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
             var allAllowedVariableNames = questionnaire
-                .Find<IComposite>(x => x is IQuestion || (x is IGroup group && group.IsRoster))
+                .Find<IComposite>(x => x is IQuestion || x is IGroup group)
                 .Select(x => x.VariableName?.ToLower())
                 .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
                 .Where(x => !string.IsNullOrEmpty(x))

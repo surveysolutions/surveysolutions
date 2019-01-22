@@ -68,15 +68,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         [NUnit.Framework.Test] public void should_mark_answered_options_as_checked () 
         {
             var lastOption = viewModel.Options.Last();
-            lastOption.YesSelected.Should().BeTrue();
+            lastOption.Checked.Should().BeTrue();
             lastOption.Title.Should().Be("item5");
-            lastOption.YesAnswerCheckedOrder.Should().Be(1);
+            lastOption.CheckedOrder.Should().Be(1);
             lastOption.Value.Should().Be(5m);
         }
 
         [NUnit.Framework.Test] public void should_subscribe_model_in_events_registry () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static string interviewId;
         static Identity questionId;
         static NavigationState navigationState;

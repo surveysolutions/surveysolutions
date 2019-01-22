@@ -132,7 +132,7 @@
 Идентификатор Вашего устройства - '{0}'</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
-    <value>Ожидание действий от устройств интервьюверов</value>
+    <value>Ожидание действий от устройств интервьюеров</value>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Загрузка ошибок с планшетов интревьюеров</value>

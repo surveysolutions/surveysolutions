@@ -39,7 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
             IAttachmentContentStorage attachmentContentStorage = null,
-            IAsyncRunner asyncRunner = null,
             IPlainStorage<TranslationInstance> translationsStorage = null,
             IQuestionnaireStorage questionnaireRepository = null)
         {
@@ -64,7 +63,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: questionnaireListStorage,
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
                 logger: logger ?? Mock.Of<ILogger>(),
-                asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
                 questionnaireDownloader: new QuestionnaireDownloadViewModel(
                     principal: mockOfPrincipal.Object,
                     designerApiService: designerApiService,

@@ -1079,6 +1079,9 @@
   <data name="StatusDurationDescription" xml:space="preserve">
     <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
+  <data name="SurveyStatisticsDescription" xml:space="preserve">
+    <value>The report presents basic statistics, one way and two way tables calculated on survey data</value>
+  </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
     <value>Assigned to</value>
   </data>

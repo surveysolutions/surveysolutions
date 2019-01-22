@@ -6,7 +6,7 @@ const chartOptions = {
     chartId: "interviewChart",
     elements: {
         point: { radius: 0 },
-        line: { fill: true }
+        line: { fill: true, tension: 0 }
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -18,18 +18,34 @@ const chartOptions = {
         mode: "index",
         intersect: false
     },
+    
     scales: {
         xAxes: [
             {
                 type: "time",
+
                 gridLines: {
                     display: true,
                     tickMarkLength: 10
+                },
+
+                ticks: {
+                    source: "data",
+                    autoSkipPadding: 10,
+                    maxRotation: 0,
+                    autoSkip: true
+                },
+                time: {
+                    bounds: "ticks",
+                    minUnit: "week"
                 }
             }
         ],
         yAxes: [
             {
+                afterDataLimits: function(axis) {
+                    axis.max += 1; // add 1px to top
+                },
                 type: "linear",
                 stacked: true,
                 ticks: {
@@ -60,7 +76,19 @@ export default {
 
     methods: {
         render() {
-            this.renderChart(this.chartData, _.assign(chartOptions, this.options));
+            this.renderChart(this.chartData, _.assign(chartOptions, {
+                animation: {
+                    onComplete: () => {
+                        this.$emit("ready");
+                    }
+                },
+            }, this.options));
+        },
+
+        getImage(){
+            if(this.$data._chart == null) return null;
+
+            return this.$data._chart.canvas.toDataURL("image/png");
         }
     },
 

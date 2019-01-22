@@ -70,6 +70,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
@@ -137,8 +138,6 @@ namespace WB.Tests.Abc.TestFactories
                 aggregateLock ?? Stub.Lock(),
                 aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
-
-        public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
 
         public AttachmentContentService AttachmentContentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
@@ -683,7 +682,14 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>());
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
+                Create.Service.AssignmentFactory());
+        }
+
+        public IAssignmentFactory AssignmentFactory()
+        {
+            var result = new AssignmentFactory(new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            return result;
         }
 
         public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null)
@@ -722,7 +728,8 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
+                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
+                Create.Service.AssignmentFactory());
         }
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)

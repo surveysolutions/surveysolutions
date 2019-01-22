@@ -312,4 +312,7 @@
   <data name="SelectQuestionnaire" xml:space="preserve">
     <value>Select questionnaire</value>
   </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
 </root>

@@ -189,7 +189,8 @@
 			}
 		}
 	}
-	.bootstrap-select.btn-group {
+	.bootstrap-select.btn-group,
+	.dropdown.bootstrap-select {
 		&:only-child{
 			padding-top: 17px;
 		}

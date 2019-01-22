@@ -17,7 +17,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
         AllUsersAndQuestionnairesView Load();
         List<TemplateViewItem> GetQuestionnaires();
         List<TemplateViewItem> GetOlderQuestionnairesWithPendingAssignments(Guid id, long version);
+        /// <summary>
+        /// Return bindable on UI list of questionnaires
+        /// </summary>
+        /// <param name="questionnaireBrowseItems"></param>
+        /// <returns></returns>
         List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems();
+
         List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version);
     }
 
@@ -81,21 +87,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires
 
         public List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaireComboboxViewItems()
         {
-            var list = this.questionnairesReader.Query(_ =>
-                _.Where(q => !q.IsDeleted).Select(q => new { q.QuestionnaireId, q.Title, q.Version })).ToList();
-
-            return list
-                .GroupBy(questionnaire => new {questionnaire.QuestionnaireId, questionnaire.Title})
-                .Select(g => new QuestionnaireVersionsComboboxViewItem
-                {
-                    Key = g.Key.QuestionnaireId.ToString(),
-                    Value = g.Key.Title,
-                    Versions = g.OrderByDescending(v => v.Version)
-                        .Select(v => new ComboboxViewItem{ Key = v.Version.ToString(), Value = $"ver. {v.Version}"})
-                        .ToList()
-                })
-                .OrderBy(q => q.Value)
-                .ToList();
+            return this.questionnairesReader.Query(_ =>
+                _.Where(q => !q.IsDeleted).ToList()).GetQuestionnaireComboboxViewItems();
         }
 
         public List<QuestionnaireIdentity> GetQuestionnaires(Guid? id, long? version)

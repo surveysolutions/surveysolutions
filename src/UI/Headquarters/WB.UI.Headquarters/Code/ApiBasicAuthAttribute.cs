@@ -27,11 +27,23 @@ namespace WB.UI.Headquarters.Code
         public ApiBasicAuthAttribute(params UserRoles[] roles)
         {
             this.roles = roles;
-            this.basicAuth = new AuthorizeAttribute();
+            this.basicAuth = new AuthorizeAttribute
+            {
+                Roles = string.Join(",", roles)
+            };
         }
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
+            var cookiePrincipal = actionContext.ControllerContext.RequestContext.Principal;
+
+            if (cookiePrincipal != null && cookiePrincipal.Identity.IsAuthenticated && FallbackToCookieAuth)
+            {
+                await basicAuth.OnAuthorizationAsync(actionContext, cancellationToken);
+                appendBasicAuthHeader(actionContext);
+                return;
+            }
+
             if (actionContext.Request.Headers?.Authorization == null)
             {
                 if (FallbackToCookieAuth)

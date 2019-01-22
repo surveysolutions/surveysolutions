@@ -31,7 +31,10 @@ namespace WB.Tests.Abc.TestFactories
             long questionnaireVersion = 0,
             DateTimeOffset? originDate = null,
             DateTime? eventTimeStamp = null)
-            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null, originDate: originDate ?? DateTimeOffset.Now)
+            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), 
+                    ToGuid(questionnaireId) ?? Guid.NewGuid(), 
+                    questionnaireVersion, null,isAudioRecordingEnabled:false, 
+                    originDate: originDate ?? DateTimeOffset.Now)
                 .ToPublishedEvent(eventSourceId: interviewId, eventTimeStamp: eventTimeStamp);
 
         public IPublishedEvent<InterviewDeleted> InterviewDeleted(string userId = null, string origin = null, Guid? interviewId = null, DateTimeOffset? originDate = null)
@@ -106,7 +109,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<TextQuestionAnswered> TextQuestionAnswered(Guid? interviewId = null, string userId = null, DateTimeOffset? originDate = null)
             => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], originDate ?? DateTimeOffset.Now, "tttt")
-                .ToPublishedEvent();
+                .ToPublishedEvent(eventSourceId: interviewId);
 
         private static Guid? ToGuid(string stringGuid)
             => string.IsNullOrEmpty(stringGuid)

@@ -95,11 +95,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         },
                         {
                             InterviewEntityType.LinkedToRosterMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToRosterQuestionViewModel>
+                            Load<CategoricalMultiLinkedToRosterTitleViewModel>
                         },
                         {
                             InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToListQuestionQuestionViewModel>
+                            Load<CategoricalMultiLinkedToListViewModel>
                         },
                         {
                             InterviewEntityType.FilteredSingleOptionQuestionModel,
@@ -110,15 +110,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Load<CascadingSingleOptionQuestionViewModel>
                         },
                         {InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel>},
-                        {InterviewEntityType.MultiOptionQuestionModel, Load<MultiOptionQuestionViewModel>},
+                        {InterviewEntityType.MultiOptionQuestionModel, Load<CategoricalMultiViewModel>},
                         {
                             InterviewEntityType.LinkedMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToRosterQuestionQuestionViewModel>
+                            Load<CategoricalMultiLinkedToQuestionViewModel>
                         },
                         {InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel>},
                         {InterviewEntityType.MultimediaQuestionModel, Load<MultimediaQuestionViewModel>},
                         {InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel>},
-                        {InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel>},
+                        {InterviewEntityType.YesNoQuestionModel, Load<CategoricalYesNoViewModel>},
                         {InterviewEntityType.GroupModel, Load<GroupViewModel>},
                         {InterviewEntityType.RosterModel, Load<RosterViewModel>},
                         {InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},

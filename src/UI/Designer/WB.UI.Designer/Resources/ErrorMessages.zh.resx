@@ -246,4 +246,19 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>您的问卷模板“{0}”包含新的功能：{1}。您现在安装的应用程序不支持新功能。请更新。</value>
   </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>全名不能包含超过 {1} 个字符</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>变量名称和二维表的ID为1-{1}个字符</value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>问卷变量是必须的</value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>问卷变量被当成导出数据问卷名字的前缀。变量名称和二维表ID的名称只能包含如下字符： a-z，A-Z， _， 或者 0-9。第一个字符不能是 0-9 或 _ 且最后一个字符不能是_。</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>无法更新用户的信息。请稍后再试。</value>
+  </data>
 </root>

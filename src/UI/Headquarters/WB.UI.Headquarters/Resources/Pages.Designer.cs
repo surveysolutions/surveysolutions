@@ -3266,6 +3266,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The report presents basic statistics, one way and two way tables calculated on survey data.
+        /// </summary>
+        public static string SurveyStatisticsDescription {
+            get {
+                return ResourceManager.GetString("SurveyStatisticsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team member.
         /// </summary>
         public static string TeamMember {

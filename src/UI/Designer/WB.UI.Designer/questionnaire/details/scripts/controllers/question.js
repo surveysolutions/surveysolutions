@@ -1,6 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
+        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, 
+            hotkeys, optionsService, alertService, $uibModal) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -170,6 +171,87 @@
 
                         utilityService.setFocusIn(focusId);
                     });
+            };
+
+            $scope.showAddClassificationModal = function() {
+                var showModal = function() {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/add-classification.html',
+                        backdrop: false,
+                        windowClass: "add-classification-modal dragAndDrop",
+                        controller: 'addClassificationCtrl',
+                        resolve: {
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                            hasOptions: $scope.activeQuestion.optionsCount > 0
+                        }
+                    });
+
+                    modalInstance.result.then(function(selectedClassification) {
+                            if (selectedClassification == null)
+                                return;
+
+                            var questionTitle = $scope.activeQuestion.title || $i18next.t('UntitledQuestion');
+                            var replaceOptions = function() {
+
+                                //commandService.replaceOptionsWithClassification
+                                $scope.activeQuestion.optionsCount = selectedClassification.categoriesCount;
+
+                                if ($scope.activeQuestion.optionsCount > $scope.MAX_OPTIONS_COUNT) {
+                                    if ($scope.activeQuestion.type !== "SingleOption") {
+
+                                        var modalInstance =confirmService.open(utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle, $scope.MAX_OPTIONS_COUNT));
+
+                                        modalInstance.result.then(function(confirmResult) {
+                                            if (confirmResult === 'ok') {
+                                                $scope.activeQuestion.options = selectedClassification.categories;
+                                                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                            }
+                                        });
+                                    } else {
+                                        commandService.replaceOptionsWithClassification(
+                                            $state.params.questionnaireId,
+                                            $scope.activeQuestion.itemId,
+                                            selectedClassification.id);
+
+                                        $scope.activeQuestion.isFilteredCombobox = true;
+                                        $scope.activeQuestion.options = selectedClassification.categories;
+                                        $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                    }
+                                } else {
+                                    if ($scope.activeQuestion.isFilteredCombobox) {
+                                        commandService.replaceOptionsWithClassification(
+                                            $state.params.questionnaireId,
+                                            $scope.activeQuestion.itemId,
+                                            selectedClassification.id);
+                                    }
+                                    $scope.activeQuestion.options = selectedClassification.categories;
+                                    $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
+
+                                }
+                            }
+
+                            if ($scope.activeQuestion.options.length > 0) {
+                                var modalInstance = confirmService.open(utilityService.replaceOptionsConfirmationPopup(questionTitle));
+                                modalInstance.result.then(function(confirmResult) {
+                                    if (confirmResult === 'ok') {
+                                        replaceOptions();
+                                    }
+                                });
+                            } else {
+                                replaceOptions();
+                            }
+                        },
+                        function() {
+
+                        });
+                };
+
+
+                if ($scope.questionForm.$dirty) {
+                    $scope.saveQuestion(showModal);
+                } else {
+                    showModal();
+                }
             };
 
             var hasQuestionEnablementConditions = function(question) {

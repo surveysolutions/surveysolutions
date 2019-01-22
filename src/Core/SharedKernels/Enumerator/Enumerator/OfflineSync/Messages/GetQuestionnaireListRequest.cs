@@ -121,6 +121,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public PostFileApiView InterviewAudio { get; set; }
     }
 
+    public class UploadInterviewAudioAuditRequest : ICommunicationMessage
+    {
+        public PostFileApiView InterviewAudio { get; set; }
+    }
+
     public class UploadDeviceInfoRequest : ICommunicationMessage
     {
         public Guid UserId { get; set; }

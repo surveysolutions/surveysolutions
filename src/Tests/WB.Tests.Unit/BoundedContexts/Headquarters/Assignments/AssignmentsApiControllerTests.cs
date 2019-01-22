@@ -4,6 +4,8 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -31,7 +33,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 Mock.Of<IAuditLog>(),
                 Mock.Of<IPreloadedDataVerifier>(),
-                Mock.Of<ICommandTransformator>()
+                Mock.Of<ICommandTransformator>(),
+                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                Create.Service.AssignmentFactory()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

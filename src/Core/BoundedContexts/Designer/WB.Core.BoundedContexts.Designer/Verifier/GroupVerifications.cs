@@ -48,7 +48,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(LongListRosterCannotHaveNestedRosters, "WB0080", string.Format(VerificationMessages.WB0080_LongRosterCannotHaveNestedRosters,Constants.MaxRosterRowCount)),
             Error<IGroup>(LongRosterHasMoreThanAllowedChildElements, "WB0068", string.Format(VerificationMessages.WB0068_RosterHasMoreThanAllowedChildElements,Constants.MaxAmountOfItemsInLongRoster)),
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
-            Warning<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
             Error<IGroup>(PlainModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
@@ -65,6 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<IGroup>(TooManySubsectionsAtOneLevel, "WB0224", VerificationMessages.WB0224_TooManySubsectionsAtOneLevel),
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
+            Warning<IGroup>(RosterHasPropagationExededLimit, "WB0262", VerificationMessages.WB0262_RosterHasTooBigPropagation),
         };
 
         private static readonly HashSet<QuestionType> QuestionTypesValidToBeRosterTitles = new HashSet<QuestionType>

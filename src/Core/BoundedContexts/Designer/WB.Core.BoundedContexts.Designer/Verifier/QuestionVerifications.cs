@@ -675,7 +675,54 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool OptionValuesMustBeUniqueForCategoricalQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            return OptionsHaveUniqueValues(question.Answers);
+            if (!question.CascadeFromQuestionId.HasValue)
+                return OptionsHaveUniqueValues(question.Answers);
+
+            if (CascadingHasCircularReference((SingleQuestion) question, questionnaire).HasErrors) return false;
+
+            var list = new List<int[]>();
+            var parentQuestions = new List<ICategoricalQuestion>();
+
+            var parentQuestionId = question.CascadeFromQuestionId;
+            while (parentQuestionId != null)
+            {
+                var cascadingQuestion = questionnaire.Find<ICategoricalQuestion>(parentQuestionId.Value);
+                if (cascadingQuestion == null) break;
+
+                parentQuestions.Add(cascadingQuestion);
+                parentQuestionId = cascadingQuestion.CascadeFromQuestionId;
+            }
+
+            if (parentQuestions.Count == 0) return OptionsHaveUniqueValues(question.Answers);
+
+            foreach (var questionAnswer in question.Answers)
+            {
+                var valueAndParentValues = new List<int> {(int) questionAnswer.GetParsedValue()};
+                var parsedParentValue = questionAnswer.GetParsedParentValue();
+
+                if (parsedParentValue.HasValue)
+                    valueAndParentValues.Add(parsedParentValue.Value);
+
+                foreach (var parentQuestion in parentQuestions)
+                {
+                    parsedParentValue = parentQuestion.Answers
+                        .Find(x => (int) x.GetParsedValue() == valueAndParentValues?.LastOrDefault())
+                        ?.GetParsedParentValue();
+
+                    if (parsedParentValue.HasValue)
+                        valueAndParentValues.Add(parsedParentValue.Value);
+                }
+
+                list.Add(valueAndParentValues.ToArray());
+            }
+
+            return list.Distinct(new EqualityArray()).Count() != list.Count;
+        }
+
+        class EqualityArray : IEqualityComparer<int[]>
+        {
+            public bool Equals(int[] x, int[] y) => x.SequenceEqual(y);
+            public int GetHashCode(int[] obj) => obj.Aggregate(0, (current, i) => current ^ i.GetHashCode());
         }
 
         private static bool OptionsHaveUniqueValues(List<Answer> options)

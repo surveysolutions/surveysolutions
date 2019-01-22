@@ -1695,11 +1695,14 @@ header > .red-line {
       white-space: nowrap;
       margin-right: 5px; }
 
-.panel-details .bootstrap-select.btn-group {
+.panel-details .bootstrap-select.btn-group,
+.panel-details .dropdown.bootstrap-select {
   width: 180px !important; }
-  .panel-details .bootstrap-select.btn-group:only-child {
+  .panel-details .bootstrap-select.btn-group:only-child,
+  .panel-details .dropdown.bootstrap-select:only-child {
     padding-top: 17px; }
-  .panel-details .bootstrap-select.btn-group .dropdown-toggle {
+  .panel-details .bootstrap-select.btn-group .dropdown-toggle,
+  .panel-details .dropdown.bootstrap-select .dropdown-toggle {
     height: 36px;
     line-height: 16px; }
 
@@ -2182,8 +2185,7 @@ header > .red-line {
           text-decoration: none;
           color: #0e5591; }
 
-.map-tooltip-info:last-of-type,
-.map-tooltip-info:only-child {
+.map-tooltip-info:last-of-type, .map-tooltip-info:only-child {
   margin-bottom: 0;
   border: none; }
 
@@ -2206,7 +2208,6 @@ header > .red-line {
   font: 10px/12px "TrebuchetMSBold";
   letter-spacing: 1px; }
 
-.map-tooltip-info p:last-of-type a:hover,
-.map-tooltip-info p:last-of-type a:focus {
+.map-tooltip-info p:last-of-type a:hover, .map-tooltip-info p:last-of-type a:focus {
   text-decoration: none;
   color: #0e5591; }

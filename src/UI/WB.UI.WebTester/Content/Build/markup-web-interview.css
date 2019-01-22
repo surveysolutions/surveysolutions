@@ -466,6 +466,7 @@ span.image-zoom-box, span.image-option {
   .question .progress.question-progress {
     bottom: -2px; }
   .question.roster-title {
+    padding: 11px 30px 11px 70px;
     background-color: #d5ebf8;
     color: #2d9cdb;
     font-family: "RobotoRegular"; }
@@ -548,10 +549,7 @@ span.image-zoom-box, span.image-option {
     white-space: normal;
     text-align: left; }
 
-
-.roster-section-block.answered .options-group, .question-editor.roster-section-block.has-error .options-group,
-.question-editor.roster-section-block.started .options-group,
-.disabled-question .question-editor.roster-section-block .options-group {
+.roster-section-block.answered .options-group, .question-editor.roster-section-block.has-error .options-group, .question-editor.roster-section-block.started .options-group, .disabled-question .question-editor.roster-section-block .options-group {
   background-color: transparent; }
 
 .question-editor.roster-section-block.has-error.answered .roster-section-info,

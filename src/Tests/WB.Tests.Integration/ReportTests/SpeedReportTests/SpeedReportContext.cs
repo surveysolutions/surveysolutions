@@ -1,6 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -10,9 +11,10 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 {
     internal class SpeedReportContext : ReportContext
     {
-        protected SpeedReportFactory CreateSpeedReport(IQueryableReadSideRepositoryReader<InterviewSummary> summaries)
+        protected SpeedReportFactory CreateSpeedReport(IQueryableReadSideRepositoryReader<InterviewSummary> summaries,
+            IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage)
         {
-            return new SpeedReportFactory(summaries);
+            return new SpeedReportFactory(summaries, speedReportStorage);
         }
 
         
@@ -38,6 +40,11 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             interviewCommentedStatus.InterviewSummary = interview;
             interview.InterviewCommentedStatuses.Add(interviewCommentedStatus);
             return interview;
+        }
+
+        protected static SpeedReportInterviewItem CreateSpeedReportItemForInterview(InterviewSummary interview)
+        {
+            return Create.Entity.SpeedReportInterviewItem(interview);
         }
     }
 }

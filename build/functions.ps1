@@ -1,5 +1,11 @@
 $vswhere = [io.path]::combine(${env:ProgramFiles(x86)}, "Microsoft Visual Studio", "Installer", "vswhere.exe")
 
+$verbosity = "q"
+
+if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
+    $verbosity = $env:MSBUILD_VERBOSITY
+}
+
 function GetPathRelativeToCurrectLocation($FullPath) {
     return $FullPath.Substring((Get-Location).Path.Length + 1)
 }
@@ -83,46 +89,82 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockClosed name='$Filter']"
 }
 
-function CleanBinAndObjFolders() {
-    Write-Host "##teamcity[blockOpened name='Cleaning folders']"
-
-    CleanFolders 'bin'
-    CleanFolders 'obj'
-    CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
-    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
-    CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
-
-    Write-Host "##teamcity[blockClosed name='Cleaning folders']"
+function Publish-Artifact($artifactSpec) {
+    Write-Host "##teamcity[publishArtifacts '$artifactSpec']"
 }
 
-function versionCheck() {
-    Write-Host "Node version:"
-    &node -v | Write-Host 
-
-    Write-Host "NPM version:"
-    &npm --version | Write-Host 
-
-    Write-Host "Yarn version:"
-    &yarn --version | Write-Host 
-}
-
-function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
-    Write-Host "##teamcity[blockOpened name='$blockName']"
-    Write-Host "##teamcity[progressStart '$blockName']"
-
-    Write-Host "Pushing location to $targetLocation"
-    Push-Location -Path $targetLocation
+function Log-Block($logBlockName, [ScriptBlock] $logBlock) {
+    Log-StartBlock $logBlockName
+    Log-StartProgress $logBlockName
 
     try {
-        $result = & $block
+        $result = & $logBlock
         return $result
     }
     finally {
-        Pop-Location
-
-        Write-Host "##teamcity[progressFinish '$blockName']"
-        Write-Host "##teamcity[blockClosed name='$blockName']"
+        Log-EndProgress $logBlockName
+        Log-EndBlock $logBlockName
     }
+}
+
+function Log-StartBlock($blockStartName) {
+    "##teamcity[blockOpened name='$(TeamCityEncode $blockStartName)']" | Write-Host
+}
+
+function Log-EndBlock($blockEndName) {
+    "##teamcity[blockClosed name='$(TeamCityEncode $blockEndName)']" | Write-Host
+}
+
+function Log-Message($message) {
+    "##teamcity[message text='$(TeamCityEncode $message)']" | Write-Host
+}
+
+function Log-Error($errorMessage, $details = $null) {
+    if($details -eq $null) {
+        $details = $errorMessage
+    }
+    $details = TeamCityEncode $details
+    $errMsg = TeamCityEncode $errorMessage
+    "##teamcity[message status='ERROR' text='$errMsg' errorDetails='$details' ]" | Write-Host
+    "##teamcity[buildProblem description='$errMsg']" | Write-Host
+}
+
+function Log-Progress($progressMessage, [ScriptBlock] $progressBlock) {
+    Log-StartProgress $progressMessage
+
+    try {
+        $result = & $progressBlock
+        return $result
+    }
+    finally {
+        Log-EndProgress $progressMessage
+    }
+}
+
+function Log-StartProgress($startProgressMessage) {
+    "##teamcity[progressStart name='$(TeamCityEncode $startProgressMessage)']" | Write-Host
+}
+
+function Log-EndProgress($endProgressMessage) {
+    "##teamcity[progressFinish name='$(TeamCityEncode $endProgressMessage)']" | Write-Host
+}
+
+function CleanBinAndObjFolders() {
+    Log-Block "Cleaning folders" {
+        CleanFolders 'bin'
+        CleanFolders 'obj'
+        CleanFolders 'src\UI\Designer\WB.UI.Designer\questionnaire\build'
+        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\InterviewApp'
+        CleanFolders 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.Interview\node_modules'
+    }
+}
+
+function versionCheck() {
+    Write-Host "Node version: $(&node -v)"
+    Write-Host "NPM version: $(&npm --version)"
+    Write-Host "Yarn version: $(&yarn --version)"
+    Write-host "MsBuild version: $(& (GetPathToMSBuild) /version /nologo)"
+    Write-Host "Dotnet CLI version: $(dotnet --version)"
 }
 
 ##############################
@@ -150,28 +192,32 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 # to execute pre build step - use script with name `preproduction`
 ##############################
 function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
-    return RunBlock "Building static files: $blockName" $targetLocation -block {
-        Write-Host "Running npm install"
-
-        #install node js dependencies
-        &yarn install --no-optional | Write-Host
-        
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-        if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
-            return $wasBuildSuccessfull
+    Push-Location $targetLocation
+    try {
+        Log-Block $blockName {
+            Log-Message "yarn install"
+            #install node js dependencies
+            &yarn install --no-optional | Write-Host
+            
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Log-Error "Failed to run yarn"
+                return $wasBuildSuccessfull
+            }
+    
+            Log-Message "Running gulp --production"
+            &node_modules\.bin\gulp --production | Write-Host
+    
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Log-Error "Failed to run gulp --production"
+                return $wasBuildSuccessfull
+            }
+    
+            return $true
         }
-
-        Write-Host "Running gulp --production"
-        &node_modules\.bin\gulp --production | Write-Host
-
-        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-        if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
-            return $wasBuildSuccessfull
-        }
-
-        return $true
+    } finally {
+        Pop-Location
     }
 }
 
@@ -207,37 +253,11 @@ function TeamCityEncode([string]$value) {
     $result
 }
 
-function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
-    $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution in configuration '$BuildConfiguration'" } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
-    $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution in configuration '$BuildConfiguration'" }
-
-    Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
-    Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
-
-    $verbosity = "minimal"
-
-    if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
-        $verbosity = $env:MSBUILD_VERBOSITY
+function BuildSolution($Solution, $BuildConfiguration) {
+    return Log-Block "Building solution $Solution in configuration '$BuildConfiguration'" {
+        return Execute-MSBuild $Solution $BuildConfiguration
     }
-
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /m /v:$verbosity /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
-
-    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-
-    if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build solution $Solution']"
-
-        if (-not $MultipleSolutions) {
-            Write-Host "##teamcity[buildProblem description='Failed to build solution $Solution']"
-        }
-    }
-
-    Write-Host "##teamcity[progressFinish '$(TeamCityEncode $progressMessage)']"
-    Write-Host "##teamcity[blockClosed name='$(TeamCityEncode $blockMessage)']"
-
-    return $wasBuildSuccessfull
 }
-
 
 function RunConfigTransform($Project, $BuildConfiguration) {
     $file = get-childitem $Project
@@ -277,43 +297,64 @@ function MoveArtifacts([string[]] $items, $folder) {
     }
 }
 
-function BuildWebPackage($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
-    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
+function Execute-MSBuild($ProjectFile, $Configuration, $buildArgs = $null) {
+    $build = @(
+        $ProjectFile
+        "/p:Configuration=$Configuration", '/nologo', "/v:$verbosity", '/m:4'
+        '/p:DebugSymbols=false;CodeContractsRunCodeAnalysis=false;ExcludeGeneratedDebugSymbol=true',
+        '/flp2:errorsonly;logfile=msbuild.err'
+    )
 
-    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
+    if(Test-Path msbuild.err  -PathType Leaf) {
+        Remove-Item msbuild.err
+    }
+
+    if($env:TEAMCITY_VERSION -eq $null) {
+        $build += '/clp:ForceConsoleColor;ErrorsOnly'
+    }
+
+    if($buildArgs -ne $null) {
+        $build = ($build + $buildArgs | select -uniq)
+    }
+
+    $binLogPath = "$([System.IO.Path]::GetFileName($ProjectFile)).msbuild.binlog"
+
+    $build += "/bl:$binLogPath"
+    
+    & (GetPathToMSBuild) $build | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
-        Write-Host "##teamcity[buildProblem description='Failed to build web package for project $Project']"
-    }
+        $errors = $null
+        
+        if(Test-Path msbuild.err -PathType Leaf){
+            $errors = Get-Content msbuild.err
+        } 
 
-    Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
-    Write-Host "##teamcity[blockClosed name='Building web package for project $Project']"
+        Log-Error "Failed to build '$ProjectFile'. See $binLogPath in artifacts for details" errors
+
+        if(Test-Path $binLogPath -PathType Leaf) {
+            Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+        }
+
+        throw "$errors"
+    } else {
+        if($env:MSBUILD_BINLOG -eq $True) {
+            Start-Sleep -Seconds 1; Publish-Artifact "$binLogPath"
+        }
+    }
 
     return $wasBuildSuccessfull
 }
 
-function CopyCapi($Project, $source, $cleanUp) {
-    $file = get-childitem $Project
-    $DestinationFolder = $file.directoryname + "\Externals"
+function BuildWebPackage($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
+    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    Write-Host "##teamcity[message text='Prepare to copy apk with option cleanUp = $cleanUp']"
-
-    if ($cleanUp) {
-        if (Test-Path "$DestinationFolder") {
-            Write-Host "##teamcity[message text='Clean up target folder $DestinationFolder']"
-  
-            Remove-Item "$DestinationFolder" -Force -Recurse
-        }
-        New-Item -ItemType directory -Path "$DestinationFolder"
+    return Log-Block "Building web package for project $Project" {
+        return Execute-MSBuild $Project $BuildConfiguration '/t:Package'
     }
-
-    Write-Host "##teamcity[message text='Copy apk with option clean from $source']"
-
-    Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
@@ -390,4 +431,17 @@ function BuildAndDeploySupportTool($SupportToolSolution, $BuildConfiguration) {
     MoveArtifacts $destZipFile "Tools"
 
     Write-Host "##teamcity[blockClosed name='Building and deploying support console application']"
+}
+function GetPathToManifest([string]$CapiProject) {
+    $file = get-childitem $CapiProject
+    return ($file.directoryname + "\Properties\AndroidManifest.xml")
+}
+
+function GetPackageName([string]$CapiProject) {
+    if((Test-Path (GetPathToManifest $CapiProject)) -eq $False) { return "no" }
+
+    [xml] $xam = Get-Content -Path (GetPathToManifest $CapiProject)
+
+    $res = Select-Xml -xml $xam -Xpath '/manifest/@package' -namespace @{android='http://schemas.android.com/apk/res/android'}
+    return ($res.Node.Value)
 }

@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.UI.Shared.Enumerator.CustomServices;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -40,7 +41,8 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingletonWithConstructorArguments<IBackupRestoreService, BackupRestoreService>(
                 new ConstructorArgument("privateStorage", context => pathToLocalDirectory),
                 new ConstructorArgument("encryptionService",
-                    context => new RsaEncryptionService(context.Get<ISecureStorage>())));
+                    context => new RsaEncryptionService(context.Get<ISecureStorage>())),
+                new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/interviewer/v2/tabletInfo"));
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -55,12 +57,10 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
-            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
-
+            registry.BindAsSingleton<IAudioAuditService, AudioAuditService>();
+            
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 

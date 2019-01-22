@@ -259,6 +259,12 @@
     <value>Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
   </data>
     <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
-    <value>Variable names and roster IDs may be from 1 to 32 characters long</value>
+    <value>Variable names and roster IDs may be from 1 to {1} characters long</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space, and shouldn't have two and more consecutive underscore characters.</value>
+  </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>Questionnaire's title can't have more than {1} symbols.</value>
   </data>
 </root>

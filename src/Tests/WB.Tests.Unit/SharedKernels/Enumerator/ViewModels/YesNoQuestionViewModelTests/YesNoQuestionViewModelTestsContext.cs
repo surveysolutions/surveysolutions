@@ -1,6 +1,5 @@
 ﻿using System;
 using Moq;
-using MvvmCross.Tests;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,10 +12,10 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    [NUnit.Framework.TestOf(typeof(YesNoQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(CategoricalYesNoViewModel))]
     public class YesNoQuestionViewModelTestsContext : BaseMvvmCrossTest
     {
-        protected static YesNoQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null,
+        protected static CategoricalYesNoViewModel CreateViewModel(
            IQuestionnaireStorage questionnaireStorage = null,
            ILiteEventRegistry eventRegistry = null,
            IStatefulInterviewRepository interviewRepository = null,
@@ -24,20 +23,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
            AnsweringViewModel answeringViewModel = null,
            QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewmodel = null,
            FilteredOptionsViewModel filteredOptionsViewModel = null,
-           ThrottlingViewModel throttlingModel = null)
+           ThrottlingViewModel throttlingModel = null,
+           IInterviewViewModelFactory viewModelFactory = null,
+           IUserInteractionService userInteraction = null)
         {
-            return new YesNoQuestionViewModel(
+            userInteraction = userInteraction ?? Mock.Of<IUserInteractionService>();
+
+            var mockOfViewModelFactory = new Mock<IInterviewViewModelFactory>();
+            mockOfViewModelFactory.Setup(x => x.GetNew<CategoricalYesNoOptionViewModel>()).Returns(() =>
+                new CategoricalYesNoOptionViewModel(userInteraction));
+
+            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+
+            var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
+            var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
+
+            return new CategoricalYesNoViewModel(
+                questionStateViewmodel ?? Create.ViewModel.QuestionState<YesNoQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
+                questionnaireRepository,
+                liteEventRegistry,
+                statefulInterviewRepository,
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadAsyncDispatcher(),
-                questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
+                userInteraction: userInteraction,
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 Create.ViewModel.QuestionInstructionViewModel(),
-                throttlingModel ?? Create.ViewModel.ThrottlingViewModel());
+                throttlingModel ?? Create.ViewModel.ThrottlingViewModel(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>());
         }
     }
 }
