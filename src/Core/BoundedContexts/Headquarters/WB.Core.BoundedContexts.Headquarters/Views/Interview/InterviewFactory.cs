@@ -202,13 +202,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswerWithTimeStamp>(
                 $@"with interviews as(
-                    select entityid, interviewid, latitude, longitude, timestamp, status
+                    select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
                     from
                         (
                             select
                                 i.entityid,
                                 s.interviewid,
                                 s.status,
+                                e.featured as idenifying,
                                 (i.asgps ->> 'Latitude')::float8 as latitude,
                                 (i.asgps ->> 'Longitude')::float8 as longitude,
                                 (i.asgps ->> 'Timestamp') as timestamp
@@ -225,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                 and e.question_scope = 0
                         ) as q
                 ) 
-                select entityid, interviewid, latitude, longitude, timestamp, status
+                select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
                 from   interviews;",
                 new
                 {

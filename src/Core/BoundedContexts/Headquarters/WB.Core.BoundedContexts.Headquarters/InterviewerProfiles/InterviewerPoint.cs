@@ -12,4 +12,10 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
         public int Index { get; set; }
         public string[] Colors { get; set; }
     }
+
+    public class InterviewerPoints
+    {
+        public List<InterviewerPoint> CheckInPoints { get; set; } = new List<InterviewerPoint>();
+        public List<InterviewerPoint> TargetLocations { get; set; } = new List<InterviewerPoint>();
+    }
 }
