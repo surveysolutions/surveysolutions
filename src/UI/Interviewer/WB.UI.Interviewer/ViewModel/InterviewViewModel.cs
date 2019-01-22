@@ -24,7 +24,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
-        private readonly IAuditService audioAuditService;
+        private readonly IAudioAuditService audioAuditService;
         private IUserInteractionService userInteractionService;
 
         public InterviewViewModel(
@@ -45,7 +45,7 @@ namespace WB.UI.Interviewer.ViewModel
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
             IAuditLogService auditLogService, 
-            IAuditService audioAuditService,
+            IAudioAuditService audioAuditService,
             IUserInteractionService userInteractionService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,

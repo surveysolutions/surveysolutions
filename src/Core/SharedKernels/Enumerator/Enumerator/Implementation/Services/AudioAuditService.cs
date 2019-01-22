@@ -10,13 +10,13 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class AuditService : IAuditService
+    public class AudioAuditService : IAudioAuditService
     {
         private readonly IAudioService audioAuditService;
         private string fileNamePrefix = "audio-audit";
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IPermissionsService permissions;
-        public AuditService(
+        public AudioAuditService(
             IAudioService audioAuditService, 
             IAudioAuditFileStorage audioAuditFileStorage, 
             IPermissionsService permissions,
