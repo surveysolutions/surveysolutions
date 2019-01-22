@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             }
 
             var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
-            var rightEdge = new[] { input.From ?? dates.max, input.To ?? dates.max }.Max() ?? DateTime.MaxValue;
+            var rightEdge = input.To ?? DateTime.UtcNow;
             
             var queryParams = new
             {
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             // report CTE will produce report over all data
             var rawData = this.unitOfWork.Session.Connection.Query<(DateTime date, InterviewStatus status, long count)>(
                 @"with 
-                        dates as (select generate_series(@minDateQuery::date,@maxDate::date, interval '1 day')::date as date),
+                        dates as (select generate_series(@minDateQuery::date, @maxDate::date, interval '1 day')::date as date),
                         timespan as (select date, status from dates as date, unnest(@AllowedStatuses) as status),
                         report as 
                         (
@@ -123,7 +123,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             view.DataSets = view.DataSets.Where(ds => ds.AllZeros == false).ToList();
             view.From = FormatDate(leftEdge);
             view.To = FormatDate(rightEdge);
-            
+            view.MaxDate = FormatDate(dates.max.Value);
+            view.MinDate = FormatDate(dates.min.Value);
+
             return view;
         }
 
