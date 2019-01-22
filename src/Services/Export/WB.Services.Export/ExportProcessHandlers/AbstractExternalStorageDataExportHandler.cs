@@ -49,7 +49,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                     async audioAuditRecord =>
                     {
                         var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(audioAuditRecord.InterviewId));
-                        var audioFolder = await this.CreateFolderAsync(interviewFolderPath, "Recording");
+                        var audioFolder = await this.CreateFolderAsync(interviewFolderPath, interviewDataExportSettings.Value.AudioAuditFolderName);
                         await this.UploadFileAsync(audioFolder, audioAuditRecord.Content, audioAuditRecord.FileName);
                     }, 
                     progress, cancellationToken);
