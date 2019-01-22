@@ -42,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 },
                 audioAuditRecord =>
                 {
-                    var recordingFolder = this.fileSystemAccessor.CombinePath(audioAuditRecord.InterviewId.FormatGuid(), "Recording");
+                    var recordingFolder = this.fileSystemAccessor.CombinePath(audioAuditRecord.InterviewId.FormatGuid(), interviewDataExportSettings.Value.AudioAuditFolderName);
                     var filePath = this.fileSystemAccessor.CombinePath(recordingFolder, audioAuditRecord.FileName);
                     archive.CreateEntry(filePath, audioAuditRecord.Content);
                     return Task.CompletedTask;
