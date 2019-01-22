@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         audioStream.CopyTo(audioMemoryStream);
                         this.audioAuditFileStorage.StoreInterviewBinaryData(
                             GetInterviewIdFromFileName(fileSystemAccessor.GetFileNameWithoutExtension(file)),
-                            fileSystemAccessor.GetFileNameWithoutExtension(file),
+                            fileSystemAccessor.GetFileName(file),
                             audioMemoryStream.ToArray(),
                             mimeType);
                     }
