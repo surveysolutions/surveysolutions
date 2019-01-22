@@ -1,14 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using Dapper;
-using FluentMigrator;
-using Npgsql;
-using NpgsqlTypes;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Infrastructure.Native.Storage;
+﻿using FluentMigrator;
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
@@ -52,7 +42,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            Delete.Index("pk_speedreportinterviewitems_interviewid").OnTable("speedreportinterviewitems");
             Delete.Index("idx_speedreportinterviewitems_firstanswerdate").OnTable("speedreportinterviewitems");
             Delete.Table("speedreportinterviewitems");
         }
