@@ -25,5 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         bool HasAssignmentWithProtectedVariables(Guid responsibleId);
         bool HasAssignmentWithAudioRecordingEnabled(Guid responsible);
+        bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity);
     }
 }

@@ -57,5 +57,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interview/{interviewId}/audioAudit/{audio}")]
         Task<HttpContent> GetAudioAuditAsync(Guid interviewId, string audio);
+
+        [Get("/api/export/v1/questionnaire/{id}/audioAudit")]
+        Task<QuestionnaireAudioAuditView> DoesSupportAudioAuditAsync([AliasAs("id")] QuestionnaireId questionnaireId);
     }
 }
