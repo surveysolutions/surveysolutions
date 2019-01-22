@@ -555,7 +555,10 @@
 		& > *{
 			margin-left: 10px;
 		}
-		.btn-group.bootstrap-select, .combo-box, .input-group, .field{
+        .btn-group.bootstrap-select, 
+	    .dropdown.bootstrap-select, 
+        .combo-box, 
+        .input-group, .field{
 			margin-left: 0 !important;
 		}
 	}

@@ -1119,6 +1119,7 @@
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.zh.resx" />
     <EmbeddedResource Include="Resources\Interviews.ar.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -1229,6 +1230,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
@@ -1992,10 +1994,13 @@
     <Compile Include="API\DataCollection\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
+    <Compile Include="API\PublicApi\Models\RecordAudioRequest.cs" />
     <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
+    <Compile Include="API\PublicApi\Models\UpdateRecordingRequest.cs" />
     <Compile Include="API\PublicApi\StatisticsController.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
@@ -2564,10 +2569,6 @@
         <DestinationRelativePath>bin\x86\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
     </ItemGroup>
-  </Target>
-  <Target Name="DeleteEsriExtra" AfterTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <Message Text="Delete Esri Extra folder" Importance="high" />
-    <RemoveDir Directories="$(_PackageTempDir)\ArcGISRuntime100.1" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

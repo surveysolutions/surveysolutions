@@ -46,6 +46,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
+            SetUp.MockedServiceLocator();
+
             this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,

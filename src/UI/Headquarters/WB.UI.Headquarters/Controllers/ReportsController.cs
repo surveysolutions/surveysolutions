@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -24,17 +27,23 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IChartStatisticsViewFactory chartStatisticsViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
+        private readonly IMapReport mapReport;
 
         public ReportsController(IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
+            IChartStatisticsViewFactory chartStatisticsViewFactory,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses, 
+            IMapReport mapReport)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
+            this.chartStatisticsViewFactory = chartStatisticsViewFactory;
             this.interviewStatuses = interviewStatuses;
+            this.mapReport = mapReport;
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
@@ -95,11 +104,11 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+            var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithGpsQuestions();
 
             return View(new
             {
-                Questionnaires = questionnaires
+                Questionnaires = questionnaires.GetQuestionnaireComboboxViewItems()
             });
         }
 
@@ -108,7 +117,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
 
-            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+            var questionnaires = this.chartStatisticsViewFactory.GetQuestionnaireListWithData();
 
             return this.View("CumulativeInterviewChart", new {
                 Templates = questionnaires
@@ -157,6 +166,7 @@ namespace WB.UI.Headquarters.Controllers
                 reportName: "Quantity",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
                 totalRowPresent: true,
+                perTeam:false,
                 supervisorId: supervisorId);
 
             model.ReportTypes = this.quantityReportTypesForSupervisor;
@@ -177,6 +187,7 @@ namespace WB.UI.Headquarters.Controllers
                 canNavigateToQuantityBySupervisors: false,
                 reportName: "Quantity",
                 totalRowPresent: true,
+                perTeam: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = this.quantityReportTypesForHeadquarters;
@@ -200,6 +211,7 @@ namespace WB.UI.Headquarters.Controllers
                 reportName: "Speed",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
                 totalRowPresent: true,
+                perTeam:false,
                 supervisorId: supervisorId);
 
             model.ReportTypes = this.speedReportTypesForSupervisor;
@@ -224,6 +236,7 @@ namespace WB.UI.Headquarters.Controllers
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
                 reportName: "Speed", totalRowPresent: true,
+                perTeam: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = this.speedReportTypesForHeadquarters;
@@ -256,6 +269,7 @@ namespace WB.UI.Headquarters.Controllers
             string reportName,
             string responsibleColumnName,
             bool totalRowPresent,
+            bool perTeam,
             Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load();
@@ -271,7 +285,7 @@ namespace WB.UI.Headquarters.Controllers
                 ReportName = reportName,
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
-                ReportNameDescription = string.Format(GetReportDescriptionByType(supervisorId, reportType), PeriodicStatusReport.Team.ToLower()),
+                ReportNameDescription = string.Format(GetReportDescriptionByType(supervisorId, reportType, perTeam), PeriodicStatusReport.Team.ToLower()),
                 TotalRowPresent = totalRowPresent,
                 MinAllowedDate = localDate ?? DateTime.Now
             };
@@ -312,30 +326,43 @@ namespace WB.UI.Headquarters.Controllers
             PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor
         };
 
-        private string GetReportDescriptionByType(Guid? supervisorId, PeriodiceReportType reportType)
+        private string GetReportDescriptionByType(Guid? supervisorId, PeriodiceReportType reportType, bool perTeam)
         {
             switch (reportType)
             {
                 case PeriodiceReportType.NumberOfCompletedInterviews:
-                    return PeriodicStatusReport.NumberOfCompletedInterviewsDescription;
+                    return perTeam ? PeriodicStatusReport.NumberOfCompletedInterviewsDescriptionPerTeam
+                        : PeriodicStatusReport.NumberOfCompletedInterviewsDescriptionPerInterviewer;
                 case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
-                    return PeriodicStatusReport.NumberOfInterviewTransactionsBySupervisorDescription;
+                    return perTeam ? PeriodicStatusReport.NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam
+                        : PeriodicStatusReport.NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer;
                 case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
-                    return supervisorId.HasValue ? PeriodicStatusReport.NumberOfCompletedInterviewsDescription : PeriodicStatusReport.NumberOfInterviewTransactionsByHQDescription;
+                    return supervisorId.HasValue ? 
+                        PeriodicStatusReport.NumberOfCompletedInterviewsDescriptionPerTeam : 
+                        PeriodicStatusReport.NumberOfInterviewTransactionsByHQDescription;
                 case PeriodiceReportType.NumberOfInterviewsApprovedByHQ:
-                    return supervisorId.HasValue ? PeriodicStatusReport.NumberOfCompletedInterviewsDescription : PeriodicStatusReport.NumberOfInterviewsApprovedByHQDescription;
-
+                    return supervisorId.HasValue ? 
+                        PeriodicStatusReport.NumberOfCompletedInterviewsDescriptionPerTeam : 
+                        PeriodicStatusReport.NumberOfInterviewsApprovedByHQDescription;
 
                 case PeriodiceReportType.AverageCaseAssignmentDuration:
                     return PeriodicStatusReport.AverageCaseAssignmentDurationDescription;
                 case PeriodiceReportType.AverageInterviewDuration:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageInterviewDurationForSupervisors;
+                    return (supervisorId.HasValue || !perTeam)? 
+                        PeriodicStatusReport.AverageInterviewDurationDescription : 
+                        PeriodicStatusReport.AverageInterviewDurationForSupervisors;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
+                    return supervisorId.HasValue ? 
+                        PeriodicStatusReport.AverageInterviewDurationDescription : 
+                        PeriodicStatusReport.AverageSupervisorProcessingTimeDescription;
                 case PeriodiceReportType.AverageHQProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageHQProcessingTimeDescription;
+                    return supervisorId.HasValue ? 
+                        PeriodicStatusReport.AverageInterviewDurationDescription : 
+                        PeriodicStatusReport.AverageHQProcessingTimeDescription;
                 case PeriodiceReportType.AverageOverallCaseProcessingTime:
-                    return supervisorId.HasValue ? PeriodicStatusReport.AverageInterviewDurationDescription : PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
+                    return supervisorId.HasValue ? 
+                        PeriodicStatusReport.AverageInterviewDurationDescription : 
+                        PeriodicStatusReport.AverageOverallCaseProcessingTimeDescription;
             }
 
             return string.Empty;

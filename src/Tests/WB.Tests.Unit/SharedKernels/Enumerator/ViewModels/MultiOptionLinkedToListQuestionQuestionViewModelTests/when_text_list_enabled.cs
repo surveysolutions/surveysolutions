@@ -6,7 +6,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToListViewModel))]
     public class when_text_list_enabled : BaseMvvmCrossTest
     {
         [Test]
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
             interview.Apply(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
 
             var viewModel = Create.ViewModel.MultiOptionLinkedToListQuestionQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
 
             interview.Apply(Create.Event.QuestionsEnabled(textListQuestionId, RosterVector.Empty));
             //act

@@ -131,7 +131,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     interviewKey,
-                    assignment.Id
+                    assignment.Id,
+                    assignment.IsAudioRecordingEnabled
                 );
 
                 await this.commandService.ExecuteAsync(createInterviewCommand);

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+﻿using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -7,7 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
     public class EnumeratorGroupGroupStateCalculationStrategy : IEnumeratorGroupStateCalculationStrategy
     {
-        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
+        public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var questionsCount = interview.CountEnabledQuestions(groupIdentity);
             var answeredQuestionsCount = interview.CountEnabledAnsweredQuestions(groupIdentity);
@@ -20,21 +19,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             if (interview.HasUnansweredQuestions(groupIdentity))
                 groupStatus = answeredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
 
-            var subgroupStatuses = interview.GetEnabledSubgroups(groupIdentity)
-                .Select(subgroup => CalculateDetailedStatus(subgroup, interview));
+            var subgroups = interview.GetEnabledSubgroupsAndRosters(groupIdentity);
 
-            foreach (var subGroupStatus in subgroupStatuses)
+            foreach (var subGroup in subgroups)
             {
+                var subGroupStatus = CalculateDetailedStatus(subGroup, interview, questionnaire);
+
+                if (questionnaire.IsPlainRoster(subGroup.Id) && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                    return GroupStatus.StartedInvalid;
+
                 switch (groupStatus)
                 {
                     case GroupStatus.Completed when subGroupStatus != GroupStatus.Completed:
-                        return GroupStatus.Started;
-                    case GroupStatus.NotStarted when subGroupStatus != GroupStatus.NotStarted:
-                        return GroupStatus.Started;
+                            return GroupStatus.Started;
+                    case GroupStatus.NotStarted
+                    when subGroupStatus != GroupStatus.NotStarted:
+                            return GroupStatus.Started;
                 }
             }
-
-            ;
 
             return groupStatus;
         }

@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All data.
+        /// </summary>
+        internal static string AllData {
+            get {
+                return ResourceManager.GetString("AllData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved by HQ.
         /// </summary>
         internal static string ApprovedByHQ {
@@ -214,11 +223,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last month.
+        /// </summary>
+        internal static string LastMonth {
+            get {
+                return ResourceManager.GetString("LastMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last {{days}} days.
+        /// </summary>
+        internal static string LastNDays {
+            get {
+                return ResourceManager.GetString("LastNDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated on.
         /// </summary>
         internal static string LastUpdatedDate {
             get {
                 return ResourceManager.GetString("LastUpdatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last week.
+        /// </summary>
+        internal static string LastWeek {
+            get {
+                return ResourceManager.GetString("LastWeek", resourceCulture);
             }
         }
         
@@ -295,6 +331,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Previous month.
+        /// </summary>
+        internal static string PreviousMonth {
+            get {
+                return ResourceManager.GetString("PreviousMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous week.
+        /// </summary>
+        internal static string PreviousWeek {
+            get {
+                return ResourceManager.GetString("PreviousWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question.
         /// </summary>
         internal static string Question {
@@ -336,6 +390,24 @@ namespace Resources {
         internal static string QuestionText {
             get {
                 return ResourceManager.GetString("QuestionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quick date ranges.
+        /// </summary>
+        internal static string QuickRanges {
+            get {
+                return ResourceManager.GetString("QuickRanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Range relative to data.
+        /// </summary>
+        internal static string RangeRelativeToData {
+            get {
+                return ResourceManager.GetString("RangeRelativeToData", resourceCulture);
             }
         }
         
@@ -565,6 +637,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save as image.
+        /// </summary>
+        internal static string SaveAsImage {
+            get {
+                return ResourceManager.GetString("SaveAsImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select condition question.
         /// </summary>
         internal static string SelectConditionQuestion {
@@ -687,6 +768,24 @@ namespace Resources {
         internal static string TemplateVersion {
             get {
                 return ResourceManager.GetString("TemplateVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This month.
+        /// </summary>
+        internal static string ThisMonth {
+            get {
+                return ResourceManager.GetString("ThisMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This week.
+        /// </summary>
+        internal static string ThisWeek {
+            get {
+                return ResourceManager.GetString("ThisWeek", resourceCulture);
             }
         }
         

@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 };
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Any();
+            this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
 
             var prefilledQuestions = questionnaire
                 .GetPrefilledQuestions();
@@ -141,7 +141,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.IsVariablesShowed = this.EnumeratorSettings.ShowVariables;
             this.IsSuccessfullyLoaded = true;
+
+            this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
         }
+
+        public bool? IsAudioRecordingEnabled { get; set; }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {

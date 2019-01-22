@@ -65,16 +65,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         public async Task BecauseOf()
         {
             Thread.Sleep(1);
-            viewModel.Options.Second().YesSelected = true;
-            await viewModel.ToggleAnswerAsync(viewModel.Options.Second(), null);
+            viewModel.Options.Second().Checked = true;
+            viewModel.Options.Second().CheckAnswerCommand.Execute();
         }
 
         [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>
-            c.AnsweredOptions[0].Yes && c.AnsweredOptions[0].OptionValue == 5 &&
-            c.AnsweredOptions[1].Yes && c.AnsweredOptions[1].OptionValue == 2
+            c.AnsweredOptions[1].Yes && c.AnsweredOptions[1].OptionValue == 5 &&
+            c.AnsweredOptions[0].Yes && c.AnsweredOptions[0].OptionValue == 2
         )));
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         static Guid questionGuid;
         static Mock<AnsweringViewModel> answeringMock;

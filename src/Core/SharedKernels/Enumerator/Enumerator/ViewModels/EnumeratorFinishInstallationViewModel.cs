@@ -174,10 +174,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (this.Endpoint?.StartsWith("@") == true)
             {
-                this.Endpoint = $"https://{this.Endpoint.Substring(1)}.mysurvey.solutions";
+                this.Endpoint = $"https://{this.Endpoint.Substring(1).Trim()}.mysurvey.solutions";
             }
 
-            this.deviceSettings.SetEndpoint(this.Endpoint);
+            this.deviceSettings.SetEndpoint(this.Endpoint.Trim());
 
             var restCredentials = new RestCredentials
             {

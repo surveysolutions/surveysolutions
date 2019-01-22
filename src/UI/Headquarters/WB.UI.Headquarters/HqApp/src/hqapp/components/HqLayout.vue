@@ -5,11 +5,13 @@
                 <slot name="filters" />
                 <div :class="information">
                     <div class="page-header clearfix" v-if="hasHeader">
-                      <slot name="headers">
-                        <h1>{{title}}</h1>
-                        <i v-if="subtitle">{{ subtitle }}</i>
-                      </slot>
-                      <slot name="subtitle" />
+                        <div :class="{'neighbor-block-to-search': hasSearch}">
+                            <slot name="headers">
+                                <h1>{{title}}</h1>
+                                <i v-if="subtitle">{{ subtitle }}</i>
+                            </slot>
+                            <slot name="subtitle" />
+                        </div>
                     </div>
                     <slot />
                 </div>
@@ -35,6 +37,10 @@ export default {
             default() { return true; }
         },
         hasFilter: {
+            type: Boolean,
+            default() { return false; }
+        },
+        hasSearch: {
             type: Boolean,
             default() { return false; }
         }

@@ -11,8 +11,9 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              local:controller_layout_id="@layout/simple_video_controls"
-             local:MvxBind="Video Attachment.Video; Tag Attachment.Tag
-                Visible Attachment.IsVideo;" />
+             local:MvxBind="Video Attachment.Video; 
+                            Tag Attachment.Tag;
+                            Visible Attachment.IsVideo;" />
 
     <com.google.android.exoplayer2.ui.PlayerView 
         android:id="@+id/player_view2"
@@ -23,5 +24,7 @@
         android:paddingBottom="@dimen/Interview_Entity_margin_vertical"
         local:use_artwork="false"
         local:controller_layout_id="@layout/simple_audio_controls"
-        local:MvxBind="Audio Attachment.Audio; Visible Attachment.IsAudio; Tag Attachment.Tag" />
+        local:MvxBind="Audio Attachment.Audio; 
+                       Visible Attachment.IsAudio; 
+                       Tag Attachment.Tag" />
 </merge>

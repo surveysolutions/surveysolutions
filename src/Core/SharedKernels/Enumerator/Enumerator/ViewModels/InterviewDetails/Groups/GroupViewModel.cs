@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
 
             this.Enablement.Init(interviewId, entityIdentity);
-            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
 
             this.GroupTitle.Init(interviewId, entityIdentity);
             this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
@@ -122,7 +122,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private void QuestionAnswered(object sender, EventArgs e)
         {
             var statefulInterview = this.interviewRepository.Get(interviewId);
-            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
         }
 
         private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));

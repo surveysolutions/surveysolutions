@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -244,10 +244,14 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="Api\Designer\ClassificationsController.cs" />
     <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
+    <Compile Include="Api\Designer\ImportController.cs" />
+    <Compile Include="Api\Designer\Qbank\MySqlFoldersAndQuestionnaires.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\Designer\SearchController.cs" />
     <Compile Include="Api\Headquarters\HQLookupController.cs" />
     <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
@@ -262,6 +266,7 @@
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
     <Compile Include="Code\UrlExtensions.cs" />
+    <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Api\Designer\TranslationsController.cs" />
     <Compile Include="Api\Designer\AttachmentsController.cs" />
@@ -317,6 +322,11 @@
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201806041250_RemoveObsoleteTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201812211517_FillQuestionnaireSearchEntities.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201901111638_AddIndexOnTypeColumnInClassificationsTable.cs" />
+    <Compile Include="Migrations\RepositoriesMigration.cs" />
     <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
@@ -477,6 +487,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\classifications.css" />
     <Content Include="Content\images\icons-files-audio.png" />
     <Content Include="Content\images\icons-files-audio.svg" />
     <Content Include="Content\images\icons-files-pdf.png" />
@@ -515,9 +526,11 @@
     <Content Include="questionnaire\content\i\icons4.png" />
     <Content Include="questionnaire\content\i\logo-designer.png" />
     <Content Include="questionnaire\content\i\logo.png" />
+    <Content Include="questionnaire\details\scripts\controllers\searchForQuestion.js" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
     <Content Include="questionnaire\details\scripts\controllers\comments.js" />
     <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
+    <Content Include="questionnaire\details\scripts\controllers\addClassification.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
@@ -531,12 +544,21 @@
     <Content Include="questionnaire\details\scripts\services\commentsService.js" />
     <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
+    <Content Include="questionnaire\details\views\search-for-question.html" />
     <Content Include="questionnaire\details\views\alert.html" />
+    <Content Include="questionnaire\details\views\add-classification.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="questionnaire\details\views\question-details\Area-template.html" />
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
     <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
+    <Content Include="Scripts\classifications\components\CategoriesEditor.js" />
+    <Content Include="Scripts\classifications\components\ClassificationEditor.js" />
+    <Content Include="Scripts\classifications\components\GroupEditor.js" />
+    <Content Include="Scripts\classifications\config.js" />
+    <Content Include="Scripts\classifications\main.js" />
+    <Content Include="Scripts\classifications\routes.js" />
+    <Content Include="Scripts\classifications\store.js" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <EmbeddedResource Include="Resources\AccountResources.ar.resx" />
@@ -569,6 +591,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FindReplaceResources.ar.resx" />
     <EmbeddedResource Include="Resources\FindReplaceResources.es.resx">
@@ -672,6 +695,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -734,6 +758,12 @@
     <Content Include="Configuration\SPuV.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Content\qbank\FoldersAndQuestionnaires.json" />
+    <Content Include="Content\qbank\Options.json" />
+    <Content Include="Content\qbank\Questions.json" />
+    <Content Include="Content\qbank\Sections.json" />
+    <Content Include="Content\qbank\SectionToQuestionnaires.json" />
+    <Content Include="Content\QbankClassifications.json" />
     <None Include="packages.config" />
     <None Include="parameters.xml">
       <SubType>Designer</SubType>
@@ -947,7 +977,9 @@
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
     <Content Include="Views\Account\_ChangePassword.cshtml" />
+    <Content Include="questionnaire\content\designer-editor\wb-classifications.less" />
     <Content Include="Views\Shared\_IE11Modal.cshtml" />
+    <Content Include="Views\Classifications\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

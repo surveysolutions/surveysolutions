@@ -58,14 +58,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void BecauseOf() 
         {
             viewModel.Options.Second().Checked = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
+            viewModel.Options.Second().CheckAnswerCommand.Execute();
         }
 
         [Test] 
         public void should_send_command_to_service () 
             => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => c.SelectedValues.SequenceEqual(new []{1,2}))));
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
         static Guid questionGuid;
         static Mock<AnsweringViewModel> answeringMock;

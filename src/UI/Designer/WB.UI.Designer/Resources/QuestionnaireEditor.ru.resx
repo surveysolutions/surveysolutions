@@ -1143,15 +1143,15 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
   </data>
-    <data name="QuestionDefaultDate" xml:space="preserve">
+  <data name="QuestionDefaultDate" xml:space="preserve">
     <value>Дата по умолчанию</value>
   </data>
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Выбранный файл не поддерживается во вложениях</value>
-  </data>    
-    <data name="HelpDefaultDate" xml:space="preserve">
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
     <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
-    </data>
+  </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Скрывать элемент когда он выключен</value>
   </data>
@@ -1165,5 +1165,76 @@
     <data name="HelpPlainRoster" xml:space="preserve">
     <value>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</value>
     <comment>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</comment>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>Все классификации</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Показать категории</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Банк вопросов. Классификации</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Только первые {{count}} категорий  будут вставлены в вопрос "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Найти классификацию</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Вы уверены, что хотите заменить существующие категории в вопросе "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Найти классификацию</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Мои классификации</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Все папки</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Добавить классификацию</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Группы</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Заголовок группы</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Введите категории</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Название категории</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Поиск вопроса</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Поиск вопроса</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>классификаций</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>элементов</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Банк вопросов</value>
+  </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать категории</value>
+    <comment>Редактировать категории</comment>
+  </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать каскадные категории </value>
+    <comment>Редактировать каскадные категории </comment>
   </data>
 </root>

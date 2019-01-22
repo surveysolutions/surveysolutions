@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion..
+        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion per interviewer..
         /// </summary>
         public static string AverageInterviewDurationDescription {
             get {
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion per supervisor team..
+        ///   Looks up a localized string similar to Average time that interview was presented on screen of interviewer before completion per team..
         /// </summary>
         public static string AverageInterviewDurationForSupervisors {
             get {
@@ -259,11 +259,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of interview completions by a team. Rejected and then completed interviews are counted as separate completion events..
+        ///   Looks up a localized string similar to Number of interview completions by interviewer. Rejected and then completed interviews are counted as separate completion events..
         /// </summary>
-        public static string NumberOfCompletedInterviewsDescription {
+        public static string NumberOfCompletedInterviewsDescriptionPerInterviewer {
             get {
-                return ResourceManager.GetString("NumberOfCompletedInterviewsDescription", resourceCulture);
+                return ResourceManager.GetString("NumberOfCompletedInterviewsDescriptionPerInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interview completions by team. Rejected and then completed interviews are counted as separate completion events..
+        /// </summary>
+        public static string NumberOfCompletedInterviewsDescriptionPerTeam {
+            get {
+                return ResourceManager.GetString("NumberOfCompletedInterviewsDescriptionPerTeam", resourceCulture);
             }
         }
         
@@ -313,11 +322,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of approvals and rejections by a supervisor on interviews collected by interviewer.
+        /// </summary>
+        public static string NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer {
+            get {
+                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of approvals and rejections by a supervisor on interviews collected by {0}..
         /// </summary>
-        public static string NumberOfInterviewTransactionsBySupervisorDescription {
+        public static string NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam {
             get {
-                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescription", resourceCulture);
+                return ResourceManager.GetString("NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam", resourceCulture);
             }
         }
         
