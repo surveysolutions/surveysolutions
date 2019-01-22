@@ -66,6 +66,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return result;
         }
 
+        public bool HasAssignmentWithAudioRecordingEnabled(QuestionnaireIdentity questionnaireIdentity)
+        {
+            bool result = this.assignmentsAccessor.Query(_ => _
+                .Any(a =>
+                    a.QuestionnaireId == questionnaireIdentity
+                    && !a.Archived
+                    && a.IsAudioRecordingEnabled));
+
+            return result;
+        }
+
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
         {
             List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _

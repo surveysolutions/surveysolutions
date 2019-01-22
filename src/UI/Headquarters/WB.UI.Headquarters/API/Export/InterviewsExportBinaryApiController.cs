@@ -4,7 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Filters;
@@ -17,17 +19,20 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IAssignmentsService assignmentsService;
 
         public InterviewsExportBinaryApiController(
             IExternalFileStorage fileStorage,
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
-            IAudioAuditFileStorage audioAuditFileStorage)
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IAssignmentsService assignmentsService)
         {
             this.fileStorage = fileStorage;
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.assignmentsService = assignmentsService;
         }
 
 
@@ -115,6 +120,21 @@ namespace WB.UI.Headquarters.API.Export
             response.Content = new ByteArrayContent(file.GetData());
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
             return response;
+        }
+
+        [Route("api/export/v1/questionnaire/{id}/audioAudit")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage DoesSupportAudioAudit(string id)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+
+            return Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                HasAssignmentWithAudioRecordingEnabled = hasAssignmentWithAudioRecordingEnabled
+            });
         }
     }
 }
