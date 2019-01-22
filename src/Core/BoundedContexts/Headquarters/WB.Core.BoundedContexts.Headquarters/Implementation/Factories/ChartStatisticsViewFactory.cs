@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             }
 
             var leftEdge = new[] { input.From ?? dates.min?.AddDays(-1), input.To ?? dates.min?.AddDays(-1) }.Min() ?? DateTime.MinValue;
-            var rightEdge = input.To ?? DateTime.UtcNow;
+            var rightEdge = new[] {input.From ?? dates.min ?? DateTime.MinValue, input.To ?? DateTime.UtcNow}.Max();
             
             var queryParams = new
             {
