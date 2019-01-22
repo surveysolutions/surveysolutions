@@ -127,8 +127,9 @@
           type="button"
           class="btn btn-primary"
           @click="upateAudioRecording"
+          :disabled="!showSelectors"
         >{{ $t("Common.Save") }}</button>
-        <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        <button type="button" class="btn btn-link" data-dismiss="modal" >{{ $t("Common.Cancel") }}</button>
       </div>
     </ModalFrame>
 
@@ -160,6 +161,7 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-primary"
+                        :disabled="!showSelectors"
                         @click="updateQuantity">{{$t("Common.Save")}}</button>
                 <button type="button"
                         class="btn btn-link"
