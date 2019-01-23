@@ -38,8 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         }
 
         public async Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
-            Func<BinaryData, Task> answersAction, 
-            Func<BinaryData, Task> audioAuditAction, 
+            Func<BinaryData, Task> binaryDataAction, 
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
@@ -77,26 +76,30 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     try
                     {
                         byte[] content;
+                        BinaryDataType binaryDataType;
 
                         switch (answer.Type)
                         {
                             case MultimediaType.Image:
                                 var imageContent = await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
                                 content = await imageContent.ReadAsByteArrayAsync();
+                                binaryDataType = BinaryDataType.Image;
                                 break;
                             case MultimediaType.Audio:
                                 var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
                                 content = await audioContent.ReadAsByteArrayAsync();
+                                binaryDataType = BinaryDataType.Audio;
                                 break;
                             default:
                                 continue;
                         }
                         
-                        await answersAction(new BinaryData
+                        await binaryDataAction(new BinaryData
                         {
                             InterviewId = answer.InterviewId,
                             FileName = answer.Answer,
-                            Content = content
+                            Content = content,
+                            Type = binaryDataType
                         });
 
                         filesUploaded++;
@@ -123,11 +126,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
                             var content = await audioContent.ReadAsByteArrayAsync();
 
-                            await audioAuditAction(new BinaryData
+                            await binaryDataAction(new BinaryData
                             {
                                 InterviewId = audioAuditInfo.InterviewId,
                                 FileName = fileName,
-                                Content = content
+                                Content = content,
+                                Type = BinaryDataType.AudioAudit
                             });
 
                             filesUploaded++;
