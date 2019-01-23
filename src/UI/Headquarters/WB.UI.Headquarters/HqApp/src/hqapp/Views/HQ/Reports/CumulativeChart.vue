@@ -45,6 +45,7 @@ const chartOptions = {
             {
                 afterDataLimits: function(axis) {
                     axis.max += 1; // add 1px to top
+                    axis.min = 0;
                 },
                 type: "linear",
                 stacked: true,
