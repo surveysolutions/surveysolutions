@@ -285,7 +285,7 @@ export default {
         queryChartData(queryString) {
             this.$store.dispatch("showProgress");
             const self = this;
-            console.log("queryChartData")
+
             this.$hq.Report.Chart(queryString)
                 .then(response => {
                     const datasets = [];
