@@ -1015,6 +1015,11 @@ namespace WB.Tests.Abc.TestFactories
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
         }
+
+        public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
+        {
+            return new EnumeratorGroupGroupStateCalculationStrategy();
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions
