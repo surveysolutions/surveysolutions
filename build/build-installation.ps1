@@ -12,11 +12,12 @@ function setupExportService($exportSettingsPath) {
 
     if($exportSettings.ExportSettings -eq $null) {
         $exportSettings.ExportSettings = @{
-
+            DirectoryPath = "..\..\..\Data_Site\ExportServiceData"
         }
+    } else {
+        $exportSettings.ExportSettings.DirectoryPath = "..\..\..\Data_Site\ExportServiceData"
     }
 
-    $exportSettings.ExportSettings.DirectoryPath = "..\..\..\Data_Site\ExportServiceData"
     $exportSettings | ConvertTo-Json -Depth 100 | set-content $exportSettingsPath
 }
 
