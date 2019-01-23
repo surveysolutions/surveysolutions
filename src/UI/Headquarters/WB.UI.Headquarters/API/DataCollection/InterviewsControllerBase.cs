@@ -11,8 +11,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -21,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
@@ -29,6 +26,7 @@ namespace WB.UI.Headquarters.API.DataCollection
     {
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -46,7 +44,8 @@ namespace WB.UI.Headquarters.API.DataCollection
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore)
+            IHeadquartersEventStore eventStore,
+            IAudioAuditFileStorage audioAuditFileStorage)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -57,6 +56,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             this.metaBuilder = metaBuilder;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStore = eventStore;
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         public virtual HttpResponseMessage Get()
@@ -102,6 +102,14 @@ namespace WB.UI.Headquarters.API.DataCollection
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
             return new HttpResponseMessage(HttpStatusCode.NoContent);
+        }
+
+        public virtual HttpResponseMessage PostAudioAudit(PostFileRequest request)
+        {
+            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+                Convert.FromBase64String(request.Data), request.ContentType);
+
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
 
         protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)

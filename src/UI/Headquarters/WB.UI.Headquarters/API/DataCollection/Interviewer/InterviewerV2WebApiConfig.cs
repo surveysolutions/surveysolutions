@@ -83,6 +83,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV2Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/audioaudit",
+                c => c.Action<InterviewsApiV2Controller>(x => x.PostAudioAudit(Param.Any<PostFileRequest>())));
 
         }
 

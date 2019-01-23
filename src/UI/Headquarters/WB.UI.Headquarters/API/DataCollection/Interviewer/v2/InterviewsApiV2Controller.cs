@@ -25,7 +25,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
+        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAudioAuditFileStorage audioAuditFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : 
+            base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage)
         {
         }
 
@@ -96,5 +97,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
         public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
+        [HttpPost]
+        public override HttpResponseMessage PostAudioAudit(PostFileRequest request) => base.PostAudioAudit(request);
     }
 }
