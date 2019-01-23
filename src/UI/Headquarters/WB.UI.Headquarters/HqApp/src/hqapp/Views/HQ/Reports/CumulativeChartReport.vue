@@ -60,9 +60,8 @@
              text: this.chartTitle
         }
       }"
-      :chartData="chartData"
       @ready="chartUpdated"
-      v-if="hasData"
+      @mounted="refreshData"
     ></LineChart>
     <div v-if="base64Encoded != null && hasData">
       <a
@@ -222,14 +221,8 @@ export default {
         queryString(to, from) {
             if (from.to == null && to.to != null) return;
             if (from.from == null && to.from != null) return;
-            this.refreshData();
-        },
 
-        ["chartData"]({ from, to }) {
-            this.onChange(q => {
-                q.from = from;
-                q.to = to;
-            });
+            this.refreshData();
         }
     },
 
@@ -292,6 +285,7 @@ export default {
         queryChartData(queryString) {
             this.$store.dispatch("showProgress");
             const self = this;
+            console.log("queryChartData")
             this.$hq.Report.Chart(queryString)
                 .then(response => {
                     const datasets = [];
@@ -308,18 +302,26 @@ export default {
                         );
                     });
 
-                    self.chartData = { 
+                    const chartData = { 
                         datasets: _.sortBy(datasets, "index"),
                         from: response.data.From, to: response.data.To,
                         min: response.data.MinDate, max: response.data.MaxDate };
+
                     self.hasData = datasets.length > 0;
+
+                    this.chartData = {
+                        min: chartData.min, from: chartData.from,
+                        max: chartData.max, to: chartData.to
+                    }
+
+                    self.$refs.chart.render(chartData)
                 })
                 .finally(() => self.$store.dispatch("hideProgress"));
         }
     },
 
     mounted() {
-        this.refreshData();
+   //     this.refreshData();
     }
 };
 </script>
