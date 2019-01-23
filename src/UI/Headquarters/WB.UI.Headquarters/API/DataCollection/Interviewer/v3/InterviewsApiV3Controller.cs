@@ -25,8 +25,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        private readonly IAudioAuditFileStorage audioAuditFileStorage;
-
         public InterviewsApiV3Controller(
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
@@ -40,9 +38,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
             IAudioAuditFileStorage audioAuditFileStorage) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore)
+                synchronizationSerializer, eventStore, audioAuditFileStorage)
         {
-            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         [HttpGet]
@@ -83,15 +80,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
         public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
-
         [HttpPost]
-        public HttpResponseMessage PostAudioAudit(PostFileRequest request)
-        {
-            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), request.ContentType);
-
-            return Request.CreateResponse(HttpStatusCode.NoContent);
-        }
+        public override HttpResponseMessage PostAudioAudit(PostFileRequest request) => base.PostAudioAudit(request);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
