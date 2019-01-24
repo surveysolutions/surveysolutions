@@ -91,8 +91,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static int levelCount;
         private static QuestionnaireDocument questionnaireDocument;
         private static string someAnswer = "some answer";
-        private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
-        private InterviewsExporter exporterS;
         private InterviewsExporter exporter;
     }
 }

@@ -74,7 +74,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static Guid questionInsideRosterGroupId;
         private static int levelCount=2;
         private static QuestionnaireDocument questionnaireDocument;
-        private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
         private InterviewsExporter exporter;
     }
 }

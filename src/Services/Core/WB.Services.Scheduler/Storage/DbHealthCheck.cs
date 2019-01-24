@@ -1,12 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
-using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Scheduler.Storage
 {
-    internal class DbHealthCheck : IHealthCheck
+    public class DbHealthCheck : IHealthCheck
     {
         private readonly IConfiguration configuration;
 
@@ -15,15 +17,13 @@ namespace WB.Services.Scheduler.Storage
             this.configuration = configuration;
         }
 
-        public async Task<bool> CheckAsync()
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
             using (var connection = new NpgsqlConnection(this.configuration.GetConnectionString("DefaultConnection")))
             {
                 await connection.QueryAsync("SELECT version();");
-                return true;
+                return HealthCheckResult.Healthy();
             }
         }
-
-        public string Name => "Database Connection";
     }
 }

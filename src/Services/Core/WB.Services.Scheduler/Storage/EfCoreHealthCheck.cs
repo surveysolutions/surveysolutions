@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
-using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Scheduler.Storage
 {
-    internal class EfCoreHealthCheck : IHealthCheck
+    public class EfCoreHealthCheck : IHealthCheck
     {
         private readonly IOptions<JobSettings> jobSettings;
         private readonly DbContextOptions<JobContext> contextOptions;
@@ -16,15 +17,13 @@ namespace WB.Services.Scheduler.Storage
             this.contextOptions = contextOptions;
         }
 
-        public async Task<bool> CheckAsync()
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
             using (var db = new JobContext(contextOptions, jobSettings))
             {
-                await db.Jobs.FirstOrDefaultAsync();
-                return true;
+                await db.Jobs.FirstOrDefaultAsync(cancellationToken: cancellationToken);
+                return HealthCheckResult.Healthy();
             }
         }
-
-        public string Name => "EF Core migration status";
     }
 }
