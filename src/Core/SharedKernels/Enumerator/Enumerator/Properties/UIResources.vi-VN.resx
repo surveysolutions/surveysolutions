@@ -130,12 +130,6 @@ Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solution
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Bộ câu hỏi của tôi</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Bộ câu hỏi công khai</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Bộ câu hỏi</value>
   </data>
