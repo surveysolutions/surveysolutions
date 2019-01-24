@@ -42,14 +42,14 @@ namespace WB.UI.Supervisor.Services.Implementation
 
         public override void NavigateToSplashScreen() => base.RestartApp(typeof(SplashActivity));
 
-        public override Task NavigateToDashboardAsync(string interviewId = null)
+        public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
             if (interviewId == null)
             {
-                return this.navigationService.Navigate<DashboardViewModel>();
+                return await this.navigationService.Navigate<DashboardViewModel>();
             }
 
-            return this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            return await this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
             });
