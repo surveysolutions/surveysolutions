@@ -9,8 +9,7 @@ namespace WB.Services.Export.ExportProcessHandlers
     internal interface IBinaryDataSource
     {
         Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
-            Func<BinaryData, Task> answersAction, 
-            Func<BinaryData, Task> audioAuditAction, 
+            Func<BinaryData, Task> binaryDataAction, 
             IProgress<int> progress, 
             CancellationToken cancellationToken);
     }
