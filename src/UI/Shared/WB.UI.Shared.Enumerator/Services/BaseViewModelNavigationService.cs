@@ -117,7 +117,7 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.navigationService.Navigate<TViewModel>();
         }
 
-        public abstract Task NavigateToDashboardAsync(string interviewId = null);
+        public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);
 
         public async Task SignOutAndNavigateToLoginAsync()
         {
