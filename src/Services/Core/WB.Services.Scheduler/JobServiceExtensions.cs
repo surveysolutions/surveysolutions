@@ -12,12 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Prometheus.Advanced;
-using WB.Services.Infrastructure.Health;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
 using WB.Services.Scheduler.Services.Implementation.HostedServices;
 using WB.Services.Scheduler.Stats;
-using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler
 {
@@ -49,9 +47,6 @@ namespace WB.Services.Scheduler
             services.AddTransient<IHostedSchedulerService, JobWorkersManageService>();
 
             services.AddSingleton<IJobCancellationNotifier, JobCancellationNotifier>();
-
-            services.ConfigureHealthCheck<DbHealthCheck>();
-            services.ConfigureHealthCheck<EfCoreHealthCheck>();
             services.AddTransient<IJobService, JobService>();
             services.AddSingleton<IJobProgressReporter, JobProgressReporter>();
             services.AddTransient<IJobWorker, JobWorker>();
@@ -105,7 +100,7 @@ namespace WB.Services.Scheduler
         /// </summary>
         private const long LockValueForMigration = -889238397;
 
-        public static readonly LoggerFactory MyLoggerFactory
+        private static readonly LoggerFactory MyLoggerFactory
             = new LoggerFactory(new[] { new ConsoleLoggerProvider((s, level) => (int)level >= 4, true) });
     }
 }
