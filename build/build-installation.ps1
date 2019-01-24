@@ -4,7 +4,7 @@ param(
 	  [switch]$noDestCleanup)
 
 $ErrorActionPreference = "Stop"
-
+Add-Type -AssemblyName System.Web.Extensions
 function setupExportService($exportSettingsPath) {
     $parser = New-Object Web.Script.Serialization.JavaScriptSerializer
     $exportSettings = $parser.DeserializeObject((Get-Content $exportSettingsPath -raw))
