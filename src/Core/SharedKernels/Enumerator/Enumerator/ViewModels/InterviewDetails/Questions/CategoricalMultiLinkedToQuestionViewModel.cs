@@ -44,9 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<RosterVector>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => x.Value).ToArray();
-
-        protected override CategoricalMultiOptionViewModel<RosterVector>[] GetSelectedOptions()
-            => this.Options.Where(x => x.Checked).ToArray();
         
         protected override RosterVector[] GetAnsweredOptionsFromInterview(IStatefulInterview interview)
             => interview.GetLinkedMultiOptionQuestion(this.Identity)?.GetAnswer()?.ToRosterVectorArray();
