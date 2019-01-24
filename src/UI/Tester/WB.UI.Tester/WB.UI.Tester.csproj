@@ -267,10 +267,11 @@
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
+    <Compile Include="Converters\QuestionnaireTitleWithSearchTermConverter.cs" />
     <Compile Include="TesterApplication.cs" />
     <Compile Include="TesterAppStart.cs" />
     <Compile Include="TesterMvxApplication.cs" />
-    <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
+    <Compile Include="Converters\QuestionnaireTypeToBackgroundConverter.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
@@ -393,6 +394,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\refresh.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dashboard_shared_with_me_questionnaires_bg.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Choose>
     <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">

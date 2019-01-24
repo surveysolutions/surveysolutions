@@ -191,12 +191,6 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>ჩემი კითხვარები</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>საჯარო კითხვარები</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>კითხვარები</value>
   </data>
