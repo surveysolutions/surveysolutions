@@ -201,7 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 
         public int FindFirstValidMaskPosition()
         {
-            if (this.rawToMask.Any())
+            if (this.rawToMask?.Any() ?? false)
                 return this.rawToMask[0];
 
             return 0;

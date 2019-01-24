@@ -14,14 +14,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
 
         public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage,
             IAudioFileStorage audioFileStorage,
-            IImageFileStorage imageFileStorage)
+            IImageFileStorage imageFileStorage, 
+            IAudioAuditFileStorage audioAuditFileStorage)
         {
             this.logoStorage = logoStorage;
             this.audioFileStorage = audioFileStorage;
             this.imageFileStorage = imageFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -64,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         
         private Task<OkResponse> UploadAudioAudit(UploadInterviewAudioAuditRequest request)
         {
-            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
+            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
                 request.InterviewAudio.FileName,
                 Convert.FromBase64String(request.InterviewAudio.Data), 
                 request.InterviewAudio.ContentType);

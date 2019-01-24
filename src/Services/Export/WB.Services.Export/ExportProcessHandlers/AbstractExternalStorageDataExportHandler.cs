@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
@@ -40,17 +41,12 @@ namespace WB.Services.Export.ExportProcessHandlers
                 string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
 
                 await binaryDataSource.ForEachInterviewMultimediaAsync(settings, 
-                    async data =>
+                    async binaryDataAction =>
                     {
-                        var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
-                        await this.UploadFileAsync(interviewFolderPath, data.Content, data.FileName);
-
-                    }, 
-                    async audioAuditRecord =>
-                    {
-                        var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(audioAuditRecord.InterviewId));
-                        var audioFolder = await this.CreateFolderAsync(interviewFolderPath, interviewDataExportSettings.Value.AudioAuditFolderName);
-                        await this.UploadFileAsync(audioFolder, audioAuditRecord.Content, audioAuditRecord.FileName);
+                        var folderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(binaryDataAction.InterviewId));
+                        if (binaryDataAction.Type == BinaryDataType.AudioAudit)
+                            folderPath = await this.CreateFolderAsync(folderPath, interviewDataExportSettings.Value.AudioAuditFolderName);
+                        await this.UploadFileAsync(folderPath, binaryDataAction.Content, binaryDataAction.FileName);
                     }, 
                     progress, cancellationToken);
             }

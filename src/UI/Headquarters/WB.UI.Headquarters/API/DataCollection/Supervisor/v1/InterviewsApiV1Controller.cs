@@ -23,13 +23,27 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(new[] { UserRoles.Supervisor })]
     public class InterviewsApiV1Controller : SupervisorInterviewsControllerBase
     {
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
-
-        public InterviewsApiV1Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
+        public InterviewsApiV1Controller(IImageFileStorage imageFileStorage, 
+            IAudioFileStorage audioFileStorage,
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IAuthorizedUser authorizedUser,
+            IInterviewInformationFactory interviewsFactory,
+            IInterviewPackagesService packagesService,
+            ICommandService commandService,
+            IMetaInfoBuilder metaBuilder,
+            IJsonAllTypesSerializer synchronizationSerializer,
+            IHeadquartersEventStore eventStore) : 
+            base(imageFileStorage,
+                audioFileStorage,
+                authorizedUser,
+                interviewsFactory,
+                packagesService,
+                commandService,
+                metaBuilder,
+                synchronizationSerializer, 
+                eventStore, 
+                audioAuditFileStorage)
         {
-            this.imageFileStorage = imageFileStorage;
-            this.audioFileStorage = audioFileStorage;
         }
 
         [HttpGet]
@@ -53,6 +67,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpPost]
         public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
+
+        [HttpPost]
+        public override HttpResponseMessage PostAudioAudit(PostFileRequest request) => base.PostAudioAudit(request);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]

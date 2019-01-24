@@ -6,7 +6,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 function setupExportService($exportSettingsPath) {
-    $exportSettings = Get-Content $exportSettingsPath -raw | ConvertFrom-Json
+    $parser = New-Object Web.Script.Serialization.JavaScriptSerializer
+    $exportSettings = $parser.DeserializeObject((Get-Content $exportSettingsPath -raw))
+    
     $exportSettings.ConnectionStrings.DefaultConnection = "Provided by HQ"
     $exportSettings.Storage.S3.Enabled = $false
 
@@ -17,6 +19,7 @@ function setupExportService($exportSettingsPath) {
     }
 
     $exportSettings.ExportSettings.DirectoryPath = "..\..\..\Data_Site\ExportServiceData"
+
     $exportSettings | ConvertTo-Json -Depth 100 | set-content $exportSettingsPath
 }
 
@@ -34,7 +37,7 @@ if ($HQSourcePath -eq "") {
 }
 
 #Set-Location $HQSourcePath
-$sitePatha = (Get-ChildItem -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "PackageTmp"}).FullName
+$sitePatha = (Get-ChildItem $HQSourcePath -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "PackageTmp"}).FullName
 
 $HQsitePath = Join-path $workdir "HQwork"
 if (!(Test-Path $HQsitePath)) {

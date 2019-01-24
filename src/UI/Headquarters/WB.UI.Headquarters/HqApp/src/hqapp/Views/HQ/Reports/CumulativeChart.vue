@@ -45,6 +45,7 @@ const chartOptions = {
             {
                 afterDataLimits: function(axis) {
                     axis.max += 1; // add 1px to top
+                    axis.min = 0;
                 },
                 type: "linear",
                 stacked: true,
@@ -66,17 +67,16 @@ export default {
     extends: Line,
     props: {
         options: { required: false },
-        chartData: { required: true },
         height: 600
     },
 
     mounted() {
-        this.render();
+        this.$emit("mounted")
     },
 
     methods: {
-        render() {
-            this.renderChart(this.chartData, _.assign(chartOptions, {
+        render(chartData) {
+            this.renderChart(chartData, _.assign(chartOptions, {
                 animation: {
                     onComplete: () => {
                         this.$emit("ready");
@@ -89,12 +89,6 @@ export default {
             if(this.$data._chart == null) return null;
 
             return this.$data._chart.canvas.toDataURL("image/png");
-        }
-    },
-
-    watch: {
-        chartData() {
-            this.render();
         }
     }
 };
