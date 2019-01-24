@@ -55,12 +55,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 var interviewStatusChanged = statusChangeEvent.Payload as InterviewStatusChanged;
 
-                state.LastInterviewStatus = interviewStatusChanged?.PreviousStatus ?? cumulativeReportReader.Query(_ => _
-                                          .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
-                                          .OrderByDescending(x => x.EventSequence)
-                                          .FirstOrDefault())?.Status;
+                state.LastInterviewStatus = interviewStatusChanged.PreviousStatus
+                                            ?? state.LastInterviewStatus
+                                            ?? cumulativeReportReader.Query(_ => _
+                                                .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
+                                                .OrderByDescending(x => x.EventSequence)
+                                                .FirstOrDefault())?.Status;
 
                 this.Update(state, interviewStatusChanged, statusChangeEvent);
+
+                state.LastInterviewStatus = interviewStatusChanged.Status;
             }
             
             if (state.IsDirty)

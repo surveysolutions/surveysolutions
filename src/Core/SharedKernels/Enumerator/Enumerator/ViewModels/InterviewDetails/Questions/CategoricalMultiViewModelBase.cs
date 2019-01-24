@@ -89,7 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
         
         protected abstract void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> answeredViewModels);
-        protected abstract CategoricalMultiOptionViewModel<TOptionValue>[] GetSelectedOptions();
         protected abstract TInterviewAnswer[] GetAnsweredOptionsFromInterview(IStatefulInterview interview);
         protected abstract void SetAnswerToOptionViewModel(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel, TInterviewAnswer[] answers);
         protected abstract AnswerQuestionCommand GetAnswerCommand(Guid interviewId, Guid userId);
@@ -159,10 +158,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
         {
-            var allSelectedOptions = this.GetSelectedOptions();
+            var allSelectedOptions = this.Options.Where(x => x.IsSelected()).ToArray();
 
-            if (this.areAnswersOrdered && optionViewModel.Checked)
-                optionViewModel.CheckedOrder = allSelectedOptions.Count(x => x.Checked);
+            if (this.areAnswersOrdered && optionViewModel.IsSelected())
+                optionViewModel.CheckedOrder = allSelectedOptions.Count(x => x.IsSelected());
 
             this.SaveAnsweredOptionsForThrottling(allSelectedOptions.OrderBy(x => x.CheckedOrder));
 
