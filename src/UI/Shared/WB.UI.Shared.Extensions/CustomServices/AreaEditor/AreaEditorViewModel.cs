@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
     public class AreaEditorViewModel : BaseViewModel<AreaEditorViewModelArgs>
     {
-        public event Action<AreaEditorResult> OnAreaEditCompleted;
+        public Action<AreaEditorResult> OnAreaEditCompleted;
 
         readonly ILogger logger;
         private readonly IMapService mapService;

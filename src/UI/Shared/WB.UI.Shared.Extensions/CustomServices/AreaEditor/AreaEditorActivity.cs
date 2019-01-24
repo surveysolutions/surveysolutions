@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
 
-        public static event Action<AreaEditorResult> OnAreaEditCompleted;
+        public static Action<AreaEditorResult> OnAreaEditCompleted;
 
         public override void OnBackPressed()
         {
@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
 
-            this.ViewModel.OnAreaEditCompleted += OnAreaEditCompleted;
+            this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
 
             //workaround
             //inflated map doesn't work (should be fixed in next Esri release) 
