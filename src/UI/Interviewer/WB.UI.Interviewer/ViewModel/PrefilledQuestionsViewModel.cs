@@ -81,13 +81,13 @@ namespace WB.UI.Interviewer.ViewModel
                     try
                     {
                         await audioAuditService.StartAudioRecordingAsync(interviewId);
+                        isAuditStarting = false;
                     }
                     catch (MissingPermissionsException e)
                     {
                         this.userInteractionService.ShowToast(e.Message);
                         await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
                     }
-                    isAuditStarting = false;
                 });
             }
 
