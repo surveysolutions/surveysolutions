@@ -131,12 +131,6 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Mes masques</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Masques publics</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Masques</value>
   </data>

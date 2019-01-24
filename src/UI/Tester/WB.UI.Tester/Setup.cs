@@ -52,7 +52,7 @@ namespace WB.UI.Tester
         {
             base.FillValueConverters(registry);
             
-            registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
+            registry.AddOrOverwrite("QuestionnaireTypeToBackground", new QuestionnaireTypeToBackgroundConverter());
         }
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()
