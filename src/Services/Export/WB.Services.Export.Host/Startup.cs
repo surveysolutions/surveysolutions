@@ -72,8 +72,8 @@ namespace WB.Services.Export.Host
             }
 
             healthChecksBuilder
-                .AddCheck<DbHealthCheck>("Database")
-                .AddCheck<EfCoreHealthCheck>("EF migrations");
+                .AddCheck<EfCoreHealthCheck>("EF migrations")
+                .AddDbContextCheck<JobContext>("Database");
             ServicesRegistry.Configure(services, Configuration);
 
             // Create the IServiceProvider based on the container.
