@@ -7413,6 +7413,9 @@ input.radio-row:checked:focus + label .tick {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap; }
+      .bootstrap-select.btn-group .dropdown-toggle .filter-option .filter-option-inner,
+      .bootstrap-select.dropdown .dropdown-toggle .filter-option .filter-option-inner {
+        padding-right: 18px; }
     .bootstrap-select.btn-group .dropdown-toggle .bs-caret .caret,
     .bootstrap-select.dropdown .dropdown-toggle .bs-caret .caret {
       right: 10px;
@@ -9276,7 +9279,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   .page-header h1 + .maintenance-mode {
     margin-top: 15px; }
   .page-header .neighbor-block-to-search {
-    padding-right: 365px; }
+    padding-right: 330px; }
     .page-header .neighbor-block-to-search.row-without-padding {
       padding-right: 0; }
   .page-header .topic-with-button {
@@ -9636,6 +9639,13 @@ main.hidden.display-block {
   -webkit-transition: all 0.2s linear 0s;
   transition: all 0.2s linear 0s; }
 
+.contains-search .page-header {
+  padding-right: 310px; }
+
+@media (max-width: 880px) {
+  .contains-search .page-header {
+    padding-right: 0; } }
+
 @media (max-width: 1210px) {
   html body {
     padding-top: 70px; }
@@ -9648,9 +9658,7 @@ main.hidden.display-block {
   .view-mode {
     top: 70px; }
   .main-information-no-filter {
-    padding: 0 10px; }
-  .page-header .neighbor-block-to-search {
-    padding-right: 255px; } }
+    padding: 0 10px; } }
 
 @media (max-width: 880px) {
   html body {
