@@ -64,6 +64,7 @@ namespace WB.Services.Scheduler.Tests
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
 
+                await db.Database.EnsureCreatedAsync();
                 await db.Database.MigrateAsync();
                 await db.Database.ExecuteSqlCommandAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
             }
