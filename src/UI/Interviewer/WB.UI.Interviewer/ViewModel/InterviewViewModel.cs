@@ -117,9 +117,8 @@ namespace WB.UI.Interviewer.ViewModel
                         this.userInteractionService.ShowToast(e.Message);
                         await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
                     }
+                    isAuditStarting = false;
                 });
-
-                isAuditStarting = false;
             }
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
