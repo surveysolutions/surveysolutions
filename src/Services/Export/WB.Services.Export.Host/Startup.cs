@@ -7,12 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 using Prometheus.Advanced;
+using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.Health;
+using WB.Services.Export.Utils;
 using WB.Services.Scheduler;
+using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Export.Host
 {
@@ -43,7 +45,7 @@ namespace WB.Services.Export.Host
             {
                 ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonFormatters();
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
@@ -62,7 +64,16 @@ namespace WB.Services.Export.Host
                 
                 return registry;
             });
-            
+
+            var healthChecksBuilder = services.AddHealthChecks();
+            if (Configuration.IsS3Enabled())
+            {
+                healthChecksBuilder.AddCheck<AmazonS3Check>("Amazon s3");
+            }
+
+            healthChecksBuilder
+                .AddCheck<DbHealthCheck>("Database")
+                .AddCheck<EfCoreHealthCheck>("EF migrations");
             ServicesRegistry.Configure(services, Configuration);
 
             // Create the IServiceProvider based on the container.

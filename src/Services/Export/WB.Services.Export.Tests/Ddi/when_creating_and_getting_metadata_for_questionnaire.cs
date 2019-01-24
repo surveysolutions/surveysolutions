@@ -108,7 +108,6 @@ namespace WB.Services.Export.Tests.Ddi
 
         private static DdiMetadataFactory ddiMetadataFactory;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static long questionnaireVersion = 3;
         private static string filePath;
         private static Mock<IMetadataWriter> metadataWriter;
     }

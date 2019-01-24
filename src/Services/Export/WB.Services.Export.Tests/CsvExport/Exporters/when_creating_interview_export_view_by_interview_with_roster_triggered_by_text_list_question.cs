@@ -127,7 +127,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static QuestionnaireDocument questionnaireDocument;
         private static string someAnswer = "some answer";
         private static int maxAnswerCount = 5;
-        private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
         private InterviewsExporter exporter;
     }
 }
