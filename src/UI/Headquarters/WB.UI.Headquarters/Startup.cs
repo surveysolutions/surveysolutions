@@ -128,7 +128,7 @@ namespace WB.UI.Headquarters
             app.UseWebApi(config);
 
 
-            InitializeAppShutdown(app, ServiceLocator.Current.GetInstance<IScheduler>());
+            InitializeAppShutdown(app, container.Resolve<IScheduler>());
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
@@ -254,7 +254,7 @@ namespace WB.UI.Headquarters
             logger.Info(@"Ending application.");
             logger.Info(@"ShutdownReason: " + HostingEnvironment.ShutdownReason);
 
-            scheduler?.Shutdown();
+            scheduler.Shutdown();
 
             if (HostingEnvironment.ShutdownReason != ApplicationShutdownReason.HostingEnvironment) return;
 
