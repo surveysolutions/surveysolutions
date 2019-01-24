@@ -193,7 +193,7 @@
     <value>Tap to enter decimal</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Are you sure you want to remove related roster?</value>
+    <value>Are you sure you want to remove related roster {0}?</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

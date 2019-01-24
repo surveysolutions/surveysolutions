@@ -44,9 +44,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<int>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => x.Value).ToArray();
 
-        protected override CategoricalMultiOptionViewModel<int>[] GetSelectedOptions()
-            => this.Options.Where(x => x.Checked).ToArray();
-
         protected override int[] GetAnsweredOptionsFromInterview(IStatefulInterview interview) 
             => interview.GetMultiOptionLinkedToListQuestion(this.Identity)?.GetAnswer()?.CheckedValues.ToArray();
 
