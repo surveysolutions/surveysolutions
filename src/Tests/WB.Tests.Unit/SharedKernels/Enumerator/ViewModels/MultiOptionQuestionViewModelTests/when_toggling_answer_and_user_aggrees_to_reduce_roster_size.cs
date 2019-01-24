@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         [Test] 
         public void should_show_confirmation_dialog ()
         {
-            var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
+            var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, "<b>'item1'</b>");
             userInteractionService.Verify(x => x.ConfirmAsync(message, "", null, null, true), Times.Once);
         }
 
