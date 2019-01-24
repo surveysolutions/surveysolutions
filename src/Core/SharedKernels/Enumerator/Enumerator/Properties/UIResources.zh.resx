@@ -612,9 +612,6 @@
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
     <value>受保护问题的新答案应该大于或等于 {0}</value>
   </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>您确定要从每个相关名单中删除 行吗？</value>
-  </data>
   <data name="Interview_ShowPdf" xml:space="preserve">
     <value>显示 PDF</value>
   </data>

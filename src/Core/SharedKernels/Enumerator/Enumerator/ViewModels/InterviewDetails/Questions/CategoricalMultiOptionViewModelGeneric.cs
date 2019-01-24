@@ -54,5 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
         
         public IMvxCommand CheckAnswerCommand => new MvxCommand(this.setAnswer, () => CanBeChecked && !IsProtected);
+
+        public virtual bool IsSelected() => this.Checked;
     }
 }

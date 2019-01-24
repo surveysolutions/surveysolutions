@@ -7,10 +7,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class CategoricalMultiOptionViewModel : CategoricalMultiOptionViewModel<int>
     {
-        public void MakeRosterSize() => this.isRosterSizeQuestion = true;
-
         private Action setAnswer;
         private bool isRosterSizeQuestion;
+        private bool wasChecked;
 
         private readonly IUserInteractionService userInteraction;
 
@@ -25,19 +24,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Init(questionState, sTitle, value, isProtected, async () => await this.SetAnswerAsync());
         }
 
+        public void MakeRosterSize() => this.isRosterSizeQuestion = true;
+
         private async Task SetAnswerAsync()
         {
             if (this.Checked || !this.isRosterSizeQuestion)
                 this.setAnswer.Invoke();
             else if (this.userInteraction.HasPendingUserInteractions)
                 this.Checked = true;
-            else if(!await this.userInteraction.ConfirmAsync(UIResources.Interview_Questions_RemoveRowFromRosterMessage))
-                this.Checked = true;
             else
             {
-                this.Checked = false;
-                this.setAnswer.Invoke();
+                this.wasChecked = true;
+                var canRemoveRoster = await this.userInteraction.ConfirmAsync(
+                    string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                        $"<b>'{this.Title}'</b>"));
+                this.wasChecked = false;
+
+                if (!canRemoveRoster)
+                    this.Checked = true;
+                else
+                {
+                    this.Checked = false;
+                    this.setAnswer.Invoke();
+                }
             }
         }
+
+        public override bool IsSelected() => this.wasChecked || this.Checked;
     }
 }
