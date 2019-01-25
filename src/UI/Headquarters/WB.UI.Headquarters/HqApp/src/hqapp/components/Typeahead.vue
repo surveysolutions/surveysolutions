@@ -168,7 +168,7 @@ export default {
             }
 
             this.isLoading = true;
-            const requestParams = Object.assign(
+            const requestParams = _.assign(
                 { query: filter, cache: false },
                 this.ajaxParams
             );
