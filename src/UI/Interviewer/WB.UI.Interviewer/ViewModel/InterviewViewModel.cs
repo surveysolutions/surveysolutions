@@ -115,8 +115,8 @@ namespace WB.UI.Interviewer.ViewModel
                     }
                     catch (MissingPermissionsException e)
                     {
-                        this.userInteractionService.ShowToast(e.Message);
                         await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
+                        this.userInteractionService.ShowToast(e.Message);
                     }
                 });
             }
