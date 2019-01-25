@@ -82,8 +82,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 };
                 return await tcs.Task;
             }
-            
-            return null;
+
+            return await Task.FromResult<AreaEditResult>(null);
         }
     }
 }
