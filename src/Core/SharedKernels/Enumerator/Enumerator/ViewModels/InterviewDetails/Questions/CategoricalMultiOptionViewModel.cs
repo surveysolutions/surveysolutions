@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SetAnswerAsync()
         {
+            if (this.wasChecked) return;
+
             if (this.Checked || !this.isRosterSizeQuestion)
                 this.setAnswer.Invoke();
             else if (this.userInteraction.HasPendingUserInteractions)
