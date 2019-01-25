@@ -98,8 +98,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
 
+            this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
+
             this.IsSuccessfullyLoaded = true;
         }
+
+        public bool? IsAudioRecordingEnabled { get; set; }
 
         public virtual Task NavigateToPreviousViewModelAsync()
         {

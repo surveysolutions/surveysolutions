@@ -14,6 +14,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.permissions = permissions;
         }
 
-        public Task AssureHasPermission(Permission permission) => this.permissions.AssureHasPermission(permission);
+        public async Task AssureHasPermission(Permission permission) => await this.permissions.AssureHasPermission(permission);
     }
 }
