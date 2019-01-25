@@ -586,5 +586,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public CategoricalYesNoOptionViewModel YesNoQuestionOptionViewModel(IUserInteractionService userInteractionService)
             => new CategoricalYesNoOptionViewModel(userInteractionService);
+
+        public CategoricalMultiOptionViewModel CategoricalMultiOptionViewModel(IUserInteractionService userInteractionService = null)
+            => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>());
     }
 }
