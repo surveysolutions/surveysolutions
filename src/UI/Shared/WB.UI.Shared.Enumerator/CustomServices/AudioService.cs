@@ -7,6 +7,7 @@ using Android.Webkit;
 using Java.Lang;
 using MvvmCross.Logging;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -24,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private object lockObject = new object();
 
         private readonly IAudioFileStorage audioFileStorage;
-        private readonly IMvxLog mvxLog;
+        private readonly ILogger logger;
 
         private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
@@ -52,11 +53,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public AudioService(string pathToAudioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
             IAudioFileStorage audioFileStorage, 
-            IMvxLogProvider mvxLogProvider)
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.audioFileStorage = audioFileStorage;
-            this.mvxLog = mvxLogProvider.GetLogFor<AudioService>();
+            this.logger = logger;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
@@ -168,7 +169,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 this.recorder.Prepare();
                 this.recorder.Start();
-                this.mvxLog.Debug("Started Audio audit recording");
+                this.logger.Info($"Started Audio recording recording to file {audioFilePath}");
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {
@@ -202,7 +203,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.Stop();
             this.duration.Stop();
             this.ReleaseAudioRecorder();
-            this.mvxLog.Debug("Stopped Audio audit recording");
+            this.logger.Info($"Stopped Audio recording recording ");
         }
 
         public void StopAuditRecording()
