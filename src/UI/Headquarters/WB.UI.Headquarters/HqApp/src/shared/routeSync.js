@@ -41,7 +41,7 @@ export default {
             // apply accumulated changes to query
             changes.forEach(change => change(data));
 
-            const state = Object.assign(_.clone(this.queryString), data);
+            const state = _.assign(_.clone(this.queryString), data);
             this.updateRoute(state);
         },
 

@@ -278,7 +278,7 @@ export default {
         filter() {
             const state = this.queryString;
 
-            const filter = Object.assign(
+            const filter = _.assign(
                 {
                     questionnaireId: this.questionnaire == null ? null : this.questionnaire.Id,
                     questionnaire: this.questionnaire,

@@ -127,7 +127,7 @@ export default {
             const version = this.$route.query.questionnaireVersion
 
             if (questionnaireId && version) {
-                requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
+                requestParams = _.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
                              this.ajaxParams);
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
