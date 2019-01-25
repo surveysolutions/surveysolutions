@@ -136,7 +136,7 @@ export default {
          * @param newConfig Object
          */
         config(newConfig) {
-            this.fp.config = Object.assign(this.fp.config, newConfig);
+            this.fp.config = _.assign(this.fp.config, newConfig);
             this.fp.redraw();
             this.fp.setDate(this.value, true);
         },

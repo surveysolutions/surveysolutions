@@ -557,7 +557,7 @@ export default {
 
         async loadResponsibleIdByName(onDone) {
             if (this.$route.query.responsible != undefined) {
-                const requestParams = Object.assign(
+                const requestParams = _.assign(
                     {
                         query: this.$route.query.responsible,
                         pageSize: 1,
@@ -579,7 +579,7 @@ export default {
             const version = this.$route.query.questionnaireVersion;
 
             if (questionnaireId != undefined && version != undefined) {
-                requestParams = Object.assign(
+                requestParams = _.assign(
                     { questionnaireIdentity: questionnaireId + "$" + version, cache: false },
                     this.ajaxParams
                 );
