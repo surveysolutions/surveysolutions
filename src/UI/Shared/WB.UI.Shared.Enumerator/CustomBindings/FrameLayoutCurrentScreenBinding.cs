@@ -46,8 +46,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             mvxFragment.ViewModel = frameViewModel;
 
-            var topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-            var activity = (FragmentActivity)topActivity.Activity;
+            var activity = (FragmentActivity)frameLayout.Context;
             var transaction = activity.SupportFragmentManager.BeginTransaction();
 
             SetCustomAnimations(transaction, stageViewModel.Direction);
