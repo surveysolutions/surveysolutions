@@ -2,8 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using Android.Media;
+using Android.Runtime;
 using Android.Webkit;
 using Java.Lang;
+using MvvmCross.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,7 +24,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private object lockObject = new object();
 
         private readonly IAudioFileStorage audioFileStorage;
-       
+        private readonly IMvxLog mvxLog;
+
         private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
         private const double MaxReportableDb = 90.3087f;
@@ -48,10 +51,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public AudioService(string pathToAudioDirectory, 
             IFileSystemAccessor fileSystemAccessor,
-            IAudioFileStorage audioFileStorage)
+            IAudioFileStorage audioFileStorage, 
+            IMvxLogProvider mvxLogProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.audioFileStorage = audioFileStorage;
+            this.mvxLog = mvxLogProvider.GetLogFor<AudioService>();
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
             this.tempFileName = Path.GetTempFileName();
             mediaPlayer.Completion += MediaPlayerOnCompletion;
@@ -142,6 +147,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void Record(string audioFilePath, int maxDuration)
         {
+            this.ReleaseAudioRecorder();
+
             this.recorder = new MediaRecorder();
 
             this.recorder.SetAudioSource(AudioSource.Mic);
@@ -161,6 +168,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 this.recorder.Prepare();
                 this.recorder.Start();
+                this.mvxLog.Debug("Started Audio audit recording");
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {
@@ -194,6 +202,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.Stop();
             this.duration.Stop();
             this.ReleaseAudioRecorder();
+            this.mvxLog.Debug("Stopped Audio audit recording");
         }
 
         public void StopAuditRecording()
