@@ -37,7 +37,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public static void RegisterLicence()
+        public static void RegisterLicense()
         {
             ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,6PAZ0H4AH409L50JT147");
         }
@@ -52,37 +52,38 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            var tcs = new TaskCompletionSource<AreaEditResult>();
+            bool activityCreated = await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(
+                new AreaEditorViewModelArgs
+                {
+                    Geometry = area?.Geometry,
+                    MapName = area?.MapName,
+                    RequestedGeometryType = geometryType
+                }).ConfigureAwait(false);
 
-            void AreaEditorActivityOnOnAreaEditCompleted(AreaEditorResult editResult)
+            if (activityCreated)
             {
-                AreaEditorActivity.OnAreaEditCompleted -= (AreaEditorActivityOnOnAreaEditCompleted);
-
-                tcs.TrySetResult(editResult == null
-                    ? null
-                    : new AreaEditResult
-                    {
-                        Geometry = editResult.Geometry,
-                        MapName = editResult.MapName,
-                        Area = editResult.Area,
-                        Length = editResult.Length,
-                        Coordinates = editResult.Coordinates,
-                        DistanceToEditor = editResult.DistanceToEditor,
-                        Preview = editResult.Preview,
-                        NumberOfPoints = editResult.NumberOfPoints
-                    });
+                var tcs = new TaskCompletionSource<AreaEditResult>();
+                
+                AreaEditorActivity.OnAreaEditCompleted = (AreaEditorResult editResult) =>
+                {
+                    tcs.TrySetResult(editResult == null
+                        ? null
+                        : new AreaEditResult
+                        {
+                            Geometry = editResult.Geometry,
+                            MapName = editResult.MapName,
+                            Area = editResult.Area,
+                            Length = editResult.Length,
+                            Coordinates = editResult.Coordinates,
+                            DistanceToEditor = editResult.DistanceToEditor,
+                            Preview = editResult.Preview,
+                            NumberOfPoints = editResult.NumberOfPoints
+                        });
+                };
+                return await tcs.Task;
             }
-
-            AreaEditorActivity.OnAreaEditCompleted += (AreaEditorActivityOnOnAreaEditCompleted);
-
-            await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(new AreaEditorViewModelArgs
-            {
-                Geometry = area?.Geometry,
-                MapName = area?.MapName,
-                RequestedGeometryType = geometryType
-            });
-
-            return await tcs.Task;
+            
+            return null;
         }
     }
 }

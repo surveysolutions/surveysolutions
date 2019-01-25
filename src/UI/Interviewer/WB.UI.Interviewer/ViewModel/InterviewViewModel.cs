@@ -103,26 +103,29 @@ namespace WB.UI.Interviewer.ViewModel
                 commandService.Execute(new ResumeInterviewCommand(interviewId, Principal.CurrentUserIdentity.UserId));
             }
 
-            if (IsAudioRecordingEnabled == true)
+            if (IsAudioRecordingEnabled == true && !isAuditStarting)
             {
+                isAuditStarting = true;
                 Task.Run(async() =>
                 {
                     try
                     {
-                        await audioAuditService.StartAudioRecordingAsync(interviewId);
+                        await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
+                        isAuditStarting = false;
                     }
                     catch (MissingPermissionsException e)
                     {
                         this.userInteractionService.ShowToast(e.Message);
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
                     }
                 });
             }
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
-
             base.ViewAppeared();
         }
+
+        private bool isAuditStarting = false;
 
         public override void ViewDisappearing()
         {
@@ -136,7 +139,7 @@ namespace WB.UI.Interviewer.ViewModel
             auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
 
             if (IsAudioRecordingEnabled == true)
-                Task.Run(()=>audioAuditService.StopAudioRecordingAsync(interviewId));
+                Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
 
             base.ViewDisappearing();
         }

@@ -1,13 +1,12 @@
+using System;
 using MvvmCross.Commands;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -15,6 +14,9 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class PrefilledQuestionsViewModel : BasePrefilledQuestionsViewModel
     {
+        private readonly IAudioAuditService audioAuditService;
+        private readonly IUserInteractionService userInteractionService;
+
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
@@ -25,7 +27,9 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            VibrationViewModel vibrationViewModel)
+            VibrationViewModel vibrationViewModel,
+            IAudioAuditService audioAuditService,
+            IUserInteractionService userInteractionService)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -38,6 +42,8 @@ namespace WB.UI.Interviewer.ViewModel
                 compositeCollectionInflationService,
                 vibrationViewModel)
         {
+            this.audioAuditService = audioAuditService;
+            this.userInteractionService = userInteractionService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
@@ -61,6 +67,43 @@ namespace WB.UI.Interviewer.ViewModel
         public async Task NavigateBack()
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+        }
+
+        public override void ViewAppeared()
+        {
+            var interviewId = Guid.Parse(this.InterviewId);
+            
+            if (IsAudioRecordingEnabled == true && !isAuditStarting)
+            {
+                isAuditStarting = true;
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        await audioAuditService.StartAudioRecordingAsync(interviewId);
+                        isAuditStarting = false;
+                    }
+                    catch (MissingPermissionsException e)
+                    {
+                        this.userInteractionService.ShowToast(e.Message);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+                    }
+                });
+            }
+
+            base.ViewAppeared();
+        }
+
+        private bool isAuditStarting = false;
+
+        public override void ViewDisappearing()
+        {
+            var interviewId = Guid.Parse(InterviewId);
+            
+            if (IsAudioRecordingEnabled == true)
+                Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
+
+            base.ViewDisappearing();
         }
     }
 }

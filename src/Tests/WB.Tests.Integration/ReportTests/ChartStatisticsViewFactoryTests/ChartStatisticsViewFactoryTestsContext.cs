@@ -162,6 +162,14 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                 entry, questionnaireId.QuestionnaireId, questionnaireId.Version, date, status, changeValue, interviewId, NextSequence)
                 , entryId);
         }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            UnitOfWork.AcceptChanges();
+            UnitOfWork.Dispose();
+            DatabaseTestInitializer.DropDb(connectionString);
+        }
     }
     
 }
