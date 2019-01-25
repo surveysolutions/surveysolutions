@@ -1258,15 +1258,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database.
-        /// </summary>
-        public static string InterviewerProfile_DatabaseInfo {
-            get {
-                return ResourceManager.GetString("InterviewerProfile_DatabaseInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} uploaded, {1} downloaded.
         /// </summary>
         public static string InterviewerProfile_DataStatsFormat {
@@ -1623,6 +1614,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_StorageInfo {
             get {
                 return ResourceManager.GetString("InterviewerProfile_StorageInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System info and non-synchronized interview data.
+        /// </summary>
+        public static string InterviewerProfile_StorageSizeInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_StorageSizeInfo", resourceCulture);
             }
         }
         
