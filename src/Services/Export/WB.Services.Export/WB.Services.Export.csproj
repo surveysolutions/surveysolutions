@@ -18,6 +18,7 @@
     <PackageReference Include="HtmlSanitizer" Version="4.0.204" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
@@ -38,9 +39,6 @@
   <ItemGroup>
     <Reference Include="ddidotnet">
       <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.diagnostics.healthchecks.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="StatData">
       <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
