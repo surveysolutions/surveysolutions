@@ -1,17 +1,44 @@
-﻿using FluentMigrator;
+﻿using Dapper;
+using FluentMigrator;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
-    [Migration(201901251800)]
-    public class M201901251800_FixHistoricDataForCumulativeChart :Migration
+    [Migration(201901251801)]
+    public class M201901251801_FixHistoricDataForCumulativeChart : Migration
     {
+        private readonly ILogger logger;
+
+        public M201901251801_FixHistoricDataForCumulativeChart(ILoggerProvider logger)
+        {
+            this.logger = logger.CreateLogger(GetType().Name);
+        }
+
         public override void Up()
         {
-            if (!this.Schema.Schema("events").Table("events").Exists()) return;
-            if (!this.Schema.Schema("readside").Table("cumulativereportstatuschanges").Exists()) return;
+            this.Execute.WithConnection((d, t) =>
+            {
+                var eventsExists = !string.IsNullOrWhiteSpace(d.QuerySingle<string>(
+                    "SELECT 'events.events'::regclass::text"));
 
-            this.Execute.Sql("delete from readside.cumulativereportstatuschanges");
-            this.Execute.Sql(@"insert into readside.cumulativereportstatuschanges
+                var cumulativeExists = !string.IsNullOrWhiteSpace(d.QuerySingle<string>(
+                    "SELECT 'readside.cumulativereportstatuschanges'::regclass::text"));
+
+                bool canProcessHistory = eventsExists && cumulativeExists;
+                if (!canProcessHistory) return;
+
+                void Execute(string sql)
+                {
+                    using (logger.BeginScope("Executing sql"))
+                    {
+                        logger.LogInformation(sql);
+                        d.Execute(sql);
+                    }
+                }
+
+                Execute(@"delete from readside.cumulativereportstatuschanges");
+                Execute(@"
+            insert into readside.cumulativereportstatuschanges
             with status_changes as (
 	            select st.id, st.interviewid, st.eventsequence, st.date::date::timestamp, lag(st.status) over w as prev_status, status
 	            from (
@@ -52,11 +79,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             )
             select entryid, date, status, changevalue, questionnaireidentity, interviewid, eventsequence
             from cumulative_chart");
+            });
         }
 
         public override void Down()
         {
-            
+
         }
     }
 }
