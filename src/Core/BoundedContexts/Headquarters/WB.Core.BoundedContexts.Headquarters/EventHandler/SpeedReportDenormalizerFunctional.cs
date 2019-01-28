@@ -53,8 +53,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             reportInterviewItem.FirstAnswerDate = answerTime;
             reportInterviewItem.SupervisorId = interviewSummary.TeamLeadId;
+            reportInterviewItem.SupervisorName = interviewSummary.TeamLeadName;
             reportInterviewItem.InterviewerId = interviewSummary.ResponsibleId;
-
+            reportInterviewItem.InterviewerName = interviewSummary.ResponsibleName;
             return interviewSummary;
         }
 
@@ -136,7 +137,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 reportInterviewItem.FirstAnswerDate = firstAnswerSetStatusRecord.Timestamp;
                 reportInterviewItem.SupervisorId = firstAnswerSetStatusRecord.SupervisorId;
+                reportInterviewItem.SupervisorName = firstAnswerSetStatusRecord.SupervisorName;
                 reportInterviewItem.InterviewerId = firstAnswerSetStatusRecord.InterviewerId;
+                reportInterviewItem.InterviewerName = firstAnswerSetStatusRecord.InterviewerName;
             }
 
             speedReportRepository.Store(reportInterviewItem, state.SummaryId);

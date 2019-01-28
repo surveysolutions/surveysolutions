@@ -4,6 +4,7 @@
       <FilterBlock
         :title="$t('Common.Questionnaire')">
         <Typeahead control-id="questionnaireId"
+          ref="questionnaireIdControl" 
           data-vv-name="questionnaireId"
           data-vv-as="questionnaire"
           :placeholder="$t('Common.AllQuestionnaires')"
@@ -16,6 +17,7 @@
       <FilterBlock
         :title="$t('Common.QuestionnaireVersion')">
         <Typeahead control-id="questionnaireVersion"
+          ref="questionnaireVersionControl" 
           data-vv-name="questionnaireVersion"
           data-vv-as="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
@@ -46,27 +48,38 @@ export default {
         }
 
     },
-    mounted() {
+    async mounted() {
         const self = this
 
-        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            if (questionnaireId) {
-                self.questionnaireId = {
-                    key: questionnaireId,
-                    value: questionnaireTitle
-                }
-                self.questionnaireVersion = {
-                    key: version,
-                    value: version
-                }
-            }
+        var questionnaireInfo = await self.loadQuestionnaireId();
 
-            self.reloadTable()
-            self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.reloadTable.bind(self))
-        });
+        if (questionnaireInfo.questionnaireId)
+        {
+            this.$refs.questionnaireIdControl.fetchOptions().then(q => {
+                self.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle };
+
+                if (self.$route.query.questionnaireVersion)
+                {
+                    this.$refs.questionnaireVersionControl.fetchOptions().then(v => {
+                        self.questionnaireVersion = { key: questionnaireInfo.version, value: "ver. " + questionnaireInfo.version };
+                        self.reloadTable();
+                    });
+                }
+                else{
+                    self.reloadTable();
+                }
+            });
+        }
+          
+        self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.onWatcherChange.bind(self))
     },
     methods: {
-        
+        onWatcherChange()
+        {
+            const self = this
+            self.reloadTable();
+        },
+
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
         },
@@ -77,7 +90,7 @@ export default {
         reloadTable(){
             this.isLoading = true
             
-            this.$refs.table.reload(self.reloadTable)
+            this.$refs.table.reload(this.reloadTable)
 
             this.addParamsToQueryString()
         },
@@ -121,22 +134,23 @@ export default {
             }
         },
 
-        async loadQuestionnaireId(onDone) {
+        async loadQuestionnaireId() {
             let requestParams = null;
 
-            const questionnaireId = this.$route.query.questionnaireId
-            const version = this.$route.query.questionnaireVersion
+            const questionnaireId = this.$route.query.questionnaireId;
+            let version = this.$route.query.questionnaireVersion || "";
+            version = (version === "" ? "0" : version);
 
             if (questionnaireId && version) {
-                requestParams = _.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
-                             this.ajaxParams);
+                requestParams = _.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false }, this.ajaxParams);
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
-                    onDone(questionnaireId, response.data.title, response.data.version);
+                    return { questionnaireId: questionnaireId, questionnaireTitle: response.data.title, version: response.data.version};
                 }
 
-            } else onDone();
+            } else 
+                return {};
         },
         
 

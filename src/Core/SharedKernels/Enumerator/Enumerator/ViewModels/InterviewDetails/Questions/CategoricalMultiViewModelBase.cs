@@ -158,10 +158,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
         {
-            var allSelectedOptions = this.Options.Where(x => x.IsSelected()).ToArray();
+            var allSelectedOptions = this.Options.Where(x => x.IsAnswered()).ToArray();
 
-            if (this.areAnswersOrdered && optionViewModel.IsSelected())
-                optionViewModel.CheckedOrder = allSelectedOptions.Count(x => x.IsSelected());
+            optionViewModel.CheckedOrder = this.areAnswersOrdered && optionViewModel.IsOrdered()
+                ? (int?) allSelectedOptions.Count(x => x.IsOrdered())
+                : null;
 
             this.SaveAnsweredOptionsForThrottling(allSelectedOptions.OrderBy(x => x.CheckedOrder));
 

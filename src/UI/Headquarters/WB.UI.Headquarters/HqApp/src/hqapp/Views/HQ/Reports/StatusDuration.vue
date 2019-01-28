@@ -17,6 +17,7 @@
             <FilterBlock
                 :title="$t('Common.QuestionnaireVersion')">
                 <Typeahead control-id="questionnaireVersion"
+                    ref="questionnaireIdControl" 
                     data-vv-name="questionnaireVersion"
                     data-vv-as="questionnaireVersion"
                     :placeholder="$t('Common.AllVersions')"
@@ -67,8 +68,10 @@
 
 <script>
 import { formatNumber } from "./helpers"
+import routeSync from "~/shared/routeSync";
 
 export default {
+    mixins: [routeSync],
     data() {
         return {
             questionnaireId: null,
@@ -81,17 +84,31 @@ export default {
         }
     },
     watch: {
-        questionnaireId: function () {
+        questionnaireId: function (newValue) {
+            this.onChange(s => {s.questionnaireId = (newValue || {key: null}).key; s.version = this.questionnaireVersion;});
             this.reload();
         },
-        questionnaireVersion: function () {
+        questionnaireVersion: function (newValue) {
+            this.onChange(s => {s.version = (newValue || {key: null}).key; s.questionnaireId = (this.questionnaireId || {key: null}).key; });
             this.reload();
         },
-        supervisorId: function () {
+        supervisorId: function (newValue) {
             this.reload();
         }
     },
-    mounted() {
+    async mounted() {
+        var questionnaireInfo = await this.loadQuestionnaireId();
+
+        if (this.$route.query.questionnaireId)
+        {
+            this.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle };
+        }
+        if (this.$route.query.version)
+        {
+            this.$refs.questionnaireIdControl.fetchOptions().then(q => {
+                this.questionnaireVersion = { key: questionnaireInfo.version, value:"ver. " + questionnaireInfo.version };
+            });
+        }
         this.reload();
     },
     computed: {
@@ -210,6 +227,23 @@ export default {
         }
     },
     methods: {
+        async loadQuestionnaireId() {
+            const questionnaireId = this.$route.query.questionnaireId;
+            let version = this.$route.query.version || "";
+            version = (version === "" ? "0" : version);
+
+            if (questionnaireId && version) {
+                let requestParams = { questionnaireIdentity: questionnaireId + '$' + version, cache: false };
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
+
+                if (response.data) {
+                    return { questionnaireId: questionnaireId, questionnaireTitle: response.data.title, version: response.data.version};
+                }
+
+            } else 
+                return {};
+        },
+
         reload() {
             this.$refs.table.reload();
         },
