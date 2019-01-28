@@ -127,8 +127,10 @@ namespace WB.UI.Headquarters
 
             app.UseWebApi(config);
 
+            var scheduler = container.Resolve<IScheduler>();
+            scheduler.Start();
 
-            InitializeAppShutdown(app, container.Resolve<IScheduler>());
+            InitializeAppShutdown(app, scheduler);
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
