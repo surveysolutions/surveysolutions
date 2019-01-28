@@ -30,6 +30,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private const int MaxDuration = 3 * 60 * 1000;
         private const double MaxReportableAmp = 32767f;
         private const double MaxReportableDb = 90.3087f;
+
+        private readonly int audioAuditMaxFileDuration = (int) TimeSpan.FromMinutes(20).TotalMilliseconds;
         private readonly string audioFileName = $"audio.{AudioFileExtension}";
         private const string AudioFileExtension = "m4a";
 
@@ -137,13 +139,25 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             isAuditShouldBeRestarted = true;
 
+            this.OnMaxDurationReached += AudioAudit_OnMaxDurationReached;
+
             this.auditFilePrefix = fileNamePrefix;
+            RecordAudioAudit();
+        }
+
+        private void AudioAudit_OnMaxDurationReached(object sender, EventArgs e)
+        {
+            RecordAudioAudit();
+        }
+
+        private void RecordAudioAudit()
+        {
             var fileNameWithExtension = $"{this.auditFilePrefix}-{DateTime.Now:yyyyMMdd_HHmmssfff}.{AudioFileExtension}";
 
             var fullPath = this.fileSystemAccessor.CombinePath(pathToAudioAuditDirectory, fileNameWithExtension);
 
             isAuditRecording = true;
-            Record(fullPath, int.MaxValue);
+            Record(fullPath, audioAuditMaxFileDuration);
         }
 
         private void Record(string audioFilePath, int maxDuration)
@@ -203,6 +217,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.Stop();
             this.duration.Stop();
             this.ReleaseAudioRecorder();
+            this.OnMaxDurationReached -= AudioAudit_OnMaxDurationReached;
             this.logger.Info($"Stopped recording");
         }
 
