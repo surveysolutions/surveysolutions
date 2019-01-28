@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             this.accountViewFactory = accountViewFactory;
         }
 
-        public bool IsUniqueEmailRequired { get; set; }
+        public bool IsUniqueEmailRequired => true;
 
         public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email, string fullName)
         {
