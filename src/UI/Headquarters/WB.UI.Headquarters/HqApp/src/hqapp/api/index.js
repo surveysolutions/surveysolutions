@@ -69,7 +69,7 @@ class MapsReport {
     }
 
     GetInterviewDetailsUrl(interviewId) {
-        return `${this.http.defaults.baseURL}/Interview/Review/${interviewId}`
+        return `${this.http.defaults.baseURL}Interview/Review/${interviewId}`
     }
 }
 

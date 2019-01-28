@@ -541,6 +541,8 @@ export default {
 
         setMapData(data, extendBounds) {
             const toRemove = {};
+            
+            this.infoWindow.close(self.map);
 
             this.totalAnswers = data.TotalPoint;
             const features = data.FeatureCollection.features;
