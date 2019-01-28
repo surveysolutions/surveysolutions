@@ -55,7 +55,12 @@
         };
 
         $(function() {
-            var $questionnaires = @Model.Templates.AsJsonValue();
+            var $questionnaires = @Model.Templates.Select(x => new
+                             {
+                                 TemplateId = x.TemplateId.FormatGuid(),
+                                 x.TemplateName,
+                                 x.TemplateVersion
+                             }).AsJsonValue();
             
             var notifier = new Notifier();
 
