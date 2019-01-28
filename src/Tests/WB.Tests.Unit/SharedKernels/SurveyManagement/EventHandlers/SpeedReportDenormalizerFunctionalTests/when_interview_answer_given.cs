@@ -54,6 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             var statusEventsToPublish = new List<IPublishableEvent>();
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: createdDate));
+            statusEventsToPublish.Add(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
             statusEventsToPublish.Add(Create.PublishedEvent.DateTimeQuestionAnswered(interviewId: interviewId, originDate: firstAnswerDate));
             statusEventsToPublish.Add(Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: DateTimeOffset.Now));
@@ -70,6 +71,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
             Assert.That(speedReportInterviewItem.CreatedDate, Is.EqualTo(createdDate));
             Assert.That(speedReportInterviewItem.FirstAnswerDate.HasValue, Is.True);
             Assert.That(speedReportInterviewItem.FirstAnswerDate.Value, Is.EqualTo(firstAnswerDate));
+
+            Assert.That(speedReportInterviewItem.SupervisorName, Is.EqualTo("name"));
+            Assert.That(speedReportInterviewItem.InterviewerName, Is.EqualTo("name"));
         }
     }
 }
