@@ -39,13 +39,25 @@ namespace WB.Services.Export.ExportProcessHandlers
                 var applicationFolder = await this.CreateApplicationFolderAsync();
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
+                string GetAudioAuditInterviewFolder(Guid interviewId) => $"{GetInterviewFolder(interviewId)}/{interviewDataExportSettings.Value.AudioAuditFolderName}";
+                async Task<string> GetOrCreateFolderByType(BinaryDataType binaryDataType, Guid interviewId)
+                {
+                    switch (binaryDataType)
+                    {
+                        case BinaryDataType.Audio:
+                        case BinaryDataType.Image:
+                            return await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(interviewId));
+                        case BinaryDataType.AudioAudit:
+                            return await this.CreateFolderAsync(applicationFolder, GetAudioAuditInterviewFolder(interviewId));
+                        default:
+                            throw new ArgumentException("Unknown binary type: " + binaryDataType);
+                    }
+                }
 
                 await binaryDataSource.ForEachInterviewMultimediaAsync(settings, 
                     async binaryDataAction =>
                     {
-                        var folderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(binaryDataAction.InterviewId));
-                        if (binaryDataAction.Type == BinaryDataType.AudioAudit)
-                            folderPath = await this.CreateFolderAsync(folderPath, interviewDataExportSettings.Value.AudioAuditFolderName);
+                        var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type, binaryDataAction.InterviewId);
                         await this.UploadFileAsync(folderPath, binaryDataAction.Content, binaryDataAction.FileName);
                     }, 
                     progress, cancellationToken);
