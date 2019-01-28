@@ -36,6 +36,7 @@
 </template>
 <script>
 import { formatNumber } from "./helpers"
+import { ok } from 'assert';
 
 export default {
     data() {
@@ -151,9 +152,11 @@ export default {
             const templateId = (this.questionnaireId || {}).key; 
             const templateVersion = (this.questionnaireVersion || {}).key;
 
-            if (!_.isUndefined(templateId) && !_.isUndefined(templateVersion)) {
-                queryObject.templateId = templateId
+            if (!_.isUndefined(templateVersion)) {
                 queryObject.templateVersion = templateVersion
+            }
+            if(!_.isUndefined(templateId)) {
+                queryObject.templateId = templateId
             }
 
             if (row.responsible) {
