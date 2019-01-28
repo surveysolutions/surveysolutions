@@ -52,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public override bool IsSelected() => this.wasChecked || this.Checked;
+        public override bool IsAnswered() => this.wasChecked || this.Checked;
+        public override bool IsOrdered() => this.IsAnswered();
     }
 }
