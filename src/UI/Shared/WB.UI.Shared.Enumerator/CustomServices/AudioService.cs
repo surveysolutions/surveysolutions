@@ -169,7 +169,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             {
                 this.recorder.Prepare();
                 this.recorder.Start();
-                this.logger.Info($"Started Audio recording recording to file {audioFilePath}");
+                this.logger.Info($"Started recording to file {audioFilePath}");
             }
             catch (Exception ex) when (ex.GetSelfOrInnerAs<IOException>() != null)
             {
@@ -203,7 +203,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder.Stop();
             this.duration.Stop();
             this.ReleaseAudioRecorder();
-            this.logger.Info($"Stopped Audio recording recording ");
+            this.logger.Info($"Stopped recording");
         }
 
         public void StopAuditRecording()
