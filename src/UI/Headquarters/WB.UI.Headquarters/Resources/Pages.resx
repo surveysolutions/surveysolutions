@@ -417,8 +417,8 @@
   <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
     <value>Memory (available/total)</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>Database</value>
+  <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
+    <value>System info and non-synchronized interview data</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
     <value>Battery status (%)</value>

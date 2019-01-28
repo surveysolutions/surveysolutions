@@ -495,9 +495,6 @@
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>ტიპი: {0}</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>მონაცემთა ბაზა</value>
-  </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{0} ატვირთულია, {1} გადმოწერილია</value>
   </data>
@@ -877,7 +874,8 @@
     <value>სტატუსი</value>
   </data>
   <data name="Supervisor_CreateText" xml:space="preserve">
-    <value>ეს ქმედება ქმნის ინდივიდუალურ მომხმარებელს ზედამხედველის უფლებებით,
+    <value>ეს ქმედება ქმნის ინდივიდუალურ მომხმარებელს ზედამხედველის უფლებებით,
+
         &lt;br&gt; იმისათვის რომ შექმნათ რამოდენიმე მომხმარებელი გამოიყენეთ &lt;a href="{0}" target="__blank"&gt; მომხმარებლის სურათების შექმნა &lt;/a&gt;. </value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">

@@ -667,8 +667,8 @@
   <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
     <value>Память (доступно/всего)</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>База данных</value>
+  <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
+    <value>Системые данные и данные еще не синхронизированных интервью</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
     <value>Состояние батареи (%)</value>
