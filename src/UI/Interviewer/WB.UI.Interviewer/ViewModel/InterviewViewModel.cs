@@ -4,7 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -25,7 +24,7 @@ namespace WB.UI.Interviewer.ViewModel
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
         private readonly IAudioAuditService audioAuditService;
-        private IUserInteractionService userInteractionService;
+        private readonly IUserInteractionService userInteractionService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -46,7 +45,8 @@ namespace WB.UI.Interviewer.ViewModel
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
             IAuditLogService auditLogService, 
             IAudioAuditService audioAuditService,
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            ILogger logger)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
@@ -55,6 +55,7 @@ namespace WB.UI.Interviewer.ViewModel
             this.auditLogService = auditLogService;
             this.audioAuditService = audioAuditService;
             this.userInteractionService = userInteractionService;
+            this.logger = logger;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
@@ -111,12 +112,17 @@ namespace WB.UI.Interviewer.ViewModel
                     try
                     {
                         await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                        isAuditStarting = false;
                     }
-                    catch (MissingPermissionsException e)
+                    catch (Exception exc)
                     {
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId).ConfigureAwait(false);
-                        this.userInteractionService.ShowToast(e.Message);
+                        logger.Warn("Audio audit failed to start.", exception: exc);
+                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                            .ConfigureAwait(false);
+                        this.userInteractionService.ShowToast(exc.Message);
+                    }
+                    finally
+                    {
+                        isAuditStarting = false;
                     }
                 });
             }
@@ -126,6 +132,7 @@ namespace WB.UI.Interviewer.ViewModel
         }
 
         private bool isAuditStarting = false;
+        private readonly ILogger logger;
 
         public override void ViewDisappearing()
         {

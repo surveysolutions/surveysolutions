@@ -173,7 +173,7 @@ export default {
                 this.ajaxParams
             );
 
-            this.$http
+            return this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
                     if(response != null && response.data != null) {

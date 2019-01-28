@@ -80,6 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return await this.userInteraction.ConfirmAsync(string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, $"<b>'{this.Title}'</b>"));
         }
 
-        public override bool IsSelected() => this.Checked || this.NoSelected;
+        public override bool IsAnswered() => this.Checked || this.NoSelected;
+        public override bool IsOrdered() => this.Checked;
     }
 }
