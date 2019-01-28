@@ -18,22 +18,15 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         {
             this.Execute.WithConnection((d, t) =>
             {
-                var eventsExists = !string.IsNullOrWhiteSpace(d.QuerySingle<string>(
-                    "SELECT 'events.events'::regclass::text"));
+                bool canProcessHistory = d.IsTableExistsInSchema("events", "events")
+                                         && d.IsTableExistsInSchema("readside", "cumulativereportstatuschanges");
 
-                var cumulativeExists = !string.IsNullOrWhiteSpace(d.QuerySingle<string>(
-                    "SELECT 'readside.cumulativereportstatuschanges'::regclass::text"));
-
-                bool canProcessHistory = eventsExists && cumulativeExists;
                 if (!canProcessHistory) return;
 
                 void Execute(string sql)
                 {
-                    using (logger.BeginScope("Executing sql"))
-                    {
-                        logger.LogInformation(sql);
-                        d.Execute(sql);
-                    }
+                    logger.LogInformation(sql);
+                    d.Execute(sql);
                 }
 
                 Execute(@"delete from readside.cumulativereportstatuschanges");
