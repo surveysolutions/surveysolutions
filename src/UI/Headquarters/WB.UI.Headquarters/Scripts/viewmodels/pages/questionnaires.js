@@ -49,15 +49,34 @@
 
     self.recordAudio = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
-        var url = $questionnairesApiEndpoint + "/" + selectedRow.questionnaireId + "/" + selectedRow.version + "/recordAudio";
+
         var checked = !opt.$selected.find('input:checkbox').prop('checked');
-        self.SendRequest(url,
-            { enabled: checked },
-            function() {
-                selectedRow.isAudioRecordingEnabled = checked;
-            },
-            false,
-            false);
+        var url = $questionnairesApiEndpoint + "/" + selectedRow.questionnaireId + "/" + selectedRow.version + "/recordAudio";
+
+        if (checked) {
+            notifier.confirm('Confirmation Needed',
+                input.settings.messages.enablingAuditConfirmationMessage,
+                // confirm
+                function() {
+                    self.SendRequest(url,
+                        { enabled: checked },
+                        function() {
+                            selectedRow.isAudioRecordingEnabled = checked;
+                        },
+                        false,
+                        false);
+                },
+                // cancel
+                function() {});
+        } else {
+            self.SendRequest(url,
+                { enabled: checked },
+                function () {
+                    selectedRow.isAudioRecordingEnabled = checked;
+                },
+                false,
+                false);
+        }
     };
 
     self.interviewsBatchUpload = function (key, opt) {
