@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -86,7 +87,16 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         public virtual HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id)
         {
-            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
+            ICommand markInterviewAsReceivedByDevice;
+
+            if (authorizedUser.IsInterviewer)
+                markInterviewAsReceivedByDevice = new MarkInterviewAsReceivedByInterviewer(id, authorizedUser.Id);
+            else if (authorizedUser.IsSupervisor)
+                markInterviewAsReceivedByDevice = new MarkInterviewAsReceivedBySupervisor(id, authorizedUser.Id);
+            else
+                throw new ArgumentException("Unsupported user role");
+
+            this.commandService.Execute(markInterviewAsReceivedByDevice);
             return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
         

@@ -1810,7 +1810,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewHardDeleted(userId, originDate));
         }
 
-        public void MarkInterviewAsReceivedByInterviwer(Guid userId, DateTimeOffset originDate)
+        public void MarkInterviewAsReceivedByInterviewer(Guid userId, DateTimeOffset originDate)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -1818,6 +1818,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters, InterviewStatus.InterviewerAssigned);
 
             this.ApplyEvent(new InterviewReceivedByInterviewer(originDate));
+        }
+
+        public void MarkInterviewAsReceivedBySupervisor(Guid userId, DateTimeOffset originDate)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned);
+
+            this.ApplyEvent(new InterviewReceivedBySupervisor(originDate));
         }
 
         public void Restore(Guid userId, DateTimeOffset originDate)
