@@ -533,5 +533,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 TotalRow = data.TotalRow
             });
         }
+
+
+        [HttpGet]
+        [Authorize(Roles = "Supervisor")]
+        [CamelCase]
+        public async Task<HttpResponseMessage> TeamStatusDuration([FromUri] StatusDurationRequest request, [FromUri] string exportType = null)
+        {
+            var input = new StatusDurationInputModel
+            {
+                SupervisorId = this.authorizedUser.Id,
+                Orders = request.GetSortOrderRequestItems(),
+                MinutesOffsetToUtc = request.Timezone,
+                TemplateId = request.QuestionnaireId,
+                TemplateVersion = request.QuestionnaireVersion
+            };
+
+            if (!string.IsNullOrEmpty(exportType))
+            {
+                var report = await this.statusDurationReport.GetReportAsync(input);
+
+                return this.CreateReportResponse(exportType, report, Reports.Report_Status_Duration);
+            }
+
+            var data = await this.statusDurationReport.LoadAsync(input);
+
+            return this.Request.CreateResponse(new StatusDurationDataTableResponse
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = data.TotalCount,
+                RecordsFiltered = data.TotalCount,
+                Data = data.Items,
+                TotalRow = data.TotalRow
+            });
+        }
     }
 }
