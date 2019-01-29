@@ -558,7 +558,7 @@ export default {
             };
 
             _.forEach(features, feature => {
-                if (toRemove[feature.id]) {
+                if (!extendBounds && toRemove[feature.id]) {
                     delete toRemove[feature.id];
                 } else {
                     markers.features.push(feature);
