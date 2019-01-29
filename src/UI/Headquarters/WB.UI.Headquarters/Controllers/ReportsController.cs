@@ -148,19 +148,21 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.StatusDuration)]
         [AuthorizeOr403(Roles = "Supervisor")]
-        public ActionResult StatusDurationForSV()
+        public ActionResult TeamStatusDuration()
         {
             return this.View("StatusDuration", new StatusDurationModel
             {
+                IsSupervisorMode = true,
+
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
                     new
                     {
                         httproute = "",
                         controller = "ReportDataApi",
-                        action = "StatusDuration"
+                        action = "TeamStatusDuration"
                     }),
 
-                InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
+                InterviewsBaseUrl = Url.Action("Interviews", "Survey"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
                 QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
                     new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" }),
