@@ -32,11 +32,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.SetProperty(ref this.title, value);
         }
 
+        private bool checkedWasChanged = false;
         private bool @checked;
         public bool Checked
         {
             get => this.@checked;
-            set => this.SetProperty(ref this.@checked, value);
+            set
+            {
+                checkedWasChanged = this.SetProperty(ref this.@checked, value);
+            }
         }
 
         private int? checkedOrder;
@@ -53,7 +57,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref this.canBeChecked, value);
         }
         
-        public IMvxCommand CheckAnswerCommand => new MvxCommand(this.setAnswer, () => CanBeChecked && !IsProtected);
+        public IMvxCommand CheckAnswerCommand => new MvxCommand(() =>
+        {
+            if (checkedWasChanged)
+                this.setAnswer();
+
+        }, () => CanBeChecked && !IsProtected);
 
         public virtual bool IsAnswered() => this.Checked;
         public virtual bool IsOrdered() => this.Checked;
