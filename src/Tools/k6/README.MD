@@ -10,7 +10,7 @@ Use `install.ps1` script to download and unpack `k6.exe` executable.
 Usage
 =====
 
-Import questionnaire `Test CS2016Household_QN`, create assignments https://design-dev.mysurvey.solutions/questionnaire/details/b69017ab3d344a0eb56962c7b1bf1d83
+Import questionnaire `K6 tool working questionnaire`, create assignments https://design-dev.mysurvey.solutions/questionnaire/details/f5edcd2f6788491ebd59a01019d67008
 
 In `config.js` provide interviewers and assignments
 
