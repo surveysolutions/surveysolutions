@@ -26,11 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Action setAnswer;
         private bool isRosterSizeQuestion;
         
+        private bool noWasChanged = false;
         private bool noSelected;
         public bool NoSelected
         {
             get => this.noSelected;
-            set => this.SetProperty(ref this.noSelected, value);
+            set => noWasChanged = this.SetProperty(ref this.noSelected, value);
         }
         
         public IMvxAsyncCommand SetNoAnswerCommand => new MvxAsyncCommand(SetNoAsync);
@@ -49,6 +50,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SetNoAsync()
         {
+            if (!noWasChanged)
+                return;
+
             var prevState = new {isYes = this.Checked, isNo = false};
 
             if (await this.HasConfirmationByRemovingRosterInstanceAsync())
