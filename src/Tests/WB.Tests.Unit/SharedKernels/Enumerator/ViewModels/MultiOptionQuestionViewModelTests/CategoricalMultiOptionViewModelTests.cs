@@ -61,7 +61,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         }
 
         [Test]
-        [Ignore("KP-12447")]
         public void when_CheckAnswerCommand_and_question_is_roster_size_and_unchecked_then_external_action_should_not_be_invoked_and_checked_should_be_true()
         {
             // arrange
@@ -69,9 +68,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var userInteraction = Mock.Of<IUserInteractionService>(x => x.HasPendingUserInteractions == true);
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
             viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Checked = true;
             viewModel.MakeRosterSize();
-            viewModel.Checked = false;
             // act
+            viewModel.Checked = false;
             viewModel.CheckAnswerCommand.Execute();
             // assert
             mockOfExternalAction.Verify(x => x(), Times.Never);
@@ -79,7 +79,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         }
 
         [Test]
-        [Ignore("KP-12447")]
         public void when_CheckAnswerCommand_and_question_is_roster_size_and_unchecked_and_user_say_yes_in_popup_then_external_action_should_be_invoked()
         {
             // arrange
@@ -89,9 +88,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
             viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Checked = true;
             viewModel.MakeRosterSize();
-            viewModel.Checked = false;
+            
             // act
+            viewModel.Checked = false;
             viewModel.CheckAnswerCommand.Execute();
             // assert
             mockOfExternalAction.Verify(x => x(), Times.Once);
@@ -99,7 +100,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         }
 
         [Test]
-        [Ignore("KP-12447")]
         public void when_CheckAnswerCommand_and_question_is_roster_size_and_unchecked_and_user_say_no_in_popup_then_external_action_should_not_be_invoked_and_option_should_be_unchecked()
         {
             // arrange
@@ -109,17 +109,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
             viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Checked = true;
             viewModel.MakeRosterSize();
-            viewModel.Checked = false;
+            
             // act
+            viewModel.Checked = false;
             viewModel.CheckAnswerCommand.Execute();
+
             // assert
             mockOfExternalAction.Verify(x => x(), Times.Never);
             viewModel.Checked.Should().BeTrue();
         }
 
         [Test]
-        [Ignore("KP-12447")]
         public void when_CheckAnswerCommand_and_question_is_roster_size_and_user_fast_click_on_option_twice_then_external_action_should_not_be_invoked()
         {
             // arrange
@@ -136,6 +138,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var viewModel = Create.ViewModel.CategoricalMultiOptionViewModel(userInteraction);
             viewModel.Init(Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), "", 1, false, mockOfExternalAction.Object);
+            viewModel.Checked = true;
             viewModel.MakeRosterSize();
             viewModel.Checked = false;
             viewModel.CheckAnswerCommand.Execute();
