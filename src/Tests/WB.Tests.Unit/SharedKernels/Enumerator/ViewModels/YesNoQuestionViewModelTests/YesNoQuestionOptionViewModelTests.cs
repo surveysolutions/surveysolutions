@@ -11,10 +11,8 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     [TestOf(typeof(CategoricalYesNoOptionViewModel))]
-    [Ignore("KP-12447")]
-    public class YesNoQuestionOptionViewModelTests
+    public class YesNoQuestionOptionViewModelTests : BaseMvvmCrossTest
     {
-
         [Test]
         public void when_roster_size_question_and_set_yes_and_ui_has_pending_user_interactions_then_answer_should_not_be_set()
         {
@@ -29,6 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Checked = true;
 
             // act
+            viewModel.NoSelected = true;
             viewModel.SetNoAnswerCommand.Execute();
 
             // assert
@@ -53,6 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Checked = true;
 
             // act
+            viewModel.NoSelected = true;
             viewModel.SetNoAnswerCommand.Execute();
 
             // assert
@@ -77,6 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Checked = true;
 
             // act
+            viewModel.NoSelected = true;
             viewModel.SetNoAnswerCommand.Execute();
 
             // assert
