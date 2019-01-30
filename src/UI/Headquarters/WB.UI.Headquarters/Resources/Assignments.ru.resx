@@ -296,7 +296,7 @@
     <value>Вести аудио запись</value>
   </data>
   <data name="AudioRecordingExplanation" xml:space="preserve">
-    <value>Вести аудио запись во время интервью</value>
+    <value>Вести аудио запись во время интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>
   <data name="IsAudioRecordingEnabled" xml:space="preserve">
     <value>Вести аудио запись</value>
