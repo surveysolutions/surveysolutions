@@ -98,8 +98,7 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
 
     self.load = function () {
 
-
-        self.SelectedQuestionnaireId( self.QueryString['templateId']);
+        self.SelectedQuestionnaireId((self.QueryString['templateId'] || "").replace(/-/g, ""));
         self.filterQuestionnaireVersions();
 
         self.SelectedQuestionnaireVersion(self.QueryString['templateVersion']);

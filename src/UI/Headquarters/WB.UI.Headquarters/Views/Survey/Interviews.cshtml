@@ -163,6 +163,17 @@
                                            options: QuestionnaireVersions,
                                            optionsCaption: '@Html.ToSafeJavascriptMessage(Common.AllVersions)',"></select>
                     </div>
+                    
+                    <div class="block-filter">
+                        <h5 title="@Interviews.Tooltip_Filter_Status">@Common.Status</h5>
+                        <select data-bind="value: SelectedStatus" class="selectpicker">
+                            <option value="">@Common.AllStatuses</option>
+                            @foreach (var item in Model.Statuses)
+                            {
+                                <option value="@item.Status">@item.StatusName</option>
+                            }
+                        </select>
+                    </div>
 
                     <div class="block-filter">
                         <h5 title="@Interviews.Tooltip_Filter_Responsible">@Pages.Survey_ResponsibleTitle</h5>
