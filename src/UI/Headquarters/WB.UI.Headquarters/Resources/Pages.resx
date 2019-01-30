@@ -716,6 +716,9 @@
   <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
     <value>An unexpected error occurred. We are sorry for inconvenience.</value>
   </data>
+  <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
+    <value>When audio audit is on an amount of synchronization data would be significantly larger. Do you want to proceed?</value>
+  </data>
   <data name="AnyOption" xml:space="preserve">
     <value>Any</value>
   </data>

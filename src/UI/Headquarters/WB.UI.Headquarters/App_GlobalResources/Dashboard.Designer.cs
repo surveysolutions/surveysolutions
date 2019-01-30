@@ -268,7 +268,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process .
+        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process. When audio audit is on an amount of synchronization data would be significantly larger.
         /// </summary>
         internal static string RecordAudioTitle {
             get {

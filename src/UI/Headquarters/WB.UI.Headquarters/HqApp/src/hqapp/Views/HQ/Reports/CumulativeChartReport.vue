@@ -314,6 +314,13 @@ export default {
                         max: chartData.max, to: chartData.to
                     }
 
+                    if(this.queryString.from == null || this.queryString.to == null){
+                        this.onChange(q => {
+                            q.from = response.data.From;
+                            q.to = response.data.To;
+                        });
+                    }
+
                     self.$refs.chart.render(chartData)
                 })
                 .finally(() => self.$store.dispatch("hideProgress"));

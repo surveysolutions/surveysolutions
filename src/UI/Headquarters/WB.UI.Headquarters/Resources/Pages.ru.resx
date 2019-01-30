@@ -210,6 +210,9 @@
   <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
     <value>Произошла непредвиденная ошибка. Мы приносим извинения за неудобства.</value>
   </data>
+  <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
+    <value>При включении аудио аудита размер данных синхронизации значительно увеличится. Вы хотите продолжить?</value>
+  </data>
   <data name="GPS_accuracy" xml:space="preserve">
     <value>Точность</value>
   </data>
