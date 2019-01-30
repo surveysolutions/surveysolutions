@@ -408,6 +408,7 @@ export default {
 
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue;
+            this.questionnaireVersionSelected(null);
         },
 
         questionnaireVersionSelected(newValue) {
