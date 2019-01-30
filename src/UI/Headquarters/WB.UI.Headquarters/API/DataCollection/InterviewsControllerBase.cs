@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
-        private readonly IAuthorizedUser authorizedUser;
+        protected readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -85,20 +85,7 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
-        public virtual HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id)
-        {
-            ICommand markInterviewAsReceivedByDevice;
-
-            if (authorizedUser.IsInterviewer)
-                markInterviewAsReceivedByDevice = new MarkInterviewAsReceivedByInterviewer(id, authorizedUser.Id);
-            else if (authorizedUser.IsSupervisor)
-                markInterviewAsReceivedByDevice = new MarkInterviewAsReceivedBySupervisor(id, authorizedUser.Id);
-            else
-                throw new ArgumentException("Unsupported user role");
-
-            this.commandService.Execute(markInterviewAsReceivedByDevice);
-            return new HttpResponseMessage(HttpStatusCode.NoContent);
-        }
+        public abstract HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid interviewId);
         
         public virtual HttpResponseMessage PostImage(PostFileRequest request)
         {
