@@ -268,6 +268,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Assignment.
+        /// </summary>
+        public static string NewAssignment {
+            get {
+                return ResourceManager.GetString("NewAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Assignment is going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
