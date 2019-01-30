@@ -11,6 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     [TestOf(typeof(CategoricalYesNoOptionViewModel))]
+    [Ignore("KP-12447")]
     public class YesNoQuestionOptionViewModelTests
     {
 

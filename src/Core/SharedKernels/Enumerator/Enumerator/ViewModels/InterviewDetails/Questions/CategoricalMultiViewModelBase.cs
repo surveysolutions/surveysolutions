@@ -160,9 +160,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var allSelectedOptions = this.Options.Where(x => x.IsAnswered()).ToArray();
 
-            optionViewModel.CheckedOrder = this.areAnswersOrdered && optionViewModel.IsOrdered()
-                ? (int?) allSelectedOptions.Count(x => x.IsOrdered())
-                : null;
+            if (this.areAnswersOrdered)
+            {
+                var order = optionViewModel.CheckedOrder;
+                optionViewModel.CheckedOrder = optionViewModel.IsOrdered()
+                    ? (int?) allSelectedOptions.Count(x => x.IsOrdered())
+                    : null;
+
+                if (optionViewModel.CheckedOrder == null && order.HasValue)
+                {
+                    foreach (var option in this.Options)
+                    {
+                        if (option.CheckedOrder > order)
+                            option.CheckedOrder--;
+                    }
+                }
+            }
 
             this.SaveAnsweredOptionsForThrottling(allSelectedOptions.OrderBy(x => x.CheckedOrder));
 

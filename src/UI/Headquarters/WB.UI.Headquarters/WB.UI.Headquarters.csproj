@@ -422,6 +422,7 @@
     </Content>
     <Content Include="App_GlobalResources\Dashboard.ru.resx">
       <DependentUpon>Dashboard.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Dashboard.zh.resx">
       <DependentUpon>Dashboard.resx</DependentUpon>
@@ -1322,6 +1323,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.ru.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.zh.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
