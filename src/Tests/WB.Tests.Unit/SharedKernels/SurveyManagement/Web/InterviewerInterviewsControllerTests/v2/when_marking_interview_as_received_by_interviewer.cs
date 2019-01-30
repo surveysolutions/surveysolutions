@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateInterviewerInterviewsController(
-                commandService: mockOfCommandService.Object,
-                authorizedUser: Mock.Of<IAuthorizedUser>(u => u.IsInterviewer == true));
+                commandService: mockOfCommandService.Object);
             BecauseOf();
         }
 
