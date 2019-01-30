@@ -278,7 +278,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                    LIMIT @batchSize", 
                    new { minVersion = startWithGlobalSequence, batchSize = pageSize });
 
-            var globalSequence = await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long>("select currval('events.globalsequence')");
+            var globalSequence = await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
 
             var events = ToCommittedEvent(rawEventsData).ToList();
             

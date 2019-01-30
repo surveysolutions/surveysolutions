@@ -628,6 +628,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When audio audit is on an amount of synchronization data would be significantly larger. Do you want to proceed?.
+        /// </summary>
+        public static string GlobalSettings_TurningAudioAuditOn {
+            get {
+                return ResourceManager.GetString("GlobalSettings_TurningAudioAuditOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unexpected error occurred. We are sorry for inconvenience..
         /// </summary>
         public static string GlobalSettings_UnhandledExceptionMessage {
