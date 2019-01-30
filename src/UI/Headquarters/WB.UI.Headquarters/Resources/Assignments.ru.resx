@@ -304,4 +304,7 @@
   <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
     <value>Вести аудио запись во время интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Новое задание</value>
+  </data>
 </root>
