@@ -1,6 +1,8 @@
 <template>  
     <HqLayout :title="title"
-            :hasFilter="true">
+            :hasFilter="true"
+            :topicButton="$t('Assignments.NewAssignment')"
+            :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
 
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
