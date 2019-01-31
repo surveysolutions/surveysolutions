@@ -1,15 +1,11 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.SupervisorInterviewsControllerTests.v1;
-using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.SupervisorInterviewsControllerTests.v1
 {
-    [TestFixture]
     internal class InterviewsApiV1ControllerTests : InterviewsApiV1ControllerTestsContext
     {
         [Test]
@@ -21,7 +17,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.SupervisorInterviewsC
 
             controller.LogInterviewAsSuccessfullyHandled(interviewId);
 
-            mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<MarkInterviewAsReceivedBySupervisor>(), Moq.It.IsAny<string>()), Times.Once);
+            mockOfCommandService.Verify(
+                x => x.Execute(Moq.It.IsAny<MarkInterviewAsReceivedBySupervisor>(), 
+                    Moq.It.IsAny<string>()), Times.Once);
         }
     }
 }

@@ -271,12 +271,12 @@ namespace WB.Tests.Abc.TestFactories
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
-                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
+                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository));
             
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
-                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues),
+                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository),
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher());
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
