@@ -152,6 +152,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         @event.Payload);
                     result.Add(committedEvent);
                 }
+
+                writer.Complete();
             }
 
             return result;

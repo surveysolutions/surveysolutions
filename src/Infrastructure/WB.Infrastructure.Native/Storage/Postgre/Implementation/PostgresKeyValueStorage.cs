@@ -172,6 +172,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         var serializedValue = this.serializer.Serialize(item.Item1);
                         writer.Write(serializedValue, NpgsqlDbType.Jsonb); // write value
                     }
+
+                    writer.Complete();
                 }
             }
         }

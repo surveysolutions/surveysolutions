@@ -130,6 +130,8 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                             if (entity.AsArea == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsArea), NpgsqlDbType.Jsonb);
                             writer.Write(entity.HasFlag, NpgsqlDbType.Boolean);
                         }
+
+                        writer.Complete();
                     }
 
                     processedInterviewsCount += groupOfInterviewIds.Count();
