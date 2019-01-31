@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     public class should_allow_be_marked_as_received_by_interviewer : InterviewTestsContext
     {
         [TestCase(InterviewStatus.InterviewerAssigned)]
+        [TestCase(InterviewStatus.SupervisorAssigned)]
         [TestCase(InterviewStatus.RejectedBySupervisor)]
         [TestCase(InterviewStatus.RejectedByHeadquarters)]
         public void should_allow_command_in_status(InterviewStatus targetStatus)
