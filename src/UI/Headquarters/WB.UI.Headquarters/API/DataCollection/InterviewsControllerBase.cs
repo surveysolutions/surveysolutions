@@ -15,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -28,7 +27,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
-        protected readonly IAuthorizedUser authorizedUser;
+        private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -85,7 +84,11 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
-        public abstract HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid interviewId);
+        public virtual HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id)
+        {
+            this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
+        }
         
         public virtual HttpResponseMessage PostImage(PostFileRequest request)
         {
