@@ -16,8 +16,7 @@ namespace WB.UI.Designer.Api.Attributes
             {
                 "Api.Portal", 
                 nameof(ClassificationsController),
-                nameof(SearchController),
-                nameof(ImportController)
+                nameof(SearchController)
             };
             
             foreach (ApiDescription apiDescription in apiExplorer.ApiDescriptions)
