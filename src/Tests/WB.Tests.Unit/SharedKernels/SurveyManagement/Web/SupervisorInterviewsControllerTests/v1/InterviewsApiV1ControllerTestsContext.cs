@@ -1,7 +1,6 @@
 ﻿using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -11,12 +10,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.SupervisorInterviewsControllerTests.v1
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.SupervisorInterviewsControllerTests.v1
 {
-    [TestFixture(typeof(InterviewsApiV1Controller))]
     internal class InterviewsApiV1ControllerTestsContext
     {
-        public static InterviewsApiV1Controller CreateSupervisorInterviewsController(
+        public InterviewsApiV1Controller CreateSupervisorInterviewsController(
             IImageFileStorage imageFileStorage = null,
             IAudioFileStorage audioFileStorage = null,
             IAudioAuditFileStorage audioAuditFileStorage = null,
