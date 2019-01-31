@@ -146,7 +146,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;&lt;br/&gt;  To complete the registration process click on this link:.
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;&lt;br/&gt; To complete the password reset process process click on this link:.
         /// </summary>
         public static string ResetPasswordEmail {
             get {
