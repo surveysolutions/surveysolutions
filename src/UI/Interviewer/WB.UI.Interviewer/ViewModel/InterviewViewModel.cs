@@ -96,7 +96,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
             var interviewId = Guid.Parse(InterviewId);
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
@@ -107,24 +107,21 @@ namespace WB.UI.Interviewer.ViewModel
             if (IsAudioRecordingEnabled == true && !isAuditStarting)
             {
                 isAuditStarting = true;
-                Task.Run(async() =>
+                try
                 {
-                    try
-                    {
                         await audioAuditService.StartAudioRecordingAsync(interviewId).ConfigureAwait(false);
-                    }
-                    catch (Exception exc)
-                    {
-                        logger.Warn("Audio audit failed to start.", exception: exc);
-                        await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
+                }
+                catch (Exception exc)
+                {
+                    logger.Warn("Audio audit failed to start.", exception: exc);
+                    await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId)
                             .ConfigureAwait(false);
-                        this.userInteractionService.ShowToast(exc.Message);
-                    }
-                    finally
-                    {
-                        isAuditStarting = false;
-                    }
-                });
+                    this.userInteractionService.ShowToast(exc.Message);
+                }
+                finally
+                {
+                    isAuditStarting = false;
+                }
             }
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(interviewId, interviewKey?.ToString(), assignmentId));
