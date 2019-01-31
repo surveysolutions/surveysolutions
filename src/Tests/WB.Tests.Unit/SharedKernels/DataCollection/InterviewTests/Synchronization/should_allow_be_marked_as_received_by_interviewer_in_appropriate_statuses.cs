@@ -9,6 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     public class should_allow_be_marked_as_received_by_interviewer : InterviewTestsContext
     {
         [TestCase(InterviewStatus.InterviewerAssigned)]
+        [TestCase(InterviewStatus.SupervisorAssigned)]
         [TestCase(InterviewStatus.RejectedBySupervisor)]
         [TestCase(InterviewStatus.RejectedByHeadquarters)]
         public void should_allow_command_in_status(InterviewStatus targetStatus)
@@ -17,13 +18,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviewer(Id.g1, DateTimeOffset.UtcNow);
+            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviwer(Id.g1, DateTimeOffset.UtcNow);
 
             // Assert
             Assert.That(act, Throws.Nothing);
         }
 
-        [TestCase(InterviewStatus.SupervisorAssigned)]
         [TestCase(InterviewStatus.ApprovedByHeadquarters)]
         [TestCase(InterviewStatus.ApprovedBySupervisor)]
         [TestCase(InterviewStatus.Completed)]
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(Create.Event.InterviewStatusChanged(targetStatus));
 
             // Act
-            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviewer(Id.g1, DateTimeOffset.UtcNow);
+            TestDelegate act = () => interview.MarkInterviewAsReceivedByInterviwer(Id.g1, DateTimeOffset.UtcNow);
 
             // Assert
             Assert.That(act, Throws.Exception.InstanceOf<InterviewException>());
