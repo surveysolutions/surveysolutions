@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        public const string QuestionnaireTitleRegularExpression = @"^(?!.*[_]{2})[_A-Za-z0-9 \-\(\)\\/]*$";
+        public const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
         private static readonly Regex QuestionnaireNameRegex = new Regex(QuestionnaireTitleRegularExpression);
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
