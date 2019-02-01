@@ -303,9 +303,9 @@ namespace WB.UI.Headquarters.Controllers
         [Localizable(false)]
         public ActionResult ImportBrokenPackage(ImportBrokenPackageModel package)
         {
-#if !DEBUG
-            throw new AggregateException("Unsupported handler");
-#endif
+//#if !DEBUG
+//            throw new AggregateException("Unsupported handler");
+//#endif
             if (package == null)
                 return this.View();
 
