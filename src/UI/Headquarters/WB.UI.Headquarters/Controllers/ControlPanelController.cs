@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Events;
+using Ncqrs.Eventing;
+using Newtonsoft.Json;
+using Refit;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Diag;
@@ -25,10 +33,16 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Models.Admin;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -41,7 +55,11 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+        private readonly IAssignmentsService assignmentsService;
         private readonly IAndroidPackageReader androidPackageReader;
+        private readonly IInterviewPackagesService interviewPackagesService;
+        private readonly IUserViewFactory userViewFactory;
+        private readonly IJsonAllTypesSerializer serializer;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -50,7 +68,11 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger,
             ISettingsProvider settingsProvider,
             IAndroidPackageReader androidPackageReader,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings)
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+            IAssignmentsService assignmentsService, 
+            IInterviewPackagesService interviewPackagesService, 
+            IUserViewFactory userViewFactory, 
+            IJsonAllTypesSerializer serializer)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -58,6 +80,10 @@ namespace WB.UI.Headquarters.Controllers
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
             this.exportServiceSettings = exportServiceSettings;
+            this.assignmentsService = assignmentsService;
+            this.interviewPackagesService = interviewPackagesService;
+            this.userViewFactory = userViewFactory;
+            this.serializer = serializer;
         }
 
         public ActionResult CreateHeadquarters()
@@ -258,6 +284,155 @@ namespace WB.UI.Headquarters.Controllers
 
         #region interview ravalidationg
 
+        public class ImportBrokenPackageModel
+        {
+            [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.MandatoryField))]
+            public int AssignmentId { get; set; }
+            [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.MandatoryField))]
+            public HttpPostedFileBase PackageFile { get; set; }
+        }
+
+        [HttpGet]
+        [Localizable(false)]
+        public ActionResult ImportBrokenPackage()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [Localizable(false)]
+        public ActionResult ImportBrokenPackage(ImportBrokenPackageModel package)
+        {
+#if !DEBUG
+            throw new AggregateException("Unsupported handler");
+#endif
+            if (package == null)
+                return this.View();
+
+            if (!ModelState.IsValid)
+                return this.View();
+
+            bool doesGenerateNewInterviewId = false;
+
+            var assignment = assignmentsService.GetAssignment(package.AssignmentId);
+            var responsibleId = assignment.ResponsibleId;
+            var user = userViewFactory.GetUser(new UserViewInputModel(responsibleId));
+            if (!user.IsInterviewer())
+                throw new ArgumentException("assignment must be on interviewer");
+
+            var bytes = ReadFully(package.PackageFile.InputStream);
+
+            var events = this.serializer.Deserialize<AggregateRootEvent[]>(bytes);
+            var lastStatusChange = events.Last(e => e.Payload is InterviewStatusChanged);
+            var interviewId = doesGenerateNewInterviewId ? Guid.NewGuid() : lastStatusChange.EventSourceId;
+            var lastStatus = ((InterviewStatusChanged) lastStatusChange.Payload).Status;
+
+            var newEvents = ChangeInterviewDataToCurrentEnvironment(events, interviewId, assignment, user.Supervisor.Id);
+            var newEventStream = this.serializer.Serialize(newEvents);
+
+            var interviewPackage = new InterviewPackage()
+            {
+                InterviewId = interviewId,
+                QuestionnaireId = assignment.QuestionnaireId.QuestionnaireId,
+                QuestionnaireVersion = assignment.QuestionnaireId.Version,
+                InterviewStatus = lastStatus,
+                ResponsibleId = responsibleId,
+                IsCensusInterview = true,
+                IncomingDate = DateTime.UtcNow,
+                Events = newEventStream
+            };
+
+            interviewPackagesService.ProcessPackage(interviewPackage);
+
+            return this.View();
+        }
+
+        private AggregateRootEvent[] ChangeInterviewDataToCurrentEnvironment(AggregateRootEvent[] events, 
+            Guid interviewId, Assignment assignment, Guid supervisorId)
+        {
+            List<AggregateRootEvent> newEvents = new List<AggregateRootEvent>();
+
+            foreach (var aggregateRootEvent in events)
+            {
+                switch (aggregateRootEvent.Payload)
+                {
+                    case InterviewCreated interviewCreated:
+                        newEvents.Add(new AggregateRootEvent(
+                            new CommittedEvent(aggregateRootEvent.CommitId, 
+                                aggregateRootEvent.Origin,
+                                aggregateRootEvent.EventIdentifier,
+                                interviewId,
+                                aggregateRootEvent.EventSequence,
+                                aggregateRootEvent.EventTimeStamp,
+                                null,
+                                payload: 
+                            new InterviewCreated(
+                            userId: assignment.ResponsibleId,
+                            questionnaireId: assignment.QuestionnaireId.QuestionnaireId,
+                            questionnaireVersion: assignment.QuestionnaireId.Version,
+                            assignmentId: assignment.Id,
+                            isAudioRecordingEnabled: interviewCreated.IsAudioRecordingEnabled,
+                            originDate: interviewCreated.OriginDate ?? aggregateRootEvent.EventTimeStamp,
+                            usesExpressionStorage: interviewCreated.UsesExpressionStorage))));
+                        break;
+                    case InterviewerAssigned interviewerAssigned:
+                        newEvents.Add(new AggregateRootEvent(
+                            new CommittedEvent(aggregateRootEvent.CommitId, 
+                                aggregateRootEvent.Origin,
+                                aggregateRootEvent.EventIdentifier,
+                                interviewId,
+                                aggregateRootEvent.EventSequence,
+                                aggregateRootEvent.EventTimeStamp,
+                                null,
+                                payload: 
+                            new InterviewerAssigned(
+                            userId: assignment.ResponsibleId,
+                            interviewerId: assignment.ResponsibleId,
+                            originDate: interviewerAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp))));
+                        break;
+                    case SupervisorAssigned supervisorAssigned:
+                        newEvents.Add(new AggregateRootEvent(
+                            new CommittedEvent(aggregateRootEvent.CommitId, 
+                                aggregateRootEvent.Origin,
+                                aggregateRootEvent.EventIdentifier,
+                                interviewId,
+                                aggregateRootEvent.EventSequence,
+                                aggregateRootEvent.EventTimeStamp,
+                                null,
+                                payload: 
+                            new SupervisorAssigned(
+                            userId: assignment.ResponsibleId,
+                            supervisorId: supervisorId,
+                            originDate: supervisorAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp))));
+                        break;
+                    default:
+                        aggregateRootEvent.EventSourceId = interviewId;
+                        if (aggregateRootEvent.Payload is InterviewActiveEvent interviewActiveEvent)
+                            typeof(InterviewActiveEvent)
+                                .GetProperty("UserId")
+                                .GetSetMethod(true).Invoke(interviewActiveEvent, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { assignment.ResponsibleId }, null);
+                        newEvents.Add(aggregateRootEvent);
+                        break;
+                }
+            }
+
+            return newEvents.ToArray();
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
         public class RevalidateModel
         {
             public DateTime? FromDate { get; set; }
@@ -269,7 +444,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        #endregion
+#endregion
 
         public ActionResult SynchronizationLog() => this.View();
 
