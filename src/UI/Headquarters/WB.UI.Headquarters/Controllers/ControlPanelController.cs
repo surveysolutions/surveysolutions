@@ -325,9 +325,9 @@ namespace WB.UI.Headquarters.Controllers
             var events = this.serializer.Deserialize<AggregateRootEvent[]>(bytes);
             var lastStatusChange = events.Last(e => e.Payload is InterviewStatusChanged);
             var interviewId = doesGenerateNewInterviewId ? Guid.NewGuid() : lastStatusChange.EventSourceId;
-            var lastStatus = ((InterviewStatusChanged) lastStatusChange.Payload).Status;
+            var lastStatus = ((InterviewStatusChanged)lastStatusChange.Payload).Status;
 
-            var newEvents = ChangeInterviewDataToCurrentEnvironment(events, interviewId, assignment, user.Supervisor.Id);
+            var newEvents = ChangeInterviewDataToCurrentEnvironment(events, doesGenerateNewInterviewId, interviewId, assignment, user.Supervisor.Id);
             var newEventStream = this.serializer.Serialize(newEvents);
 
             var interviewPackage = new InterviewPackage()
@@ -347,8 +347,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        private AggregateRootEvent[] ChangeInterviewDataToCurrentEnvironment(AggregateRootEvent[] events, 
-            Guid interviewId, Assignment assignment, Guid supervisorId)
+        private AggregateRootEvent[] ChangeInterviewDataToCurrentEnvironment(AggregateRootEvent[] events,
+            bool regenerateEventId, Guid interviewId, Assignment assignment, Guid supervisorId)
         {
             List<AggregateRootEvent> newEvents = new List<AggregateRootEvent>();
 
@@ -357,63 +357,40 @@ namespace WB.UI.Headquarters.Controllers
                 switch (aggregateRootEvent.Payload)
                 {
                     case InterviewCreated interviewCreated:
-                        newEvents.Add(new AggregateRootEvent(
-                            new CommittedEvent(aggregateRootEvent.CommitId, 
-                                aggregateRootEvent.Origin,
-                                aggregateRootEvent.EventIdentifier,
-                                interviewId,
-                                aggregateRootEvent.EventSequence,
-                                aggregateRootEvent.EventTimeStamp,
-                                null,
-                                payload: 
-                            new InterviewCreated(
+                        aggregateRootEvent.Payload = new InterviewCreated(
                             userId: assignment.ResponsibleId,
                             questionnaireId: assignment.QuestionnaireId.QuestionnaireId,
                             questionnaireVersion: assignment.QuestionnaireId.Version,
                             assignmentId: assignment.Id,
                             isAudioRecordingEnabled: interviewCreated.IsAudioRecordingEnabled,
                             originDate: interviewCreated.OriginDate ?? aggregateRootEvent.EventTimeStamp,
-                            usesExpressionStorage: interviewCreated.UsesExpressionStorage))));
+                            usesExpressionStorage: interviewCreated.UsesExpressionStorage);
                         break;
                     case InterviewerAssigned interviewerAssigned:
-                        newEvents.Add(new AggregateRootEvent(
-                            new CommittedEvent(aggregateRootEvent.CommitId, 
-                                aggregateRootEvent.Origin,
-                                aggregateRootEvent.EventIdentifier,
-                                interviewId,
-                                aggregateRootEvent.EventSequence,
-                                aggregateRootEvent.EventTimeStamp,
-                                null,
-                                payload: 
-                            new InterviewerAssigned(
+                        aggregateRootEvent.Payload = new InterviewerAssigned(
                             userId: assignment.ResponsibleId,
                             interviewerId: assignment.ResponsibleId,
-                            originDate: interviewerAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp))));
+                            originDate: interviewerAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp);
                         break;
                     case SupervisorAssigned supervisorAssigned:
-                        newEvents.Add(new AggregateRootEvent(
-                            new CommittedEvent(aggregateRootEvent.CommitId, 
-                                aggregateRootEvent.Origin,
-                                aggregateRootEvent.EventIdentifier,
-                                interviewId,
-                                aggregateRootEvent.EventSequence,
-                                aggregateRootEvent.EventTimeStamp,
-                                null,
-                                payload: 
-                            new SupervisorAssigned(
+                        aggregateRootEvent.Payload = new SupervisorAssigned(
                             userId: assignment.ResponsibleId,
                             supervisorId: supervisorId,
-                            originDate: supervisorAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp))));
+                            originDate: supervisorAssigned.OriginDate ?? aggregateRootEvent.EventTimeStamp);
                         break;
                     default:
-                        aggregateRootEvent.EventSourceId = interviewId;
                         if (aggregateRootEvent.Payload is InterviewActiveEvent interviewActiveEvent)
                             typeof(InterviewActiveEvent)
                                 .GetProperty("UserId")
                                 .GetSetMethod(true).Invoke(interviewActiveEvent, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { assignment.ResponsibleId }, null);
-                        newEvents.Add(aggregateRootEvent);
                         break;
                 }
+
+                if (regenerateEventId)
+                    aggregateRootEvent.EventIdentifier = Guid.NewGuid();
+
+                aggregateRootEvent.EventSourceId = interviewId;
+                newEvents.Add(aggregateRootEvent);
             }
 
             return newEvents.ToArray();
