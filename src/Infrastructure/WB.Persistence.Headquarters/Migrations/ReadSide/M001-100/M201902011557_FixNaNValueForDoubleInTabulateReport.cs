@@ -27,15 +27,17 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                                 END AS answer
                           FROM readside.interviews i JOIN readside.questionnaire_entities qe ON i.entityid = qe.id
                           WHERE 
-          	                interviewid = _interviewid and
-          	                (i.asint IS NOT NULL OR i.asdouble IS NOT NULL OR i.asintarray IS NOT NULL) 
-          	                AND i.isenabled 
-                            AND i.asdouble != 'NAN'::float8
-          	                AND (qe.question_type = ANY (ARRAY[0, 3, 4])) 
-          	                AND qe.linked_to_question_id IS NULL 
-          	                AND qe.linked_to_roster_id IS NULL 
-          	                AND qe.cascade_from_question_id IS NULL 
-          	                AND qe.is_filtered_combobox = false) a,
+                            interviewid = _interviewid and
+                            (i.asint IS NOT NULL 
+                                OR (i.asdouble IS NOT NULL and i.asdouble != 'NAN'::float8) 
+                                OR i.asintarray IS NOT NULL) 
+                            AND i.isenabled 
+                            AND (qe.question_type = ANY (ARRAY[0, 3, 4])) 
+                            AND qe.entity_type = 2
+                            AND qe.linked_to_question_id IS NULL 
+                            AND qe.linked_to_roster_id IS NULL 
+                            AND qe.cascade_from_question_id IS NULL 
+                            AND qe.is_filtered_combobox = false) a,
                    LATERAL unnest(a.answer) ans(ans);
 
                 INSERT INTO readside.report_tabulate_numerical
