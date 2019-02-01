@@ -33,7 +33,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                                 OR i.asintarray IS NOT NULL) 
                             AND i.isenabled 
                             AND (qe.question_type = ANY (ARRAY[0, 3, 4])) 
-                            AND qe.entity_type = 2
                             AND qe.linked_to_question_id IS NULL 
                             AND qe.linked_to_roster_id IS NULL 
                             AND qe.cascade_from_question_id IS NULL 
