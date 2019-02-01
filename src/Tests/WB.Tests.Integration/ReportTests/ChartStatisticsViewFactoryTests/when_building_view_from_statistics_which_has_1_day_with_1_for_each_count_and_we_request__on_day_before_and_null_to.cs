@@ -27,7 +27,6 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
             chartStatisticsViewFactory = CreateChartStatisticsViewFactory();
             Because();
-            UnitOfWork.AcceptChanges();
         }
 
         public void Because() => view = chartStatisticsViewFactory.Load(input);
