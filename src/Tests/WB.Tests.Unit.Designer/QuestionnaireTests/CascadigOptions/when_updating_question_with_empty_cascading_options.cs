@@ -3,6 +3,8 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOptions
 {
@@ -45,26 +47,37 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
         }
 
         private void BecauseOf() => questionnaire.UpdateSingleOptionQuestion(
-            updatedQuestionId,
-            "title",
-            "var",
-            null,
-            false,
-            QuestionScope.Interviewer,
-            null,
-            false,
-            null,
-            actorId,
-            new[]
-            {
-                new Option(String.Empty, String.Empty, (decimal?)null), 
-                new Option(String.Empty, String.Empty, (decimal?)null), 
-                new Option(String.Empty, String.Empty, (decimal?)null) 
-            }, 
-            null,
-            false,
-            cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+
+
+            new UpdateSingleOptionQuestion(
+                questionnaireId: questionnaire.Id,
+                questionId: updatedQuestionId,
+                commonQuestionParameters: new CommonQuestionParameters()
+                {
+                    Title = "title",
+                    VariableName = "var",
+                    VariableLabel = null,
+                    HideIfDisabled = false
+                },
+
+                isPreFilled: false,
+                scope: QuestionScope.Interviewer,
+                responsibleId: actorId,
+                options: new[]
+                {
+                    new Option(String.Empty, String.Empty, (decimal?)null),
+                    new Option(String.Empty, String.Empty, (decimal?)null),
+                    new Option(String.Empty, String.Empty, (decimal?)null)
+                },
+                linkedToEntityId: null,
+                isFilteredCombobox: false,
+                cascadeFromQuestionId: parentQuestionId,
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null,
+                validationExpression: null,
+                validationMessage: null,
+                showAsList: false,
+                showAsListLimit: null));
 
 
         [NUnit.Framework.Test] public void should_contains_question_with_empty_answers () =>
