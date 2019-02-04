@@ -72,5 +72,29 @@ namespace WB.Services.Export.Questionnaire
                 }
             }
         }
+
+        private QuestionnaireDocument root;
+        public QuestionnaireDocument Root
+        {
+            get
+            {
+                if (root != null) return root;
+
+                var parent = this.GetParent();
+                while (parent != null)
+                {
+                    if (parent is QuestionnaireDocument document)
+                    {
+                        this.root = document;
+                        return document;
+                    }
+                    parent = parent.GetParent();
+                }
+
+                return null;
+            }
+        }
+
+        public string TableName => $"{this.Root.Id}_{this.PublicKey}";
     }
 }

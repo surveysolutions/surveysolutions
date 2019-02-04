@@ -155,6 +155,22 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        
+        public IEnumerable<Guid> GetMainScopeSections()
+        {
+            Queue<Group> queue = new Queue<Group>(this.Children.OfType<Group>());
+
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                if(current.IsRoster) continue;
+
+                foreach (var subChild in current.Children.OfType<Group>())
+                {
+                    queue.Enqueue(subChild);
+                }
+
+                yield return current.PublicKey;
+            }
+        }
     }
 }
