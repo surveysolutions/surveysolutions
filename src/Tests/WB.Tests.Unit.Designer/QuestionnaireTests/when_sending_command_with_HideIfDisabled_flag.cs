@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                         VariableLabel = "variableLabel7",
                         EnablementCondition = null,
                         Instructions = null,
-                        HideIfDisabled = false
+                        HideIfDisabled = true
                     },
 
                     isPreFilled: false,
