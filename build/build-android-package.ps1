@@ -27,7 +27,7 @@ if(!$VersionCode){
 #     Exit
 # }
 
-function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $OutFileName) {
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi, $VersionCode, $OutFileName) {
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
@@ -77,7 +77,7 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
             Remove-Item $OutFileName -Force
         }
 
-        BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
+        BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra -VersionCode "$VersionCode" -OutFileName $OutFileName | %{ if (-not $_) { Exit } }
     }
     else
     {
@@ -90,8 +90,8 @@ Log-Block "Building Android Package: $(GetPackageName $CapiProject)" {
             if (Test-Path "$TargetAbi$OutFileName") {
                 Remove-Item "$TargetAbi$OutFileName" -Force
             }
-
-            BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }    
+#to build several abis and upload to store version per apk should be different
+            BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi -VersionCode "$VersionCode$IndexToAdd" -OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }    
         }
     }
 }
