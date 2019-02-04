@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
@@ -7,5 +8,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
     {
         IMvxAsyncCommand StartDiscoveryAsyncCommand { get; }
         IMvxCommand CancelCommand { get; }
+        IUserInteractionService UserInteractionService { get; }
     }
 }

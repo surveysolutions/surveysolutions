@@ -22,14 +22,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadigOptions
             var questionnaire = Create.Questionnaire(Id.gA, questionnaireDocument);
 
             // Act
-            questionnaire.UpdateFilteredComboboxOptions(questionId, Id.gA, new Option[]
+            questionnaire.UpdateFilteredComboboxOptions(questionId, Id.gA, new []
             {
-                new Option("-1", "m 1"), 
+                Create.QuestionnaireCategoricalOption(-1, "m 1")
             });
 
             var categoricalQuestion = questionnaireDocument.Find<ICategoricalQuestion>(questionId);
             Assert.That(categoricalQuestion.Answers, Has.Count.EqualTo(1));
-            Assert.That(categoricalQuestion.Answers[0], Has.Property(nameof(Answer.AnswerValue)).EqualTo("-1"));
+            Assert.That(categoricalQuestion.Answers[0], Has.Property(nameof(Answer.AnswerCode)).EqualTo(-1));
         }
     }
 }

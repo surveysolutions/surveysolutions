@@ -26,18 +26,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.MultiRoster(Id.g2, rosterSizeQuestionId: Id.g1)
             );
 
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interview = Setup.StatefulInterview(questionnaire);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interview = SetUp.StatefulInterview(questionnaire);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             userInteractionService = new Mock<IUserInteractionService>();
-            userInteractionService.Setup(x => x.HasPendingUserInterations).Returns(true);
+            userInteractionService.Setup(x => x.HasPendingUserInteractions).Returns(true);
 
             viewModel = CreateViewModel(
                 questionnaireStorage: questionnaireStorage,
                 interviewRepository: interviewRepository,
-                filteredOptionsViewModel: Setup.FilteredOptionsViewModel(options),
+                filteredOptionsViewModel: SetUp.FilteredOptionsViewModel(options),
                 userInteractionService: userInteractionService.Object);
 
             interview.AnswerMultipleOptionsQuestion(Id.gF, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, new [] { 1, 2 });
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var option = viewModel.Options.First();
             option.Checked = false;
-            await viewModel.ToggleAnswerAsync(option);
+            option.CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel.Options.Second().Checked.Should().BeTrue();
         }
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         private Mock<IUserInteractionService> userInteractionService;
     }
 }

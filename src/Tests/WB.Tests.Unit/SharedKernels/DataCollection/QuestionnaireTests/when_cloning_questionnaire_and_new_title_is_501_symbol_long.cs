@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             longTitle = Enumerable.Range(1, 501).Select(_ => "x").Aggregate((s1, s2) => s1 + s2);
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+                = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
             questionnaire = Create.AggregateRoot.Questionnaire(

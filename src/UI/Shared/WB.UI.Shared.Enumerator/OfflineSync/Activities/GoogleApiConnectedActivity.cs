@@ -7,6 +7,7 @@ using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Widget;
+using MvvmCross;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -79,8 +80,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             this.RestoreGoogleApiConnectionIfNeeded();
         }
 
-        private IUserInteractionService userInteractionService =>
-            ServiceLocator.Current.GetInstance<IUserInteractionService>();
         /// <summary>
         /// Check the device to make sure it has the Google Play Services APK.
         /// If it doesn't, display a dialog that allows users to download the APK from the Google Play Store 
@@ -95,12 +94,12 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
             if (apiAvailability.IsUserResolvableError(resultCode))
             {
-                userInteractionService.ShowGoogleApiErrorDialog(resultCode,
+                ViewModel.UserInteractionService.ShowGoogleApiErrorDialog(resultCode,
                     RequestCodeRecoverPlayServices,
                     () =>
                     {
                         this.Finish();
-                        userInteractionService.ShowToast(UIResources.OfflineSync_InstallPlayServices);
+                        ViewModel.UserInteractionService.ShowToast(UIResources.OfflineSync_InstallPlayServices);
                     });
             }
             else
@@ -122,14 +121,13 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                     .AddApi(NearbyClass.CONNECTIONS_API)
                     .Build();
 
-                this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
-                var apiClientFactory = ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>();
+                this.communicator = Mvx.IoCProvider.GetSingleton<INearbyConnection>();
+                var apiClientFactory = Mvx.IoCProvider.GetSingleton<IGoogleApiClientFactory>();
                 apiClientFactory.GoogleApiClient = this.GoogleApi;
             }
 
             if (this.GoogleApi.IsConnected)
             {
-                System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
                 this.ViewModel.StartDiscoveryAsyncCommand.Execute();
                 return;
             }
@@ -140,13 +138,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnected(Bundle connectionHint)
         {
-            //if (!this.GoogleApi.IsConnected)
-            //{
-            //    this.GoogleApi.Connect();
-            //    return;
-            //}
-
-            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from OnConnected");
             this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 
@@ -164,7 +155,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             {
                 this.GoogleApi?.Dispose();
                 this.GoogleApi = null;
-                ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>().GoogleApiClient = null;
             }
 
             base.Dispose(disposing);

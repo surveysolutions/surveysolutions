@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -20,7 +22,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpPost]
-        public void Post(InterviewerSyncStatisticsApiView statistics)
+        public HttpResponseMessage Post(InterviewerSyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(statistics.InterviewerId);
             deviceInfo.Statistics = new SyncStatistics
@@ -43,6 +45,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             };
 
             this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
+            return Request.CreateResponse(HttpStatusCode.NoContent);
         }
     }
 }

@@ -7,10 +7,14 @@ using AutoFixture.AutoMoq;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
+using ReflectionMagic;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -50,10 +54,21 @@ namespace WB.Tests.Abc.TestFactories
                 0,
                 payload ?? Mock.Of<IEvent>());
 
-        public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
+        public NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            Identity currentGroup = null)
         {
-            return new NavigationState(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), Substitute.For<IViewModelNavigationService>());
+            var navigationState = new NavigationState(
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Mock.Of<IQuestionnaire>()),
+                Substitute.For<IViewModelNavigationService>()
+
+                );
+            if (currentGroup != null)
+            {
+                navigationState.AsDynamic().CurrentGroup = currentGroup;
+            }
+            return navigationState;
         }
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)

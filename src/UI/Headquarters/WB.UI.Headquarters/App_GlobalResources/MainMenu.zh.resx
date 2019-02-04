@@ -213,4 +213,7 @@
   <data name="StatusDuration" xml:space="preserve">
     <value>状态持续间期</value>
   </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>调研过程统计</value>
+  </data>
 </root>

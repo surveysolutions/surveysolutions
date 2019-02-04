@@ -4,6 +4,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Filters;
@@ -15,15 +18,21 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IExternalFileStorage fileStorage;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IAssignmentsService assignmentsService;
 
         public InterviewsExportBinaryApiController(
             IExternalFileStorage fileStorage,
             IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage)
+            IAudioFileStorage audioFileStorage,
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IAssignmentsService assignmentsService)
         {
             this.fileStorage = fileStorage;
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
+            this.assignmentsService = assignmentsService;
         }
 
 
@@ -54,14 +63,14 @@ namespace WB.UI.Headquarters.API.Export
             }
         }
 
-        [Route("api/export/v1/interview/{interviewId}/audio/{answer}")]
+        [Route("api/export/v1/interview/{interviewId}/audio/{fileName}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterviewAudio(Guid interviewId, string answer)
+        public HttpResponseMessage GetInterviewAudio(Guid interviewId, string fileName)
         {
             var descriptors = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
-            var file = descriptors.FirstOrDefault(d => d.FileName == answer);
+            var file = descriptors.FirstOrDefault(d => d.FileName == fileName);
 
             if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -69,6 +78,63 @@ namespace WB.UI.Headquarters.API.Export
             response.Content = new ByteArrayContent(file.GetData());
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType ?? @"audio/mpeg");
             return response;
+        }
+
+        [Route("api/export/v1/interviews/batch/audioAudit")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetAudioAuditDescriptorsForInterviews([FromUri]Guid[] id)
+        {
+            var audioAuditInfo = id.Select(interviewId =>
+            {
+                var audioAuditRecords = audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+                return new
+                {
+                    InterviewId = interviewId,
+                    Files = audioAuditRecords.Select(descriptor =>
+                        new
+                        {
+                            FileName = descriptor.FileName,
+                            ContentType = descriptor.ContentType
+                        }
+                    ).OrderBy(x => x.FileName).ToArray()
+                };
+            }).OrderBy(x => x.InterviewId).ToArray();
+
+            return Request.CreateResponse(HttpStatusCode.OK, audioAuditInfo);
+        }
+
+        [Route("api/export/v1/interview/{interviewId}/audioAudit/{fileName}")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetAudioAudit(Guid interviewId, string fileName)
+        {
+            var descriptors = this.audioAuditFileStorage.GetBinaryFilesForInterview(interviewId);
+            var file = descriptors.FirstOrDefault(d => d.FileName == fileName);
+
+            if (file == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(file.GetData());
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            return response;
+        }
+
+        [Route("api/export/v1/questionnaire/{id}/audioAudit")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage DoesSupportAudioAudit(string id)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+
+            return Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                HasAssignmentWithAudioRecordingEnabled = hasAssignmentWithAudioRecordingEnabled
+            });
         }
     }
 }

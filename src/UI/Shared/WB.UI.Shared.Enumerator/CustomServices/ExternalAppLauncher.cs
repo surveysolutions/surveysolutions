@@ -1,17 +1,20 @@
 using System.Globalization;
-using Android.App;
 using Android.Content;
 using Android.Support.V4.Content;
 using Java.IO;
 using MvvmCross.Platforms.Android;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
     internal class ExternalAppLauncher : IExternalAppLauncher
     {
-        private Activity CurrentActivity => ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>().Activity;
+        private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
+
+        public ExternalAppLauncher(IMvxAndroidCurrentTopActivity currentTopActivity)
+        {
+            this.currentTopActivity = currentTopActivity;
+        }
 
         public void LaunchMapsWithTargetLocation(double latitude, double longitude)
         {
@@ -20,7 +23,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             var mapIntent = new Intent(Intent.ActionView, geoUri);
 
-            this.CurrentActivity.StartActivity(mapIntent);
+            this.currentTopActivity.Activity.StartActivity(mapIntent);
         }
 
         public void OpenPdf(string pathToPdfFile)
@@ -28,14 +31,14 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             var pdfIntent = new Intent(Intent.ActionView);
 
             var pdfFile = new File(pathToPdfFile);
-            var uriForPdfFile = FileProvider.GetUriForFile(this.CurrentActivity,
-                $"{this.CurrentActivity.ApplicationContext.PackageName}.fileprovider", pdfFile);
+            var uriForPdfFile = FileProvider.GetUriForFile(this.currentTopActivity.Activity,
+                $"{this.currentTopActivity.Activity.ApplicationContext.PackageName}.fileprovider", pdfFile);
 
             pdfIntent.SetDataAndType(uriForPdfFile, "application/pdf")
                 .SetFlags(ActivityFlags.ClearWhenTaskReset | ActivityFlags.NewTask)
                 .SetFlags(ActivityFlags.GrantReadUriPermission);
 
-            this.CurrentActivity.StartActivity(pdfIntent);
+            this.currentTopActivity.Activity.StartActivity(pdfIntent);
         }
     }
 }

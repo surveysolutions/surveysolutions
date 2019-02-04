@@ -1,6 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, $sce, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
+        function ($rootScope, $scope, $state, $sce, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, 
+            hotkeys, notificationService, $timeout, $uibModal) {
             'use strict';
             var me = this;
             var emptySectionAddQuestion = "<button class='btn' disabled type='button'>"+ $i18next.t('AddQuestion') +" </button>";
@@ -46,6 +47,37 @@
             var focusSearchField = 'ctrl+f';
             var openTreeItemInEditor = 'enter';
            
+            
+            $scope.searchForQuestion = function(parent) {
+                var showModal = function() {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'views/search-for-question.html',
+                        backdrop: false,
+                        windowClass: "add-classification-modal search-for-question-modal dragAndDrop",
+                        controller: 'searchForQuestionCtrl',
+                        resolve: {
+                            isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                        }
+                    });
+
+                    modalInstance.result.then(
+                        function(entityToPaste) {
+                            var newId = utilityService.guid();
+
+                            commandService.pasteItemInto($state.params.questionnaireId, parent.itemId, entityToPaste.questionnaireId, entityToPaste.itemId, newId)
+                                .then(function () {
+
+                                $scope.refreshTree();
+
+                                $rootScope.$emit('itemPasted');
+                                $state.go('questionnaire.chapter.' + entityToPaste.itemType, { chapterId: $state.params.chapterId, itemId: newId });
+                            });
+                        },
+                        function() { });
+                };
+                showModal();
+            }
+
             if (hotkeys.get(scrollDown) !== false) {
                 hotkeys.del(scrollDown);
             }
@@ -761,7 +793,10 @@
                 var group = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(group)) return;
                 group.title = data.title;
+                group.variable = data.variable;
                 group.hasCondition = data.hasCondition;
+
+                $rootScope.addOrUpdateLocalVariable(data.itemId, data.variable, data.type);
             });
 
             $rootScope.$on('rosterUpdated', function (event, data) {

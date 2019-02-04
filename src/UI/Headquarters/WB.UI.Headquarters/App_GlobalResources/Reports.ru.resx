@@ -130,7 +130,10 @@
     <value>Дата завершения</value>
   </data>
   <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>График</value>
+    <value>Накопительный График Интервью</value>
+  </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>Накопительный График Интервью отображает изменение количества интервью по каждому статусу с течением времени</value>
   </data>
   <data name="DatesRange" xml:space="preserve">
     <value>Период</value>
@@ -168,6 +171,12 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Команды и статусы</value>
   </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают количество интервью в каждом статусе по интервьюеру</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>Команды и статусы отображают количество интервью в каждом статусе по командам</value>
+  </data>
   <data name="Variables" xml:space="preserve">
     <value>Переменные</value>
   </data>
@@ -182,47 +191,36 @@
   </data>
   <data name="Report_Surveys_and_Statuses" xml:space="preserve">
     <value>Отчет по обследованиям и статусам интервью</value>
-    <comment>Обследования и статусы</comment>
   </data>
   <data name="Report_Teams_and_Statuses" xml:space="preserve">
     <value>Отчет по командам и статусам интервью</value>
-    <comment>Команды и статусы</comment>
   </data>
   <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
     <value>Отчет по кол-ву выполненой работы интервьюеров</value>
-    <comment>Отчет по интервьюерам</comment>
   </data>
   <data name="Report_Days_by_Interview_Status" xml:space="preserve">
     <value>Отчет по кол-ву дней в статусе интервью</value>
-    <comment>Отчет по кол-ву дней в статусе интервью</comment>
   </data>
   <data name="Report_Devices_and_Interviewers" xml:space="preserve">
     <value>Отчет по устройствам интервьюеров</value>
-    <comment>Отчет по устройствам интервьюеров</comment>
   </data>
   <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
     <value>Отчет по супервизорам и статусам интервью</value>
-    <comment>Отчет по супервизорам и статусам интервью</comment>
   </data>
   <data name="Report_Speed_By_Supervisors" xml:space="preserve">
     <value>Отчет по скорости супервизоров</value>
-    <comment>Отчет по скорости супервизоров</comment>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
     <value>Отчет по скорости интервьюеров при переводе из одного статуса интевью в другое</value>
-    <comment>Отчет по скорости интервьюеров при переводе из одного статуса интевью в другое</comment>
   </data>
   <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
     <value>Отчет по скорости супервизоров перевода из одного статуса интервью в другое</value>
-    <comment>Отчет по скорости супервизоров перевода из одного статуса интервью в другое</comment>
   </data>
   <data name="Report_Speed_By_Interviewers" xml:space="preserve">
     <value>Отчет по скорости работы интервьюеров</value>
-    <comment>Отчет по скорости работы интервьюеров</comment>
   </data>
   <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
     <value>Отчет по кол-ву выполненой работы супервизоров</value>
-    <comment>Отчет по кол-ву выполненой работы супервизоров</comment>
   </data>
   <data name="Report_Average_Interview_Duration" xml:space="preserve">
     <value>Средняя продолжительность интервью</value>
@@ -267,18 +265,15 @@
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Количество дней интервью в Статусе</value>
-    <comment>Количество дней интервью в Статусе</comment>
   </data>
   <data name="Updating" xml:space="preserve">
     <value>Обновление в процессе</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>Обновлено {0}</value>
-    <comment>Обновлено {0}</comment>
   </data>
   <data name="UpdateNow" xml:space="preserve">
     <value>Обновить сейчас</value>
-    <comment>Обновить сейчас</comment>
   </data>
   <data name="PivotView" xml:space="preserve">
     <value>Сводная таблица</value>
@@ -351,5 +346,44 @@
   </data>
   <data name="MapDataLoading" xml:space="preserve">
     <value>Данные карты загружаются</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>Имеются проблемы совместимости между разными версиями опросника. Некоторые ответы в прошлых версиях опросника больше не присутствуют в последней версии опросника. Такие ответы были проигнорированы.</value>
+  </data>
+  <data name="ToAllQuestionnaires" xml:space="preserve">
+    <value>Назад к опросникам</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Сохранить как картинку</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Эта неделя</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Последняя неделя</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Этот месяц</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Последний месяц</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Предыдущая неделя</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Предыдуший месяц</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Последние {{days}} дней</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Предустановленные периоды даты</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Периоды дат относительно данных</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Все данные</value>
   </data>
 </root>

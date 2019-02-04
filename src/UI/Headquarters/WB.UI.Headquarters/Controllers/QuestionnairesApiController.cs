@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -72,7 +75,8 @@ namespace WB.UI.Headquarters.Controllers
                     CreationDate = x.CreationDate,
                     LastEntryDate = x.LastEntryDate,
                     ImportDate = x.ImportDate,
-                    IsDisabled = x.Disabled
+                    IsDisabled = x.Disabled,
+                    IsAudioRecordingEnabled = x.IsAudioRecordingEnabled
                 })
             };
         }
@@ -104,6 +108,30 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [CamelCase]
+        [ApiNoCache]
+        public ComboboxModel QuestionnairesWithVersions(Guid? id = null, string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            if (id != null) 
+            {
+                var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel {
+                    PageSize = pageSize,
+                    QuestionnaireId = id,
+                    SearchFor = query,
+                    IsAdminMode = true,
+                    Order = nameof(QuestionnaireBrowseItem.Version) + " DESC"
+                });
+                return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Version.ToString(),
+                    $"ver. {x.Version}")).ToArray(), questionnaires.TotalCount);
+            }
+
+            var questionnaireNames = this.questionnaireBrowseViewFactory.UniqueQuestionnaireIds(query, pageSize);
+
+            return new ComboboxModel(questionnaireNames.Items.Select(x => new ComboboxOptionModel(x.Id.FormatGuid(), x.Title)).ToArray(), questionnaireNames.TotalCount);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [CamelCase]
         public ComboboxModel QuestionnairesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool censusOnly = false)
         {
             var questionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel
@@ -120,7 +148,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [CamelCase]
-        public ComboboxModel QuestionnairesComboboxById(string questionnaireIdentity, bool censusOnly = false)
+        public HttpResponseMessage QuestionnairesComboboxById(string questionnaireIdentity, bool censusOnly = false)
         {
             var identity = QuestionnaireIdentity.Parse(questionnaireIdentity);
 
@@ -132,7 +160,20 @@ namespace WB.UI.Headquarters.Controllers
                 OnlyCensus = censusOnly
             });
 
-            return new ComboboxModel(questionnaires.Items.Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}")).ToArray(), questionnaires.TotalCount);
+            var questionnaireItems = questionnaires.Items.ToList();
+            if (questionnaireItems.Count > 0)
+            {
+                var firstHit = questionnaireItems[0];
+                return Request.CreateResponse(HttpStatusCode.OK,
+                    new
+                    {
+                        Id = firstHit.Id,
+                        Title = firstHit.Title,
+                        @Version = firstHit.Version
+                    });
+            }
+
+            return Request.CreateResponse(HttpStatusCode.NotFound);
         }
     }
 }

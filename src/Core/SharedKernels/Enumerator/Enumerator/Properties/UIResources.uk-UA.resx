@@ -291,7 +291,7 @@
     <value>Торкніться кнопки прийняти штрих-коду</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Ви дійсно бажаєте видалити {0} рядків з пов'язаних списків?</value>
+    <value>Ви дійсно бажаєте видалити рядок {0} з пов'язаних списків?</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
     <value>Відповідь "{0}" не відповідає ніякому варіанту</value>

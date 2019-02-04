@@ -142,26 +142,41 @@
 	.progress.question-progress{
 		bottom: -2px;
 	}
+	&.roster-title{
+		padding: 11px 30px 11px 70px;
+		background-color: #d5ebf8;
+		color: #2d9cdb;
+		font-family: "RobotoRegular";
+		div{
+			margin-left: 10px;
+		}
+	}
 }
 .information-block{
-	padding: 0 10px;
+	padding: 20px 10px 0;
 	font-size: 12px;
 	line-height: 14px;
-		font-weight: bold;
+	font-weight: bold;
 
+	&:empty{
+		padding: 0;
+	}
 	color: $gray_light;
 	h6, .comment label{
-		margin-top: 20px;
+		//margin-top: 20px;
 		font: 10px/12px $trebuchet_bold;
 		letter-spacing: 0.5px;
     	text-transform: uppercase;
-    	display: block;
+		display: block;
+		&:first-of-type{
+			margin-top: 0px;
+		}
 	}
 	p{
 		width: 90%;
 		font-style: italic;
-		p:last-of-type{
-			margin-bottom: 10px;
+		&:last-of-type{
+			margin-bottom: 0;
 		}
 	}
 	&.instruction{
@@ -183,10 +198,15 @@
 .comments-block{
 	p{
 		color: $gray_text;
+		& + .enumerators-comment h6,
+		& + h6{
+			margin-top: 20px;
+		}
 	}
 	h6{
 		margin-bottom: 5px;
 		color: rgb(128, 128, 128);
+		
 	}
 	.publication-date{
 		color: rgb(203, 203, 203);
@@ -195,6 +215,10 @@
 		color: $pink;
 	}
 	.comment {
+		&:only-of-type{
+			padding-top: 0;
+		}
+		padding-top: 20px;
 		display: none;
 		&.active{
 			display: block;

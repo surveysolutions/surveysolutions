@@ -23,16 +23,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "aaa"));
             interview.Apply(answersDeclaredInvalid);
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             viewModel = Create.ViewModel.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
-            viewModel.Init("interviewid", questionIdentity);
+            viewModel.Init("interviewid", questionIdentity, Create.Other.NavigationState());
             BecauseOf();
         }
 

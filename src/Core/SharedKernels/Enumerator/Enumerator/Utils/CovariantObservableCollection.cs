@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
-    public class CovariantObservableCollection<T> : ObservableCollection<T>, IObservableCollection<T>
+    public class CovariantObservableCollection<T> : MvxObservableCollection<T>, IObservableCollection<T>
     {
         public CovariantObservableCollection()
         {
@@ -15,13 +18,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
         }
 
-        public new void Clear()
+        protected override Task InvokeOnMainThread(Action action)
         {
-            var removedItems = this.ToList();
-
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removedItems, 0));
-
-            base.Clear();
+            action();
+            return Task.CompletedTask;
         }
     }
 }

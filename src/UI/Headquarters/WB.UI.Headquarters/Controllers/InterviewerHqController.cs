@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -33,17 +36,18 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersRepository;
         private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryReader;
         private readonly IPlainStorageAccessor<Assignment> assignments;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
 
         public InterviewerHqController(
             ICommandService commandService,
             ILogger logger,
             IAuthorizedUser authorizedUser,
-            IWebInterviewConfigProvider configProvider,
             IUserViewFactory usersRepository,
             IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
             IPlainStorageAccessor<Assignment> assignments,
-            IInterviewUniqueKeyGenerator keyGenerator) : base(commandService, logger)
+            IInterviewUniqueKeyGenerator keyGenerator,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory) : base(commandService, logger)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
@@ -51,6 +55,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewSummaryReader = interviewSummaryReader;
             this.assignments = assignments;
             this.keyGenerator = keyGenerator;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [ActivePage(MenuItem.CreateNew)]
@@ -107,7 +112,8 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,
                 this.keyGenerator.Get(),
-                assignment.Id);
+                assignment.Id,
+                assignment.IsAudioRecordingEnabled);
 
             this.commandService.Execute(createInterviewCommand);
             return interviewId.FormatGuid();
@@ -148,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
             return Content(Url.Content(GenerateUrl(@"Cover", id.FormatGuid())));
         }
         
-        private ComboboxOptionModel[] GetQuestionnaires(InterviewStatus[] interviewStatuses)
+        private List<QuestionnaireVersionsComboboxViewItem> GetQuestionnaires(InterviewStatus[] interviewStatuses)
         {
             var queryResult = this.interviewSummaryReader.Query(_ =>
             {
@@ -160,19 +166,19 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 return filter
-                    .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
-                    .Select(s => new
-                    {
-                        s.QuestionnaireTitle,
-                        s.QuestionnaireId,
-                        s.QuestionnaireVersion
-                    })
-                    .Distinct().ToList();
-            });
+                   .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
+                   .Select(s => new
+                   {
+                       s.QuestionnaireTitle,
+                       s.QuestionnaireId,
+                       s.QuestionnaireVersion
+                   })
+                   .Distinct().ToList();
+            }).Select(q => new QuestionnaireIdentity(q.QuestionnaireId, q.QuestionnaireVersion)).ToArray();
 
-            return queryResult.Select(s => new ComboboxOptionModel(
-                new QuestionnaireIdentity(s.QuestionnaireId, s.QuestionnaireVersion).ToString(),
-                $@"(ver. {s.QuestionnaireVersion.ToString()}) {s.QuestionnaireTitle}")).ToArray();
+            var questionnaires = questionnaireBrowseViewFactory.GetByIds(queryResult);
+
+            return questionnaires.GetQuestionnaireComboboxViewItems();
         }
 
         private string GenerateUrl(string action, string interviewId, string sectionId = null) =>

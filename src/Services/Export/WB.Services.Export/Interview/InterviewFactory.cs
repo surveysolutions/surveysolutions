@@ -118,6 +118,9 @@ namespace WB.Services.Export.Interview
 
             var api = this.tenantApi.For(tenant);
 
+            if (!entities.Any())
+                return new List<MultimediaAnswer>();
+
             var answerLines = await api.GetInterviewBatchAsync(interviewIds, entities.Keys.ToArray());
 
             IEnumerable<MultimediaAnswer> ToMultimediaAnswer()
@@ -161,6 +164,22 @@ namespace WB.Services.Export.Interview
             }
 
             return ToMultimediaAnswer().ToList();
+        }
+
+        public async Task<List<AudioAuditInfo>> GetAudioAuditInfos(TenantInfo tenant,
+            Guid[] interviewIds, CancellationToken cancellationToken)
+        {
+            var api = this.tenantApi.For(tenant);
+
+            var audioInterviewViews = await api.GetAudioAuditInterviewsAsync(interviewIds);
+
+            return audioInterviewViews.Select(ai =>
+                new AudioAuditInfo
+                {
+                    InterviewId = ai.InterviewId,
+                    FileNames = ai.Files.Select(f => f.FileName).ToArray(),
+                }
+            ).ToList();
         }
     }
 }

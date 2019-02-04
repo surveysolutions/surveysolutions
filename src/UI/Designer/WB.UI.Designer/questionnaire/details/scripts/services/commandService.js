@@ -30,6 +30,15 @@
                 return commandCall(type, command);
             };
 
+            commandService.replaceOptionsWithClassification = function (questionnaireId, questionId, classificationId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    questionId: questionId,
+                    classificationId: classificationId
+                };
+                return commandCall("ReplaceOptionsWithClassification", command);
+            };
+
             commandService.updateAttachment = function (questionnaireId, attachmentId, attachment) {
                 blockUI.start();
 
@@ -310,6 +319,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: false,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
@@ -329,6 +339,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: true,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "FixedTitles",
                     fixedRosterTitles: [{ value: 1, title: "First Title" }, { value: 2, title: "Second Title" }],
@@ -386,11 +397,12 @@
                     condition: group.enablementCondition,
                     hideIfDisabled: group.hideIfDisabled,
                     isRoster: false,
+                    isPlainMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
                     rosterTitleQuestionId: null,
-                    variableName: null
+                    variableName: group.variableName
                 };
 
                 return commandCall("UpdateGroup", command);
@@ -406,6 +418,7 @@
                     condition: incomingRoster.enablementCondition,
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
+                    isPlainMode: incomingRoster.isPlainMode,
                     isRoster: true
                 };
 

@@ -1163,8 +1163,14 @@
                 .chapter-level-buttons {
                     border-top: 2px solid @tree-item-border-color;
                     margin-top: 2px;
-                    padding: 8px 24px 0 18px;
+                    padding: 8px 24px 30px 18px;
+
+                    .btn{
+                        margin-bottom: 10px;
+                    }
                 }
+
+
             }
         }
     }
@@ -1735,13 +1741,6 @@
         &.roster {
             .item-text {
                 color: @questionnaire-tree-roster-color;
-
-                .roster-marker {
-                    text-transform: capitalize;
-                    font-weight: normal;
-                    font-style: italic;
-                    .georgia-font();
-                }
             }
         }
 
@@ -1961,3 +1960,10 @@
     .pointer {
         cursor: pointer;
     }
+
+.roster-marker {
+    text-transform: capitalize;
+    font-weight: normal;
+    font-style: italic;
+    .georgia-font();
+}

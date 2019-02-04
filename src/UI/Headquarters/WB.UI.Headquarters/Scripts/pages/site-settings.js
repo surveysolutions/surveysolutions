@@ -9,7 +9,6 @@
 
     self.isEnabled = ko.observable(false);
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
-    self.howManyMajorReleaseDontNeedUpdate = ko.observable(null);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -39,7 +38,6 @@
                 if (!data) return;
 
                 self.isInterviewerAutomaticUpdatesEnabled(data.InterviewerAutoUpdatesEnabled);
-                self.howManyMajorReleaseDontNeedUpdate(data.HowManyMajorReleaseDontNeedUpdate);
             }, true, true);
     };
 
@@ -99,7 +97,6 @@
         ajax.sendRequest($autoUpdateSettingsUrl, "POST",
             {
                 interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled(),
-                howManyMajorReleaseDontNeedUpdate: self.howManyMajorReleaseDontNeedUpdate()
             }, false,
             //onSuccess
             function() {

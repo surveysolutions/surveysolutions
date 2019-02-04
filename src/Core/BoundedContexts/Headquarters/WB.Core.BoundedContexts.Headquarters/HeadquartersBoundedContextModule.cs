@@ -164,6 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
+            registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
@@ -193,7 +194,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
-            registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
             registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
 
@@ -284,6 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
+            registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
@@ -294,11 +295,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireImportValidator>())
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
-                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire, config => config.ValidatedBy<QuestionnaireValidator>());
 
             CommandRegistry
                 .Setup<StatefulInterview>()
@@ -366,6 +367,11 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<HardDeleteInterview>()
                     .SkipValidationFor<DeleteInterviewCommand>()
                     .SkipValidationFor<MoveInterviewToTeam>()
+                    .SkipValidationFor<ApproveInterviewCommand>()
+                    .SkipValidationFor<RejectInterviewCommand>()
+                    .SkipValidationFor<HqApproveInterviewCommand>()
+                    .SkipValidationFor<HqRejectInterviewCommand>()
+                    .SkipValidationFor<UnapproveByHeadquartersCommand>()
             );
 
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());

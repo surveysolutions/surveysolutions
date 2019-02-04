@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsEntityValid(Identity identity);
         bool IsEntityPlausible(Identity identity);
 
-        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
+        IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaultErrorMessageFallback);
 
         IEnumerable<string> GetFailedWarningMessages(Identity identity, string defaultText);
 
@@ -112,10 +112,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasUnansweredQuestions(Identity group);
 
         Identity GetParentGroup(Identity groupOrQuestion);
+        Identity[] GetParentGroups(Identity groupOrQuestion);
 
         IEnumerable<Identity> GetChildQuestions(Identity groupIdentity);
-        
-        IEnumerable<Identity> GetEnabledSubgroups(Identity group);
+
+        IEnumerable<Identity> GetEnabledSubgroupsAndRosters(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
 
@@ -124,6 +125,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewTreeSection FirstSection { get; }
 
         Guid CurrentResponsibleId { get; }
+
+        Guid SupervisorId { get; }
 
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
@@ -151,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
 
-        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
+        IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibleToInterviewer();
 
         IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
 
@@ -159,7 +162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLastSupervisorComment();
 
-        IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
+        List<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId);
 
         InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity);
 
@@ -195,6 +198,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsAnswerProtected(Identity questionIdentity, decimal value);
 
-
+        bool? GetIsAudioRecordingEnabled();
     }
 }

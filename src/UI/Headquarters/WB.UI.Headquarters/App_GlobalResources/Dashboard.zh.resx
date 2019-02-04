@@ -201,4 +201,7 @@
   <data name="ExportQuestionnaire" xml:space="preserve">
     <value>导出问卷</value>
   </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>升级调研任务</value>
+  </data>
 </root>

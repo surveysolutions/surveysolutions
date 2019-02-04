@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
-using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
@@ -36,17 +35,17 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.navigationService = navigationService;
         }
 
-        public override Task NavigateToDashboardAsync(string interviewId = null)
+        public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
             if (interviewId == null)
             {
-                return this.navigationService.Navigate<DashboardViewModel>();
+               return await this.navigationService.Navigate<DashboardViewModel>().ConfigureAwait(false);
             }
 
-            return this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            return await this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
-            });
+            }).ConfigureAwait(false);
         }
 
         public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 

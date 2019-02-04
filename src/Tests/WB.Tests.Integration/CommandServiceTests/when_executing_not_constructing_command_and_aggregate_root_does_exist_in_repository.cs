@@ -59,8 +59,6 @@ namespace WB.Tests.Integration.CommandServiceTests
                     publishedEvents = events;
                 });
 
-            snapshooterMock = new Mock<IAggregateSnapshotter>();
-
             var eventStore = new Mock<IEventStore>();
             eventStore.Setup(x => x.Store(Moq.It.IsAny<UncommittedEventStream>())).Returns(
                 (UncommittedEventStream eventStream) =>
@@ -91,8 +89,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                     return new CommittedEventStream(eventStream.SourceId);
                 });
 
-            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, 
-                snapshooter: snapshooterMock.Object, eventStore:eventStore.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, eventStore:eventStore.Object);
             BecauseOf();
         }
 
@@ -102,15 +99,9 @@ namespace WB.Tests.Integration.CommandServiceTests
         [NUnit.Framework.Test] public void should_publish_result_aggregate_root_event_to_event_bus () =>
             publishedEvents.Single().Payload.Should().BeOfType<Updated>();
 
-        [NUnit.Framework.Test] public void should_create_snapshot_of_aggregate_root_if_needed () =>
-            snapshooterMock.Verify(
-                snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(aggregateFromRepository),
-                Times.Once());
-
         private static CommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static IEnumerable<CommittedEvent> publishedEvents;
-        private static Mock<IAggregateSnapshotter> snapshooterMock;
         private static Aggregate aggregateFromRepository;
     }
 }

@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     internal class when_determining_has_interview_a_group_and_questionnaire_has_no_such_group : StatefulInterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            IQuestionnaireStorage questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasGroup(@group.Id) == false);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);

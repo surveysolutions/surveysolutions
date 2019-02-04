@@ -383,5 +383,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0053_InconsistentNumericRosterInstanceCodes", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max quantity shouldn&apos;t be more than {0}..
+        /// </summary>
+        public static string PL0054_MaxInterviewsCountByAssignmentExeeded {
+            get {
+                return ResourceManager.GetString("PL0054_MaxInterviewsCountByAssignmentExeeded", resourceCulture);
+            }
+        }
     }
 }

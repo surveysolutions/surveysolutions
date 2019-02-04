@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         [OneTimeSetUp] 
         public void Context () {
             var questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Title = "this is valid (title), \\variable/";
+            questionnaire.Title = "this is valid ы (title) \\variable/";
             var verifier = CreateQuestionnaireVerifier();
             
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));

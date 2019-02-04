@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.NotStarted));
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.Started));
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.Completed));
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview,Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.Started));
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.Completed));
@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.Started));
@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var strategy = Create.Service.SupervisorGroupStateCalculationStrategy();
             
             // Act
-            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview);
+            GroupStatus status = strategy.CalculateDetailedStatus(Create.Identity(Id.g1), interview, Create.Entity.PlainQuestionnaire(questionnaire));
 
             // Assert
             Assert.That(status, Is.EqualTo(GroupStatus.StartedInvalid));

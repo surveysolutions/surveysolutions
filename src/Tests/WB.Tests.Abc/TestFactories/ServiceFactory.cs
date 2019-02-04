@@ -11,6 +11,7 @@ using NSubstitute;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Main.Core.Events;
 using NHibernate.Linq;
 using Quartz;
@@ -57,6 +58,7 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -68,6 +70,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
@@ -102,6 +105,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -109,6 +113,7 @@ using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Services;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 
@@ -120,7 +125,6 @@ namespace WB.Tests.Abc.TestFactories
             IEventSourcedAggregateRootRepository repository = null,
             IPlainAggregateRootRepository plainRepository = null,
             IEventBus eventBus = null,
-            IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
@@ -129,14 +133,11 @@ namespace WB.Tests.Abc.TestFactories
             return new CommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
                 aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
-
-        public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
 
         public AttachmentContentService AttachmentContentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
@@ -148,8 +149,7 @@ namespace WB.Tests.Abc.TestFactories
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null)
             => new CumulativeChartDenormalizer(
-                cumulativeReportStatusChangeStorage ??
-                Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
+                cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
                 cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
 
@@ -167,30 +167,27 @@ namespace WB.Tests.Abc.TestFactories
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
-        public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null,
+        public DomainRepository DomainRepository(
             IServiceLocator serviceLocator = null)
             => new DomainRepository(
-                aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
 
         public EventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(
-            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
-            => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
+            IEventStore eventStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepository(eventStore, repository);
 
         public EventSourcedAggregateRootRepositoryWithCache EventSourcedAggregateRootRepositoryWithCache(
-            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+            IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithCache(
                 eventStore ?? Mock.Of<IEventStore>(),
-                snapshotStore ?? Mock.Of<ISnapshotStore>(),
                 repository ?? Mock.Of<IDomainRepository>(),
                 new AggregateLock());
 
         public EventSourcedAggregateRootRepositoryWithExtendedCache
             EventSourcedAggregateRootRepositoryWithExtendedCache(
-                IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+                IEventStore eventStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithExtendedCache(
                 eventStore ?? Mock.Of<IEventStore>(),
-                snapshotStore ?? Mock.Of<ISnapshotStore>(),
                 repository ?? Mock.Of<IDomainRepository>());
 
         public FileSystemIOAccessor FileSystemIOAccessor()
@@ -209,7 +206,6 @@ namespace WB.Tests.Abc.TestFactories
             IPrincipal principal = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
-            ISnapshotStoreWithCache snapshotStoreWithCache = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null,
@@ -224,7 +220,6 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IPrincipal>(),
                 eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
-                snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
                 Mock.Of<ILiteEventRegistry>(),
@@ -261,9 +256,9 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
-        public QuestionnaireImportValidator QuestionnaireNameValidator(
+        public QuestionnaireValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-            => new QuestionnaireImportValidator(
+            => new QuestionnaireValidator(
                 questionnaireBrowseItemStorage ??
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
@@ -304,20 +299,24 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
+            IServiceLocator serviceLocator,
             IEnumeratorSettings settings)
         {
             return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<IEnumeratorSettings>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
+            IServiceLocator serviceLocator = null,
             IEnumeratorSettings settings = null)
         {
             return new SupervisorInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<IEnumeratorSettings>(),
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public AllInterviewsFactory AllInterviewsFactory(
@@ -412,7 +411,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
-            IHttpStatistician httpStatistician = null)
+            IHttpStatistician httpStatistician = null,
+            IServiceLocator serviceLocator = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
 
@@ -427,8 +427,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogService>(),
+                Mock.Of<IDeviceInformationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                Mock.Of<IServiceLocator>());
+                serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
         public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
@@ -452,6 +453,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IInterviewerSettings>(),
+                Mock.Of<IDeviceInformationService>(),
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IUserInteractionService>());
         }
@@ -520,14 +522,6 @@ namespace WB.Tests.Abc.TestFactories
             IExpressionProcessor expressionProcessor = null,
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
-            if (expressionProcessor == null && !ServiceLocator.IsLocationProviderSet)
-            {
-                var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
-
-                ServiceLocator.SetLocatorProvider(() => serviceLocator);
-                Setup.StubToMockedServiceLocator<IExpressionProcessor>();
-            }
-
             return new ExpressionsPlayOrderProvider(
                 new ExpressionsGraphProvider(
                     expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
@@ -687,7 +681,14 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>());
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
+                Create.Service.AssignmentFactory());
+        }
+
+        public IAssignmentFactory AssignmentFactory()
+        {
+            var result = new AssignmentFactory(new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            return result;
         }
 
         public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null)
@@ -726,7 +727,8 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
+                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
+                Create.Service.AssignmentFactory());
         }
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
@@ -906,6 +908,7 @@ namespace WB.Tests.Abc.TestFactories
                 attachmentContentMetadataRepository ?? Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
                 attachmentContentDataRepository ?? Mock.Of<IPlainStorage<AttachmentContentData>>(),
                 pathUtils ?? Mock.Of<IPathUtils>(p => p.GetRootDirectory() == @"c:\tmp"),
+                Mock.Of<IPermissionsService>(),
                 files ?? Mock.Of<IFileSystemAccessor>());
         }
 
@@ -935,6 +938,7 @@ namespace WB.Tests.Abc.TestFactories
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>(),
+                Mock.Of<IDeviceInformationService>(),
                 Mock.Of<IAssignmentDocumentsStorage>());
         }
 
@@ -945,20 +949,32 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+                sessionProvider ?? Mock.Of<IUnitOfWork>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null,
             IAuthorizedUser authorizedUser = null)
         {
             return new MapReport(
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>());
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+        }
+
+        public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(IMapper autoMapper = null,
+            IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy = null,
+            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy = null)
+        {
+            return new WebInterviewInterviewEntityFactory(
+                autoMapper ?? Mock.Of<IMapper>(),
+                enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
+                supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
+                Mock.Of<IWebNavigationService>());
         }
 
         public IInScopeExecutor InScopeExecutor(IServiceLocator serviceLocatorMock)
@@ -969,6 +985,33 @@ namespace WB.Tests.Abc.TestFactories
                 .Callback((Action<IServiceLocator> act) => act(serviceLocatorMock));
 
             return result.Object;
+        }
+        
+        public RestService RestService(IRestServiceSettings restServiceSettings = null,
+            INetworkService networkService = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
+            IStringCompressor stringCompressor = null,
+            IRestServicePointManager restServicePointManager = null,
+            IHttpStatistician httpStatistician = null,
+            IHttpClientFactory httpClientFactory = null)
+        {
+            return new RestService(
+                restServiceSettings ?? Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost"),
+                networkService ?? Mock.Of<INetworkService>(x => x.IsHostReachable(It.IsAny<string>()) == true && x.IsNetworkEnabled() == true),
+                synchronizationSerializer ?? new JsonAllTypesSerializer(),
+                stringCompressor ?? Mock.Of<IStringCompressor>(),
+                restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>(),
+                httpClientFactory ?? Mock.Of<IHttpClientFactory>()
+            );
+        }
+
+        public WebNavigationService WebNavigationService()
+        {
+            var mockOfVirtualPathService = new Mock<IVirtualPathService>();
+            mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
+
+            return new WebNavigationService(mockOfVirtualPathService.Object);
         }
     }
 

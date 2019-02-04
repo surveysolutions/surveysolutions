@@ -40,6 +40,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
@@ -81,7 +82,8 @@ namespace WB.UI.WebTester
             var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
             registry.Bind<IImageProcessingService, ImageProcessingService>();
-            
+            registry.Bind<IVirtualPathService, VirtualPathService>();
+
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 
             #if DEBUG
@@ -123,6 +125,7 @@ namespace WB.UI.WebTester
             }
 
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebNavigationService, WebNavigationService>();
 
             registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
             {
@@ -148,7 +151,7 @@ namespace WB.UI.WebTester
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
-            registry.BindAsSingleton<IInMemoryEventStore, ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
             registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();

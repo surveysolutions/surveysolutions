@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User has not permissions to access requested questionnaire.
+        ///   Looks up a localized string similar to User doesn&apos;t have permissions to access requested questionnaire.
         /// </summary>
         internal static string NoAccessToQuestionnaire {
             get {
@@ -251,11 +251,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire&apos;s title can&apos;t have more than {1} symbols..
+        /// </summary>
+        internal static string QuestionnaireTitle_MaxLength {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire title is required.
         /// </summary>
         internal static string QuestionnaireTitle_required {
             get {
                 return ResourceManager.GetString("QuestionnaireTitle_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space, and shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        internal static string QuestionnaireTitle_rules {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable names and roster IDs may be from 1 to {1} characters long.
+        /// </summary>
+        internal static string QuestionnaireVariable_MaxLength {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariable_MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable is required.
+        /// </summary>
+        internal static string QuestionnaireVariable_required {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariable_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
+        /// </summary>
+        internal static string QuestionnaireVariable_rules {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariable_rules", resourceCulture);
             }
         }
         

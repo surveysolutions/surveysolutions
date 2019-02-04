@@ -210,6 +210,9 @@
   <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
     <value>Произошла непредвиденная ошибка. Мы приносим извинения за неудобства.</value>
   </data>
+  <data name="GlobalSettings_TurningAudioAuditOn" xml:space="preserve">
+    <value>При включении аудио аудита размер данных синхронизации значительно увеличится. Вы хотите продолжить?</value>
+  </data>
   <data name="GPS_accuracy" xml:space="preserve">
     <value>Точность</value>
   </data>
@@ -359,6 +362,12 @@
   </data>
   <data name="SurveysAndStatuses_Overview" xml:space="preserve">
     <value>Состояние созданных и собранных интервью</value>
+  </data>
+  <data name="SurveysAndStatuses_HeadquartersDescription" xml:space="preserve">
+    <value>Отчет состояния созданных и собранных интервью отображает количество интервью в каждом из статусов по обследованиям</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorDescription" xml:space="preserve">
+    <value>Отчет состояния созданных и собранных интервью отображает количество интервью в каждом из статусов по обследованиям, в которых задействован супервизор</value>
   </data>
   <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
     <value>{0} интервью</value>
@@ -661,8 +670,8 @@
   <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
     <value>Память (доступно/всего)</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>База данных</value>
+  <data name="InterviewerProfile_StorageSizeInfo" xml:space="preserve">
+    <value>Системые данные и данные еще не синхронизированных интервью</value>
   </data>
   <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
     <value>Состояние батареи (%)</value>
@@ -1056,6 +1065,9 @@
     <value>Количество дней когда интервью находятся в их текущем статусе</value>
     <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
   </data>
+  <data name="SurveyStatisticsDescription" xml:space="preserve">
+    <value>Отчет отображает основные показатели, одно- и двумерные таблицы, построенные по собранным данным</value>
+  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Задания</value>
   </data>
@@ -1073,6 +1085,9 @@
   </data>
   <data name="InterviewersAndDevicesTitle" xml:space="preserve">
     <value>Устройства/Интервьюеры</value>
+  </data>
+  <data name="InterviewersAndDevicesSubtitle" xml:space="preserve">
+    <value>Отчет Устройства/Интервьюеры отражает количество учетных записей интервьюеров на сервере, связаных с каждой проблемой</value>
   </data>
   <data name="DownloadReport" xml:space="preserve">
     <value>Экспортировать отчет в</value>
@@ -1199,7 +1214,7 @@
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{0} и еще {1}</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Сделать первичного супервизора ответственным за задания и интервью перемещаемых интервьюеров. </value>
   </data>
   <data name="OperationFailedDescription" xml:space="preserve">

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -24,8 +23,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void StartRecording();
         void StopRecording();
-        bool IsRecording();
-        Stream GetLastRecord();
+        void StartAuditRecording(string fileNamePrefix);
+        void StopAuditRecording();
+        bool IsAnswerRecording();
+        Stream GetRecord(string fileName = null);
         TimeSpan GetLastRecordDuration();
         TimeSpan GetAudioRecordDuration();
         string GetMimeType();
@@ -37,8 +38,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
         void Play(Guid interviewId, Identity questionId, string fileName);
         void Stop();
-    }
 
+        string GetAuditPath();
+    }
+    
     public class PlaybackCompletedEventArgs : EventArgs
     {
         public PlaybackCompletedEventArgs(Identity questionIdentity)

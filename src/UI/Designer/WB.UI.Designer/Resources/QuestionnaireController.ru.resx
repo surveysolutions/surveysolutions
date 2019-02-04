@@ -335,4 +335,7 @@
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
     <value>Вы используете Internet Explorer который не поддерживается. Некоторые функции могут работать не правильно.</value>
   </data>
+  <data name="Classifications" xml:space="preserve">
+    <value>Классификации</value>
+  </data>
 </root>

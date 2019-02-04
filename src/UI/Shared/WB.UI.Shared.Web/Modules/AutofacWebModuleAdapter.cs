@@ -38,8 +38,8 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindMvcActionFilter<T>(int order = -1) where T: System.Web.Mvc.ActionFilterAttribute
         {
-            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new MvcActionFilter(c.Resolve<T>()))
+            containerBuilder.RegisterType<T>().InstancePerRequest();
+            containerBuilder.Register(c => new MvcActionFilter<T>(c.Resolve<T>()))
                 .AsActionFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
@@ -80,10 +80,9 @@ namespace WB.UI.Shared.Web.Modules
             where T : System.Web.Mvc.ActionFilterAttribute
             where TAttribute : Attribute
         {
-            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest().PropertiesAutowired();
-            containerBuilder.Register(c => new MvcActionFilterWhenControllerOrActionHasNoAttribute(c.Resolve<T>(), typeof(TAttribute)))
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
+            containerBuilder.Register(c => new MvcActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(c.Resolve<T>()))
                 .AsActionFilterFor<Controller>(order)
-                .PropertiesAutowired()
                 .InstancePerRequest();
         }
 

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 }),
             });
 
-            interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
+            interview = SetUp.InterviewForQuestionnaireDocument(questionnaireDocument);
             interview.Apply(Create.Event.NumericIntegerQuestionAnswered(numericId, Empty.RosterVector, 1));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(0)));
             BecauseOf();

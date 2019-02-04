@@ -253,16 +253,16 @@
     <value>Variable cannot be pasted here.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have empty ParentValue column.</value>
+    <value>Categories in cascading question can not have empty ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
+    <value>Categories in cascading question can not have not numeric value in ParentValue column.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+    <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>Option value should have only number characters</value>
+    <value>Category value should have only number characters</value>
   </data>
   <data name="AttachmentIdIsMissing" xml:space="preserve">
     <value>Missing attachment with id {0}</value>
@@ -302,5 +302,38 @@
   </data>
   <data name="RequiredHeaderWasNotFound" xml:space="preserve">
     <value>Header {0} was not found in excel file</value>
+  </data>
+    <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>No categories for parent cascading question '{0}' found</value>
+  </data>
+    <data name="Column" xml:space="preserve">
+    <value>column</value>
+  </data>
+    <data name="Row" xml:space="preserve">
+    <value>row</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Some column(s) are missing. Make sure that you upload file with required columns</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Empty value</value>
+  </data>
+    <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Invalid 32 bit integer value '{0}'. Value should be between -2147483647 and 2147483647</value>
+  </data>
+    <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>Parent question doesn't have an category with value '{0}'</value>
+  </data>
+    <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Duplicated category '{0}' with parent value '{1}'</value>
+  </data>
+    <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>Parent question '{0}' has {1} categories with value '{2}'</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>Title is too long. Title length should be less than {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Duplicated category '{0}' with value '{1}'</value>
   </data>
 </root>

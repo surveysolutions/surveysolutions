@@ -6,9 +6,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IViewModelNavigationService
     {
-        Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>;
+        Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>;
         Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel;
-        Task NavigateToDashboardAsync(string interviewId = null);
+        Task<bool> NavigateToDashboardAsync(string interviewId = null);
         void NavigateToSettings();
         Task SignOutAndNavigateToLoginAsync();
         Task NavigateToLoginAsync();

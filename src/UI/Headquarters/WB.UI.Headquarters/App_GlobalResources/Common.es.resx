@@ -291,4 +291,8 @@
   <data name="НasErrors" xml:space="preserve">
     <value>Tiene errores</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>Seleccione cuestionario</value>
+      <comment>Buscar</comment>
+  </data>
 </root>

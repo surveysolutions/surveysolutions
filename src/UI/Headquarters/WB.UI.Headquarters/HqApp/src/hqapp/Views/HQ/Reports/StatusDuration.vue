@@ -3,23 +3,45 @@
             :title="$t('Pages.StatusDuration')"
             :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Reports.Questionnaire')">
-                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="questionnaires"
-                           :value="questionnaireId"
-                           noSearch
-                           @selected="selectQuestionnaire" />
+            <FilterBlock
+                :title="$t('Common.Questionnaire')">
+                <Typeahead control-id="questionnaireId"
+                    data-vv-name="questionnaireId"
+                    data-vv-as="questionnaire"
+                    :placeholder="$t('Common.AllQuestionnaires')"
+                    :value="questionnaireId"
+                    v-on:selected="selectQuestionnaire"
+                    :fetch-url="$config.model.questionnairesUrl" />
+            </FilterBlock>
+
+            <FilterBlock
+                :title="$t('Common.QuestionnaireVersion')">
+                <Typeahead control-id="questionnaireVersion"
+                    ref="questionnaireIdControl" 
+                    data-vv-name="questionnaireVersion"
+                    data-vv-as="questionnaireVersion"
+                    :placeholder="$t('Common.AllVersions')"
+                    :value="questionnaireVersion"
+                    v-on:selected="questionnaireVersionSelected"
+                    :fetch-url="questionnaireVersionFetchUrl"
+                    :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
             <FilterBlock :title="$t('Strings.Teams')">
-                 <Typeahead :placeholder="$t('Strings.AllTeams')"
-                           :value="supervisorId"
-                           @selected="selectSupervisor"
-                           :ajax-params="supervisorsParams"
-                           :fetch-url="supervisorsUrl"
-                           data-vv-name="UserId"
-                           data-vv-as="UserName" />
+                 <Typeahead control-id="teams"
+                        :placeholder="$t('Strings.AllTeams')"
+                        :value="supervisorId"
+                        @selected="selectSupervisor"
+                        :ajax-params="supervisorsParams"
+                        :fetch-url="supervisorsUrl"
+                        data-vv-name="UserId"
+                        data-vv-as="UserName" />
             </FilterBlock>
         </Filters>
+        <div class="clearfix">
+            <div class="col-sm-8">
+                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}} </h4>        
+            </div>
+        </div>
         <DataTables ref="table"
                     :tableOptions="tableOptions"
                     :addParamsToRequest="addFilteringParams"
@@ -30,7 +52,6 @@
                 <th rowspan="2" class="vertical-align-middle text-center">{{$t("Strings.Days")}}</th>
                 <th colspan="2" class="type-numeric sorting_disabled text-center">{{$t("Strings.Assignments")}}</th>
                 <th colspan="5" class="type-numeric sorting_disabled text-center">{{$t("Strings.Interviews")}}</th>
-                <th rowspan="2" class="type-numeric sorting_disabled vertical-align-middle text-center">{{$t("Strings.Total")}}</th>
             </tr>
             <tr slot="header">
                 <th></th>
@@ -46,10 +67,15 @@
 </template>
 
 <script>
+import { formatNumber } from "./helpers"
+import routeSync from "~/shared/routeSync";
+
 export default {
+    mixins: [routeSync],
     data() {
         return {
             questionnaireId: null,
+            questionnaireVersion: null,
             supervisorId: null,
             supervisorsParams: { limit: 10 },
             loading : {
@@ -58,19 +84,38 @@ export default {
         }
     },
     watch: {
-        questionnaireId: function () {
+        questionnaireId: function (newValue) {
+            this.onChange(s => {s.questionnaireId = (newValue || {key: null}).key; s.version = this.questionnaireVersion;});
             this.reload();
         },
-        supervisorId: function () {
+        questionnaireVersion: function (newValue) {
+            this.onChange(s => {s.version = (newValue || {key: null}).key; s.questionnaireId = (this.questionnaireId || {key: null}).key; });
+            this.reload();
+        },
+        supervisorId: function (newValue) {
             this.reload();
         }
     },
-    mounted() {
+    async mounted() {
+        var questionnaireInfo = await this.loadQuestionnaireId();
+
+        if (this.$route.query.questionnaireId)
+        {
+            this.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle };
+        }
+        if (this.$route.query.version)
+        {
+            this.$refs.questionnaireIdControl.fetchOptions().then(q => {
+                this.questionnaireVersion = { key: questionnaireInfo.version, value:"ver. " + questionnaireInfo.version };
+            });
+        }
         this.reload();
     },
     computed: {
-        questionnaires() {
-            return this.$config.model.questionnaires
+        questionnaireVersionFetchUrl() {
+             if(this.questionnaireId && this.questionnaireId.key)
+                return `${this.$config.model.questionnairesUrl}/${this.questionnaireId.key}`
+            return null
         },
         supervisorsUrl() {
             return this.$hq.Users.SupervisorsUri
@@ -163,15 +208,6 @@ export default {
                         render: function(data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
-                    },
-                    {
-                        data: "totalCount",
-                        className: "type-numeric",
-                        title: this.$t("Strings.Total"),
-                        orderable: false,
-                        render: function(data) {
-                            return `<span>${self.formatNumber(data)}</span>`;
-                        }
                     }
                 ],
                 ajax: {
@@ -191,6 +227,23 @@ export default {
         }
     },
     methods: {
+        async loadQuestionnaireId() {
+            const questionnaireId = this.$route.query.questionnaireId;
+            let version = this.$route.query.version || "";
+            version = (version === "" ? "0" : version);
+
+            if (questionnaireId && version) {
+                let requestParams = { questionnaireIdentity: questionnaireId + '$' + version, cache: false };
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
+
+                if (response.data) {
+                    return { questionnaireId: questionnaireId, questionnaireTitle: response.data.title, version: response.data.version};
+                }
+
+            } else 
+                return {};
+        },
+
         reload() {
             this.$refs.table.reload();
         },
@@ -198,15 +251,17 @@ export default {
         selectQuestionnaire(value) {
             this.questionnaireId = value;
         },
+        questionnaireVersionSelected(value){
+            this.questionnaireVersion = value;
+        },
  
         selectSupervisor(value) {
             this.supervisorId = value;
         },
 
         addFilteringParams(data) {
-            if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId.key;
-            }
+            data.questionnaireId = (this.questionnaireId || {}).key;
+            data.questionnaireVersion = (this.questionnaireVersion || {}).key;
             if (this.supervisorId) {
                 data.supervisorId = this.supervisorId.key;
             }
@@ -214,7 +269,7 @@ export default {
         },
 
         renderAssignmentsUrl(row, data, userRole){
-            const formatedNumber = this.formatNumber(data);
+            const formatedNumber = formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
@@ -242,7 +297,7 @@ export default {
         },
 
         renderInterviewsUrl(row, data, status){
-            const formatedNumber = this.formatNumber(data);
+            const formatedNumber = formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
@@ -274,14 +329,6 @@ export default {
             parts.push(guid.slice(16,20));
             parts.push(guid.slice(20,32));
             return parts.join('-'); 
-        },
-        formatNumber(value) {
-            if (value == null || value == undefined)
-                return value;
-            var language = navigator.languages && navigator.languages[0] || 
-               navigator.language || 
-               navigator.userLanguage; 
-            return value.toLocaleString(language);
         },
         encodeQueryData(data) {
             let ret = [];

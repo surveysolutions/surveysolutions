@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,22 +18,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
         private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
         private readonly IPathUtils pathUtils;
+        private readonly IPermissionsService permissionsService;
         private readonly IFileSystemAccessor files;
 
         public AttachmentContentStorage(
             IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
             IPlainStorage<AttachmentContentData> attachmentContentDataRepository,
             IPathUtils pathUtils,
+            IPermissionsService permissionsService,
             IFileSystemAccessor files)
         {
             this.attachmentContentMetadataRepository = attachmentContentMetadataRepository;
             this.attachmentContentDataRepository = attachmentContentDataRepository;
             this.pathUtils = pathUtils;
+            this.permissionsService = permissionsService;
             this.files = files;
         }
 
-        public void Store(AttachmentContent attachmentContent)
+        public async Task StoreAsync(AttachmentContent attachmentContent)
         {
+            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
+            if (storeInFileSystem)
+            {
+                await this.permissionsService.AssureHasPermission(Permission.Storage);
+            }
+
             this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
@@ -39,7 +50,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 Size = attachmentContent.Size,
             });
 
-            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
             if (!storeInFileSystem)
             {
                 this.attachmentContentDataRepository.Store(new AttachmentContentData
@@ -89,12 +99,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public bool Exists(string attachmentContentId)
         {
+            var attachmentContentMeta = this.GetMetadata(attachmentContentId);
+            if (attachmentContentMeta == null) return false;
+
             var fileCache = GetFileCacheLocation(attachmentContentId);
-            var attachmentContentData = this.attachmentContentDataRepository.GetById(attachmentContentId);
+            if (files.IsFileExists(fileCache)) return true;
 
-            if (attachmentContentData?.Content != null) return true;
-
-            return files.IsFileExists(fileCache);
+            return this.attachmentContentDataRepository.Count(x =>
+                x.Id == attachmentContentId && x.Content != null) > 0;
         }
 
         public byte[] GetContent(string attachmentContentId)
@@ -130,15 +142,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
         }
 
-        public IEnumerable<string> EnumerateCache()
+        public async Task<IEnumerable<string>> EnumerateCacheAsync()
         {
+            await this.permissionsService.AssureHasPermission(Permission.Storage);
+            List<string> result = new List<string>();
+
             if (this.files.IsDirectoryExists(FileCacheDirectory))
             {
                 foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
                 {
-                    yield return Path.GetFileNameWithoutExtension(file);
+                    result.Add(Path.GetFileNameWithoutExtension(file));
                 }
             }
+
+            return result;
         }
     }
 }

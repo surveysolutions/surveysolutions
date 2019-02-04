@@ -15,7 +15,7 @@ namespace WB.UI.Supervisor.Activities
         NoHistory = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
         Exported = false)]
-    public class LoadingActivity : BaseActivity<LoadingViewModel>
+    public class LoadingActivity : BaseActivity<LoadingInterviewViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.loading;
 

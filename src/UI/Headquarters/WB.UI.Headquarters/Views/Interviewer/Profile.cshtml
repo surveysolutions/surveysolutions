@@ -2,6 +2,7 @@
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.BoundedContexts.Headquarters.Views.User
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 
@@ -369,7 +370,7 @@
                             <td>@Pages.InterviewerProfile_BatteryStatus</td>
                             <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.BatteryStatus, Model.BatteryPowerSource, Model.IsPowerSaveMode == true ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
                         </tr>
-                        <tr>
+                        <tr class="@(Model.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize ? "text-danger" : "")">
                             <td>@Pages.InterviewerProfile_StorageInfo</td>
                             <td>@FileSizeUtils.SizeSuffix(Model.StorageFreeInBytes ?? 0)/@FileSizeUtils.SizeSuffix(Model.StorageTotalInBytes ?? 0)</td>
                         </tr>
@@ -378,7 +379,7 @@
                             <td>@FileSizeUtils.SizeSuffix(Model.RamFreeInBytes ?? 0)/@FileSizeUtils.SizeSuffix(Model.RamTotalInBytes ?? 0)</td>
                         </tr>
                         <tr>
-                            <td>@Pages.InterviewerProfile_DatabaseInfo</td>
+                            <td>@Pages.InterviewerProfile_StorageSizeInfo</td>
                             <td>@FileSizeUtils.SizeSuffix(Model.DatabaseSizeInBytes ?? 0)</td>
                         </tr>
                         </tbody>
@@ -394,7 +395,7 @@
                             <td>@Pages.InterviewerProfile_ServerDate</td>
                             <td>@Model.ServerTimeAtTheBeginningOfSync.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                         </tr>
-                        <tr>
+                        <tr class="@(Model.DeviceHasWrongTime ? "text-danger" : "")">
                             <td>@Pages.InterviewerProfile_DeviceDate</td>
                             <td>@Model.TabletTimeAtTeBeginningOfSync.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                         </tr>

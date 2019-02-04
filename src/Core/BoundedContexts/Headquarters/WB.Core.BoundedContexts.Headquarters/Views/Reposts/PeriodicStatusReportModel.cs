@@ -17,5 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         public string ReportNameDescription { get; set; }
         public bool TotalRowPresent { get; set; }
         public DateTime MinAllowedDate { get; set; }
+
+        public string ReportGroupName { get; set; }
     }
 }

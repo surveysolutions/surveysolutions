@@ -4,9 +4,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
     public class InterviewerSettings : AppSetting
     {
-        public const int HowManyMajorReleaseDontNeedUpdateDefaultValue = 4;
+        public const bool AutoUpdateEnabledDefault = true;
 
         public bool AutoUpdateEnabled { get; set; }
-        public int? HowManyMajorReleaseDontNeedUpdate { get; set; } = HowManyMajorReleaseDontNeedUpdateDefaultValue;
+    }
+
+    public static class InterviewerSettingsExtensions
+    {
+        public static bool IsAutoUpdateEnabled(this InterviewerSettings settings)
+        {
+            if (settings == null) return InterviewerSettings.AutoUpdateEnabledDefault;
+
+            return settings.AutoUpdateEnabled;
+        }
     }
 }

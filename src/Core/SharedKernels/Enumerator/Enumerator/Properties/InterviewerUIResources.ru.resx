@@ -467,10 +467,10 @@
     <value>Назначено {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Все собранные данные будут сохранены как резервная копия на этом устройстве.</value>
+    <value>Сохранить нужную информацию в файл на устройстве.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Создать резервную копию собранной информации</value>
+    <value>Создать пакет для службы поддержки</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>Мы проверим наличие новой версии на сервере</value>
@@ -623,7 +623,7 @@
     <value>Не удалось открыть интервью</value>
   </data>
   <data name="FailedToLoadInterviewDescription" xml:space="preserve">
-    <value>Интервью находится в неправильном состоянии и будет удалено. Синхронизируйтесь, чтобы получить правильное.</value>
+    <value>Интервью находится в неправильном состоянии и не может быть открыто. Свяжитесь с поддержкой или попробуйте синхронизироваться, чтобы получить правильное состояние.</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
@@ -796,13 +796,13 @@
     <value>Назначить</value>
   </data>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
-    <value>Синхронизация интервьюверов</value>
+    <value>Синхронизация интервьюеров</value>
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
     <value>Синхронизация деталей супервизора</value>
   </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
-    <value>Синхронизация интервьюверов: {0} из {1}</value>
+    <value>Синхронизация интервьюеров: {0} из {1}</value>
   </data>
   <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
     <value>Синхронизировать карты</value>
@@ -866,5 +866,16 @@
     <data name="Dashboard_Searching" xml:space="preserve">
     <value>Поиск...</value>
     <comment>Поиск...</comment>
+  </data>
+    <data name="Interview_Creating" xml:space="preserve">
+    <value>Создание интервью</value>
+    <comment>Создание интервью</comment>
+  </data>
+    <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Пожалуйста, подождите</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Это может занять время, 
+не выходите из приложения</value>
   </data>
 </root>

@@ -34,32 +34,4 @@ namespace WB.UI.Shared.Web.Modules.Filters
             return Task.CompletedTask;
         }
     }
-
-
-    public class WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute : IAuthorizationFilter
-    {
-        public WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute(IAuthorizationFilter filter, Type attributeType)
-        {
-            this.filter = filter;
-            this.attributeType = attributeType;
-        }
-
-        private readonly IAuthorizationFilter filter;
-        private readonly Type attributeType;
-
-        public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken,
-            Func<Task<HttpResponseMessage>> continuation)
-        {
-            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
-
-            if (shouldExecute)
-            {
-                return filter.ExecuteAuthorizationFilterAsync(actionContext, cancellationToken, continuation);
-            }
-
-            return continuation();
-        }
-
-        public bool AllowMultiple => true;
-    }
 }
