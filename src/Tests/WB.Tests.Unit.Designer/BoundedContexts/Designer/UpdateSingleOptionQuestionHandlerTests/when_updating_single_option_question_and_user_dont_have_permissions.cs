@@ -3,6 +3,8 @@ using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -28,21 +30,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private void BecauseOf() =>
             exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateSingleOptionQuestion(
-                    questionId: questionId,
-                    title: title,
-                    variableName: variableName,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: notExistinigUserId,
-                    options: options,
-                    linkedToEntityId: linkedToQuestionId,
-                    isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties()));
+                    new UpdateSingleOptionQuestion(
+                        questionnaireId: questionnaire.Id,
+                        questionId: questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = title,
+                            VariableName = variableName,
+                            VariableLabel = null,
+                            EnablementCondition = enablementCondition,
+                            Instructions = instructions,
+                            HideIfDisabled = false
+                        },
+
+                        isPreFilled: isPreFilled,
+                        scope: scope,
+                        responsibleId: notExistinigUserId,
+                        options: options,
+                        linkedToEntityId: linkedToQuestionId,
+                        isFilteredCombobox: isFilteredCombobox,
+                        cascadeFromQuestionId: cascadeFromQuestionId,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                        linkedFilterExpression: null,
+                        validationExpression: null,
+                        validationMessage: null,
+                        showAsList: false,
+                        showAsListLimit: null)));
 
         private static Questionnaire questionnaire;
         private static Exception exception;

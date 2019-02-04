@@ -101,8 +101,35 @@ namespace WB.Tests.Unit
             Guid? cascadeFromQuestionId)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false, false));
+            questionnaire.UpdateSingleOptionQuestion(
+
+                new UpdateSingleOptionQuestion(
+                    questionnaireId: questionnaire.Id,
+                    questionId: questionId,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = title,
+                        VariableName = variableName,
+                        VariableLabel = null,
+                        EnablementCondition = enablementCondition,
+                        Instructions = instructions,
+                        HideIfDisabled = false
+                        
+                    },
+
+                    isPreFilled: isPreFilled,
+                    scope: scope,
+                    responsibleId: responsibleId,
+                    options: options,
+                    linkedToEntityId: linkedToQuestionId,
+                    isFilteredCombobox: isFilteredCombobox,
+                    cascadeFromQuestionId: cascadeFromQuestionId,
+                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    linkedFilterExpression: null,
+                    validationExpression: null,
+                    validationMessage: null,
+                    showAsList: false,
+                    showAsListLimit: null));
         }
 
         public static void AddNumericQuestion(
