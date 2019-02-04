@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         VariableLabel = null,
                         EnablementCondition = enablementCondition,
                         Instructions = instructions,
-                        HideIfDisabled = false
+                        HideIfDisabled = hideIfDisabled
                     },
 
                     isPreFilled: isPreFilled,
