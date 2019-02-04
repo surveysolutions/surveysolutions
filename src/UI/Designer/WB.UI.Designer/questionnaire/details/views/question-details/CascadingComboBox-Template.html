@@ -1,4 +1,5 @@
-﻿<div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
+﻿<div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons" 
+     ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
     <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
     <label for="singleOptionQuestionSource" ng-i18next="SelectParentQuestion"></label>
     <div class="btn-group dropdown" uib-dropdown>
@@ -51,9 +52,11 @@
     <div class="col-md-5 inline-inputs">
         <div class="form-group checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListLimit.$valid}">
             <label for="edit-question-count-for-list" ng-i18next="QuestionShowListLimit"></label>
-            <input id="edit-question-count-for-list" type="text"
-                   maxlength="15"
+            <input id="edit-question-count-for-list" type="number"
+                   maxlength="2"
                    name="showAsListLimit"
+                   min="1"
+                   max="50"
                    ng-pattern="/^\d+$/"
                    ng-model="activeQuestion.showAsListLimit"
                    class="form-control small-numeric-input">
