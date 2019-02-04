@@ -37,5 +37,8 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
+
+        public bool ShowAsList { get; set; }
+        public int? ShowAsListLimit { get; set; }
     }
 }
