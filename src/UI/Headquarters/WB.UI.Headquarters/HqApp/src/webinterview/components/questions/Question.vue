@@ -39,7 +39,7 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
+        props: ["question", 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
         data() {
             return {
                 isShowingAddCommentDialogFlag: undefined
@@ -106,7 +106,8 @@
                 return [{ 
                     'mark': this.highlight,
                     'disabled-question': this.disabled, 
-                    'with-flag': this.hasFlag}]
+                    'with-flag': this.hasFlag
+                    }, this.questionDivCssClassName]
             },
             questionEditorClass() {
                 return [{

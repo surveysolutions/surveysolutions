@@ -169,7 +169,7 @@
     <value>الاستبدال لا يمكن ان يشير الى بند في مستوى اعمق من اللائحه </value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>الحد الأقصى لعدد الإجابات أكبر من عدد خيارات الأسئلة.</value>
+    <value>أقصى عدد من الإجابات أكبر من عدد فئات الأسئلة.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>سؤال من هذا نوع لايمكن تعريفه</value>
@@ -193,7 +193,7 @@
     <value>يتجاوز طول تعبير تصفية الخيارات أكثر من {0} حرفا.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>سؤال مع خيارات تصفية التعبير لا يمكن تحديده</value>
+    <value>لا يمكن تحديد سؤال مع فئات تصفية التعبير.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>تحديد الأسئلة لا يمكن أن يكون داخل اللائحة.</value>
@@ -457,7 +457,7 @@
     <value>يجب أن يكون اسم المتغير أو معرف القائمة فريدا في نطاق الاستبيان.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>هناك تكرار واحد على الأقل في العنوان + ازواج قيمة الأصل. يجب ألا تحتوي قائمة الخيارات على أية نسخ مكررة من هذا النوع.</value>
+    <value>يوجد تكرار واحد على الأقل من أزواج "العنوان" و "قيمة الأصل". يجب ألا تحتوي القائمة على أية نسخ مكررة.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>عدد المنازل العشرية ليس في نطاق من {0} إلى {1}.</value>

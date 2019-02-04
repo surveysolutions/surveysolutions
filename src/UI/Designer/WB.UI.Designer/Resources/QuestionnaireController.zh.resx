@@ -154,10 +154,10 @@
     <value>确认</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>粘贴</value>
+    <value>复制</value>
   </data>
   <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>粘贴问卷</value>
+    <value>复制问卷</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>创建</value>
@@ -190,7 +190,7 @@
     <value>正在删除……</value>
   </data>
   <data name="Designer" xml:space="preserve">
-    <value>设计师</value>
+    <value>设计器</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
     <value>下载PDF版本</value>
@@ -305,5 +305,11 @@
   </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
     <value>与我分享的问卷模板</value>
+  </data>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>没有使用被支持的浏览器</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>你正在使用不被支持的IE浏览器。某些功能可能无法正常运行。</value>
   </data>
 </root>

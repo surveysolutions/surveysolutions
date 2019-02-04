@@ -9,7 +9,7 @@
   <TextView
       style="@style/Interview_Question_Errors_Title"
       local:MvxBind="Text Error.Caption;
-                     Visible IsInvalid;
+                     Visible And(IsInvalid, IsStringNotEmpty(Error.Caption));
                      Tag Format('ValidationTitle_{0}', Identity)" />
   <MvxLinearLayout
         android:layout_width="match_parent"

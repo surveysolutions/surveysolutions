@@ -7,6 +7,7 @@ using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -28,10 +29,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
     public class SpeedReportFactory : ISpeedReportFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
+        private readonly IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage;
 
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage,
+            IQueryableReadSideRepositoryReader<SpeedReportInterviewItem> speedReportStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
+            this.speedReportStorage = speedReportStorage;
         }
 
         private class StatusChangeRecord
@@ -49,15 +53,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
          int columnCount,
          int page,
          int pageSize,
-         Guid questionnaireId,
-         long questionnaireVersion,
-         Func<Guid, long, DateTime, DateTime, IQueryable<T>> query,
+         Guid? questionnaireId,
+         long? questionnaireVersion,
+         Func<Guid?, long?, DateTime, DateTime, IQueryable<T>> query,
          Expression<Func<T, Guid>> selectUser,
          Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
             var ranges = ReportHelpers.BuildColumns(reportStartDate, period, columnCount, timezoneAdjastmentMins,
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion), this.interviewStatusesStorage);
+                questionnaireId, questionnaireVersion, this.interviewStatusesStorage);
 
             var allUsersQuery = query(questionnaireId, questionnaireVersion, ranges.FromUtc, ranges.ToUtc);
 
@@ -80,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     .Select(i => new StatusChangeRecord { UserId = i.UserId.Value, UserName = i.UserName, Timestamp = i.Timestamp, Timespan = new TimeSpan(i.Timespan) })
                     .ToArray();
 
-            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, allInterviewsInStatus)).ToArray();
+            var rows = userIds.Select(u => GetSpeedByResponsibleReportRow(u, ranges.ColumnRangesUtc, allInterviewsInStatus)).OrderBy(x =>x.ResponsibleName).ToArray();
 
             SpeedByResponsibleTotalRow totalRow = new SpeedByResponsibleTotalRow();
             foreach (var dateTimeRange in ranges.ColumnRangesUtc)
@@ -133,92 +137,92 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 total: interviewsForUser.Any() ? Math.Round(interviewsForUser.Select(i => Math.Abs(i.Timespan.TotalMinutes)).Sum(), 2) : (double?)null);
         }
 
-        private IQueryable<InterviewCommentedStatus> QueryNonEmptyInterviewDurations(
-            Guid questionnaireId,
-            long questionnaireVersion,
+        private IQueryable<SpeedReportInterviewItem> QueryNonEmptyInterviewDurations(
+            Guid? questionnaireId,
+            long? questionnaireVersion,
             DateTime fromDate,
             DateTime to)
         {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            return this.speedReportStorage.Query(_ =>
+            {
+                var query = _;
+                if (questionnaireId.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                }
 
-            return this.interviewStatusesStorage.Query(_ =>
-                _.Where(x => questionnaireId == Guid.Empty || x.QuestionnaireIdentity == questionnaireIdentity.ToString())
-                    .SelectMany(x => x.InterviewCommentedStatuses
-                        .Where(c => c.Status == InterviewExportedAction.FirstAnswerSet &&
-                                    c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.FirstAnswerSet).Min(y => y.Timestamp))
-                    )
-                    .Where(ics =>
-                        ics.Timestamp >= fromDate &&
-                        ics.Timestamp < to &&
-                        ics.TimespanWithPreviousStatusLong.HasValue));
+                if (questionnaireVersion.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                }
+
+                return query
+                    .Where(c =>
+                        c.FirstAnswerDate >= fromDate &&
+                        c.FirstAnswerDate < to
+                    );
+            });
         }
-
+         
         private IQueryable<TimeSpanBetweenStatuses> QueryTimeSpanBetweenStatuses(
-          Guid questionnaireId,
-          long questionnaireVersion,
+          Guid? questionnaireId,
+          long? questionnaireVersion,
           DateTime from,
           DateTime to,
           InterviewExportedAction[] beginStatuses,
           InterviewExportedAction[] endStatuses)
         {
-            if (questionnaireId != Guid.Empty)
+            return this.interviewStatusesStorage.Query(_ =>
             {
-                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
-                return this.interviewStatusesStorage.Query(_ =>
-                    _.Where(x => x.QuestionnaireIdentity == questionnaireIdentity)
-                        .SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics =>
-                            ics.EndStatusTimestamp >= from &&
-                            ics.EndStatusTimestamp < to &&
-                            endStatuses.Contains(ics.EndStatus) &&
-                            beginStatuses.Contains(ics.BeginStatus)));
-            }
-            else
-            {
-                return this.interviewStatusesStorage.Query(_ =>
-                    _.SelectMany(x => x.TimeSpansBetweenStatuses)
-                        .Where(ics =>
-                            ics.EndStatusTimestamp >= from &&
-                            ics.EndStatusTimestamp < to &&
-                            endStatuses.Contains(ics.EndStatus) &&
-                            beginStatuses.Contains(ics.BeginStatus)));
-            }
+                var query = _;
+                if (questionnaireId.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                }
+
+                if (questionnaireVersion.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                }
+
+                return query
+                    .SelectMany(x => x.TimeSpansBetweenStatuses)
+                    .Where(ics =>
+                        ics.EndStatusTimestamp >= @from &&
+                        ics.EndStatusTimestamp < to &&
+                        endStatuses.Contains(ics.EndStatus) &&
+                        beginStatuses.Contains(ics.BeginStatus));
+            });
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
-            Guid questionnaireId,
-            long questionnaireVersion,
+            Guid? questionnaireId,
+            long? questionnaireVersion,
             DateTime fromDate,
             DateTime to,
             InterviewExportedAction[] statuses)
         {
-            var isCompleteStatusReport = statuses.Length == 1 && statuses[0] == InterviewExportedAction.Completed;
-            if (isCompleteStatusReport)
-                return QueryNonEmptyInterviewDurations(questionnaireId, questionnaireVersion, fromDate, to);
-
-            if (questionnaireId != Guid.Empty)
+            return this.interviewStatusesStorage.Query(_ =>
             {
-                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
+                var query = _;
+                if (questionnaireId.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                }
 
-                return this.interviewStatusesStorage.Query(_ =>
-                    _.Where(x => x.QuestionnaireIdentity == questionnaireIdentity)
-                        .SelectMany(x => x.InterviewCommentedStatuses)
-                        .Where(ics =>
-                                ics.Timestamp >= fromDate &&
-                                ics.Timestamp < to &&
-                                statuses.Contains(ics.Status) &&
-                                ics.TimespanWithPreviousStatusLong.HasValue));
-            }
-            else
-            {
-                return this.interviewStatusesStorage.Query(_ =>
-                    _.SelectMany(x => x.InterviewCommentedStatuses)
-                        .Where(ics =>
-                            ics.Timestamp >= fromDate &&
-                            ics.Timestamp < to &&
-                            statuses.Contains(ics.Status) &&
-                            ics.TimespanWithPreviousStatusLong.HasValue));
-            }
+                if (questionnaireVersion.HasValue)
+                {
+                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                }
+
+                return query
+                    .SelectMany(x => x.InterviewCommentedStatuses)
+                    .Where(ics =>
+                        ics.Timestamp >= fromDate &&
+                        ics.Timestamp < to &&
+                        statuses.Contains(ics.Status) &&
+                        ics.TimespanWithPreviousStatusLong.HasValue);
+            });
         }
 
         public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
@@ -238,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 userIdSelector: i => new UserAndTimestampAndTimespan
                 {
                     UserId = i.InterviewerId,
-                    Timestamp = i.Timestamp,
+                    Timestamp = i.FirstAnswerDate.Value,
                     Timespan = i.InterviewSummary.InterviewDurationLong ?? 0,
                     UserName = i.InterviewerName
                 });
@@ -248,6 +252,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input)
         {
             bool isInterviewDuration = input.InterviewStatuses.Length == 1 && input.InterviewStatuses[0] == InterviewExportedAction.Completed;
+
+            if (isInterviewDuration)
+            {
+                return this.Load(
+                    reportStartDate: input.From,
+                    timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
+                    period: input.Period,
+                    columnCount: input.ColumnCount,
+                    page: input.Page,
+                    pageSize: input.PageSize,
+                    questionnaireId: input.QuestionnaireId,
+                    questionnaireVersion: input.QuestionnaireVersion,
+                    query: this.QueryNonEmptyInterviewDurations,
+                    selectUser: u => u.SupervisorId.Value,
+                    restrictUser: null,
+                    userIdSelector: i => new UserAndTimestampAndTimespan
+                    {
+                        UserId = i.SupervisorId,
+                        Timestamp = i.FirstAnswerDate.Value,
+                        Timespan = i.InterviewSummary.InterviewDurationLong ?? 0,
+                        UserName = i.SupervisorName
+                    });
+            }
+
 
             return this.Load(
                 reportStartDate: input.From,
@@ -266,7 +294,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 {
                     UserId = i.SupervisorId,
                     Timestamp = i.Timestamp,
-                    Timespan = isInterviewDuration ? i.InterviewSummary.InterviewDurationLong ?? 0 : i.TimespanWithPreviousStatusLong.Value,
+                    Timespan = i.TimespanWithPreviousStatusLong.Value,
                     UserName = i.SupervisorName
                 });
         }

@@ -8,6 +8,7 @@
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || 
                           page == MenuItem.Surveys || 
+                          page == MenuItem.SurveyAndStatuses ||
                           page == MenuItem.Summary || 
                           page == MenuItem.Statuses || 
                           page == MenuItem.DevicesInterviewers ||
@@ -17,7 +18,7 @@
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.Surveys)
+            @Html.MainMenuItem("SurveysAndStatuses", "Reports", @MainMenu.SurveysAndStatuses, MenuItem.SurveyAndStatuses)
             @Html.MainMenuItem("SupervisorsAndStatuses", "Reports", @MainMenu.TeamsAndStatuses, MenuItem.Summary)
             @Html.MainMenuItem("StatusDuration", "Reports", @MainMenu.StatusDuration, MenuItem.StatusDuration)
             @Html.MainMenuItem("InterviewersAndDevices", "Reports", @MainMenu.DevicesInterviewers, MenuItem.DevicesInterviewers)
@@ -60,7 +61,7 @@
 </ul>
 <ul class="nav navbar-nav navbar-right" role="menu">
     @Html.Partial("QueueIndicator")
-    <li><a href="http://docs.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
+    <li><a href="http://support.mysurvey.solutions/headquarters" target="_blank" title="Help">@MainMenu.Help</a></li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@User.Identity.Name">
             @User.Identity.Name <span class="caret"></span>

@@ -8,20 +8,26 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
     public abstract class RefreshingAfterSyncListViewModel : ListViewModel
     {
-        private IMvxMessenger messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
-        private MvxSubscriptionToken messengerSubscribtion;
+        private readonly IMvxMessenger messenger;
+
+        protected RefreshingAfterSyncListViewModel(IMvxMessenger messenger)
+        {
+            this.messenger = messenger;
+        }
+
+        private MvxSubscriptionToken messengerSubscription;
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
+            messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg => await this.UpdateUiItemsAsync(), MvxReference.Strong);
             UpdateUiItemsAsync().WaitAndUnwrapException();
         }
 
         public override void ViewDisappeared()
         {
             base.ViewDisappeared();
-            messengerSubscribtion.Dispose();
+            messengerSubscription.Dispose();
         }
     }
 }

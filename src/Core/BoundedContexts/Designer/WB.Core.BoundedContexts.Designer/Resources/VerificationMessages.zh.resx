@@ -127,10 +127,10 @@
     <value>启用性条件有一个语法错误。</value>
   </data>
   <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
-    <value>变量不能包含空的表达式。</value>
+    <value>计算变量不能包含空的表达式。</value>
   </data>
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>变量表达式有长度超过{0}个字符。</value>
+    <value>计算变量表达式有长度超过{0}个字符。</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>只能有一个GPS型问题可以标记为识别型</value>
@@ -268,7 +268,7 @@
     <value>条形码型问题无法被识别。</value>
   </data>
   <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
-    <value>子模块不能有引用子问题的启用条件。</value>
+    <value>问卷子块不能有引用子问题的启用条件。</value>
   </data>
   <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
     <value>查询表名称不能是保留的词汇。</value>
@@ -286,7 +286,7 @@
     <value>兜圈引用不被允许。</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>变量名或二维表ID不能是保留词汇。</value>
+    <value>变量名或二维表ID不能是系统保留词汇。</value>
   </data>
   <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
     <value>如果条目用 %rostertitle% 替代则需要放置于二维表内部。</value>
@@ -313,7 +313,7 @@
     <value>这种类型的问题不被支持。</value>
   </data>
   <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
-    <value>有效的变量或二维表ID名称不应为空。</value>
+    <value>有效的变量或二维表ID名称不能为空。</value>
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>二维表不能有超过{0}个子元素。</value>
@@ -409,13 +409,13 @@
     <value>二维表的答案数量最多不能大于{0}。</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
-    <value>子模块不能有超过{0}个上级子模块。</value>
+    <value>问卷子块不能有超过{0}个上级问卷子块。</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>遵循问卷的条目（题目/分组/静态文本/等等。） 使用相同的内部ID。请删除它们其中的一个。</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>二维表才是一个二维表的关联源，而不是一个子模块。</value>
+    <value>二维表才是一个二维表的关联源，而不是一个问卷子块。</value>
   </data>
   <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
     <value>验证性条件 #{0}太长。它应该不长于{1}个字符。</value>
@@ -466,7 +466,7 @@
     <value>问卷的标题不能有超过{0}个符号。</value>
   </data>
   <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
-    <value>问卷模块或问卷子模块的标题不能为空或者只由空格键组成。</value>
+    <value>问卷模块或问卷问卷子块的标题不能为空或者只由空格键组成。</value>
   </data>
   <data name="WB0121_VariableNameTooLong" xml:space="preserve">
     <value>此元素的名字或ID应该不长于{0}个字符。</value>
@@ -520,7 +520,7 @@
     <value>问卷包含了超过{0}个问题，但只有1到2个问卷模块。把这些题目分组进问卷模块，便于问卷的浏览和提升效率。</value>
   </data>
   <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
-    <value>固定的二维表包含了{0}个或更少的项目。考虑使用子模块或者一系列的问题。二维表使得导出的数据更复杂。</value>
+    <value>固定的二维表包含了{0}个或更少的项目。考虑使用问卷子块或者一系列的问题。二维表使得导出的数据更复杂。</value>
   </data>
   <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
     <value>超过{0}% 的题目没有验证性条件。考虑增加验证性条件以改进数据质量。</value>
@@ -553,7 +553,7 @@
     <value>变量的标签过长（超过{0}个字符）故将在导出为SPSS文件时被截短。</value>
   </data>
   <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
-    <value>连续多个问题包含一样的启用性条件。考虑放入一个子模块，并设置子模块的启用性条件。</value>
+    <value>连续多个问题包含一样的启用性条件。考虑放入一个问卷子块，并设置问卷子块的启用性条件。</value>
   </data>
   <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
     <value>多个连续的无条件单选选项有{0}个选项。考虑替换为多选题。</value>
@@ -568,10 +568,10 @@
     <value>单选题被标记为识别型。考虑使用文本型的题目。</value>
   </data>
   <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
-    <value>问卷子模块的问题少于5个。考虑和其它子模块合并。</value>
+    <value>问卷问卷子块的问题少于5个。考虑和其它问卷子块合并。</value>
   </data>
   <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
-    <value>在同一层级有太多的子模块。考虑分层的布局。</value>
+    <value>在同一层级有太多的问卷子块。考虑分层的布局。</value>
   </data>
   <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
     <value>下拉菜单（复选框）包含少于10个元素。考虑使用标准的单选型题目。</value>

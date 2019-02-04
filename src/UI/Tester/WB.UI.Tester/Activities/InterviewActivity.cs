@@ -59,7 +59,7 @@ namespace WB.UI.Tester.Activities
 
             if (!this.ViewModel.IsSuccessfullyLoaded) return;
 
-            var shouldShowVariables = ServiceLocator.Current.GetInstance<IEnumeratorSettings>()?.ShowVariables ?? false;
+            var shouldShowVariables = this.ViewModel.EnumeratorSettings.ShowVariables;
             if (this.ViewModel.IsVariablesShowed != shouldShowVariables)
                 this.ViewModel?.ReloadCommand?.Execute();  
         }

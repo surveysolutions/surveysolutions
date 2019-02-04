@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -65,10 +66,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
-            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken).ConfigureAwait(false);
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
                 var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
@@ -84,8 +85,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         .ConfigureAwait(false);
                 }
             }
-
-            return questionnaireIdentity != null;
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
@@ -111,15 +110,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    if (navigationIdentity.TargetScreen == ScreenType.Identifying)
-                    {
-                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
-                    }
-                    else
-                    {
-                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                            NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup));
-                    }
+                    var targetGroup = navigationIdentity.TargetGroup != null
+                        ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
+                        : null;
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
+                        targetGroup);
                 }
                 catch (Exception e)
                 {
@@ -144,7 +139,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                var questionnairePackage = await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
+                var questionnairePackage =
+                    await this.DownloadQuestionnaire(questionnaireId, progress, cancellationToken);
 
                 if (questionnairePackage != null)
                 {
@@ -154,12 +150,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     var dummyQuestionnaireIdentity = GenerateDummyQuestionnaireIdentity(questionnaireId);
 
-                    var translations = await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
+                    var translations =
+                        await this.designerApiService.GetTranslationsAsync(questionnaireId, cancellationToken);
 
-                    this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage, translations, progress);
+                    this.StoreQuestionnaireWithNewIdentity(dummyQuestionnaireIdentity, questionnairePackage,
+                        translations, progress);
 
                     return dummyQuestionnaireIdentity;
                 }
+            }
+            catch (MissingPermissionsException permissionsException)
+            {
+                await this.userInteractionService.AlertAsync(permissionsException.Message);
             }
             catch (RestException ex)
             {
@@ -214,7 +216,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
-                assignmentId: null));
+                assignmentId: null,
+                isAudioRecordingEnabled:false));
 
             return interviewId;
         }
@@ -267,15 +270,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                 TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress))),
                         token: cancellationToken);
 
-                    this.attachmentContentStorage.Store(attachmentContent);
+                    await this.attachmentContentStorage.StoreAsync(attachmentContent);
                 }
 
                 requiredAttachments.Add(attachment.ContentId);
             }
 
-            var attachmentsPath = this.attachmentContentStorage.GetFileCacheLocation(string.Empty);
-
-            foreach (var contentId in this.attachmentContentStorage.EnumerateCache())
+            foreach (var contentId in await this.attachmentContentStorage.EnumerateCacheAsync())
             {
                 if (!requiredAttachments.Contains(contentId))
                     this.attachmentContentStorage.Remove(contentId);

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
@@ -38,13 +39,28 @@ namespace WB.Services.Export.ExportProcessHandlers
                 var applicationFolder = await this.CreateApplicationFolderAsync();
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
-
-                await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
+                string GetAudioAuditInterviewFolder(Guid interviewId) => $"{GetInterviewFolder(interviewId)}/{interviewDataExportSettings.Value.AudioAuditFolderName}";
+                async Task<string> GetOrCreateFolderByType(BinaryDataType binaryDataType, Guid interviewId)
                 {
-                    var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
-                    await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
+                    switch (binaryDataType)
+                    {
+                        case BinaryDataType.Audio:
+                        case BinaryDataType.Image:
+                            return await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(interviewId));
+                        case BinaryDataType.AudioAudit:
+                            return await this.CreateFolderAsync(applicationFolder, GetAudioAuditInterviewFolder(interviewId));
+                        default:
+                            throw new ArgumentException("Unknown binary type: " + binaryDataType);
+                    }
+                }
 
-                }, progress, cancellationToken);
+                await binaryDataSource.ForEachInterviewMultimediaAsync(settings, 
+                    async binaryDataAction =>
+                    {
+                        var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type, binaryDataAction.InterviewId);
+                        await this.UploadFileAsync(folderPath, binaryDataAction.Content, binaryDataAction.FileName);
+                    }, 
+                    progress, cancellationToken);
             }
         }
 

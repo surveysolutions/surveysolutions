@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
 {
@@ -71,6 +72,37 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             Assert.That(firstLine.RejectedBySupervisorCount, Is.EqualTo(1));
             Assert.That(firstLine.ApprovedByHeadquartersCount, Is.EqualTo(1));
             Assert.That(firstLine.RejectedByHeadquartersCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_questionnaire_id_not_provided_should_search_for_all_interviews_from_all_versions_grouped_by_questionnaire()
+        {
+            Guid questionnaireId = Id.gA;
+            Guid questionnaire1Id = Id.gB;
+            Guid teamLeadId = Id.gC;
+            List<InterviewSummary> interviews = new List<InterviewSummary>()
+            {
+                Create.Entity.InterviewSummary(questionnaireId: questionnaireId, teamLeadId: teamLeadId, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaire1Id, teamLeadId: teamLeadId, questionnaireVersion: 1, status: InterviewStatus.Completed),
+                Create.Entity.InterviewSummary(questionnaireId: questionnaire1Id, teamLeadId: teamLeadId, questionnaireVersion: 2, status: InterviewStatus.Completed),
+                
+            };
+
+            var report = Sv.SurveyAndStatuses(interviews);
+
+            // Act
+            var view = report.Load(new SurveysAndStatusesReportInputModel { Order = "CompletedCount ASC" });
+            
+            // Assert
+            Assert.That(view.TotalCount, Is.EqualTo(2));
+            
+            var firstLine = view.Items.First();
+
+            Assert.That(firstLine.CompletedCount, Is.EqualTo(1));
+            
+            var secondLine = view.Items.ToArray()[1];
+
+            Assert.That(secondLine.CompletedCount, Is.EqualTo(2));
         }
     }
 }

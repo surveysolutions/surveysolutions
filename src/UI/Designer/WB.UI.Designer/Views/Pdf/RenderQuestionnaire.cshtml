@@ -24,11 +24,11 @@
 	<header>
 		<div class="column_header authors">
 			<ul>
-				<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On</span></li>
-				<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On</span></li>
+				<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On.Value.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
+				<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On.Value.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 				@if (questionnaire.LastModified != null)
 				{
-				<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On</span></li>
+				<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On.Value.AddMinutes(-questionnaire.TimezoneOffsetMinutes).FormatDate()</span></li>
 				}
 			</ul>
 			@if (questionnaire.SharedPersons.Count() != 0)
@@ -332,25 +332,27 @@
 		<section class="section">
             <div class="section_header">
                 <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
-                
                 @{ var group = questionnaire.Find<Group>(sectionId);}
-                
+                <div class="generated_by">
+                    <div class="variable_name">@(group.VariableName)</div>
+                </div>
+
                 @if (questionnaire.GroupHasEnablementCondition(group))
-                    {
-                        <div class="common-info">
-                            <div class="condition">
-                                <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
-                                @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
-                                {
-                                    <div class="more">
-                                        <a href="#@questionnaire.GetConditionRef(group.PublicKey)">
-                                            @Pdf.Format(PdfStrings.AppendixLink, group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E"))
-                                        </a>
-                                    </div>
-                                }
-                            </div>
+                {
+                    <div class="common-info">
+                        <div class="condition">
+                            <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
+                            @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
+                            {
+                                <div class="more">
+                                    <a href="#@questionnaire.GetConditionRef(group.PublicKey)">
+                                        @Pdf.Format(PdfStrings.AppendixLink, group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E"))
+                                    </a>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
+                }
 
             </div>
             

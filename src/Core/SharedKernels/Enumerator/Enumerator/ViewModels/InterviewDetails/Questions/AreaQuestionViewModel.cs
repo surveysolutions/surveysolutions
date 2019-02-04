@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .GeometryType;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);

@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
     internal class when_toggling_answer_and_user_rejects_reduce_roster_size: MultiOptionQuestionViewModelTestsContext
     {
         [OneTimeSetUp] 
-        public async Task context () {
+        public void context () {
             questionId = Create.Entity.Identity(Id.gA, Empty.RosterVector);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 && _.IsRosterSizeQuestion(questionId.Id) == true
             );
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -48,18 +48,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.First().Checked = false;
+            viewModel.Options.First().CheckAnswerCommand.Execute();
 
-            await BecauseOf();
+            BecauseOf();
         }
 
-        public async Task BecauseOf() 
-            => await viewModel.ToggleAnswerAsync(viewModel.Options.First());
+        public void BecauseOf() 
+            => viewModel.Options.First().CheckAnswerCommand.Execute();
 
         [Test] 
         public void should_undo_checked_property_change () 
             => viewModel.Options.First().Checked.Should().BeTrue();
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
     }
 }

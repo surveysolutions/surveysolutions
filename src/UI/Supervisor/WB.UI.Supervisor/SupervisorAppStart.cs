@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Activities;
 
 namespace WB.UI.Supervisor
@@ -15,36 +16,41 @@ namespace WB.UI.Supervisor
     {
         private readonly IViewModelNavigationService viewModelNavigation;
         private readonly IPlainStorage<SupervisorIdentity> users;
+        private readonly IApplicationCypher applicationCypher;
 
         public SupervisorAppStart(IMvxApplication application, IMvxNavigationService navigationService,
             IViewModelNavigationService viewModelNavigation,
-            IPlainStorage<SupervisorIdentity> users
+            IPlainStorage<SupervisorIdentity> users,
+            IApplicationCypher applicationCypher
         ) : base(application, navigationService)
         {
             this.viewModelNavigation = viewModelNavigation;
             this.users = users;
+            this.applicationCypher = applicationCypher;
         }
 
-        protected override async Task<object> ApplicationStartup(object hint = null)
+        protected override Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.IoCProvider.Resolve<InterviewDashboardEventHandler>();
+            Mvx.IoCProvider.GetSingleton<InterviewDashboardEventHandler>();
 
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            return await base.ApplicationStartup(hint);
+            applicationCypher.EncryptAppData();
+
+            return base.ApplicationStartup(hint);
         }
 
-        protected override async Task NavigateToFirstViewModel(object hint = null)
+        protected override Task NavigateToFirstViewModel(object hint = null)
         {
             var currentUser = users.FirstOrDefault();
             if (currentUser == null)
             {
-                await viewModelNavigation.NavigateToFinishInstallationAsync();
+                return viewModelNavigation.NavigateToFinishInstallationAsync();
             }
             else
             {
-                await viewModelNavigation.NavigateToLoginAsync();
+                return viewModelNavigation.NavigateToLoginAsync();
             }
         }
     }

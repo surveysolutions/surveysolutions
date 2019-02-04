@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
             fixedRosterId = Guid.Parse("a7b0d842-0355-4eab-a943-968c9c013d97");
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(
                 Create.Entity.QuestionnaireIdentity(questionnaireId, 1),
                 Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
                 {

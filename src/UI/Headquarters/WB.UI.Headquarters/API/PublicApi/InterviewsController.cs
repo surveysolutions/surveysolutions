@@ -383,7 +383,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpPost]
         [Route("{id:Guid}/rebuild")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public void RebuildInterviewByEventStream(Guid id) => this.interviewStateFixer.RefreshInterview(id);
+        public HttpResponseMessage RebuildInterviewByEventStream(Guid id)
+        {
+            this.interviewStateFixer.RefreshInterview(id);
+            return Request.CreateResponse(HttpStatusCode.NoContent);
+        }
 
         #endregion
 

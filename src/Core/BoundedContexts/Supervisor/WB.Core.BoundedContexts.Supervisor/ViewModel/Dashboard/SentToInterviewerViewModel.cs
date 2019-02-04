@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IInterviewViewModelFactory viewModelFactory;
 
         public SentToInterviewerViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory)
+            IInterviewViewModelFactory viewModelFactory, IMvxMessenger messenger) : base(messenger)
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;

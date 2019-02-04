@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
@@ -16,6 +17,8 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         string GetRosterTitle(Identity rosterIdentity);
 
         IInterviewPropertiesForExpressions Properties { get; }
+
+        Section GetSection(Guid sectionId, IEnumerable<int> rosterVector);
     }
 
     public interface IInterviewPropertiesForExpressions

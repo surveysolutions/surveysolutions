@@ -32,9 +32,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IEnumeratorSettings enumeratorSettings,
             IUserInteractionService userInteractionService,
             IServiceLocator serviceLocator,
+            IDeviceInformationService deviceInformationService,
             IAssignmentDocumentsStorage assignmentsStorage)
             : base(mapService, synchronizationService, logger, httpStatistician,
-                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator, assignmentsStorage)
+                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, deviceInformationService, serviceLocator, assignmentsStorage)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;

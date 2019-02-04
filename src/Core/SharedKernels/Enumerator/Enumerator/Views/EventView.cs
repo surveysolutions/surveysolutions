@@ -19,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public DateTime DateTimeUtc { get; set; }
 
-        [Obsolete("Since 18.12")]
         public string JsonEvent { get; set; }
 
         public string EventType { get; set; }

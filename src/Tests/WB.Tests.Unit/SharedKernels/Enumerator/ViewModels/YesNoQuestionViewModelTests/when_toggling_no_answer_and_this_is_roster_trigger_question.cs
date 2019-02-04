@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 && _.IsRosterSizeQuestion(questionId.Id) == true
             );
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -50,23 +50,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock = new Mock<IUserInteractionService>();
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
-                userInteractionService: userInteractionServiceMock.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            viewModel.Options.Last().Selected = false;
 
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last(), null).Wait();
+        public void BecauseOf() => viewModel.Options.Last().CheckAnswerCommand.Execute();
 
-        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().YesSelected.Should().BeFalse();
+        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().Checked.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_dont_call_userInteractionService_for_reduce_roster_size () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never());
 
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Mock<IUserInteractionService> userInteractionServiceMock;
         static Identity questionId;
         private static Guid questionGuid;

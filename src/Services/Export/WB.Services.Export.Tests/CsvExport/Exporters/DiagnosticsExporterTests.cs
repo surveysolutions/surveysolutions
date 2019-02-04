@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -9,6 +8,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -92,9 +92,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
             Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview__id", "interview__status", "responsible", "interviewers", "rejections__sup", "rejections__hq", "entities__errors", "questions__comments", "interview__duration" }));
-            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", interviewId1.ToString() ,"60", "int1", "1", "2", "3", "5", "7", "00.00:00:00" }));
-            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", interviewId2.ToString(), "125", "int2", "9", "8", "7", "5", "3", "00.00:00:02" }));
-            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", interviewId3.ToString(), "65", "int1", "2", "4", "6", "9", "2", "00.00:02:55" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", interviewId1.FormatGuid() ,"60", "int1", "1", "2", "3", "5", "7", "00.00:00:00" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", interviewId2.FormatGuid(), "125", "int2", "9", "8", "7", "5", "3", "00.00:00:02" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", interviewId3.FormatGuid(), "65", "int1", "2", "4", "6", "9", "2", "00.00:02:55" }));
         }
     }
 }

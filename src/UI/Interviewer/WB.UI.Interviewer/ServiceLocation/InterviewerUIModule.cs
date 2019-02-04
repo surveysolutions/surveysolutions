@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.FileSystem;
@@ -40,8 +39,6 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
-            registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();
-            registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
@@ -62,7 +59,6 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();
             registry.Bind<IArchivePatcherService, ArchivePatcherService>();
-            registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
@@ -117,7 +113,7 @@ namespace WB.UI.Interviewer.ServiceLocation
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
+            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicense();
 #endif
 
             return Task.CompletedTask;

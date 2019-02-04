@@ -6,8 +6,10 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -32,6 +34,8 @@ namespace WB.UI.Headquarters.API
         private readonly IAuditLog auditLog;
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IAssignmentFactory assignmentFactory;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -40,7 +44,9 @@ namespace WB.UI.Headquarters.API
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IAuditLog auditLog,
             IPreloadedDataVerifier verifier,
-            ICommandTransformator commandTransformator)
+            ICommandTransformator commandTransformator, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
+            IAssignmentFactory assignmentFactory)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -50,6 +56,8 @@ namespace WB.UI.Headquarters.API
             this.auditLog = auditLog;
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
+            this.questionnaires = questionnaires;
+            this.assignmentFactory = assignmentFactory;
         }
         
         [Route("")]
@@ -57,12 +65,6 @@ namespace WB.UI.Headquarters.API
         [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         public IHttpActionResult Get([FromUri]AssignmentsDataTableRequest request)
         {
-            QuestionnaireIdentity questionnaireIdentity = null;
-            if (!string.IsNullOrEmpty(request.QuestionnaireId))
-            {
-                QuestionnaireIdentity.TryParse(request.QuestionnaireId, out questionnaireIdentity);
-            }
-
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
             var input = new AssignmentsInputModel
@@ -71,8 +73,8 @@ namespace WB.UI.Headquarters.API
                 PageSize = request.PageSize,
                 Order = request.GetSortOrder(),
                 SearchBy = request.Search.Value,
-                QuestionnaireId = questionnaireIdentity?.QuestionnaireId,
-                QuestionnaireVersion = questionnaireIdentity?.Version,
+                QuestionnaireId = request.QuestionnaireId,
+                QuestionnaireVersion = request.QuestionnaireVersion,
                 ResponsibleId = isInterviewer ? this.authorizedUser.Id :request.ResponsibleId,
                 ShowArchive = !isInterviewer && request.ShowArchive,
                 DateStart = request.DateStart?.ToUniversalTime(),
@@ -201,7 +203,7 @@ namespace WB.UI.Headquarters.API
                     break;
             }
 
-            var assignment = new Assignment(questionnaireIdentity, request.ResponsibleId, quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 
@@ -261,7 +263,8 @@ namespace WB.UI.Headquarters.API
 
         public class AssignmentsDataTableRequest : DataTableRequest
         {
-            public string QuestionnaireId { get; set; }
+            public Guid? QuestionnaireId { get; set; }
+            public long? QuestionnaireVersion { get; set; }
             public Guid? ResponsibleId { get; set; }
             public Guid? TeamId { get; set; }
 

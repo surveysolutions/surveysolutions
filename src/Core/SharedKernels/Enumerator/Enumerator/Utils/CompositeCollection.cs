@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
@@ -15,6 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// For instance it will not notify indexer change (http://stackoverflow.com/questions/657675/propertychanged-for-indexer-property) because we do not use such bindings.
     /// The same is applied for other features.
     /// </remarks>
+    [DebuggerDisplay("CompositeCollection Count={Count}")]
     public class CompositeCollection<T> : IObservableCollection<T>
     {
         private readonly ReaderWriterLockSlim itemsLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
@@ -28,21 +30,29 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             get
             {
-                int processedItemsCount = 0;
-                for (int i = 0; i < this.collections.Count; i++)
+                this.itemsLock.EnterReadLock();
+                try
                 {
-                    var currentCollection = this.collections[i];
-                    if (processedItemsCount + currentCollection.Count > index)
+                    int processedItemsCount = 0;
+                    for (int i = 0; i < this.collections.Count; i++)
                     {
-                        return currentCollection[index - processedItemsCount];
+                        var currentCollection = this.collections[i];
+                        if (processedItemsCount + currentCollection.Count > index)
+                        {
+                            return currentCollection[index - processedItemsCount];
+                        }
+                        else
+                        {
+                            processedItemsCount += currentCollection.Count;
+                        }
                     }
-                    else
-                    {
-                        processedItemsCount += currentCollection.Count;
-                    }
-                }
 
-                throw new IndexOutOfRangeException();
+                    throw new IndexOutOfRangeException();
+                }
+                finally
+                {
+                    this.itemsLock.ExitReadLock();
+                }
             }
 
             set => throw new NotImplementedException();
@@ -186,28 +196,39 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         {
             this.itemsLock.EnterWriteLock();
 
+            int offset = this.Count;
             try
             {
                 this.collections.Add(collection);
+                collection.CollectionChanged += this.HandleChildCollectionChanged;
 
+                var addedCollectionCount = collection.Count;
+                this.Count += addedCollectionCount;
+                this.NotifyItemsAdded(collection, offset);
             }
             finally
             {
                 this.itemsLock.ExitWriteLock();
             }
-
-            collection.CollectionChanged += this.HandleChildCollectionChanged;
-            var offset = this.Count;
-
-            var addedCollectionCount = collection.Count;
-            this.Count += addedCollectionCount;
-
-            this.NotifyItemsAdded(collection, offset);
         }
 
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            var newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+            int newCount = 0;
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                using (var enumerator = this.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                    {
+                        newCount++;
+                    }
+                }
+            }
+            else
+            {
+                newCount = this.Count + (e.NewItems?.Count ?? 0) - (e.OldItems?.Count ?? 0);
+            }
 
             if (newCount != this.Count)
             {

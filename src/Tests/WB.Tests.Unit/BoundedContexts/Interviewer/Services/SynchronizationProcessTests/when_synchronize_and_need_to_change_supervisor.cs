@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var interviewerIdentity = new InterviewerIdentity {Name = "name", PasswordHash = "hash", Token = "Outdated token", SupervisorId = Id.g1};
 
-            PrincipalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
+            PrincipalMock = Mock.Get(SetUp.InterviewerPrincipal(interviewerIdentity));
           
             SynchronizationServiceMock
                 .Setup(x => x.GetCurrentSupervisor(It.IsAny<CancellationToken>(), It.IsAny<RestCredentials>()))

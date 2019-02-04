@@ -280,6 +280,9 @@ for further instructions</value>
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Update</value>
+  </data>
   <data name="Synchronization_Done" xml:space="preserve">
     <value>Done</value>
   </data>
@@ -481,13 +484,7 @@ for further instructions</value>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Assigned on {0}</value>
   </data>
-  <data name="Diagnostics_Support_Package_Description" xml:space="preserve">
-    <value>Save all relevant information to the file on this device.</value>
-  </data>
-    <data name="Diagnostics_Support_Package_Title" xml:space="preserve">
-    <value>Generate support package</value>
-  </data>
-  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>We will check for the newer version on HQ server</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">

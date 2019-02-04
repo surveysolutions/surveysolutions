@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
+            questionnaireInfoView.IsSharedWithUser = person != null;
             questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
 

@@ -41,6 +41,7 @@ using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
@@ -66,6 +67,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
             registry.Bind<IImageProcessingService, ImageProcessingService>();
+            registry.Bind<IVirtualPathService, VirtualPathService>();
 
             registry.Bind<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
@@ -134,9 +136,6 @@ namespace WB.UI.Headquarters.Injections
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
-            GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
-
             return Task.CompletedTask;
         }
 

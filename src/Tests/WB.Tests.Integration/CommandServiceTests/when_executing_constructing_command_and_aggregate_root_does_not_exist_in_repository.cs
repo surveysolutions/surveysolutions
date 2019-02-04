@@ -56,8 +56,6 @@ namespace WB.Tests.Integration.CommandServiceTests
                     publishedEvents = events;
                 });
 
-            snapshooterMock = new Mock<IAggregateSnapshotter>();
-
             IServiceLocator serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
@@ -94,8 +92,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 });
 
 
-            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, 
-                snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator, eventStore : eventStore.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, serviceLocator: serviceLocator, eventStore : eventStore.Object);
 
             BecauseOf();
         }
@@ -109,15 +106,9 @@ namespace WB.Tests.Integration.CommandServiceTests
         [NUnit.Framework.Test] public void should_set_specified_aggregate_id_to_constructed_aggregate_root () =>
             constructedAggregateId.Should().Be(aggregateId);
 
-        [NUnit.Framework.Test] public void should_create_snapshot_of_aggregate_root_if_needed () =>
-            snapshooterMock.Verify(
-                snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(Moq.It.Is<IEventSourcedAggregateRoot>(aggregate => aggregate.EventSourceId == aggregateId)),
-                Times.Once());
-
         private static CommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock
         private static IEnumerable<CommittedEvent> publishedEvents;
         private static Guid constructedAggregateId;
-        private static Mock<IAggregateSnapshotter> snapshooterMock;
     }
 }

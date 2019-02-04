@@ -72,7 +72,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             if (input.TemplateId.HasValue)
             {
-                result = x => x.QuestionnaireId == input.TemplateId && x.QuestionnaireVersion == input.TemplateVersion;
+                result = x => x.QuestionnaireId == input.TemplateId;
+            }
+
+            if (input.TemplateVersion.HasValue)
+            {
+                result = result.AndCondition(x => x.QuestionnaireVersion == input.TemplateVersion);
             }
 
             if (input.ViewerId.HasValue)

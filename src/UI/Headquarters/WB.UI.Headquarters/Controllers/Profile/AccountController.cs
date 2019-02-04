@@ -173,6 +173,7 @@ namespace WB.UI.Headquarters.Controllers
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+            this.ViewBag.IsOwnAccoutEditing = true;
 
             model.Password = null;
             model.ConfirmPassword = null;
@@ -204,6 +205,7 @@ namespace WB.UI.Headquarters.Controllers
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
+            this.ViewBag.IsOwnAccoutEditing = true;
 
             if (!string.IsNullOrEmpty(model.Password))
             {

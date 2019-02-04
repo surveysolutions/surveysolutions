@@ -141,6 +141,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [TestCase("state")]
         [TestCase("quest")]
         [TestCase("optioncode")]
+        [TestCase("complete")]
+        [TestCase("cover")]
+        [TestCase("overview")]
         //windows reserved
         [TestCase("con")]
         [TestCase("prn")]

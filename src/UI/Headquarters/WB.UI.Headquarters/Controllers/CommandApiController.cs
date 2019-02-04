@@ -88,12 +88,6 @@ namespace WB.UI.Headquarters.Controllers
 
                     response.IsSuccess = true;
                 }
-                catch (OverflowException e)
-                {
-                    this.Logger.Error(DefaultErrorMessage, e);
-                    response.IsSuccess = false;
-                    response.DomainException = Strings.UnexpectedErrorOccurred;
-                }
                 catch (Exception e)
                 {
                     response.IsSuccess = false;
@@ -101,8 +95,7 @@ namespace WB.UI.Headquarters.Controllers
                     var domainEx = e.GetSelfOrInnerAs<InterviewException>();
                     if (domainEx == null)
                     {
-                        this.Logger.Error(DefaultErrorMessage, e);
-                        response.DomainException = Strings.UnexpectedErrorOccurred;
+                        throw new Exception(Strings.UnexpectedErrorOccurred, e);
                     }
                     else
                     {

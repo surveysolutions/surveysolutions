@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -29,21 +30,21 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedToListQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
-            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToRosterQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToListQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToRosterQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (CategoricalMultiViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (CategoricalMultiLinkedToListViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (CategoricalMultiLinkedToQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (CategoricalMultiLinkedToRosterTitleViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (TimestampQuestionViewModel), Resource.Layout.interview_question_timestamp},
             {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
-            {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
+            {typeof (CategoricalYesNoViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
             {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete},
-            {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
-            {typeof (MultiOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
+            {typeof (CategoricalMultiOptionViewModel<int>), Resource.Layout.interview_question_multi_option_item},
+            {typeof (CategoricalMultiOptionViewModel<RosterVector>), Resource.Layout.interview_question_multi_option_item},
             {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
             {typeof (SingleOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
             {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question__header},
@@ -52,12 +53,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (CommentsViewModel), Resource.Layout.interview_question__comments},
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
-            {typeof (YesNoQuestionOptionViewModel), Resource.Layout.interview_question_yesno_item},
+            {typeof (CategoricalYesNoOptionViewModel), Resource.Layout.interview_question_yesno_item},
             {typeof (VariableViewModel), Resource.Layout.interview_variable},
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
-            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner}
+            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
+            {typeof (PlainRosterTitleViewModel), Resource.Layout.interview_group_plain_roster_title}
         };
 
         public int GetItemViewType(object forItemObject)
@@ -68,7 +70,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 typeof(QuestionHeaderViewModel),
                 typeof(GroupViewModel),
-                typeof(StaticTextViewModel)
+                typeof(StaticTextViewModel),
+                typeof(PlainRosterTitleViewModel)
             };
 
             if (disabledViewModelTypes.Contains(typeOfViewModel))
@@ -79,10 +82,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {
                     if (enablementModel.HideIfDisabled) return UnknownViewType;
 
-                    if (typeOfViewModel == typeof(QuestionHeaderViewModel))
+                    if (typeOfViewModel == typeof(QuestionHeaderViewModel) || typeOfViewModel == typeof(PlainRosterTitleViewModel))
                         return Resource.Layout.interview_disabled_question;
 
-                    if (typeOfViewModel == typeof(GroupViewModel))
+                    if (typeOfViewModel == typeof(GroupViewModel) )
                         return Resource.Layout.interview_disabled_group;
 
                     if (typeOfViewModel == typeof(StaticTextViewModel))
@@ -123,6 +126,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return groupViewModel.Enablement;
                 case StaticTextViewModel staticTextViewModel:
                     return staticTextViewModel.QuestionState.Enablement;
+                case PlainRosterTitleViewModel rosterTitleViewModel:
+                    return rosterTitleViewModel.Enablement;
             }
 
             return null;

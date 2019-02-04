@@ -193,7 +193,7 @@
     <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
+    <value>上传面访：{0}</value>
   </data>
   <data name="GetTranslations" xml:space="preserve">
     <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
@@ -230,5 +230,23 @@
   </data>
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>已请求版本{0}的补丁文件</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>检查重复的面访。 面访：&lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>检查废弃的面访。 请求： &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt;下载面访包: {0}</value>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; 上传面访: {0}</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>新的督导员app文件请求已发送</value>
+  </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>请求的督导员安装包版本： {0}</value>
   </data>
 </root>

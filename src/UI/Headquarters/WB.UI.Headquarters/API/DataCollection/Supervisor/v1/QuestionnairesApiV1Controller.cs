@@ -41,9 +41,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [HttpGet]
         public override HttpResponseMessage GetAssembly(Guid id, int version) => base.GetAssembly(id, version);
         [HttpPost]
-        public override void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAsSuccessfullyHandled(id, version);
+        public override HttpResponseMessage LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAsSuccessfullyHandled(id, version);
         [HttpPost]
-        public override void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAssemblyAsSuccessfullyHandled(id, version);
+        public override HttpResponseMessage LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAssemblyAsSuccessfullyHandled(id, version);
         [HttpGet]
         public override HttpResponseMessage GetAttachments(Guid id, int version) => base.GetAttachments(id, version);
 

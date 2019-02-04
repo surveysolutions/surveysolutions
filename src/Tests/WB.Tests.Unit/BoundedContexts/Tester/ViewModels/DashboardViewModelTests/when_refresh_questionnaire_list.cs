@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_refresh_questionnaire_list : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 designerApiService: designerApiService);
 
             viewModel.ShowPublicQuestionnairesCommand.Execute();
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.RefreshQuestionnairesCommand.ExecuteAsync().WaitAndUnwrapException();
+        public async Task Because() => await viewModel.RefreshQuestionnairesCommand.ExecuteAsync();
 
         [Test] public void should_stay_on_same_tab_with_public_questionnaires () => viewModel.IsPublicShowed.Should().BeTrue();
         [Test] public void should_Questionnaires_have_3_public_questionnaires () => viewModel.Questionnaires.Count.Should().Be(3);

@@ -33,8 +33,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionInstructionV
             ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
             ILiteEventBus liteEventBus = Create.Service.LiteEventBus(registry);
 
-            var viewModel = CreateQuestionHeaderViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
-            viewModel.Init("interview", questionWithSubstitutionIdentity);
+            var viewModel = CreateQuestionHeaderViewModel(SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
+            viewModel.Init("interview", questionWithSubstitutionIdentity,
+                Create.Other.NavigationState(interviewRepository));
 
             liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,
                 Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: new Identity[]

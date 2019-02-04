@@ -160,7 +160,7 @@
     <value>Substitution cannot reference items from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Max number of answers is greater than number of question's options.</value>
+    <value>Max number of answers is greater than number of question's categories.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be identifying.</value>
@@ -172,7 +172,7 @@
     <value>Expression has a syntax error.</value>
   </data>
   <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Options filter expression has length more than {0} characters.</value>
+    <value>Categories filter expression has length more than {0} characters.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Identifying questions cannot be inside a roster.</value>
@@ -208,7 +208,7 @@
     <value>Maximum number of list elements must be in range [{1}, {0}].</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
-    <value>Question has option(s) with empty value.</value>
+    <value>Question has categories with empty value.</value>
   </data>
   <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
     <value>Enabling condition cannot refer to a question from a deeper roster level.</value>
@@ -238,7 +238,7 @@
     <value>If item uses %rostertitle% substitution it needs to be placed inside roster.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
-    <value>Question has less than {0} options.</value>
+    <value>Question has less than {0} categories.</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
     <value>Question has max allowed answers less than {0}.</value>
@@ -268,19 +268,19 @@
     <value>Static text cannot be empty.</value>
   </data>
   <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option titles must be unique.</value>
+    <value>Categories titles must be unique.</value>
   </data>
   <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
-    <value>Option values must be unique.</value>
+    <value>Categories values must be unique.</value>
   </data>
   <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
-    <value>Categorical question cannot have options and be linked to another question.</value>
+    <value>Categorical question cannot have categories and be linked to another question.</value>
   </data>
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
-    <value>Contains more than {0} options.</value>
+    <value>Contains more than {0} categories.</value>
   </data>
   <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
-    <value>Contains more than {0} options.</value>
+    <value>Contains more than {0} categories.</value>
   </data>
   <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
     <value>Question has invalid variable name.</value>
@@ -295,7 +295,7 @@
     <value>Question with current type can not be used as roster title.</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
-    <value>Options in child cascading combo box question should reference only existing option in parent question.</value>
+    <value>Categories in child cascading combo box question should reference only existing option in parent question.</value>
   </data>
   <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
     <value>Question should have deeper or the same level as it's parent question.</value>
@@ -307,10 +307,10 @@
     <value>Circular references in cascading combo box questions not allowed.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Cascading combo box question should have less than {0} options.</value>
+    <value>Cascading combo box question should have less than {0} categories.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
-    <value>Cascading combo box question should have unique value and parent value options list.</value>
+    <value>Cascading combo box question should have unique value and parent value list of categories.</value>
   </data>
   <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
     <value>Linked question can be interviewers only.</value>
@@ -373,7 +373,7 @@
     <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Question with options filter expression cannot be identifying.</value>
+    <value>Question with categories filter expression cannot be identifying.</value>
   </data>
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
     <value>Items with the same name found.</value>
@@ -565,7 +565,7 @@
     <value>Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section.</value>
   </data>
   <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
-    <value>Multiple consecutive unconditional single choice options with {0} options. Consider one multiple choice question.</value>
+    <value>Multiple consecutive unconditional single-select question with {0} categories. Consider one multiple choice question.</value>
   </data>
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
     <value>Using @{0} with a multi-choice roster may be unstable. Consider using @{1} instead.</value>
@@ -574,7 +574,7 @@
     <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
   </data>
   <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
-    <value>Single-choice question is marked as identifying. Consider using a text question.</value>
+    <value>Single-select question is marked as identifying. Consider using a text question.</value>
   </data>
   <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
     <value>Section contains less than five questions. Consider joining with other sections.</value>
@@ -595,7 +595,7 @@
     <value>Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback.</value>
   </data>
   <data name="WB0228_OmittedOptions" xml:space="preserve">
-    <value>Categorical question has nonconsecutive option codes. Check for omitted options.</value>
+    <value>Categorical question has nonconsecutive categories codes. Check for omitted categories.</value>
   </data>
   <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
     <value>Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond.</value>
@@ -604,10 +604,10 @@
     <value>Nonconsecutive cascade questions. Consider laying the cascading questions one after another.</value>
   </data>
   <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
-    <value>Linked to list question doen't support options filter</value>
+    <value>Linked to list question doesn't support categories filter</value>
   </data>
   <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
-    <value>Multichoice question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
+    <value>Multi select question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
   </data>
   <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
     <value>Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency.</value>
@@ -667,13 +667,13 @@
     <value>Variable name or roster ID should be unique in questionnaire's scope.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+    <value>There is at least one duplicate of "Title" and "Parent Value" pairs. The list should not contain any duplicates.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>Number of decimal places is not in range from {0} to {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Option title is empty or too long. Title's length should be in range from {0} to {1} characters.</value>
+    <value>Category title is empty or too long. Title's length should be in range from {0} to {1} characters.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>You cannot use child entities in enablement condition for sections, subsection and rosters.</value>
@@ -716,5 +716,20 @@
   </data>
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Questionnaire title shouldn't have two and more consecutive underscore characters.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Plain mode allowed only for rosters with no more than {0} elements.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Plain mode doesn't allow to use nested rosters.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Text contains a link to an unknown question, subsection, roster or pdf attachment.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Links are prohibited on navigation elements: sections, sub-sections, rosters</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Limit of number of questions in single interview exceeded. Consider reducing number of instances generated by rosters.</value>
   </data>
 </root>

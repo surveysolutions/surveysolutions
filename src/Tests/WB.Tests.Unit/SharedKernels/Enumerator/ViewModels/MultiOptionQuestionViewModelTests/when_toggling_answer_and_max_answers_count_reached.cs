@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_toggling_answer_and_max_answers_count_reached : MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public async Task context () {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -24,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 && _.IsRosterSizeQuestion(questionId.Id) == false
             );
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -39,22 +38,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
             interviewRepository.SetReturnsDefault(interview);
-
+            
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
-            viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            viewModel.Options.Second().Checked = true;
-
-            await BecauseOf();
+            BecauseOf();
         }
 
-        public async Task BecauseOf() => await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
+        public void BecauseOf() => viewModel.Init("blah", questionId, Create.Other.NavigationState());
 
-        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().Checked.Should().BeFalse();
+        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().CheckAnswerCommand.CanExecute().Should().BeFalse();
 
-        private static MultiOptionQuestionViewModel viewModel;
+        private static CategoricalMultiViewModel viewModel;
         private static Identity questionId;
         private static Guid questionGuid;
     }

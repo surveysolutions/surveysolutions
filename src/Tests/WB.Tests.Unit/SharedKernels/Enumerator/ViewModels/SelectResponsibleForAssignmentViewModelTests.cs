@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var usersRepository = Create.Storage.SqliteInmemoryStorage(
                 Create.Entity.InterviewerDocument(Guid.NewGuid()),
                 Create.Entity.InterviewerDocument(responsibleOfInterviewId));
-            var statefullInterviewRepository = Setup.StatefulInterviewRepository(
+            var statefullInterviewRepository = SetUp.StatefulInterviewRepository(
                 Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleOfInterviewId));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(usersRepository: usersRepository,
@@ -208,7 +208,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var usersRepository = Create.Storage.SqliteInmemoryStorage(
                 Create.Entity.InterviewerDocument(newResponsibleId),
                 Create.Entity.InterviewerDocument(responsibleOfInterviewId));
-            var statefullInterviewRepository = Setup.StatefulInterviewRepository(
+            var statefullInterviewRepository = SetUp.StatefulInterviewRepository(
                 Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleOfInterviewId));
             var mockOfCommandService = new Mock<ICommandService>();
             var mockOfNavigationViewModelService = new Mock<IViewModelNavigationService>();

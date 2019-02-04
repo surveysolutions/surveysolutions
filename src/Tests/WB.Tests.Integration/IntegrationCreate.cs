@@ -14,6 +14,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
+using NHibernate.Properties;
 using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -293,17 +294,15 @@ namespace WB.Tests.Integration
                         eventSequence: x.EventSequence)));
         }
 
-        public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null)
         {
             return new SequentialCommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
+                Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>()
-                //,Mock.Of<IEventStore>()
-                );
+                Mock.Of<IAggregateRootCacheCleaner>());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -350,9 +349,12 @@ namespace WB.Tests.Integration
                 new EntitySerializer<TEntity>());
         }
 
-        public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes, bool executeSchemaUpdate, string schemaName = null)
+        public static ISessionFactory SessionFactory(string connectionString, 
+            IEnumerable<Type> painStorageEntityMapTypes,
+            bool executeSchemaUpdate, string schemaName = null)
         {
             var cfg = new Configuration();
+            
             cfg.DataBaseIntegration(db =>
             {
                 db.ConnectionString = connectionString;
@@ -361,6 +363,8 @@ namespace WB.Tests.Integration
             });
 
             cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes), "Plain");
+            cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
+
             if (executeSchemaUpdate)
             {
                 var update = new SchemaUpdate(cfg);

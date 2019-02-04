@@ -5,6 +5,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -22,9 +24,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var interviewId = Id.gA;
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsSupervisor == true && x.Id == supervisorId);
-            var interview = Create.Entity.InterviewSummary(interviewId: interviewId, teamLeadId: supervisorId);
-            var interviews = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), interview);
-            var service = SetupService(interviews, authorizedUser);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId, supervisorId: supervisorId);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
+            var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));
         }
@@ -36,9 +38,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var interviewId = Id.gA;
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsSupervisor == true && x.Id == supervisorId);
-            var interview = Create.Entity.InterviewSummary(interviewId: interviewId, teamLeadId: Id.g2);
-            var interviews = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), interview);
-            var service = SetupService(interviews, authorizedUser);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId, supervisorId: Id.g2);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
+            var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.Throws<InterviewAccessException>(() => service.CheckIfAllowed(interviewId));
         }
@@ -49,9 +51,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var interviewId = Id.gA;
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsHeadquarter == true);
-            var interview = Create.Entity.InterviewSummary(interviewId: interviewId);
-            var interviews = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), interview);
-            var service = SetupService(interviews, authorizedUser);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
+            var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));
         }
@@ -62,20 +64,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var interviewId = Id.gA;
 
             var authorizedUser = Mock.Of<IAuthorizedUser>(x => x.IsAdministrator == true);
-            var interview = Create.Entity.InterviewSummary(interviewId: interviewId);
-            var interviews = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), interview);
-            var service = SetupService(interviews, authorizedUser);
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
+            var service = SetupService(interviewRepository, authorizedUser);
 
             Assert.DoesNotThrow(() => service.CheckIfAllowed(interviewId));
         }
 
-        private IReviewAllowedService SetupService(IQueryableReadSideRepositoryReader<InterviewSummary> summaries = null, 
+        private IReviewAllowedService SetupService(IStatefulInterviewRepository interviewRepository = null, 
             IAuthorizedUser authorizedUser = null)
         {
             var reviewAllowedService = new ReviewAllowedService(
-                summaries ?? new TestInMemoryWriter<InterviewSummary>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
-            ReviewAllowedService.reviewAllowedCache = new MemoryCache("test");
             return reviewAllowedService;
         }
     }

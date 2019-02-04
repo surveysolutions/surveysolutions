@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.InstructionViewModel.Init(interviewId, entityIdentity);
+            this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
 
@@ -168,7 +168,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                this.StoreAudioToPlainStorage();
+                var audioStream = this.audioService.GetRecord();
+
+                using (var audioMemoryStream = new MemoryStream())
+                {
+                    audioStream.CopyTo(audioMemoryStream);
+                    this.audioFileStorage.StoreInterviewBinaryData(this.interviewId, this.GetAudioFileName(),
+                        audioMemoryStream.ToArray(), this.audioService.GetMimeType());
+                }
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
@@ -192,7 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RecordAudioAsync()
         {
-            if (this.audioService.IsRecording()) return;
+            if (this.audioService.IsAnswerRecording()) return;
             this.audioService.Stop();
             this.IsPlaying = false;
 
@@ -202,7 +209,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.permissions.AssureHasPermission(Permission.Storage);
 
                 this.audioDialog.OnRecorded += this.AudioDialog_OnRecorded;
-                this.audioDialog.OnCanelRecording += AudioDialog_OnCancel;
+                this.audioDialog.OnCancelRecording += AudioDialog_OnCancel;
                 this.audioDialog.ShowAndStartRecording(this.QuestionState.Header.Title.HtmlText);
             }
             catch (MissingPermissionsException e) when (e.Permission == Permission.Microphone)
@@ -229,20 +236,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void AudioDialog_OnCancel(object sender, EventArgs e) => this.UnhandleDialog();
+        private void AudioDialog_OnCancel(object sender, EventArgs e) => this.UnsubscribeDialog();
 
         private async void AudioDialog_OnRecorded(object sender, EventArgs e)
         {
-            this.UnhandleDialog();
+            this.UnsubscribeDialog();
 
             if (this.QuestionState.Enablement.Enabled)
                 await this.SendAnswerAsync();
         }
 
-        private void UnhandleDialog()
+        private void UnsubscribeDialog()
         {
             this.audioDialog.OnRecorded -= this.AudioDialog_OnRecorded;
-            this.audioDialog.OnCanelRecording -= this.AudioDialog_OnCancel;
+            this.audioDialog.OnCancelRecording -= this.AudioDialog_OnCancel;
         }
 
         private async Task RemoveAnswerAsync()
@@ -270,18 +277,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Answer = null;
             this.audioFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetAudioFileName());
-        }
-
-        private void StoreAudioToPlainStorage()
-        {
-            var audioStream = this.audioService.GetLastRecord();
-
-            using (var audioMemoryStream = new MemoryStream())
-            {
-                audioStream.CopyTo(audioMemoryStream);
-                this.audioFileStorage.StoreInterviewBinaryData(this.interviewId, this.GetAudioFileName(),
-                    audioMemoryStream.ToArray(), this.audioService.GetMimeType());
-            }
         }
 
         private string GetAudioFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}.{this.audioService.GetAudioType()}";

@@ -231,7 +231,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>健康检查监测</value>
   </data>
-    <data name="HideFilter" xml:space="preserve">
+  <data name="HideFilter" xml:space="preserve">
     <value>隐藏过滤</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
@@ -636,9 +636,6 @@
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>类型：{0}</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>数据库</value>
-  </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>已上传{0}，已下载{1}</value>
   </data>
@@ -901,7 +898,7 @@
     <value>下载调查员应用程序</value>
   </data>
   <data name="DownloadPage_Title" xml:space="preserve">
-    <value>ESRI地Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time.</value>
+    <value>由世界银行开发的CAPI工具</value>
   </data>
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>版本</value>
@@ -1164,7 +1161,7 @@
   <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
     <value>{0}和{1}更多</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>使原督导员仍负责已转移调查员现有的任务和问卷。</value>
   </data>
   <data name="Map_Status" xml:space="preserve">
@@ -1187,5 +1184,56 @@
   </data>
   <data name="MapList_UserMapsTitle" xml:space="preserve">
     <value>用户地图</value>
+  </data>
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>米</value>
+  </data>
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>点</value>
+  </data>
+  <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
+    <value>下载督导员 app</value>
+  </data>
+  <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
+    <value>欢迎浏览Survey Solutions的督导员app下载页面</value>
+  </data>
+  <data name="GetLatestSupervisorApp" xml:space="preserve">
+    <value>下载最新的督导员程序</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>调查员已收到的访谈</value>
+  </data>
+  <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
+    <value>进入的数据流量</value>
+  </data>
+  <data name="InterviewerProfile_OutgoingTraffic" xml:space="preserve">
+    <value>外出数据量</value>
+  </data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>显示操作日志</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
+    <value>已使用的数据流量</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
+    <value>全部用户设备进入和外出的数据流量加总</value>
+  </data>
+  <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
+    <value>数据流量</value>
+  </data>
+  <data name="InterviewOverview" xml:space="preserve">
+    <value>访谈概览</value>
+  </data>
+  <data name="Kb" xml:space="preserve">
+    <value>KB</value>
+  </data>
+  <data name="Map_UploadingFileTooBig" xml:space="preserve">
+    <value>文件过大</value>
+  </data>
+  <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+    <value>升级任务</value>
   </data>
 </root>

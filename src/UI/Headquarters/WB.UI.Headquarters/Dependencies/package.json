@@ -4,11 +4,11 @@
   "description": "Survey Solutions Headquarters js module",
   "private": true,
   "devDependencies": {
-    "bootstrap-sass": "^3.3.7",
+    "bootstrap-sass": "^3.4.0",
     "bootstrap-select": "^1.12.4",
     "datatables.net-select": "^1.2.3",
     "del": "^2.2.2",
-    "flatpickr": "^3.0.7",
+    "flatpickr": "^4.5.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-clean": "^0.3.2",

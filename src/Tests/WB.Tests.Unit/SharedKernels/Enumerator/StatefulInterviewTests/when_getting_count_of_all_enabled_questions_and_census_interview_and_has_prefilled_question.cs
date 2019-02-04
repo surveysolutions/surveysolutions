@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true)
             });
 
-            var statefulInterview = Setup.StatefulInterview(questionnaire);
+            var statefulInterview = SetUp.StatefulInterview(questionnaire);
             statefulInterview.AnswerTextQuestion(responsibleId, prefilledQuestionId, RosterVector.Empty, DateTime.UtcNow, "prefilled text");
             statefulInterview.AnswerTextQuestion(responsibleId, questionId, RosterVector.Empty, DateTime.UtcNow, "regular text");
             //act

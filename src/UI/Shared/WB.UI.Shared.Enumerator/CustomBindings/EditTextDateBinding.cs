@@ -1,11 +1,10 @@
 ﻿using System;
 using Android.App;
 using Android.Widget;
-using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.Target;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.UI.Shared.Enumerator.CustomControls;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -26,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
 
             var dialog = new DatePickerDialogFragment(parsedDate, this.OnDateSet);
-            dialog.Show(ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>().Activity.FragmentManager, "date");
+            dialog.Show(Target.GetActivity().FragmentManager, "date");
         }
 
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)

@@ -4,7 +4,6 @@ using System.Linq;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
 using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Tests.Abc;
@@ -32,7 +31,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             // assert - expect load twice
             Mock.Get(domainRepository).Verify(
-                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()),
+                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Exactly(2));
         }
 
@@ -54,7 +53,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             // assert - expect load once
             Mock.Get(domainRepository).Verify(
-                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()),
+                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Exactly(1));
         }
 
@@ -69,9 +68,9 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository)
-                .Setup(repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>(
-                    (_, aggregateId, __, ___) => storedAggregates[aggregateId]);
+                .Setup(repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Returns<Type, Guid, IEnumerable<CommittedEvent>>(
+                    (_, aggregateId, ___) => storedAggregates[aggregateId]);
 
             var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
 
@@ -87,7 +86,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             // assert
             Mock.Get(domainRepository).Verify(
-                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()),
+                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Exactly(100));
         }
 
@@ -102,9 +101,9 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository)
-                .Setup(repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()))
-                .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>(
-                    (_, aggregateId, __, ___) => storedAggregates[aggregateId]);
+                .Setup(repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()))
+                .Returns<Type, Guid,  IEnumerable<CommittedEvent>>(
+                    (_, aggregateId, ___) => storedAggregates[aggregateId]);
 
             var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithExtendedCache(repository: domainRepository);
 
@@ -120,7 +119,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
 
             // assert
             Mock.Get(domainRepository).Verify(
-                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<Snapshot>(), It.IsAny<IEnumerable<CommittedEvent>>()),
+                repository => repository.Load(It.IsAny<Type>(), It.IsAny<Guid>(), It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Exactly(300));
         }
     }

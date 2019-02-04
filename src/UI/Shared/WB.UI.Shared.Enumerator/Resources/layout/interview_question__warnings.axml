@@ -6,10 +6,6 @@
     android:orientation="vertical"
     style="@style/Interview_Question_Errors"
     local:MvxBind="Visible IsImplausible">
-  <TextView
-    style="@style/Interview_Question_Warning_Title"
-    local:MvxBind="Text Warning.Caption;
-                     Tag Format('WarningTitle_{0}', Identity)" />
   <MvxLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
@@ -23,37 +29,45 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser currentUser;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
             IStatefulInterviewRepository interviews,
             IQuestionnaireStorage questionnaireStorage,
             IAuthorizedUser currentUser, 
-            IPlainStorageAccessor<Assignment> assignmentsStorage)
+            IPlainStorageAccessor<Assignment> assignmentsStorage, 
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
             : base(commandService, logger)
         {
             this.interviews = interviews;
             this.questionnaireStorage = questionnaireStorage;
             this.currentUser = currentUser;
             this.assignmentsStorage = assignmentsStorage;
+            this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.questionnaires = questionnaires;
         }
         
         [Localizable(false)]
         [ActivePage(MenuItem.Assignments)]
         public ActionResult Index()
         {
+            var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
+
             var model = new AssignmentsFilters 
             {
                 IsSupervisor = this.currentUser.IsSupervisor,
                 IsObserver = this.currentUser.IsObserver,
                 IsObserving = this.currentUser.IsObserving,
-                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator
+                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
+                Questionnaires = questionnaires,
+                MaxInterviewsByAssignment = Constants.MaxInterviewsCountByAssignment
             };
 
             model.Api = new AssignmentsFilters.ApiEndpoints
             {
-                Questionnaire = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesCombobox"}),
-                QuestionnaireById = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
                 Responsible = model.IsSupervisor
                     ? Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "InterviewersCombobox"})
                     : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
@@ -77,9 +91,14 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
+                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
+                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
+
             var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
             assignment.UpdateQuantity(size);
             assignment.Reassign(responsibleId);
+            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
 
             this.assignmentsStorage.Store(assignment, null);
 
@@ -94,6 +113,8 @@ namespace WB.UI.Headquarters.Controllers
         public ApiEndpoints Api { get; set; }
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
+        public List<QuestionnaireVersionsComboboxViewItem> Questionnaires { get; set; }
+        public int MaxInterviewsByAssignment { get; set; }
 
         public class ApiEndpoints
         {
@@ -101,11 +122,7 @@ namespace WB.UI.Headquarters.Controllers
 
             public string Profile { get; set; }
             public string Interviews { get; set; }
-            public string Questionnaire { get; set; }
-            public string QuestionnaireById { get; set; }
             public string Responsible { get; set; }
         }
     }
-
-
 }

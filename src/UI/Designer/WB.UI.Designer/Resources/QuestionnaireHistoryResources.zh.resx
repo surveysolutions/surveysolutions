@@ -153,6 +153,9 @@
   <data name="Macro_Update" xml:space="preserve">
     <value>宏{0}更新成功</value>
   </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>已更新问卷模板元数据{0}</value>
+  </data>
   <data name="NoTitle" xml:space="preserve">
     <value>无标题</value>
   </data>
@@ -229,7 +232,7 @@
     <value>二维表{0}已移至二维表{1}</value>
   </data>
   <data name="Roster_Move_To_Section" xml:space="preserve">
-    <value>二维表{0}已移至问卷子模块{1}</value>
+    <value>二维表{0}已移至问卷问卷子块{1}</value>
   </data>
   <data name="Roster_RosterBecameAGroup" xml:space="preserve">
     <value>二维表{0}已变成 问卷模块</value>
@@ -247,7 +250,7 @@
     <value>问卷模块{0}已删除</value>
   </data>
   <data name="Section_GroupBecameARoster" xml:space="preserve">
-    <value>问卷子模块 {0} 已变成二维表</value>
+    <value>问卷问卷子块 {0} 已变成二维表</value>
   </data>
   <data name="Section_Move_To_Roster" xml:space="preserve">
     <value>问卷模块{0}已移至二维表{1}</value>
@@ -304,24 +307,21 @@
     <value>用户名</value>
   </data>
   <data name="Variable_Add" xml:space="preserve">
-    <value>变量{0}已添加</value>
+    <value>计算变量{0}已添加</value>
   </data>
   <data name="Variable_Clone" xml:space="preserve">
-    <value>变量{0}由变量{1}克隆而来</value>
+    <value>计算变量{0}由变量{1}克隆而来</value>
   </data>
   <data name="Variable_Delete" xml:space="preserve">
-    <value>变量{0}已添加</value>
+    <value>计算变量{0}已添加</value>
   </data>
   <data name="Variable_Move_To_Roster" xml:space="preserve">
-    <value>变量{0}已移至二维表{1}</value>
+    <value>计算变量{0}已移至二维表{1}</value>
   </data>
   <data name="Variable_Move_To_Section" xml:space="preserve">
-    <value>变量{0}已移至问卷模块{1}</value>
+    <value>计算变量{0}已移至问卷模块{1}</value>
   </data>
   <data name="Variable_Update" xml:space="preserve">
-    <value>变量{0}已添加</value>
-  </data>
-  <data name="Metadata_Update" xml:space="preserve">
-    <value>已更新问卷模板元数据{0}</value>
+    <value>计算变量{0}已添加</value>
   </data>
 </root>

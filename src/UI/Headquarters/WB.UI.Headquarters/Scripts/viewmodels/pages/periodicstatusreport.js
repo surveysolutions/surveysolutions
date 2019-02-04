@@ -1,13 +1,18 @@
-﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl) {
+﻿Supervisor.VM.PeriodicStatusReport = function (listViewUrl, allQuestionnariesCaption, allVersionCaption, $questionnaires) {
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
+    self.$questionnaires = $questionnaires;
     var defaultFromDate = moment();
     var dateFormat = "YYYY-MM-DD";
 
     self.Url = new Url(window.location.href);
 
     self.SelectedQuestionnaire = ko.observable('');
+    self.SelectedQuestionnaireVersion = ko.observable('');
+
+    self.AllQuestionnariesCaption = allQuestionnariesCaption;
+    self.AllVersionsCaption = allVersionCaption;
 
     self.SelectedType = ko.observable(null);
 
@@ -21,9 +26,16 @@
 
     self.TotalRow = ko.observable(null);
 
-    this.QuestionnaireName = ko.observable();
+    self.QuestionnaireName = ko.observable();
+    self.QuestionnaireVersion = ko.observable();
 
-    this.ReportTypeName = ko.observable();
+    self.ReportTypeName = ko.observable();
+
+    self.questionnaires = _.chain($questionnaires).map(function(q) {
+        return { id: q.templateId, title: q.templateName};
+    }).uniqWith(_.isEqual).sortBy(function(q) { return q.templateName}).value();
+
+    self.QuestionnaireVersions = ko.observableArray([]);
 
     self.GetPeriodName = function (period) {
         return moment(period.To()).format(dateFormat);
@@ -50,13 +62,25 @@
         return formatedNumber;
     };
 
-    var updateQuestionnaireName = function (value) {
-        self.QuestionnaireName($("#questionnaireSelector option[value='" + value + "']").text());
-    }
-
-    var updateReportTypeName = function (value) {
+    var updateReportTypeName = function(value) {
         self.ReportTypeName($("#reportTypeSelector option[value='" + value + "']").text());
-    }
+    };
+
+    
+    self.filterQuestionnaireVersions = function() {
+        if (self.SelectedQuestionnaire()) {
+            var versions = _.chain(self.$questionnaires)
+                .filter({ templateId: self.SelectedQuestionnaire().id })
+                .sortBy(function(q) { return parseInt(q); })
+                .reverse()
+                .map(function(q) { return q.templateVersion; })
+                .value();
+            self.QuestionnaireVersions(versions);
+        } else {
+            self.QuestionnaireVersions([]);
+        }
+    };
+
 
     self.load = function () {
         var todayMinus7Days = defaultFromDate.format(dateFormat);
@@ -68,10 +92,14 @@
         self.Url.query['columnCount'] = self.QueryString['columnCount'] || "7";
         self.Url.query['reportType'] = self.QueryString['reportType'] || "";
 
-        self.SelectedQuestionnaire("{\"questionnaireId\": \"" + self.QueryString['questionnaireId'] + "\",\"questionnaireVersion\": \"" + self.QueryString['questionnaireVersion'] + "\"}");
+        if (self.QueryString['questionnaireId'] !== undefined) {
+            self.SelectedQuestionnaire(_.find(this.questionnaires, { id: self.QueryString['questionnaireId'] }));
+        }
+        
+        self.filterQuestionnaireVersions();
+        self.SelectedQuestionnaireVersion(self.QueryString['questionnaireVersion']);
         self.SelectedType(self.Url.query['reportType']);
 
-        updateQuestionnaireName(self.SelectedQuestionnaire());
         updateReportTypeName(self.SelectedType());
 
         var from = unescape(self.Url.query['from']);
@@ -86,7 +114,21 @@
         self.initReport();
 
         self.SelectedQuestionnaire.subscribe(function (value) {
-            updateQuestionnaireName(self.SelectedQuestionnaire());
+            if (value) {
+                var versions = _.chain(self.$questionnaires)
+                                .filter({ templateId: value.id })
+                                .sortBy(function(q) { return parseInt(q); })
+                                .reverse()
+                                .map(function (q) { return q.templateVersion; })
+                                .value();
+                self.QuestionnaireVersions(versions);
+
+            } else {
+                self.QuestionnaireVersions([]);
+            }
+            self.initReport();
+        });
+        self.SelectedQuestionnaireVersion.subscribe(function (value) {
             self.initReport();
         });
 
@@ -121,14 +163,10 @@
     };
 
     self.GetFilterMethod = function () {
-        var selectedQuestionnaire = Supervisor.Framework.Objects.isEmpty(self.SelectedQuestionnaire())
-           ? { questionnaireId: '', questionnaireVersion: '' }
-           : JSON.parse(self.SelectedQuestionnaire());
-
         var startDate = moment(self.FromDate());
 
-        self.Url.query['questionnaireId'] = selectedQuestionnaire.questionnaireId;
-        self.Url.query['questionnaireVersion'] = selectedQuestionnaire.questionnaireVersion;
+        self.Url.query['questionnaireId'] = _.isUndefined(self.SelectedQuestionnaire()) ? "" : self.SelectedQuestionnaire().id;
+        self.Url.query['questionnaireVersion'] = self.SelectedQuestionnaireVersion() || '';
         self.Url.query['from'] = startDate.format(dateFormat);
         self.Url.query['period'] = self.Period();
         self.Url.query['columnCount'] = self.ColumnCount();
@@ -138,8 +176,8 @@
             window.history.pushState({}, "Charts", self.Url.toString());
         }
         return {
-            questionnaireId: selectedQuestionnaire.questionnaireId,
-            questionnaireVersion: selectedQuestionnaire.questionnaireVersion,
+            questionnaireId: _.isUndefined(self.SelectedQuestionnaire()) ? "" : self.SelectedQuestionnaire().id,
+            questionnaireVersion: self.SelectedQuestionnaireVersion() || '',
             from: startDate.format(dateFormat),
             period: self.Period(),
             columnCount: self.ColumnCount(),

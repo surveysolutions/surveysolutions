@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_load_questionnaire_and_server_not_responding : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             mockOfDesignerApiService.Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(),
                     Moq.It.IsAny<CancellationToken>())).Returns(Task.FromResult(downloadedQuestionnaire));
@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireImportService: mockOfQuestionnaireImportService.Object,
                 viewModelNavigationService: mockOfViewModelNavigationService.Object
                 );
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
+        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(selectedQuestionnaire);
 
         [Test]
         public void should_be_downloaded_questionnaire() => mockOfDesignerApiService.Verify(

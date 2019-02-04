@@ -15,12 +15,11 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public WebTesterAggregateRootRepository(
             IInMemoryEventStore eventStore,
-            ISnapshotStore snapshotStore,
             IDomainRepository repository,
             IAggregateLock aggregateLock,
             IServiceLocator serviceLocator,
             IEvictionNotifier notify,
-            IEvictionObservable evictionNotification) : base(eventStore, eventStore, new EventBusSettings(), snapshotStore, repository, serviceLocator, aggregateLock)
+            IEvictionObservable evictionNotification) : base(eventStore, eventStore, new EventBusSettings(), repository, serviceLocator, aggregateLock)
         {
             this.notify = notify;
             Expiration = TimeSpan.FromMinutes(ConfigurationSource.Configuration["Cache.Expiration"].AsInt(10));

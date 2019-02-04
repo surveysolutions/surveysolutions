@@ -133,6 +133,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable audio recording.
+        /// </summary>
+        public static string AudioRecordingEnable {
+            get {
+                return ResourceManager.GetString("AudioRecordingEnable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process. With turning audio audit on an amount of synchronization data would be significantly larger.
+        /// </summary>
+        public static string AudioRecordingExplanation {
+            get {
+                return ResourceManager.GetString("AudioRecordingExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording settings for assignment {{id}}.
+        /// </summary>
+        public static string ChangeAudioRecordingModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeAudioRecordingModalTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit size for assignment {{assignmentId}}.
         /// </summary>
         public static string ChangeSizeModalTitle {
@@ -196,6 +223,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment can not be created. .
+        /// </summary>
+        public static string ErrorToCreateAssignment {
+            get {
+                return ResourceManager.GetString("ErrorToCreateAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifying Questions.
         /// </summary>
         public static string IdentifyingQuestions {
@@ -219,6 +255,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InvalidSize {
             get {
                 return ResourceManager.GetString("InvalidSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio recording.
+        /// </summary>
+        public static string IsAudioRecordingEnabled {
+            get {
+                return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
             }
         }
         
@@ -367,6 +412,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a questionnaire version to see its associated assignments. Select “All versions” to see assignments associated with any version of selected questionnaire..
+        /// </summary>
+        public static string Tooltip_Filter_QuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_QuestionnaireVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets..
         /// </summary>
         public static string Tooltip_Filter_Received {
@@ -417,6 +471,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_InterviewsNeeded {
             get {
                 return ResourceManager.GetString("Tooltip_Table_InterviewsNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record interview process.
+        /// </summary>
+        public static string Tooltip_Table_IsAudioRecordingEnabled {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_IsAudioRecordingEnabled", resourceCulture);
             }
         }
         

@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -428,6 +430,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private void AddNodeToCache(IInterviewTreeNode node)
         {
+            if (nodesCache.Count >= Constants.MaxTotalRosterPropagationLimit)
+            {
+                throw new InterviewException("Propagation limit exceeded", InterviewDomainExceptionType.InterviewSizeLimitReached);
+            }
+
             nodesCache[node.Identity] = node;
 
             if (!nodesIdCache.ContainsKey(node.Identity.Id))

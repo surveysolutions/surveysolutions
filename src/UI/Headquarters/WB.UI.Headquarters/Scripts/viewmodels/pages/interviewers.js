@@ -178,7 +178,7 @@
                 model.Users.AssignTo(undefined);
                 countInterviewersToMove(0);
             },
-            WhatToDoWithAssignments: ko.observable("ReassigntToOriginalSupervisor"),
+            WhatToDoWithAssignments: ko.observable("ReassignToOriginalSupervisor"),
             SelectedSupervisor: ko.observable(),
             InterviewersToMove: ko.observableArray([]),
             InterviewersToStay: ko.observableArray([])

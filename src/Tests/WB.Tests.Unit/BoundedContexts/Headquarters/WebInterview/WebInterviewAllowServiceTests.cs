@@ -12,6 +12,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
@@ -20,34 +23,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
     [TestOf(typeof(WebInterviewAllowService))]
     public class WebInterviewAllowServiceTests
     {
-        private InterviewSummary interview;
         private WebInterviewAllowService webInterviewAllowService;
-        private Guid interviewId;
-
-        private Mock<IQueryableReadSideRepositoryReader<InterviewSummary>> interviewSummaryRepoMock;
+        private Guid interviewId = Guid.NewGuid();
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
         private EventBusSettings eventBusSettings;
-
+        private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
+        private StatefulInterview interview;
 
         [SetUp]
         public void Setup()
         {
-            interviewSummaryRepoMock = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
-
+            statefulInterviewRepo = new Mock<IStatefulInterviewRepository>();
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
             eventBusSettings = new EventBusSettings();
 
             var interviewAllowService = new WebInterviewAllowService(
-                interviewSummaryRepoMock.Object, 
+                statefulInterviewRepo.Object,
                 webInterviewConfigProvider,
                 authorizedUserMock.Object,
                 eventBusSettings);
             webInterviewAllowService = interviewAllowService;
-            WebInterviewAllowService.interviewsCache.Remove(interviewId.FormatGuid());
         }
 
         private void Act()
@@ -82,16 +81,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             }
 
             if (interviewStatus.HasValue)
-            {                
-                interview = Create.Entity.InterviewSummary(responsibleId: responsibleId ?? Guid.NewGuid(), 
-                                                        status: interviewStatus.Value,
-                                                        teamLeadId: teamLeadId);
+            {
+                interview = Create.AggregateRoot.StatefulInterview(interviewId, userId: responsibleId, supervisorId: teamLeadId);
+                var @event = Create.PublishedEvent.SynchronizationMetadataApplied(userId: responsibleId.FormatGuid(),
+                    status: interviewStatus.Value);
+                interview.Apply(@event.Payload);
+                this.statefulInterviewRepo.Setup(r => r.Get(interviewId.FormatGuid())).Returns(interview);
                 
                 webInterviewConfig.Started = webInterviewEnabled;
-                
-                interviewSummaryRepoMock
-                    .Setup(s => s.GetById(It.IsAny<string>()))
-                    .Returns(interview);
             }
         }
 

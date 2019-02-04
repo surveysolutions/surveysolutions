@@ -55,7 +55,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Mask { get; set; }
         public string Answer { get; set; }
-        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class InterviewIntegerQuestion : GenericQuestion
@@ -202,6 +201,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsForSupervisor { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
+        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class Validity
@@ -240,15 +240,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public GroupStatus Status { get; set; }
 
         public Validity Validity { get; set; } = new Validity();
-        public AnswersStats Stats { get; set; }
-
-        public class AnswersStats
-        {
-            public int InvalidCount { get; set; }
-            public int AnsweredCount { get; set; }
-            public int SubSectionsCount { get; set; }
-            public bool HasUnanswered { get; set; }
-        }
     }
     
 

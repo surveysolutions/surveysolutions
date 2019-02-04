@@ -26,12 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.MultyOptionsQuestion(Id.g1, options),
                 Create.Entity.MultiRoster(Id.g2, rosterSizeQuestionId: Id.g1)
             );
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
             
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(options);
+            var filteredOptionsViewModel = SetUp.FilteredOptionsViewModel(options);
 
-            var interview = Setup.StatefulInterview(questionnaire);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interview = SetUp.StatefulInterview(questionnaire);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             userInteractionService = new Mock<IUserInteractionService>();
             userInteractionService
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var option = viewModel.Options.First();
             option.Checked = false;
-            await viewModel.ToggleAnswerAsync(option);
+            option.CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -62,11 +62,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         [Test] 
         public void should_show_confirmation_dialog ()
         {
-            var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
+            var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, "<b>'item1'</b>");
             userInteractionService.Verify(x => x.ConfirmAsync(message, "", null, null, true), Times.Once);
         }
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         private Mock<IUserInteractionService> userInteractionService;
     }
 }

@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                     assignment1, assignment2, assignment3
                 });
 
-            var service = this.GetService(assignments: assignments.Object, Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire));
+            var service = this.GetService(assignments: assignments.Object, SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire));
 
             // act
             // Act

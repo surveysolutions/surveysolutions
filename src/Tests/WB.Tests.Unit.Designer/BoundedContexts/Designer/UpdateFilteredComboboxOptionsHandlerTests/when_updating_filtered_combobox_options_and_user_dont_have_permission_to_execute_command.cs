@@ -35,6 +35,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private static Guid notExistingResponsibleId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-        private static Option[] options = new[] { new Option("1", "Option 1"), new Option("2", "Option 2") };
+        private static QuestionnaireCategoricalOption[] options = new[] { Create.QuestionnaireCategoricalOption(1, "Option 1"), Create.QuestionnaireCategoricalOption(2, "Option 2") };
     }
 }

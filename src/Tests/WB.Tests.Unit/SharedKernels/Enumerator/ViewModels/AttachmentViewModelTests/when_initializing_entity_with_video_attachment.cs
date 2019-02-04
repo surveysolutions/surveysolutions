@@ -25,11 +25,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             attachmentContentData = Create.Entity.AttachmentContentData(new byte[] { 1, 2, 3 });
             this.questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _
                 => _.GetAttachmentForEntity(entityId) == attachment);
 
             var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
                 s.GetMetadata(attachmentContentId) == attachmentContentMetadata
