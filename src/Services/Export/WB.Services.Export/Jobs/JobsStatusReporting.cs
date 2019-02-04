@@ -8,6 +8,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Export.Utils;
@@ -35,6 +36,7 @@ namespace WB.Services.Export.Jobs
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
         private readonly ILogger<JobsStatusReporting> logger;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IQuestionnaireExportStructureFactory exportStructureFactory,
@@ -42,7 +44,8 @@ namespace WB.Services.Export.Jobs
             IFileSystemAccessor fileSystemAccessor,
             IExternalFileStorage externalFileStorage,
             IDataExportFileAccessor exportFileAccessor,
-            ILogger<JobsStatusReporting> logger)
+            ILogger<JobsStatusReporting> logger,
+            ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.exportStructureFactory = exportStructureFactory;
@@ -51,6 +54,7 @@ namespace WB.Services.Export.Jobs
             this.externalFileStorage = externalFileStorage;
             this.exportFileAccessor = exportFileAccessor;
             this.logger = logger;
+            this.tenantApi = tenantApi;
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -131,9 +135,8 @@ namespace WB.Services.Export.Jobs
             };
 
             if (exportSettings.ExportFormat == DataExportFormat.Binary &&
-                !questionnaire.HeaderToLevelMap.Values.SelectMany(l =>
-                    l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q =>
-                        q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
+                !DoesExistAnyMultimediaQuestion(questionnaire) &&
+                !await DoesExistAnyAudioAuditRecords(exportSettings))
             {
                 dataExportView.CanRefreshBeRequested = false;
                 dataExportView.HasAnyDataToBePrepared = false;
@@ -177,6 +180,27 @@ namespace WB.Services.Export.Jobs
             }
 
             return dataExportView;
+        }
+
+        private async Task<bool> DoesExistAnyAudioAuditRecords(ExportSettings exportSettings)
+        {
+            var headquartersApi = tenantApi.For(exportSettings.Tenant);
+            try
+            {
+                var questionnaireAudioAuditView = await headquartersApi.DoesSupportAudioAuditAsync(exportSettings.QuestionnaireId);
+                return questionnaireAudioAuditView.HasAssignmentWithAudioRecordingEnabled;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static bool DoesExistAnyMultimediaQuestion(QuestionnaireExportStructure questionnaire)
+        {
+            return questionnaire.HeaderToLevelMap.Values.SelectMany(l =>
+                l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q =>
+                    q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any();
         }
 
 

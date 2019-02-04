@@ -467,7 +467,7 @@
     <value>Текст вопроса</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>Для обновления опций</value>
+    <value>Для обновления категорий</value>
   </data>
   <data name="QuestionVariableLabel" xml:space="preserve">
     <value>Тег переменной</value>
@@ -501,6 +501,9 @@
   </data>
   <data name="RosterVariableName" xml:space="preserve">
     <value>Ростер ID</value>
+  </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Имя переменной</value>
   </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
@@ -581,7 +584,7 @@
     <value>Вставить</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>Добавить опцию</value>
+    <value>Добавить категорию</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Поле с каскадным списком</value>
@@ -611,7 +614,7 @@
     <value>Разрешены только цифры</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>Т.к. вопрос был отмечен как "Поле со списком" or "Каскадное поле со списком" во время сохранения и содержал больше опций чем разрешено, их количество было уменьшено до {{count}}</value>
+    <value>Вопрос был отмечен как "Поле со списком" или "Каскадное поле со списком" во время сохранения и содержал больше категорий, чем разрешено, их количество было уменьшено до {{count}}</value>
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Сохранять порядок ответов</value>
@@ -623,7 +626,7 @@
     <value>Показать строки</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>Загрузить опции</value>
+    <value>Загрузить категории</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Использовать 1000 разделитель</value>
@@ -846,7 +849,7 @@
     <value>Применить</value>
   </data>
   <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>Опции не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} опций.</value>
+    <value>Категории не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} категорий.</value>
   </data>
   <data name="OptionsUploadTitle" xml:space="preserve">
     <value>Название</value>
@@ -1132,7 +1135,7 @@
     <value>Переменная опросника</value>
   </data>
   <data name="HelpCombobox" xml:space="preserve">
-    <value>Комбобокс - это комбинация выпадающего списка и однострочного текстового поля. Опции могут быть выбраны либо непостредственно из списка, либо набором значиния в поле</value>
+    <value>Комбобокс - это комбинация выпадающего списка и однострочного текстового поля. Категории могут быть выбраны либо непостредственно из списка, либо набором значиния в поле</value>
   </data>
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
     <value>Переменная опросника используется как префикс для формирования имени экспортных файлов. Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
@@ -1140,19 +1143,98 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
   </data>
-    <data name="QuestionDefaultDate" xml:space="preserve">
+  <data name="QuestionDefaultDate" xml:space="preserve">
     <value>Дата по умолчанию</value>
   </data>
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Выбранный файл не поддерживается во вложениях</value>
-  </data>    
-    <data name="HelpDefaultDate" xml:space="preserve">
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
     <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
-    </data>
+  </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Скрывать элемент когда он выключен</value>
   </data>
   <data name="HideIfDisabledNested" xml:space="preserve">
     <value>Унаследовано от опросника</value>
+  </data>
+    <data name="PlainRoster" xml:space="preserve">
+    <value>Режим списка</value>
+    <comment>Режим списка</comment>
+  </data>
+    <data name="HelpPlainRoster" xml:space="preserve">
+    <value>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</value>
+    <comment>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</comment>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>Все классификации</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Показать категории</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Банк вопросов. Классификации</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Только первые {{count}} категорий  будут вставлены в вопрос "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Найти классификацию</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Вы уверены, что хотите заменить существующие категории в вопросе "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Найти классификацию</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Мои классификации</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Все папки</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Добавить классификацию</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Добавить группу</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Группы</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Заголовок группы</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Введите категории</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Название категории</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Поиск вопроса</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Поиск вопроса</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>классификаций</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>элементов</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Банк вопросов</value>
+  </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать категории</value>
+    <comment>Редактировать категории</comment>
+  </data>
+    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Редактировать каскадные категории </value>
+    <comment>Редактировать каскадные категории </comment>
   </data>
 </root>

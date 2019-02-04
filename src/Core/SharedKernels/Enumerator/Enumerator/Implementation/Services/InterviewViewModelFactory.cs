@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -57,53 +58,93 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
+            PlainRoster = 600
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IEnumeratorSettings settings;
+        protected readonly IServiceLocator ServiceLocator;
 
-        private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
-            new Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>>
+
+        private Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> entityTypeToViewModelMap;
+        private Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap
+        {
+            get
             {
-                { InterviewEntityType.StaticTextModel, Load<StaticTextViewModel> },
-                { InterviewEntityType.IntegerNumericQuestionModel, Load<IntegerQuestionViewModel> },
-                { InterviewEntityType.RealNumericQuestionModel, Load<RealQuestionViewModel> },
-                { InterviewEntityType.TextQuestionModel, Load<TextQuestionViewModel> },
-                { InterviewEntityType.TextListQuestionModel, Load<TextListQuestionViewModel> },
-                { InterviewEntityType.SingleOptionQuestionModel, Load<SingleOptionQuestionViewModel> },
-                { InterviewEntityType.LinkedSingleOptionQuestionModel, Load<SingleOptionLinkedQuestionViewModel> },
-                { InterviewEntityType.LinkedToRosterSingleOptionQuestionModel, Load<SingleOptionRosterLinkedQuestionViewModel> },
-                { InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel, Load<SingleOptionLinkedToListQuestionViewModel> },
-                { InterviewEntityType.LinkedToRosterMultiOptionQuestionModel, Load<MultiOptionLinkedToRosterQuestionViewModel> },
-                { InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel, Load<MultiOptionLinkedToListQuestionQuestionViewModel> },
-                { InterviewEntityType.FilteredSingleOptionQuestionModel, Load<FilteredSingleOptionQuestionViewModel> },
-                { InterviewEntityType.CascadingSingleOptionQuestionModel, Load<CascadingSingleOptionQuestionViewModel> },
-                { InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel> },
-                { InterviewEntityType.MultiOptionQuestionModel, Load<MultiOptionQuestionViewModel> },
-                { InterviewEntityType.LinkedMultiOptionQuestionModel, Load<MultiOptionLinkedToRosterQuestionQuestionViewModel> },
-                { InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel> },
-                { InterviewEntityType.MultimediaQuestionModel, Load<MultimediaQuestionViewModel> },
-                { InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel> },
-                { InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel> },
-                { InterviewEntityType.GroupModel, Load<GroupViewModel> },
-                { InterviewEntityType.RosterModel, Load<RosterViewModel>},
-                { InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
-                { InterviewEntityType.VariableModel, Load<VariableViewModel>},
-                { InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
-                { InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel> },
-                { InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel> },
-            };
+                if (entityTypeToViewModelMap == null)
+                {
+                    this.entityTypeToViewModelMap = new Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>>
+                    {
+                        {InterviewEntityType.StaticTextModel, Load<StaticTextViewModel>},
+                        {InterviewEntityType.IntegerNumericQuestionModel, Load<IntegerQuestionViewModel>},
+                        {InterviewEntityType.RealNumericQuestionModel, Load<RealQuestionViewModel>},
+                        {InterviewEntityType.TextQuestionModel, Load<TextQuestionViewModel>},
+                        {InterviewEntityType.TextListQuestionModel, Load<TextListQuestionViewModel>},
+                        {InterviewEntityType.SingleOptionQuestionModel, Load<SingleOptionQuestionViewModel>},
+                        {
+                            InterviewEntityType.LinkedSingleOptionQuestionModel,
+                            Load<SingleOptionLinkedQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.LinkedToRosterSingleOptionQuestionModel,
+                            Load<SingleOptionRosterLinkedQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.LinkedToListQuestionSingleOptionQuestionModel,
+                            Load<SingleOptionLinkedToListQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.LinkedToRosterMultiOptionQuestionModel,
+                            Load<CategoricalMultiLinkedToRosterTitleViewModel>
+                        },
+                        {
+                            InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel,
+                            Load<CategoricalMultiLinkedToListViewModel>
+                        },
+                        {
+                            InterviewEntityType.FilteredSingleOptionQuestionModel,
+                            Load<FilteredSingleOptionQuestionViewModel>
+                        },
+                        {
+                            InterviewEntityType.CascadingSingleOptionQuestionModel,
+                            Load<CascadingSingleOptionQuestionViewModel>
+                        },
+                        {InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel>},
+                        {InterviewEntityType.MultiOptionQuestionModel, Load<CategoricalMultiViewModel>},
+                        {
+                            InterviewEntityType.LinkedMultiOptionQuestionModel,
+                            Load<CategoricalMultiLinkedToQuestionViewModel>
+                        },
+                        {InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel>},
+                        {InterviewEntityType.MultimediaQuestionModel, Load<MultimediaQuestionViewModel>},
+                        {InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel>},
+                        {InterviewEntityType.YesNoQuestionModel, Load<CategoricalYesNoViewModel>},
+                        {InterviewEntityType.GroupModel, Load<GroupViewModel>},
+                        {InterviewEntityType.RosterModel, Load<RosterViewModel>},
+                        {InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
+                        {InterviewEntityType.VariableModel, Load<VariableViewModel>},
+                        {InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
+                        {InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel>},
+                        {InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel>},
+                        {InterviewEntityType.PlainRoster, Load<PlainRosterViewModel>},
+                    };
+                }
 
-        private static T Load<T>() where T : class => ServiceLocator.Current.GetInstance<T>();
+                return entityTypeToViewModelMap;
+            }
+        }
 
-        public InterviewViewModelFactory(
-            IQuestionnaireStorage questionnaireRepository,
+        private T Load<T>() where T : class => this.ServiceLocator.GetInstance<T>();
+
+        public InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IEnumeratorSettings settings)
+            IEnumeratorSettings settings, 
+            IServiceLocator serviceLocator)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.settings = settings;
+            this.ServiceLocator = serviceLocator;
         }
 
         public List<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -163,7 +204,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (questionnaire.HasGroup(entityId))
             {
-                return questionnaire.IsRosterGroup(entityId) ? InterviewEntityType.RosterModel : InterviewEntityType.GroupModel;
+                if (questionnaire.IsRosterGroup(entityId))
+                    return questionnaire.IsPlainRoster(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
+                else
+                    return InterviewEntityType.GroupModel;
             }
 
             if (questionnaire.HasQuestion(entityId))
@@ -244,6 +288,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
 
             throw new ArgumentException("Don't found type for entity : " + entityId);
+        }
+
+        public IInterviewEntityViewModel GetEntity(Identity identity,
+            string interviewid, 
+            NavigationState navigationState)
+        {
+            var interview = this.interviewRepository.Get(interviewid);
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            var modelType = GetEntityModelType(identity, questionnaire, interview);
+
+            return CreateInterviewEntityViewModel(identity, modelType, interviewid, navigationState);
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(

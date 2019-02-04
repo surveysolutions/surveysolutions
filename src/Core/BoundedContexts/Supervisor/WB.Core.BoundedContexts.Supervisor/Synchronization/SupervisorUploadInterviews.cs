@@ -21,9 +21,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             IImageFileStorage imagesStorage, 
             IAudioFileStorage audioFileStorage,
             ISynchronizationService synchronizationService, 
+            IAudioAuditFileStorage audioAuditFileStorage,
             int sortOrder,
             IPlainStorage<InterviewView> interviewViewRepository) : base(interviewFactory,
-            interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, sortOrder)
+            interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
         }

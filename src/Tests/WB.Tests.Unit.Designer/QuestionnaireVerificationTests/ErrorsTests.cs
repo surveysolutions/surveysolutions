@@ -18,6 +18,25 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
 
         [Test]
+        public void when_sub_section_title_has_markdown_link()
+         => Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.NumericIntegerQuestion(Id.g1, variable: "q1"),
+                Create.Group(groupId: Id.gA, title: "Sub-section [move to q1](q1)")
+            }).ExpectError("WB0057");
+
+        [Test]
+        public void when_section_title_has_markdown_link()
+            => Create.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Group(groupId: Id.gA, children:  new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(Id.g1, variable: "q1"),
+                }),
+                Create.Group(groupId: Id.gB, title: "Section [move to q1](q1)")
+            }).ExpectError("WB0057");
+
+        [Test]
         public void questionnaire_variable_and_roster_has_the_same_name()
             => Create.QuestionnaireDocument("questionnaire_var", Id.gA, "title", children: new IComposite[] {
                     Create.Group(Id.gB, children: new IComposite[]

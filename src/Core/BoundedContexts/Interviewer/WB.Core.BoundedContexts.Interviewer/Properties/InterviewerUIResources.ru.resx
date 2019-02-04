@@ -457,13 +457,7 @@
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Назначено {0}</value>
   </data>
-    <data name="Diagnostics_Support_Package_Description" xml:space="preserve">
-    <value>Сохранить нужную информацию в файл на устройстве.</value>
-  </data>
-    <data name="Diagnostics_Support_Package_Title" xml:space="preserve">
-    <value>Сгенерировать пакет для службы поддержки</value>
-  </data>
-  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>Мы проверим наличие новой версии на сервере</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
@@ -830,5 +824,9 @@
   </data>
   <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
     <value>Состояине Bluetooth передатчика не может быть корректно определено приложением. Пожалуйста перезагрузите оба приложения (Interviewer и Supervisor) и попробуйте синхронизировать</value>
+  </data>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Обновить</value>
+    <comment>Обновить</comment>
   </data>
 </root>

@@ -498,9 +498,6 @@
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>Tipo: {0}</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>Base de datos</value>
-  </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{0} cargado {1} descargado</value>
   </data>

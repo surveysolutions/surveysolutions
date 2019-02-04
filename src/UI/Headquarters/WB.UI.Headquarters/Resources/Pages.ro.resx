@@ -507,9 +507,6 @@
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>Tip: {0}</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>Bază de date</value>
-  </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{0} încărcat, {1} descărcat</value>
   </data>
@@ -738,7 +735,7 @@
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
     <value>Neactualizat</value>
   </data>
-  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+  <data name="Interviewers_ReassignToOriginalSupervisor" xml:space="preserve">
     <value>Controlorul devine responsabil pentru sarcinile și interviurile anchetatorului mutat.</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">

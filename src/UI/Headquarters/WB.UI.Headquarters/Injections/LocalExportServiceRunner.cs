@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Headquarters.Injections
@@ -14,18 +15,19 @@ namespace WB.UI.Headquarters.Injections
         private readonly string servicePath;
         private readonly string serviceExe;
         private readonly ILogger logger;
+        private readonly InterviewDataExportSettings exportSettings;
         private readonly TaskCompletionSource<bool> tsc;
 
-        public LocalExportServiceRunner(ILogger logger)
+        public LocalExportServiceRunner(ILogger logger, InterviewDataExportSettings exportSettings)
         {
             this.logger = logger;
+            this.exportSettings = exportSettings;
 
             if (HttpContext.Current != null)
             {
                 var httpCtx = HttpContext.Current;
                 servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
                 serviceExe = Path.Combine(servicePath, "WB.Services.Export.Host.exe");
-               
             }
 
             this.tsc = new TaskCompletionSource<bool>();
@@ -39,7 +41,7 @@ namespace WB.UI.Headquarters.Injections
                     .Select(HttpContext.Current.Server.MapPath)
                     .Reverse());
             
-            var processStartInfo = new ProcessStartInfo(serviceExe, $"--console --webConfigs=\"{webConfigs}\"")
+            var processStartInfo = new ProcessStartInfo(serviceExe, $"--console --urls={exportSettings.ExportServiceUrl} --webConfigs=\"{webConfigs}\"")
             {
                 WorkingDirectory = servicePath,
                 UseShellExecute = false,

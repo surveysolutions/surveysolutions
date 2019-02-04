@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                     Create.Entity.TextQuestion(Id.gB)
                 }));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             var interviewerId = Guid.Parse("77777777777777777777777777777777");
 
             interview.AnswerTextQuestion(interviewerId, Id.gB, Create.Entity.RosterVector(1), DateTime.UtcNow, "answer1");

@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             IQuestionnaireHelper questionnaireHelper = null,
             IQuestionnaireViewFactory questionnaireViewFactory = null,
             ILogger logger = null,
-            IQuestionnaireInfoFactory questionnaireInfoFactory = null)
+            IQuestionnaireInfoFactory questionnaireInfoFactory = null,
+            ICategoricalOptionsImportService categoricalOptionsImportService = null)
         {
             return new QuestionnaireController(commandService ?? Mock.Of<ICommandService>(),
                 userHelper ?? Mock.Of<IMembershipUserService>(),
@@ -39,7 +40,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
-                Mock.Of<IPublicFoldersStorage>());
+                Mock.Of<IPublicFoldersStorage>(), 
+                categoricalOptionsImportService ?? Mock.Of<ICategoricalOptionsImportService>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)

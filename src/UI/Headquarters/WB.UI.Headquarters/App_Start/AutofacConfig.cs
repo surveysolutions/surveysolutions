@@ -197,7 +197,6 @@ namespace WB.UI.Headquarters
                 
                 new OrmModule(connectionSettings),
 
-                new EventSourcedInfrastructureModule(),
                 new InfrastructureModule(),
                 new NcqrsModule(),
                 new WebConfigurationModule(),

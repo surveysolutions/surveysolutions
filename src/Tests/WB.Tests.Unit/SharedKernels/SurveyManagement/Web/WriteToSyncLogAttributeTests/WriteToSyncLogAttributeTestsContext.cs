@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
     {
         public static void SetupContext(IPlainStorageAccessor<SynchronizationLogItem> accessor = null)
         {
-            Setup.InstanceToMockedServiceLocator(accessor?? new Mock<IPlainStorageAccessor<SynchronizationLogItem>>().Object);
+            SetUp.InstanceToMockedServiceLocator(accessor?? new Mock<IPlainStorageAccessor<SynchronizationLogItem>>().Object);
         }
 
         public static WriteToSyncLogAttribute Create(SynchronizationLogType logType)

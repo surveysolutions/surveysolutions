@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             transferProgress,
                             cancellationToken);
 
-                        this.attachmentContentStorage.Store(attachmentContent);
+                        await this.attachmentContentStorage.StoreAsync(attachmentContent);
                     }
                 }
 

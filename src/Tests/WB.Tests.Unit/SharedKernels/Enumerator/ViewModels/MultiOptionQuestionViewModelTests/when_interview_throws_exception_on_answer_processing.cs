@@ -29,10 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.MultyOptionsQuestion(Id.g1, options),
                 Create.Entity.MultiRoster(Id.g2, rosterSizeQuestionId: Id.g1)
             );
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var interview = Setup.StatefulInterview(questionnaire);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interview = SetUp.StatefulInterview(questionnaire);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             var answeringViewModel = new Mock<AnsweringViewModel>();
             answeringViewModel
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel = CreateViewModel(
                 questionnaireStorage: questionnaireStorage,
                 interviewRepository: interviewRepository,
-                filteredOptionsViewModel: Setup.FilteredOptionsViewModel(options),
+                filteredOptionsViewModel: SetUp.FilteredOptionsViewModel(options),
                 answeringViewModel: answeringViewModel.Object);
 
             interview.AnswerMultipleOptionsQuestion(Id.gF, Id.g1, RosterVector.Empty, DateTimeOffset.UtcNow, new [] { 1, 3 });
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             var option = viewModel.Options.Second();
             option.Checked = true;
-            await viewModel.ToggleAnswerAsync(option);
+            option.CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -63,6 +63,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel.Options.ElementAt(3).Checked.Should().BeFalse();
         }
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
     }
 }

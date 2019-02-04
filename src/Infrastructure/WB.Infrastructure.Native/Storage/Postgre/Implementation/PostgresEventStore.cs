@@ -21,7 +21,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     public class PostgresEventStore  : IHeadquartersEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
-        private static long lastUsedGlobalSequence = -1;
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
         
@@ -124,7 +123,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             ValidateStreamVersion(eventStream, connection);
 
             var copyFromCommand =
-                $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
+                $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, value, eventsequence, eventtype) FROM STDIN BINARY;";
             var npgsqlConnection = connection.Connection as NpgsqlConnection;
 
             using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
@@ -133,14 +132,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
                         EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
-                    var nextSequence = this.GetNextSequence();
 
                     writer.StartRow();
                     writer.Write(@event.EventIdentifier, NpgsqlDbType.Uuid);
                     writer.Write(@event.Origin, NpgsqlDbType.Text);
                     writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
                     writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
-                    writer.Write(nextSequence, NpgsqlDbType.Integer);
                     writer.Write(eventString, NpgsqlDbType.Jsonb);
                     writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
                     writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
@@ -151,7 +148,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         @event.EventSourceId,
                         @event.EventSequence,
                         @event.EventTimeStamp,
-                        nextSequence,
+                        null,
                         @event.Payload);
                     result.Add(committedEvent);
                 }
@@ -272,7 +269,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
         {
-
             var rawEventsData = await this.sessionProvider.Session.Connection
                 .QueryAsync<RawEvent>
                  ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
@@ -282,9 +278,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                    LIMIT @batchSize", 
                    new { minVersion = startWithGlobalSequence, batchSize = pageSize });
 
-            var events = ToCommittedEvent(rawEventsData).ToList();
+            var globalSequence = await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
 
-            return new EventsFeedPage(GetLastGlobalSequence(), events);
+            var events = ToCommittedEvent(rawEventsData).ToList();
+            
+            return new EventsFeedPage(globalSequence, events);
         }
 
         private IEnumerable<CommittedEvent> ToCommittedEvent(IEnumerable<RawEvent> rawEventsData)
@@ -323,42 +321,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     raw.globalSequence,
                     typedEvent
                 );
-            }
-        }
-
-        private long GetNextSequence()
-        {
-            GetLastGlobalSequence();
-
-            return Interlocked.Increment(ref lastUsedGlobalSequence);
-        }
-
-        private long GetLastGlobalSequence()
-        {
-            if (lastUsedGlobalSequence == -1)
-            {
-                lock (lockObject)
-                {
-                    if (lastUsedGlobalSequence == -1)
-                    {
-                        this.FillLastUsedSequenceInEventStore();
-                    }
-                }
-            }
-
-            return lastUsedGlobalSequence;
-        }
-
-        private void FillLastUsedSequenceInEventStore()
-        {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = $"select MAX(globalsequence) from {tableNameWithSchema}";
-
-                var scalar = command.ExecuteScalar();
-                lastUsedGlobalSequence = scalar is DBNull ? 0 : Convert.ToInt32(scalar);
             }
         }
     }

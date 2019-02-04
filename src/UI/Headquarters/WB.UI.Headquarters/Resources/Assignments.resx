@@ -288,4 +288,25 @@
   <data name="AssignTo" xml:space="preserve">
     <value>Assign to</value>
   </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Select a questionnaire version to see its associated assignments. Select “All versions” to see assignments associated with any version of selected questionnaire.</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>Assignment can not be created. </value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Audio recording</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Record interview process</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Audio recording settings for assignment {{id}}</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Enable audio recording</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>When enabled, interviewer application will record interview process. With turning audio audit on an amount of synchronization data would be significantly larger</value>
+  </data>
 </root>

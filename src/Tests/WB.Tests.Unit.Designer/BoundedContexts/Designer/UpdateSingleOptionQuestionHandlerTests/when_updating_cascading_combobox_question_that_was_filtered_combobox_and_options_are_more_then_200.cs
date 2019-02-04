@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId : null
             );
 
-            questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, oldOptions);
+            questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, oldOptions.Select(x=> Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
             BecauseOf();
         }
 

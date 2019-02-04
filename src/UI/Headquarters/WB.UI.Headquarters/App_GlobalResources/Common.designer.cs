@@ -124,6 +124,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All versions.
+        /// </summary>
+        internal static string AllVersions {
+            get {
+                return ResourceManager.GetString("AllVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Rights Reserved.
         /// </summary>
         internal static string AlRightsReserved {
@@ -448,6 +457,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire version.
+        /// </summary>
+        internal static string QuestionnaireVersion {
+            get {
+                return ResourceManager.GetString("QuestionnaireVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Received by Interviewer.
         /// </summary>
         internal static string ReceivedByInterviewer {
@@ -471,6 +489,15 @@ namespace Resources {
         internal static string Reject {
             get {
                 return ResourceManager.GetString("Reject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
             }
         }
         
@@ -507,6 +534,15 @@ namespace Resources {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire.
+        /// </summary>
+        internal static string SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
             }
         }
         

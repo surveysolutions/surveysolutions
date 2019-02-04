@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s options..
+        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s categories..
         /// </summary>
         public static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options filter expression has length more than {0} characters..
+        ///   Looks up a localized string similar to Categories filter expression has length more than {0} characters..
         /// </summary>
         public static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
@@ -314,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with options filter expression cannot be identifying..
+        ///   Looks up a localized string similar to Question with categories filter expression cannot be identifying..
         /// </summary>
         public static string WB0029_QuestionWithOptionsFilterCannotBePrefilled {
             get {
@@ -458,7 +458,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has option(s) with empty value..
+        ///   Looks up a localized string similar to Question has categories with empty value..
         /// </summary>
         public static string WB0045_QuestionHasOptionsWithEmptyValue {
             get {
@@ -566,6 +566,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Links are prohibited on navigation elements: sections, sub-sections, rosters.
+        /// </summary>
+        public static string WB0057_LinksAreProhibitedOnNavigationElements {
+            get {
+                return ResourceManager.GetString("WB0057_LinksAreProhibitedOnNavigationElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
         public static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
@@ -584,7 +593,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has less than {0} options..
+        ///   Looks up a localized string similar to Question has less than {0} categories..
         /// </summary>
         public static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
@@ -683,7 +692,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option titles must be unique..
+        ///   Looks up a localized string similar to Categories titles must be unique..
         /// </summary>
         public static string WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion {
             get {
@@ -692,7 +701,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option values must be unique..
+        ///   Looks up a localized string similar to Categories values must be unique..
         /// </summary>
         public static string WB0073_OptionValuesMustBeUniqueForCategoricalQuestion {
             get {
@@ -701,7 +710,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question cannot have options and be linked to another question..
+        ///   Looks up a localized string similar to Categorical question cannot have categories and be linked to another question..
         /// </summary>
         public static string WB0074_CategoricalQuestionHasOptionsAndIsLinked {
             get {
@@ -710,7 +719,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than {0} options..
+        ///   Looks up a localized string similar to Contains more than {0} categories..
         /// </summary>
         public static string WB0075_FilteredComboboxContainsMoreThan5000Options {
             get {
@@ -719,7 +728,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than {0} options..
+        ///   Looks up a localized string similar to Contains more than {0} categories..
         /// </summary>
         public static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
@@ -791,7 +800,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options in child cascading combo box question should reference only existing option in parent question..
+        ///   Looks up a localized string similar to Categories in child cascading combo box question should reference only existing option in parent question..
         /// </summary>
         public static string WB0084_CascadingOptionsShouldHaveParent {
             get {
@@ -827,7 +836,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have less than {0} options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than {0} categories..
         /// </summary>
         public static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -836,7 +845,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value options list..
+        ///   Looks up a localized string similar to Cascading combo box question should have unique value and parent value list of categories..
         /// </summary>
         public static string WB0089_CascadingQuestionOptionWithParentShouldBeUnique {
             get {
@@ -1079,7 +1088,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked to list question doen&apos;t support options filter.
+        ///   Looks up a localized string similar to Linked to list question doesn&apos;t support categories filter.
         /// </summary>
         public static string WB0117_LinkedToTextListQuestionDoesNotSupportFilters {
             get {
@@ -1169,7 +1178,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
+        ///   Looks up a localized string similar to There is at least one duplicate of &quot;Title&quot; and &quot;Parent Value&quot; pairs. The list should not contain any duplicates..
         /// </summary>
         public static string WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
@@ -1187,7 +1196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        ///   Looks up a localized string similar to Category title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
         /// </summary>
         public static string WB0129_AnswerTitleIsTooLong {
             get {
@@ -1439,7 +1448,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with {0} options. Consider one multiple choice question..
+        ///   Looks up a localized string similar to Multiple consecutive unconditional single-select question with {0} categories. Consider one multiple choice question..
         /// </summary>
         public static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
             get {
@@ -1466,7 +1475,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single-choice question is marked as identifying. Consider using a text question..
+        ///   Looks up a localized string similar to Single-select question is marked as identifying. Consider using a text question..
         /// </summary>
         public static string WB0222_SingleOptionPrefilled {
             get {
@@ -1520,7 +1529,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question has nonconsecutive option codes. Check for omitted options..
+        ///   Looks up a localized string similar to Categorical question has nonconsecutive categories codes. Check for omitted categories..
         /// </summary>
         public static string WB0228_OmittedOptions {
             get {
@@ -1547,7 +1556,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multichoice question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
+        ///   Looks up a localized string similar to Multi select question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
         /// </summary>
         public static string WB0231_MultiOptionWithMoreThan20Options {
             get {
@@ -1858,6 +1867,42 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore {
             get {
                 return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain mode allowed only for rosters with no more than {0} elements..
+        /// </summary>
+        public static string WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements {
+            get {
+                return ResourceManager.GetString("WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain mode doesn&apos;t allow to use nested rosters..
+        /// </summary>
+        public static string WB0279_PlainModeGroupContainsNestedGroup {
+            get {
+                return ResourceManager.GetString("WB0279_PlainModeGroupContainsNestedGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text contains a link to an unknown question, subsection, roster or pdf attachment..
+        /// </summary>
+        public static string WB0280_TextContainsLinkToUnknownQuestionOrGroup {
+            get {
+                return ResourceManager.GetString("WB0280_TextContainsLinkToUnknownQuestionOrGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit of number of questions in single interview exceeded. Consider reducing number of instances generated by rosters..
+        /// </summary>
+        public static string WB0281_QuestionnaireExceededEntitiesLimit {
+            get {
+                return ResourceManager.GetString("WB0281_QuestionnaireExceededEntitiesLimit", resourceCulture);
             }
         }
     }

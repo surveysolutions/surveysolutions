@@ -81,7 +81,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     data.Add(new string[]
                     {
                         diagInfo.InterviewKey,
-                        diagInfo.InterviewId.ToString(),
+                        diagInfo.InterviewId.FormatGuid(),
                         ((int)diagInfo.Status).ToString(),
                         diagInfo.ResponsibleName,
                         diagInfo.NumberOfInterviewers.ToString(),

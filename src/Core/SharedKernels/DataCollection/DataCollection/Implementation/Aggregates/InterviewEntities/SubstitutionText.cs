@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
-using System.Web;
+using CommonMark;
+using CommonMark.Syntax;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -28,9 +29,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             ISubstitutionService substitutionService,
             IVariableToUIStringService variableToUiStringService)
         {
-            this.Text = text;
-            this.BrowserReadyText = text;
-            this.originalText = text;
+            var markdownReplacedText = string.IsNullOrEmpty(text) ? text : MarkdownTextToHtml(text);
+
+            this.Text = markdownReplacedText;
+            this.BrowserReadyText = markdownReplacedText;
+            this.originalText = markdownReplacedText;
             this.identity = identity;
             this.substitutionService = substitutionService;
             this.variableToUiStringService = variableToUiStringService;
@@ -114,6 +117,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
 
             return textWithReplacedSubstitutions;
+        }
+
+        private static string MarkdownTextToHtml(string text)
+        {
+            var settings = CommonMarkSettings.Default.Clone();
+            settings.OutputFormat = OutputFormat.CustomDelegate;
+            settings.OutputDelegate = (doc, output, s) =>
+            {
+                // this magic should be here because markdown engine wraps up text into paragraph which breaks down layout of our interview.
+                // in our case we just ignore auto generated paragraph
+                if (doc.FirstChild?.Tag == BlockTag.Paragraph)
+                    doc.FirstChild.Tag = BlockTag.Document;
+
+                new CommonMark.Formatters.HtmlFormatter(output, s).WriteDocument(doc);
+            };
+
+            return CommonMarkConverter.Convert(text, settings);
         }
 
         public override string ToString() => this.Text;

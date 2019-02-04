@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 })
             });
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
 
             var interviews = Create.Fake.StatefulInterviewRepositoryWith(interview);
@@ -41,10 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             interview.AnswerTextQuestion(userId, linkedToQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, "some answer");
 
             questionViewModel = CreateViewModel(interviewRepository: interviews, questionnaireStorage: questionnaires, answering:answering.Object);
-            questionViewModel.Init("interviewId", questionId, Create.Other.NavigationState());
+            questionViewModel.Init(interview.Id.FormatGuid(), questionId, Create.Other.NavigationState());
 
             questionViewModel.Options.First().Checked = true;
-            questionViewModel.ToggleAnswerAsync(questionViewModel.Options.First()).WaitAndUnwrapException();
+            questionViewModel.Options.First().CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
                 c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.Identical(questionViewModel.Options.First().Value)))));
 
-        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
+        static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity questionId;
         static Mock<AnsweringViewModel> answering;
     }

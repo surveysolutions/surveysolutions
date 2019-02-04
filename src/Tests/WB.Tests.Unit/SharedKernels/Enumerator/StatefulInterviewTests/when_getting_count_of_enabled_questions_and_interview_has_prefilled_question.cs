@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.TextQuestion(questionId, variable: "q1"), 
                 Create.Entity.TextQuestion(prefilledQuestionId, variable: "q2", preFilled: true));
 
-            var statefulInterview = Setup.StatefulInterview(questionnaire);
+            var statefulInterview = SetUp.StatefulInterview(questionnaire);
             //act
             var countActiveQuestionsInInterview = statefulInterview.CountActiveQuestionsInInterview();
             //assert

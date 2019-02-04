@@ -34,14 +34,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public class StatusDurationRequest : DataTableRequest
         {
-            public string QuestionnaireId { get; set; }
+            public Guid? QuestionnaireId { get; set; }
+            public long? QuestionnaireVersion { get; set; }
             public Guid? SupervisorId { get; set; }
             public int Timezone { get; set; }
         }
 
         public class DeviceInterviewersFilter : DataTableRequest
         {
-
+            public Guid? SupervisorId { get; set; }
         }
 
         public class SurveysAndStatusesFilter : DataTableRequest

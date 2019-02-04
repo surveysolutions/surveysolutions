@@ -139,13 +139,13 @@
     <value>No es posible eliminar el usuario ya que no se encuentra en la lista de trabajo</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Las opciones de preguntas en cascada no pueden tener nula la columna Parent Value</value>
+    <value>Las categorías de pregunta en cascada no pueden tener una columna de valor padre vacía.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Las opciones de preguntas en cascada no pueden tener un valor numerico en la columna ParentValue</value>
+    <value>Las categorías de preguntas en cascada no pueden tener un valor numerico en la columna ParentValue</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Existe al menos un duplicado en cuanto a Titulo + Valor del Padre. La lista de opciones no debe contener ningún tipo de duplicados</value>
+    <value>Existe al menos un duplicado en cuanto a Titulo + Valor del Padre. La lista no debe contener ningún tipo de duplicados</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>No se ha encontrado ninguna pregunta en la caja combo con la llave {0}</value>
@@ -226,7 +226,7 @@
     <value>En este momento solo se encuentran soportados documentos asociados a cuestionarios</value>
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
-    <value>El valor de la opción solo puede contener caracteres numéricos </value>
+    <value>El valor de la categoría debe tener solo caracteres numéricos</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>No fue posible encontrar la pregunta con el id {0}</value>

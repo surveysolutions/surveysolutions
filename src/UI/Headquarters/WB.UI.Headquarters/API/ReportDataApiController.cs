@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -145,12 +146,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public ComboboxOptionModel[] QuestionInfo(string id)
+        public List<string> QuestionInfo(Guid id, long? version)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-
-            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(questionnaireIdentity);
-            return variables.Select(x => new ComboboxOptionModel(x, x)).ToArray();
+            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(id, version);
+            return variables;
         }
 
         [HttpGet]
@@ -379,7 +378,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public HttpResponseMessage SupervisorSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
+        public HttpResponseMessage SupervisorSurveysAndStatusesReport(Guid? id = null,[FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
         {
             var teamLeadName = this.authorizedUser.UserName;
             var input = new SurveysAndStatusesReportInputModel
@@ -389,6 +388,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 PageSize = filter.PageSize,
                 Orders = filter.ToOrderRequestItems(),
                 ResponsibleName = filter.ResponsibleName == teamLeadName ? null : filter.ResponsibleName,
+                QuestionnaireId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -415,14 +415,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [CamelCase]
-        public HttpResponseMessage HeadquarterSurveysAndStatusesReport([FromUri]SurveysAndStatusesFilter filter, [FromUri]string exportType = null)
+        public HttpResponseMessage HeadquarterSurveysAndStatusesReport(Guid? id = null, [FromUri]SurveysAndStatusesFilter filter = null, [FromUri]string exportType = null)
         {
             var input = new SurveysAndStatusesReportInputModel
             {
                 Orders = filter.ToOrderRequestItems(),
                 Page = filter.PageIndex,
                 PageSize = filter.PageSize,
-                TeamLeadName = filter.ResponsibleName
+                TeamLeadName = filter.ResponsibleName,
+                QuestionnaireId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -451,14 +452,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, [FromUri]string exportType = null)
+        public async Task<HttpResponseMessage> DeviceInterviewers([FromUri]DeviceInterviewersFilter request, Guid? id = null, 
+            [FromUri]string exportType = null)
         {
             var input = new DeviceByInterviewersReportInputModel
             {
                 Filter = request.Search.Value,
                 Orders = request.GetSortOrderRequestItems(),
                 Page = request.Start,
-                PageSize = request.Length
+                PageSize = request.Length,
+                SupervisorId = id
             };
 
             if (!string.IsNullOrEmpty(exportType))
@@ -507,15 +510,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Orders = request.GetSortOrderRequestItems(),
                 MinutesOffsetToUtc = request.Timezone,
-                SupervisorId = request.SupervisorId
+                SupervisorId = request.SupervisorId,
+                TemplateId = request.QuestionnaireId,
+                TemplateVersion = request.QuestionnaireVersion
             };
-
-            if (!string.IsNullOrEmpty(request.QuestionnaireId))
-            {
-                var questionnaireIdentity = QuestionnaireIdentity.Parse(request.QuestionnaireId);
-                input.TemplateVersion = questionnaireIdentity.Version;
-                input.TemplateId = questionnaireIdentity.QuestionnaireId;
-            }
 
             if (!string.IsNullOrEmpty(exportType))
             {

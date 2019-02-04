@@ -159,12 +159,6 @@
   <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
     <value>Actualizările automate ale aplicațiilor Android sunt activate</value>
   </data>
-  <data name="InterviewerSettings_Description" xml:space="preserve">
-    <value>Setări specifice pentru versiunea de Android a aplicației anchetatorului</value>
-  </data>
-  <data name="InterviewerSettings_Title" xml:space="preserve">
-    <value>Setările aplicației anchetatorului</value>
-  </data>
   <data name="Logo" xml:space="preserve">
     <value>Sigla companiei</value>
   </data>

@@ -123,4 +123,7 @@
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
     <value>您已经从问卷设计网站中导入了另外一个标题为“{0}”的问卷。如果您仍然要导入这个问卷，请在问卷设计网站中将问卷改为一个不同的名称。</value>
   </data>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value> 您已经从设计器导入过问卷变量为 '{0}' 的问卷。如果你仍想导入这个特殊的问卷，请再设计器中重命名其问卷变量。</value>
+  </data>
 </root>

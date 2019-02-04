@@ -6,12 +6,23 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
+        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        private readonly IWebNavigationService webNavigationService;
+
+        public InterviewOverviewService(IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IWebNavigationService webNavigationService)
+        {
+            this.interviewEntityFactory = interviewEntityFactory;
+            this.webNavigationService = webNavigationService;
+        }
+
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
             bool isReviewMode)
         {
@@ -38,13 +49,21 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var question = interview.GetQuestion(identity);
             if (question != null)
             {
-                return new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                var additionalInfo = new OverviewItemAdditionalInfo(question, interview, currentUserId);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             var staticText = interview.GetStaticText(identity);
             if (staticText != null)
             {
-                return new OverviewItemAdditionalInfo(staticText, interview);
+                var additionalInfo = new OverviewItemAdditionalInfo(staticText, interview);
+                additionalInfo.Errors = additionalInfo.Errors.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+                additionalInfo.Warnings = additionalInfo.Warnings.Select(this.webNavigationService.ResetNavigationLinksToDefault).ToArray();
+
+                return additionalInfo;
             }
 
             return null;
@@ -59,7 +78,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             
             if (question != null)
             {
-                return new OverviewWebQuestionNode(question, interview);
+                var overviewQuestion = new OverviewWebQuestionNode(question, interview);
+                overviewQuestion.Title = this.webNavigationService.ResetNavigationLinksToDefault(overviewQuestion.Title);
+                return overviewQuestion;
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
@@ -68,7 +89,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = staticText.Title.Text,
+                    Title = this.webNavigationService.ResetNavigationLinksToDefault(staticText.Title.Text),
                     AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }
@@ -87,7 +108,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 if (group is InterviewTreeRoster roster)
                 {
-                    return new OverviewWebGroupNode(roster)
+                    return new OverviewWebGroupNode(roster, questionnaire)
                     {
                         Id = roster.Identity.ToString(),
                         Title = roster.Title.Text,
@@ -95,7 +116,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     };
                 }
 
-                return new OverviewWebGroupNode(group)
+                return new OverviewWebGroupNode(group, questionnaire)
                 {
                     Id = group.Identity.ToString(),
                     Title = group.Title.Text

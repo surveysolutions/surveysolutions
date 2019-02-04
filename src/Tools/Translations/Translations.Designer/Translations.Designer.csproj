@@ -58,6 +58,12 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ru.resx">
       <Link>Common.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.zh.resx">
+      <Link>Common.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Country.zh.resx">
+      <Link>Country.zh.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.es.resx">
       <Link>ExceptionMessages.es.resx</Link>
     </EmbeddedResource>
@@ -70,11 +76,29 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ru.resx">
       <Link>ExceptionMessages.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.zh.resx">
+      <Link>ExceptionMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.resx">
+      <Link>KindOfData.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\KindOfData.ru.resx">
+      <Link>KindOfData.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ar.resx">
+      <Link>ModeOfDataCollection.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ru.resx">
+      <Link>ModeOfDataCollection.ru.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx">
       <Link>PdfStrings.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ru.resx">
       <Link>PdfStrings.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.zh.resx">
+      <Link>PdfStrings.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.resx">
       <Link>QuestionnaireEditor.resx</Link>
@@ -82,11 +106,26 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ru.resx">
       <Link>QuestionnaireEditor.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ar.resx">
+      <Link>Roster.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.es.resx">
+      <Link>Roster.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.fr.resx">
+      <Link>Roster.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.resx">
       <Link>Roster.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ru.resx">
       <Link>Roster.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.zh.resx">
+      <Link>Roster.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.resx">
+      <Link>StudyType.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx">
       <Link>VerificationMessages.resx</Link>
@@ -94,11 +133,32 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.ru.resx">
       <Link>VerificationMessages.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.zh.resx">
+      <Link>VerificationMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.ar.resx">
+      <Link>AccountResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.es.resx">
+      <Link>AccountResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.fr.resx">
+      <Link>AccountResources.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx">
       <Link>AccountResources.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.ru.resx">
       <Link>AccountResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.zh.resx">
+      <Link>AccountResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.es.resx">
+      <Link>ErrorMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.fr.resx">
+      <Link>ErrorMessages.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx">
       <Link>ErrorMessages.resx</Link>
@@ -106,14 +166,38 @@
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.ru.resx">
       <Link>ErrorMessages.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.zh.resx">
+      <Link>ErrorMessages.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.ar.resx">
+      <Link>FindReplaceResources.ar.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.es.resx">
+      <Link>FindReplaceResources.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.fr.resx">
+      <Link>FindReplaceResources.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.resx">
       <Link>FindReplaceResources.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.zh.resx">
+      <Link>FindReplaceResources.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx">
       <Link>NotificationResources.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.ru.resx">
       <Link>NotificationResources.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.zh.resx">
+      <Link>NotificationResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\Paging.resx">
+      <Link>Paging.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\Paging.zh.resx">
+      <Link>Paging.zh.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx">
       <Link>PdfMessages.resx</Link>
@@ -126,6 +210,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.ru.resx">
       <Link>QuestionnaireController.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.zh.resx">
+      <Link>QuestionnaireController.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireEditor.zh.resx">
+      <Link>QuestionnaireEditor.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireHistoryResources.zh.resx">
+      <Link>QuestionnaireHistoryResources.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\UnderConstruction.resx">
+      <Link>UnderConstruction.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\UnderConstruction.ru.resx">
+      <Link>UnderConstruction.ru.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

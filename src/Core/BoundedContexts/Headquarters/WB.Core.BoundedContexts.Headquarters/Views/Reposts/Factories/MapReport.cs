@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Caching;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Supercluster;
 using Supercluster.KDBush;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -24,28 +26,50 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
+        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         private readonly IAuthorizedUser authorizedUser;
 
         public MapReport(IInterviewFactory interviewFactory, 
             IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor, 
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser, 
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnairesAccessor = questionnairesAccessor;
             this.authorizedUser = authorizedUser;
+            this.questionnaireItems = questionnaireItems;
         }
 
-        public List<string> GetGpsQuestionsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity)
-                .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
+        public List<string> GetGpsQuestionsByQuestionnaire(Guid questionnaireId, long? version)
+        {
+            var questions = this.questionnaireItems.Query(q =>
+            {
+                if (version == null)
+                {
+                    var questionnaire = questionnaireId.FormatGuid();
+                    q = q.Where(i => i.QuestionnaireIdentity.StartsWith(questionnaire));
+                }
+                else
+                {
+                    var identity = new QuestionnaireIdentity(questionnaireId, version.Value).ToString();
+                    q = q.Where(i => i.QuestionnaireIdentity == identity);
+                }
+
+                q = q.Where(i => i.QuestionType == QuestionType.GpsCoordinates);
+
+                return q.Select(i => i. StatExportCaption).Distinct().ToList();
+            });
+
+            return questions;
+        }
 
         protected static Cache Cache => System.Web.HttpContext.Current?.Cache;
         
         public MapReportView Load(MapReportInputModel input)
         {
-            var key = $"MapReport;{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
+            var key = $"MapReport;{input.QuestionnaireId};{input.QuestionnaireVersion ?? 0L};{input.Variable};{this.authorizedUser.Id}";
 
             var cacheLine = Cache?.Get(key);
             
@@ -101,14 +125,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private MapReportCacheLine InitializeSuperCluster(MapReportInputModel input)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
-            var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
-
-            if (!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
-            
             var gpsAnswers = this.interviewFactory.GetGpsAnswers(
-                input.QuestionnaireIdentity,
-                gpsQuestionId.Value, null, GeoBounds.Open,
+                input.QuestionnaireId, input.QuestionnaireVersion, input.Variable, null, GeoBounds.Open,
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
 
             var cluster = new SuperCluster();
@@ -129,8 +147,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
-            this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted).ToList());
+        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions()
+        {
+            var questionnaireIds = this.questionnaireItems.Query(q =>
+            {
+                return q.Where(item => item.QuestionType == QuestionType.GpsCoordinates)
+                    .Select(item => item.QuestionnaireIdentity)
+                    .Distinct().ToList();
+            });
+
+            return this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted && questionnaireIds.Contains(x.Id)).ToList());
+        }
 
         private struct MapReportCacheLine
         {

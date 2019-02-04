@@ -389,6 +389,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
+        public Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: string.Concat(this.InterviewsController, "/", interviewId, "/audioaudit"),
+                request: new PostFileRequest
+                {
+                    InterviewId = interviewId,
+                    FileName = fileName,
+                    ContentType = contentType,
+                    Data = Convert.ToBase64String(fileData)
+                },
+                credentials: this.restCredentials,
+                token: token));
+        }
+
         #endregion
         
         #region Attachments

@@ -59,10 +59,12 @@ namespace Ncqrs.Eventing
             Guid eventSourceId, 
             int eventSequence, 
             DateTime eventTimeStamp, 
-            long globalSequence,
+            long? globalSequence,
             WB.Core.Infrastructure.EventBus.IEvent payload)            
         {
-            GlobalSequence = globalSequence;
+            if(globalSequence != null)
+                GlobalSequence = globalSequence.Value;
+
             Payload = payload;
             _commitId = commitId;
             _origin = origin;

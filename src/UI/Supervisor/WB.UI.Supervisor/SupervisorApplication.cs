@@ -6,7 +6,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 namespace WB.UI.Supervisor
 {
     [Application]
-    public class SupervisorApplication : MvxAppCompatApplication<SupervisorSetup, SupervisorMvxApplication>
+    public class SupervisorApplication : MvxAppCompatApplication<Setup, SupervisorMvxApplication>
     {
         public SupervisorApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {

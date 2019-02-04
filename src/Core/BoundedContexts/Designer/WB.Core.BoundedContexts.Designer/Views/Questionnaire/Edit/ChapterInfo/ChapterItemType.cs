@@ -6,6 +6,7 @@
         Group = 2,
         StaticText = 3,
         Chapter = 4,
-        Variable = 5
+        Variable = 5,
+        Roster = 6
     }
 }

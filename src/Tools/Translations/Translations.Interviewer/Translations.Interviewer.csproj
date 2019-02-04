@@ -76,8 +76,8 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.vi-VN.resx">
       <Link>InterviewerUIResources.vi-VN.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.zh-CN.resx">
-      <Link>InterviewerUIResources.zh-CN.resx</Link>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.zh.resx">
+      <Link>InterviewerUIResources.zh.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

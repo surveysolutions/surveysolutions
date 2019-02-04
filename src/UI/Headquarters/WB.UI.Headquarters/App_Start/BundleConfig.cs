@@ -164,6 +164,7 @@ namespace WB.UI.Headquarters
                 "~/Scripts/ko.pager.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/viewmodels/listview.js",
+                "~/Scripts/lodash.underscore.js",
                 "~/Scripts/components/moment-duration-format.js",
                 "~/Scripts/viewmodels/pages/periodicstatusreport.js"
                 ));

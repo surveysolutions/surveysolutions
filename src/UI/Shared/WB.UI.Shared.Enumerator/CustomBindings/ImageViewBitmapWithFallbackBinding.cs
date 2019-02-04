@@ -1,9 +1,14 @@
 ﻿using System;
+using Android.App;
+using Android.Content;
 using Android.Graphics;
+using Android.Runtime;
 using Android.Util;
+using Android.Views;
 using Android.Widget;
 using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -85,8 +90,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private static DisplayMetrics GetDisplayMetrics()
         {
-            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-            var defaultDisplay = mvxAndroidCurrentTopActivity.Activity.WindowManager.DefaultDisplay;
+            var defaultDisplay = Application.Context.GetSystemService(Context.WindowService).JavaCast<IWindowManager>().DefaultDisplay;
             DisplayMetrics displayMetrics = new DisplayMetrics();
             defaultDisplay.GetMetrics(displayMetrics);
             return displayMetrics;

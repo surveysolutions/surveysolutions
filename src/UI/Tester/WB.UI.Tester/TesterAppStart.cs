@@ -3,6 +3,7 @@ using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -22,6 +23,7 @@ namespace WB.UI.Tester
             ClearPlainInterviewStorage();
 
             Mvx.IoCProvider.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
+            Mvx.IoCProvider.Resolve<IEncryptionService>().GenerateKeys();
 
             return await base.ApplicationStartup(hint);
         }

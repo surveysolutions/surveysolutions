@@ -15,10 +15,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ => true);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ => true);
 
             var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
-            var interviewRepository = Setup.StatefulInterviewRepository(interview);
+            var interviewRepository = SetUp.StatefulInterviewRepository(interview);
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
 

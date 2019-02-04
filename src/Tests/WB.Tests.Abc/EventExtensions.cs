@@ -11,6 +11,8 @@ namespace WB.Tests.Abc
 {
     internal static class EventExtensions
     {
+        private static int eventSequence = 0;
+
         public static IPublishedEvent<T> ToPublishedEvent<T>(this T @event,
             Guid? eventSourceId = null,
             string origin = null,
@@ -25,6 +27,7 @@ namespace WB.Tests.Abc
             mock.Setup(x => x.Origin).Returns(origin);
             mock.Setup(x => x.EventIdentifier).Returns(eventIdentifier);
             mock.Setup(x => x.EventTimeStamp).Returns((eventTimeStamp ?? DateTime.Now));
+            mock.Setup(x => x.EventSequence).Returns(eventSequence++);
             var publishableEventMock = mock.As<IUncommittedEvent>();
             publishableEventMock.Setup(x => x.Payload).Returns(@event);
             return mock.Object;

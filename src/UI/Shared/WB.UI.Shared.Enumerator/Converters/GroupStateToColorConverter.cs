@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using MvvmCross.Converters;
-using MvvmCross.Platforms.Android;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
@@ -12,9 +9,6 @@ namespace WB.UI.Shared.Enumerator.Converters
     {
         protected override int Convert(SimpleGroupStatus value, Type targetType, object parameter, CultureInfo culture)
         {
-            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-            var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
-
             switch (value)
             {
                 case SimpleGroupStatus.Completed:

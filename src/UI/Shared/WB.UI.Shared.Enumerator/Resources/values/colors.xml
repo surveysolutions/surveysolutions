@@ -48,6 +48,8 @@
     <color name="group_completed_pressed">#187d00</color>
     <color name="group_with_invalid_answers">#e4512b</color>
     <color name="group_with_invalid_answers_pressed">#cd4927</color>
+    <color name="group_plain_roster_text">#2D9CDB</color>
+    <color name="group_plain_roster_background">#D5EBF8</color>
 
     <color name="default_input_button_pressed">#0D6DBF</color>
     <color name="default_input_button_unpressed">#2A81CB</color>
@@ -160,5 +162,12 @@
     <color name="exo_player_seek_played">#2a81cb</color>
     <color name="exo_player_seek_unplayed">#2a81cb</color>
     <color name="exo_player_text">#333333</color>
+
+    <color name="loading_title">#000000</color>
+    <color name="loading_background">#EEEEEE</color>
+    <color name="loading_progress_color">#2D9CDB</color>
+    <color name="loading_progress_background">#C4C4C4</color>
+    <color name="loading_indeterminate_progress_gradient_start">#C4C4C4</color>
+    <color name="loading_indeterminate_progress_gradient_center">#FFFFFF</color>
 
 </resources>

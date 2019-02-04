@@ -1,5 +1,5 @@
-﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier) {
-    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl, notifier]);
+﻿Supervisor.VM.HQInterviews = function (listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl, usersToAssignUrl, notifier, $questionnaires) {
+    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl, notifier, $questionnaires]);
 
     var self = this;
 
@@ -7,7 +7,7 @@
         self.sendCommandAfterFilterAndConfirm(
             selectedRowAsArray,
             "DeleteInterviewCommand",
-            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return { InterviewId: item.InterviewId }; },
             function(item) { return item.CanDelete(); },
             "#confirm-delete-template",
             "#confirm-continue-message-template"

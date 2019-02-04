@@ -294,4 +294,8 @@
   <data name="НasErrors" xml:space="preserve">
     <value>فيه أخطاء</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>حدد الاستبيان</value>
+      <comment>حدد الاستبيان</comment>
+  </data>
 </root>

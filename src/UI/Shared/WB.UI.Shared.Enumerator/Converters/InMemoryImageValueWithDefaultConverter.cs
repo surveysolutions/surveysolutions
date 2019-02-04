@@ -5,9 +5,9 @@ using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.Graphics.Drawable;
 using Android.Support.V7.Widget;
+using MvvmCross;
 using MvvmCross.Converters;
 using MvvmCross.Platforms.Android;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.Converters
                     return bitmap;
             }
 
-            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
+            var mvxAndroidCurrentTopActivity = Mvx.IoCProvider.GetSingleton<IMvxAndroidCurrentTopActivity>();
             return BitmapFromVectorDrawable(mvxAndroidCurrentTopActivity.Activity, Resource.Drawable.img_placeholder);
         }
 

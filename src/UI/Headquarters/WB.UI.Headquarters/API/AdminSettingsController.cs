@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         public HttpResponseMessage GlobalNoticeSettings()
         {
-            var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
             return Request.CreateResponse(new GlobalNoticeModel
             {
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
@@ -62,12 +61,11 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         public HttpResponseMessage AutoUpdateSettings()
-        {
+     {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
             return Request.CreateResponse(new AutoUpdateModel
             {
-                InterviewerAutoUpdatesEnabled = interviewerSettings?.AutoUpdateEnabled ?? true,
-                HowManyMajorReleaseDontNeedUpdate = interviewerSettings != null ? interviewerSettings.HowManyMajorReleaseDontNeedUpdate : InterviewerSettings.HowManyMajorReleaseDontNeedUpdateDefaultValue
+                InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled()
             });
         }
 
@@ -78,7 +76,6 @@ namespace WB.UI.Headquarters.API
                 new InterviewerSettings
                 {
                     AutoUpdateEnabled = message.InterviewerAutoUpdatesEnabled,
-                    HowManyMajorReleaseDontNeedUpdate = message.HowManyMajorReleaseDontNeedUpdate
                 },
                 AppSetting.InterviewerSettings);
 

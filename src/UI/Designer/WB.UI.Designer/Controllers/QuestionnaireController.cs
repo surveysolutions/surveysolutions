@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Entities.SubEntities;
@@ -10,10 +9,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CsvHelper.TypeConversion;
+using System.Web.Routing;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -45,6 +47,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ILogger logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IPublicFoldersStorage publicFoldersStorage;
+        private readonly ICategoricalOptionsImportService categoricalOptionsImportService;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -57,7 +60,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
             ILookupTableService lookupTableService, 
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
-            IPublicFoldersStorage publicFoldersStorage)
+            IPublicFoldersStorage publicFoldersStorage,
+            ICategoricalOptionsImportService categoricalOptionsImportService)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -70,6 +74,24 @@ namespace WB.UI.Designer.Controllers
             this.lookupTableService = lookupTableService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
             this.publicFoldersStorage = publicFoldersStorage;
+            this.categoricalOptionsImportService = categoricalOptionsImportService;
+        }
+
+        
+        [NoCache]
+        public ActionResult DetailsNoSection(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+        {
+            if (UserHelper.WebUser.IsAdmin || this.UserHasAccessToEditOrViewQuestionnaire(id))
+            {
+                // get section id and redirect
+                var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id.FormatGuid(), entityid);
+                return RedirectToActionPermanent("Details", new RouteValueDictionary
+                {
+                    { "id", id.FormatGuid() }, {"chapterId", sectionId.FormatGuid()},{ "entityType", entityType},{ "entityid", entityid.FormatGuid()}
+                });
+            }
+
+            return this.LackOfPermits();
         }
 
         [NoCache]
@@ -109,7 +131,7 @@ namespace WB.UI.Designer.Controllers
                     var questionnaireId = Guid.NewGuid();
 
                     var command = new CloneQuestionnaire(questionnaireId, model.Title, this.UserHelper.WebUser.UserId,
-                        model.IsPublic, sourceModel.Source);
+                        false, sourceModel.Source);
 
                     this.commandService.Execute(command);
 
@@ -154,7 +176,8 @@ namespace WB.UI.Designer.Controllers
                         questionnaireId: questionnaireId,
                         text: model.Title,
                         responsibleId: this.UserHelper.WebUser.UserId,
-                        isPublic: model.IsPublic);
+                        isPublic: model.IsPublic,
+                        variable: model.Variable);
 
                     this.commandService.Execute(command);
 
@@ -287,27 +310,28 @@ namespace WB.UI.Designer.Controllers
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
-        public ActionResult EditCascadingOptions(string id, Guid questionId)
-        {
-            this.SetupViewModel(id, questionId);
-            return this.View(this.questionWithOptionsViewModel.Options);
-        }
+        public ActionResult EditCascadingOptions(string id, Guid questionId) 
+            => this.EditOptions(id, questionId);
 
         private void SetupViewModel(string id, Guid questionId)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView?.Options.Select(
-                              option => new Option(option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
-            var optionsList = options.ToList();
+                              option => new QuestionnaireCategoricalOption
+                              {
+                                  Value = (int)option.Value,
+                                  ParentValue = (int?)option.ParentValue,
+                                  Title = option.Title
+                              }) ??
+                          new QuestionnaireCategoricalOption[0];
 
-            this.questionWithOptionsViewModel = new EditOptionsViewModel()
+            this.questionWithOptionsViewModel = new EditOptionsViewModel
             {
                 QuestionnaireId = id,
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
-                Options = optionsList,
-                SourceOptions = optionsList
+                Options = options.ToArray()
             };
         }
 
@@ -334,48 +358,37 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ViewResult EditOptions(HttpPostedFileBase csvFile)
         {
-            this.GetOptionsFromStream(csvFile);
+            if (csvFile?.InputStream == null)
+                this.Error(Resources.QuestionnaireController.SelectTabFile);
+            else
+            {
+                try
+                {
+                    var importResult = this.categoricalOptionsImportService.ImportOptions(csvFile.InputStream,
+                        this.questionWithOptionsViewModel.QuestionnaireId,
+                        this.questionWithOptionsViewModel.QuestionId);
+
+                    if (importResult.Succeeded)
+                        this.questionWithOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
+                    else
+                    {
+                        foreach (var importError in importResult.Errors)
+                            this.Error(importError, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
+                    this.logger.Error(e.Message, e);
+                }
+            }
 
             return this.View(this.questionWithOptionsViewModel.Options);
         }
 
         [HttpPost]
         public ViewResult EditCascadingOptions(HttpPostedFileBase csvFile)
-        {
-            this.GetOptionsFromStream(csvFile, isCascade: true);
-
-            return this.View(this.questionWithOptionsViewModel.Options);
-        }
-
-        private void GetOptionsFromStream(HttpPostedFileBase csvFile, bool isCascade = false)
-        {
-            try
-            {
-                this.questionWithOptionsViewModel.Options = this.ExtractOptionsFromStream(csvFile.InputStream, isCascade);
-            }
-            catch (Exception)
-            {
-                if (csvFile == null)
-                {
-                    this.Error(Resources.QuestionnaireController.SelectTabFile);
-                }
-                else
-                {
-                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
-                }
-            }
-        }
-
-        private Configuration CreateCsvConfiguration()
-        {
-            return new Configuration
-            {
-                HasHeaderRecord = false,
-                TrimOptions = TrimOptions.Trim,
-                IgnoreQuotes = false,
-                Delimiter = "\t",
-            };
-        }
+            => this.EditOptions(csvFile);
 
         public JsonResult ApplyOptions()
         {
@@ -436,69 +449,18 @@ namespace WB.UI.Designer.Controllers
         {
             var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
             var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
-            return
-                File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
-                    fileDownloadName);
+
+            return File(this.categoricalOptionsImportService.ExportOptions(
+                this.questionWithOptionsViewModel.QuestionnaireId,
+                this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
         }
 
         public class EditOptionsViewModel
         {
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
-            public List<Option> Options { get; set; }
-            public List<Option> SourceOptions { get; set; }
+            public QuestionnaireCategoricalOption[] Options { get; set; }
             public string QuestionTitle { get; set; }
-        }
-
-        private List<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
-        {
-            var importedOptions = new List<Option>();
-
-            var csvReader = new CsvReader(new StreamReader(inputStream), this.CreateCsvConfiguration());
-            using (csvReader)
-            {
-                while (csvReader.Read())
-                {
-                    if (isCascade)
-                    {
-                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
-                    }
-                    else
-                    {
-                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1)));    
-                    }
-                }
-            }
-
-            return importedOptions;
-        }
-
-        private Stream SaveOptionsToStream(IEnumerable<Option> options)
-        {
-            var sb = new StringBuilder();
-            using (var csvWriter = new CsvWriter(new StringWriter(sb),this.CreateCsvConfiguration()))
-            {
-                foreach (var option in options)
-                {
-                    if (String.IsNullOrEmpty(option.ParentValue))
-                    {
-                        csvWriter.WriteRecord(new { key = option.Value, value = option.Title });
-                    }
-                    else
-                    {
-                        csvWriter.WriteRecord(new { key = option.Value, value = option.Title, parent = option.ParentValue });
-                    }
-                    csvWriter.NextRecord();
-                }
-            }
-
-            var memoryStream = new MemoryStream();
-            var streamWriter = new StreamWriter(memoryStream);
-            streamWriter.Write(sb.ToString());
-            streamWriter.Flush();
-            memoryStream.Position = 0;
-
-            return memoryStream;
         }
 
         #endregion

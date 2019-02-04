@@ -89,14 +89,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewId = Guid.NewGuid();
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
-            var createInterviewCommand = new CreateInterview(interviewId,
+            var createInterviewCommand = new SharedKernels.DataCollection.Commands.Interview.CreateInterview(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, 
                 new List<InterviewAnswer>(),
                 new List<string>(),
                 interviewerIdentity.SupervisorId,
                 interviewerIdentity.UserId,
                 keyGenerator.Get(),
-                null);
+                null,
+                isAudioRecordingEnabled:false);
             await this.commandService.ExecuteAsync(createInterviewCommand);
             await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
         }

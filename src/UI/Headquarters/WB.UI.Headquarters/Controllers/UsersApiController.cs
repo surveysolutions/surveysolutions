@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -342,7 +343,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public void CancelToImportUsers() => this.userImportService.RemoveAllUsersToImport();
+        public HttpResponseMessage CancelToImportUsers()
+        {
+            this.userImportService.RemoveAllUsersToImport();
+            return Request.CreateResponse(HttpStatusCode.NoContent);
+        }
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]

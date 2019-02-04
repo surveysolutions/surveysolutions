@@ -625,5 +625,29 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
         #endregion
 
+        #region Section functions
+
+        public bool IsSectionAnswered(Section section)
+        {
+            return section.GetEnabledQuestionsCount() == section.GetEnabledAnsweredQuestionsCount();
+        }
+
+        public int NumberUnansweredQuestions(Section section)
+        {
+            return section.GetEnabledQuestionsCount() - section.GetEnabledAnsweredQuestionsCount();
+        }
+
+        public int EnabledAnsweredQuestionsCount(Section section)
+        {
+            return section.GetEnabledAnsweredQuestionsCount();
+        }
+
+        public int EnabledQuestionsCount(Section section)
+        {
+            return section.GetEnabledQuestionsCount();
+        }
+
+        #endregion
+
     }
 }

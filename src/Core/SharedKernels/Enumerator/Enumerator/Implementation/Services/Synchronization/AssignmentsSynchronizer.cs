@@ -136,6 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         local.ResponsibleName = remoteItem.ResponsibleName;
                     }
 
+                    local.IsAudioRecordingEnabled = remoteItem.IsAudioRecordingEnabled;
+
                     var interviewsCount = this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);
                      
                     local.CreatedInterviewsCount = interviewsCount;
