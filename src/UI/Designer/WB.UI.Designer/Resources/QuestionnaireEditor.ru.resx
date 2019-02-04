@@ -1237,4 +1237,10 @@
     <value>Редактировать каскадные категории </value>
     <comment>Редактировать каскадные категории </comment>
   </data>
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Отображать списком</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>Если меньше чем</value>
+  </data>
 </root>
