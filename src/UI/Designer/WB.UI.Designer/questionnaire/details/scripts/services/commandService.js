@@ -252,6 +252,8 @@
                         } else {
                             command.options = question.options;
                         }
+                        command.showAsListLimit = question.showAsListLimit;
+                        command.showAsList = question.showAsListLimit;
                         break;
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
