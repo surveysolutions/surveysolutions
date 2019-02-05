@@ -11,7 +11,6 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Interview
@@ -33,12 +32,41 @@ namespace WB.Services.Export.Interview
             List<InterviewEntity> result = new List<InterviewEntity>();
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
-                StringBuilder query = new StringBuilder($"select * from ");
-                query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" t0 ");
+                List<string> columnsCollector = new List<string>();
+                string BuildSelectColumns(string alias)
+                {
+                    foreach (var questionnaireEntity in group.Children)
+                    {
+                        if (questionnaireEntity is Question question)
+                        {
+                            columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}_{question.ColumnName}\" ");
+                        }
+
+                        if (questionnaireEntity is Variable variable)
+                        {
+                            columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}_{variable.ColumnName}\" ");
+                        }
+                    }
+
+                    return string.Join(", ", columnsCollector);
+                }
+
+                StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, data.roster_vector as data_roster_vector");
+
+                query.Append(BuildSelectColumns("data"));
+                query.Append(", ");
+                query.Append(BuildSelectColumns("enablement"));
+                query.Append(", ");
+                query.Append(BuildSelectColumns("validity"));
+
+                query.AppendLine($" from ");
+                query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
                 
-                query.AppendFormat("    LEFT JOIN \"{0}\".\"{1}_enablement\" enablement ON t0.interview_id = enablement.interview_id{2}", tenant.Name, group.TableName, Environment.NewLine);
-                query.AppendFormat("    LEFT JOIN \"{0}\".\"{1}_validity\" validity ON t0.interview_id = validity.interview_id{2}", tenant.Name, group.TableName, Environment.NewLine);
-                query.AppendFormat(" WHERE t0.interview_id = ANY(@ids)");
+                query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_enablement\" enablement ON data.interview_id = enablement.interview_id{2}",
+                    tenant.Name, group.TableName, Environment.NewLine);
+                query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_validity\" validity ON data.interview_id = validity.interview_id{2}",
+                    tenant.Name, group.TableName, Environment.NewLine);
+                query.AppendFormat(" WHERE data.interview_id = ANY(@ids)");
 
                 using (var connection = new NpgsqlConnection(this.connectionSettings.DefaultConnection))
                 {
@@ -54,9 +82,23 @@ namespace WB.Services.Export.Interview
                             {
                                 result.Add(new InterviewEntity
                                 {
-                                    Identity = new Identity(question.PublicKey, RosterVector.Empty),
+                                    Identity = new Identity(question.PublicKey, (int[])reader["data_roster_vector"] ?? RosterVector.Empty),
                                     EntityType = EntityType.Question,
-                                    InterviewId = (Guid)reader["interview_id"]
+                                    InterviewId = (Guid)reader["data_interview_id"],
+                                    AsObjectValue = reader[$"data_{question.ColumnName}"],
+                                    InvalidValidations = (int[])reader[$"validity_{question.ColumnName}"],
+                                    IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
+                                });
+                            }
+                            if (groupChild is Variable variable)
+                            {
+                                result.Add(new InterviewEntity
+                                {
+                                    Identity = new Identity(variable.PublicKey, (int[])reader["data_roster_vector"] ?? RosterVector.Empty),
+                                    EntityType = EntityType.Variable,
+                                    InterviewId = (Guid)reader["data_interview_id"],
+                                    AsObjectValue = reader[$"data_{variable.ColumnName}"],
+                                    IsEnabled = (bool)reader[$"enablement_{variable.ColumnName}"]
                                 });
                             }
                         }
@@ -66,11 +108,13 @@ namespace WB.Services.Export.Interview
                 }
             }
 
-            return new List<InterviewEntity>();
+            return result;
             //var api = this.tenantApi.For(tenant);
             //var entities = await api.GetInterviewBatchAsync(interviewsId);
             //return entities;
         }
+
+        private InterviewEntity ReadSingleEntity(Guid entityId, )
 
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
             QuestionnaireDocument questionnaire,
