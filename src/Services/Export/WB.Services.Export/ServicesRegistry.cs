@@ -13,6 +13,7 @@ using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
@@ -71,6 +72,7 @@ namespace WB.Services.Export
             services.AddTransient<IMetadataWriter, MetadataWriter>();
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
             services.AddTransient<IExportJob, ExportJob>();
+            services.AddTransient<IInterviewDatabaseInitializer, InterviewDatabaseInitializer>();
 
             // Singletons
             RegisterHandlers(services);
