@@ -59,6 +59,8 @@ namespace WB.Services.Export.Interview.Entities
         public virtual AudioAnswer AsAudio { get; set; }
         public virtual Area AsArea { get; set; }
 
+        public virtual object AsObjectValue { get; set; }
+
         public override bool Equals(object obj)
         {
             if (!(obj is InterviewEntity target)) return false;
@@ -74,7 +76,7 @@ namespace WB.Services.Export.Interview.Entities
                this.AsBool ?? this.AsGps ?? this.AsIntArray ??
                this.AsList ?? this.AsYesNo ??
                this.AsIntMatrix ?? this.AsArea ??
-               (object) this.AsAudio;
+               (object) this.AsAudio ?? AsObjectValue;
 
     }
 }
