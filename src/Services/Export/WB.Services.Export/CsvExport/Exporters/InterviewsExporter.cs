@@ -134,7 +134,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var interviewIds = batch.Select(b => b.Id).ToArray();
                 var trace = Stopwatch.StartNew();
 
-                var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds);
+                var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
 
                 logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 

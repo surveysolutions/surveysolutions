@@ -34,6 +34,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                     var questionnaire = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireDocument, serializer);
                     entry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                    questionnaire.QuestionnaireId = questionnaireId;
                     return questionnaire;
                 });
 
