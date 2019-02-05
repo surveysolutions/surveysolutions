@@ -42,6 +42,10 @@ namespace WB.Services.Export.Interview
             }
 
             StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, ");
+            if (group.IsInsideRoster)
+            {
+                query.Append("data.roster_vector as data_roster_vector, ");
+            }
 
             query.Append(BuildSelectColumns("data"));
             query.Append(", ");
@@ -66,7 +70,7 @@ namespace WB.Services.Export.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        private DbConnectionSettings connectionSettings;
+        private readonly DbConnectionSettings connectionSettings;
 
         public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi,
             IOptions<DbConnectionSettings> connectionSettings)
@@ -90,11 +94,13 @@ namespace WB.Services.Export.Interview
                     {
                         foreach (var groupChild in group.Children)
                         {
+
                             if (groupChild is Question question)
                             {
+                                var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
                                 result.Add(new InterviewEntity
                                 {
-                                    Identity = new Identity(question.PublicKey, reader["data_roster_vector"] is DBNull ? RosterVector.Empty : (int[])reader["data_roster_vector"]),
+                                    Identity = identity,
                                     EntityType = EntityType.Question,
                                     InterviewId = (Guid)reader["data_interview_id"],
                                     AsObjectValue = reader[$"data_{question.ColumnName}"],
@@ -102,11 +108,12 @@ namespace WB.Services.Export.Interview
                                     IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
                                 });
                             }
-                            if (groupChild is Variable variable)
+                            else if (groupChild is Variable variable)
                             {
+                                var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
                                 result.Add(new InterviewEntity
                                 {
-                                    Identity = new Identity(variable.PublicKey, reader["data_roster_vector"] is DBNull ? RosterVector.Empty : (int[])reader["data_roster_vector"]),
+                                    Identity = identity,
                                     EntityType = EntityType.Variable,
                                     InterviewId = (Guid)reader["data_interview_id"],
                                     AsObjectValue = reader[$"data_{variable.ColumnName}"],

@@ -27,5 +27,20 @@ namespace WB.Services.Export.Tests.Services.Interview
             // Assert
             Approvals.Verify(query);
         }
+
+        [Test]
+        public void should_be_able_to_build_query_for_roster()
+        {
+            var questionnaire = Create.QuestionnaireDocument(Id.gA, 6, "quest", 
+                Create.Roster(Id.gB, variable: "roster1",
+                    children: new IQuestionnaireEntity[] { Create.NumericIntegerQuestion(variable: "num1") }));
+            questionnaire.ConnectChildrenWithParent();
+
+            // Act
+            var query = InterviewQueryBuilder.GetInterviewsQuery(Create.Tenant(name: "tenant"), questionnaire.Find<Group>(Id.gB));
+
+            // Assert
+            Approvals.Verify(query);
+        }
     }
 }
