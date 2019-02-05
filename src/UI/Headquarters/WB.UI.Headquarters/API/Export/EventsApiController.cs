@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Filters;
 
@@ -25,17 +29,59 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public async Task<HttpResponseMessage> Get(int globalSequence = 0, int pageSize = 500)
+        public async Task<HttpResponseMessage> Get(int sequence = 0, int pageSize = 500)
         {
-            var events = await headquartersEventStore.GetEventsFeedAsync(globalSequence, pageSize);
+            var maximum = await this.headquartersEventStore.GetMaximumGlobalSequence();
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            var eventsFeedPage = new EventsFeedPage
+            response.Content = new PushStreamContent((outputStream, content, context) =>
             {
-                NextPageUrl = Url.Route("EventsFeed", new {startWith = events.CurrentGlobalSequenceValue}),
-                Events = events.Events.Select(e => new FeedEvent(e)).ToList()
-            };
+                using (var sw = new StreamWriter(outputStream))
+                using (var json = new JsonTextWriter(sw))
+                {
+                    json.WriteStartObject();
+                    json.WritePropertyName("total");
+                    json.WriteValue(maximum);
 
-            return Request.CreateResponse(eventsFeedPage);
+                    json.WritePropertyName(nameof(EventsFeedPage.Events));
+                    json.WriteStartArray();
+
+                    var events = headquartersEventStore.GetRawEventsFeed(sequence, pageSize);
+                    long lastEvent = sequence;
+                    foreach (var ev in events)
+                    {
+                        json.WriteStartObject();
+
+                        json.WritePropertyName(nameof(FeedEvent.GlobalSequence));
+                        json.WriteValue(ev.GlobalSequence);
+                        json.WritePropertyName(nameof(FeedEvent.EventSourceId));
+                        json.WriteValue(ev.EventSourceId);
+                        json.WritePropertyName(nameof(FeedEvent.Sequence));
+                        json.WriteValue(ev.EventSequence);
+                        json.WritePropertyName(nameof(FeedEvent.EventTypeName));
+                        json.WriteValue(ev.EventType);
+                        json.WritePropertyName(nameof(FeedEvent.Payload));
+                        json.WriteRawValue(ev.Value);
+                        json.WriteEndObject();
+
+                        lastEvent = ev.GlobalSequence;
+                    }
+
+                    json.WriteEndArray();
+
+                    json.WritePropertyName(nameof(EventsFeedPage.NextPageUrl));
+                    json.WriteValue(Url.Route(@"EventsFeed", new
+                    {
+                        sequence = lastEvent + 1,
+                        pageSize
+                    }));
+
+                    json.WriteEndObject();
+                }
+
+            }, MediaTypeHeaderValue.Parse(@"application/json"));
+
+            return response;
         }
 
         [Route("interview/events/{id:guid}", Name = "InterviewEventsFeed")]
@@ -48,7 +94,7 @@ namespace WB.UI.Headquarters.API.Export
 
             var eventsFeedPage = new EventsFeedPage
             {
-                NextPageUrl = Url.Route("InterviewEventsFeed", new {lastSequence = events.LastOrDefault()}),
+                NextPageUrl = Url.Route("InterviewEventsFeed", new { lastSequence = events.LastOrDefault() }),
                 Events = events.Select(e => new FeedEvent(e)).ToList()
             };
 
