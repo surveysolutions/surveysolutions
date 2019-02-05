@@ -51,7 +51,7 @@ namespace WB.Services.Export.Interview
                     return string.Join(", ", columnsCollector);
                 }
 
-                StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, data.roster_vector as data_roster_vector");
+                StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, data.roster_vector as data_roster_vector, ");
 
                 query.Append(BuildSelectColumns("data"));
                 query.Append(", ");
@@ -82,11 +82,11 @@ namespace WB.Services.Export.Interview
                             {
                                 result.Add(new InterviewEntity
                                 {
-                                    Identity = new Identity(question.PublicKey, (int[])reader["data_roster_vector"] ?? RosterVector.Empty),
+                                    Identity = new Identity(question.PublicKey, reader["data_roster_vector"] is DBNull ? RosterVector.Empty : (int[])reader["data_roster_vector"]),
                                     EntityType = EntityType.Question,
                                     InterviewId = (Guid)reader["data_interview_id"],
                                     AsObjectValue = reader[$"data_{question.ColumnName}"],
-                                    InvalidValidations = (int[])reader[$"validity_{question.ColumnName}"],
+                                    InvalidValidations = reader[$"validity_{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity_{question.ColumnName}"],
                                     IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
                                 });
                             }
@@ -94,7 +94,7 @@ namespace WB.Services.Export.Interview
                             {
                                 result.Add(new InterviewEntity
                                 {
-                                    Identity = new Identity(variable.PublicKey, (int[])reader["data_roster_vector"] ?? RosterVector.Empty),
+                                    Identity = new Identity(variable.PublicKey, reader["data_roster_vector"] is DBNull ? RosterVector.Empty : (int[])reader["data_roster_vector"]),
                                     EntityType = EntityType.Variable,
                                     InterviewId = (Guid)reader["data_interview_id"],
                                     AsObjectValue = reader[$"data_{variable.ColumnName}"],
@@ -113,8 +113,6 @@ namespace WB.Services.Export.Interview
             //var entities = await api.GetInterviewBatchAsync(interviewsId);
             //return entities;
         }
-
-        private InterviewEntity ReadSingleEntity(Guid entityId, )
 
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
             QuestionnaireDocument questionnaire,
