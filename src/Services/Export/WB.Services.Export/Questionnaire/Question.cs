@@ -61,5 +61,27 @@ namespace WB.Services.Export.Questionnaire
                 return columnName;
             }
         }
+
+        private bool? isInRoster;
+        public bool IsInRoster
+        {
+            get
+            {
+                if (isInRoster.HasValue) return isInRoster.Value;
+                var localParent = GetParent();
+                while (localParent != null)
+                {
+                    if (localParent is Group group && group.IsRoster)
+                    {
+                        this.isInRoster = true;
+                    }
+
+                    localParent = this.parent.GetParent();
+                }
+
+                this.isInRoster = false;
+                return this.isInRoster.Value;
+            }
+        }
     }
 }

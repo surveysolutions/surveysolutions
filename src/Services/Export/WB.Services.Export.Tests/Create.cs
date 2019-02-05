@@ -92,14 +92,17 @@ namespace WB.Services.Export.Tests
             return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, string variableName = null, params IQuestionnaireEntity[] children)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, long version = 5, string variableName = null, params IQuestionnaireEntity[] children)
         {
-            return new QuestionnaireDocument
+            var questionnaireDocument = new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children,
-                VariableName = variableName
+                VariableName = variableName,
             };
+            questionnaireDocument.QuestionnaireId = new QuestionnaireId(questionnaireDocument.PublicKey.FormatGuid() + "$" + version);
+
+            return questionnaireDocument;
         }
 
         public static TextQuestion TextQuestion(Guid? id = null, 
@@ -407,7 +410,7 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi());
+            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<IOptions<DbConnectionSettings>>());
         }
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
@@ -438,11 +441,12 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static Group Group(Guid? groupId = null, params IQuestionnaireEntity[] children)
+        public static Group Group(Guid? groupId = null, string variable = null, params IQuestionnaireEntity[] children)
         {
             return new Group(children: children.ToList())
             {
-                PublicKey = groupId ?? Guid.NewGuid()
+                PublicKey = groupId ?? Guid.NewGuid(),
+                VariableName = variable
             };
         }
 

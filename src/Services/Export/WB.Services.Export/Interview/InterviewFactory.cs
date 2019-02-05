@@ -15,6 +15,54 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Interview
 {
+    public static class InterviewQueryBuilder
+    {
+        public static string GetInterviewsQuery(TenantInfo tenant, Group group)
+        {
+            if (!group.Children.Any()) throw new ArgumentException("Cannot build query for group without questions");
+
+            string BuildSelectColumns(string alias)
+            {
+                List<string> columnsCollector = new List<string>();
+
+                foreach (var questionnaireEntity in group.Children)
+                {
+                    if (questionnaireEntity is Question question)
+                    {
+                        columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}_{question.ColumnName}\" ");
+                    }
+
+                    if (questionnaireEntity is Variable variable)
+                    {
+                        columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}_{variable.ColumnName}\" ");
+                    }
+                }
+
+                return string.Join(", ", columnsCollector);
+            }
+
+            StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, ");
+
+            query.Append(BuildSelectColumns("data"));
+            query.Append(", ");
+            query.Append(BuildSelectColumns("enablement"));
+            query.Append(", ");
+            query.Append(BuildSelectColumns("validity"));
+
+            query.AppendLine($" from ");
+            query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
+                
+            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_enablement\" enablement ON data.interview_id = enablement.interview_id{2}",
+                tenant.Name, group.TableName, Environment.NewLine);
+            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_validity\" validity ON data.interview_id = validity.interview_id{2}",
+                tenant.Name, group.TableName, Environment.NewLine);
+            query.AppendFormat(" WHERE data.interview_id = ANY(@ids)");
+
+            return query.ToString();
+        }
+
+    }
+
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
@@ -32,47 +80,11 @@ namespace WB.Services.Export.Interview
             List<InterviewEntity> result = new List<InterviewEntity>();
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
-                List<string> columnsCollector = new List<string>();
-                string BuildSelectColumns(string alias)
-                {
-                    foreach (var questionnaireEntity in group.Children)
-                    {
-                        if (questionnaireEntity is Question question)
-                        {
-                            columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}_{question.ColumnName}\" ");
-                        }
-
-                        if (questionnaireEntity is Variable variable)
-                        {
-                            columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}_{variable.ColumnName}\" ");
-                        }
-                    }
-
-                    return string.Join(", ", columnsCollector);
-                }
-
-                StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, data.roster_vector as data_roster_vector, ");
-
-                query.Append(BuildSelectColumns("data"));
-                query.Append(", ");
-                query.Append(BuildSelectColumns("enablement"));
-                query.Append(", ");
-                query.Append(BuildSelectColumns("validity"));
-
-                query.AppendLine($" from ");
-                query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
-                
-                query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_enablement\" enablement ON data.interview_id = enablement.interview_id{2}",
-                    tenant.Name, group.TableName, Environment.NewLine);
-                query.AppendFormat("    INNER JOIN \"{0}\".\"{1}_validity\" validity ON data.interview_id = validity.interview_id{2}",
-                    tenant.Name, group.TableName, Environment.NewLine);
-                query.AppendFormat(" WHERE data.interview_id = ANY(@ids)");
-
                 using (var connection = new NpgsqlConnection(this.connectionSettings.DefaultConnection))
                 {
                     await connection.OpenAsync();
 
-                    var reader = await connection.ExecuteReaderAsync(query.ToString(), new {ids = interviewsId});
+                    var reader = await connection.ExecuteReaderAsync(InterviewQueryBuilder.GetInterviewsQuery(tenant, group), new {ids = interviewsId});
 
                     while (reader.Read())
                     {
@@ -109,11 +121,9 @@ namespace WB.Services.Export.Interview
             }
 
             return result;
-            //var api = this.tenantApi.For(tenant);
-            //var entities = await api.GetInterviewBatchAsync(interviewsId);
-            //return entities;
         }
 
+        
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
             QuestionnaireDocument questionnaire,
             List<InterviewEntity> interviewEntities)

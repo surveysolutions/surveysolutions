@@ -32,6 +32,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var message1ForStaticText = "message1 for static text";
             var questionnaireDocumentWithOneChapter = Create.QuestionnaireDocument(
                 Id.g1,
+                1,
                 "variable",
                 Create.NumericIntegerQuestion(questionId, "numeric1",
                     validationConditions: new[]
