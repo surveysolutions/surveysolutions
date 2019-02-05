@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -174,5 +175,17 @@ namespace WB.Services.Export.Questionnaire
                 yield return current;
             }
         }
+
+        private string tableName;
+        public override string TableName
+        {
+            get
+            {
+                if (tableName != null) return tableName;
+                tableName = $"{CompressQuestionnaireId(this.QuestionnaireId)}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
+                return tableName;
+            }
+        }
+
     }
 }
