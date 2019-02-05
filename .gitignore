@@ -99,3 +99,4 @@ Elmah/
 *.pubxml.user
 *.binlog
 *.apk
+/src/Services/Export/WB.Services.Export.Host/.temp
