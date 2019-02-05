@@ -14,7 +14,7 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public string Id { get; set;}
-        
+
         public bool IsIntegerQuestion(Guid publicKey)
         {
             var result = this.Find<NumericQuestion>(x => x.PublicKey == publicKey && x.QuestionType == QuestionType.Numeric && x.IsInteger).FirstOrDefault();
@@ -155,7 +155,9 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        public IEnumerable<Guid> GetMainScopeSections()
+        public QuestionnaireId QuestionnaireId { get; set; }
+
+        public IEnumerable<Group> GetAllStoredGroups()
         {
             Queue<Group> queue = new Queue<Group>(this.Children.OfType<Group>());
 
@@ -169,7 +171,7 @@ namespace WB.Services.Export.Questionnaire
                     queue.Enqueue(subChild);
                 }
 
-                yield return current.PublicKey;
+                yield return current;
             }
         }
     }

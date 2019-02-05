@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Extensions.Options;
+using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
@@ -15,17 +19,57 @@ namespace WB.Services.Export.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private DbConnectionSettings connectionSettings;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi,
+            IOptions<DbConnectionSettings> connectionSettings)
         {
             this.tenantApi = tenantApi;
+            this.connectionSettings = connectionSettings.Value;
         }
 
-        public async Task<List<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId)
+        public async Task<List<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
         {
-            var api = this.tenantApi.For(tenant);
-            var entities = await api.GetInterviewBatchAsync(interviewsId);
-            return entities;
+            List<InterviewEntity> result = new List<InterviewEntity>();
+            foreach (var group in questionnaire.GetAllStoredGroups())
+            {
+                StringBuilder query = new StringBuilder($"select * from ");
+                query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" t0 ");
+                
+                query.AppendFormat("    LEFT JOIN \"{0}\".\"{1}_enablement\" enablement ON t0.interview_id = enablement.interview_id{2}", tenant.Name, group.TableName, Environment.NewLine);
+                query.AppendFormat("    LEFT JOIN \"{0}\".\"{1}_validity\" validity ON t0.interview_id = validity.interview_id{2}", tenant.Name, group.TableName, Environment.NewLine);
+                query.AppendFormat(" WHERE t0.interview_id = ANY(@ids)");
+
+                using (var connection = new NpgsqlConnection(this.connectionSettings.DefaultConnection))
+                {
+                    await connection.OpenAsync();
+
+                    var reader = await connection.ExecuteReaderAsync(query.ToString(), new {ids = interviewsId});
+
+                    while (reader.Read())
+                    {
+                        foreach (var groupChild in group.Children)
+                        {
+                            if (groupChild is Question question)
+                            {
+                                result.Add(new InterviewEntity
+                                {
+                                    Identity = new Identity(question.PublicKey, RosterVector.Empty),
+                                    EntityType = EntityType.Question,
+                                    InterviewId = (Guid)reader["interview_id"]
+                                });
+                            }
+                        }
+                    }
+
+                  
+                }
+            }
+
+            return new List<InterviewEntity>();
+            //var api = this.tenantApi.For(tenant);
+            //var entities = await api.GetInterviewBatchAsync(interviewsId);
+            //return entities;
         }
 
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(

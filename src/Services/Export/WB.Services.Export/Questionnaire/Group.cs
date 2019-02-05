@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -95,6 +96,15 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        public string TableName => $"{this.Root.Id}_{this.PublicKey}";
+        private string tableName;
+        public string TableName
+        {
+            get
+            {
+                if (tableName != null) return tableName;
+                tableName = $"{this.Root.QuestionnaireId}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
+                return tableName;
+            }
+        }
     }
 }
