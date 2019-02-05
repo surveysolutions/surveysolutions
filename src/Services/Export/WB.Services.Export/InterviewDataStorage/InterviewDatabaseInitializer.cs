@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -22,20 +23,20 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private class ColumnInfo
         {
-            public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isUnique = false)
+            public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
             {
                 Name = name;
                 SqlType = sqlType;
                 IsPrimaryKey = isPrimaryKey;
-                IsUnique = isUnique;
-                Nullable = isPrimaryKey || isUnique ? "NOT NULL" : "NULL";
+                DefaultValue = defaultValue;
+                IsNullable = isNullable;
             }
 
             public string Name { get; }
             public string SqlType { get; }
             public bool IsPrimaryKey { get; }
-            public bool IsUnique { get; }
-            public string Nullable { get; }
+            public string DefaultValue { get; }
+            public bool IsNullable { get; }
         }
 
         public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings)
@@ -79,76 +80,55 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private Task CreateTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
         {
-            var tableName = $"\"{tenant.Name}\".\"{group.TableName}\"";
-
-            var createTableCommand = connection.CreateCommand();
-
-            var columns = GetColumnsInfoFor(group, rosterLevel);
-
-            var commandText = $"CREATE TABLE IF NOT EXISTS {tableName}(" +
-                              string.Join(" , ", columns.Select(c => $"\"{c.Name}\" {c.SqlType} {c.Nullable}")) + $" , " +
-                              $"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => c.Name))})" +
-                              $")";
-
-            createTableCommand.CommandText = commandText;
-            return createTableCommand.ExecuteNonQueryAsync();
-        }
-
-        private Task CreateEnablementTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
-        {
-            var tableName = $"\"{tenant.Name}\".\"{group.EnablementTableName}\"";
-
-            var createTableCommand = connection.CreateCommand();
-
-            var columns = GetColumnsInfoFor(group, rosterLevel);
-
-            var commandText = $"CREATE TABLE IF NOT EXISTS {tableName}(" +
-                              string.Join(" , ", columns.Select(c => $"\"{c.Name}\" bool NOT NULL DEFAULT true")) + $" , " +
-                              $"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => c.Name))})" +
-                              $")";
-
-            createTableCommand.CommandText = commandText;
-            return createTableCommand.ExecuteNonQueryAsync();
-        }
-
-        private Task CreateValidityTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
-        {
-            var tableName = $"\"{tenant.Name}\".\"{group.ValidityTableName}\"";
-
-            var createTableCommand = connection.CreateCommand();
-
-            var columns = GetColumnsInfoFor(group, rosterLevel);
-
-            var commandText = $"CREATE TABLE IF NOT EXISTS {tableName}(" +
-                              string.Join(" , ", columns.Select(c => $"\"{c.Name}\" int4[] {c.Nullable}")) + $" , " +
-                              $"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => c.Name))})" +
-                              $")";
-
-            createTableCommand.CommandText = commandText;
-            return createTableCommand.ExecuteNonQueryAsync();
-        }
-
-        private List<ColumnInfo> GetColumnsInfoFor(Group @group, int rosterLevel)
-        {
             var columns = new List<ColumnInfo>();
-
             columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
-
-            //if (group is QuestionnaireDocument)
-            //    columns.Add(new ColumnInfo("interview_key", "varchar", isUnique: true));
-
             if (rosterLevel > 0)
                 columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question)));
+                columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question), isNullable: true));
 
             var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
-                columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable)));
+                columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
 
-            return columns;
+            var commandText = GenerateCreateTableScript(tenant.Name, group.TableName, columns);
+            return ExecuteCommandAsync(connection, commandText);
+        }
+
+        private Task CreateEnablementTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
+        {
+            var columns = new List<ColumnInfo>();
+            columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
+            if (rosterLevel > 0)
+                columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
+
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            foreach (var question in questions)
+                columns.Add(new ColumnInfo(question.ColumnName, "bool", isNullable: false, defaultValue: "true"));
+
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
+            foreach (var variable in variables)
+                columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
+
+            var commandText = GenerateCreateTableScript(tenant.Name, group.EnablementTableName, columns);
+            return ExecuteCommandAsync(connection, commandText);
+        }
+
+        private Task CreateValidityTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
+        {
+            var columns = new List<ColumnInfo>();
+            columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
+            if (rosterLevel > 0)
+                columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
+
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            foreach (var question in questions)
+                columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
+
+            var commandText = GenerateCreateTableScript(tenant.Name, group.ValidityTableName, columns);
+            return ExecuteCommandAsync(connection, commandText);
         }
 
         private string GetSqlTypeForQuestion(Question question)
@@ -198,9 +178,33 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private static Task CreateSchemaAsync(NpgsqlConnection connection, TenantInfo tenant)
         {
-            var checkSchemaExistsCommand = connection.CreateCommand();
-            checkSchemaExistsCommand.CommandText = $"CREATE SCHEMA IF NOT EXISTS \"{tenant.Name}\"";
-            return checkSchemaExistsCommand.ExecuteNonQueryAsync();
+            return ExecuteCommandAsync(connection, $"CREATE SCHEMA IF NOT EXISTS \"{tenant.Name}\"");
+        }
+
+        private string GenerateCreateTableScript(string schemaName, string tableName, List<ColumnInfo> columns)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{schemaName}\".\"{tableName}\"(");
+
+            foreach (var column in columns)
+            {
+                sb.Append($"\"{column.Name}\" {column.SqlType} ");
+                sb.Append(column.IsNullable ? " NULL " : " NOT NULL ");
+                if (column.DefaultValue != null)
+                    sb.Append(" DEFAULT " + column.DefaultValue);
+                sb.AppendLine(",");
+            }
+
+            sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
+            sb.AppendLine(")");
+            return sb.ToString();
+        }
+
+        private static Task ExecuteCommandAsync(NpgsqlConnection connection, string commandText)
+        {
+            var createTableCommand = connection.CreateCommand();
+            createTableCommand.CommandText = commandText;
+            return createTableCommand.ExecuteNonQueryAsync();
         }
     }
 }

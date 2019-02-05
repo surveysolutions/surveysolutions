@@ -107,6 +107,7 @@ namespace WB.Services.Export.Questionnaire
                 return tableName;
             }
         }
+
         public string EnablementTableName => $"{TableName}_e";
         public string ValidityTableName => $"{TableName}_v";
 
