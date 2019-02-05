@@ -50,6 +50,8 @@ namespace WB.Services.Export.Host
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
+            services.Configure<DbConnectionSettings>(Configuration.GetSection("ConnectionStrings"));
+
             services.UseJobService(Configuration);
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
