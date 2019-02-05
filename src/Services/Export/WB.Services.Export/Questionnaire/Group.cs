@@ -108,5 +108,29 @@ namespace WB.Services.Export.Questionnaire
         }
         public string EnablementTableName => $"{TableName}_enablement";
         public string ValidityTableName => $"{TableName}_validity";
+
+        private bool? isInRoster;
+        public bool IsInsideRoster
+        {
+            get
+            {
+                if (isInRoster.HasValue) return isInRoster.Value;
+                if (IsRoster) return true;
+
+                var localParent = GetParent();
+                while (localParent != null)
+                {
+                    if (localParent is Group group && group.IsRoster)
+                    {
+                        this.isInRoster = true;
+                    }
+
+                    localParent = localParent.GetParent();
+                }
+
+                this.isInRoster = false;
+                return this.isInRoster.Value;
+            }
+        }
     }
 }
