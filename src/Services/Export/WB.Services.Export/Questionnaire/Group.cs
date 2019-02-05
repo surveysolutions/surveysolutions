@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Questionnaire
@@ -97,18 +98,28 @@ namespace WB.Services.Export.Questionnaire
         }
 
         private string tableName;
-        public string TableName
+        public virtual string TableName
         {
             get
             {
                 if (tableName != null) return tableName;
-                tableName = $"{this.Root.QuestionnaireId}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
+                tableName = $"{CompressQuestionnaireId(this.Root.QuestionnaireId)}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
                 return tableName;
             }
         }
-        public string EnablementTableName => $"{TableName}_enablement";
-        public string ValidityTableName => $"{TableName}_validity";
+        public string EnablementTableName => $"{TableName}_e";
+        public string ValidityTableName => $"{TableName}_v";
 
+        protected string CompressQuestionnaireId(QuestionnaireId questionnaireId)
+        {
+            var strings = questionnaireId.Id.Split('$');
+            strings[0] = Convert.ToBase64String(Guid.Parse(strings[0]).ToByteArray())
+                        .Substring(0, 22)
+                        .Replace("/", "_")
+                        .Replace("+", "-");
+            return string.Join("$", strings);
+        }
+        
         private bool? isInRoster;
         public bool IsInsideRoster
         {
