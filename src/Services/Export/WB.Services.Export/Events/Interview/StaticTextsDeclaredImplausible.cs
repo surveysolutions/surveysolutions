@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WB.Services.Export.Events.Interview.Base;
 
 namespace WB.Services.Export.Events.Interview
