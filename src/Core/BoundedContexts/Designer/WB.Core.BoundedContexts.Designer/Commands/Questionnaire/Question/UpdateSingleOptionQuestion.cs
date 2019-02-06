@@ -24,7 +24,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             List<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
+            string linkedFilterExpression,
+            bool showAsList,
+            int? showAsListLimit)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -39,7 +41,13 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.LinkedFilterExpression = linkedFilterExpression;
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
+            this.ShowAsList = showAsList;
+            this.ShowAsListLimit = showAsListLimit;
         }
+
+        public int? ShowAsListLimit { get; set; }
+
+        public bool ShowAsList { get; set; }
 
         public bool IsFilteredCombobox { get; set; }
 

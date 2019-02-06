@@ -1216,13 +1216,19 @@
   <data name="SearchQuestionPlaceholder" xml:space="preserve">
     <value>Search for a question</value>
   </data>
- <data name="QuestionsSearchTitle" xml:space="preserve">
+  <data name="QuestionsSearchTitle" xml:space="preserve">
     <value>Question Bank</value>
-</data>
-    <data name="QuestionsSearchEntities" xml:space="preserve">
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
     <value>search results</value>
   </data>
-    <data name="ClassificationsSearchEntities" xml:space="preserve">
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
     <value>classifications</value>
+  </data>
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Show as a list of categories</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>Show if less than</value>
   </data>
 </root>

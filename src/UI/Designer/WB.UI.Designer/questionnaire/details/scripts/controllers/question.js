@@ -110,6 +110,9 @@
                 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
+                $scope.activeQuestion.showAsList = question.showAsList;
+                $scope.activeQuestion.showAsListLimit = question.showAsListLimit;
+
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
                 }
@@ -652,6 +655,10 @@
 
             $scope.isIntegerChange = function () {
                 $scope.activeQuestion.countOfDecimalPlaces = null;
+            };
+
+            $scope.showAsListChange = function () {
+                $scope.activeQuestion.showAsListLimit = null;
             };
 
             $scope.loadQuestion();

@@ -1735,6 +1735,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show if less than.
+        /// </summary>
+        public static string QuestionShowListLimit {
+            get {
+                return ResourceManager.GetString("QuestionShowListLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show strings.
         /// </summary>
         public static string QuestionShowStrings {
@@ -2262,6 +2271,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsWhoHasAccess {
             get {
                 return ResourceManager.GetString("SettingsWhoHasAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show as a list of categories.
+        /// </summary>
+        public static string ShowAsList {
+            get {
+                return ResourceManager.GetString("ShowAsList", resourceCulture);
             }
         }
         

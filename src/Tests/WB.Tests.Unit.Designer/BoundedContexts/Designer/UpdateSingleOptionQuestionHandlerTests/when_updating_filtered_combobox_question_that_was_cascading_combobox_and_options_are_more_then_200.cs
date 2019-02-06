@@ -3,6 +3,8 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -57,22 +59,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
 
         private void BecauseOf() =>
             questionnaire.UpdateSingleOptionQuestion(
-                questionId: cascadeQuestionId,
-                title: "title",
-                variableName: "qr_barcode_question",
-                variableLabel: null,
-                isPreFilled: false,
-                scope: QuestionScope.Interviewer,
-                enablementCondition: "some condition",
-                hideIfDisabled: false,
-                instructions: "intructions",
-                responsibleId: responsibleId,
-                options: null,
-                linkedToEntityId: (Guid?)null,
-                isFilteredCombobox: true,
-                cascadeFromQuestionId: null, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+                new UpdateSingleOptionQuestion(
+                    questionnaireId: questionnaire.Id,
+                    questionId: cascadeQuestionId,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = "title",
+                        VariableName = "qr_barcode_question",
+                        VariableLabel = null,
+                        EnablementCondition = "some condition",
+                        Instructions = "instructions",
+                        HideIfDisabled = false
+                    },
 
+                    isPreFilled: false,
+                    scope: QuestionScope.Interviewer,
+                    responsibleId: responsibleId,
+                    options: null,
+                    linkedToEntityId: (Guid?)null,
+                    isFilteredCombobox: true,
+                    cascadeFromQuestionId: null,
+                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    linkedFilterExpression: null,
+                    validationExpression: null,
+                    validationMessage: null,
+                    showAsList: false,
+                    showAsListLimit: null));
 
 
         [NUnit.Framework.Test] public void should_contains_question () =>
