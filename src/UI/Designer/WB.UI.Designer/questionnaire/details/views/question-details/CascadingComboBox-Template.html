@@ -1,4 +1,5 @@
-﻿<div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
+﻿<div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons" 
+     ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
     <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
     <label for="singleOptionQuestionSource" ng-i18next="SelectParentQuestion"></label>
     <div class="btn-group dropdown" uib-dropdown>
@@ -39,6 +40,29 @@
             </li>
         </ul>
     </div>
-    <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required" ng-i18next="SelectParentQuestionError">
-    </p>
+    <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required" ng-i18next="SelectParentQuestionError"></p>
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="checkbox checkbox-in-column">
+            <input id="cb-as-list" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.showAsList" ng-change="showAsListChange()" />
+            <label for="cb-as-list"><span></span>{{'ShowAsList' | i18next}}</label>
+        </div>
+    </div>
+    <div class="col-md-5 inline-inputs">
+        <div class="form-group checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListLimit.$valid}">
+            <label for="edit-question-count-for-list" ng-i18next="QuestionShowListLimit"></label>
+            <input id="edit-question-count-for-list" type="number"
+                   maxlength="2"
+                   name="showAsListLimit"
+                   min="1"
+                   max="50"
+                   ng-pattern="/^\d+$/"
+                   ng-model="activeQuestion.showAsListLimit"
+                   class="form-control small-numeric-input">
+            <p class="help-block ng-cloak" ng-show="questionForm.showAsListLimit.$error.pattern" ng-i18next="QuestionOnlyInts">
+            </p>
+        </div>
+    </div>
+
 </div>

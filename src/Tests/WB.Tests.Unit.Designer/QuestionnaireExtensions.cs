@@ -103,10 +103,33 @@ namespace WB.Tests.Unit.Designer
 
             var optionsList = options ?? new Option[] { new Option { Title = "one", Value = "1" }, new Option { Title = "two", Value = "2" } };
 
-            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, 
-                responsibleId, optionsList,
-                linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+            questionnaire.UpdateSingleOptionQuestion(
+                new UpdateSingleOptionQuestion(
+                        questionnaireId: questionnaire.Id,
+                        questionId: questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = title,
+                            VariableName = variableName,
+                            VariableLabel = null,
+                            EnablementCondition = enablementCondition,
+                            Instructions = instructions,
+                            HideIfDisabled = false
+                        },
+
+                        isPreFilled: isPreFilled,
+                        scope: scope,
+                        responsibleId: responsibleId,
+                        options: options,
+                        linkedToEntityId: linkedToQuestionId,
+                        isFilteredCombobox: isFilteredCombobox,
+                        cascadeFromQuestionId: cascadeFromQuestionId,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                        linkedFilterExpression: null,
+                        validationExpression: null,
+                        validationMessage: null,
+                        showAsList: false,
+                        showAsListLimit: null));
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
