@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.S3;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
@@ -15,14 +15,16 @@ namespace WB.Services.Export.Jobs
     internal class ExportJob : IExportJob
     {
         private readonly IServiceProvider serviceProvider;
+        private readonly ITenantContext tenantContext;
 
         private readonly ILogger<ExportJob> logger;
         
-        public ExportJob(IServiceProvider serviceProvider,
+        public ExportJob(IServiceProvider serviceProvider, ITenantContext tenantContext,
             ILogger<ExportJob> logger)
         {
             logger.LogTrace("Constructed instance of ExportJob");
             this.serviceProvider = serviceProvider;
+            this.tenantContext = tenantContext;
             this.logger = logger;
         }
 
@@ -30,6 +32,8 @@ namespace WB.Services.Export.Jobs
         {
             try
             {
+                tenantContext.Tenant = pendingExportProcess.ExportSettings.Tenant;
+
                 if (pendingExportProcess.StorageType.HasValue)
                 {
                     var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
