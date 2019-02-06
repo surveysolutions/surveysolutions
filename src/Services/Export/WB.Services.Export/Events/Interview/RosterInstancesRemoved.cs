@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using WB.Services.Export.Events.Interview.Base;
 using WB.Services.Export.Events.Interview.Dtos;
 
