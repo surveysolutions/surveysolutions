@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class NumericIntegerQuestionAnswered : QuestionAnswered
     {
-        public int Answer { get; private set; }
+        public int Answer { get; set; }
        
     }
 }

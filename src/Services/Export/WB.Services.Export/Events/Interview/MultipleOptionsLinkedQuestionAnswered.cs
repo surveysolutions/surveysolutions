@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class MultipleOptionsLinkedQuestionAnswered : QuestionAnswered
     {
-        public decimal[][] SelectedRosterVectors { get; private set; }
+        public decimal[][] SelectedRosterVectors { get; set; }
     }
 }

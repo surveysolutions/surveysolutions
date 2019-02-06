@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class SingleOptionLinkedQuestionAnswered : QuestionAnswered
     {
-        public decimal[] SelectedRosterVector { get; private set; }
+        public decimal[] SelectedRosterVector { get; set; }
         
     }
 }

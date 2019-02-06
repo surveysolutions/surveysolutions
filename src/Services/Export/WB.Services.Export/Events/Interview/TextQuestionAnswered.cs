@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class TextQuestionAnswered : QuestionAnswered
     {
-        public string Answer { get; private set; }
+        public string Answer { get; set; }
 
     }
 }
