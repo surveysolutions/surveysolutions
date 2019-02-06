@@ -2,9 +2,9 @@ namespace WB.Services.Export.Events.Interview.Dtos
 {
     public class AnsweredYesNoOption
     {
-        public decimal OptionValue { get; }
+        public decimal OptionValue { get; set; }
 
-        public bool Yes { get; }
+        public bool Yes { get; set; }
 
         public AnsweredYesNoOption(decimal optionValue, bool yes)
         {

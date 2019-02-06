@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class DateTimeQuestionAnswered : QuestionAnswered
     {
-        public DateTime Answer { get; private set; }
+        public DateTime Answer { get; set; }
     }
 }

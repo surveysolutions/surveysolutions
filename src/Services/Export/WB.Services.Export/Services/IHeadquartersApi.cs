@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Refit;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Events;
+using WB.Services.Export.Events.Interview.Base;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -62,19 +65,6 @@ namespace WB.Services.Export.Services
         Task<QuestionnaireAudioAuditView> DoesSupportAudioAuditAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
         [Get("/api/export/v1/interview/events")]
-        Task<FeedEvent> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
-    }
-
-    public class FeedEvent
-    {
-        public string EventTypeName { get; set; }
-
-        public int Sequence { get; set; }
-
-        public Guid EventSourceId { get; set; }
-
-        public long GlobalSequence { get; set; }
-
-        public Object Payload { get; set; }
+        Task<FeedEvents> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
     }
 }
