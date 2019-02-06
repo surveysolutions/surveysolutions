@@ -1,9 +1,29 @@
-﻿using WB.Services.Infrastructure.Tenant;
+﻿using WB.Services.Export.Services;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Infrastructure
 {
     public class TenantContext : ITenantContext
     {
-        public TenantInfo Tenant { get; set; }
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+
+        public TenantContext(ITenantApi<IHeadquartersApi>tenantApi)
+        {
+            this.tenantApi = tenantApi;
+        }
+
+        private TenantInfo tenant;
+
+        public TenantInfo Tenant
+        {
+            get => tenant;
+            set
+            {
+                tenant = value;
+                Api = tenantApi.For(value);
+            }
+        }
+
+        public IHeadquartersApi Api { get; private set; }
     }
 }
