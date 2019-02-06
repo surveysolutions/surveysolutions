@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using WB.Services.Export.Events.Interview.Base;
 //using System.Collections.ObjectModel;
 
