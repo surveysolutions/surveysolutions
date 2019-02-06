@@ -67,9 +67,8 @@ namespace WB.Services.Export.ExportProcessHandlers
                 HandleProgress(dataExportProcessArgs, exportProgress);
 
                 var archiveName = this.FileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
-
-                this.dataExportProcessesService.ChangeStatusType(
-                    dataExportProcessArgs.ProcessId, DataExportStatus.Running);
+                
+                this.dataExportProcessesService.ChangeStatusType(dataExportProcessArgs.ProcessId, DataExportStatus.Running);
 
                 await DoExportAsync(dataExportProcessArgs, dataExportProcessArgs.ExportSettings, archiveName, exportProgress, cancellationToken);
             }

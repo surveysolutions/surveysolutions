@@ -5,13 +5,13 @@ namespace WB.Services.Export.Events.Interview
 {
     public class AreaQuestionAnswered : QuestionAnswered
     {
-        public string Geometry { set; get; }
-        public string MapName { set; get; }
-        public double? AreaSize { set; get; }
-        public double? Length { set; get; }
-        public string Coordinates { set; get; }
-        public double? DistanceToEditor { set; get; }
+        public string Geometry { get; set; }
+        public string MapName { get; set; }
+        public double? AreaSize { get; set; }
+        public double? Length { get; set; }
+        public string Coordinates { get; set; }
+        public double? DistanceToEditor { get; set; }
 
-        public int? NumberOfPoints { set; get; }
+        public int? NumberOfPoints { get; set; }
     }
 }

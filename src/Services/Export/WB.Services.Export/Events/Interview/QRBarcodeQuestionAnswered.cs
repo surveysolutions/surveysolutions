@@ -5,6 +5,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class QRBarcodeQuestionAnswered : QuestionAnswered
     {
-        public string Answer { get; private set; }
+        public string Answer { get; set; }
     }
 }

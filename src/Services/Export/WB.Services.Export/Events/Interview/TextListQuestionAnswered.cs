@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class TextListQuestionAnswered : QuestionAnswered
     {
-        public Tuple<decimal, string>[] Answers { get; private set; }
+        public Tuple<decimal, string>[] Answers { get; set; }
 
     }
 }

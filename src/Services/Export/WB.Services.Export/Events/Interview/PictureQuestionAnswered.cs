@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class PictureQuestionAnswered : QuestionAnswered
     {
-        public string PictureFileName { get; private set; }
+        public string PictureFileName { get; set; }
 
     }
 }

@@ -7,6 +7,6 @@ namespace WB.Services.Export.Events.Interview
 {
     public class RosterInstancesRemoved : InterviewPassiveEvent
     {
-        public RosterInstance[] Instances { get; private set; }
+        public RosterInstance[] Instances { get; set; }
     }
 }

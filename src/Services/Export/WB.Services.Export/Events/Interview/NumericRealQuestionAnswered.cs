@@ -5,7 +5,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class NumericRealQuestionAnswered : QuestionAnswered
     {
-        public decimal Answer { get; private set; }
+        public decimal Answer { get; set; }
         
     }
 }

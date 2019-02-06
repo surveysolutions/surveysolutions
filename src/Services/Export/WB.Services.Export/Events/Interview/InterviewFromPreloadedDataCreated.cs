@@ -5,9 +5,9 @@ namespace WB.Services.Export.Events.Interview
 {
     public class InterviewFromPreloadedDataCreated : InterviewActiveEvent
     {
-        public Guid QuestionnaireId { get; private set; }
-        public long QuestionnaireVersion { get; private set; }
+        public Guid QuestionnaireId { get; set; }
+        public long QuestionnaireVersion { get; set; }
         public bool UsesExpressionStorage { get; set; }
-        public int? AssignmentId { get; private set; }
+        public int? AssignmentId { get; set; }
     }
 }

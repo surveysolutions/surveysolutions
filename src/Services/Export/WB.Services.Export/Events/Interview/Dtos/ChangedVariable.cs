@@ -6,8 +6,8 @@ namespace WB.Services.Export.Events.Interview.Dtos
     [DebuggerDisplay("NewValue = {NewValue}, Identity = {Identity}")]
     public class ChangedVariable
     {
-        public Identity Identity { get; private set; }
-        public object NewValue { private set; get; }
+        public Identity Identity { get; set; }
+        public object NewValue { get; set; }
 
         public ChangedVariable(Identity identity, object newValue)
         {

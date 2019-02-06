@@ -7,7 +7,7 @@ namespace WB.Services.Export.Events.Interview
 {
     public class RosterInstancesAdded : InterviewPassiveEvent
     {
-        public AddedRosterInstance[] Instances { get; private set; }
+        public AddedRosterInstance[] Instances { get; set; }
 
         public RosterInstancesAdded(AddedRosterInstance[] instances, DateTimeOffset originDate) 
         {

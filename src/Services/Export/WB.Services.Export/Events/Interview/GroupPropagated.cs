@@ -6,8 +6,8 @@ namespace WB.Services.Export.Events.Interview
     [Obsolete("Since v6.0")]
     public class GroupPropagated : InterviewPassiveEvent
     {
-        public Guid GroupId { get; private set; }
-        public decimal[] OuterScopeRosterVector { get; private set; }
-        public int Count { get; private set; }
+        public Guid GroupId { get; set; }
+        public decimal[] OuterScopeRosterVector { get; set; }
+        public int Count { get; set; }
     }
 }
