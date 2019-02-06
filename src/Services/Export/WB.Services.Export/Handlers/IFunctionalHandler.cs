@@ -1,15 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Events.Interview.Base;
 
 namespace WB.Services.Export.Handlers
 {
-    public interface IFunctionalHandler<TState>
+    public interface IFunctionalHandler
     {
-        TState GetStateAsync(CancellationToken cancellationToken);
+        Task<object> GetStateAsync(CancellationToken cancellationToken);
 
-        Task SaveStateAsync(TState state, CancellationToken cancellationToken);
+        Task SaveStateAsync(object state, CancellationToken cancellationToken);
     }
 
     public interface IEventHandler<TState, TEvent> where TEvent : IEvent
