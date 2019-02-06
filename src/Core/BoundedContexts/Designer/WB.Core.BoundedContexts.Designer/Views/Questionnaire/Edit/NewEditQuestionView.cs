@@ -66,5 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool HideIfDisabled { get; set; }
         public int Quality { get; set; }
         public List<QualityOption> QualityOptions { get; set; }
+
+        public bool ShowAsList { get; set; }
+        public int? ShowAsListLimit { get; set; }
     }
 }
