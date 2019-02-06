@@ -65,7 +65,6 @@ namespace WB.UI.Interviewer
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
             var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
             InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
-            logger.Debug("NavigateToFirstViewModel called");
             if (currentInterviewer == null)
             {
                 await viewModelNavigationService.NavigateToFinishInstallationAsync();
@@ -74,7 +73,6 @@ namespace WB.UI.Interviewer
             {
                 await viewModelNavigationService.NavigateToLoginAsync();
             }
-            logger.Debug("NavigateToFirstViewModel ended");
         }
 
 
