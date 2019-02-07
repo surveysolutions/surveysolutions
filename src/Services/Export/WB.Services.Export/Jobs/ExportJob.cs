@@ -7,6 +7,7 @@ using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
