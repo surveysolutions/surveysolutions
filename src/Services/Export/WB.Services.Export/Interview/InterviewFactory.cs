@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
@@ -42,31 +43,34 @@ namespace WB.Services.Export.Interview
                     {
                         foreach (var groupChild in group.Children)
                         {
-
                             if (groupChild is Question question)
                             {
                                 var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
-                                result.Add(new InterviewEntity
+                                var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Question,
                                     InterviewId = (Guid)reader["data_interview_id"],
-                                    AsObjectValue = reader[$"data_{question.ColumnName}"],
                                     InvalidValidations = reader[$"validity_{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity_{question.ColumnName}"],
                                     IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
-                                });
+                                };
+
+                                FillAnswerToQuestion(question, interviewEntity, reader[$"data_{question.ColumnName}"]);
+                                result.Add(interviewEntity);
+
+
                             }
                             else if (groupChild is Variable variable)
                             {
                                 var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
-                                result.Add(new InterviewEntity
+                                var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Variable,
                                     InterviewId = (Guid)reader["data_interview_id"],
-                                    AsObjectValue = reader[$"data_{variable.ColumnName}"],
                                     IsEnabled = (bool)reader[$"enablement_{variable.ColumnName}"]
-                                });
+                                };
+                                FillAnswerToVariable(variable, interviewEntity, reader[$"data_{variable.ColumnName}"]);
                             }
                         }
                     }
@@ -78,6 +82,69 @@ namespace WB.Services.Export.Interview
             return result;
         }
 
+        private void FillAnswerToVariable(Variable variable, InterviewEntity entity, object answer)
+        {
+            switch (variable.Type)
+            {
+                case VariableType.LongInteger:
+                    entity.AsLong = (long?) answer;
+                    break;
+                case VariableType.Double:
+                    entity.AsDouble = (double?) answer;
+                    break;
+                case VariableType.Boolean:
+                    entity.AsBool = (bool?) answer;
+                    break;
+                case VariableType.DateTime:
+                    entity.AsDateTime = (DateTime?) answer;
+                    break;
+                case VariableType.String:
+                    entity.AsString = (string) answer;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void FillAnswerToQuestion(Question question, InterviewEntity entity, object answer)
+        {
+            switch (question.QuestionType)
+            {
+                case QuestionType.MultyOption:
+                    var multiOption = (MultyOptionsQuestion)question;
+
+                    if (multiOption.YesNoView)
+                    {
+                        entity.AsYesNo = JsonConvert.DeserializeObject<AnsweredYesNoOption[]>(answer.ToString());
+                    }
+                    else
+                    {
+                        entity.AsIntArray = (int[]) answer;
+                    }
+                    break;
+                case QuestionType.Numeric:
+                    entity.AsInt = (int?) answer;
+                    break;
+                case QuestionType.DateTime:
+                    entity.AsDateTime = (DateTime?) answer;
+                    break;
+                case QuestionType.Multimedia:
+                case QuestionType.QRBarcode:
+                case QuestionType.Text:
+                case QuestionType.SingleOption:
+                    entity.AsString = (string) answer;
+                    break;
+                case QuestionType.GpsCoordinates:
+                    entity.AsGps = JsonConvert.DeserializeObject<GeoPosition>(answer.ToString());
+                    break;
+                case QuestionType.Audio:
+                    entity.AsAudio = JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString());
+                    break;
+                case QuestionType.TextList:
+                    entity.AsList = JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString());
+                    break;
+            }
+        }
         
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
             QuestionnaireDocument questionnaire,
