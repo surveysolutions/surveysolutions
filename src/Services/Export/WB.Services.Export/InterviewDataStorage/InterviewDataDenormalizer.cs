@@ -145,8 +145,10 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
-                var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId).ToArray();
-                state.Commands.Add(InterviewDataStateChangeCommand.AddRosterInstance(@event.EventSourceId, rosterInstance.GroupId, rosterVector));
+                var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId)
+                    .Cast<int>().ToArray();
+                state.Commands.Add(InterviewDataStateChangeCommand.AddRosterInstance(
+                    @event.EventSourceId, rosterInstance.GroupId, rosterVector));
             }
             return Task.FromResult(state);
         }
@@ -156,7 +158,7 @@ namespace WB.Services.Export.InterviewDataStorage
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
-                rosterVector: @event.Event.RosterVector,
+                rosterVector: @event.Event.RosterVector.Cast<int>().ToArray(),
                 answer: @event.Event.Answer
             ));
             return Task.FromResult(state);

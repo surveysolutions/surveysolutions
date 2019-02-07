@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace WB.Services.Export.Events.Interview.Dtos
 {
@@ -9,8 +10,9 @@ namespace WB.Services.Export.Events.Interview.Dtos
     public class RosterInstance
     {
         public Guid GroupId { get; set; }
-        public int[] OuterRosterVector { get; set; }
-        public int RosterInstanceId { get; set; }
+
+        public decimal[] OuterRosterVector { get; set; }
+        public decimal RosterInstanceId { get; set; }
 
         private int? hashCode;
 
