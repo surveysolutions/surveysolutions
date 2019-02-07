@@ -21,17 +21,17 @@ namespace WB.Services.Export.Services
             var feed = JObject.Load(reader);
             var eventTypeName = feed["EventTypeName"].Value<string>();
 
-            var feedEvent = new FeedEvent
+            var feedEvent = new Event
             {
-                EventSourceId = Guid.Parse(feed[nameof(FeedEvent.EventSourceId)].Value<string>()),
-                EventTypeName = feed[nameof(FeedEvent.EventTypeName)].Value<string>(),
-                GlobalSequence = feed[nameof(FeedEvent.GlobalSequence)].Value<long>(),
-                Sequence = feed[nameof(FeedEvent.Sequence)].Value<int>(),
+                EventSourceId = Guid.Parse(feed[nameof(Event.EventSourceId)].Value<string>()),
+                EventTypeName = feed[nameof(Event.EventTypeName)].Value<string>(),
+                GlobalSequence = feed[nameof(Event.GlobalSequence)].Value<long>(),
+                Sequence = feed[nameof(Event.Sequence)].Value<int>(),
             };
 
             if (TypesCache.TryGetValue(eventTypeName, out var eventType))
             {
-                feedEvent.Payload = (IEvent) feed[nameof(FeedEvent.Payload)].ToObject(eventType, PayloadSerializer);
+                feedEvent.Payload = (IEvent) feed[nameof(Event.Payload)].ToObject(eventType, PayloadSerializer);
             }
 
             return feedEvent;
@@ -39,7 +39,7 @@ namespace WB.Services.Export.Services
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(FeedEvent);
+            return objectType == typeof(Event);
         }
 
         private static readonly JsonSerializer PayloadSerializer = new JsonSerializer

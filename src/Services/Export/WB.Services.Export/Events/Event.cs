@@ -6,7 +6,7 @@ using WB.Services.Export.Services;
 namespace WB.Services.Export.Events
 {
     [JsonConverter(typeof(FeedEventConverter))]
-    public class FeedEvent
+    public class Event
     {
         public string EventTypeName { get; set; }
 
