@@ -69,12 +69,8 @@ namespace WB.UI.Headquarters.API.Export
 
                     json.WriteEndArray();
 
-                    json.WritePropertyName(nameof(EventsFeedPage.NextPageUrl));
-                    json.WriteValue(Url.Route(@"EventsFeed", new
-                    {
-                        sequence = lastEvent + 1,
-                        pageSize
-                    }));
+                    json.WritePropertyName(nameof(EventsFeedPage.NextSequence));
+                    json.WriteValue(lastEvent == maximum  ? (long?) null : lastEvent + 1);
 
                     json.WriteEndObject();
                 }
@@ -88,13 +84,15 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage Get(Guid id, int lastSequence = 0, int pageSize = 500)
+        public async Task<HttpResponseMessage> Get(Guid id, int lastSequence = 0, int pageSize = 500)
         {
+            var maximum = await this.headquartersEventStore.GetMaximumGlobalSequence();
             var events = this.headquartersEventStore.Read(id, minVersion: lastSequence).Take(pageSize).ToList();
 
             var eventsFeedPage = new EventsFeedPage
             {
-                NextPageUrl = Url.Route("InterviewEventsFeed", new { lastSequence = events.LastOrDefault() }),
+                Total = maximum,
+                //NextPageUrl = Url.Route("InterviewEventsFeed", new { lastSequence = events.LastOrDefault() }),
                 Events = events.Select(e => new FeedEvent(e)).ToList()
             };
 
@@ -105,9 +103,11 @@ namespace WB.UI.Headquarters.API.Export
     public class EventsFeedPage
     {
         /// <summary>
-        /// Relative url for fetching next batch of events. Null if application retrieved last page
+        /// Relative sequence for fetching next batch of events. Null if application retrieved last page
         /// </summary>
-        public string NextPageUrl { get; set; }
+        public long? NextSequence { get; set; }
+
+        public long Total { get; set; }
 
         public List<FeedEvent> Events { get; set; }
     }

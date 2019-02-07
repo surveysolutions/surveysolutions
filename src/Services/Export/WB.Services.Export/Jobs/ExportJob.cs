@@ -17,15 +17,19 @@ namespace WB.Services.Export.Jobs
     {
         private readonly IServiceProvider serviceProvider;
         private readonly ITenantContext tenantContext;
+        private readonly IEventProcessor processor;
 
         private readonly ILogger<ExportJob> logger;
         
-        public ExportJob(IServiceProvider serviceProvider, ITenantContext tenantContext,
+        public ExportJob(IServiceProvider serviceProvider, 
+            ITenantContext tenantContext,
+            IEventProcessor processor,
             ILogger<ExportJob> logger)
         {
             logger.LogTrace("Constructed instance of ExportJob");
             this.serviceProvider = serviceProvider;
             this.tenantContext = tenantContext;
+            this.processor = processor;
             this.logger = logger;
         }
 
@@ -34,6 +38,8 @@ namespace WB.Services.Export.Jobs
             try
             {
                 tenantContext.Tenant = pendingExportProcess.ExportSettings.Tenant;
+
+                await processor.HandleNewEvents(cancellationToken);
 
                 if (pendingExportProcess.StorageType.HasValue)
                 {

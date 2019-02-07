@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Events.Interview;
-using WB.Services.Export.Events.Interview.Base;
-using WB.Services.Export.Handlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Export.Storage;
+using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage
@@ -107,7 +107,7 @@ namespace WB.Services.Export.InterviewDataStorage
     }
 
     class InterviewDataDenormalizer:
-        IFunctionalHandler,
+      //  IFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<TextQuestionAnswered>/*,
@@ -120,11 +120,11 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private readonly InterviewDataState state;
 
-        public InterviewDataDenormalizer(TenantInfo tenantInfo, IQuestionnaireStorage questionnaireStorage,
+        public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage,
             IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference,
             ISession session)
         {
-            this.tenantInfo = tenantInfo;
+            this.tenantInfo = tenantContext.Tenant;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewQuestionnaireReference = interviewQuestionnaireReference;
             this.session = session;
