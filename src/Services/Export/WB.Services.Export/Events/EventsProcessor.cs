@@ -59,7 +59,7 @@ namespace WB.Services.Export.Events
         {
             using (var scope = serviceProvider.CreateScope())
             {
-                scope.ServiceProvider.GetService<ITenantContext>().Tenant = tenant.Tenant;
+                scope.PropagateTenantContext(tenant);
 
                 var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>().ToArray();
                 var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>().ToArray();

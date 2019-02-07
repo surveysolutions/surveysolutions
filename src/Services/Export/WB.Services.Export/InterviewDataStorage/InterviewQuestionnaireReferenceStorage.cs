@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
@@ -27,9 +28,9 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly TenantInfo tenantInfo;
         private readonly ISession session;
 
-        public InterviewQuestionnaireReferenceStorage(TenantInfo tenantInfo, ISession session)
+        public InterviewQuestionnaireReferenceStorage(ITenantContext tenantInfo, ISession session)
         {
-            this.tenantInfo = tenantInfo;
+            this.tenantInfo = tenantInfo.Tenant;
             this.session = session;
 
             EnshureTableExists();
