@@ -61,17 +61,18 @@ namespace WB.Services.Export.Events
             {
                 scope.PropagateTenantContext(tenant);
 
-                var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>().ToArray();
-                var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>().ToArray();
                 var session = (Session) scope.ServiceProvider.GetRequiredService<ISession>();
 
                 using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
                 {
                     session.Connection = db;
-
                     await db.OpenAsync(token);
+                    
                     using (var tr = db.BeginTransaction())
                     {
+                        var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>().ToArray();
+                        var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>().ToArray();
+                        
                         foreach (var handler in priorityHandlers.Concat(handlers))
                         {
                             foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
