@@ -20,10 +20,10 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                   ""total"": 13164971,
                   ""Events"": [
                     {
+                      ""$type"": ""InterviewOnClientCreated"",
                       ""GlobalSequence"": 1,
                       ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
                       ""Sequence"": 1,
-                      ""EventTypeName"": ""InterviewOnClientCreated"",
                       ""Payload"": {
                         ""userId"": ""bc606b47-d1d7-4fff-b032-41ef0c9c7635"",
                         ""originDate"": ""2018-12-28T09:53:12.4357076-05:00"",
@@ -33,10 +33,10 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                       }
                     },
                     {
+                      ""$type"": ""InterviewCreated"",
                       ""GlobalSequence"": 2,
                       ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
                       ""Sequence"": 2,
-                      ""EventTypeName"": ""InterviewCreated"",
                       ""Payload"": {
                         ""userId"": ""bc606b47-d1d7-4fff-b032-41ef0c9c7635"",
                         ""originDate"": ""2018-12-28T16:31:09.363733+02:00"",
@@ -46,17 +46,34 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                         ""questionnaireVersion"": 1,
                         ""usesExpressionStorage"": true
                       }
+                    },
+                    {
+                      ""$type"": ""RosterInstancesAdded"",
+                      ""GlobalSequence"": 2,
+                      ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
+                      ""Sequence"": 2,
+                      ""Payload"": {
+                        ""instances"": [
+                          {
+                            ""groupId"": ""591c5473-2d33-e4ab-4011-8e272b79ff80"",
+                            ""sortIndex"": 0,
+                            ""rosterInstanceId"": 1.0,
+                            ""outerRosterVector"": [1.0, 2.0]
+                          }
+                        ]
+                      }
                     }
                   ],
                   ""NextSequence"": 3
-                }";
+                }
+                ";
 
             var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
 
             Assert.That(feed.Total, Is.EqualTo(13164971));
             Assert.That(feed.NextSequence, Is.EqualTo(3));
 
-            Assert.That(feed.Events.Count, Is.EqualTo(2));
+            Assert.That(feed.Events.Count, Is.EqualTo(3));
 
             Assert.That(feed.Events[0].GlobalSequence, Is.EqualTo(1));
             Assert.That(feed.Events[0].Sequence, Is.EqualTo(1));
@@ -76,6 +93,11 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             {
                 Assert.Fail("Payload has wrong type");
             }
+
+            if (feed.Events[2].Payload is RosterInstancesAdded added)
+            {
+                Assert.That(added.Instances[0].OuterRosterVector, Is.EquivalentTo(new int[]{ 1,2}));
+            }
         }
 
         [Test]
@@ -86,10 +108,10 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                   ""total"": 13164971,
                   ""Events"": [
                     {
+                      ""$type"": ""InterviewOnClientCreated"",
                       ""GlobalSequence"": 1,
                       ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
-                      ""Sequence"": 1,
-                      ""EventTypeName"": ""InterviewOnClientCreated"",
+                      ""Sequence"": 1,                      
                       ""Payload"": {
                         ""userId"": ""bc606b47-d1d7-4fff-b032-41ef0c9c7635"",
                         ""originDate"": ""2018-12-28T09:53:12.4357076-05:00"",
@@ -99,10 +121,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                       }
                     },
                     {
-                      ""GlobalSequence"": 2,
-                      ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
-                      ""Sequence"": 2,
-                      ""EventTypeName"": ""InterviewCreated2"",
+                      ""$type"": ""InterviewCreated2"",
                       ""Payload"": {
                         ""userId"": ""bc606b47-d1d7-4fff-b032-41ef0c9c7635"",
                         ""originDate"": ""2018-12-28T16:31:09.363733+02:00"",
@@ -111,10 +130,13 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                         ""questionnaireId"": ""12aabc0b-963d-4afc-b67f-1f8b838a094e"",
                         ""questionnaireVersion"": 1,
                         ""usesExpressionStorage"": true
-                      }
+                      },
+                      ""GlobalSequence"": 2,
+                      ""EventSourceId"": ""98b5d3f4-7c89-4f40-820b-158b3977c3f2"",
+                      ""Sequence"": 2                      
                     }
                   ],
-                  ""NextPageUrl"": ""/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2""
+                   ""NextSequence"": 3
                 }";
 
             var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
@@ -126,8 +148,10 @@ namespace WB.Services.Export.Tests.Services.TenantApi
         public void can_deserialize_event()
         {
             var ev =
-                "{\r\n  \"userId\": \"bc606b47-d1d7-4fff-b032-41ef0c9c7635\",\r\n  \"originDate\": \"2018-12-28T16:53:12.4357076+02:00\",\r\n " +
-                " \"questionnaireId\": \"12aabc0b-963d-4afc-b67f-1f8b838a094e\",\r\n  \"questionnaireVersion\": 1,\r\n  \"usesExpressionStorage\": true\r\n}";
+                "{\r\n  \"userId\": \"bc606b47-d1d7-4fff-b032-41ef0c9c7635\",\r\n" +
+                "  \"originDate\": \"2018-12-28T16:53:12.4357076+02:00\",\r\n " +
+                " \"questionnaireId\": \"12aabc0b-963d-4afc-b67f-1f8b838a094e\",\r\n  " +
+                "\"questionnaireVersion\": 1,\r\n  \"usesExpressionStorage\": true\r\n}";
 
             var obj = JsonConvert.DeserializeObject<InterviewOnClientCreated>(ev);
 
