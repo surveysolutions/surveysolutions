@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -115,18 +116,18 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly TenantInfo tenantInfo;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference;
-        private readonly IOptions<DbConnectionSettings> connectionSettings;
+        private readonly ISession session;
 
         private readonly InterviewDataState state;
 
         public InterviewDataDenormalizer(TenantInfo tenantInfo, IQuestionnaireStorage questionnaireStorage,
             IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference,
-            IOptions<DbConnectionSettings> connectionSettings)
+            ISession session)
         {
             this.tenantInfo = tenantInfo;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewQuestionnaireReference = interviewQuestionnaireReference;
-            this.connectionSettings = connectionSettings;
+            this.session = session;
 
             state = new InterviewDataState()
             {
@@ -196,30 +197,20 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
-            var commandsState = await GenerateSqlCommands(state);
-            await ExecuteCommandsAsync(commandsState.GetOrderedCommands());
+            var commandsState = await GenerateSqlCommandsAsync();
+            await ExecuteCommandsAsync(commandsState.GetOrderedCommands(), cancellationToken);
         }
 
-        private async Task ExecuteCommandsAsync(IEnumerable<DbCommand> sqlCommands)
+        private async Task ExecuteCommandsAsync(IEnumerable<DbCommand> sqlCommands, CancellationToken cancellationToken)
         {
-            var connectionString = connectionSettings.Value.DefaultConnection;
-
-            using (var connection = new NpgsqlConnection(connectionString))
+            foreach (var sqlCommand in sqlCommands)
             {
-                await connection.OpenAsync();
-                var transaction = connection.BeginTransaction();
-
-                foreach (var sqlCommand in sqlCommands)
-                {
-                    sqlCommand.Connection = connection;
-                    await sqlCommand.ExecuteNonQueryAsync();
-                }
-
-                await transaction.CommitAsync();
+                sqlCommand.Connection = session.Connection;
+                await sqlCommand.ExecuteNonQueryAsync(cancellationToken);
             }
         }
 
-        private async Task<CommandsForExecute> GenerateSqlCommands(InterviewDataState state)
+        private async Task<CommandsForExecute> GenerateSqlCommandsAsync()
         {
             var commandsState = new CommandsForExecute();
 
@@ -239,36 +230,31 @@ namespace WB.Services.Export.InterviewDataStorage
                         case InterviewDataStateChangeCommandType.InsertInterview:
                         {
                             foreach (var insertInterviewCommand in commandByType)
-                                commandsState.InsertInterviewCommands.AddRange(GetInsertCommands(questionnaire,
-                                    insertInterviewCommand));
+                                commandsState.InsertInterviewCommands.AddRange(GetInsertCommands(questionnaire, insertInterviewCommand));
                             break;
                         }
                         case InterviewDataStateChangeCommandType.DeleteInterview:
                         {
                             foreach (var deleteInterviewCommand in commandByType)
-                                commandsState.RemoveInterviewCommands.AddRange(GetDeleteCommands(questionnaire,
-                                    deleteInterviewCommand));
+                                commandsState.RemoveInterviewCommands.AddRange(GetDeleteCommands(questionnaire, deleteInterviewCommand));
                             break;
                         }
                         case InterviewDataStateChangeCommandType.AddRosterInstance:
                         {
                             foreach (var addRosterInstanceCommand in commandByType)
-                                commandsState.AddRosterInstanceCommands.AddRange(
-                                    GetAddRosterInstanceCommands(questionnaire, addRosterInstanceCommand));
+                                commandsState.AddRosterInstanceCommands.AddRange(GetAddRosterInstanceCommands(questionnaire, addRosterInstanceCommand));
                             break;
                         }
                         case InterviewDataStateChangeCommandType.RemoveRosterInstance:
                         {
                             foreach (var removeRosterInstanceCommand in commandByType)
-                                commandsState.RemoveRosterInstanceCommands.AddRange(
-                                    GetRemoveRosterInstanceCommands(questionnaire, removeRosterInstanceCommand));
+                                commandsState.RemoveRosterInstanceCommands.AddRange(GetRemoveRosterInstanceCommands(questionnaire, removeRosterInstanceCommand));
                             break;
                         }
                         case InterviewDataStateChangeCommandType.UpdateAnswer:
                         {
                             foreach (var updateAnswerCommand in commandByType)
-                                commandsState.UpdateAnswerCommands.AddRange(GetUpdateAnswerCommands(questionnaire,
-                                    updateAnswerCommand));
+                                commandsState.UpdateAnswerCommands.AddRange(GetUpdateAnswerCommands(questionnaire, updateAnswerCommand));
                             break;
                         }
                         default:
