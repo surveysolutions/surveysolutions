@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
-using WB.Services.Export.Services;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Tests.Services.TenantApi
 {
@@ -49,13 +48,13 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                       }
                     }
                   ],
-                  ""NextPageUrl"": ""/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2""
+                  ""NextSequence"": 3
                 }";
 
             var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
 
             Assert.That(feed.Total, Is.EqualTo(13164971));
-            Assert.That(feed.NextPageUrl, Is.EqualTo("/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2"));
+            Assert.That(feed.NextSequence, Is.EqualTo(3));
 
             Assert.That(feed.Events.Count, Is.EqualTo(2));
 
@@ -136,18 +135,58 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             Assert.That(obj.QuestionnaireId, Is.EqualTo(Guid.Parse("12aabc0b-963d-4afc-b67f-1f8b838a094e")));
         }
 
-        //[Test]
-        //public void test_double()
-        //{
-        //    var json = "{ \"vector\" : [1.0, 2.0,3.0] }";
-        //    var obj = JsonConvert.DeserializeObject<Test>(json);
+    }
 
-        //}
-
-        class Test
+    public class EventHandlerTests
+    {
+        [Test]
+        public void can_resolve_all_handlers()
         {
-            public int[] vector { get; set; }
+            var calledEvents = new HashSet<(IEvent, Guid)>();
+            IFunctionalHandler testSubj = new TestHandler(calledEvents);
+
+            var events = new []
+            {
+                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g1 },
+                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g2}
+            };
+
+            foreach (var ev in events)
+            {
+                testSubj.Handle(ev);
+            }
+            
+            Assert.That(calledEvents.Contains((events[0].Payload, events[0].EventSourceId)));
+            Assert.That(calledEvents.Contains((events[1].Payload, events[1].EventSourceId)));
         }
 
+        class TestHandler : IFunctionalHandler,
+            IEventHandler<InterviewCreated>,
+            IEventHandler<AnswersRemoved>
+        {
+            private readonly HashSet<(IEvent,Guid)>  track;
+
+            public TestHandler(HashSet<(IEvent, Guid)> track)
+            {
+                this.track = track;
+            }
+
+            public Task SaveStateAsync(CancellationToken cancellationToken = default)
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+            {
+                track.Add((@event.Event, @event.EventSourceId));
+                return Task.CompletedTask;
+            }
+
+            public Task HandleAsync(PublishedEvent<AnswersRemoved> @event, CancellationToken cancellationToken = default)
+            {
+                track.Add((@event.Event, @event.EventSourceId));
+                return Task.CompletedTask;
+            }
+        }
     }
 }

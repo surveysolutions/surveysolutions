@@ -1,8 +1,7 @@
-﻿using System.Reflection;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace WB.Services.Export.Handlers
+namespace WB.Services.Infrastructure.EventSourcing
 {
     /// <summary>
     /// Stateful handler for events.
@@ -12,4 +11,9 @@ namespace WB.Services.Export.Handlers
     {
         Task SaveStateAsync(CancellationToken cancellationToken = default);
     }
+
+    /// <summary>
+    /// Functional handlers marked with this interface will be executed earlier than other handlers
+    /// </summary>
+    public interface IHighPriorityFunctionalHandler: IFunctionalHandler {  }
 }

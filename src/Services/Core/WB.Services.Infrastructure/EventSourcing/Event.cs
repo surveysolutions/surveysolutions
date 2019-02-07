@@ -1,9 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
-using WB.Services.Export.Events.Interview.Base;
-using WB.Services.Export.Services;
 
-namespace WB.Services.Export.Events
+namespace WB.Services.Infrastructure.EventSourcing
 {
     [JsonConverter(typeof(FeedEventConverter))]
     public class Event

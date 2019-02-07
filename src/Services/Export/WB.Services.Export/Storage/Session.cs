@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 
-namespace WB.Services.Export.Handlers
+namespace WB.Services.Export.Storage
 {
     public class Session : ISession
     {
