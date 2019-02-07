@@ -55,7 +55,8 @@ namespace WB.Services.Export.Interview
                                     IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
                                 };
 
-                                FillAnswerToQuestion(question, interviewEntity, reader[$"data_{question.ColumnName}"]);
+                                var answer = reader[$"data_{question.ColumnName}"];
+                                FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
                                 result.Add(interviewEntity);
 
 
@@ -70,7 +71,8 @@ namespace WB.Services.Export.Interview
                                     InterviewId = (Guid)reader["data_interview_id"],
                                     IsEnabled = (bool)reader[$"enablement_{variable.ColumnName}"]
                                 };
-                                FillAnswerToVariable(variable, interviewEntity, reader[$"data_{variable.ColumnName}"]);
+                                var val = reader[$"data_{variable.ColumnName}"];
+                                FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
                             }
                         }
                     }
@@ -113,7 +115,7 @@ namespace WB.Services.Export.Interview
                 case QuestionType.MultyOption:
                     var multiOption = (MultyOptionsQuestion)question;
 
-                    if (multiOption.YesNoView)
+                    if (multiOption.YesNoView && answer != null)
                     {
                         entity.AsYesNo = JsonConvert.DeserializeObject<AnsweredYesNoOption[]>(answer.ToString());
                     }
@@ -135,13 +137,13 @@ namespace WB.Services.Export.Interview
                     entity.AsString = (string) answer;
                     break;
                 case QuestionType.GpsCoordinates:
-                    entity.AsGps = JsonConvert.DeserializeObject<GeoPosition>(answer.ToString());
+                    entity.AsGps = answer != null ? JsonConvert.DeserializeObject<GeoPosition>(answer.ToString()) : null;
                     break;
                 case QuestionType.Audio:
-                    entity.AsAudio = JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString());
+                    entity.AsAudio = answer != null ? JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString()) : null;
                     break;
                 case QuestionType.TextList:
-                    entity.AsList = JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString());
+                    entity.AsList = answer != null ? JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString()) : null;
                     break;
             }
         }
