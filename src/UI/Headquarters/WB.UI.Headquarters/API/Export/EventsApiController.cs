@@ -52,14 +52,16 @@ namespace WB.UI.Headquarters.API.Export
                     {
                         json.WriteStartObject();
 
+                        json.WritePropertyName(@"$type"); json.WriteValue(ev.EventType);
+
                         json.WritePropertyName(nameof(FeedEvent.GlobalSequence));
                         json.WriteValue(ev.GlobalSequence);
                         json.WritePropertyName(nameof(FeedEvent.EventSourceId));
                         json.WriteValue(ev.EventSourceId);
                         json.WritePropertyName(nameof(FeedEvent.Sequence));
                         json.WriteValue(ev.EventSequence);
-                        json.WritePropertyName(nameof(FeedEvent.EventTypeName));
-                        json.WriteValue(ev.EventType);
+                        //json.WritePropertyName(nameof(FeedEvent.EventTypeName));
+                        //json.WriteValue(ev.EventType);
                         json.WritePropertyName(nameof(FeedEvent.Payload));
                         json.WriteRawValue(ev.Value);
                         json.WriteEndObject();
