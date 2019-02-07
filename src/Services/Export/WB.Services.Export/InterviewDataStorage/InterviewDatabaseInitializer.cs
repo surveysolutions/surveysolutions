@@ -82,7 +82,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
@@ -104,7 +104,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
@@ -126,7 +126,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
