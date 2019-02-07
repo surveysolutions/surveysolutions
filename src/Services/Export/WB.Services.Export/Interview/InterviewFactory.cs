@@ -143,6 +143,9 @@ namespace WB.Services.Export.Interview
                 case QuestionType.TextList:
                     entity.AsList = answer != null ? JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString()) : null;
                     break;
+                case QuestionType.Area:
+                    entity.AsArea = answer != null ? JsonConvert.DeserializeObject<Area>(answer.ToString()) : null;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException($"Question {question.QuestionType} is not supported by export");
             }
