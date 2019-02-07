@@ -9,8 +9,8 @@ namespace WB.Services.Export.Events.Interview.Dtos
     public class RosterInstance
     {
         public Guid GroupId { get; set; }
-        public decimal[] OuterRosterVector { get; set; }
-        public decimal RosterInstanceId { get; set; }
+        public int[] OuterRosterVector { get; set; }
+        public int RosterInstanceId { get; set; }
 
         private int? hashCode;
 
