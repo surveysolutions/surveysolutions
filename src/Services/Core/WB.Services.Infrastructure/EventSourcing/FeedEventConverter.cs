@@ -4,10 +4,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using WB.Services.Export.Events;
-using WB.Services.Export.Events.Interview.Base;
 
-namespace WB.Services.Export.Services
+namespace WB.Services.Infrastructure.EventSourcing
 {
     public class FeedEventConverter  : JsonConverter
     {

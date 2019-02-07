@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Reflection;
-using WB.Services.Export.Events;
 
-namespace WB.Services.Export.Handlers
+namespace WB.Services.Infrastructure.EventSourcing
 {
     public static class PublishedEventConstructor
     {

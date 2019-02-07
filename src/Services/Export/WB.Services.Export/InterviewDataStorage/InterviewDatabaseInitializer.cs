@@ -144,11 +144,11 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (question)
             {
-                case TextQuestion textQuestion : return "text";
+                case TextQuestion _ : return "text";
                 case NumericQuestion numericQuestion when (numericQuestion.IsInteger): return "int4";
                 case NumericQuestion numericQuestion when (!numericQuestion.IsInteger): return "float8";
-                case TextListQuestion textListQuestion : return "text[]";
-                case MultimediaQuestion multimediaQuestion : return "text";
+                case TextListQuestion _ : return "text[]";
+                case MultimediaQuestion _ : return "text";
                 case DateTimeQuestion dateTimeQuestion : return "timestamp";
                 case AudioQuestion audioQuestion : return "jsonb";
                 case AreaQuestion areaQuestion : return "jsonb";

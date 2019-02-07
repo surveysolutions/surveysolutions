@@ -1,8 +1,6 @@
 ﻿using System;
-using WB.Services.Export.Events;
-using WB.Services.Export.Events.Interview.Base;
 
-namespace WB.Services.Export.Handlers
+namespace WB.Services.Infrastructure.EventSourcing
 {
     public class PublishedEvent<T> where T : IEvent
     {
