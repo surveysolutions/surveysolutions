@@ -50,8 +50,19 @@ namespace WB.Services.Export.Interview
                 
             query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" enablement ON data.interview_id = enablement.interview_id{2}",
                 tenant.Name, group.EnablementTableName, Environment.NewLine);
+            if (group.IsInsideRoster)
+            {
+                query.AppendLine("   AND data.roster_vector = enablement.roster_vector");
+            }
+
             query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" validity ON data.interview_id = validity.interview_id{2}",
                 tenant.Name, group.ValidityTableName, Environment.NewLine);
+
+            if (group.IsInsideRoster)
+            {
+                query.AppendLine("   AND data.roster_vector = validity.roster_vector");
+            }
+
             query.AppendFormat(" WHERE data.interview_id = ANY(@ids)");
 
             return query.ToString();

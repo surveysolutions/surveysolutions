@@ -165,7 +165,6 @@ namespace WB.Services.Export.Questionnaire
             while (queue.Count > 0)
             {
                 var current = queue.Dequeue();
-                if(current.IsRoster) continue;
 
                 foreach (var subChild in current.Children.OfType<Group>())
                 {
