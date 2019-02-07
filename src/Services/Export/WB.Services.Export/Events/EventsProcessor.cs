@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -33,14 +34,24 @@ namespace WB.Services.Export.Events
         {
             long currentSequence = 0;
             long? max = null;
-
+            var sw = Stopwatch.StartNew();
             do
             {
-                var events = await tenant.Api.GetInterviewEvents(currentSequence, 1000);
+                sw.Restart();
+                var events = await tenant.Api.GetInterviewEvents(currentSequence, 10000);
                 await HandleEvents(events, token);
-                
+
                 max = max ?? events.Total;
-                currentSequence = events.NextSequence;
+                if (events.NextSequence == null) break;
+                currentSequence = events.NextSequence.Value;
+
+                
+                var speed = events.Events.Count / sw.Elapsed.TotalSeconds;
+                var total = (max.Value - currentSequence) / speed;
+
+                Debug.WriteLine($"Took {sw.Elapsed} to handle {events.Events.Count} events. {TimeSpan.FromSeconds(total)} left");
+
+
             } while (currentSequence <= max.Value);
         }
 
@@ -48,10 +59,12 @@ namespace WB.Services.Export.Events
         {
             using (var scope = serviceProvider.CreateScope())
             {
+                scope.ServiceProvider.GetService<ITenantContext>().Tenant = tenant.Tenant;
+
                 var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>().ToArray();
                 var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>().ToArray();
                 var session = (Session) scope.ServiceProvider.GetRequiredService<ISession>();
-                
+
                 using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
                 {
                     session.Connection = db;
