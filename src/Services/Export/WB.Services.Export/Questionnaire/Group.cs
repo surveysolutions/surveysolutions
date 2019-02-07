@@ -12,7 +12,7 @@ namespace WB.Services.Export.Questionnaire
         FixedTitles = 1
     }
 
-    [DebuggerDisplay("Group {PublicKey}")]
+    [DebuggerDisplay("Group {PublicKey}; Variable {VariableName}")]
     public class Group : IQuestionnaireEntity
     {
         public Group(List<IQuestionnaireEntity> children = null)
