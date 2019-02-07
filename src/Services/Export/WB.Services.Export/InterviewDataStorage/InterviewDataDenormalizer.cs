@@ -13,7 +13,6 @@ using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
-using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
@@ -113,21 +112,18 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<TextQuestionAnswered>/*,
         IEventHandler<NumericIntegerQuestionAnswered>*/
     {
-        private readonly TenantInfo tenantInfo;
+        private readonly ITenantContext tenantContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference;
-        private readonly ISession session;
-
+        
         private readonly InterviewDataState state;
 
         public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage,
-            IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference,
-            ISession session)
+            IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference)
         {
-            this.tenantInfo = tenantContext.Tenant;
+            this.tenantContext = tenantContext;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewQuestionnaireReference = interviewQuestionnaireReference;
-            this.session = session;
 
             state = new InterviewDataState()
             {
@@ -207,7 +203,7 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var sqlCommand in sqlCommands)
             {
-                sqlCommand.Connection = session.Connection;
+                sqlCommand.Connection = tenantContext.Connection;
                 await sqlCommand.ExecuteNonQueryAsync(cancellationToken);
             }
         }
@@ -272,7 +268,7 @@ namespace WB.Services.Export.InterviewDataStorage
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
             var questionnaireId = await interviewQuestionnaireReference.GetQuestionnaireIdByInterviewIdAsync(interviewId, cancellationToken);
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantInfo, questionnaireId);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, questionnaireId);
             return questionnaire;
         }
 
@@ -290,7 +286,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private SqlCommand CreateInsertCommandForTable(string tableName, Guid interviewId)
         {
-            var text = $"INSERT INTO \"{tenantInfo.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
+            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
                        $"           VALUES(@interviewId);";
             SqlCommand insertCommand = new SqlCommand(text);
             insertCommand.Parameters.AddWithValue("@interviewId", interviewId);
@@ -311,7 +307,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private SqlCommand CreateDeleteCommandForTable(string tableName, Guid interviewId)
         {
-            var text = $"DELETE FROM \"{tenantInfo.Name}\".\"{tableName}\" " +
+            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId;";
             SqlCommand deleteCommand = new SqlCommand(text);
             deleteCommand.Parameters.AddWithValue("@interviewId", interviewId);
@@ -328,7 +324,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private SqlCommand CreateAddRosterInstanceForTable(string tableName, Guid interviewId, int[] rosterVector)
         {
-            var text = $"INSERT INTO \"{tenantInfo.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
+            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
                        $"           VALUES(@interviewId, @rosterVector);";
             SqlCommand insertCommand = new SqlCommand(text);
             insertCommand.Parameters.AddWithValue("@interviewId", interviewId);
@@ -346,7 +342,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private SqlCommand CreateRemoveRosterInstanceForTable(string tableName, Guid interviewId, int[] rosterVector)
         {
-            var text = $"DELETE FROM \"{tenantInfo.Name}\".\"{tableName}\" " +
+            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId" +
                        $"        AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
             SqlCommand deleteCommand = new SqlCommand(text);
@@ -364,7 +360,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private SqlCommand CreateUpdateAnswerForTable(string tableName, string columnName, Guid interviewId, int[] rosterVector, string answer)
         {
-            var text = $"UPDATE \"{tenantInfo.Name}\".\"{tableName}\" " +
+            var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"   SET {columnName} = @answer" +
                        $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId" +
                        $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";

@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
@@ -60,12 +59,10 @@ namespace WB.Services.Export.Events
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);
-
-                var session = (Session) scope.ServiceProvider.GetRequiredService<ISession>();
-
+                
                 using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
                 {
-                    session.Connection = db;
+                    scope.SetDbConnection(db);
                     await db.OpenAsync(token);
                     
                     using (var tr = db.BeginTransaction())
