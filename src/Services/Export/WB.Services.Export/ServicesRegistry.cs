@@ -81,8 +81,7 @@ namespace WB.Services.Export
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
-            services.AddScoped<ISession, Session>();
-
+            
             RegisterFunctionalHandlers(services, typeof(DebugHandler));
 
             // Singletons

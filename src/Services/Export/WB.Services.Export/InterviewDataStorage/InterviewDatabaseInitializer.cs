@@ -16,7 +16,6 @@ namespace WB.Services.Export.InterviewDataStorage
         Task CreateQuestionnaireDbStructureAsync(TenantInfo tenant, QuestionnaireDocument questionnaireDocument);
     }
 
-
     public class InterviewDatabaseInitializer : IInterviewDatabaseInitializer
     {
         private readonly IOptions<DbConnectionSettings> connectionSettings;

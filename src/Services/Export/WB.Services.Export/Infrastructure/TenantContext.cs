@@ -1,4 +1,5 @@
-﻿using WB.Services.Export.Services;
+﻿using System.Data.Common;
+using WB.Services.Export.Services;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Infrastructure
@@ -25,5 +26,7 @@ namespace WB.Services.Export.Infrastructure
         }
 
         public IHeadquartersApi Api { get; private set; }
+
+        public DbConnection Connection { get; set; }
     }
 }
