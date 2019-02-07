@@ -17,6 +17,57 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
     internal class TabularFormatExportServiceTests
     {
         [Test]
+        public async Task When_generating_description_file_by_questionnaire_with_groups_with_variable_names_Then_should_generate_it_with_group_variable_names()
+        {
+            // arrange
+            string description = null;
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
+                .Callback<string, string>((file, content) => description = content);
+
+            var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
+            {
+                CreateHeaderStructureForLevel("questionnaire", headerItems: new[]
+                {
+                    ExportedGroupHeaderItem(variableName: null),
+                    ExportedGroupHeaderItem(variableName: "group"),
+                    ExportedQuestionHeaderItem(variableName: "question"),
+                }),
+                CreateHeaderStructureForLevel("roster", levelScopeVector: ValueVector.Create(Guid.NewGuid()),
+                    headerItems: new[]
+                    {
+                        ExportedGroupHeaderItem(variableName: "nested_group"),
+                        ExportedQuestionHeaderItem(variableName: "nested_question"),
+                    }),
+            });
+
+            var hqApi = new Mock<IHeadquartersApi>();
+
+            var tenantApi = Create.TenantHeadquartersApi(hqApi.Object);
+
+            var exportService = Create.ReadSideToTabularFormatExportService(
+                questionnaireExportStructure,
+                tenantApi,
+
+                fileSystemAccessor: fileSystemAccessor.Object);
+
+            // act
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), @"x:\", ".xlsx");
+
+            // assert
+            Assert.That(description, Is.Not.Empty);
+            var lines = description.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            CollectionAssert.AreEqual(lines.Skip(1), new[]
+            {
+                "questionnaire.xlsx",
+                "group, question",
+                "roster.xlsx",
+                "nested_group, nested_question",
+            });
+        }
+
+        [Test]
         public async Task When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
         {
             // arrange
@@ -95,6 +146,14 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 ColumnHeaders = columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x}).ToList() ?? new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}},
                 QuestionType = type,
                 VariableName = variableName,
+            };
+
+        protected static IExportedHeaderItem ExportedGroupHeaderItem(string variableName = "varname")
+            => new ExportedGroupHeaderItem
+            {
+                PublicKey = Guid.NewGuid(),
+                VariableName = variableName,
+                ColumnHeaders = new List<HeaderColumn>()
             };
 
         protected static IExportedHeaderItem ExportedVariableHeaderItem(

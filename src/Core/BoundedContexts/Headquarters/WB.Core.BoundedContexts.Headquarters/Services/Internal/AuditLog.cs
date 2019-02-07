@@ -1,5 +1,6 @@
 ﻿using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -9,9 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
     {
         private readonly ILogger logger;
 
-        public AuditLog(ILogger logger)
+        public AuditLog(ILoggerProvider logger)
         {
-            this.logger = logger;
+            this.logger = logger.GetFor<AuditLog>();
         }
 
         public void ExportStared(string processName, DataExportFormat format)
