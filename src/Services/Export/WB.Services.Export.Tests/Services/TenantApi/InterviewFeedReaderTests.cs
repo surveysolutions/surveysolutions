@@ -52,7 +52,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                   ""NextPageUrl"": ""/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2""
                 }";
 
-            var feed = JsonConvert.DeserializeObject<FeedEvents>(feedJson);
+            var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
 
             Assert.That(feed.Total, Is.EqualTo(13164971));
             Assert.That(feed.NextPageUrl, Is.EqualTo("/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2"));
@@ -118,7 +118,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                   ""NextPageUrl"": ""/headquarters/api/export/v1/interview/events?sequence=3&pageSize=2""
                 }";
 
-            var feed = JsonConvert.DeserializeObject<FeedEvents>(feedJson);
+            var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
 
             Assert.That(feed.Events[1].Payload, Is.Null);
         }
@@ -134,6 +134,19 @@ namespace WB.Services.Export.Tests.Services.TenantApi
 
             Assert.That(obj.UserId, Is.EqualTo(Guid.Parse("bc606b47-d1d7-4fff-b032-41ef0c9c7635")));
             Assert.That(obj.QuestionnaireId, Is.EqualTo(Guid.Parse("12aabc0b-963d-4afc-b67f-1f8b838a094e")));
+        }
+
+        //[Test]
+        //public void test_double()
+        //{
+        //    var json = "{ \"vector\" : [1.0, 2.0,3.0] }";
+        //    var obj = JsonConvert.DeserializeObject<Test>(json);
+
+        //}
+
+        class Test
+        {
+            public int[] vector { get; set; }
         }
 
     }
