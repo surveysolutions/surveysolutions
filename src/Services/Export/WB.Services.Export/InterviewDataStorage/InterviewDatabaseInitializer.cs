@@ -81,17 +81,20 @@ namespace WB.Services.Export.InterviewDataStorage
         private Task CreateTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
         {
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question), isNullable: true));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
+
+            if (!questions.Any() && !variables.Any())
+                return Task.CompletedTask;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.TableName, columns);
             return ExecuteCommandAsync(connection, commandText);
@@ -100,17 +103,20 @@ namespace WB.Services.Export.InterviewDataStorage
         private Task CreateEnablementTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
         {
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
+
+            if (!questions.Any() && !variables.Any())
+                return Task.CompletedTask;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.EnablementTableName, columns);
             return ExecuteCommandAsync(connection, commandText);
@@ -119,13 +125,16 @@ namespace WB.Services.Export.InterviewDataStorage
         private Task CreateValidityTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
         {
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo("interview_id", "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (rosterLevel > 0)
-                columns.Add(new ColumnInfo("roster_vector", $"float8[{rosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"float8[{rosterLevel}]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
+
+            if (!questions.Any())
+                return Task.CompletedTask;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.ValidityTableName, columns);
             return ExecuteCommandAsync(connection, commandText);
