@@ -7,7 +7,7 @@ using WB.Services.Infrastructure.EventSourcing;
 namespace WB.Services.Export.InterviewDataStorage
 {
     public class InterviewQuestionnaireReferenceDenormalizer:
-        IFunctionalHandler,
+        IHighPriorityFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewHardDeleted>
     {
@@ -21,14 +21,12 @@ namespace WB.Services.Export.InterviewDataStorage
         public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
         {
             string questionnaireId = $"{@event.Event.QuestionnaireId}${@event.Event.QuestionnaireVersion}";
-            referenceStorage.AddInterviewQuestionnaireReference(@event.EventSourceId, new QuestionnaireId(questionnaireId));
-            return Task.CompletedTask;
+            return referenceStorage.AddInterviewQuestionnaireReferenceAsync(@event.EventSourceId, new QuestionnaireId(questionnaireId), cancellationToken);
         }
 
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
         {
-            referenceStorage.RemoveInterviewQuestionnaireReference(@event.EventSourceId);
-            return Task.CompletedTask;
+            return referenceStorage.RemoveInterviewQuestionnaireReferenceAsync(@event.EventSourceId, cancellationToken);
         }
 
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
