@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Storage;
@@ -21,26 +22,22 @@ namespace WB.Services.Export.InterviewDataStorage
 
     public class InterviewQuestionnaireReferenceStorage : IInterviewQuestionnaireReferenceStorage
     {
+        private readonly ITenantContext tenantContext;
         private const string InterviewQuestionnaireReferenceTableName = "interview_questionnaire_reference";
         private const string InterviewColumnName = "interviewid";
         private const string QuestionnaireColumnName = "questionnaireid";
 
-        private readonly TenantInfo tenantInfo;
-        private readonly ISession session;
-
-        public InterviewQuestionnaireReferenceStorage(ITenantContext tenantInfo, ISession session)
+        public InterviewQuestionnaireReferenceStorage(ITenantContext tenantContext)
         {
-            this.tenantInfo = tenantInfo.Tenant;
-            this.session = session;
-
+            this.tenantContext = tenantContext;
             EnshureTableExists();
         }
 
         public async Task<QuestionnaireId> GetQuestionnaireIdByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            var commandText = $"SELECT questionnaireid FROM \"{tenantInfo.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"" +
+            var commandText = $"SELECT questionnaireid FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"" +
                               $"  WHERE {InterviewColumnName} = @interviewId;";
-            var command = this.session.Connection.CreateCommand();
+            var command = this.tenantContext.Connection.CreateCommand();
             command.CommandText = commandText;
             AddParameter(command, "@interviewId", DbType.Guid, interviewId);
             var questionnaireId = (await command.ExecuteScalarAsync(cancellationToken)) as string;
@@ -49,10 +46,10 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task AddInterviewQuestionnaireReferenceAsync(Guid interviewId, QuestionnaireId questionnaireId, CancellationToken cancellationToken)
         {
-            var text = $"INSERT INTO \"{tenantInfo.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" ({InterviewColumnName}, {QuestionnaireColumnName})" +
+            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" ({InterviewColumnName}, {QuestionnaireColumnName})" +
                        $"           VALUES(@interviewId, @questionnaireId);";
 
-            var command = this.session.Connection.CreateCommand();
+            var command = this.tenantContext.Connection.CreateCommand();
             command.CommandText = text;
             AddParameter(command, "@interviewId", DbType.Guid, interviewId);
             AddParameter(command, "@questionnaireId", DbType.String, questionnaireId.Id);
@@ -61,10 +58,10 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task RemoveInterviewQuestionnaireReferenceAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            var text = $"DELETE FROM \"{tenantInfo.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" " +
+            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" " +
                        $"      WHERE {InterviewColumnName} = @interviewId;";
 
-            var command = this.session.Connection.CreateCommand();
+            var command = this.tenantContext.Connection.CreateCommand();
             command.CommandText = text;
             AddParameter(command, "@interviewId", DbType.Guid, interviewId);
             return command.ExecuteNonQueryAsync(cancellationToken);
@@ -85,11 +82,11 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             if (doesExistTable) return;
 
-            var command = $"CREATE TABLE IF NOT EXISTS \"{tenantInfo.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"( " +
+            var command = $"CREATE TABLE IF NOT EXISTS \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"( " +
                           $"     {InterviewColumnName}  uuid PRIMARY KEY," +
                           $" {QuestionnaireColumnName}  text NOT NULL" +
                           $")";
-            using (var sqlCommand = session.Connection.CreateCommand())
+            using (var sqlCommand = tenantContext.Connection.CreateCommand())
             {
                 sqlCommand.CommandText = command;
                 sqlCommand.ExecuteNonQuery();

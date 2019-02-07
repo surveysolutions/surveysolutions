@@ -37,7 +37,7 @@ namespace WB.Services.Export.Jobs
         {
             try
             {
-                tenantContext.Tenant = pendingExportProcess.ExportSettings.Tenant;
+                serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
 
                 await processor.HandleNewEvents(cancellationToken);
 
