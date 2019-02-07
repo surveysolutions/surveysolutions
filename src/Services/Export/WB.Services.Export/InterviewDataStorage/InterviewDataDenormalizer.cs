@@ -107,7 +107,7 @@ namespace WB.Services.Export.InterviewDataStorage
     }
 
     class InterviewDataDenormalizer:
-      //  IFunctionalHandler,
+        IFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<TextQuestionAnswered>/*,
@@ -197,7 +197,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
-            var commandsState = await GenerateSqlCommandsAsync();
+            var commandsState = await GenerateSqlCommandsAsync(cancellationToken);
             await ExecuteCommandsAsync(commandsState.GetOrderedCommands(), cancellationToken);
         }
 
@@ -210,7 +210,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private async Task<CommandsForExecute> GenerateSqlCommandsAsync()
+        private async Task<CommandsForExecute> GenerateSqlCommandsAsync(CancellationToken cancellationToken)
         {
             var commandsState = new CommandsForExecute();
 
@@ -220,7 +220,7 @@ namespace WB.Services.Export.InterviewDataStorage
             foreach (var commandsByInterview in commandsByInterviews)
             {
                 var interviewId = commandsByInterview.Key;
-                var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+                var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, cancellationToken);
 
                 var commandsByType = commandsByInterview.GroupBy(c => c.Type);
                 foreach (var commandByType in commandsByType)
@@ -267,10 +267,10 @@ namespace WB.Services.Export.InterviewDataStorage
             return commandsState;
         }
 
-        private Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId)
+        private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            var questionnaireId = interviewQuestionnaireReference.GetQuestionnaireIdByInterviewId(interviewId);
-            var questionnaire = questionnaireStorage.GetQuestionnaireAsync(tenantInfo, questionnaireId);
+            var questionnaireId = await interviewQuestionnaireReference.GetQuestionnaireIdByInterviewIdAsync(interviewId, cancellationToken);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantInfo, questionnaireId);
             return questionnaire;
         }
 
