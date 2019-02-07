@@ -2,10 +2,10 @@
 
 namespace WB.Services.Export.Events
 {
-    public class FeedEvents
+    public class EventsFeed
     {
         public long Total { get; set; }
         public string NextPageUrl { get; set; }
-        public List<FeedEvent> Events { get; set; }
+        public List<Event> Events { get; set; }
     }
 }

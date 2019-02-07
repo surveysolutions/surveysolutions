@@ -65,6 +65,6 @@ namespace WB.Services.Export.Services
         Task<QuestionnaireAudioAuditView> DoesSupportAudioAuditAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
         [Get("/api/export/v1/interview/events")]
-        Task<FeedEvents> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
+        Task<EventsFeed> GetInterviewEvents([AliasAs("sequence")] long sequence, int pageSize = 500);
     }
 }
