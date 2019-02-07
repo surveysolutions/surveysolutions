@@ -76,8 +76,6 @@ namespace WB.Services.Export.Interview
                             }
                         }
                     }
-
-                  
                 }
             }
 
@@ -104,7 +102,7 @@ namespace WB.Services.Export.Interview
                     entity.AsString = (string) answer;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Variable {variable.Type} is not supported by export");
             }
         }
 
@@ -145,6 +143,8 @@ namespace WB.Services.Export.Interview
                 case QuestionType.TextList:
                     entity.AsList = answer != null ? JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString()) : null;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Question {question.QuestionType} is not supported by export");
             }
         }
         
