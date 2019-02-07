@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Events.Interview;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events.Handlers
@@ -10,11 +12,15 @@ namespace WB.Services.Export.Events.Handlers
         IEventHandler<InterviewCreated>
     {
         private readonly ILogger<DebugHandler> logger;
+        private readonly ISession session;
+        private readonly ITenantContext tenant;
         private long EventsHandled = 0;
 
-        public DebugHandler(ILogger<DebugHandler>logger)
+        public DebugHandler(ILogger<DebugHandler>logger, ISession session, ITenantContext tenant)
         {
             this.logger = logger;
+            this.session = session;
+            this.tenant = tenant;
         }
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
