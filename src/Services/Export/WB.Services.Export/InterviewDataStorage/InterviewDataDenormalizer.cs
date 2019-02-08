@@ -717,9 +717,11 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var @group = questionnaire.Find<Group>(commandInfo.EntityId);
             if (@group.Children.Any(e => e is Question || e is Variable))
+            {
                 yield return CreateAddRosterInstanceForTable(@group.TableName, commandInfo.InterviewId, commandInfo.RosterVector);
-            yield return CreateAddRosterInstanceForTable(@group.EnablementTableName, commandInfo.InterviewId, commandInfo.RosterVector);
-            yield return CreateAddRosterInstanceForTable(@group.ValidityTableName, commandInfo.InterviewId, commandInfo.RosterVector);
+                yield return CreateAddRosterInstanceForTable(@group.EnablementTableName, commandInfo.InterviewId, commandInfo.RosterVector);
+                yield return CreateAddRosterInstanceForTable(@group.ValidityTableName, commandInfo.InterviewId, commandInfo.RosterVector);
+            }
         }
 
         private DbCommand CreateAddRosterInstanceForTable(string tableName, Guid interviewId, int[] rosterVector)
