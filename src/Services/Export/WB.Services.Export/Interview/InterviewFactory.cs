@@ -123,7 +123,11 @@ namespace WB.Services.Export.Interview
                     }
                     break;
                 case QuestionType.Numeric:
-                    entity.AsInt = (int?) answer;
+                    var numericQuestion = (NumericQuestion)question;
+                    if (numericQuestion.IsInteger)
+                        entity.AsInt = (int?) answer;
+                    else
+                        entity.AsDouble = (double?) answer;
                     break;
                 case QuestionType.DateTime:
                     entity.AsDateTime = (DateTime?) answer;
@@ -131,8 +135,10 @@ namespace WB.Services.Export.Interview
                 case QuestionType.Multimedia:
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
+                    entity.AsString = (string)answer;
+                    break;
                 case QuestionType.SingleOption:
-                    entity.AsString = (string) answer;
+                    entity.AsInt = (int?)answer;
                     break;
                 case QuestionType.GpsCoordinates:
                     entity.AsGps = answer != null ? JsonConvert.DeserializeObject<GeoPosition>(answer.ToString()) : null;
