@@ -90,6 +90,7 @@ namespace WB.Services.Export.Events
                             await handler.SaveStateAsync(token);
                         }
 
+                        await scope.ServiceProvider.GetService<TenantDbContext>().SaveChangesAsync(token);
                         await tr.CommitAsync(token);
                     }
                 }
