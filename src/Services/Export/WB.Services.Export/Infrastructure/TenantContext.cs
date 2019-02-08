@@ -26,7 +26,9 @@ namespace WB.Services.Export.Infrastructure
         }
 
         public IHeadquartersApi Api { get; private set; }
-
+        
         public DbConnection Connection { get; set; }
+
+        public TenantDbContext DbContext { get; set; }
     }
 }

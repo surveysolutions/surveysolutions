@@ -4,7 +4,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace WB.Services.Scheduler.Storage
+namespace WB.Services.Infrastructure.Storage
 {
     public static class EfCoreHelpers
     {

@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -11,18 +13,23 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewHardDeleted>
     {
+        private readonly ITenantContext tenantContext;
         private readonly IInterviewQuestionnaireReferenceStorage referenceStorage;
 
-        public InterviewQuestionnaireReferenceDenormalizer(IInterviewQuestionnaireReferenceStorage referenceStorage)
+        public InterviewQuestionnaireReferenceDenormalizer(ITenantContext tenantContext)
         {
-            this.referenceStorage = referenceStorage;
+            this.tenantContext = tenantContext;
         }
 
-        public async Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+        public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
         {
-            string questionnaireId = $"{@event.Event.QuestionnaireId}${@event.Event.QuestionnaireVersion}";
-            var id = new QuestionnaireId(questionnaireId);
-            await referenceStorage.AddInterviewQuestionnaireReferenceAsync(@event.EventSourceId, id, cancellationToken);
+            return this.tenantContext.DbContext.InterviewReferences.AddAsync(
+                new InterviewQuestionnaireReferenceNode
+                {
+                    InterviewId = @event.EventSourceId,
+                    QuestionnaireId = @event.Event.QuestionnaireId.ToString("N") + "$" +
+                                      @event.Event.QuestionnaireVersion
+                }, cancellationToken);
         }
 
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)

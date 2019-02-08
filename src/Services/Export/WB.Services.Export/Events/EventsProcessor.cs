@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -63,10 +64,12 @@ namespace WB.Services.Export.Events
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);
-                
+                await scope.ServiceProvider.GetService<TenantDbContext>().Database.MigrateAsync(token);
+
                 using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
                 {
                     scope.SetDbConnection(db);
+
                     await db.OpenAsync(token);
                     
                     using (var tr = db.BeginTransaction())
