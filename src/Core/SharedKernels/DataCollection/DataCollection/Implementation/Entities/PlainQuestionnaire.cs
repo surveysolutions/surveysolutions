@@ -1012,6 +1012,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
+        public bool CanCascadingBeShownAsList(Guid questionId)
+        {
+            if (!this.IsQuestionCascading(questionId))
+                return false;
+            var question = this.GetQuestion(questionId);
+            return (question as SingleQuestion)?.ShowAsList ?? false;
+        }
+
+        public int? GetCascadingAsListThreshold(Guid questionId)
+        {
+            if (!this.IsQuestionCascading(questionId))
+                return null;
+            var question = this.GetQuestion(questionId);
+            return (question as SingleQuestion)?.ShowAsListLimit;
+        }
+
         public string GetValidationMessage(Guid questionId, int conditionIndex)
         {
             if (IsQuestion(questionId))
