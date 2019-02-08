@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
@@ -19,17 +18,15 @@ namespace WB.Services.Export.Events
     {
         private readonly ITenantContext tenant;
         private readonly IServiceProvider serviceProvider;
-        private readonly IOptions<DbConnectionSettings> connectionSettings;
         private readonly ILogger<EventsProcessor> logger;
 
         public EventsProcessor(
             ITenantContext tenant,
-            IServiceProvider serviceProvider, 
-            IOptions<DbConnectionSettings> connectionSettings, ILogger<EventsProcessor> logger)
+            IServiceProvider serviceProvider,
+            ILogger<EventsProcessor> logger)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
-            this.connectionSettings = connectionSettings;
             this.logger = logger;
         }
 
@@ -86,9 +83,9 @@ namespace WB.Services.Export.Events
                             }
 
                             await handler.SaveStateAsync(token);
+                            await db.SaveChangesAsync(token);
                         }
 
-                        await db.SaveChangesAsync(token);
                         tr.Commit();
                     }
                 }
