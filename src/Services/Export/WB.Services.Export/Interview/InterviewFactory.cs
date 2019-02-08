@@ -51,11 +51,11 @@ namespace WB.Services.Export.Interview
                                     Identity = identity,
                                     EntityType = EntityType.Question,
                                     InterviewId = (Guid)reader["data__interview_id"],
-                                    InvalidValidations = reader[$"validity_{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity_{question.ColumnName}"],
-                                    IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
+                                    InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity__{question.ColumnName}"],
+                                    IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
                                 };
 
-                                var answer = reader[$"data_{question.ColumnName}"];
+                                var answer = reader[$"data__{question.ColumnName}"];
                                 FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
                                 result.Add(interviewEntity);
 
@@ -63,15 +63,15 @@ namespace WB.Services.Export.Interview
                             }
                             else if (groupChild is Variable variable)
                             {
-                                var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
+                                var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Variable,
-                                    InterviewId = (Guid)reader["data_interview_id"],
-                                    IsEnabled = (bool)reader[$"enablement_{variable.ColumnName}"]
+                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
                                 };
-                                var val = reader[$"data_{variable.ColumnName}"];
+                                var val = reader[$"data__{variable.ColumnName}"];
                                 FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
                             }
                         }
