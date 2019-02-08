@@ -14,7 +14,7 @@ namespace WB.Services.Export.Interview
         {
             if (!group.Children.Any()) throw new ArgumentException("Cannot build query for group without questions");
 
-            string BuildSelectColumns(string alias)
+            string BuildSelectColumns(string alias, bool includeVariables = true)
             {
                 List<string> columnsCollector = new List<string>();
 
@@ -25,7 +25,7 @@ namespace WB.Services.Export.Interview
                         columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");
                     }
 
-                    if (questionnaireEntity is Variable variable)
+                    if (includeVariables && questionnaireEntity is Variable variable)
                     {
                         columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
                     }
@@ -44,7 +44,7 @@ namespace WB.Services.Export.Interview
             query.Append(", ");
             query.Append(BuildSelectColumns("enablement"));
             query.Append(", ");
-            query.Append(BuildSelectColumns("validity"));
+            query.Append(BuildSelectColumns("validity", false));
 
             query.AppendLine($" from ");
             query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
