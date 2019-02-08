@@ -21,7 +21,7 @@ namespace WB.Services.Export.Infrastructure
             set
             {
                 tenant = value;
-                Api = tenantApi.For(value);
+                Api = tenantApi?.For(value);
             }
         }
 

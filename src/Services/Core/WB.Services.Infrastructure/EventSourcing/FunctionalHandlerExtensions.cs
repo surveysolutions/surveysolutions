@@ -12,7 +12,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     {
         static readonly ConcurrentDictionary<Type, Dictionary<Type, MethodInfo>> eventsMapCache = new ConcurrentDictionary<Type, Dictionary<Type, MethodInfo>>();
 
-        public static Dictionary<Type, MethodInfo> GetEventHandlersMap(this IFunctionalHandler handler)
+        public static Dictionary<Type, MethodInfo> GetEventHandlersMap(this IStatefulDenormalizer handler)
         {
             return eventsMapCache.GetOrAdd(handler.GetType(), h =>
             {
@@ -31,7 +31,7 @@ namespace WB.Services.Infrastructure.EventSourcing
             });
         }
 
-        public static Task Handle(this IFunctionalHandler denormalizer, Event ev, CancellationToken token = default)
+        public static Task Handle(this IStatefulDenormalizer denormalizer, Event ev, CancellationToken token = default)
         {
             var handler = denormalizer.GetEventHandlersMap();
 

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
@@ -18,15 +19,17 @@ namespace WB.Services.Export.Events
         private readonly ITenantContext tenant;
         private readonly IServiceProvider serviceProvider;
         private readonly IOptions<DbConnectionSettings> connectionSettings;
+        private readonly ILogger<EventsProcessor> logger;
 
         public EventsProcessor(
             ITenantContext tenant,
             IServiceProvider serviceProvider, 
-            IOptions<DbConnectionSettings> connectionSettings)
+            IOptions<DbConnectionSettings> connectionSettings, ILogger<EventsProcessor> logger)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
             this.connectionSettings = connectionSettings;
+            this.logger = logger;
         }
 
         public async Task HandleNewEvents(CancellationToken token = default)
@@ -44,6 +47,7 @@ namespace WB.Services.Export.Events
                 if (events.NextSequence == null) break;
                 currentSequence = events.NextSequence.Value;
 
+                logger.LogInformation("Handling: Curr: {currentSequence} Max: {max}", currentSequence, max);
                 
                 var speed = events.Events.Count / sw.Elapsed.TotalSeconds;
                 var total = (max.Value - currentSequence) / speed;
@@ -67,10 +71,13 @@ namespace WB.Services.Export.Events
                     
                     using (var tr = db.BeginTransaction())
                     {
-                        var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>().ToArray();
-                        var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>().ToArray();
-                        
-                        foreach (var handler in priorityHandlers.Concat(handlers))
+                        var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>()
+                            .Cast<IStatefulDenormalizer>();
+                        var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
+                            .Cast<IStatefulDenormalizer>();
+
+                        var all = priorityHandlers.Union(handlers).ToArray();
+                        foreach (var handler in all)
                         {
                             foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
                             {
