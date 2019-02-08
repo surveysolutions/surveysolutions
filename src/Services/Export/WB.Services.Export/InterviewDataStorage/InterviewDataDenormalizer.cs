@@ -277,7 +277,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.Answer,
-                answerType: NpgsqlDbType.Double
+                answerType: NpgsqlDbType.Numeric
             ));
             return Task.FromResult(state);
         }
@@ -325,7 +325,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: (int)@event.Event.SelectedValue,
-                answerType: NpgsqlDbType.Double
+                answerType: NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
         }
@@ -596,6 +596,8 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private async Task ExecuteCommandsAsync(IEnumerable<DbCommand> sqlCommands, CancellationToken cancellationToken)
         {
+
+
             foreach (var sqlCommand in sqlCommands)
             {
                 sqlCommand.Connection = tenantContext.DbContext.Database.GetDbConnection();
@@ -815,14 +817,20 @@ namespace WB.Services.Export.InterviewDataStorage
             var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"   SET {columnName} = @answer" +
                        $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
-            updateCommand.Parameters.AddWithValue("@answer",/* answerType,*/ answer);
             updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
+
+            if (answer == null)
+                updateCommand.Parameters.AddWithValue("@answer", DBNull.Value);
+            else
+                updateCommand.Parameters.AddWithValue("@answer", answerType, answer);
 
             if (!isTopLevel)
             {
                 text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
                 updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
             }
+
+
 
             updateCommand.CommandText = text;
 
