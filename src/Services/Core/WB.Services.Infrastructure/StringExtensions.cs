@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace WB.Services.Scheduler.Storage
+namespace WB.Services.Infrastructure
 {
     public static class StringExtensions
     {

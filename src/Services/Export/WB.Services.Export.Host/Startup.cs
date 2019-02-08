@@ -55,6 +55,7 @@ namespace WB.Services.Export.Host
             services.UseJobService(Configuration);
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
+            services.AddDbContext<TenantDbContext>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
             {
