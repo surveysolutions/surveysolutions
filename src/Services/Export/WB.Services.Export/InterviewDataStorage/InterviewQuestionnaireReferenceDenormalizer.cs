@@ -35,14 +35,14 @@ namespace WB.Services.Export.InterviewDataStorage
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
         {
             var dbContext = this.tenantContext.DbContext;
-            var reference = dbContext.InterviewReferences.FirstOrDefault(x => x.InterviewId == @event.EventSourceId);
-            dbContext.Remove(reference);
+            var reference = dbContext.InterviewReferences.Find(@event.EventSourceId);
+            dbContext.InterviewReferences.Remove(reference);
             return Task.CompletedTask;
         }
 
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            return Task.CompletedTask;
+            return this.tenantContext.DbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

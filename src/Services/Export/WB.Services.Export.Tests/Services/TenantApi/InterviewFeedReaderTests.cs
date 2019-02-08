@@ -71,7 +71,6 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             var feed = JsonConvert.DeserializeObject<EventsFeed>(feedJson);
 
             Assert.That(feed.Total, Is.EqualTo(13164971));
-            Assert.That(feed.NextSequence, Is.EqualTo(3));
 
             Assert.That(feed.Events.Count, Is.EqualTo(3));
 
