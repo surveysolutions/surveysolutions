@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using WB.Services.Infrastructure.EventSourcing.Json;
 
 namespace WB.Services.Infrastructure.EventSourcing
 {

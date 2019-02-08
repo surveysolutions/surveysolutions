@@ -8,6 +8,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
 {

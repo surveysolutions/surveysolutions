@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events.Interview.Dtos
 {  

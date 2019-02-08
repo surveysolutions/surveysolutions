@@ -15,8 +15,8 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tests.CsvExport.Exporters;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
+using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests
@@ -293,6 +293,11 @@ namespace WB.Services.Export.Tests
                 PublicKey = publicKey ?? Guid.NewGuid(),
                 ValidationConditions = validationConditions
             };
+
+        public static Identity Identity(string id, params int[] rosterVector)
+        {
+            return Identity(Guid.Parse(id), rosterVector);
+        }
 
         public static Identity Identity(Guid? id = null, params int[] rosterVector)
         {

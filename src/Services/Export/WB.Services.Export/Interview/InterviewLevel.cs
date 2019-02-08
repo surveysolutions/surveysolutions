@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Interview
 {

@@ -15,6 +15,8 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
+using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters

@@ -123,7 +123,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
-
+            
             if (!questions.Any())
                 return;
 

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace WB.Services.Infrastructure.EventSourcing
+namespace WB.Services.Infrastructure.EventSourcing.Json
 {
     public class FeedEventConverter  : JsonConverter
     {
@@ -67,7 +66,8 @@ namespace WB.Services.Infrastructure.EventSourcing
             ContractResolver =  new CamelCasePropertyNamesContractResolver(),
             Converters =
             {
-                //new RosterVectorReader()
+                new RosterVectorJsonConverter(),
+                new IdentityJsonConverter()
             }
         };
 
@@ -84,26 +84,6 @@ namespace WB.Services.Infrastructure.EventSourcing
             {
                 TypesCache.Add(t.Name, t);
             }
-        }
-    }
-
-    internal class RosterVectorReader : JsonConverter<int[]>
-    {
-        public override void WriteJson(JsonWriter writer, int[] value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int[] ReadJson(
-            JsonReader reader,
-            Type objectType,
-            int[] existingValue,
-            bool hasExistingValue,
-            JsonSerializer serializer)
-        {
-            var json = JArray.Load(reader);
-            return json.Select(j => (int) j.Value<float>()).ToArray();
-            //return Array.Empty<int>();
         }
     }
 }
