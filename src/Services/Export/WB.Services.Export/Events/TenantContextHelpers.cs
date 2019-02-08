@@ -19,7 +19,6 @@ namespace WB.Services.Export.Events
             ctx.Tenant = context.Tenant;
             ctx.Connection = context.Connection;
         }
-
         
         public static void SetDbConnection(this IServiceScope scope, DbConnection connection)
         {
@@ -30,6 +29,7 @@ namespace WB.Services.Export.Events
             }
 
             ctx.Connection = connection;
+            ctx.DbContext = scope.ServiceProvider.GetService<TenantDbContext>();
         }
         public static void SetTenant(this IServiceProvider scope, TenantInfo tenant)
         {
