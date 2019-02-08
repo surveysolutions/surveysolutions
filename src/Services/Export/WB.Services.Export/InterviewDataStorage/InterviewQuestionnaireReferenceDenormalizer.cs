@@ -42,7 +42,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            return this.tenantContext.DbContext.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
     }
 }
