@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
@@ -143,6 +144,34 @@ namespace WB.Services.Export.InterviewDataStorage
             };
         }
 
+        public static InterviewDataStateChangeCommand Invalid(Guid interviewId, Guid entityId, int[] rosterVector,
+            int[] failedValidationConditions)
+        {
+            return new InterviewDataStateChangeCommand()
+            {
+                Type = InterviewDataStateChangeCommandType.UpdateValue,
+                InterviewId = interviewId,
+                EntityId = entityId,
+                RosterVector = rosterVector.Select(i => (int)i).ToArray(),
+                TableType = InterviewDataStateChangeTableType.Validity,
+                Answer = failedValidationConditions,
+                AnswerType = NpgsqlDbType.Array | NpgsqlDbType.Integer
+            };
+        }
+
+        public static InterviewDataStateChangeCommand Valid(Guid interviewId, Guid entityId, int[] rosterVector)
+        {
+            return new InterviewDataStateChangeCommand()
+            {
+                Type = InterviewDataStateChangeCommandType.UpdateValue,
+                InterviewId = interviewId,
+                EntityId = entityId,
+                RosterVector = rosterVector.Select(i => (int)i).ToArray(),
+                TableType = InterviewDataStateChangeTableType.Validity,
+                Answer = null,
+                AnswerType = NpgsqlDbType.Array | NpgsqlDbType.Integer
+            };
+        }
 
 
         public InterviewDataStateChangeTableType TableType { get; private set; }
@@ -152,6 +181,7 @@ namespace WB.Services.Export.InterviewDataStorage
         public int[] RosterVector { get; private set; }
         public NpgsqlDbType AnswerType { get; private set; }
         public object Answer { get; private set; }
+
     }
 
     public enum InterviewDataStateChangeCommandType
@@ -196,6 +226,8 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<AnswersRemoved>,
         IEventHandler<QuestionsDisabled>,
         IEventHandler<QuestionsEnabled>,
+        IEventHandler<AnswersDeclaredInvalid>,
+        IEventHandler<AnswersDeclaredValid>,
 
         IEventHandler<VariablesChanged>,
         IEventHandler<VariablesDisabled>,
@@ -476,6 +508,34 @@ namespace WB.Services.Export.InterviewDataStorage
             foreach (var question in @event.Event.Questions)
             {
                 state.Commands.Add(InterviewDataStateChangeCommand.Enable(
+                    interviewId: @event.EventSourceId,
+                    entityId: question.Id,
+                    rosterVector: question.RosterVector.Coordinates.ToArray()
+                ));
+            }
+            return Task.FromResult(state);
+        }
+
+        public Task HandleAsync(PublishedEvent<AnswersDeclaredInvalid> @event, CancellationToken cancellationToken = default)
+        {
+            var failedValidationConditions = @event.Event.FailedValidationConditions;
+            foreach (var question in @event.Event.Questions)
+            {
+                state.Commands.Add(InterviewDataStateChangeCommand.Invalid(
+                    interviewId: @event.EventSourceId,
+                    entityId: question.Id,
+                    rosterVector: question.RosterVector.Coordinates.ToArray(),
+                    failedValidationConditions: failedValidationConditions[question].Select(c => c.FailedConditionIndex).ToArray()
+                ));
+            }
+            return Task.FromResult(state);
+        }
+
+        public Task HandleAsync(PublishedEvent<AnswersDeclaredValid> @event, CancellationToken cancellationToken = default)
+        {
+            foreach (var question in @event.Event.Questions)
+            {
+                state.Commands.Add(InterviewDataStateChangeCommand.Valid(
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector.Coordinates.ToArray()
@@ -836,8 +896,6 @@ namespace WB.Services.Export.InterviewDataStorage
                 text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
                 updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
             }
-
-
 
             updateCommand.CommandText = text;
 

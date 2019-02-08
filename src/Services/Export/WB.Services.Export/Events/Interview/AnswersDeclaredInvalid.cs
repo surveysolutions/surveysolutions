@@ -9,11 +9,10 @@ namespace WB.Services.Export.Events.Interview
     {
         private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions;
 
-        public Identity[] Questions { get; protected set; } = new Identity[]{};
+        public Identity[] Questions { get; set; } = new Identity[]{};
 
-        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; protected set; } 
+        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; set; } 
 
-        [JsonIgnore]
         public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions
         {
             get
@@ -21,7 +20,7 @@ namespace WB.Services.Export.Events.Interview
                 return this.failedValidationConditions ?? 
                         (this.failedValidationConditions = this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value));
             }
-            protected set
+            set
             {
                 this.FailedConditionsStorage = value.ToList();
                 this.failedValidationConditions = null;
