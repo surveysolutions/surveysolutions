@@ -236,7 +236,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task HandleAsync(PublishedEvent<InterviewOnClientCreated> @event, CancellationToken cancellationToken = default)
         {
-            state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
+            //state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
             return Task.FromResult(state);
         }
 
@@ -545,27 +545,27 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task HandleAsync(PublishedEvent<GroupsDisabled> @event, CancellationToken cancellationToken = default)
         {
-            foreach (var identity in @event.Event.Groups)
+            /*foreach (var identity in @event.Event.Groups)
             {
                 state.Commands.Add(InterviewDataStateChangeCommand.Disable(
                     interviewId: @event.EventSourceId,
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
-            }
+            }*/
             return Task.FromResult(state);
         }
 
         public Task HandleAsync(PublishedEvent<GroupsEnabled> @event, CancellationToken cancellationToken = default)
         {
-            foreach (var identity in @event.Event.Groups)
+            /*foreach (var identity in @event.Event.Groups)
             {
                 state.Commands.Add(InterviewDataStateChangeCommand.Enable(
                     interviewId: @event.EventSourceId,
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
-            }
+            }*/
             return Task.FromResult(state);
         }
 
@@ -665,6 +665,8 @@ namespace WB.Services.Export.InterviewDataStorage
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
             var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FirstOrDefaultAsync(x => x.InterviewId == interviewId, cancellationToken: cancellationToken);
+            if (questionnaireId == null)
+                return null;
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId));
             return questionnaire;
         }
@@ -714,7 +716,8 @@ namespace WB.Services.Export.InterviewDataStorage
         private IEnumerable<DbCommand> GetAddRosterInstanceCommands(QuestionnaireDocument questionnaire, InterviewDataStateChangeCommand commandInfo)
         {
             var @group = questionnaire.Find<Group>(commandInfo.EntityId);
-            yield return CreateAddRosterInstanceForTable(@group.TableName, commandInfo.InterviewId, commandInfo.RosterVector);
+            if (@group.Children.Any(e => e is Question || e is Variable))
+                yield return CreateAddRosterInstanceForTable(@group.TableName, commandInfo.InterviewId, commandInfo.RosterVector);
             yield return CreateAddRosterInstanceForTable(@group.EnablementTableName, commandInfo.InterviewId, commandInfo.RosterVector);
             yield return CreateAddRosterInstanceForTable(@group.ValidityTableName, commandInfo.InterviewId, commandInfo.RosterVector);
         }
@@ -803,14 +806,24 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private DbCommand CreateUpdateValueForTable(string tableName, string columnName, Guid interviewId, int[] rosterVector, object answer, NpgsqlDbType answerType)
         {
+            bool isTopLevel = rosterVector == null || rosterVector.Length == 0;
+
+            NpgsqlCommand updateCommand = new NpgsqlCommand();
+
             var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"   SET {columnName} = @answer" +
-                       $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId" +
-                       $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
-            NpgsqlCommand updateCommand = new NpgsqlCommand(text);
+                       $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
             updateCommand.Parameters.AddWithValue("@answer", answerType, answer);
             updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-            updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
+
+            if (!isTopLevel)
+            {
+                text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
+                updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
+            }
+
+            updateCommand.CommandText = text;
+
             return updateCommand;
         }
 
