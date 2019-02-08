@@ -80,7 +80,7 @@ namespace WB.Enumerator.Native.WebInterview
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var result = new IdentifyingQuestion();
-            var entityType = this.GetEntityType(questionId, questionnaire);
+            var entityType = this.GetEntityType(questionId, questionnaire, RosterVector.Empty, interview);
 
             result.Type = entityType.ToString();
             var questionIdentity = new Identity(questionId, RosterVector.Empty);
@@ -116,12 +116,13 @@ namespace WB.Enumerator.Native.WebInterview
         public InterviewEntityWithType[] GetPrefilledQuestions()
         {
             var questionnaire = this.GetCallerQuestionnaire();
+            var interview = this.GetCallerInterview();
             InterviewEntityWithType[] interviewEntityWithTypes = questionnaire
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.GetEntityType(x, questionnaire).ToString()
+                    EntityType = this.GetEntityType(x, questionnaire, RosterVector.Empty, interview).ToString()
                 })
                 .ToArray();
 
@@ -184,7 +185,7 @@ namespace WB.Enumerator.Native.WebInterview
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionnaire).ToString()
+                    EntityType = this.GetEntityType(x.Id, questionnaire, x.RosterVector, statefulInterview).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -505,7 +506,7 @@ namespace WB.Enumerator.Native.WebInterview
             return completeInfo;
         }
         
-        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire)
+        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire, RosterVector rosterVector, IStatefulInterview interview)
         {
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
 
@@ -541,9 +542,27 @@ namespace WB.Enumerator.Native.WebInterview
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
                         || callerQuestionnaire.IsQuestionLinkedToRoster(entityId))
                         return InterviewEntityType.LinkedSingle;
-                    return callerQuestionnaire.IsQuestionFilteredCombobox(entityId) || callerQuestionnaire.IsQuestionCascading(entityId)
-                        ? InterviewEntityType.Combobox
-                        : InterviewEntityType.CategoricalSingle;
+                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
+                        return InterviewEntityType.Combobox;
+                    if (callerQuestionnaire.IsQuestionCascading(entityId))
+                    {
+                        if (callerQuestionnaire.CanCascadingBeShownAsList(entityId))
+                        {
+                            var countOfOptions = 3;
+                            var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
+                          
+                            if (countOfOptions <= threshold)
+                            {
+                                return InterviewEntityType.CategoricalSingle;
+                            }
+
+                            return InterviewEntityType.Combobox;
+                        }
+
+                        return InterviewEntityType.Combobox;
+                    }
+                    else
+                        return InterviewEntityType.CategoricalSingle;
                 case QuestionType.Numeric:
                     return callerQuestionnaire.IsQuestionInteger(entityId)
                         ? InterviewEntityType.Integer
