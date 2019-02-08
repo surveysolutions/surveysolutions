@@ -1,8 +1,20 @@
 ﻿<div class="multyOption">
     <ng-include src="'views/question-details/OptionsEditor-template.html'"
-                ng-if="!activeQuestion.isLinked"></ng-include>
+                ng-if="!activeQuestion.isLinked && !activeQuestion.isFilteredCombobox"></ng-include>
     <ng-include src="'categorical-filter-expression'"></ng-include>
 </div>
+<p>
+    <a ng-if="activeQuestion.isFilteredCombobox"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="editFilteredComboboxOptions()" ng-i18next="QuestionUploadOptions">
+    </a>
+    <a ng-if="activeQuestion.isFilteredCombobox"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification">
+    </a>
+</p>
 <div class="table-holder">
     <div class="row">
         <div class="col-xs-5">
@@ -14,7 +26,7 @@
         <div class="col-xs-6">
             <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
                 <label for="edit-question-max-answers-number" ng-i18next="QuestionMaxNumberOfAnswers"></label>
-                <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers"/>
+                <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers" />
                 <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern" ng-i18next="QuestionOnlyInts">
                 </p>
             </div>
@@ -36,7 +48,14 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-xs-4" ng-show="!activeQuestion.isLinked && !activeQuestion.yesNoView">
+            <div class="checkbox checkbox-in-column">
+                <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
+                <label for="cb-is-filtered-combobox"><span></span>{{'QuestionComboBox' | i18next}} <help key="combobox" /></label>
+            </div>
+        </div>
+    </div>
     <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
     </div>
 </div>
