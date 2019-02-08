@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.InterviewDataStorage;
@@ -21,6 +22,7 @@ namespace WB.Services.Export.Infrastructure
         }
 
         public DbSet<InterviewQuestionnaireReferenceNode> InterviewReferences { get; set; }
+        public DbSet<Metadata> MetadataSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,6 +32,21 @@ namespace WB.Services.Export.Infrastructure
                 optionsBuilder.UseNpgsql(connectionString, b => {
                     b.MigrationsHistoryTable("__migrations", this.tenantContext.Tenant.Name); 
                 });
+            }
+        }
+
+        public Metadata Metadata
+        {
+            get
+            {
+                
+                var meta = MetadataSet.SingleOrDefault(m => m.Id == "settings");
+                if (meta == null)
+                {
+                    return MetadataSet.Add(new Metadata{Id = "settings"}).Entity;
+                }
+
+                return meta;
             }
         }
 
