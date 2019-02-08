@@ -8,7 +8,6 @@ namespace WB.Services.Export.Infrastructure
     {
         TenantInfo Tenant { get; }
         IHeadquartersApi Api { get; }
-        DbConnection Connection { get; }
         TenantDbContext DbContext { get; set; }
     }
 }

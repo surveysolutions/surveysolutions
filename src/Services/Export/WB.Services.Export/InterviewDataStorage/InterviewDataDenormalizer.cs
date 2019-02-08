@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Npgsql;
@@ -207,16 +208,13 @@ namespace WB.Services.Export.InterviewDataStorage
     {
         private readonly ITenantContext tenantContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference;
         
         private readonly InterviewDataState state;
 
-        public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage,
-            IInterviewQuestionnaireReferenceStorage interviewQuestionnaireReference)
+        public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage)
         {
             this.tenantContext = tenantContext;
             this.questionnaireStorage = questionnaireStorage;
-            this.interviewQuestionnaireReference = interviewQuestionnaireReference;
 
             state = new InterviewDataState()
             {
@@ -600,7 +598,7 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var sqlCommand in sqlCommands)
             {
-                sqlCommand.Connection = tenantContext.Connection;
+                sqlCommand.Connection = tenantContext.DbContext.Database.GetDbConnection();
                 await sqlCommand.ExecuteNonQueryAsync(cancellationToken);
             }
         }
@@ -666,8 +664,8 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            var questionnaireId = await interviewQuestionnaireReference.GetQuestionnaireIdByInterviewIdAsync(interviewId, cancellationToken);
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, questionnaireId);
+            var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FirstOrDefaultAsync(x => x.InterviewId == interviewId, cancellationToken: cancellationToken);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId));
             return questionnaire;
         }
 
