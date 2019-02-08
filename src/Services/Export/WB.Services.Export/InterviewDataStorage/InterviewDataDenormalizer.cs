@@ -57,7 +57,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.AddRosterInstance,
                 InterviewId = interviewId,
                 EntityId = groupId,
-                RosterVector = rosterVector.Cast<int>().ToArray()
+                RosterVector = rosterVector.Select(i => (int)i).ToArray()
             };
         }
 
@@ -68,7 +68,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.RemoveRosterInstance,
                 InterviewId = interviewId,
                 EntityId = groupId,
-                RosterVector = rosterVector.Cast<int>().ToArray()
+                RosterVector = rosterVector.Select(i => (int)i).ToArray()
             };
         }
 
@@ -80,7 +80,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.UpdateValue,
                 InterviewId = interviewId,
                 EntityId = questionId,
-                RosterVector = rosterVector.Cast<int>().ToArray(),
+                RosterVector = rosterVector.Select(i => (int)i).ToArray(),
                 TableType = InterviewDataStateChangeTableType.Data,
                 Answer = answer,
                 AnswerType = answerType
@@ -121,7 +121,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.UpdateValue,
                 InterviewId = interviewId,
                 EntityId = entityId,
-                RosterVector = rosterVector.Cast<int>().ToArray(),
+                RosterVector = rosterVector.Select(i => (int)i).ToArray(),
                 TableType = InterviewDataStateChangeTableType.Enablement,
                 Answer = true,
                 AnswerType = NpgsqlDbType.Boolean
@@ -135,7 +135,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.UpdateValue,
                 InterviewId = interviewId,
                 EntityId = entityId,
-                RosterVector = rosterVector.Cast<int>().ToArray(),
+                RosterVector = rosterVector.Select(i => (int)i).ToArray(),
                 TableType = InterviewDataStateChangeTableType.Enablement,
                 Answer = false,
                 AnswerType = NpgsqlDbType.Boolean
@@ -232,17 +232,20 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task HandleAsync(PublishedEvent<InterviewFromPreloadedDataCreated> @event, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
+            return Task.FromResult(state);
         }
 
         public Task HandleAsync(PublishedEvent<InterviewOnClientCreated> @event, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
+            return Task.FromResult(state);
         }
 
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            state.Commands.Add(InterviewDataStateChangeCommand.RemoveInterview(@event.EventSourceId));
+            return Task.FromResult(state);
         }
 
         public Task HandleAsync(PublishedEvent<TextQuestionAnswered> @event, CancellationToken cancellationToken)
@@ -300,7 +303,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.SelectedRosterVectors,
-                answerType: NpgsqlDbType.Array
+                answerType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
         }
@@ -312,7 +315,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.SelectedValues,
-                answerType: NpgsqlDbType.Array
+                answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
         }
@@ -336,7 +339,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.SelectedRosterVector,
-                answerType: NpgsqlDbType.Array
+                answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
         }
@@ -438,7 +441,7 @@ namespace WB.Services.Export.InterviewDataStorage
             state.Commands.Add(InterviewDataStateChangeCommand.RemoveAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
-                rosterVector: @event.Event.RosterVector.Cast<int>().ToArray()
+                rosterVector: @event.Event.RosterVector.Select(i => (int)i).ToArray()
             ));
             return Task.FromResult(state);
         }
@@ -613,6 +616,8 @@ namespace WB.Services.Export.InterviewDataStorage
             {
                 var interviewId = commandsByInterview.Key;
                 var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, cancellationToken);
+                if (questionnaire == null)
+                    continue;
 
                 var commandsByType = commandsByInterview.GroupBy(c => c.Type);
                 foreach (var commandByType in commandsByType)
@@ -722,7 +727,7 @@ namespace WB.Services.Export.InterviewDataStorage
                        $"           VALUES(@interviewId, @rosterVector);";
             NpgsqlCommand insertCommand = new NpgsqlCommand(text);
             insertCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-            insertCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array, rosterVector);
+            insertCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
             return insertCommand;
         }
 
@@ -741,7 +746,7 @@ namespace WB.Services.Export.InterviewDataStorage
                        $"        AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
             NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
             deleteCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-            deleteCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array, rosterVector);
+            deleteCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
             return deleteCommand;
         }
 
@@ -770,7 +775,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     {
                         var tableName = ResolveGroupForEnablementOrValidity(entity).ValidityTableName;
                         var columnName = ResolveColumnNameForEnablementOrValidity(entity);
-                        yield return CreateUpdateValueForTable(tableName, columnName, commandInfo.InterviewId, commandInfo.RosterVector, commandInfo.Answer, NpgsqlDbType.Array);
+                        yield return CreateUpdateValueForTable(tableName, columnName, commandInfo.InterviewId, commandInfo.RosterVector, commandInfo.Answer, NpgsqlDbType.Array | NpgsqlDbType.Integer);
                     }
                     break;
                 default:
@@ -807,7 +812,7 @@ namespace WB.Services.Export.InterviewDataStorage
             NpgsqlCommand updateCommand = new NpgsqlCommand(text);
             updateCommand.Parameters.AddWithValue("@answer", answerType, answer);
             updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-            updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array, rosterVector);
+            updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterVector);
             return updateCommand;
         }
 
