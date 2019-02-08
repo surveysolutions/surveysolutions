@@ -277,7 +277,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.Answer,
-                answerType: NpgsqlDbType.Real
+                answerType: NpgsqlDbType.Double
             ));
             return Task.FromResult(state);
         }
@@ -300,7 +300,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: @event.Event.SelectedRosterVectors,
+                answer: @event.Event.SelectedRosterVectors.Select(c => c.Select(i => (int)i).ToArray()).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
@@ -312,7 +312,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: @event.Event.SelectedValues,
+                answer: @event.Event.SelectedValues.Select(c => (int)c).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
@@ -324,8 +324,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: @event.Event.SelectedValue,
-                answerType: NpgsqlDbType.Real
+                answer: (int)@event.Event.SelectedValue,
+                answerType: NpgsqlDbType.Double
             ));
             return Task.FromResult(state);
         }
@@ -336,7 +336,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: @event.Event.SelectedRosterVector,
+                answer: @event.Event.SelectedRosterVector.Select(c => (int)c).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
             return Task.FromResult(state);
@@ -815,7 +815,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"   SET {columnName} = @answer" +
                        $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
-            updateCommand.Parameters.AddWithValue("@answer", answerType, answer);
+            updateCommand.Parameters.AddWithValue("@answer",/* answerType,*/ answer);
             updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
 
             if (!isTopLevel)
