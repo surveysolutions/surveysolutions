@@ -40,7 +40,7 @@ namespace WB.Services.Export.Infrastructure
             get
             {
                 
-                var meta = MetadataSet.SingleOrDefault(m => m.Id == "settings");
+                var meta = MetadataSet.Find("settings");
                 if (meta == null)
                 {
                     return MetadataSet.Add(new Metadata{Id = "settings"}).Entity;
