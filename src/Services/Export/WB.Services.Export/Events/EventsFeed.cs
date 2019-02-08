@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using WB.Services.Export.Services;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events

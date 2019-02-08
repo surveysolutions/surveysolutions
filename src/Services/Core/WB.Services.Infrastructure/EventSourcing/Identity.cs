@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using WB.Services.Export.Interview.Entities;
-using WB.Services.Export.Utils;
 
-namespace WB.Services.Export.Events
+namespace WB.Services.Infrastructure.EventSourcing
 {
     /// <summary>
     /// Full identity of group or question: id and roster vector.
@@ -33,7 +31,7 @@ namespace WB.Services.Export.Events
         public RosterVector RosterVector { get; private set; }
 
         // ReSharper disable once UnusedMember.Local # used by NHibernate
-        private Identity() { }
+        public Identity() { }
 
         public Identity(Guid id, RosterVector rosterVector)
         {

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events.Interview.Dtos
 {
@@ -11,7 +12,8 @@ namespace WB.Services.Export.Events.Interview.Dtos
     {
         public Guid GroupId { get; set; }
 
-        public decimal[] OuterRosterVector { get; set; }
+        public RosterVector OuterRosterVector { get; set; }
+        
         public decimal RosterInstanceId { get; set; }
 
         private int? hashCode;
@@ -21,7 +23,7 @@ namespace WB.Services.Export.Events.Interview.Dtos
             return this.GroupId == other.GroupId &&
                    this.RosterInstanceId == other.RosterInstanceId &&
                    this.OuterRosterVector.Length == other.OuterRosterVector.Length &&
-                   Enumerable.SequenceEqual(this.OuterRosterVector, other.OuterRosterVector);
+                   this.OuterRosterVector.SequenceEqual(other.OuterRosterVector);
         }
 
         public override int GetHashCode()

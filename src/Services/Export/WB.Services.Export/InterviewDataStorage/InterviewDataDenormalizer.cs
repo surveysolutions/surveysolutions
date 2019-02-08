@@ -52,7 +52,7 @@ namespace WB.Services.Export.InterviewDataStorage
             };
         }
 
-        public static InterviewDataStateChangeCommand AddRosterInstance(Guid interviewId, Guid groupId, decimal[] rosterVector)
+        public static InterviewDataStateChangeCommand AddRosterInstance(Guid interviewId, Guid groupId, RosterVector rosterVector)
         {
             return new InterviewDataStateChangeCommand()
             {
@@ -63,7 +63,7 @@ namespace WB.Services.Export.InterviewDataStorage
             };
         }
 
-        public static InterviewDataStateChangeCommand RemoveRosterInstance(Guid interviewId, Guid groupId, decimal[] rosterVector)
+        public static InterviewDataStateChangeCommand RemoveRosterInstance(Guid interviewId, Guid groupId, RosterVector rosterVector)
         {
             return new InterviewDataStateChangeCommand()
             {
@@ -74,7 +74,7 @@ namespace WB.Services.Export.InterviewDataStorage
             };
         }
 
-        public static InterviewDataStateChangeCommand UpdateAnswer(Guid interviewId, Guid questionId, decimal[] rosterVector,
+        public static InterviewDataStateChangeCommand UpdateAnswer(Guid interviewId, Guid questionId, RosterVector rosterVector,
             object answer, NpgsqlDbType answerType)
         {
             return new InterviewDataStateChangeCommand()
@@ -143,7 +143,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 AnswerType = NpgsqlDbType.Boolean
             };
         }
-
+        
         public static InterviewDataStateChangeCommand Invalid(Guid interviewId, Guid entityId, int[] rosterVector,
             int[] failedValidationConditions)
         {
@@ -172,13 +172,11 @@ namespace WB.Services.Export.InterviewDataStorage
                 AnswerType = NpgsqlDbType.Array | NpgsqlDbType.Integer
             };
         }
-
-
         public InterviewDataStateChangeTableType TableType { get; private set; }
         public Guid InterviewId { get; private set; }
         public InterviewDataStateChangeCommandType Type { get; private set; }
         public Guid EntityId { get; private set; }
-        public int[] RosterVector { get; private set; }
+        public RosterVector RosterVector { get; private set; }
         public NpgsqlDbType AnswerType { get; private set; }
         public object Answer { get; private set; }
 
@@ -201,7 +199,7 @@ namespace WB.Services.Export.InterviewDataStorage
     }
 
     public class InterviewDataDenormalizer:
-        IFunctionalHandler,
+      //  IFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewFromPreloadedDataCreated>,
         IEventHandler<InterviewOnClientCreated>,
@@ -594,8 +592,11 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
-                var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId).ToArray();
-                state.Commands.Add(InterviewDataStateChangeCommand.AddRosterInstance(@event.EventSourceId, rosterInstance.GroupId, rosterVector));
+                var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId);
+                state.Commands.Add(InterviewDataStateChangeCommand.AddRosterInstance(
+                    @event.EventSourceId, 
+                    rosterInstance.GroupId, 
+                    rosterVector));
             }
             return Task.FromResult(state);
         }
@@ -793,7 +794,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private DbCommand CreateAddRosterInstanceForTable(string tableName, Guid interviewId, int[] rosterVector)
+        private DbCommand CreateAddRosterInstanceForTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
             var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
                        $"           VALUES(@interviewId, @rosterVector);";
@@ -811,7 +812,7 @@ namespace WB.Services.Export.InterviewDataStorage
             yield return CreateRemoveRosterInstanceForTable(@group.ValidityTableName, commandInfo.InterviewId, commandInfo.RosterVector);
         }
 
-        private DbCommand CreateRemoveRosterInstanceForTable(string tableName, Guid interviewId, int[] rosterVector)
+        private DbCommand CreateRemoveRosterInstanceForTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
             var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId" +
@@ -875,7 +876,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private DbCommand CreateUpdateValueForTable(string tableName, string columnName, Guid interviewId, int[] rosterVector, object answer, NpgsqlDbType answerType)
+        private DbCommand CreateUpdateValueForTable(string tableName, string columnName, Guid interviewId, RosterVector rosterVector, object answer, NpgsqlDbType answerType)
         {
             bool isTopLevel = rosterVector == null || rosterVector.Length == 0;
 
