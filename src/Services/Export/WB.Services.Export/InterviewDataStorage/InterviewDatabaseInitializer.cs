@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
@@ -13,7 +14,7 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IInterviewDatabaseInitializer
     {
-        Task CreateQuestionnaireDbStructureAsync(TenantInfo tenant, QuestionnaireDocument questionnaireDocument);
+        void CreateQuestionnaireDbStructure(TenantInfo tenant, QuestionnaireDocument questionnaireDocument);
     }
 
     public class InterviewDatabaseInitializer : IInterviewDatabaseInitializer
@@ -43,46 +44,34 @@ namespace WB.Services.Export.InterviewDataStorage
             this.connectionSettings = connectionSettings;
         }
 
-        public async Task CreateQuestionnaireDbStructureAsync(TenantInfo tenant, QuestionnaireDocument questionnaireDocument)
+        public void CreateQuestionnaireDbStructure(TenantInfo tenant, QuestionnaireDocument questionnaireDocument)
         {
             var connectionString = connectionSettings.Value.DefaultConnection;
 
             using (var connection = new NpgsqlConnection(connectionString))
             {
-                await connection.OpenAsync();
+                connection.Open();
                 var transaction = connection.BeginTransaction();
 
-                await CreateSchemaAsync(connection, tenant);
+                CreateSchema(connection, tenant);
 
-                await CreateTablesRecursivelyAsync(connection, tenant, questionnaireDocument, rosterLevel: 0);
+                foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
+                {
+                    CreateTableForGroup(connection, tenant, storedGroup);
+                    CreateEnablementTableForGroup(connection, tenant, storedGroup);
+                    CreateValidityTableForGroup(connection, tenant, storedGroup);
+                }
 
-                await transaction.CommitAsync();
+                transaction.Commit();
             }
         }
 
-        private async Task CreateTablesRecursivelyAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
-        {
-            if (group.IsRoster)
-                rosterLevel++;
-
-            await CreateTableForGroupAsync(connection, tenant, group, rosterLevel);
-            await CreateEnablementTableForGroupAsync(connection, tenant, group, rosterLevel);
-            await CreateValidityTableForGroupAsync(connection, tenant, group, rosterLevel);
-
-            var groups = group.Children.Where(entity => entity is Group).Cast<Group>();
-
-            foreach (var nextGroup in groups)
-            {
-                await CreateTablesRecursivelyAsync(connection, tenant, nextGroup, rosterLevel);
-            }
-        }
-
-        private Task CreateTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
+        private void CreateTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
-            if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
+            if (group.RosterLevel > 0)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
@@ -93,18 +82,18 @@ namespace WB.Services.Export.InterviewDataStorage
                 columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
 
             if (!questions.Any() && !variables.Any())
-                return Task.CompletedTask;
+                return ;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.TableName, columns);
-            return ExecuteCommandAsync(connection, commandText);
+            connection.Execute(commandText);
         }
 
-        private Task CreateEnablementTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
+        private void CreateEnablementTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
-            if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
+            if (group.RosterLevel > 0)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
 
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
 
@@ -117,18 +106,17 @@ namespace WB.Services.Export.InterviewDataStorage
                 columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
             if (!questions.Any() && !variables.Any())
-                return Task.CompletedTask;
-
+                return;
             var commandText = GenerateCreateTableScript(tenant.Name, group.EnablementTableName, columns);
-            return ExecuteCommandAsync(connection, commandText);
+            connection.Execute(commandText);
         }
 
-        private Task CreateValidityTableForGroupAsync(NpgsqlConnection connection, TenantInfo tenant, Group group, int rosterLevel)
+        private void CreateValidityTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
-            if (rosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{rosterLevel}]", isPrimaryKey: true));
+            if (group.RosterLevel > 0)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
 
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "int4[]", isNullable: true));
 
@@ -137,10 +125,10 @@ namespace WB.Services.Export.InterviewDataStorage
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
 
             if (!questions.Any())
-                return Task.CompletedTask;
+                return ;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.ValidityTableName, columns);
-            return ExecuteCommandAsync(connection, commandText);
+            connection.Execute(commandText);
         }
 
         private string GetSqlTypeForQuestion(Question question)
@@ -188,9 +176,9 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private static Task CreateSchemaAsync(NpgsqlConnection connection, TenantInfo tenant)
+        private static void CreateSchema(NpgsqlConnection connection, TenantInfo tenant)
         {
-            return ExecuteCommandAsync(connection, $"CREATE SCHEMA IF NOT EXISTS \"{tenant.Name}\"");
+            connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.Name}\"");
         }
 
         private string GenerateCreateTableScript(string schemaName, string tableName, List<ColumnInfo> columns)
@@ -210,13 +198,6 @@ namespace WB.Services.Export.InterviewDataStorage
             sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
             sb.AppendLine(")");
             return sb.ToString();
-        }
-
-        private static Task ExecuteCommandAsync(NpgsqlConnection connection, string commandText)
-        {
-            var createTableCommand = connection.CreateCommand();
-            createTableCommand.CommandText = commandText;
-            return createTableCommand.ExecuteNonQueryAsync();
         }
     }
 }

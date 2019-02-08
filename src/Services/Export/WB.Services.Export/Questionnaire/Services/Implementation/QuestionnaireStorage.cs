@@ -15,6 +15,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
         private readonly IMemoryCache memoryCache;
         private readonly IInterviewDatabaseInitializer interviewDatabaseInitializer;
         private readonly JsonSerializerSettings serializer;
+        private static object schemaLock = new object();
 
         public QuestionnaireStorage(ITenantApi<IHeadquartersApi> tenantApi, IMemoryCache memoryCache,
             IInterviewDatabaseInitializer interviewDatabaseInitializer)
@@ -40,7 +41,10 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                     entry.SlidingExpiration = TimeSpan.FromMinutes(1);
                     questionnaire.QuestionnaireId = questionnaireId;
 
-                    await interviewDatabaseInitializer.CreateQuestionnaireDbStructureAsync(tenant, questionnaire);
+                    lock (schemaLock)
+                    {
+                        interviewDatabaseInitializer.CreateQuestionnaireDbStructure(tenant, questionnaire);
+                    }
 
                     return questionnaire;
                 });
