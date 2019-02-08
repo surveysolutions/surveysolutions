@@ -1,7 +1,7 @@
-﻿select data.interview_id as data_interview_id, data.roster_vector as data_roster_vector,  data."num1" as "data_num1" ,  enablement."num1" as "enablement_num1" ,  validity."num1" as "validity_num1"  from 
+﻿select data.interview__id as data__interview_id, data.roster__vector as data__roster_vector,  data."num1" as "data__num1" ,  enablement."num1" as "enablement__num1" ,  validity."num1" as "validity__num1"  from 
 "tenant"."qqqqqqqqqqqqqqqqqqqqqg$6_roster1" data 
-    INNER JOIN "tenant"."qqqqqqqqqqqqqqqqqqqqqg$6_roster1_e" enablement ON data.interview_id = enablement.interview_id
-   AND data.roster_vector = enablement.roster_vector
-    INNER JOIN "tenant"."qqqqqqqqqqqqqqqqqqqqqg$6_roster1_v" validity ON data.interview_id = validity.interview_id
-   AND data.roster_vector = validity.roster_vector
- WHERE data.interview_id = ANY(@ids)
+    INNER JOIN "tenant"."qqqqqqqqqqqqqqqqqqqqqg$6_roster1_e" enablement ON data.interview__id = enablement.interview__id
+    AND data.roster__vector = enablement.roster__vector
+    INNER JOIN "tenant"."qqqqqqqqqqqqqqqqqqqqqg$6_roster1_v" validity ON data.interview__id = validity.interview__id
+   AND data.roster__vector = validity.roster__vector 
+WHERE data.interview__id = ANY(@ids)

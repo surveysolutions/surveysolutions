@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
 
@@ -21,22 +22,22 @@ namespace WB.Services.Export.Interview
                 {
                     if (questionnaireEntity is Question question)
                     {
-                        columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}_{question.ColumnName}\" ");
+                        columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");
                     }
 
                     if (questionnaireEntity is Variable variable)
                     {
-                        columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}_{variable.ColumnName}\" ");
+                        columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
                     }
                 }
 
                 return string.Join(", ", columnsCollector);
             }
 
-            StringBuilder query = new StringBuilder($"select data.interview_id as data_interview_id, ");
+            StringBuilder query = new StringBuilder($"select data.{InterviewDatabaseConstants.InterviewId} as data__interview_id, ");
             if (group.IsInsideRoster)
             {
-                query.Append("data.roster_vector as data_roster_vector, ");
+                query.AppendFormat("data.{0} as data__roster_vector, ", InterviewDatabaseConstants.RosterVector);
             }
 
             query.Append(BuildSelectColumns("data"));
@@ -48,22 +49,22 @@ namespace WB.Services.Export.Interview
             query.AppendLine($" from ");
             query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
                 
-            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" enablement ON data.interview_id = enablement.interview_id{2}",
-                tenant.Name, group.EnablementTableName, Environment.NewLine);
+            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" enablement ON data.{2} = enablement.{2}{3}",
+                tenant.Name, group.EnablementTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
             if (group.IsInsideRoster)
             {
-                query.AppendLine("   AND data.roster_vector = enablement.roster_vector");
+                query.AppendFormat("    AND data.{0} = enablement.{0}{1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
             }
 
-            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" validity ON data.interview_id = validity.interview_id{2}",
-                tenant.Name, group.ValidityTableName, Environment.NewLine);
+            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" validity ON data.{2} = validity.{2}{3}",
+                tenant.Name, group.ValidityTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
 
             if (group.IsInsideRoster)
             {
-                query.AppendLine("   AND data.roster_vector = validity.roster_vector");
+                query.AppendFormat("   AND data.{0} = validity.{0} {1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
             }
 
-            query.AppendFormat(" WHERE data.interview_id = ANY(@ids)");
+            query.AppendFormat("WHERE data.{0} = ANY(@ids)", InterviewDatabaseConstants.InterviewId);
 
             return query.ToString();
         }
