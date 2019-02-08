@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace WB.Services.Export.Interview.Entities
+namespace WB.Services.Infrastructure.EventSourcing
 {
      [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public class RosterVector : IEnumerable<int>
@@ -12,6 +12,11 @@ namespace WB.Services.Export.Interview.Entities
         private int? cachedHashCode;
         public static readonly RosterVector Empty = new RosterVector(Array.Empty<int>());
         private readonly int[] coordinates;
+
+        public RosterVector(params int[] coordinates)
+        {
+            this.coordinates = coordinates;
+        }
 
         public RosterVector(IEnumerable<int> coordinates)
         {
@@ -45,6 +50,26 @@ namespace WB.Services.Export.Interview.Entities
         public int Last()
         {
             return this.coordinates[this.Length - 1];
+        }
+
+        public RosterVector Append(int value)
+        {
+            switch (this.Length)
+            {
+                case 0: return new RosterVector(value);
+                case 1: return new RosterVector(this.coordinates[0], value);
+                case 2: return new RosterVector(this.coordinates[0], this.coordinates[1], value);
+                case 3: return new RosterVector(this.coordinates[0], this.coordinates[1], this.coordinates[2], value);
+                case 4: return new RosterVector(this.coordinates[0], this.coordinates[1], this.coordinates[2], this.coordinates[3], value);
+                case 5: return new RosterVector(this.coordinates[0], this.coordinates[1], this.coordinates[2], this.coordinates[3], this.coordinates[4], value);
+            }
+
+            return new RosterVector(this.coordinates.Append(value));
+        }
+
+        public RosterVector Append(decimal value)
+        {
+            return Append((int) value);
         }
 
         public RosterVector Take(int targetLength)

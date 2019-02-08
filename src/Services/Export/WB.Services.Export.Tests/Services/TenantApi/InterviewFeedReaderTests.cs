@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoBogus;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Infrastructure.EventSourcing;
+using WB.Services.Infrastructure.EventSourcing.Json;
 
 namespace WB.Services.Export.Tests.Services.TenantApi
 {
@@ -157,6 +159,68 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             Assert.That(obj.UserId, Is.EqualTo(Guid.Parse("bc606b47-d1d7-4fff-b032-41ef0c9c7635")));
             Assert.That(obj.QuestionnaireId, Is.EqualTo(Guid.Parse("12aabc0b-963d-4afc-b67f-1f8b838a094e")));
         }
+
+        [Test]
+        public void can_deserialize_VariablesChanged()
+        {
+            var json = @"{  ""changedVariables"": [
+                    {
+                      ""identity"": {
+                        ""id"": ""cb950143-b85d-4c23-b9ff-7620fc756464"",
+                        ""rosterVector"": {
+                          ""$type"": ""WB.Core.SharedKernels.DataCollection.RosterVector, WB.Core.SharedKernels.DataCollection.Portable"",
+                          ""$values"": [1.0,2.0]
+                        }
+                      },
+                      ""newValue"": ""Rajasthan""
+                    }
+                  ] }";
+
+            var ev = JsonConvert.DeserializeObject<VariablesChanged>(json, new RosterVectorJsonConverter(),
+                new IdentityJsonConverter());
+
+            Assert.That(ev.ChangedVariables[0].Identity, Is.EqualTo(
+                Create.Identity("cb950143-b85d-4c23-b9ff-7620fc756464",1,2)));
+
+            Assert.That(ev.ChangedVariables[0].NewValue, Is.EqualTo("Rajasthan"));
+        }
+
+        
+        [Test]
+        public void can_deserialize_AnswersDeclaredInvalid()
+        {
+            var json = @"{""questions"": [  {
+                  ""id"": ""5e156e5b-5ebd-4684-5bf6-7d11514f9461"",
+                  ""rosterVector"": {
+                    ""$type"": ""WB.Core.SharedKernels.DataCollection.RosterVector, WB.Core.SharedKernels.DataCollection.Portable"",
+                    ""$values"": [1]
+                  }
+                }],
+              ""failedConditionsStorage"": [
+                {
+                  ""key"": {
+                    ""id"": ""661de5b9-05c4-177b-57ed-34831bfad1a1"",
+                    ""rosterVector"": {
+                      ""$type"": ""WB.Core.SharedKernels.DataCollection.RosterVector, WB.Core.SharedKernels.DataCollection.Portable"",
+                      ""$values"": [-23.00, 4,5,6,7]
+                    }
+                  },
+                  ""value"": [{}]
+                }
+              ]
+            }";
+
+            var ev = JsonConvert.DeserializeObject<AnswersDeclaredInvalid>(json, 
+                new RosterVectorJsonConverter(), new IdentityJsonConverter());
+
+            var question = Create.Identity("5e156e5b-5ebd-4684-5bf6-7d11514f9461", 1);
+            Assert.That(ev.Questions[0], Is.EqualTo(question));
+
+            var faildCondition = Create.Identity("661de5b9-05c4-177b-57ed-34831bfad1a1", -23, 4, 5, 6, 7);
+            Assert.That(ev.FailedValidationConditions[faildCondition][0].FailedConditionIndex, Is.EqualTo(0));
+        }
+
+        
 
     }
 

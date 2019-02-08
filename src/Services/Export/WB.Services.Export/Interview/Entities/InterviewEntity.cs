@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using WB.Services.Export.Questionnaire;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Interview.Entities
 {
