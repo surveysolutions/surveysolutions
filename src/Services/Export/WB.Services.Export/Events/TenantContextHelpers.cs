@@ -41,5 +41,10 @@ namespace WB.Services.Export.Events
 
             ctx.Tenant = tenant;
         }
+
+        public static string SchemaName(this ITenantContext ctx)
+        {
+            return ctx.Tenant.Name;
+        }
     }
 }

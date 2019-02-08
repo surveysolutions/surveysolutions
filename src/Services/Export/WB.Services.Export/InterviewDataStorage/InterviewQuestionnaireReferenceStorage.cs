@@ -10,7 +10,7 @@ namespace WB.Services.Export.InterviewDataStorage
     public class InterviewQuestionnaireReferenceStorage : IInterviewQuestionnaireReferenceStorage
     {
         private readonly ITenantContext tenantContext;
-        private const string InterviewQuestionnaireReferenceTableName = "interview__questionnaire";
+        private const string Table = "\"interview__questionnaire\"";
         private const string InterviewColumnName = "interview_id";
         private const string QuestionnaireColumnName = "questionnaire_id";
 
@@ -20,10 +20,12 @@ namespace WB.Services.Export.InterviewDataStorage
             EnsureTableExists();
         }
 
-        public async Task<QuestionnaireId> GetQuestionnaireIdByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
+        public async Task<QuestionnaireId> GetQuestionnaireIdByInterviewIdAsync(Guid interviewId,
+            CancellationToken cancellationToken)
         {
-            var commandText = $"SELECT {QuestionnaireColumnName} FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"" +
-                              $" WHERE {InterviewColumnName} = @interviewId;";
+            var commandText =
+                $"SELECT {QuestionnaireColumnName} FROM {SchemaName}.{Table}" +
+                $" WHERE {InterviewColumnName} = @interviewId;";
 
             var questionnaireId = await this.tenantContext.Connection.ExecuteScalarAsync<string>(commandText, new
             {
@@ -32,10 +34,12 @@ namespace WB.Services.Export.InterviewDataStorage
             return new QuestionnaireId(questionnaireId);
         }
 
-        public Task AddInterviewQuestionnaireReferenceAsync(Guid interviewId, QuestionnaireId questionnaireId, CancellationToken cancellationToken)
+        public Task AddInterviewQuestionnaireReferenceAsync(Guid interviewId, QuestionnaireId questionnaireId,
+            CancellationToken cancellationToken)
         {
-            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" ({InterviewColumnName}, {QuestionnaireColumnName})" +
-                       $"           VALUES(@interviewId, @questionnaireId);";
+            var text =
+                $@"INSERT INTO {SchemaName}.{Table} ({InterviewColumnName}, {QuestionnaireColumnName})" +
+                 " VALUES(@interviewId, @questionnaireId);";
 
             return this.tenantContext.Connection.ExecuteAsync(text, new
             {
@@ -46,20 +50,19 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task RemoveInterviewQuestionnaireReferenceAsync(Guid interviewId, CancellationToken cancellationToken)
         {
-            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" " +
-                       $"      WHERE {InterviewColumnName} = @interviewId;";
+            var text = $"DELETE FROM {SchemaName}.{Table} WHERE {InterviewColumnName} = @interviewId;";
 
-            return this.tenantContext.Connection.ExecuteAsync(text, new {interviewId = interviewId});
+            return this.tenantContext.Connection.ExecuteAsync(text, new { interviewId = interviewId });
         }
 
         private void EnsureTableExists()
         {
-            var command = $"CREATE TABLE IF NOT EXISTS \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"( " +
-                          $"     {InterviewColumnName}  uuid PRIMARY KEY," +
-                          $" {QuestionnaireColumnName}  text NOT NULL" +
-                          $")";
-
-            this.tenantContext.Connection.Execute(command);
+            this.tenantContext.Connection.Execute(
+                $"CREATE TABLE IF NOT EXISTS {SchemaName}.{Table} ( " +
+                  $"     {InterviewColumnName}  uuid PRIMARY KEY," +
+                  $" {QuestionnaireColumnName}  text NOT NULL)");
         }
+
+        private string SchemaName => $"\"{tenantContext.Tenant.Name}\"";
     }
 }

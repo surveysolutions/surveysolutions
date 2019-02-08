@@ -7,7 +7,11 @@ namespace WB.Services.Infrastructure.EventSourcing
     /// Stateful handler for events.
     /// Functional handler is the only one that responsible for own state
     /// </summary>
-    public interface IFunctionalHandler
+    public interface IFunctionalHandler : IStatefulDenormalizer
+    {
+    }
+
+    public interface IStatefulDenormalizer
     {
         Task SaveStateAsync(CancellationToken cancellationToken = default);
     }
@@ -15,5 +19,8 @@ namespace WB.Services.Infrastructure.EventSourcing
     /// <summary>
     /// Functional handlers marked with this interface will be executed earlier than other handlers
     /// </summary>
-    public interface IHighPriorityFunctionalHandler: IFunctionalHandler {  }
+    public interface IHighPriorityFunctionalHandler : IStatefulDenormalizer
+    {
+       
+    }
 }
