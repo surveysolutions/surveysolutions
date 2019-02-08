@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Npgsql;
-using NpgsqlTypes;
+using Dapper;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 
@@ -12,27 +10,26 @@ namespace WB.Services.Export.InterviewDataStorage
     public class InterviewQuestionnaireReferenceStorage : IInterviewQuestionnaireReferenceStorage
     {
         private readonly ITenantContext tenantContext;
-        private const string InterviewQuestionnaireReferenceTableName = "interview_questionnaire_reference";
-        private const string InterviewColumnName = "interviewid";
-        private const string QuestionnaireColumnName = "questionnaireid";
+        private const string InterviewQuestionnaireReferenceTableName = "interview__questionnaire";
+        private const string InterviewColumnName = "interview_id";
+        private const string QuestionnaireColumnName = "questionnaire_id";
 
         public InterviewQuestionnaireReferenceStorage(ITenantContext tenantContext)
         {
             this.tenantContext = tenantContext;
-            EnshureTableExists();
+            EnsureTableExists();
         }
 
         public async Task<QuestionnaireId> GetQuestionnaireIdByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
         {
             var commandText = $"SELECT {QuestionnaireColumnName} FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"" +
                               $" WHERE {InterviewColumnName} = @interviewId;";
-            using (var command = this.tenantContext.Connection.CreateCommand())
+
+            var questionnaireId = await this.tenantContext.Connection.ExecuteScalarAsync<string>(commandText, new
             {
-                command.CommandText = commandText;
-                AddParameter(command, "@interviewId", NpgsqlDbType.Uuid, interviewId);
-                var questionnaireId = (await command.ExecuteScalarAsync(cancellationToken)) as string;
-                return new QuestionnaireId(questionnaireId);
-            }
+                interviewId = interviewId
+            });
+            return new QuestionnaireId(questionnaireId);
         }
 
         public Task AddInterviewQuestionnaireReferenceAsync(Guid interviewId, QuestionnaireId questionnaireId, CancellationToken cancellationToken)
@@ -40,13 +37,11 @@ namespace WB.Services.Export.InterviewDataStorage
             var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" ({InterviewColumnName}, {QuestionnaireColumnName})" +
                        $"           VALUES(@interviewId, @questionnaireId);";
 
-            using (var command = this.tenantContext.Connection.CreateCommand())
+            return this.tenantContext.Connection.ExecuteAsync(text, new
             {
-                command.CommandText = text;
-                AddParameter(command, "@interviewId", NpgsqlDbType.Uuid, interviewId);
-                AddParameter(command, "@questionnaireId", NpgsqlDbType.Text, questionnaireId.Id);
-                return command.ExecuteNonQueryAsync(cancellationToken);
-            }
+                interviewId = interviewId,
+                questionnaireId = questionnaireId.Id
+            });
         }
 
         public Task RemoveInterviewQuestionnaireReferenceAsync(Guid interviewId, CancellationToken cancellationToken)
@@ -54,37 +49,17 @@ namespace WB.Services.Export.InterviewDataStorage
             var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\" " +
                        $"      WHERE {InterviewColumnName} = @interviewId;";
 
-            using (var command = this.tenantContext.Connection.CreateCommand())
-            {
-                command.CommandText = text;
-                AddParameter(command, "@interviewId", NpgsqlDbType.Uuid, interviewId);
-                return command.ExecuteNonQueryAsync(cancellationToken);
-            }
+            return this.tenantContext.Connection.ExecuteAsync(text, new {interviewId = interviewId});
         }
 
-        private static void AddParameter(DbCommand command, string name, NpgsqlDbType dbType, object value)
+        private void EnsureTableExists()
         {
-            var parameter = new NpgsqlParameter(name, dbType) { Value = value};
-            command.Parameters.Add(parameter);
-        }
-
-        private bool doesExistTable = false;
-
-        protected void EnshureTableExists()
-        {
-            if (doesExistTable) return;
-
             var command = $"CREATE TABLE IF NOT EXISTS \"{tenantContext.Tenant.Name}\".\"{InterviewQuestionnaireReferenceTableName}\"( " +
                           $"     {InterviewColumnName}  uuid PRIMARY KEY," +
                           $" {QuestionnaireColumnName}  text NOT NULL" +
                           $")";
-            using (var sqlCommand = this.tenantContext.Connection.CreateCommand())
-            {
-                sqlCommand.CommandText = command;
-                sqlCommand.ExecuteNonQuery();
-            }
 
-            doesExistTable = true;
+            this.tenantContext.Connection.Execute(command);
         }
     }
 }
