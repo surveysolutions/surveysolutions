@@ -138,7 +138,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 case TextQuestion _ : return "text";
                 case NumericQuestion numericQuestion when (numericQuestion.IsInteger): return "int4";
                 case NumericQuestion numericQuestion when (!numericQuestion.IsInteger): return "float8";
-                case TextListQuestion _ : return "text[]";
+                case TextListQuestion _ : return "jsonb";
                 case MultimediaQuestion _ : return "text";
                 case DateTimeQuestion dateTimeQuestion : return "timestamp";
                 case AudioQuestion audioQuestion : return "jsonb";
@@ -147,16 +147,16 @@ namespace WB.Services.Export.InterviewDataStorage
                 case QRBarcodeQuestion qrBarcodeQuestion : return "text";
                 case SingleQuestion singleQuestion 
                     when (singleQuestion.LinkedToQuestionId.HasValue || singleQuestion.LinkedToRosterId.HasValue):
-                    return "float8[]";
+                    return "int4[]";
                 case SingleQuestion singleQuestion 
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
-                    return "float8";
+                    return "int4";
                 case MultyOptionsQuestion multiOptionsQuestion
                     when(multiOptionsQuestion.LinkedToQuestionId.HasValue || multiOptionsQuestion.LinkedToRosterId.HasValue):
-                    return "float8[][]";
+                    return "int4[][]";
                 case MultyOptionsQuestion multiOptionsQuestion
                     when(!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
-                    return "float8[]";
+                    return "int4[]";
                 default:
                     throw new ArgumentException("Unknown question type: " + question.GetType().Name);
             }
