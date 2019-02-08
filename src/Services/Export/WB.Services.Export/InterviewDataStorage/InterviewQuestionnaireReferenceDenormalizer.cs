@@ -18,10 +18,11 @@ namespace WB.Services.Export.InterviewDataStorage
             this.referenceStorage = referenceStorage;
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+        public async Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
         {
             string questionnaireId = $"{@event.Event.QuestionnaireId}${@event.Event.QuestionnaireVersion}";
-            return referenceStorage.AddInterviewQuestionnaireReferenceAsync(@event.EventSourceId, new QuestionnaireId(questionnaireId), cancellationToken);
+            var id = new QuestionnaireId(questionnaireId);
+            await referenceStorage.AddInterviewQuestionnaireReferenceAsync(@event.EventSourceId, id, cancellationToken);
         }
 
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
