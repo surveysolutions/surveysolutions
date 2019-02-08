@@ -272,12 +272,13 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task HandleAsync(PublishedEvent<NumericRealQuestionAnswered> @event, CancellationToken cancellationToken = default)
         {
+            double answer = (double)@event.Event.Answer;
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: @event.Event.Answer,
-                answerType: NpgsqlDbType.Numeric
+                answer: double.IsNaN(answer) ? null : (object)answer,
+                answerType: NpgsqlDbType.Double
             ));
             return Task.FromResult(state);
         }
@@ -487,11 +488,17 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var variable in @event.Event.ChangedVariables)
             {
+                var value = variable.NewValue;
+                if (value is string sValue && sValue== "NaN")
+                    value = double.NaN;
+                if (value is double dValue && double.IsNaN(dValue))
+                    value = double.NaN;
+
                 state.Commands.Add(InterviewDataStateChangeCommand.UpdateVariable(
                     interviewId: @event.EventSourceId,
                     variableId: variable.Identity.Id,
                     rosterVector: variable.Identity.RosterVector.Coordinates.ToArray(),
-                    value: variable.NewValue
+                    value: value
                 ));
             }
             return Task.FromResult(state);
