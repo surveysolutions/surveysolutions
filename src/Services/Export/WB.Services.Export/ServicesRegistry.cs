@@ -77,7 +77,6 @@ namespace WB.Services.Export
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
             services.AddTransient<IExportJob, ExportJob>();
             services.AddTransient<IInterviewDatabaseInitializer, InterviewDatabaseInitializer>();
-            services.AddTransient<IInterviewQuestionnaireReferenceStorage, InterviewQuestionnaireReferenceStorage>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();

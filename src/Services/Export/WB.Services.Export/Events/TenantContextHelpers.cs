@@ -17,10 +17,9 @@ namespace WB.Services.Export.Events
             }
 
             ctx.Tenant = context.Tenant;
-            ctx.Connection = context.Connection;
         }
         
-        public static void SetDbConnection(this IServiceScope scope, DbConnection connection)
+        public static void SetDbContext(this IServiceScope scope, TenantDbContext connection)
         {
             var ctx = scope.ServiceProvider.GetService<ITenantContext>() as TenantContext;
             if (ctx == null)
@@ -28,9 +27,9 @@ namespace WB.Services.Export.Events
                 throw new ArgumentException("Cannot get tenant context implementation");
             }
 
-            ctx.Connection = connection;
-            ctx.DbContext = scope.ServiceProvider.GetService<TenantDbContext>();
+            ctx.DbContext = connection;
         }
+
         public static void SetTenant(this IServiceProvider scope, TenantInfo tenant)
         {
             var ctx = scope.GetService<ITenantContext>() as TenantContext;
