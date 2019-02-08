@@ -613,7 +613,7 @@ namespace WB.Services.Export.InterviewDataStorage
             foreach (var commandsByInterview in commandsByInterviews)
             {
                 var interviewId = commandsByInterview.Key;
-                var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, cancellationToken);
+                var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
                 if (questionnaire == null)
                     continue;
 
@@ -662,9 +662,9 @@ namespace WB.Services.Export.InterviewDataStorage
             return commandsState;
         }
 
-        private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken cancellationToken)
+        private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId)
         {
-            var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FirstOrDefaultAsync(x => x.InterviewId == interviewId, cancellationToken: cancellationToken);
+            var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
             if (questionnaireId == null)
                 return null;
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId));
