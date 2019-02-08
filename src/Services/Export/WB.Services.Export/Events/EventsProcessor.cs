@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -30,63 +26,62 @@ namespace WB.Services.Export.Events
             this.logger = logger;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>Last event global sequence</returns>
         public async Task HandleNewEvents(CancellationToken token = default)
         {
-            long currentSequence = 0;
-            long? max = null;
-            var sw = Stopwatch.StartNew();
-            do
+            long? maximumSequenceToQuery = null;
+            long? last = null;
+
+            while(true)
             {
-                sw.Restart();
-                var events = await tenant.Api.GetInterviewEvents(currentSequence, 10000);
-                await HandleEvents(events, token);
-
-                max = max ?? events.Total;
-                if (events.NextSequence == null) break;
-                currentSequence = events.NextSequence.Value;
-
-                logger.LogInformation("Handling: Curr: {currentSequence} Max: {max}", currentSequence, max);
-                
-                var speed = events.Events.Count / sw.Elapsed.TotalSeconds;
-                var total = (max.Value - currentSequence) / speed;
-
-                Debug.WriteLine($"Took {sw.Elapsed} to handle {events.Events.Count} events. {TimeSpan.FromSeconds(total)} left");
-
-
-            } while (currentSequence <= max.Value);
-        }
-
-        public async Task HandleEvents(EventsFeed feed, CancellationToken token = default)
-        {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                scope.PropagateTenantContext(tenant);
-                await scope.ServiceProvider.GetService<TenantDbContext>().Database.MigrateAsync(token);
-
-                using (var db = scope.ServiceProvider.GetService<TenantDbContext>())
+                using (var scope = serviceProvider.CreateScope())
                 {
-                    scope.SetDbContext(db);
-                    
-                    using (var tr = db.Database.BeginTransaction())
-                    {
-                        var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>()
-                            .Cast<IStatefulDenormalizer>();
-                        var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
-                            .Cast<IStatefulDenormalizer>();
+                    scope.PropagateTenantContext(tenant);
+                    await scope.ServiceProvider.GetService<TenantDbContext>().Database.MigrateAsync(token);
 
-                        var all = priorityHandlers.Union(handlers).ToArray();
-                        foreach (var handler in all)
+                    using (var db = scope.ServiceProvider.GetService<TenantDbContext>())
+                    {
+                        scope.SetDbContext(db);
+                        
+                        using (var tr = db.Database.BeginTransaction())
                         {
-                            foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                            if (maximumSequenceToQuery.HasValue 
+                                && db.Metadata.GlobalSequence >= maximumSequenceToQuery) break;
+                            
+                            var feed = await tenant.Api.GetInterviewEvents(db.Metadata.GlobalSequence, 10000);
+                            maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+
+                            if (feed.Events.Any())
                             {
-                                await handler.Handle(ev, token);
+                                var priorityHandlers = scope.ServiceProvider
+                                    .GetServices<IHighPriorityFunctionalHandler>()
+                                    .Cast<IStatefulDenormalizer>();
+                                var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
+                                    .Cast<IStatefulDenormalizer>();
+
+                                var all = priorityHandlers.Union(handlers).ToArray();
+
+                                foreach (var handler in all)
+                                {
+                                    foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                                    {
+                                        await handler.Handle(ev, token);
+                                    }
+
+                                    await handler.SaveStateAsync(token);
+                                }
+
+                                db.Metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+
+                                await db.SaveChangesAsync(token);
                             }
 
-                            await handler.SaveStateAsync(token);
-                            await db.SaveChangesAsync(token);
+                            tr.Commit();
                         }
-
-                        tr.Commit();
                     }
                 }
             }

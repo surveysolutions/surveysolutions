@@ -21,14 +21,14 @@ namespace WB.Services.Export.Events.Handlers
         }
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            logger.LogInformation($"Saving state. EventsHandled: {EventsHandled}");
+            //logger.LogInformation($"Saving state. EventsHandled: {EventsHandled}");
             return Task.CompletedTask;
         }
 
         public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
         {
             EventsHandled++;
-            logger.LogInformation($"Handle event: {@event.EventSourceId} {@event.Event.GetType().Name}");
+          //  logger.LogInformation($"Handle event: {@event.EventSourceId} {@event.Event.GetType().Name}");
             return Task.CompletedTask;
         }
     }

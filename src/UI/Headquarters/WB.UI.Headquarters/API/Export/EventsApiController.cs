@@ -40,14 +40,14 @@ namespace WB.UI.Headquarters.API.Export
                 using (var json = new JsonTextWriter(sw))
                 {
                     json.WriteStartObject();
-                    json.WritePropertyName("total");
+                    json.WritePropertyName(@"total");
                     json.WriteValue(maximum);
 
                     json.WritePropertyName(nameof(EventsFeedPage.Events));
                     json.WriteStartArray();
 
                     var events = headquartersEventStore.GetRawEventsFeed(sequence, pageSize);
-                    long lastEvent = sequence;
+
                     foreach (var ev in events)
                     {
                         json.WriteStartObject();
@@ -60,20 +60,12 @@ namespace WB.UI.Headquarters.API.Export
                         json.WriteValue(ev.EventSourceId);
                         json.WritePropertyName(nameof(FeedEvent.Sequence));
                         json.WriteValue(ev.EventSequence);
-                        //json.WritePropertyName(nameof(FeedEvent.EventTypeName));
-                        //json.WriteValue(ev.EventType);
                         json.WritePropertyName(nameof(FeedEvent.Payload));
                         json.WriteRawValue(ev.Value);
                         json.WriteEndObject();
-
-                        lastEvent = ev.GlobalSequence;
                     }
 
                     json.WriteEndArray();
-
-                    json.WritePropertyName(nameof(EventsFeedPage.NextSequence));
-                    json.WriteValue(lastEvent == maximum  ? (long?) null : lastEvent + 1);
-
                     json.WriteEndObject();
                 }
 
@@ -104,10 +96,7 @@ namespace WB.UI.Headquarters.API.Export
 
     public class EventsFeedPage
     {
-        /// <summary>
-        /// Relative sequence for fetching next batch of events. Null if application retrieved last page
-        /// </summary>
-        public long? NextSequence { get; set; }
+        public long NextSequence { get; set; }
 
         public long Total { get; set; }
 
