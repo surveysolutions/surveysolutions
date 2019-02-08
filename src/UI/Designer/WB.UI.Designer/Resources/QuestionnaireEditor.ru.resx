@@ -1158,12 +1158,12 @@
   <data name="HideIfDisabledNested" xml:space="preserve">
     <value>Унаследовано от опросника</value>
   </data>
-    <data name="PlainRoster" xml:space="preserve">
+  <data name="PlainRoster" xml:space="preserve">
     <value>Режим списка</value>
     <comment>Режим списка</comment>
   </data>
-    <data name="HelpPlainRoster" xml:space="preserve">
-    <value>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</value>
+  <data name="HelpPlainRoster" xml:space="preserve">
+    <value>Если опция не выбрана, все вопросы ростера показываются за кнопкой экземпляра ростера. Если выбрана, вопросы ростера отображаются на том же уровне, разделенные заголовком соответсвующего экземпляра ростера.</value>
     <comment>По умолчанию,  ростер отображается как группа. Выбирая эту опцию содержимое ростеров будет показываться на уровне ростера.</comment>
   </data>
   <data name="Add" xml:space="preserve">
@@ -1229,11 +1229,11 @@
   <data name="QuestionsSearchTitle" xml:space="preserve">
     <value>Банк вопросов</value>
   </data>
-    <data name="OptionsWindowTitle" xml:space="preserve">
+  <data name="OptionsWindowTitle" xml:space="preserve">
     <value>Редактировать категории</value>
     <comment>Редактировать категории</comment>
   </data>
-    <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
     <value>Редактировать каскадные категории </value>
     <comment>Редактировать каскадные категории </comment>
   </data>
