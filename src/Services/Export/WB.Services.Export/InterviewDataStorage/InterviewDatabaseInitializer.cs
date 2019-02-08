@@ -71,7 +71,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
@@ -93,7 +93,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
             //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
 
@@ -116,7 +116,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
             //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "int4[]", isNullable: true));
 
