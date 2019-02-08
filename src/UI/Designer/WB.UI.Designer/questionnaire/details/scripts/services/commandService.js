@@ -261,6 +261,7 @@
                         command.linkedToEntityId = question.linkedToEntityId;
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
+                        command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
                     case "Numeric":

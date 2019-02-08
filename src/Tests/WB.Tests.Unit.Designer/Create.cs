@@ -1227,6 +1227,36 @@ namespace WB.Tests.Unit.Designer
                     IsSignature = isSignature
                 };
             }
+
+            public static UpdateMultiOptionQuestion UpdateMultiOptionQuestion(Guid questionId, Guid responsibleId, string title,
+                string variableName, string variableLabel = null, string enablementCondition = null, string instructions = null,
+                string validationExpression = null, string validationMessage = null, QuestionScope scope = QuestionScope.Interviewer, Option[] options = null,
+                Guid? linkedToQuestionId = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, bool yesNoView = false,
+                string linkedFilterExpression = null, bool isFilteredCombobox = false, bool hideIfDisabled = false, 
+                List<ValidationCondition> validationConditions = null) => new UpdateMultiOptionQuestion(
+                Guid.NewGuid(),
+                questionId,
+                responsibleId,
+                commonQuestionParameters: new CommonQuestionParameters()
+                {
+                    Title = title,
+                    VariableName = variableName,
+                    VariableLabel = variableLabel,
+                    EnablementCondition = enablementCondition,
+                    Instructions = instructions,
+                    HideIfDisabled = hideIfDisabled
+                },
+                validationExpression,
+                validationMessage,
+                scope,
+                options ?? new[] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"}},
+                linkedToQuestionId,
+                areAnswersOrdered,
+                maxAllowedAnswers,
+                yesNoView,
+                validationConditions ?? new List<ValidationCondition>(),
+                linkedFilterExpression,
+                isFilteredCombobox);
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

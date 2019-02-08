@@ -56,11 +56,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, 
                 scope: QuestionScope.Interviewer, properties: Create.QuestionProperties(), isSignature: false));
 
-            questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", 
-                variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, 
-                responsibleId: responsibleId, options: new Option[] { new Option("1", "1"), new Option("2", "2"), }, 
-                linkedToEntityId: null, areAnswersOrdered: false, maxAllowedAnswers: 2, yesNoView: false,
-                validationConditions: new List<ValidationCondition>(), linkedFilterExpression: null, properties: Create.QuestionProperties());
+            questionnaire.UpdateMultiOptionQuestion(
+                Create.Command.UpdateMultiOptionQuestion(
+                    questionMultyOptionId,
+                    responsibleId,
+                    "title",
+                    "variableName5",
+                    hideIfDisabled: true));
 
             questionnaire.UpdateQRBarcodeQuestion(
                 new UpdateQRBarcodeQuestion(questionnaire.Id,questionQRBarcodeId, 
