@@ -95,7 +95,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
 
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
+            //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
@@ -118,14 +118,14 @@ namespace WB.Services.Export.InterviewDataStorage
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int8[{group.RosterLevel}]", isPrimaryKey: true));
 
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "int4[]", isNullable: true));
+            //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "int4[]", isNullable: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
 
             if (!questions.Any())
-                return ;
+                return;
 
             var commandText = GenerateCreateTableScript(tenant.Name, group.ValidityTableName, columns);
             connection.Execute(commandText);
