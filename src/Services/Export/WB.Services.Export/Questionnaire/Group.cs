@@ -144,5 +144,30 @@ namespace WB.Services.Export.Questionnaire
                 return this.isInRoster.Value;
             }
         }
+
+        private int? rosterLevel;
+        /// <summary>
+        /// Count of parent rosters that group has
+        /// </summary>
+        public int RosterLevel
+        {
+            get
+            {
+                int result = this.IsRoster ? 1 : 0;
+                var localParent = GetParent();
+                while (localParent != null)
+                {
+                    if (localParent is Group group && group.IsRoster)
+                    {
+                        result++;
+                    }
+
+                    localParent = localParent.GetParent();
+                }
+
+                this.rosterLevel = result;
+                return this.rosterLevel.Value;
+            }
+        }
     }
 }
