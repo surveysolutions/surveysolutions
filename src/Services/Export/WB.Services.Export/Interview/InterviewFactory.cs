@@ -45,12 +45,12 @@ namespace WB.Services.Export.Interview
                         {
                             if (groupChild is Question question)
                             {
-                                var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data_roster_vector"] : RosterVector.Empty);
+                                var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Question,
-                                    InterviewId = (Guid)reader["data_interview_id"],
+                                    InterviewId = (Guid)reader["data__interview_id"],
                                     InvalidValidations = reader[$"validity_{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity_{question.ColumnName}"],
                                     IsEnabled = (bool)reader[$"enablement_{question.ColumnName}"]
                                 };
