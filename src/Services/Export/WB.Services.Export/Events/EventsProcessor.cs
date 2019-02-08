@@ -66,13 +66,11 @@ namespace WB.Services.Export.Events
                 scope.PropagateTenantContext(tenant);
                 await scope.ServiceProvider.GetService<TenantDbContext>().Database.MigrateAsync(token);
 
-                using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
+                using (var db = scope.ServiceProvider.GetService<TenantDbContext>())
                 {
-                    scope.SetDbConnection(db);
-
-                    await db.OpenAsync(token);
+                    scope.SetDbContext(db);
                     
-                    using (var tr = db.BeginTransaction())
+                    using (var tr = db.Database.BeginTransaction())
                     {
                         var priorityHandlers = scope.ServiceProvider.GetServices<IHighPriorityFunctionalHandler>()
                             .Cast<IStatefulDenormalizer>();
@@ -90,8 +88,8 @@ namespace WB.Services.Export.Events
                             await handler.SaveStateAsync(token);
                         }
 
-                        await scope.ServiceProvider.GetService<TenantDbContext>().SaveChangesAsync(token);
-                        await tr.CommitAsync(token);
+                        await db.SaveChangesAsync(token);
+                        tr.Commit();
                     }
                 }
             }

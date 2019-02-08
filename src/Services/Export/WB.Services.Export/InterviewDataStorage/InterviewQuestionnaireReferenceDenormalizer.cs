@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
@@ -14,7 +15,6 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<InterviewHardDeleted>
     {
         private readonly ITenantContext tenantContext;
-        private readonly IInterviewQuestionnaireReferenceStorage referenceStorage;
 
         public InterviewQuestionnaireReferenceDenormalizer(ITenantContext tenantContext)
         {
@@ -34,7 +34,10 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
         {
-            return referenceStorage.RemoveInterviewQuestionnaireReferenceAsync(@event.EventSourceId, cancellationToken);
+            var dbContext = this.tenantContext.DbContext;
+            var reference = dbContext.InterviewReferences.FirstOrDefault(x => x.InterviewId == @event.EventSourceId);
+            dbContext.Remove(reference);
+            return Task.CompletedTask;
         }
 
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
