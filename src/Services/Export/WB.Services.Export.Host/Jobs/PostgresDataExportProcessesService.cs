@@ -72,10 +72,10 @@ namespace WB.Services.Export.Host.Jobs
             return jobs;
         }
         
-        public void UpdateDataExportProgress(DataExportProcessArgs process, int progressInPercents)
+        public void UpdateDataExportProgress(long processId, int progressInPercents)
         {
             logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);
-            jobProgressReporter.UpdateJobData(process.ProcessId, ProgressField, progressInPercents.ToString());
+            jobProgressReporter.UpdateJobData(processId, ProgressField, progressInPercents.ToString());
         }
 
         public void DeleteDataExport(long processId, string reason)

@@ -39,7 +39,7 @@ namespace WB.Services.Export.Jobs
             {
                 serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
 
-                await processor.HandleNewEvents(cancellationToken);
+                await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 
                 if (pendingExportProcess.StorageType.HasValue)
                 {

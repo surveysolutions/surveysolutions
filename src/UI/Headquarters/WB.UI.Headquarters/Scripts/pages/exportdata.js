@@ -363,6 +363,14 @@
         return dataReference.StatusOfLatestExportProcess() === 2;
     }
 
+    self.isPreparing = function(type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+        var status = dataReference.StatusOfLatestExportProcess();
+        
+        return status === 7;
+    }
+
     self.isRunning = function (type, format) {
         var dataReference = self.getDataReference(type, format);
         if (dataReference == null) return false;
