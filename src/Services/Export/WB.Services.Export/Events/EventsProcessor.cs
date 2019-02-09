@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
@@ -15,26 +17,29 @@ namespace WB.Services.Export.Events
         private readonly ITenantContext tenant;
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EventsProcessor> logger;
+        private readonly IDataExportProcessesService dataExportProcessesService;
 
         public EventsProcessor(
             ITenantContext tenant,
             IServiceProvider serviceProvider,
-            ILogger<EventsProcessor> logger)
+            ILogger<EventsProcessor> logger, IDataExportProcessesService dataExportProcessesService)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
             this.logger = logger;
+            this.dataExportProcessesService = dataExportProcessesService;
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="processId"></param>
         /// <param name="token"></param>
         /// <returns>Last event global sequence</returns>
-        public async Task HandleNewEvents(CancellationToken token = default)
+        public async Task HandleNewEvents(long processId, CancellationToken token = default)
         {
             long? maximumSequenceToQuery = null;
-            long? last = null;
+            long? startedReadAt = null;
 
             while(true)
             {
@@ -49,12 +54,18 @@ namespace WB.Services.Export.Events
                         
                         using (var tr = db.Database.BeginTransaction())
                         {
-                            if (maximumSequenceToQuery.HasValue 
-                                && db.Metadata.GlobalSequence >= maximumSequenceToQuery) break;
-                            
-                            var feed = await tenant.Api.GetInterviewEvents(db.Metadata.GlobalSequence, 10000);
-                            maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+                            var metadata = db.Metadata;
+                            startedReadAt = startedReadAt ?? metadata.GlobalSequence;
 
+                            if (maximumSequenceToQuery.HasValue 
+                                && metadata.GlobalSequence >= maximumSequenceToQuery) break;
+
+                            dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
+                            // dataExportProcessesService.UpdateDataExportProgress(processId, 0);
+
+                            var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
+                            maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+                            
                             if (feed.Events.Any())
                             {
                                 var priorityHandlers = scope.ServiceProvider
@@ -75,12 +86,18 @@ namespace WB.Services.Export.Events
                                     await handler.SaveStateAsync(token);
                                 }
 
-                                db.Metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+                                metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
 
                                 await db.SaveChangesAsync(token);
                             }
-
+                            
                             tr.Commit();
+
+                            var totalEventsToRead = maximumSequenceToQuery - startedReadAt;
+                            var eventsProcessed = metadata.GlobalSequence - startedReadAt;
+                            var percent = eventsProcessed.PercentOf(totalEventsToRead);
+
+                            dataExportProcessesService.UpdateDataExportProgress(processId, percent);
                         }
                     }
                 }
@@ -90,6 +107,6 @@ namespace WB.Services.Export.Events
 
     public interface IEventProcessor
     {
-        Task HandleNewEvents(CancellationToken token = default);
+        Task HandleNewEvents(long processId, CancellationToken token = default);
     }
 }
