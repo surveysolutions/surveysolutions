@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage
@@ -21,28 +18,27 @@ namespace WB.Services.Export.InterviewDataStorage
             this.tenantContext = tenantContext;
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<InterviewCreated> @event)
         {
-            return this.tenantContext.DbContext.InterviewReferences.AddAsync(
+            this.tenantContext.DbContext.InterviewReferences.Add(
                 new InterviewQuestionnaireReferenceNode
                 {
                     InterviewId = @event.EventSourceId,
                     QuestionnaireId = @event.Event.QuestionnaireId.ToString("N") + "$" +
                                       @event.Event.QuestionnaireVersion
-                }, cancellationToken);
+                });
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<InterviewHardDeleted> @event)
         {
             var dbContext = this.tenantContext.DbContext;
             var reference = dbContext.InterviewReferences.Find(@event.EventSourceId);
             dbContext.InterviewReferences.Remove(reference);
-            return Task.CompletedTask;
         }
 
         public Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            return Task.CompletedTask;
+            return this.tenantContext.DbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
