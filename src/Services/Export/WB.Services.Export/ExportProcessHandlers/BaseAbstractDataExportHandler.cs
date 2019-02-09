@@ -41,7 +41,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 // throttle progress changed events 
                 if (donePercent != lastPercent || sw.Elapsed > TimeSpan.FromSeconds(1))
                 {
-                    this.dataExportProcessesService.UpdateDataExportProgress(process, donePercent);
+                    this.dataExportProcessesService.UpdateDataExportProgress(process.ProcessId, donePercent);
 
                     lastPercent = donePercent;
                     sw.Restart();

@@ -254,13 +254,16 @@
                     <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
                 </div>
 
-                <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters)">
+                <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters) || isPreparing(@exportParameters)">
                     <div class="wrapper-progress">
                         <!-- ko if: isCompessing(@Html.Raw(exportParameters)) -->
                         <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
                         <!-- /ko -->
                         <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
                         <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                        <!-- /ko -->
+                        <!-- ko if: isPreparing(@Html.Raw(exportParameters)) -->
+                        <span data-bind="text: '@DataExport.Preparing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
                         <!-- /ko -->
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
