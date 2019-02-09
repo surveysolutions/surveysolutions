@@ -31,20 +31,17 @@ namespace WB.Services.Infrastructure.EventSourcing
             });
         }
 
-        public static Task Handle(this IStatefulDenormalizer denormalizer, Event ev, CancellationToken token = default)
+        public static void Handle(this IStatefulDenormalizer denormalizer, Event ev)
         {
             var handler = denormalizer.GetEventHandlersMap();
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {
-                return (Task)method.Invoke(denormalizer, new[]
+                method.Invoke(denormalizer, new[]
                 {
-                    (object) ev.AsPublishedEvent(),
-                    (object) CancellationToken.None
+                    (object) ev.AsPublishedEvent()
                 });
             }
-
-            return Task.CompletedTask;
         }
     }
 }

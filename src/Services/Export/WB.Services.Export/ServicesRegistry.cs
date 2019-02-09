@@ -9,7 +9,6 @@ using WB.Services.Export.Ddi;
 using WB.Services.Export.Ddi.Implementation;
 using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Events;
-using WB.Services.Export.Events.Handlers;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
@@ -81,7 +80,7 @@ namespace WB.Services.Export
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
             
-            RegisterFunctionalHandlers(services, typeof(DebugHandler));
+            RegisterFunctionalHandlers(services, typeof(InterviewQuestionnaireReferenceDenormalizer));
 
             // Singletons
             RegisterHandlers(services);

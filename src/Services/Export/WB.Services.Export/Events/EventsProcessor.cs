@@ -61,7 +61,6 @@ namespace WB.Services.Export.Events
                                 && metadata.GlobalSequence >= maximumSequenceToQuery) break;
 
                             dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
-                            // dataExportProcessesService.UpdateDataExportProgress(processId, 0);
 
                             var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
                             maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
@@ -80,7 +79,7 @@ namespace WB.Services.Export.Events
                                 {
                                     foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
                                     {
-                                        await handler.Handle(ev, token);
+                                        handler.Handle(ev);
                                     }
 
                                     await handler.SaveStateAsync(token);

@@ -263,16 +263,14 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                 return Task.CompletedTask;
             }
 
-            public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+            public void Handle(PublishedEvent<InterviewCreated> @event)
             {
                 track.Add((@event.Event, @event.EventSourceId));
-                return Task.CompletedTask;
             }
 
-            public Task HandleAsync(PublishedEvent<AnswersRemoved> @event, CancellationToken cancellationToken = default)
+            public void Handle(PublishedEvent<AnswersRemoved> @event)
             {
                 track.Add((@event.Event, @event.EventSourceId));
-                return Task.CompletedTask;
             }
         }
     }

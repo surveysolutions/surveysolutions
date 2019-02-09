@@ -11,7 +11,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     public interface IEventHandler<TEvent> where TEvent : IEvent
     {
         [Handler]
-        Task HandleAsync(PublishedEvent<TEvent> @event, CancellationToken cancellationToken = default);
+        void Handle(PublishedEvent<TEvent> @event);
     }
 
     [AttributeUsage(AttributeTargets.Method)]

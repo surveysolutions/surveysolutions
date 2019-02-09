@@ -143,7 +143,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 AnswerType = NpgsqlDbType.Boolean
             };
         }
-        
+
         public static InterviewDataStateChangeCommand Invalid(Guid interviewId, Guid entityId, int[] rosterVector,
             int[] failedValidationConditions)
         {
@@ -198,8 +198,8 @@ namespace WB.Services.Export.InterviewDataStorage
         Enablement
     }
 
-    public class InterviewDataDenormalizer:
-      //  IFunctionalHandler,
+    public class InterviewDataDenormalizer :
+       // IFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewFromPreloadedDataCreated>,
         IEventHandler<InterviewOnClientCreated>,
@@ -238,7 +238,7 @@ namespace WB.Services.Export.InterviewDataStorage
     {
         private readonly ITenantContext tenantContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        
+
         private readonly InterviewDataState state;
 
         public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage)
@@ -252,43 +252,39 @@ namespace WB.Services.Export.InterviewDataStorage
             };
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken)
+        public void Handle(PublishedEvent<InterviewCreated> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewFromPreloadedDataCreated> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewOnClientCreated> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<InterviewOnClientCreated> @event)
         {
             //state.Commands.Add(InterviewDataStateChangeCommand.InsertInterview(@event.EventSourceId));
-            return Task.FromResult(state);
+
         }
 
-        public Task HandleAsync(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<InterviewHardDeleted> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.RemoveInterview(@event.EventSourceId));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<TextQuestionAnswered> @event, CancellationToken cancellationToken)
+        public void Handle(PublishedEvent<TextQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 answer: @event.Event.Answer,
-                answerType:NpgsqlDbType.Text
+                answerType: NpgsqlDbType.Text
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<NumericIntegerQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -297,10 +293,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.Answer,
                 answerType: NpgsqlDbType.Integer
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<NumericRealQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<NumericRealQuestionAnswered> @event)
         {
             double answer = (double)@event.Event.Answer;
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
@@ -310,22 +305,20 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: double.IsNaN(answer) ? null : (object)answer,
                 answerType: NpgsqlDbType.Double
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<TextListQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<TextListQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                answer: SerializeToJson(@event.Event.Answers), 
+                answer: SerializeToJson(@event.Event.Answers),
                 answerType: NpgsqlDbType.Json
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -334,10 +327,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.SelectedRosterVectors.Select(c => c.Select(i => (int)i).ToArray()).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<MultipleOptionsQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -346,10 +338,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.SelectedValues.Select(c => (int)c).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<SingleOptionQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -358,10 +349,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: (int)@event.Event.SelectedValue,
                 answerType: NpgsqlDbType.Integer
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<SingleOptionLinkedQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -370,10 +360,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.SelectedRosterVector.Select(c => (int)c).ToArray(),
                 answerType: NpgsqlDbType.Array | NpgsqlDbType.Integer
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AreaQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AreaQuestionAnswered> @event)
         {
             var area = new Area(@event.Event.Geometry, @event.Event.MapName, @event.Event.NumberOfPoints,
                 @event.Event.AreaSize, @event.Event.Length, @event.Event.Coordinates, @event.Event.DistanceToEditor);
@@ -384,10 +373,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: SerializeToJson(area),
                 answerType: NpgsqlDbType.Json
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AudioQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AudioQuestionAnswered> @event)
         {
             var audioAnswer = AudioAnswer.FromString(@event.Event.FileName, @event.Event.Length);
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
@@ -397,10 +385,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: SerializeToJson(audioAnswer),
                 answerType: NpgsqlDbType.Json
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<DateTimeQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -409,13 +396,12 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.Answer,
                 answerType: NpgsqlDbType.Date
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<GeoLocationQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<GeoLocationQuestionAnswered> @event)
         {
-            GeoPosition geoPosition = new GeoPosition(@event.Event.Latitude, 
-                @event.Event.Longitude, 
+            GeoPosition geoPosition = new GeoPosition(@event.Event.Latitude,
+                @event.Event.Longitude,
                 @event.Event.Accuracy,
                 @event.Event.Altitude,
                 @event.Event.Timestamp);
@@ -426,10 +412,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: SerializeToJson(geoPosition),
                 answerType: NpgsqlDbType.Json
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<PictureQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<PictureQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -438,10 +423,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: @event.Event.PictureFileName,
                 answerType: NpgsqlDbType.Text
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<QRBarcodeQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -450,10 +434,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: SerializeToJson(@event.Event.Answer),
                 answerType: NpgsqlDbType.Text
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<YesNoQuestionAnswered> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<YesNoQuestionAnswered> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.UpdateAnswer(
                 interviewId: @event.EventSourceId,
@@ -462,20 +445,18 @@ namespace WB.Services.Export.InterviewDataStorage
                 answer: SerializeToJson(@event.Event.AnsweredOptions),
                 answerType: NpgsqlDbType.Json
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AnswerRemoved> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AnswerRemoved> @event)
         {
             state.Commands.Add(InterviewDataStateChangeCommand.RemoveAnswer(
                 interviewId: @event.EventSourceId,
                 questionId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector.Select(i => (int)i).ToArray()
             ));
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AnswersRemoved> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AnswersRemoved> @event)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -485,10 +466,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: question.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<QuestionsDisabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<QuestionsDisabled> @event)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -498,10 +478,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: question.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<QuestionsEnabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<QuestionsEnabled> @event)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -511,10 +490,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: question.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AnswersDeclaredInvalid> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AnswersDeclaredInvalid> @event)
         {
             var failedValidationConditions = @event.Event.FailedValidationConditions;
             foreach (var question in @event.Event.Questions)
@@ -526,10 +504,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     failedValidationConditions: failedValidationConditions[question].Select(c => c.FailedConditionIndex).ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<AnswersDeclaredValid> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<AnswersDeclaredValid> @event)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -539,15 +516,14 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: question.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<VariablesChanged> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<VariablesChanged> @event)
         {
             foreach (var variable in @event.Event.ChangedVariables)
             {
                 var value = variable.NewValue;
-                if (value is string sValue && sValue== "NaN")
+                if (value is string sValue && sValue == "NaN")
                     value = double.NaN;
                 if (value is double dValue && double.IsNaN(dValue))
                     value = double.NaN;
@@ -559,10 +535,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     value: value
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<VariablesDisabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<VariablesDisabled> @event)
         {
             foreach (var identity in @event.Event.Variables)
             {
@@ -572,10 +547,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<VariablesEnabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<VariablesEnabled> @event)
         {
             foreach (var identity in @event.Event.Variables)
             {
@@ -585,33 +559,30 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<RosterInstancesAdded> @event, CancellationToken cancellationToken)
+        public void Handle(PublishedEvent<RosterInstancesAdded> @event)
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
                 var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId);
                 state.Commands.Add(InterviewDataStateChangeCommand.AddRosterInstance(
-                    @event.EventSourceId, 
-                    rosterInstance.GroupId, 
+                    @event.EventSourceId,
+                    rosterInstance.GroupId,
                     rosterVector));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<RosterInstancesRemoved> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<RosterInstancesRemoved> @event)
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
                 var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId).ToArray();
                 state.Commands.Add(InterviewDataStateChangeCommand.RemoveRosterInstance(@event.EventSourceId, rosterInstance.GroupId, rosterVector));
             }
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<GroupsDisabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<GroupsDisabled> @event)
         {
             /*foreach (var identity in @event.Event.Groups)
             {
@@ -621,10 +592,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
             }*/
-            return Task.FromResult(state);
         }
 
-        public Task HandleAsync(PublishedEvent<GroupsEnabled> @event, CancellationToken cancellationToken = default)
+        public void Handle(PublishedEvent<GroupsEnabled> @event)
         {
             /*foreach (var identity in @event.Event.Groups)
             {
@@ -634,9 +604,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
             }*/
-            return Task.FromResult(state);
         }
-
 
         private class CommandsForExecute
         {
@@ -693,35 +661,35 @@ namespace WB.Services.Export.InterviewDataStorage
                     switch (commandByType.Key)
                     {
                         case InterviewDataStateChangeCommandType.InsertInterview:
-                        {
-                            foreach (var insertInterviewCommand in commandByType)
-                                commandsState.InsertInterviewCommands.AddRange(GetInsertCommands(questionnaire, insertInterviewCommand));
-                            break;
-                        }
+                            {
+                                foreach (var insertInterviewCommand in commandByType)
+                                    commandsState.InsertInterviewCommands.AddRange(GetInsertCommands(questionnaire, insertInterviewCommand));
+                                break;
+                            }
                         case InterviewDataStateChangeCommandType.DeleteInterview:
-                        {
-                            foreach (var deleteInterviewCommand in commandByType)
-                                commandsState.RemoveInterviewCommands.AddRange(GetDeleteCommands(questionnaire, deleteInterviewCommand));
-                            break;
-                        }
+                            {
+                                foreach (var deleteInterviewCommand in commandByType)
+                                    commandsState.RemoveInterviewCommands.AddRange(GetDeleteCommands(questionnaire, deleteInterviewCommand));
+                                break;
+                            }
                         case InterviewDataStateChangeCommandType.AddRosterInstance:
-                        {
-                            foreach (var addRosterInstanceCommand in commandByType)
-                                commandsState.AddRosterInstanceCommands.AddRange(GetAddRosterInstanceCommands(questionnaire, addRosterInstanceCommand));
-                            break;
-                        }
+                            {
+                                foreach (var addRosterInstanceCommand in commandByType)
+                                    commandsState.AddRosterInstanceCommands.AddRange(GetAddRosterInstanceCommands(questionnaire, addRosterInstanceCommand));
+                                break;
+                            }
                         case InterviewDataStateChangeCommandType.RemoveRosterInstance:
-                        {
-                            foreach (var removeRosterInstanceCommand in commandByType)
-                                commandsState.RemoveRosterInstanceCommands.AddRange(GetRemoveRosterInstanceCommands(questionnaire, removeRosterInstanceCommand));
-                            break;
-                        }
+                            {
+                                foreach (var removeRosterInstanceCommand in commandByType)
+                                    commandsState.RemoveRosterInstanceCommands.AddRange(GetRemoveRosterInstanceCommands(questionnaire, removeRosterInstanceCommand));
+                                break;
+                            }
                         case InterviewDataStateChangeCommandType.UpdateValue:
-                        {
-                            foreach (var updateAnswerCommand in commandByType)
-                                commandsState.UpdateValueCommands.AddRange(GetUpdateValueCommands(questionnaire, updateAnswerCommand));
-                            break;
-                        }
+                            {
+                                foreach (var updateAnswerCommand in commandByType)
+                                    commandsState.UpdateValueCommands.AddRange(GetUpdateValueCommands(questionnaire, updateAnswerCommand));
+                                break;
+                            }
                         default:
                             throw new ArgumentException("Unknown command type: " + commandByType.Key);
                             //break; // ignore
@@ -858,7 +826,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private Group ResolveGroupForEnablementOrValidity(IQuestionnaireEntity entity)
         {
-            return (entity as Group) ?? ((Group) entity.GetParent());
+            return (entity as Group) ?? ((Group)entity.GetParent());
         }
 
         private string ResolveColumnNameForEnablementOrValidity(IQuestionnaireEntity entity)
