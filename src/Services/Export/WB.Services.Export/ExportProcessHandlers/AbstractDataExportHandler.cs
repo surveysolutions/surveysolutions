@@ -36,8 +36,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
             this.dataExportProcessesService.UpdateDataExportProgress(processArgs.ProcessId, 0);
 
-            this.dataExportProcessesService.ChangeStatusType(
-                processArgs.ProcessId, DataExportStatus.Compressing);
+            this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Compressing);
 
             this.dataExportFileAccessor.RecreateExportArchive(this.ExportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);
