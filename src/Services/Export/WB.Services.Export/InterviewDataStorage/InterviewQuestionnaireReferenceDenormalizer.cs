@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
@@ -18,27 +21,41 @@ namespace WB.Services.Export.InterviewDataStorage
             this.tenantContext = tenantContext;
         }
 
+        private readonly Dictionary<Guid, string> added = new Dictionary<Guid, string>();
+        private readonly HashSet<Guid> removed = new HashSet<Guid>();
+
         public void Handle(PublishedEvent<InterviewCreated> @event)
         {
-            this.tenantContext.DbContext.InterviewReferences.Add(
-                new InterviewQuestionnaireReferenceNode
-                {
-                    InterviewId = @event.EventSourceId,
-                    QuestionnaireId = @event.Event.QuestionnaireId.ToString("N") + "$" +
-                                      @event.Event.QuestionnaireVersion
-                });
+            added.Add(@event.EventSourceId, @event.Event.QuestionnaireIdentity);
         }
 
         public void Handle(PublishedEvent<InterviewHardDeleted> @event)
         {
-            var dbContext = this.tenantContext.DbContext;
-            var reference = dbContext.InterviewReferences.Find(@event.EventSourceId);
-            dbContext.InterviewReferences.Remove(reference);
+            if (!added.Remove(@event.EventSourceId))
+            {
+                removed.Add(@event.EventSourceId);
+            }
         }
 
-        public Task SaveStateAsync(CancellationToken cancellationToken = default)
+        public async Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            return this.tenantContext.DbContext.SaveChangesAsync(cancellationToken);
+            var db = this.tenantContext.DbContext;
+
+            db.InterviewReferences.AddRange(added.Select(kv => new InterviewQuestionnaireReferenceNode
+            {
+                InterviewId = kv.Key,
+                QuestionnaireId = kv.Value
+            }));
+
+            var arg = new object[1];
+            foreach (var remove in removed)
+            {
+                arg[0] = remove;
+                var reference = await db.InterviewReferences.FindAsync(arg, cancellationToken);
+                db.InterviewReferences.Remove(reference);
+            }
+
+            await db.SaveChangesAsync(cancellationToken);
         }
     }
 }
