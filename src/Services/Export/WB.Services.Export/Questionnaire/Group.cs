@@ -49,6 +49,8 @@ namespace WB.Services.Export.Questionnaire
 
         public IEnumerable<IQuestionnaireEntity> Children { get; set; } = new List<IQuestionnaireEntity>();
 
+        public bool HasAnyExportableQuestions => Children.Any(x => x is Question || x is Variable);
+
         public IQuestionnaireEntity GetParent()
         {
             return Parent;
@@ -108,6 +110,8 @@ namespace WB.Services.Export.Questionnaire
                 return tableName;
             }
         }
+
+        public string TableNameQ => $"\"{TableName}\"";
 
         public string EnablementTableName => $"{TableName}_e";
         public string ValidityTableName => $"{TableName}_v";

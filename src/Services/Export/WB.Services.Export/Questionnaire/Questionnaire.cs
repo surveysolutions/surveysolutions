@@ -172,7 +172,7 @@ namespace WB.Services.Export.Questionnaire
                     queue.Enqueue(subChild);
                 }
 
-                if (current.Children.Any(x => x is Question || x is Variable))
+                if (current.HasAnyExportableQuestions)
                 {
                     yield return current;
                 }

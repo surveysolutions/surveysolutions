@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
-using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
@@ -59,7 +53,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 Type = InterviewDataStateChangeCommandType.AddRosterInstance,
                 InterviewId = interviewId,
                 EntityId = groupId,
-                RosterVector = rosterVector.Select(i => (int)i).ToArray()
+                RosterVector = rosterVector
             };
         }
 
@@ -220,8 +214,10 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<PictureQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<YesNoQuestionAnswered>,
+
         IEventHandler<AnswerRemoved>,
         IEventHandler<AnswersRemoved>,
+
         IEventHandler<QuestionsDisabled>,
         IEventHandler<QuestionsEnabled>,
         IEventHandler<AnswersDeclaredInvalid>,
@@ -901,7 +897,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 if (currentGroup.Children.Any(e => e is Question || e is Variable))
                     yield return currentGroup;
 
-                var childGroups = currentGroup.Children.Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();
+                var childGroups = currentGroup.Children
+                    .Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();
 
                 foreach (var childItem in childGroups)
                 {
