@@ -9,5 +9,7 @@ namespace WB.Services.Export.Events.Interview
         public long QuestionnaireVersion { get; set; }
         public bool UsesExpressionStorage { get; set; }
         public int? AssignmentId { get; set; }
+        public string QuestionnaireIdentity => QuestionnaireId.ToString("N") + "$" +
+                                               QuestionnaireVersion;
     }
 }

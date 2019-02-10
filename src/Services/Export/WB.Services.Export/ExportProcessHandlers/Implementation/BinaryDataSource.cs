@@ -48,7 +48,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
 
             var questionnaire = await this.questionnaireStorage
-                .GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId);
+                .GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, cancellationToken);
 
             var batchSize = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 

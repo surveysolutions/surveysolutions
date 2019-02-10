@@ -16,6 +16,8 @@ namespace WB.Services.Export.Events.Interview.Dtos
         
         public decimal RosterInstanceId { get; set; }
 
+        [JsonIgnore] public RosterVector RosterVector => OuterRosterVector.Append(RosterInstanceId);
+
         private int? hashCode;
 
         private bool Equals(RosterInstance other)

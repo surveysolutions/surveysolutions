@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             };
         }
 
-        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId)
+        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, CancellationToken token = default)
         {
             return await this.memoryCache.GetOrCreateAsync($"{nameof(QuestionnaireStorage)}:{tenant}:{questionnaireId}",
                 async entry =>
