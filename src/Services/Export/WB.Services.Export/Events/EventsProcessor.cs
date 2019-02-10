@@ -97,6 +97,8 @@ namespace WB.Services.Export.Events
                             var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
                             dataExportProcessesService.UpdateDataExportProgress(processId, percent);
+
+                            if (metadata.GlobalSequence >= maximumSequenceToQuery) break;
                         }
                     }
                 }
