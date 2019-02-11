@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,26 +19,60 @@ using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
+    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public class RosterInfo
     {
         public Guid InterviewId { get; set; }
         public RosterVector RosterVector { get; set; }
+
+        public override string ToString() => InterviewId + "-" + RosterVector;
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as RosterInfo;
+            if (item == null)
+                return false;
+
+            return this.InterviewId.Equals(item.InterviewId) && this.RosterVector.Equals(item.RosterVector);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.InterviewId.GetHashCode() ^ this.RosterVector.GetHashCode();
+        }
     }
 
+    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
     public class UpdateValueInfo
     {
         public string ColumnName { get; set; }
         public object Value { get; set; }
         public NpgsqlDbType ValueType { get; set; }
+
+        public override string ToString() => ColumnName + "-" + Value + "-" + ValueType;
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as UpdateValueInfo;
+            if (item == null)
+                return false;
+
+            return this.ColumnName.Equals(item.ColumnName);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ColumnName.GetHashCode();
+        }
     }
 
     public class InterviewDataState
     {
-        public Dictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-        public Dictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public Dictionary<string, Dictionary<RosterInfo, HashSet<UpdateValueInfo>>> UpdateValues = new Dictionary<string, Dictionary<RosterInfo, HashSet<UpdateValueInfo>>>();
-        public Dictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public Dictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
+        public IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
+        public IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        public IDictionary<string, IDictionary<RosterInfo, HashSet<UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, HashSet<UpdateValueInfo>>>();
+        public IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        public IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
@@ -110,9 +145,9 @@ namespace WB.Services.Export.InterviewDataStorage
         IAsyncEventHandler<VariablesDisabled>,
         IAsyncEventHandler<VariablesEnabled>,
         IAsyncEventHandler<RosterInstancesAdded>,
-        IAsyncEventHandler<RosterInstancesRemoved>,
-        IAsyncEventHandler<GroupsDisabled>,
-        IAsyncEventHandler<GroupsEnabled>
+        IAsyncEventHandler<RosterInstancesRemoved>
+        //IAsyncEventHandler<GroupsDisabled>,
+        //IAsyncEventHandler<GroupsEnabled>
     {
 
         private readonly ITenantContext tenantContext;
@@ -376,17 +411,12 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             foreach (var variable in @event.Event.ChangedVariables)
             {
-                var value = variable.NewValue;
-                if (value is string sValue && sValue == "NaN")
-                    value = double.NaN;
-                if (value is double dValue && double.IsNaN(dValue))
-                    value = double.NaN;
-
                 await UpdateVariableValue(
                     interviewId: @event.EventSourceId,
                     entityId: variable.Identity.Id,
                     rosterVector: variable.Identity.RosterVector,
-                    value: value, token: token);
+                    value: variable.NewValue, 
+                    token: token);
             }
         }
 
@@ -432,7 +462,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public Task Handle(PublishedEvent<GroupsDisabled> @event, CancellationToken token = default)
+        /*public Task Handle(PublishedEvent<GroupsDisabled> @event, CancellationToken token = default)
         {
             /*foreach (var identity in @event.Event.Groups)
             {
@@ -441,7 +471,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
-            }*/
+            }#1#
             return Task.CompletedTask;
         }
 
@@ -454,9 +484,9 @@ namespace WB.Services.Export.InterviewDataStorage
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector.Coordinates.ToArray()
                 ));
-            }*/
+            }#1#
             return Task.CompletedTask;
-        }
+        }*/
 
         private async Task AddInterview(Guid interviewId, CancellationToken token = default)
         {
@@ -464,7 +494,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var topLevelGroups = GetInterviewLevelGroupsWithQuestionOrVariables(questionnaire);
+            var topLevelGroups = questionnaire.GetInterviewLevelGroupsWithQuestionOrVariables();
             foreach (var topLevelGroup in topLevelGroups)
             {
                 state.InsertInterviewInTable(topLevelGroup.TableName, interviewId);
@@ -510,6 +540,10 @@ namespace WB.Services.Export.InterviewDataStorage
             var parentGroup = (Group)variable.GetParent();
             var columnName = variable.ColumnName;
             var columnType = GetPostgresSqlTypeForVariable(variable);
+
+            if (columnType == NpgsqlDbType.Double && value is string sValue && sValue == "NaN")
+                value = double.NaN;
+
             state.UpdateValueInTable(parentGroup.TableName, interviewId, rosterVector, columnName, value, columnType);
         }
 
@@ -557,7 +591,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var topLevelGroups = GetInterviewLevelGroupsWithQuestionOrVariables(questionnaire);
+            var topLevelGroups = questionnaire.GetInterviewLevelGroupsWithQuestionOrVariables();
             foreach (var topLevelGroup in topLevelGroups)
             {
                 state.RemoveInterviewFromTable(topLevelGroup.TableName, interviewId);
@@ -581,14 +615,10 @@ namespace WB.Services.Export.InterviewDataStorage
             var commands = new List<DbCommand>();
 
             foreach (var tableWithAddInterviews in state.InsertInterviews)
-            {
-                commands.AddRange(CreateInsertCommandForTable(tableWithAddInterviews.Key, tableWithAddInterviews.Value));
-            }
+                commands.Add(CreateInsertCommandForTable(tableWithAddInterviews.Key, tableWithAddInterviews.Value));
 
             foreach (var tableWithAddRosters in state.InsertRosters)
-            {
-                commands.AddRange(CreateAddRosterInstanceForTable(tableWithAddRosters.Key, tableWithAddRosters.Value));
-            }
+                commands.Add(CreateAddRosterInstanceForTable(tableWithAddRosters.Key, tableWithAddRosters.Value));
 
             foreach (var updateValueInfo in state.UpdateValues)
             {
@@ -597,19 +627,15 @@ namespace WB.Services.Export.InterviewDataStorage
                     var updateValueCommand = CreateUpdateValueForTable(updateValueInfo.Key, 
                         groupedByInterviewAndRoster.Key,
                         groupedByInterviewAndRoster.Value);
-                    commands.AddRange(updateValueCommand);
+                    commands.Add(updateValueCommand);
                 }
             }
 
             foreach (var tableWithRemoveRosters in state.RemoveRosters)
-            {
-                commands.AddRange(CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.Key, tableWithRemoveRosters.Value));
-            }
+                commands.Add(CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.Key, tableWithRemoveRosters.Value));
 
             foreach (var tableWithRemoveInterviews in state.RemoveInterviews)
-            {
-                commands.AddRange(CreateDeleteCommandForTable(tableWithRemoveInterviews.Key, tableWithRemoveInterviews.Value));
-            }
+                commands.Add(CreateDeleteCommandForTable(tableWithRemoveInterviews.Key, tableWithRemoveInterviews.Value));
 
             return commands;
         }
@@ -630,55 +656,83 @@ namespace WB.Services.Export.InterviewDataStorage
                 });
         }
 
-        private IEnumerable<DbCommand> CreateInsertCommandForTable(string tableName, HashSet<Guid> interviewIds)
+        private DbCommand CreateInsertCommandForTable(string tableName, HashSet<Guid> interviewIds)
         {
+            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
+                       $"           VALUES ";
+            NpgsqlCommand insertCommand = new NpgsqlCommand();
+
+            int index = 0;
             foreach (var interviewId in interviewIds)
             {
-                var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
-                           $"           VALUES(@interviewId);";
-                NpgsqlCommand insertCommand = new NpgsqlCommand(text);
-                insertCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-                yield return insertCommand;
+                index++;
+                text += $" (@interviewId{index}),";
+                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, interviewId);
             }
+
+            text = text.TrimEnd(',');
+            text += ";";
+
+            insertCommand.CommandText = text;
+            return insertCommand;
         }
 
-        private IEnumerable<DbCommand> CreateDeleteCommandForTable(string tableName, HashSet<Guid> interviewIds)
+        private DbCommand CreateDeleteCommandForTable(string tableName, HashSet<Guid> interviewIds)
         {
-            foreach (var interviewId in interviewIds)
-            {
-                var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                           $"      WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId;";
-                NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
-                deleteCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, interviewId);
-                yield return deleteCommand;
-            }
+            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+                       $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
+            NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
+            deleteCommand.Parameters.AddWithValue("@interviewIds", NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
+            return deleteCommand;
         }
 
-        private IEnumerable<DbCommand> CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
+        private DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
+            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
+                       $"           VALUES";
+
+            NpgsqlCommand insertCommand = new NpgsqlCommand();
+            int index = 0;
             foreach (var rosterInfo in rosterInfos)
             {
-                var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
-                           $"           VALUES(@interviewId, @rosterVector);";
-                NpgsqlCommand insertCommand = new NpgsqlCommand(text);
-                insertCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                insertCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-                yield return insertCommand;
+                index++;
+                text += $"       (@interviewId{index}, @rosterVector{index}),";
+                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                insertCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
+
+            text = text.TrimEnd(',');
+            text += ";";
+
+            insertCommand.CommandText = text;
+            return insertCommand;
         }
 
-        private IEnumerable<DbCommand> CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
+        private DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
+            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+                       $"      WHERE ";
+            NpgsqlCommand deleteCommand = new NpgsqlCommand();
+
+            int index = 0;
             foreach (var rosterInfo in rosterInfos)
             {
-                var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                           $"      WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId" +
-                           $"        AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
-                NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
-                deleteCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                deleteCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-                yield return deleteCommand;
+                index++;
+                text += $" (" +
+                        $"   {InterviewDatabaseConstants.InterviewId} = @interviewId{index}" +
+                        $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector{index}" +
+                        $" ) " +
+                        $" OR";
+                deleteCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                deleteCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
+
+            text = text.TrimEnd('O', 'R');
+            text += ";";
+
+            deleteCommand.CommandText = text;
+
+            return deleteCommand;
         }
 
         private Group ResolveGroupForEnablementOrValidity(IQuestionnaireEntity entity)
@@ -701,34 +755,41 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private IEnumerable<DbCommand> CreateUpdateValueForTable(string tableName, RosterInfo rosterInfo, IEnumerable<UpdateValueInfo> updateValueInfos)
+        private DbCommand CreateUpdateValueForTable(string tableName, RosterInfo rosterInfo, IEnumerable<UpdateValueInfo> updateValueInfos)
         {
             bool isTopLevel = rosterInfo.RosterVector == null || rosterInfo.RosterVector.Length == 0;
 
+            NpgsqlCommand updateCommand = new NpgsqlCommand();
+
+            var setValues = string.Empty;
+
+            int index = 0;
             foreach (var updateValueInfo in updateValueInfos)
             {
-                NpgsqlCommand updateCommand = new NpgsqlCommand();
-
-                var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                           $"   SET {updateValueInfo.ColumnName} = @answer" +
-                           $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
-                updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                index++;
+                setValues += $"   \"{updateValueInfo.ColumnName}\" = @answer{index},";
 
                 if (updateValueInfo.Value == null)
-                    updateCommand.Parameters.AddWithValue("@answer", DBNull.Value);
+                    updateCommand.Parameters.AddWithValue($"@answer{index}", DBNull.Value);
                 else
-                    updateCommand.Parameters.AddWithValue("@answer", updateValueInfo.ValueType, updateValueInfo.Value);
-
-                if (!isTopLevel)
-                {
-                    text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
-                    updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-                }
-
-                updateCommand.CommandText = text;
-
-                yield return updateCommand;
+                    updateCommand.Parameters.AddWithValue($"@answer{index}", updateValueInfo.ValueType, updateValueInfo.Value);
             }
+            setValues = setValues.TrimEnd(',');
+
+            var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+                       $"   SET {setValues}" +
+                       $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
+
+            updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+
+            if (!isTopLevel)
+            {
+                text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
+                updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
+            }
+
+            updateCommand.CommandText = text;
+            return updateCommand;
         }
 
         private NpgsqlDbType GetPostgresSqlTypeForVariable(Variable variable)
@@ -745,31 +806,6 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private IEnumerable<Group> GetInterviewLevelGroupsWithQuestionOrVariables(QuestionnaireDocument questionnaire)
-        {
-            var itemsQueue = new Queue<Group>();
-            itemsQueue.Enqueue(questionnaire);
-
-            while (itemsQueue.Count > 0)
-            {
-                var currentGroup = itemsQueue.Dequeue();
-
-                if (currentGroup.Children.Any(e => e is Question || e is Variable))
-                    yield return currentGroup;
-
-                var childGroups = currentGroup.Children
-                    .Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();
-
-                foreach (var childItem in childGroups)
-                {
-                    itemsQueue.Enqueue(childItem);
-                }
-            }
-        }
-
-        private string SerializeToJson(object value)
-        {
-            return JsonConvert.SerializeObject(value);
-        }
+        private string SerializeToJson(object value) => JsonConvert.SerializeObject(value);
     }
 }
