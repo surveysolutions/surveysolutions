@@ -119,7 +119,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         if (canBeShownAsList)
                         {
                             var threshold = questionnaire.GetCascadingAsListThreshold(identity.Id) ?? Constants.DefaultCascadingAsListThreshold;
-                            if (!callerInterview.HasCascadingQuestionMoreOptionsThenInThreshold(identity, threshold))
+                            if (!callerInterview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(identity, threshold))
                             {
                                 var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion().GetCascadingParentQuestion();
                                 if (parentCascadingQuestion.IsAnswered())

@@ -550,7 +550,7 @@ namespace WB.Enumerator.Native.WebInterview
                         {
                             var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
                           
-                            if (!interview.HasCascadingQuestionMoreOptionsThenInThreshold(identity, threshold))
+                            if (!interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(identity, threshold))
                             {
                                 return InterviewEntityType.CategoricalSingle;
                             }
