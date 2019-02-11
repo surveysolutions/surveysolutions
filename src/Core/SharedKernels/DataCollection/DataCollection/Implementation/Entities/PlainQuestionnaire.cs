@@ -1012,7 +1012,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
-        public bool CanCascadingBeShownAsList(Guid questionId)
+        public bool ShowCascadingAsList(Guid questionId)
         {
             if (!this.IsQuestionCascading(questionId))
                 return false;
@@ -1025,7 +1025,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.IsQuestionCascading(questionId))
                 return null;
             var question = this.GetQuestion(questionId);
-            return (question as SingleQuestion)?.ShowAsListLimit;
+            return (question as SingleQuestion)?.ShowAsListThreshold;
         }
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)

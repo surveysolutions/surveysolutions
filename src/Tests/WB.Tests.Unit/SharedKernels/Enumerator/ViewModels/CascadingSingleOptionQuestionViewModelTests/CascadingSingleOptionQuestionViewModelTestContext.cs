@@ -50,7 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
-                Mock.Of<QuestionInstructionViewModel>());
+                Mock.Of<QuestionInstructionViewModel>(),
+                Stub.MvxMainThreadAsyncDispatcher(),
+                Create.ViewModel.ThrottlingViewModel());
+
             return cascadingSingleOptionQuestionViewModel;
         }
 
@@ -76,8 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
-                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true)
-                );
+                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true));
             
             AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>());
             

@@ -546,7 +546,7 @@ namespace WB.Enumerator.Native.WebInterview
                         return InterviewEntityType.Combobox;
                     if (callerQuestionnaire.IsQuestionCascading(entityId))
                     {
-                        if (callerQuestionnaire.CanCascadingBeShownAsList(entityId))
+                        if (callerQuestionnaire.ShowCascadingAsList(entityId))
                         {
                             var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
                           
