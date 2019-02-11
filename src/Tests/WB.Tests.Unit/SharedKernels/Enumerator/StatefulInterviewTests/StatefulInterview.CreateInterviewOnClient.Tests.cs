@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal partial class StatefullInterviewTests
+    internal partial class StatefulInterviewTests
     {
         EventContext eventContext;
 
