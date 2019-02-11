@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,108 +12,13 @@ using NpgsqlTypes;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
-    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class RosterInfo
-    {
-        public Guid InterviewId { get; set; }
-        public RosterVector RosterVector { get; set; }
-
-        public override string ToString() => InterviewId + "-" + RosterVector;
-
-        public override bool Equals(object obj)
-        {
-            var item = obj as RosterInfo;
-            if (item == null)
-                return false;
-
-            return this.InterviewId.Equals(item.InterviewId) && this.RosterVector.Equals(item.RosterVector);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.InterviewId.GetHashCode() ^ this.RosterVector.GetHashCode();
-        }
-    }
-
-    [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class UpdateValueInfo
-    {
-        public string ColumnName { get; set; }
-        public object Value { get; set; }
-        public NpgsqlDbType ValueType { get; set; }
-
-        public override string ToString() => ColumnName + "-" + Value + "-" + ValueType;
-
-        public override bool Equals(object obj)
-        {
-            var item = obj as UpdateValueInfo;
-            if (item == null)
-                return false;
-
-            return this.ColumnName.Equals(item.ColumnName);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.ColumnName.GetHashCode();
-        }
-    }
-
-    public class InterviewDataState
-    {
-        public IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-        public IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public IDictionary<string, IDictionary<RosterInfo, HashSet<UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, HashSet<UpdateValueInfo>>>();
-        public IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-
-        public void InsertInterviewInTable(string tableName, Guid interviewId)
-        {
-            if (!InsertInterviews.ContainsKey(tableName))
-                InsertInterviews.Add(tableName, new HashSet<Guid>());
-            InsertInterviews[tableName].Add(interviewId);
-        }
-
-        public void RemoveInterviewFromTable(string tableName, Guid interviewId)
-        {
-            if (!RemoveInterviews.ContainsKey(tableName))
-                RemoveInterviews.Add(tableName, new HashSet<Guid>());
-            RemoveInterviews[tableName].Add(interviewId);
-        }
-
-        public void InsertRosterInTable(string tableName, Guid interviewId, RosterVector rosterVector)
-        {
-            if (!InsertRosters.ContainsKey(tableName))
-                InsertRosters.Add(tableName, new HashSet<RosterInfo>());
-            InsertRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector});
-        }
-
-        public void RemoveRosterFromTable(string tableName, Guid interviewId, RosterVector rosterVector)
-        {
-            if (!RemoveRosters.ContainsKey(tableName))
-                RemoveRosters.Add(tableName, new HashSet<RosterInfo>());
-            RemoveRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector });
-        }
-
-        public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)
-        {
-            if (!UpdateValues.ContainsKey(tableName))
-                UpdateValues.Add(tableName, new Dictionary<RosterInfo, HashSet<UpdateValueInfo>>());
-            var updateValueForTable = UpdateValues[tableName];
-            var rosterInfo = new RosterInfo() {InterviewId = interviewId, RosterVector = rosterVector};
-            if (!updateValueForTable.ContainsKey(rosterInfo))
-                updateValueForTable.Add(rosterInfo, new HashSet<UpdateValueInfo>());
-            updateValueForTable[rosterInfo].Add(new UpdateValueInfo() { ColumnName = columnName, Value = value, ValueType = valueType});
-        }
-    }
-
-
     public class InterviewDataDenormalizer :
         IFunctionalHandler,
         IAsyncEventHandler<InterviewCreated>,
@@ -153,15 +57,17 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly ITenantContext tenantContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
+        private readonly IInterviewDataExportCommandBuilder commandBuilder;
 
         private readonly InterviewDataState state;
 
         public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage,
-            IMemoryCache memoryCache)
+            IMemoryCache memoryCache, IInterviewDataExportCommandBuilder commandBuilder)
         {
             this.tenantContext = tenantContext;
             this.questionnaireStorage = questionnaireStorage;
             this.memoryCache = memoryCache;
+            this.commandBuilder = commandBuilder;
 
             state = new InterviewDataState();
         }
@@ -615,27 +521,27 @@ namespace WB.Services.Export.InterviewDataStorage
             var commands = new List<DbCommand>();
 
             foreach (var tableWithAddInterviews in state.InsertInterviews)
-                commands.Add(CreateInsertCommandForTable(tableWithAddInterviews.Key, tableWithAddInterviews.Value));
+                commands.Add(commandBuilder.CreateInsertCommandForTable(tableWithAddInterviews.Key, tableWithAddInterviews.Value));
 
             foreach (var tableWithAddRosters in state.InsertRosters)
-                commands.Add(CreateAddRosterInstanceForTable(tableWithAddRosters.Key, tableWithAddRosters.Value));
+                commands.Add(commandBuilder.CreateAddRosterInstanceForTable(tableWithAddRosters.Key, tableWithAddRosters.Value));
 
             foreach (var updateValueInfo in state.UpdateValues)
             {
                 foreach (var groupedByInterviewAndRoster in updateValueInfo.Value)
                 {
-                    var updateValueCommand = CreateUpdateValueForTable(updateValueInfo.Key, 
+                    var updateValueCommand = commandBuilder.CreateUpdateValueForTable(updateValueInfo.Key, 
                         groupedByInterviewAndRoster.Key,
-                        groupedByInterviewAndRoster.Value);
+                        groupedByInterviewAndRoster.Value.SelectMany(v => v.Value));
                     commands.Add(updateValueCommand);
                 }
             }
 
             foreach (var tableWithRemoveRosters in state.RemoveRosters)
-                commands.Add(CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.Key, tableWithRemoveRosters.Value));
+                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.Key, tableWithRemoveRosters.Value));
 
             foreach (var tableWithRemoveInterviews in state.RemoveInterviews)
-                commands.Add(CreateDeleteCommandForTable(tableWithRemoveInterviews.Key, tableWithRemoveInterviews.Value));
+                commands.Add(commandBuilder.CreateDeleteCommandForTable(tableWithRemoveInterviews.Key, tableWithRemoveInterviews.Value));
 
             return commands;
         }
@@ -656,84 +562,6 @@ namespace WB.Services.Export.InterviewDataStorage
                 });
         }
 
-        private DbCommand CreateInsertCommandForTable(string tableName, HashSet<Guid> interviewIds)
-        {
-            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
-                       $"           VALUES ";
-            NpgsqlCommand insertCommand = new NpgsqlCommand();
-
-            int index = 0;
-            foreach (var interviewId in interviewIds)
-            {
-                index++;
-                text += $" (@interviewId{index}),";
-                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, interviewId);
-            }
-
-            text = text.TrimEnd(',');
-            text += ";";
-
-            insertCommand.CommandText = text;
-            return insertCommand;
-        }
-
-        private DbCommand CreateDeleteCommandForTable(string tableName, HashSet<Guid> interviewIds)
-        {
-            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                       $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
-            NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
-            deleteCommand.Parameters.AddWithValue("@interviewIds", NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
-            return deleteCommand;
-        }
-
-        private DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
-        {
-            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
-                       $"           VALUES";
-
-            NpgsqlCommand insertCommand = new NpgsqlCommand();
-            int index = 0;
-            foreach (var rosterInfo in rosterInfos)
-            {
-                index++;
-                text += $"       (@interviewId{index}, @rosterVector{index}),";
-                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                insertCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-            }
-
-            text = text.TrimEnd(',');
-            text += ";";
-
-            insertCommand.CommandText = text;
-            return insertCommand;
-        }
-
-        private DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
-        {
-            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                       $"      WHERE ";
-            NpgsqlCommand deleteCommand = new NpgsqlCommand();
-
-            int index = 0;
-            foreach (var rosterInfo in rosterInfos)
-            {
-                index++;
-                text += $" (" +
-                        $"   {InterviewDatabaseConstants.InterviewId} = @interviewId{index}" +
-                        $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector{index}" +
-                        $" ) " +
-                        $" OR";
-                deleteCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                deleteCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-            }
-
-            text = text.TrimEnd('O', 'R');
-            text += ";";
-
-            deleteCommand.CommandText = text;
-
-            return deleteCommand;
-        }
 
         private Group ResolveGroupForEnablementOrValidity(IQuestionnaireEntity entity)
         {
@@ -755,42 +583,6 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private DbCommand CreateUpdateValueForTable(string tableName, RosterInfo rosterInfo, IEnumerable<UpdateValueInfo> updateValueInfos)
-        {
-            bool isTopLevel = rosterInfo.RosterVector == null || rosterInfo.RosterVector.Length == 0;
-
-            NpgsqlCommand updateCommand = new NpgsqlCommand();
-
-            var setValues = string.Empty;
-
-            int index = 0;
-            foreach (var updateValueInfo in updateValueInfos)
-            {
-                index++;
-                setValues += $"   \"{updateValueInfo.ColumnName}\" = @answer{index},";
-
-                if (updateValueInfo.Value == null)
-                    updateCommand.Parameters.AddWithValue($"@answer{index}", DBNull.Value);
-                else
-                    updateCommand.Parameters.AddWithValue($"@answer{index}", updateValueInfo.ValueType, updateValueInfo.Value);
-            }
-            setValues = setValues.TrimEnd(',');
-
-            var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
-                       $"   SET {setValues}" +
-                       $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
-
-            updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-
-            if (!isTopLevel)
-            {
-                text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
-                updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
-            }
-
-            updateCommand.CommandText = text;
-            return updateCommand;
-        }
 
         private NpgsqlDbType GetPostgresSqlTypeForVariable(Variable variable)
         {
