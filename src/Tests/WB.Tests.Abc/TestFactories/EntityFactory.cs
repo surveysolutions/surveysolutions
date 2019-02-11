@@ -1164,7 +1164,7 @@ namespace WB.Tests.Abc.TestFactories
                     OptionsFilterExpression = optionsFilterExpression
                 },
                 ShowAsList = showAsListThreshold.HasValue,
-                ShowAsListLimit = showAsListThreshold
+                ShowAsListThreshold = showAsListThreshold
             };
         }
 
