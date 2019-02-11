@@ -1510,6 +1510,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checkboxes.
+        /// </summary>
+        public static string QuestionCheckboxes {
+            get {
+                return ResourceManager.GetString("QuestionCheckboxes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to click reload.
         /// </summary>
         public static string QuestionClickReload {
@@ -1519,7 +1528,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Combo box.
+        ///   Looks up a localized string similar to Combobox.
         /// </summary>
         public static string QuestionComboBox {
             get {
@@ -1605,6 +1614,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionIsLinked {
             get {
                 return ResourceManager.GetString("QuestionIsLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string QuestionKind {
+            get {
+                return ResourceManager.GetString("QuestionKind", resourceCulture);
             }
         }
         
@@ -1825,7 +1843,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes/No mode.
+        ///   Looks up a localized string similar to Yes/No buttons.
         /// </summary>
         public static string QuestionYesNoMode {
             get {
