@@ -219,15 +219,12 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             var faildCondition = Create.Identity("661de5b9-05c4-177b-57ed-34831bfad1a1", -23, 4, 5, 6, 7);
             Assert.That(ev.FailedValidationConditions[faildCondition][0].FailedConditionIndex, Is.EqualTo(0));
         }
-
-        
-
     }
 
     public class EventHandlerTests
     {
         [Test]
-        public void can_resolve_all_handlers()
+        public async void can_resolve_all_handlers()
         {
             var calledEvents = new HashSet<(IEvent, Guid)>();
             IFunctionalHandler testSubj = new TestHandler(calledEvents);
@@ -240,7 +237,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
 
             foreach (var ev in events)
             {
-                testSubj.Handle(ev);
+                await testSubj.Handle(ev);
             }
             
             Assert.That(calledEvents.Contains((events[0].Payload, events[0].EventSourceId)));
@@ -263,14 +260,16 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                 return Task.CompletedTask;
             }
 
-            public void Handle(PublishedEvent<InterviewCreated> @event)
+            public Task Handle(PublishedEvent<InterviewCreated> @event)
             {
                 track.Add((@event.Event, @event.EventSourceId));
+                return Task.CompletedTask;
             }
 
-            public void Handle(PublishedEvent<AnswersRemoved> @event)
+            public Task Handle(PublishedEvent<AnswersRemoved> @event)
             {
                 track.Add((@event.Event, @event.EventSourceId));
+                return Task.CompletedTask;
             }
         }
     }

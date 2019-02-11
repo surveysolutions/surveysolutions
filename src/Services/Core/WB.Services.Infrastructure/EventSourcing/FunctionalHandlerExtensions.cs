@@ -31,13 +31,13 @@ namespace WB.Services.Infrastructure.EventSourcing
             });
         }
 
-        public static void Handle(this IStatefulDenormalizer denormalizer, Event ev)
+        public static async Task Handle(this IStatefulDenormalizer denormalizer, Event ev)
         {
             var handler = denormalizer.GetEventHandlersMap();
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {
-                method.Invoke(denormalizer, new[]
+                await(Task) method.Invoke(denormalizer, new[]
                 {
                     (object) ev.AsPublishedEvent()
                 });

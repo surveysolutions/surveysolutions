@@ -24,17 +24,20 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly Dictionary<Guid, string> added = new Dictionary<Guid, string>();
         private readonly HashSet<Guid> removed = new HashSet<Guid>();
 
-        public void Handle(PublishedEvent<InterviewCreated> @event)
+        public Task Handle(PublishedEvent<InterviewCreated> @event)
         {
             added.Add(@event.EventSourceId, @event.Event.QuestionnaireIdentity);
+            return Task.CompletedTask;
         }
 
-        public void Handle(PublishedEvent<InterviewHardDeleted> @event)
+        public Task Handle(PublishedEvent<InterviewHardDeleted> @event)
         {
             if (!added.Remove(@event.EventSourceId))
             {
                 removed.Add(@event.EventSourceId);
             }
+
+            return Task.CompletedTask;
         }
 
         public async Task SaveStateAsync(CancellationToken cancellationToken = default)
