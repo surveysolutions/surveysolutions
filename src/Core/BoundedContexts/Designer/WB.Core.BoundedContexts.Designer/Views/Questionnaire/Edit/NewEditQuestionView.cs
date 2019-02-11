@@ -68,6 +68,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public List<QualityOption> QualityOptions { get; set; }
 
         public bool ShowAsList { get; set; }
-        public int? ShowAsListLimit { get; set; }
+        public int? ShowAsListThreshold { get; set; }
     }
 }

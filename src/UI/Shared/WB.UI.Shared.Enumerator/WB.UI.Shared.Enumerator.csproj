@@ -440,7 +440,7 @@
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
     <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\InstantAutoComplete.cs" />
+    <Compile Include="CustomControls\InstantAutoCompleteTextView.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\InterviewOverviewTemplateSelector.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />

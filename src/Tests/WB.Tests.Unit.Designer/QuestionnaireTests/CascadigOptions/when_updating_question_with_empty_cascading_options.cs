@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 validationExpression: null,
                 validationMessage: null,
                 showAsList: false,
-                showAsListLimit: null));
+                showAsListThreshold: null));
 
 
         [NUnit.Framework.Test] public void should_contains_question_with_empty_answers () =>

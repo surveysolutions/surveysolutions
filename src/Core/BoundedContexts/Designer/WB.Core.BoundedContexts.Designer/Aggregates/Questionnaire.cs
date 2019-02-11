@@ -875,7 +875,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 linkedFilterExpression: null,
                 isTimestamp: false,
                 showAsList:null,
-                showAsListLimit:null);
+                showAsListThreshold: null);
 
             this.innerDocument.Add(question, command.ParentGroupId);
             
@@ -1165,7 +1165,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.LinkedFilterExpression,
                 false,
                 showAsList:command.ShowAsList,
-                showAsListLimit:command.ShowAsListLimit);
+                showAsListThreshold: command.ShowAsListThreshold);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -2310,7 +2310,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
             string linkedFilterExpression, bool isTimestamp,
-            bool? showAsList, int? showAsListLimit)
+            bool? showAsList, int? showAsListThreshold)
         {
             AbstractQuestion question;
 
@@ -2329,7 +2329,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     question = new SingleQuestion()
                     {
                         ShowAsList = showAsList ?? false,
-                        ShowAsListLimit = showAsListLimit
+                        ShowAsListThreshold = showAsListThreshold
                     };
 
                     UpdateAnswerList(answers, question, linkedToQuestionId);

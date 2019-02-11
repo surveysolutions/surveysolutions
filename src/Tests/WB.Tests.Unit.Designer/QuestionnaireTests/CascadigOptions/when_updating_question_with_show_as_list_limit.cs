@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 validationExpression: null,
                 validationMessage: null,
                 showAsList: true,
-                showAsListLimit: 20));
+                showAsListThreshold: 20));
 
 
         [NUnit.Framework.Test]
@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             (questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId) as SingleQuestion).ShowAsList.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_contains_question_with_limit () =>
-            (questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId) as SingleQuestion).ShowAsListLimit.Should().Be(20);
+            (questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId) as SingleQuestion).ShowAsListThreshold.Should().Be(20);
 
 
         private static Questionnaire questionnaire;
