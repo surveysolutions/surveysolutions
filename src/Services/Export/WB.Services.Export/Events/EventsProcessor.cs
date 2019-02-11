@@ -79,7 +79,7 @@ namespace WB.Services.Export.Events
                                 {
                                     foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
                                     {
-                                        handler.Handle(ev);
+                                        await handler.Handle(ev);
                                     }
 
                                     await handler.SaveStateAsync(token);
