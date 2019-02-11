@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTime.UtcNow, 2);
 
             //act
-            var hasMoreOptionsThenInThreshold = interview.HasCascadingQuestionMoreOptionsThenInThreshold(Create.Identity(Id.g2, RosterVector.Empty), threshold: 3);
+            var hasMoreOptionsThenInThreshold = interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(Create.Identity(Id.g2, RosterVector.Empty), threshold: 3);
 
             //assert
             Assert.That(hasMoreOptionsThenInThreshold, Is.False);
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AnswerSingleOptionQuestion(Id.gA, Id.g1, RosterVector.Empty, DateTime.UtcNow, 2);
 
             //act
-            var hasMoreOptionsThenInThreshold = interview.HasCascadingQuestionMoreOptionsThenInThreshold(Create.Identity(Id.g2, RosterVector.Empty), threshold: 5);
+            var hasMoreOptionsThenInThreshold = interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(Create.Identity(Id.g2, RosterVector.Empty), threshold: 5);
 
             //assert
             Assert.That(hasMoreOptionsThenInThreshold, Is.True);
