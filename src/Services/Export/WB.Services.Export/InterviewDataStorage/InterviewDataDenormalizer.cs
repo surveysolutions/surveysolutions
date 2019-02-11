@@ -82,41 +82,37 @@ namespace WB.Services.Export.InterviewDataStorage
 
     public class InterviewDataDenormalizer :
         IFunctionalHandler,
-        IEventHandler<InterviewCreated>,
-        IEventHandler<InterviewHardDeleted>,
-
-        IEventHandler<TextQuestionAnswered>,
-        IEventHandler<NumericIntegerQuestionAnswered>,
-        IEventHandler<NumericRealQuestionAnswered>,
-        IEventHandler<TextListQuestionAnswered>,
-        IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        IEventHandler<MultipleOptionsQuestionAnswered>,
-        IEventHandler<SingleOptionQuestionAnswered>,
-        IEventHandler<SingleOptionLinkedQuestionAnswered>,
-        IEventHandler<AreaQuestionAnswered>,
-        IEventHandler<AudioQuestionAnswered>,
-        IEventHandler<DateTimeQuestionAnswered>,
-        IEventHandler<GeoLocationQuestionAnswered>,
-        IEventHandler<PictureQuestionAnswered>,
-        IEventHandler<QRBarcodeQuestionAnswered>,
-        IEventHandler<YesNoQuestionAnswered>,
-
-        IEventHandler<AnswerRemoved>,
-        IEventHandler<AnswersRemoved>,
-
-        IEventHandler<QuestionsDisabled>,
-        IEventHandler<QuestionsEnabled>,
-        IEventHandler<AnswersDeclaredInvalid>,
-        IEventHandler<AnswersDeclaredValid>,
-
-        IEventHandler<VariablesChanged>,
-        IEventHandler<VariablesDisabled>,
-        IEventHandler<VariablesEnabled>,
-
-        IEventHandler<RosterInstancesAdded>,
-        IEventHandler<RosterInstancesRemoved>,
-        IEventHandler<GroupsDisabled>,
-        IEventHandler<GroupsEnabled>
+        IAsyncEventHandler<InterviewCreated>,
+        IAsyncEventHandler<InterviewHardDeleted>,
+        IAsyncEventHandler<TextQuestionAnswered>,
+        IAsyncEventHandler<NumericIntegerQuestionAnswered>,
+        IAsyncEventHandler<NumericRealQuestionAnswered>,
+        IAsyncEventHandler<TextListQuestionAnswered>,
+        IAsyncEventHandler<MultipleOptionsLinkedQuestionAnswered>,
+        IAsyncEventHandler<MultipleOptionsQuestionAnswered>,
+        IAsyncEventHandler<SingleOptionQuestionAnswered>,
+        IAsyncEventHandler<SingleOptionLinkedQuestionAnswered>,
+        IAsyncEventHandler<AreaQuestionAnswered>,
+        IAsyncEventHandler<AudioQuestionAnswered>,
+        IAsyncEventHandler<DateTimeQuestionAnswered>,
+        IAsyncEventHandler<GeoLocationQuestionAnswered>,
+        IAsyncEventHandler<PictureQuestionAnswered>,
+        IAsyncEventHandler<QRBarcodeQuestionAnswered>,
+        IAsyncEventHandler<YesNoQuestionAnswered>,
+        
+        IAsyncEventHandler<AnswerRemoved>,
+        IAsyncEventHandler<AnswersRemoved>,
+        IAsyncEventHandler<QuestionsDisabled>,
+        IAsyncEventHandler<QuestionsEnabled>,
+        IAsyncEventHandler<AnswersDeclaredInvalid>,
+        IAsyncEventHandler<AnswersDeclaredValid>,
+        IAsyncEventHandler<VariablesChanged>,
+        IAsyncEventHandler<VariablesDisabled>,
+        IAsyncEventHandler<VariablesEnabled>,
+        IAsyncEventHandler<RosterInstancesAdded>,
+        IAsyncEventHandler<RosterInstancesRemoved>,
+        IAsyncEventHandler<GroupsDisabled>,
+        IAsyncEventHandler<GroupsEnabled>
     {
 
         private readonly ITenantContext tenantContext;
@@ -135,39 +131,37 @@ namespace WB.Services.Export.InterviewDataStorage
             state = new InterviewDataState();
         }
 
-        public Task Handle(PublishedEvent<InterviewCreated> @event)
+        public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken token = default)
         {
-            return AddInterview(@event.EventSourceId);
+            return AddInterview(@event.EventSourceId, token);
         }
 
-        public Task Handle(PublishedEvent<InterviewHardDeleted> @event)
+        public Task Handle(PublishedEvent<InterviewHardDeleted> @event, CancellationToken token = default)
         {
-            return RemoveInterview(@event.EventSourceId);
+            return RemoveInterview(@event.EventSourceId, token);
         }
 
-        public Task Handle(PublishedEvent<TextQuestionAnswered> @event)
-        {
-            return UpdateQuestionValue(
-                interviewId: @event.EventSourceId,
-                entityId: @event.Event.QuestionId,
-                rosterVector: @event.Event.RosterVector,
-                value: @event.Event.Answer,
-                valueType: NpgsqlDbType.Text
-            );
-        }
-
-        public Task Handle(PublishedEvent<NumericIntegerQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<TextQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.Answer,
-                valueType: NpgsqlDbType.Integer
-            );
+                valueType: NpgsqlDbType.Text, token: token);
         }
 
-        public Task Handle(PublishedEvent<NumericRealQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<NumericIntegerQuestionAnswered> @event, CancellationToken token = default)
+        {
+            return UpdateQuestionValue(
+                interviewId: @event.EventSourceId,
+                entityId: @event.Event.QuestionId,
+                rosterVector: @event.Event.RosterVector,
+                value: @event.Event.Answer,
+                valueType: NpgsqlDbType.Integer, token: token);
+        }
+
+        public Task Handle(PublishedEvent<NumericRealQuestionAnswered> @event, CancellationToken token = default)
         {
             double answer = (double)@event.Event.Answer;
             return UpdateQuestionValue(
@@ -175,66 +169,60 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: double.IsNaN(answer) ? null : (object)answer,
-                valueType: NpgsqlDbType.Double
-            );
+                valueType: NpgsqlDbType.Double, token: token);
         }
 
-        public Task Handle(PublishedEvent<TextListQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<TextListQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(@event.Event.Answers),
-                valueType: NpgsqlDbType.Json
-            );
+                valueType: NpgsqlDbType.Json, token: token);
         }
 
-        public Task Handle(PublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.SelectedRosterVectors.Select(c => c.Select(i => (int)i).ToArray()).ToArray(),
-                valueType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer
-            );
+                valueType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer, token: token);
         }
 
-        public Task Handle(PublishedEvent<MultipleOptionsQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<MultipleOptionsQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.SelectedValues.Select(c => (int)c).ToArray(),
-                valueType: NpgsqlDbType.Array | NpgsqlDbType.Integer
-            );
+                valueType: NpgsqlDbType.Array | NpgsqlDbType.Integer, token: token);
         }
 
-        public Task Handle(PublishedEvent<SingleOptionQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<SingleOptionQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: (int)@event.Event.SelectedValue,
-                valueType: NpgsqlDbType.Integer
-            );
+                valueType: NpgsqlDbType.Integer, token: token);
         }
 
-        public Task Handle(PublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<SingleOptionLinkedQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.SelectedRosterVector.Select(c => (int)c).ToArray(),
-                valueType: NpgsqlDbType.Array | NpgsqlDbType.Integer
-            );
+                valueType: NpgsqlDbType.Array | NpgsqlDbType.Integer, token: token);
         }
 
-        public Task Handle(PublishedEvent<AreaQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<AreaQuestionAnswered> @event, CancellationToken token = default)
         {
             var area = new Area(@event.Event.Geometry, @event.Event.MapName, @event.Event.NumberOfPoints,
                 @event.Event.AreaSize, @event.Event.Length, @event.Event.Coordinates, @event.Event.DistanceToEditor);
@@ -243,11 +231,10 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(area),
-                valueType: NpgsqlDbType.Json
-            );
+                valueType: NpgsqlDbType.Json, token: token);
         }
 
-        public Task Handle(PublishedEvent<AudioQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<AudioQuestionAnswered> @event, CancellationToken token = default)
         {
             var audioAnswer = AudioAnswer.FromString(@event.Event.FileName, @event.Event.Length);
             return UpdateQuestionValue(
@@ -255,22 +242,20 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(audioAnswer),
-                valueType: NpgsqlDbType.Json
-            );
+                valueType: NpgsqlDbType.Json, token: token);
         }
 
-        public Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.Answer,
-                valueType: NpgsqlDbType.Date
-            );
+                valueType: NpgsqlDbType.Date, token: token);
         }
 
-        public Task Handle(PublishedEvent<GeoLocationQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<GeoLocationQuestionAnswered> @event, CancellationToken token = default)
         {
             GeoPosition geoPosition = new GeoPosition(@event.Event.Latitude,
                 @event.Event.Longitude,
@@ -282,55 +267,50 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(geoPosition),
-                valueType: NpgsqlDbType.Json
-            );
+                valueType: NpgsqlDbType.Json, token: token);
         }
 
-        public Task Handle(PublishedEvent<PictureQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<PictureQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.PictureFileName,
-                valueType: NpgsqlDbType.Text
-            );
+                valueType: NpgsqlDbType.Text, token: token);
         }
 
-        public Task Handle(PublishedEvent<QRBarcodeQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<QRBarcodeQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(@event.Event.Answer),
-                valueType: NpgsqlDbType.Text
-            );
+                valueType: NpgsqlDbType.Text, token: token);
         }
 
-        public Task Handle(PublishedEvent<YesNoQuestionAnswered> @event)
+        public Task Handle(PublishedEvent<YesNoQuestionAnswered> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(@event.Event.AnsweredOptions),
-                valueType: NpgsqlDbType.Json
-            );
+                valueType: NpgsqlDbType.Json, token: token);
         }
 
-        public Task Handle(PublishedEvent<AnswerRemoved> @event)
+        public Task Handle(PublishedEvent<AnswerRemoved> @event, CancellationToken token = default)
         {
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: null,
-                valueType: NpgsqlDbType.Unknown
-            );
+                valueType: NpgsqlDbType.Unknown, token: token);
         }
 
-        public async Task Handle(PublishedEvent<AnswersRemoved> @event)
+        public async Task Handle(PublishedEvent<AnswersRemoved> @event, CancellationToken token = default)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -339,12 +319,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
                     value: null,
-                    valueType: NpgsqlDbType.Unknown
-                );
+                    valueType: NpgsqlDbType.Unknown, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<QuestionsDisabled> @event)
+        public async Task Handle(PublishedEvent<QuestionsDisabled> @event, CancellationToken token = default)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -352,12 +331,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
-                    isEnabled: false
-                );
+                    isEnabled: false, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<QuestionsEnabled> @event)
+        public async Task Handle(PublishedEvent<QuestionsEnabled> @event, CancellationToken token = default)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -365,12 +343,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
-                    isEnabled: true
-                );
+                    isEnabled: true, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<AnswersDeclaredInvalid> @event)
+        public async Task Handle(PublishedEvent<AnswersDeclaredInvalid> @event, CancellationToken token = default)
         {
             var failedValidationConditions = @event.Event.FailedValidationConditions;
             foreach (var question in @event.Event.Questions)
@@ -379,12 +356,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
-                    validityValue: failedValidationConditions[question].Select(c => c.FailedConditionIndex).ToArray()
-                ); 
+                    validityValue: failedValidationConditions[question].Select(c => c.FailedConditionIndex).ToArray(), token: token); 
             }
         }
 
-        public async Task Handle(PublishedEvent<AnswersDeclaredValid> @event)
+        public async Task Handle(PublishedEvent<AnswersDeclaredValid> @event, CancellationToken token = default)
         {
             foreach (var question in @event.Event.Questions)
             {
@@ -392,12 +368,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
-                    validityValue: null
-                );
+                    validityValue: null, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<VariablesChanged> @event)
+        public async Task Handle(PublishedEvent<VariablesChanged> @event, CancellationToken token = default)
         {
             foreach (var variable in @event.Event.ChangedVariables)
             {
@@ -411,12 +386,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: variable.Identity.Id,
                     rosterVector: variable.Identity.RosterVector,
-                    value: value
-                );
+                    value: value, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<VariablesDisabled> @event)
+        public async Task Handle(PublishedEvent<VariablesDisabled> @event, CancellationToken token = default)
         {
             foreach (var identity in @event.Event.Variables)
             {
@@ -424,12 +398,11 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector,
-                    isEnabled: false
-                );
+                    isEnabled: false, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<VariablesEnabled> @event)
+        public async Task Handle(PublishedEvent<VariablesEnabled> @event, CancellationToken token = default)
         {
             foreach (var identity in @event.Event.Variables)
             {
@@ -437,30 +410,29 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: identity.Id,
                     rosterVector: identity.RosterVector,
-                    isEnabled: true
-                );
+                    isEnabled: true, token: token);
             }
         }
 
-        public async Task Handle(PublishedEvent<RosterInstancesAdded> @event)
+        public async Task Handle(PublishedEvent<RosterInstancesAdded> @event, CancellationToken token = default)
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
                 var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId);
-                await AddRoster(@event.EventSourceId, rosterInstance.GroupId, rosterVector);
+                await AddRoster(@event.EventSourceId, rosterInstance.GroupId, rosterVector, token);
             }
         }
 
-        public async Task Handle(PublishedEvent<RosterInstancesRemoved> @event)
+        public async Task Handle(PublishedEvent<RosterInstancesRemoved> @event, CancellationToken token = default)
         {
             foreach (var rosterInstance in @event.Event.Instances)
             {
                 var rosterVector = rosterInstance.OuterRosterVector.Append(rosterInstance.RosterInstanceId).ToArray();
-                await RemoveRoster(@event.EventSourceId, rosterInstance.GroupId, rosterVector);
+                await RemoveRoster(@event.EventSourceId, rosterInstance.GroupId, rosterVector, token);
             }
         }
 
-        public Task Handle(PublishedEvent<GroupsDisabled> @event)
+        public Task Handle(PublishedEvent<GroupsDisabled> @event, CancellationToken token = default)
         {
             /*foreach (var identity in @event.Event.Groups)
             {
@@ -473,7 +445,7 @@ namespace WB.Services.Export.InterviewDataStorage
             return Task.CompletedTask;
         }
 
-        public Task Handle(PublishedEvent<GroupsEnabled> @event)
+        public Task Handle(PublishedEvent<GroupsEnabled> @event, CancellationToken token = default)
         {
             /*foreach (var identity in @event.Event.Groups)
             {
@@ -486,9 +458,9 @@ namespace WB.Services.Export.InterviewDataStorage
             return Task.CompletedTask;
         }
 
-        private async Task AddInterview(Guid interviewId)
+        private async Task AddInterview(Guid interviewId, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -501,9 +473,9 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private async Task AddRoster(Guid interviewId, Guid groupId, RosterVector rosterVector)
+        private async Task AddRoster(Guid interviewId, Guid groupId, RosterVector rosterVector, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -516,9 +488,9 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, NpgsqlDbType valueType)
+        public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, NpgsqlDbType valueType, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -528,9 +500,9 @@ namespace WB.Services.Export.InterviewDataStorage
             state.UpdateValueInTable(parentGroup.TableName, interviewId, rosterVector, columnName, value, valueType);
         }
 
-        public async Task UpdateVariableValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value)
+        public async Task UpdateVariableValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -541,9 +513,9 @@ namespace WB.Services.Export.InterviewDataStorage
             state.UpdateValueInTable(parentGroup.TableName, interviewId, rosterVector, columnName, value, columnType);
         }
 
-        public async Task UpdateEnablementValue(Guid interviewId, Guid entityId, RosterVector rosterVector, bool isEnabled)
+        public async Task UpdateEnablementValue(Guid interviewId, Guid entityId, RosterVector rosterVector, bool isEnabled, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -553,9 +525,9 @@ namespace WB.Services.Export.InterviewDataStorage
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
         }
 
-        public async Task UpdateValidityValue(Guid interviewId, Guid entityId, RosterVector rosterVector, int[] validityValue)
+        public async Task UpdateValidityValue(Guid interviewId, Guid entityId, RosterVector rosterVector, int[] validityValue, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
@@ -564,9 +536,9 @@ namespace WB.Services.Export.InterviewDataStorage
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, validityValue, NpgsqlDbType.Array | NpgsqlDbType.Integer);
         }
 
-        public async Task RemoveRoster(Guid interviewId, Guid groupId, RosterVector rosterVector)
+        public async Task RemoveRoster(Guid interviewId, Guid groupId, RosterVector rosterVector, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -579,9 +551,9 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public async Task RemoveInterview(Guid interviewId)
+        public async Task RemoveInterview(Guid interviewId, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId);
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
@@ -642,7 +614,7 @@ namespace WB.Services.Export.InterviewDataStorage
             return commands;
         }
 
-        private Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId)
+        private Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
             var key = $"{nameof(InterviewDataDenormalizer)}:{tenantContext.Tenant.Name}:{interviewId}";
             return memoryCache.GetOrCreateAsync(key,
@@ -653,7 +625,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
                     if (questionnaireId == null)
                         return null;
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId));
+                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId), token);
                     return questionnaire;
                 });
         }
