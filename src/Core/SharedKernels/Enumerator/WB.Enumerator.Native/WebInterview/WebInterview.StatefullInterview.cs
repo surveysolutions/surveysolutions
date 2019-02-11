@@ -80,7 +80,7 @@ namespace WB.Enumerator.Native.WebInterview
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var result = new IdentifyingQuestion();
-            var entityType = this.GetEntityType(questionId, questionnaire, RosterVector.Empty, interview);
+            var entityType = this.GetEntityType(questionId, questionnaire, new Identity(questionId, RosterVector.Empty), interview);
 
             result.Type = entityType.ToString();
             var questionIdentity = new Identity(questionId, RosterVector.Empty);
@@ -122,7 +122,7 @@ namespace WB.Enumerator.Native.WebInterview
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.GetEntityType(x, questionnaire, RosterVector.Empty, interview).ToString()
+                    EntityType = this.GetEntityType(x, questionnaire, new Identity(x, RosterVector.Empty), interview).ToString()
                 })
                 .ToArray();
 
@@ -185,7 +185,7 @@ namespace WB.Enumerator.Native.WebInterview
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id, questionnaire, x.RosterVector, statefulInterview).ToString()
+                    EntityType = this.GetEntityType(x.Id, questionnaire, x, statefulInterview).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -506,7 +506,7 @@ namespace WB.Enumerator.Native.WebInterview
             return completeInfo;
         }
         
-        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire, RosterVector rosterVector, IStatefulInterview interview)
+        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire, Identity identity, IStatefulInterview interview)
         {
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
 
@@ -548,10 +548,9 @@ namespace WB.Enumerator.Native.WebInterview
                     {
                         if (callerQuestionnaire.CanCascadingBeShownAsList(entityId))
                         {
-                            var countOfOptions = 3;
                             var threshold = callerQuestionnaire.GetCascadingAsListThreshold(entityId) ?? Constants.DefaultCascadingAsListThreshold;
                           
-                            if (countOfOptions <= threshold)
+                            if (!interview.HasCascadingQuestionMoreOptionsThenInThreshold(identity, threshold))
                             {
                                 return InterviewEntityType.CategoricalSingle;
                             }
