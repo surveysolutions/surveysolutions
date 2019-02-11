@@ -190,5 +190,26 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
+        public IEnumerable<Group> GetInterviewLevelGroupsWithQuestionOrVariables()
+        {
+            var itemsQueue = new Queue<Group>();
+            itemsQueue.Enqueue(this);
+
+            while (itemsQueue.Count > 0)
+            {
+                var currentGroup = itemsQueue.Dequeue();
+
+                if (currentGroup.Children.Any(e => e is Question || e is Variable))
+                    yield return currentGroup;
+
+                var childGroups = currentGroup.Children
+                    .Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();
+
+                foreach (var childItem in childGroups)
+                {
+                    itemsQueue.Enqueue(childItem);
+                }
+            }
+        }
     }
 }
