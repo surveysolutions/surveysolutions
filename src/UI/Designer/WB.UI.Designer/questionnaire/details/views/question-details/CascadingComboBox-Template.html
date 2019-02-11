@@ -50,17 +50,17 @@
         </div>
     </div>
     <div class="col-md-5 inline-inputs">
-        <div class="form-group checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListLimit.$valid}">
+        <div class="form-group checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListThreshold.$valid}">
             <label for="edit-question-count-for-list" ng-i18next="QuestionShowListLimit"></label>
             <input id="edit-question-count-for-list" type="number"
                    maxlength="2"
-                   name="showAsListLimit"
+                   name="showAsListThreshold"
                    min="1"
                    max="50"
                    ng-pattern="/^\d+$/"
-                   ng-model="activeQuestion.showAsListLimit"
+                   ng-model="activeQuestion.showAsListThreshold"
                    class="form-control small-numeric-input">
-            <p class="help-block ng-cloak" ng-show="questionForm.showAsListLimit.$error.pattern" ng-i18next="QuestionOnlyInts">
+            <p class="help-block ng-cloak" ng-show="questionForm.showAsListThreshold.$error.pattern" ng-i18next="QuestionOnlyInts">
             </p>
         </div>
     </div>

@@ -113,16 +113,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             
-            //add fork?
             await this.UpdateFilterAndSuggestionsAsync(string.Empty);
 
-            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            if (showCascadingAsList)
             {
-                this.RaisePropertyChanged(() => RenderAsComboBox);
-                UpdateOptions();
-                this.RaisePropertyChanged(() => Options);
-                this.RaisePropertyChanged(() => Children);
-            });
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    this.RaisePropertyChanged(() => RenderAsComboBox);
+                    UpdateOptions();
+                    this.RaisePropertyChanged(() => Options);
+                    this.RaisePropertyChanged(() => Children);
+                });
+            }
         }
 
         
@@ -132,9 +134,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (!showCascadingAsList || answerOnParentQuestion == null)
                     return true;
-
-                //cache the value to void extra db calls
-                return !interview.HasCascadingQuestionMoreOptionsThenInThreshold(this.Identity, showCascadingAsListThreshold);
+                
+                return interview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(this.Identity, showCascadingAsListThreshold);
             }
         }
 
@@ -148,12 +149,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (!showCascadingAsList)
                     return result;
 
-                result.Add(new OptionBorderViewModel(this.QuestionState, true));
+                this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
+                result.Add(this.optionsTopBorderViewModel);
+
                 result.AddCollection(Options);
-                result.Add(new OptionBorderViewModel(this.QuestionState, false));
+
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
+                result.Add(this.optionsBottomBorderViewModel);
+
                 return result;
             }
         }
+
+        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
@@ -162,6 +171,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
+            optionsTopBorderViewModel.HasOptions = false;
+            optionsBottomBorderViewModel.HasOptions = false;
+
             if (!RenderAsComboBox)
             {
                 var singleOptionQuestionOptionViewModels = GetSuggestions(String.Empty)
@@ -169,6 +181,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .ToList();
 
                 singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
+
+                optionsTopBorderViewModel.HasOptions = true;
+                optionsBottomBorderViewModel.HasOptions = true;
             }
         }
 

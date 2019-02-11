@@ -777,7 +777,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
 
-        public bool HasCascadingQuestionMoreOptionsThenInThreshold(Identity questionIdentity, int threshold)
+        public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
         {
             var question = this.GetCascadingQuestion(questionIdentity);
             if (question == null)
