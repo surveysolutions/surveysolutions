@@ -111,7 +111,7 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
 
                 $scope.activeQuestion.showAsList = question.showAsList;
-                $scope.activeQuestion.showAsListLimit = question.showAsListLimit;
+                $scope.activeQuestion.showAsListThreshold = question.showAsListThreshold;
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -658,7 +658,7 @@
             };
 
             $scope.showAsListChange = function () {
-                $scope.activeQuestion.showAsListLimit = null;
+                $scope.activeQuestion.showAsListThreshold = null;
             };
 
             $scope.loadQuestion();
