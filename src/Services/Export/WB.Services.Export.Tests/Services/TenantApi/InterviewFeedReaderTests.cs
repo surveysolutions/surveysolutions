@@ -97,7 +97,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
 
             if (feed.Events[2].Payload is RosterInstancesAdded added)
             {
-                Assert.That(added.Instances[0].OuterRosterVector, Is.EquivalentTo(new int[]{ 1,2}));
+                Assert.That(added.Instances[0].OuterRosterVector, Is.EquivalentTo(new int[] { 1, 2 }));
             }
         }
 
@@ -180,12 +180,12 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                 new IdentityJsonConverter());
 
             Assert.That(ev.ChangedVariables[0].Identity, Is.EqualTo(
-                Create.Identity("cb950143-b85d-4c23-b9ff-7620fc756464",1,2)));
+                Create.Identity("cb950143-b85d-4c23-b9ff-7620fc756464", 1, 2)));
 
             Assert.That(ev.ChangedVariables[0].NewValue, Is.EqualTo("Rajasthan"));
         }
 
-        
+
         [Test]
         public void can_deserialize_AnswersDeclaredInvalid()
         {
@@ -210,7 +210,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
               ]
             }";
 
-            var ev = JsonConvert.DeserializeObject<AnswersDeclaredInvalid>(json, 
+            var ev = JsonConvert.DeserializeObject<AnswersDeclaredInvalid>(json,
                 new RosterVectorJsonConverter(), new IdentityJsonConverter());
 
             var question = Create.Identity("5e156e5b-5ebd-4684-5bf6-7d11514f9461", 1);
@@ -224,31 +224,34 @@ namespace WB.Services.Export.Tests.Services.TenantApi
     public class EventHandlerTests
     {
         [Test]
-        public async void can_resolve_all_handlers()
+        public async Task can_resolve_all_handlers()
         {
             var calledEvents = new HashSet<(IEvent, Guid)>();
             IFunctionalHandler testSubj = new TestHandler(calledEvents);
 
-            var events = new []
+            var events = new[]
             {
                 new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g1 },
-                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g2}
+                new Event {Payload = new AnswersRemoved(), EventSourceId = Id.g2},
+                new Event {Payload = new InterviewHardDeleted(), EventSourceId = Id.g2}
             };
 
             foreach (var ev in events)
             {
                 await testSubj.Handle(ev);
             }
-            
+
             Assert.That(calledEvents.Contains((events[0].Payload, events[0].EventSourceId)));
             Assert.That(calledEvents.Contains((events[1].Payload, events[1].EventSourceId)));
+            Assert.That(calledEvents.Contains((events[2].Payload, events[2].EventSourceId)));
         }
 
         class TestHandler : IFunctionalHandler,
             IEventHandler<InterviewCreated>,
-            IEventHandler<AnswersRemoved>
+            IEventHandler<AnswersRemoved>,
+            IAsyncEventHandler<InterviewHardDeleted>
         {
-            private readonly HashSet<(IEvent,Guid)>  track;
+            private readonly HashSet<(IEvent, Guid)> track;
 
             public TestHandler(HashSet<(IEvent, Guid)> track)
             {
@@ -260,16 +263,65 @@ namespace WB.Services.Export.Tests.Services.TenantApi
                 return Task.CompletedTask;
             }
 
-            public Task Handle(PublishedEvent<InterviewCreated> @event)
+            public void Handle(PublishedEvent<InterviewCreated> @event)
+            {
+                track.Add((@event.Event, @event.EventSourceId));
+            }
+
+            public void Handle(PublishedEvent<AnswersRemoved> @event)
+            {
+                track.Add((@event.Event, @event.EventSourceId));
+            }
+
+            public Task Handle(PublishedEvent<InterviewHardDeleted> @event, CancellationToken cancellationToken = default)
             {
                 track.Add((@event.Event, @event.EventSourceId));
                 return Task.CompletedTask;
             }
+        }
 
-            public Task Handle(PublishedEvent<AnswersRemoved> @event)
+        [Test]
+        public void should_not_allow_register_of_same_event_handling_sync_async()
+        {
+            IFunctionalHandler testSubj = new BrokenHandler();
+
+            var events = new[]
             {
-                track.Add((@event.Event, @event.EventSourceId));
+                new Event {Payload = new InterviewCreated(), EventSourceId = Id.g1 }
+            };
+
+            Assert.ThrowsAsync<ArgumentException>(async () =>
+            {
+                foreach (var ev in events)
+                {
+                    await testSubj.Handle(ev);
+                }
+            });
+        }
+
+        private class BrokenHandler : IFunctionalHandler,
+            IEventHandler<InterviewCreated>,
+            IAsyncEventHandler<InterviewCreated>,
+            IEventHandler<InterviewHardDeleted>
+        {
+            public Task SaveStateAsync(CancellationToken cancellationToken = default)
+            {
                 return Task.CompletedTask;
+            }
+
+            public void Handle(PublishedEvent<InterviewCreated> @event)
+            {
+
+            }
+
+            public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken cancellationToken = default)
+            {
+                return Task.CompletedTask;
+            }
+
+            public void Handle(PublishedEvent<InterviewHardDeleted> @event)
+            {
+                
             }
         }
     }
