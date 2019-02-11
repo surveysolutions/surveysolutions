@@ -10,9 +10,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
     {
         private readonly ILogger logger;
 
-        public AuditLog(IServiceLocator serviceLocator)
+        public AuditLog(ILoggerProvider logger)
         {
-            this.logger = logger = serviceLocator.GetInstance<ILoggerProvider>().GetFor<AuditLog>();
+            this.logger = logger.GetFor<AuditLog>();
         }
 
         public void ExportStared(string processName, DataExportFormat format)
