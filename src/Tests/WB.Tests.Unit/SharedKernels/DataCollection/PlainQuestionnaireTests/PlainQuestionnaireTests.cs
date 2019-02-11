@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 0);
 
             // act
-            var canCascadingBeShownAsList = plainQuestionnaire.CanCascadingBeShownAsList(Id.g2);
+            var canCascadingBeShownAsList = plainQuestionnaire.ShowCascadingAsList(Id.g2);
 
             //assert 
             Assert.That(canCascadingBeShownAsList, Is.True);
