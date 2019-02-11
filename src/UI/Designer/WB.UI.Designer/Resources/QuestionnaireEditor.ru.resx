@@ -1243,4 +1243,12 @@
   <data name="QuestionShowListLimit" xml:space="preserve">
     <value>Если меньше чем</value>
   </data>
+    <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>Флажки</value>
+    <comment>Флажки</comment>
+  </data>
+    <data name="QuestionKind" xml:space="preserve">
+    <value>Вид</value>
+    <comment>Вид</comment>
+  </data>
 </root>
