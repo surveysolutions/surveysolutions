@@ -1062,7 +1062,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsQuestionFilteredCombobox(Guid questionId)
         {
-            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            var singleQuestion = (this.GetQuestion(questionId) as ICategoricalQuestion);
             return singleQuestion?.IsFilteredCombobox ?? false;
         }
 

@@ -527,6 +527,10 @@ namespace WB.Enumerator.Native.WebInterview
                 case QuestionType.Multimedia:
                     return InterviewEntityType.Multimedia; // InterviewEntityType.Multimedia;
                 case QuestionType.MultyOption:
+                    if (callerQuestionnaire.IsQuestionFilteredCombobox(entityId))
+                    {
+                        return InterviewEntityType.MultiCombobox;
+                    }
                     if (callerQuestionnaire.IsLinkedToListQuestion(entityId))
                         return InterviewEntityType.CategoricalMulti;
                     if (callerQuestionnaire.IsQuestionLinked(entityId)
