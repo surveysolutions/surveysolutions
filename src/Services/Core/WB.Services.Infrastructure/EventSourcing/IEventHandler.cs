@@ -11,7 +11,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     public interface IEventHandler<TEvent> where TEvent : IEvent
     {
         [Handler]
-        void Handle(PublishedEvent<TEvent> @event);
+        Task Handle(PublishedEvent<TEvent> @event);
     }
 
     [AttributeUsage(AttributeTargets.Method)]
