@@ -129,7 +129,7 @@ namespace WB.Tests.Unit.Designer
                         validationExpression: null,
                         validationMessage: null,
                         showAsList: false,
-                        showAsListLimit: null));
+                        showAsListThreshold: null));
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {

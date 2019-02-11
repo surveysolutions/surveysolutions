@@ -115,7 +115,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         break;
                     case InterviewQuestionType.Cascading:
-                        var canBeShownAsList = questionnaire.CanCascadingBeShownAsList(identity.Id);
+                        var canBeShownAsList = questionnaire.ShowCascadingAsList(identity.Id);
                         if (canBeShownAsList)
                         {
                             var threshold = questionnaire.GetCascadingAsListThreshold(identity.Id) ?? Constants.DefaultCascadingAsListThreshold;

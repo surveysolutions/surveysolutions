@@ -521,7 +521,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
                     questionView.OptionsFilterExpression = singleoptionQuestion.Properties.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
-                    questionView.ShowAsListLimit = singleoptionQuestion.ShowAsListLimit;
+                    questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
                     return questionView;
                 case QuestionType.Text:
                     var textQuestion = (TextQuestion)question;
