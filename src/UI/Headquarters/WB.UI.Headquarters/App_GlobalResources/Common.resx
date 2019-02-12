@@ -243,6 +243,9 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Email providers</value>
+  </data>
   <data name="AuditLog" xml:space="preserve">
     <value>Audit log</value>
   </data>
