@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
@@ -14,13 +16,13 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IInterviewDatabaseInitializer
     {
-        void CreateQuestionnaireDbStructure(TenantInfo tenant, QuestionnaireDocument questionnaireDocument);
+        void CreateQuestionnaireDbStructure(ITenantContext tenantContext, QuestionnaireDocument questionnaireDocument);
     }
 
     public class InterviewDatabaseInitializer : IInterviewDatabaseInitializer
     {
         private readonly IOptions<DbConnectionSettings> connectionSettings;
-
+        
         private class ColumnInfo
         {
             public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
@@ -39,34 +41,33 @@ namespace WB.Services.Export.InterviewDataStorage
             public bool IsNullable { get; }
         }
 
-        public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings)
+        public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings, ITenantContext tenantContext)
         {
             this.connectionSettings = connectionSettings;
         }
 
-        public void CreateQuestionnaireDbStructure(TenantInfo tenant, QuestionnaireDocument questionnaireDocument)
+        public void CreateQuestionnaireDbStructure(ITenantContext tenantContext, QuestionnaireDocument questionnaireDocument)
         {
-            var connectionString = connectionSettings.Value.DefaultConnection;
-
-            using (var connection = new NpgsqlConnection(connectionString))
+            using(var dbContext = new TenantDbContext(tenantContext, connectionSettings))
             {
-                connection.Open();
-                var transaction = connection.BeginTransaction();
-
-                CreateSchema(connection, tenant);
+                dbContext.Database.BeginTransaction();
+                var connection = dbContext.Database.GetDbConnection();
+                
+                CreateSchema(connection, tenantContext.Tenant);
 
                 foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
                 {
-                    CreateTableForGroup(connection, tenant, storedGroup);
-                    CreateEnablementTableForGroup(connection, tenant, storedGroup);
-                    CreateValidityTableForGroup(connection, tenant, storedGroup);
+                    CreateTableForGroup(connection, storedGroup);
+                    CreateEnablementTableForGroup(connection, tenantContext.Tenant, storedGroup);
+                    CreateValidityTableForGroup(connection, tenantContext.Tenant, storedGroup);
                 }
 
-                transaction.Commit();
+                dbContext.Database.CommitTransaction();
+                dbContext.SaveChanges();
             }
         }
 
-        private void CreateTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
+        private void CreateTableForGroup(DbConnection connection, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -84,11 +85,11 @@ namespace WB.Services.Export.InterviewDataStorage
             if (!questions.Any() && !variables.Any())
                 return ;
 
-            var commandText = GenerateCreateTableScript(tenant.Name, group.TableName, columns);
+            var commandText = GenerateCreateTableScript(group.TableName, columns);
             connection.Execute(commandText);
         }
 
-        private void CreateEnablementTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
+        private void CreateEnablementTableForGroup(DbConnection connection, TenantInfo tenant, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -107,11 +108,11 @@ namespace WB.Services.Export.InterviewDataStorage
 
             if (!questions.Any() && !variables.Any())
                 return;
-            var commandText = GenerateCreateTableScript(tenant.Name, group.EnablementTableName, columns);
+            var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
         }
 
-        private void CreateValidityTableForGroup(NpgsqlConnection connection, TenantInfo tenant, Group group)
+        private void CreateValidityTableForGroup(DbConnection connection, TenantInfo tenant, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -127,7 +128,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (!questions.Any())
                 return;
 
-            var commandText = GenerateCreateTableScript(tenant.Name, group.ValidityTableName, columns);
+            var commandText = GenerateCreateTableScript(group.ValidityTableName, columns);
             connection.Execute(commandText);
         }
 
@@ -176,15 +177,15 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private static void CreateSchema(NpgsqlConnection connection, TenantInfo tenant)
+        private static void CreateSchema(DbConnection connection, TenantInfo tenant)
         {
-            connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.Name}\"");
+            connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.SchemaName()}\"");
         }
 
-        private string GenerateCreateTableScript(string schemaName, string tableName, List<ColumnInfo> columns)
+        private string GenerateCreateTableScript(string tableName, List<ColumnInfo> columns)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{schemaName}\".\"{tableName}\"(");
+            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{tableName}\"(");
 
             foreach (var column in columns)
             {

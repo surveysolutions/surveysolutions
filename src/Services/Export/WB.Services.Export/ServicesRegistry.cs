@@ -25,7 +25,6 @@ using WB.Services.Export.Services;
 using WB.Services.Export.Services.Implementation;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.FileSystem;
 

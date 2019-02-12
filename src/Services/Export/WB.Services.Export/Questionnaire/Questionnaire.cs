@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Questionnaire

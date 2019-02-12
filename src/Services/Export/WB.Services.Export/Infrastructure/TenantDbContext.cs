@@ -17,7 +17,7 @@ namespace WB.Services.Export.Infrastructure
         {
             this.tenantContext = tenantContext;
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
-            connectionStringBuilder.SearchPath = tenantContext.Tenant.Name;
+            connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
             this.connectionString = connectionStringBuilder.ToString();
         }
 
@@ -30,7 +30,7 @@ namespace WB.Services.Export.Infrastructure
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseNpgsql(connectionString, b => {
-                    b.MigrationsHistoryTable("__migrations", this.tenantContext.Tenant.Name); 
+                    b.MigrationsHistoryTable("__migrations", this.tenantContext.Tenant.SchemaName()); 
                 });
             }
         }
@@ -54,7 +54,7 @@ namespace WB.Services.Export.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
-            modelBuilder.HasDefaultSchema(tenantContext.Tenant.Name);
+            modelBuilder.HasDefaultSchema(tenantContext.Tenant.SchemaName());
             modelBuilder.ApplyConfiguration(new InterviewQuestionnaireReferenceNodeMap());
         }
     }

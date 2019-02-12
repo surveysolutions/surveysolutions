@@ -38,7 +38,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             }
             setValues = setValues.TrimEnd(',');
 
-            var text = $"UPDATE \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+            var text = $"UPDATE \"{tableName}\" " +
                        $"   SET {setValues}" +
                        $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
 
@@ -57,7 +57,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateInsertCommandForTable(string tableName, HashSet<Guid> interviewIds)
         {
-            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
+            var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
                        $"           VALUES ";
             NpgsqlCommand insertCommand = new NpgsqlCommand();
 
@@ -78,7 +78,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateDeleteCommandForTable(string tableName, HashSet<Guid> interviewIds)
         {
-            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+            var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
             NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
             deleteCommand.Parameters.AddWithValue("@interviewIds", NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
@@ -87,7 +87,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
-            var text = $"INSERT INTO \"{tenantContext.Tenant.Name}\".\"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
+            var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
                        $"           VALUES";
 
             NpgsqlCommand insertCommand = new NpgsqlCommand();
@@ -109,7 +109,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
-            var text = $"DELETE FROM \"{tenantContext.Tenant.Name}\".\"{tableName}\" " +
+            var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE ";
             NpgsqlCommand deleteCommand = new NpgsqlCommand();
 

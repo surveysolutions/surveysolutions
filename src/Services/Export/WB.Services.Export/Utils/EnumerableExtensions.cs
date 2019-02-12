@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public static class EnumerableExtensions
     {

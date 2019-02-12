@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public class ProgressAggregator
     {
