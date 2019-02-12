@@ -556,19 +556,22 @@ namespace WB.Services.Export.InterviewDataStorage
             return commands;
         }
 
-        private Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
+        private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
             var key = $"{nameof(InterviewDataDenormalizer)}:{tenantContext.Tenant.Name}:{interviewId}";
-            var questionnaireId = memoryCache.GetOrCreateAsync(key,
+            var questionnaireId = await memoryCache.GetOrCreateAsync(key,
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    return await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
+                    var interviewSummary = await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
+                    if (interviewSummary == null)
+                        return null;
+                    return new QuestionnaireId(interviewSummary.QuestionnaireId);
                 });
 
             if (questionnaireId == null)
                 return null;
-            var questionnaire = questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId), token);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, questionnaireId, token);
             return questionnaire;
         }
 
