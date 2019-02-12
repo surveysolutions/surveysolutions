@@ -117,7 +117,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
-        private async Task ExportInterviewsAsync(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
+        private Task ExportInterviewsAsync(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
@@ -135,7 +135,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var interviewIds = batch.Select(b => b.Id).ToArray();
                 var trace = Stopwatch.StartNew();
 
-                var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
+                var interviewEntities = this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
 
                 logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
@@ -169,6 +169,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             progress.Report(100);
+            return Task.CompletedTask;
         }
 
         private void WriteInterviewDataToCsvFile(string basePath,
