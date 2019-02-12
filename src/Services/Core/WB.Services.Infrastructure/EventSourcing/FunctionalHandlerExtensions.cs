@@ -57,16 +57,25 @@ namespace WB.Services.Infrastructure.EventSourcing
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {
-                if (method.ReturnType == typeof(Task))
+                try
                 {
-                    await (Task)method.Invoke(denormalizer, new[]
+                    if (method.ReturnType == typeof(Task))
                     {
-                        ev.AsPublishedEvent(), token
-                    });
+                        await (Task) method.Invoke(denormalizer, new[]
+                        {
+                            ev.AsPublishedEvent(), token
+                        });
+                    }
+                    else
+                    {
+                        method.Invoke(denormalizer, new[] {ev.AsPublishedEvent()});
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    method.Invoke(denormalizer, new[] { ev.AsPublishedEvent() });
+                    e.Data.Add("handlerMethod", 
+                        $"{denormalizer.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
+                    throw;
                 }
             }
         }

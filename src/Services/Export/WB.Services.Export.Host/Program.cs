@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
@@ -10,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
+using Serilog.Formatting.Compact;
+using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Export.Host
 {
@@ -25,7 +29,7 @@ namespace WB.Services.Export.Host
                 {
                     Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
-                    Log.Logger.Fatal("Unhandled exception occur {exception}", new [] { eventArgs.ExceptionObject.ToString() });
+                    Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
                 var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -78,17 +82,27 @@ namespace WB.Services.Export.Host
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-            var fileLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
+            var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
 
             logConfig
                 .MinimumLevel.Verbose()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
                 .Enrich.WithProperty("Version", fvi.FileVersion)
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
-                .WriteTo.File(Path.GetFullPath(fileLogFolder), rollingInterval: RollingInterval.Day);
+                .WriteTo.Postgres(configuration.GetConnectionString("DefaultConnection"), LogEventLevel.Error)
+                .WriteTo
+                    .File(Path.GetFullPath(fileLog), 
+                        rollingInterval: RollingInterval.Day);
+
+            var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
+            if (!string.IsNullOrWhiteSpace(hook))
+            {
+                logConfig = logConfig.WriteTo.Slack(hook, LogEventLevel.Fatal);
+            }
 
             var metadata = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
 

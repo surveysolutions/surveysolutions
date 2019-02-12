@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog.Context;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.EventSourcing;
@@ -74,19 +75,37 @@ namespace WB.Services.Export.Events
 
                                 var all = priorityHandlers.Union(handlers).ToArray();
 
-                                foreach (var handler in all)
+                                try
                                 {
-                                    foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                                    foreach (var handler in all)
                                     {
-                                        await handler.Handle(ev, token);
+                                        foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                                        {
+                                            try
+                                            {
+                                                await handler.Handle(ev, token);
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                e.Data.Add("Event", ev.EventTypeName);
+                                                e.Data.Add("GlobalSequence", ev.GlobalSequence);
+
+                                                throw;
+                                            }
+                                        }
+                                        
+                                        await handler.SaveStateAsync(token);
                                     }
 
-                                    await handler.SaveStateAsync(token);
+                                    metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+
+                                    await db.SaveChangesAsync(token);
                                 }
-
-                                metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
-
-                                await db.SaveChangesAsync(token);
+                                catch (Exception e)
+                                {
+                                    logger.LogCritical(e, "Unhandled exception during event handling");
+                                    throw;
+                                }
                             }
                             
                             tr.Commit();
