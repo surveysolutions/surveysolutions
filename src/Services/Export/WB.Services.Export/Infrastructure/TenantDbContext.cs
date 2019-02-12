@@ -21,7 +21,7 @@ namespace WB.Services.Export.Infrastructure
             this.connectionString = connectionStringBuilder.ToString();
         }
 
-        public DbSet<InterviewQuestionnaireReferenceNode> InterviewReferences { get; set; }
+        public DbSet<InterviewSummary> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -55,7 +55,7 @@ namespace WB.Services.Export.Infrastructure
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
             modelBuilder.HasDefaultSchema(tenantContext.Tenant.SchemaName());
-            modelBuilder.ApplyConfiguration(new InterviewQuestionnaireReferenceNodeMap());
+            modelBuilder.ApplyConfiguration(new InterviewSummaryEntityTypeConfiguration());
         }
     }
 }

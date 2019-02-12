@@ -20,7 +20,7 @@ using WB.Services.Infrastructure.EventSourcing;
 namespace WB.Services.Export.InterviewDataStorage
 {
     public class InterviewDataDenormalizer :
-        IFunctionalHandler,
+        //IFunctionalHandler,
         IAsyncEventHandler<InterviewCreated>,
         IAsyncEventHandler<InterviewHardDeleted>,
         IAsyncEventHandler<TextQuestionAnswered>,

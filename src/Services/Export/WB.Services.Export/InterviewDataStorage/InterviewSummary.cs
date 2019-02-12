@@ -2,13 +2,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
-    public class InterviewQuestionnaireReferenceNode
+    public class InterviewSummary
     {
         public string QuestionnaireId { get; set; }
+
         public Guid InterviewId { get; set; }
+
+        public InterviewStatus Status { get; set; }
+
+        public string Key { get; set; }
+
+        public DateTime? UpdateDateUtc { get; set; }
     }
 
     [Table("metadata")]

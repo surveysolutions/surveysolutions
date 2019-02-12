@@ -16,5 +16,6 @@ namespace WB.Services.Infrastructure.EventSourcing
         public long GlobalSequence { get; set; }
 
         public IEvent Payload { get; set; }
+        public DateTime EventTimeStamp { get; set; }
     }
 }

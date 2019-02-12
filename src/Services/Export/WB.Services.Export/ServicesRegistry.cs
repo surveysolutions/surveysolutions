@@ -40,6 +40,7 @@ namespace WB.Services.Export
 
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
+            services.AddTransient<IInterviewsToExportSource, InterviewsToExportSource>();
             services.AddTransient<ICsvWriter, CsvWriter>();
             services.AddTransient<ITabularFormatExportService, CsvExport.Implementation.TabularFormatExportService>();
             services.AddTransient<IProductVersion, ProductVersion>();
@@ -81,7 +82,7 @@ namespace WB.Services.Export
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
             
-            RegisterFunctionalHandlers(services, typeof(InterviewQuestionnaireReferenceDenormalizer));
+            RegisterFunctionalHandlers(services, typeof(InterviewSummaryDenormalizer));
 
             // Singletons
             RegisterHandlers(services);
