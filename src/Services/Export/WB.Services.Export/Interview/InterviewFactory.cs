@@ -109,19 +109,24 @@ namespace WB.Services.Export.Interview
 
         private void FillAnswerToQuestion(Question question, InterviewEntity entity, object answer)
         {
+            if (answer == null) return;
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    var multiOption = (MultyOptionsQuestion)question;
-
-                    if (multiOption.YesNoView && answer != null)
+                    var multiOption = (MultyOptionsQuestion) question;
+                    if (answer is int[] asIntArray)
+                    {
+                        entity.AsIntArray = asIntArray;
+                    }
+                    else if (multiOption.YesNoView)
                     {
                         entity.AsYesNo = JsonConvert.DeserializeObject<AnsweredYesNoOption[]>(answer.ToString());
                     }
-                    else
+                    else if (multiOption.IsQuestionLinked())
                     {
-                        entity.AsIntArray = (int[])answer;
+                        entity.AsIntMatrix = JsonConvert.DeserializeObject<int[][]>(answer.ToString());
                     }
+
                     break;
                 case QuestionType.Numeric:
                     var numericQuestion = (NumericQuestion)question;
@@ -139,13 +144,13 @@ namespace WB.Services.Export.Interview
                     entity.AsString = (string)answer;
                     break;
                 case QuestionType.SingleOption:
-                    if (question.IsQuestionLinked())
+                    if (answer is int intAnswer)
                     {
-                        entity.AsIntArray = (int[]) answer;
+                        entity.AsInt = intAnswer;
                     }
-                    else
+                    else if (answer is int[] intArray)
                     {
-                        entity.AsInt = (int?) answer;
+                        entity.AsIntArray = intArray;
                     }
 
                     break;
