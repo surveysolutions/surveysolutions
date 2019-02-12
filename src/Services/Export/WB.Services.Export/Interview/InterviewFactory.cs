@@ -58,8 +58,6 @@ namespace WB.Services.Export.Interview
                                 var answer = reader[$"data__{question.ColumnName}"];
                                 FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
                                 result.Add(interviewEntity);
-
-
                             }
                             else if (groupChild is Variable variable)
                             {
@@ -74,6 +72,7 @@ namespace WB.Services.Export.Interview
                                 };
                                 var val = reader[$"data__{variable.ColumnName}"];
                                 FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
+                                result.Add(interviewEntity);
                             }
                         }
                     }
