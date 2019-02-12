@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Services;
@@ -36,6 +37,11 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult EmailProviders()
+        {
+            return View(new EmailProviders());
         }
 
         [HttpPost]
