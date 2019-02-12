@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -22,6 +22,7 @@ namespace WB.Services.Export.InterviewDataStorage
     public class InterviewDataDenormalizer :
         IFunctionalHandler,
         IAsyncEventHandler<InterviewCreated>,
+        IAsyncEventHandler<InterviewDeleted>,
         IAsyncEventHandler<InterviewHardDeleted>,
         IAsyncEventHandler<TextQuestionAnswered>,
         IAsyncEventHandler<NumericIntegerQuestionAnswered>,
@@ -75,6 +76,11 @@ namespace WB.Services.Export.InterviewDataStorage
         public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken token = default)
         {
             return AddInterview(@event.EventSourceId, token);
+        }
+
+        public Task Handle(PublishedEvent<InterviewDeleted> @event, CancellationToken token = default)
+        {
+            return RemoveInterview(@event.EventSourceId, token);
         }
 
         public Task Handle(PublishedEvent<InterviewHardDeleted> @event, CancellationToken token = default)
@@ -464,6 +470,10 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
+
+            if (entity is Group group && !group.IsRoster && !group.HasAnyExportableQuestions)
+                return;
+
             var tableName = ResolveGroupForEnablement(entity).EnablementTableName;
             var columnName = ResolveColumnNameForEnablement(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
@@ -549,17 +559,17 @@ namespace WB.Services.Export.InterviewDataStorage
         private Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
             var key = $"{nameof(InterviewDataDenormalizer)}:{tenantContext.Tenant.Name}:{interviewId}";
-            return memoryCache.GetOrCreateAsync(key,
+            var questionnaireId = memoryCache.GetOrCreateAsync(key,
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-
-                    var questionnaireId = await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
-                    if (questionnaireId == null)
-                        return null;
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId), token);
-                    return questionnaire;
+                    return await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
                 });
+
+            if (questionnaireId == null)
+                return null;
+            var questionnaire = questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, new QuestionnaireId(questionnaireId.QuestionnaireId), token);
+            return questionnaire;
         }
 
         private Group ResolveGroupForEnablement(IQuestionnaireEntity entity)
