@@ -146,20 +146,20 @@ namespace WB.Services.Export.InterviewDataStorage
                 case AreaQuestion areaQuestion : return "jsonb";
                 case GpsCoordinateQuestion gpsCoordinateQuestion : return "jsonb";
                 case QRBarcodeQuestion qrBarcodeQuestion : return "text";
-                case MultyOptionsQuestion multiOptionsQuestion 
-                    when (multiOptionsQuestion.YesNoView):
-                    return "json";
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToRosterId.HasValue):
                     return "int4[]";
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToQuestionId.HasValue):
-                    var sourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
-                    return sourceQuestion is TextListQuestion ? "int4" : "int4[]";
+                    var singleSourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
+                    return singleSourceQuestion is TextListQuestion ? "int4" : "int4[]";
                 case SingleQuestion singleQuestion 
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
                     return "int4";
-                case MultyOptionsQuestion multiOptionsQuestion
-                    when(multiOptionsQuestion.LinkedToQuestionId.HasValue || multiOptionsQuestion.LinkedToRosterId.HasValue):
-                    return "int4[][]";
+                case MultyOptionsQuestion yesNoOptionsQuestion when (yesNoOptionsQuestion.YesNoView):
+                case MultyOptionsQuestion multiLinkedToRoster when (multiLinkedToRoster.LinkedToRosterId.HasValue):
+                    return "jsonb";
+                case MultyOptionsQuestion multiLinkedToQuestion when (multiLinkedToQuestion.LinkedToQuestionId.HasValue):
+                    var multiSourceQuestion = questionnaire.Find<Question>(multiLinkedToQuestion.LinkedToQuestionId.Value);
+                    return multiSourceQuestion is TextListQuestion ? "int4[]" : "jsonb";
                 case MultyOptionsQuestion multiOptionsQuestion
                     when(!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
                     return "int4[]";
