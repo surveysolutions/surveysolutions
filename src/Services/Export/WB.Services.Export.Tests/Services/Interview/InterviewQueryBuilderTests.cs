@@ -42,5 +42,19 @@ namespace WB.Services.Export.Tests.Services.Interview
             // Assert
             Approvals.Verify(query);
         }
+
+        [Test]
+        public void should_be_able_to_build_query_for_empty_roster()
+        {
+            var questionnaire = Create.QuestionnaireDocument(Id.gA, 6, "quest", 
+                Create.Roster(Id.gB, variable: "roster1"));
+            questionnaire.ConnectChildrenWithParent();
+
+            // Act
+            var query = InterviewQueryBuilder.GetInterviewsQuery(questionnaire.Find<Group>(Id.gB));
+
+            // Assert
+            Approvals.Verify(query);
+        }
     }
 }

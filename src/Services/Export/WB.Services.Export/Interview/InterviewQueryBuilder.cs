@@ -11,8 +11,6 @@ namespace WB.Services.Export.Interview
     {
         public static string GetInterviewsQuery(Group group)
         {
-            if (!group.Children.Any()) throw new ArgumentException("Cannot build query for group without questions");
-
             string BuildSelectColumns(string alias, bool includeVariables = true)
             {
                 List<string> columnsCollector = new List<string>();
@@ -33,17 +31,31 @@ namespace WB.Services.Export.Interview
                 return string.Join(", ", columnsCollector);
             }
 
-            StringBuilder query = new StringBuilder($"select data.{InterviewDatabaseConstants.InterviewId} as data__interview_id, ");
+            StringBuilder query = new StringBuilder($"select data.{InterviewDatabaseConstants.InterviewId} as data__interview_id ");
             if (group.IsInsideRoster)
             {
-                query.AppendFormat("data.{0} as data__roster_vector, ", InterviewDatabaseConstants.RosterVector);
+                query.AppendFormat(", data.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
             }
 
-            query.Append(BuildSelectColumns("data"));
-            query.Append(", ");
+            query.AppendFormat(", enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue, Environment.NewLine);
+            if (group.HasAnyExportableQuestions)
+            {
+                query.Append(",");
+            }
+
             query.Append(BuildSelectColumns("enablement"));
-            query.Append(", ");
-            query.Append(BuildSelectColumns("validity", false));
+
+            if (group.HasAnyExportableQuestions)
+            {
+                query.Append(", ");
+                query.Append(BuildSelectColumns("data"));
+            }
+
+            if (group.HasAnyExportableQuestions)
+            {
+                query.Append(", ");
+                query.Append(BuildSelectColumns("validity", false));
+            }
 
             query.AppendLine($" from ");
             query.AppendLine($"\"{group.TableName}\" data ");
@@ -54,11 +66,16 @@ namespace WB.Services.Export.Interview
                 query.AppendFormat("    AND data.{0} = enablement.{0}{1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
             }
 
-            query.Append($@"    INNER JOIN ""{@group.ValidityTableName}"" validity ON data.{InterviewDatabaseConstants.InterviewId} = validity.{InterviewDatabaseConstants.InterviewId}{Environment.NewLine}");
-
-            if (group.IsInsideRoster)
+            if (group.HasAnyExportableQuestions)
             {
-                query.AppendFormat("   AND data.{0} = validity.{0} {1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
+                query.AppendFormat("    INNER JOIN \"{0}\" validity ON data.{1} = validity.{1}{2}",
+                    group.ValidityTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+
+                if (group.IsInsideRoster)
+                {
+                    query.AppendFormat("   AND data.{0} = validity.{0} {1}", InterviewDatabaseConstants.RosterVector,
+                        Environment.NewLine);
+                }
             }
 
             query.AppendFormat("WHERE data.{0} = ANY(@ids){1}", InterviewDatabaseConstants.InterviewId, Environment.NewLine);
