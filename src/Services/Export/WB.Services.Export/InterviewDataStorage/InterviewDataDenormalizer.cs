@@ -195,7 +195,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: @event.Event.Answer,
-                valueType: NpgsqlDbType.Date, token: token);
+                valueType: NpgsqlDbType.Timestamp,
+                token: token);
         }
 
         public Task Handle(PublishedEvent<GeoLocationQuestionAnswered> @event, CancellationToken token = default)
