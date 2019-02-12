@@ -11,7 +11,6 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {

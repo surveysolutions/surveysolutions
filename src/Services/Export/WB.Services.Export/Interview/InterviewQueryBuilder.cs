@@ -47,17 +47,15 @@ namespace WB.Services.Export.Interview
             query.Append(BuildSelectColumns("validity", false));
 
             query.AppendLine($" from ");
-            query.AppendLine($"\"{tenant.Name}\".\"{group.TableName}\" data ");
+            query.AppendLine($"\"{group.TableName}\" data ");
                 
-            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" enablement ON data.{2} = enablement.{2}{3}",
-                tenant.Name, group.EnablementTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+            query.Append($"    INNER JOIN \"{@group.EnablementTableName}\" enablement ON data.{InterviewDatabaseConstants.InterviewId} = enablement.{InterviewDatabaseConstants.InterviewId}{Environment.NewLine}");
             if (group.IsInsideRoster)
             {
                 query.AppendFormat("    AND data.{0} = enablement.{0}{1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
             }
 
-            query.AppendFormat("    INNER JOIN \"{0}\".\"{1}\" validity ON data.{2} = validity.{2}{3}",
-                tenant.Name, group.ValidityTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+            query.Append($@"    INNER JOIN ""{@group.ValidityTableName}"" validity ON data.{InterviewDatabaseConstants.InterviewId} = validity.{InterviewDatabaseConstants.InterviewId}{Environment.NewLine}");
 
             if (group.IsInsideRoster)
             {

@@ -464,7 +464,7 @@ namespace WB.Services.Export.InterviewDataStorage
             var columnName = ResolveColumnNameForEnablementOrValidity(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
         }
-
+        
         public async Task UpdateValidityValue(Guid interviewId, Guid entityId, RosterVector rosterVector, int[] validityValue, CancellationToken token = default)
         {
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);

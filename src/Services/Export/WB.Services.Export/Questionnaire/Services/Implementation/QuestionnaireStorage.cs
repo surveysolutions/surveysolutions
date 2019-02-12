@@ -44,7 +44,7 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                     lock (schemaLock)
                     {
-                        interviewDatabaseInitializer.CreateQuestionnaireDbStructure(tenant, questionnaire);
+                        interviewDatabaseInitializer.CreateQuestionnaireDbStructure(new TenantContext(null) {Tenant = tenant}, questionnaire);
                     }
 
                     return questionnaire;
