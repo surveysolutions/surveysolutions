@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage

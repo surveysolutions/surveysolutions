@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
@@ -19,13 +19,12 @@ namespace WB.Services.Export.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        private readonly DbConnectionSettings connectionSettings;
+        private readonly ITenantContext tenantContext;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi,
-            IOptions<DbConnectionSettings> connectionSettings)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, ITenantContext tenantContext)
         {
             this.tenantApi = tenantApi;
-            this.connectionSettings = connectionSettings.Value;
+            this.tenantContext = tenantContext;
         }
 
         public async Task<List<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
@@ -33,48 +32,44 @@ namespace WB.Services.Export.Interview
             List<InterviewEntity> result = new List<InterviewEntity>();
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
-                using (var connection = new NpgsqlConnection(this.connectionSettings.DefaultConnection))
+                var connection = tenantContext.DbContext.Database.GetDbConnection();
+                var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(tenant, @group);
+                var reader = await connection.ExecuteReaderAsync(interviewsQuery, new { ids = interviewsId });
+
+                while (reader.Read())
                 {
-                    await connection.OpenAsync();
-
-                    var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(tenant, @group);
-                    var reader = await connection.ExecuteReaderAsync(interviewsQuery, new {ids = interviewsId});
-
-                    while (reader.Read())
+                    foreach (var groupChild in group.Children)
                     {
-                        foreach (var groupChild in group.Children)
+                        if (groupChild is Question question)
                         {
-                            if (groupChild is Question question)
+                            var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
+                            var interviewEntity = new InterviewEntity
                             {
-                                var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
-                                var interviewEntity = new InterviewEntity
-                                {
-                                    Identity = identity,
-                                    EntityType = EntityType.Question,
-                                    InterviewId = (Guid)reader["data__interview_id"],
-                                    InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity__{question.ColumnName}"],
-                                    IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
-                                };
+                                Identity = identity,
+                                EntityType = EntityType.Question,
+                                InterviewId = (Guid)reader["data__interview_id"],
+                                InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity__{question.ColumnName}"],
+                                IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
+                            };
 
-                                var answer = reader[$"data__{question.ColumnName}"];
-                                FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
-                                result.Add(interviewEntity);
+                            var answer = reader[$"data__{question.ColumnName}"];
+                            FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
+                            result.Add(interviewEntity);
 
 
-                            }
-                            else if (groupChild is Variable variable)
+                        }
+                        else if (groupChild is Variable variable)
+                        {
+                            var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
+                            var interviewEntity = new InterviewEntity
                             {
-                                var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
-                                var interviewEntity = new InterviewEntity
-                                {
-                                    Identity = identity,
-                                    EntityType = EntityType.Variable,
-                                    InterviewId = (Guid)reader["data__interview_id"],
-                                    IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
-                                };
-                                var val = reader[$"data__{variable.ColumnName}"];
-                                FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
-                            }
+                                Identity = identity,
+                                EntityType = EntityType.Variable,
+                                InterviewId = (Guid)reader["data__interview_id"],
+                                IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
+                            };
+                            var val = reader[$"data__{variable.ColumnName}"];
+                            FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
                         }
                     }
                 }
@@ -88,19 +83,19 @@ namespace WB.Services.Export.Interview
             switch (variable.Type)
             {
                 case VariableType.LongInteger:
-                    entity.AsLong = (long?) answer;
+                    entity.AsLong = (long?)answer;
                     break;
                 case VariableType.Double:
-                    entity.AsDouble = (double?) answer;
+                    entity.AsDouble = (double?)answer;
                     break;
                 case VariableType.Boolean:
-                    entity.AsBool = (bool?) answer;
+                    entity.AsBool = (bool?)answer;
                     break;
                 case VariableType.DateTime:
-                    entity.AsDateTime = (DateTime?) answer;
+                    entity.AsDateTime = (DateTime?)answer;
                     break;
                 case VariableType.String:
-                    entity.AsString = (string) answer;
+                    entity.AsString = (string)answer;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Variable {variable.Type} is not supported by export");
@@ -120,18 +115,18 @@ namespace WB.Services.Export.Interview
                     }
                     else
                     {
-                        entity.AsIntArray = (int[]) answer;
+                        entity.AsIntArray = (int[])answer;
                     }
                     break;
                 case QuestionType.Numeric:
                     var numericQuestion = (NumericQuestion)question;
                     if (numericQuestion.IsInteger)
-                        entity.AsInt = (int?) answer;
+                        entity.AsInt = (int?)answer;
                     else
-                        entity.AsDouble = (double?) answer;
+                        entity.AsDouble = (double?)answer;
                     break;
                 case QuestionType.DateTime:
-                    entity.AsDateTime = (DateTime?) answer;
+                    entity.AsDateTime = (DateTime?)answer;
                     break;
                 case QuestionType.Multimedia:
                 case QuestionType.QRBarcode:
@@ -157,7 +152,7 @@ namespace WB.Services.Export.Interview
                     throw new ArgumentOutOfRangeException($"Question {question.QuestionType} is not supported by export");
             }
         }
-        
+
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
             QuestionnaireDocument questionnaire,
             List<InterviewEntity> interviewEntities)
@@ -218,7 +213,7 @@ namespace WB.Services.Export.Interview
             return levels;
         }
 
-        
+
 
         private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, Dictionary<Identity, InterviewEntity> interviewEntities)
         {
@@ -274,7 +269,7 @@ namespace WB.Services.Export.Interview
 
                         continue;
                     }
-                    
+
                     if (type == typeof(AudioQuestion))
                     {
                         if (a.AsAudio == null) continue;
