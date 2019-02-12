@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace WB.Services.Infrastructure.EventSourcing
 {
     public static class PublishedEventConstructor
     {
+        [DebuggerStepThrough]
         public static object AsPublishedEvent(this Event ev)
         {
             var eventType = ev.Payload.GetType();
