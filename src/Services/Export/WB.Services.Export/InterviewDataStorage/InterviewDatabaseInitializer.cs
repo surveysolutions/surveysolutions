@@ -147,22 +147,22 @@ namespace WB.Services.Export.InterviewDataStorage
                 case GpsCoordinateQuestion gpsCoordinateQuestion : return "jsonb";
                 case QRBarcodeQuestion qrBarcodeQuestion : return "text";
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToRosterId.HasValue):
-                    return "float8[]";
+                    return "int4[]";
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToQuestionId.HasValue):
                     var singleSourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
-                    return singleSourceQuestion is TextListQuestion ? "float8" : "float8[]";
+                    return singleSourceQuestion is TextListQuestion ? "int4" : "int4[]";
                 case SingleQuestion singleQuestion 
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
-                    return "float8";
+                    return "int4";
                 case MultyOptionsQuestion yesNoOptionsQuestion when (yesNoOptionsQuestion.YesNoView):
                 case MultyOptionsQuestion multiLinkedToRoster when (multiLinkedToRoster.LinkedToRosterId.HasValue):
                     return "jsonb";
                 case MultyOptionsQuestion multiLinkedToQuestion when (multiLinkedToQuestion.LinkedToQuestionId.HasValue):
                     var multiSourceQuestion = questionnaire.Find<Question>(multiLinkedToQuestion.LinkedToQuestionId.Value);
-                    return multiSourceQuestion is TextListQuestion ? "float8[]" : "jsonb";
+                    return multiSourceQuestion is TextListQuestion ? "int4[]" : "jsonb";
                 case MultyOptionsQuestion multiOptionsQuestion
                     when(!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
-                    return "float8[]";
+                    return "int4[]";
                 default:
                     throw new ArgumentException("Unknown question type: " + question.GetType().Name);
             }
