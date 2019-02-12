@@ -174,7 +174,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(area),
-                valueType: NpgsqlDbType.Json, token: token);
+                valueType: NpgsqlDbType.Jsonb, token: token);
         }
 
         public Task Handle(PublishedEvent<AudioQuestionAnswered> @event, CancellationToken token = default)
@@ -185,7 +185,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(audioAnswer),
-                valueType: NpgsqlDbType.Json, token: token);
+                valueType: NpgsqlDbType.Jsonb, token: token);
         }
 
         public Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken token = default)
@@ -210,7 +210,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(geoPosition),
-                valueType: NpgsqlDbType.Json, token: token);
+                valueType: NpgsqlDbType.Jsonb, token: token);
         }
 
         public Task Handle(PublishedEvent<PictureQuestionAnswered> @event, CancellationToken token = default)
@@ -229,8 +229,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                value: SerializeToJson(@event.Event.Answer),
-                valueType: NpgsqlDbType.Text, token: token);
+                value: @event.Event.Answer,
+                valueType: NpgsqlDbType.Text, 
+                token: token);
         }
 
         public Task Handle(PublishedEvent<YesNoQuestionAnswered> @event, CancellationToken token = default)
@@ -240,7 +241,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
                 value: SerializeToJson(@event.Event.AnsweredOptions),
-                valueType: NpgsqlDbType.Json, token: token);
+                valueType: NpgsqlDbType.Jsonb, 
+                token: token);
         }
 
         public Task Handle(PublishedEvent<AnswerRemoved> @event, CancellationToken token = default)
