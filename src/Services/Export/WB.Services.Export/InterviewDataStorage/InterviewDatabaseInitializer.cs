@@ -57,9 +57,9 @@ namespace WB.Services.Export.InterviewDataStorage
 
                 foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
                 {
-                    CreateTableForGroup(connection, storedGroup);
-                    CreateEnablementTableForGroup(connection, tenantContext.Tenant, storedGroup);
-                    CreateValidityTableForGroup(connection, tenantContext.Tenant, storedGroup);
+                    CreateTableForGroup(connection, storedGroup, questionnaireDocument);
+                    CreateEnablementTableForGroup(connection, storedGroup);
+                    CreateValidityTableForGroup(connection, storedGroup);
                 }
 
                 dbContext.Database.CommitTransaction();
@@ -67,7 +67,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private void CreateTableForGroup(DbConnection connection, Group group)
+        private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -76,7 +76,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question), isNullable: true));
+                columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
 
             var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
             foreach (var variable in variables)
@@ -89,7 +89,7 @@ namespace WB.Services.Export.InterviewDataStorage
             connection.Execute(commandText);
         }
 
-        private void CreateEnablementTableForGroup(DbConnection connection, TenantInfo tenant, Group group)
+        private void CreateEnablementTableForGroup(DbConnection connection, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -112,7 +112,7 @@ namespace WB.Services.Export.InterviewDataStorage
             connection.Execute(commandText);
         }
 
-        private void CreateValidityTableForGroup(DbConnection connection, TenantInfo tenant, Group group)
+        private void CreateValidityTableForGroup(DbConnection connection, Group group)
         {
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
@@ -132,7 +132,7 @@ namespace WB.Services.Export.InterviewDataStorage
             connection.Execute(commandText);
         }
 
-        private string GetSqlTypeForQuestion(Question question)
+        private string GetSqlTypeForQuestion(Question question, QuestionnaireDocument questionnaire)
         {
             switch (question)
             {
@@ -146,9 +146,14 @@ namespace WB.Services.Export.InterviewDataStorage
                 case AreaQuestion areaQuestion : return "jsonb";
                 case GpsCoordinateQuestion gpsCoordinateQuestion : return "jsonb";
                 case QRBarcodeQuestion qrBarcodeQuestion : return "text";
-                case SingleQuestion singleQuestion 
-                    when (singleQuestion.LinkedToQuestionId.HasValue || singleQuestion.LinkedToRosterId.HasValue):
+                case MultyOptionsQuestion multiOptionsQuestion 
+                    when (multiOptionsQuestion.YesNoView):
+                    return "json";
+                case SingleQuestion singleQuestion when (singleQuestion.LinkedToRosterId.HasValue):
                     return "int4[]";
+                case SingleQuestion singleQuestion when (singleQuestion.LinkedToQuestionId.HasValue):
+                    var sourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
+                    return sourceQuestion is TextListQuestion ? "int4" : "int4[]";
                 case SingleQuestion singleQuestion 
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
                     return "int4";

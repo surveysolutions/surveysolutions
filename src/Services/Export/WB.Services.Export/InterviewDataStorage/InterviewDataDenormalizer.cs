@@ -532,7 +532,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 {
                     var updateValueCommand = commandBuilder.CreateUpdateValueForTable(updateValueInfo.Key, 
                         groupedByInterviewAndRoster.Key,
-                        groupedByInterviewAndRoster.Value.SelectMany(v => v.Value));
+                        groupedByInterviewAndRoster.Value.Select(v => v.Value));
                     commands.Add(updateValueCommand);
                 }
             }
@@ -562,7 +562,6 @@ namespace WB.Services.Export.InterviewDataStorage
                 });
         }
 
-
         private Group ResolveGroupForEnablementOrValidity(IQuestionnaireEntity entity)
         {
             return (entity as Group) ?? ((Group)entity.GetParent());
@@ -582,7 +581,6 @@ namespace WB.Services.Export.InterviewDataStorage
                     throw new ArgumentException("Unsupported entity type: " + entity.GetType().Name);
             }
         }
-
 
         private NpgsqlDbType GetPostgresSqlTypeForVariable(Variable variable)
         {
