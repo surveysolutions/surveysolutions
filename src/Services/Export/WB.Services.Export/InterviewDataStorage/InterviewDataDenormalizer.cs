@@ -525,28 +525,25 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var commands = new List<DbCommand>();
 
-            foreach (var tableWithAddInterviews in state.InsertInterviews)
-                commands.Add(commandBuilder.CreateInsertCommandForTable(tableWithAddInterviews.Key, tableWithAddInterviews.Value));
+            foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
+                commands.Add(commandBuilder.CreateInsertCommandForTable(tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds));
 
-            foreach (var tableWithAddRosters in state.InsertRosters)
-                commands.Add(commandBuilder.CreateAddRosterInstanceForTable(tableWithAddRosters.Key, tableWithAddRosters.Value));
+            foreach (var tableWithAddRosters in state.GetInsertRostersData())
+                commands.Add(commandBuilder.CreateAddRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
 
-            foreach (var updateValueInfo in state.UpdateValues)
+            foreach (var updateValueInfo in state.GetUpdateValuesData())
             {
-                foreach (var groupedByInterviewAndRoster in updateValueInfo.Value)
-                {
-                    var updateValueCommand = commandBuilder.CreateUpdateValueForTable(updateValueInfo.Key, 
-                        groupedByInterviewAndRoster.Key,
-                        groupedByInterviewAndRoster.Value.Select(v => v.Value));
-                    commands.Add(updateValueCommand);
-                }
+                var updateValueCommand = commandBuilder.CreateUpdateValueForTable(updateValueInfo.TableName,
+                    updateValueInfo.RosterLevelInfo,
+                    updateValueInfo.UpdateValuesInfo);
+                commands.Add(updateValueCommand);
             }
 
-            foreach (var tableWithRemoveRosters in state.RemoveRosters)
-                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.Key, tableWithRemoveRosters.Value));
+            foreach (var tableWithRemoveRosters in state.GetRemoveRostersData())
+                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo));
 
-            foreach (var tableWithRemoveInterviews in state.RemoveInterviews)
-                commands.Add(commandBuilder.CreateDeleteCommandForTable(tableWithRemoveInterviews.Key, tableWithRemoveInterviews.Value));
+            foreach (var tableWithRemoveInterviews in state.GetRemoveInterviewsData())
+                commands.Add(commandBuilder.CreateDeleteCommandForTable(tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds));
 
             return commands;
         }

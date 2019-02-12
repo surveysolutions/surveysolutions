@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NpgsqlTypes;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -7,17 +8,22 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataState
     {
-        public IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-        public IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
-        public IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
+        private IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
+        private IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        private IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
+        private IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        private IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
             if (!InsertInterviews.ContainsKey(tableName))
                 InsertInterviews.Add(tableName, new HashSet<Guid>());
             InsertInterviews[tableName].Add(interviewId);
+        }
+
+        public IEnumerable<InterviewTableInfo> GetInsertInterviewsData()
+        {
+            return InsertInterviews.Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value});
         }
 
         public void RemoveInterviewFromTable(string tableName, Guid interviewId)
@@ -27,6 +33,11 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             RemoveInterviews[tableName].Add(interviewId);
         }
 
+        public IEnumerable<InterviewTableInfo> GetRemoveInterviewsData()
+        {
+            return RemoveInterviews.Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value });
+        }
+
         public void InsertRosterInTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
             if (!InsertRosters.ContainsKey(tableName))
@@ -34,11 +45,21 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             InsertRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector});
         }
 
+        public IEnumerable<RosterLevelTableInfo> GetInsertRostersData()
+        {
+            return InsertRosters.Select(r => new RosterLevelTableInfo() {TableName = r.Key, RosterLevelInfo = r.Value});
+        }
+
         public void RemoveRosterFromTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
             if (!RemoveRosters.ContainsKey(tableName))
                 RemoveRosters.Add(tableName, new HashSet<RosterInfo>());
             RemoveRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector });
+        }
+
+        public IEnumerable<RosterLevelTableInfo> GetRemoveRostersData()
+        {
+            return RemoveRosters.Select(r => new RosterLevelTableInfo() { TableName = r.Key, RosterLevelInfo = r.Value });
         }
 
         public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)
@@ -51,6 +72,22 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 updateValueForTable.Add(rosterInfo, new Dictionary<string, UpdateValueInfo>());
             var updateValueForRosterInstance = updateValueForTable[rosterInfo];
             updateValueForRosterInstance[columnName] = new UpdateValueInfo() { ColumnName = columnName, Value = value, ValueType = valueType};
+        }
+
+        public IEnumerable<UpdateValueForTableRowInfo> GetUpdateValuesData()
+        {
+            foreach (var updateValueInfo in UpdateValues)
+            {
+                foreach (var groupedByInterviewAndRoster in updateValueInfo.Value)
+                {
+                    yield return new UpdateValueForTableRowInfo()
+                    {
+                        TableName = updateValueInfo.Key,
+                        RosterLevelInfo = groupedByInterviewAndRoster.Key,
+                        UpdateValuesInfo = groupedByInterviewAndRoster.Value.Select(v => v.Value)
+                    };
+                }
+            }
         }
     }
 }
