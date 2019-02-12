@@ -222,10 +222,14 @@ namespace WB.Services.Export.CsvExport.Exporters
             exportProcessingStopwatch.Start();
             List<string[]> errors = errorsExporter.Export(exportStructure, questionnaire, interview, basePath, interviewToExport.Key);
 
+            var errorsCount = interview
+                .Where(x => x.EntityType == EntityType.Question || x.EntityType == EntityType.StaticText)
+                .Count(x => x.InvalidValidations.Length > 0);
             var interviewData = new InterviewData
             {
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
-                InterviewId = interviewToExport.Id
+                InterviewId = interviewToExport.Id,
+                ErrorsCount = errorsCount
             };
             InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
@@ -252,7 +256,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 interviewDataExportLevelViews.Add(interviewDataExportLevelView);
             }
 
-            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
+            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray(), interview.ErrorsCount);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview,
@@ -436,7 +440,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                             }
                         }
 
-                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
+                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString());
                         InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
                     }
 

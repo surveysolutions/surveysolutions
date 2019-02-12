@@ -38,6 +38,8 @@ namespace WB.Services.Export.Jobs
             try
             {
                 serviceProvider.SetTenant(pendingExportProcess.ExportSettings.Tenant);
+                var tenantDbContext = serviceProvider.GetService<TenantDbContext>();
+                tenantContext.DbContext = tenantDbContext;
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 

@@ -62,6 +62,8 @@ namespace WB.UI.Headquarters.API.Export
                         json.WriteValue(ev.EventSequence);
                         json.WritePropertyName(nameof(FeedEvent.Payload));
                         json.WriteRawValue(ev.Value);
+                        json.WritePropertyName(nameof(FeedEvent.EventTimeStamp));
+                        json.WriteValue(ev.TimeStamp);
                         json.WriteEndObject();
                     }
 
@@ -112,7 +114,10 @@ namespace WB.UI.Headquarters.API.Export
             GlobalSequence = committedEvent.GlobalSequence;
             Payload = committedEvent.Payload;
             EventTypeName = committedEvent.Payload.GetType().Name;
+            EventTimeStamp = committedEvent.EventTimeStamp;
         }
+
+        public DateTime EventTimeStamp { get; set; }
 
         public string EventTypeName { get; set; }
 

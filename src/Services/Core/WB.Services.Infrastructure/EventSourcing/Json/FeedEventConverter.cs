@@ -38,6 +38,9 @@ namespace WB.Services.Infrastructure.EventSourcing.Json
                         case nameof(Event.Sequence):
                             @event.Sequence = reader.ReadAsInt32() ?? 0;
                             break;
+                        case nameof(Event.EventTimeStamp):
+                            @event.EventTimeStamp = reader.ReadAsDateTime() ?? DateTime.MinValue;
+                            break;
                         case nameof(Event.Payload):
                             reader.Read();
                             if (TypesCache.TryGetValue(@event.EventTypeName, out var eventType))

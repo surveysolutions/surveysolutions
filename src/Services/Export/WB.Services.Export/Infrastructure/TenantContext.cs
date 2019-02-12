@@ -8,7 +8,7 @@ namespace WB.Services.Export.Infrastructure
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
-        public TenantContext(ITenantApi<IHeadquartersApi>tenantApi)
+        public TenantContext(ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.tenantApi = tenantApi;
         }

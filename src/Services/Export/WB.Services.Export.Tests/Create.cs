@@ -176,6 +176,7 @@ namespace WB.Services.Export.Tests
         {
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
                 tenantApi,
+                Mock.Of<IInterviewsToExportSource>(),
                 Mock.Of<IInterviewsExporter>(),
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
