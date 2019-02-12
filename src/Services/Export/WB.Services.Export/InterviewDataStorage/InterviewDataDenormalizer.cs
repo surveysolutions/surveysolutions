@@ -115,11 +115,12 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public Task Handle(PublishedEvent<TextListQuestionAnswered> @event, CancellationToken token = default)
         {
+            var answer = @event.Event.Answers.Select(a => new InterviewTextListAnswer(a.Item1, a.Item2)).ToArray();
             return UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                value: SerializeToJson(@event.Event.Answers),
+                value: SerializeToJson(answer),
                 valueType: NpgsqlDbType.Json, token: token);
         }
 
