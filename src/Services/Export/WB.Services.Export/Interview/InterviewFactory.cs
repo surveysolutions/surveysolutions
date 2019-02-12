@@ -27,49 +27,54 @@ namespace WB.Services.Export.Interview
             this.tenantContext = tenantContext;
         }
 
-        public async Task<List<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
+        public List<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
         {
             List<InterviewEntity> result = new List<InterviewEntity>();
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
                 var connection = tenantContext.DbContext.Database.GetDbConnection();
                 var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(tenant, @group);
-                var reader = await connection.ExecuteReaderAsync(interviewsQuery, new { ids = interviewsId });
-
-                while (reader.Read())
+                using (var reader = connection.ExecuteReader(interviewsQuery, new {ids = interviewsId}))
                 {
-                    foreach (var groupChild in group.Children)
+                    while (reader.Read())
                     {
-                        if (groupChild is Question question)
+                        foreach (var groupChild in @group.Children)
                         {
-                            var identity = new Identity(question.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
-                            var interviewEntity = new InterviewEntity
+                            if (groupChild is Question question)
                             {
-                                Identity = identity,
-                                EntityType = EntityType.Question,
-                                InterviewId = (Guid)reader["data__interview_id"],
-                                InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull ? Array.Empty<int>() : (int[])reader[$"validity__{question.ColumnName}"],
-                                IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
-                            };
+                                var identity = new Identity(question.PublicKey,
+                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
+                                var interviewEntity = new InterviewEntity
+                                {
+                                    Identity = identity,
+                                    EntityType = EntityType.Question,
+                                    InterviewId = (Guid) reader["data__interview_id"],
+                                    InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull
+                                        ? Array.Empty<int>()
+                                        : (int[]) reader[$"validity__{question.ColumnName}"],
+                                    IsEnabled = (bool) reader[$"enablement__{question.ColumnName}"]
+                                };
 
-                            var answer = reader[$"data__{question.ColumnName}"];
-                            FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
-                            result.Add(interviewEntity);
+                                var answer = reader[$"data__{question.ColumnName}"];
+                                FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
+                                result.Add(interviewEntity);
 
 
-                        }
-                        else if (groupChild is Variable variable)
-                        {
-                            var identity = new Identity(variable.PublicKey, group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
-                            var interviewEntity = new InterviewEntity
+                            }
+                            else if (groupChild is Variable variable)
                             {
-                                Identity = identity,
-                                EntityType = EntityType.Variable,
-                                InterviewId = (Guid)reader["data__interview_id"],
-                                IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
-                            };
-                            var val = reader[$"data__{variable.ColumnName}"];
-                            FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
+                                var identity = new Identity(variable.PublicKey,
+                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
+                                var interviewEntity = new InterviewEntity
+                                {
+                                    Identity = identity,
+                                    EntityType = EntityType.Variable,
+                                    InterviewId = (Guid) reader["data__interview_id"],
+                                    IsEnabled = (bool) reader[$"enablement__{variable.ColumnName}"]
+                                };
+                                var val = reader[$"data__{variable.ColumnName}"];
+                                FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
+                            }
                         }
                     }
                 }
@@ -134,7 +139,15 @@ namespace WB.Services.Export.Interview
                     entity.AsString = (string)answer;
                     break;
                 case QuestionType.SingleOption:
-                    entity.AsInt = (int?)answer;
+                    if (question.IsQuestionLinked())
+                    {
+                        entity.AsIntArray = (int[]) answer;
+                    }
+                    else
+                    {
+                        entity.AsInt = (int?) answer;
+                    }
+
                     break;
                 case QuestionType.GpsCoordinates:
                     entity.AsGps = answer != null ? JsonConvert.DeserializeObject<GeoPosition>(answer.ToString()) : null;
