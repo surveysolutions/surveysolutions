@@ -13,7 +13,6 @@ using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Implementation

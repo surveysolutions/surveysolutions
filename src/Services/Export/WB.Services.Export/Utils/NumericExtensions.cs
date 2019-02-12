@@ -1,4 +1,4 @@
-﻿namespace WB.Services.Export.Utils
+﻿namespace WB.Services.Export
 {
     public static class NumericExtensions
     {

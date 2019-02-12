@@ -185,7 +185,6 @@ namespace WB.Services.Export.Tests.Services.TenantApi
             Assert.That(ev.ChangedVariables[0].NewValue, Is.EqualTo("Rajasthan"));
         }
 
-
         [Test]
         public void can_deserialize_AnswersDeclaredInvalid()
         {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public static class FileVersionInfoExtension
     {
