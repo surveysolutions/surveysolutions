@@ -319,8 +319,6 @@ namespace WB.Services.Export.CsvExport.Exporters
             var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
-                if(headerItem is ExportedGroupHeaderItem) continue;
-
                 var questionHeaderItem = headerItem as ExportedQuestionHeaderItem;
                 var variableHeaderItem = headerItem as ExportedVariableHeaderItem;
 
