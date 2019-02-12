@@ -129,8 +129,9 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                value: @event.Event.SelectedRosterVectors.Select(c => c.Select(i => (int)i).ToArray()).ToArray(),
-                valueType: NpgsqlDbType.Array | NpgsqlDbType.Array | NpgsqlDbType.Integer, token: token);
+                value: SerializeToJson(@event.Event.SelectedRosterVectors.Select(c => c.Select(i => (int)i).ToArray()).ToArray()),
+                valueType: NpgsqlDbType.Jsonb,
+                token: token);
         }
 
         public Task Handle(PublishedEvent<MultipleOptionsQuestionAnswered> @event, CancellationToken token = default)
