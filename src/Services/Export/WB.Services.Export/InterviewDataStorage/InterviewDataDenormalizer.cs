@@ -589,7 +589,7 @@ namespace WB.Services.Export.InterviewDataStorage
             switch (variable.Type)
             {
                 case VariableType.Boolean: return NpgsqlDbType.Boolean;
-                case VariableType.DateTime: return NpgsqlDbType.Date;
+                case VariableType.DateTime: return NpgsqlDbType.Timestamp;
                 case VariableType.Double: return NpgsqlDbType.Double;
                 case VariableType.LongInteger: return NpgsqlDbType.Bigint;
                 case VariableType.String: return NpgsqlDbType.Text;
