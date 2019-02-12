@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Interview
 {
     public static class InterviewQueryBuilder
     {
-        public static string GetInterviewsQuery(TenantInfo tenant, Group group)
+        public static string GetInterviewsQuery(Group group)
         {
             if (!group.Children.Any()) throw new ArgumentException("Cannot build query for group without questions");
 
@@ -62,7 +61,11 @@ namespace WB.Services.Export.Interview
                 query.AppendFormat("   AND data.{0} = validity.{0} {1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
             }
 
-            query.AppendFormat("WHERE data.{0} = ANY(@ids)", InterviewDatabaseConstants.InterviewId);
+            query.AppendFormat("WHERE data.{0} = ANY(@ids){1}", InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+            if (group.IsInsideRoster)
+            {
+                query.AppendFormat("ORDER BY data.{0}", InterviewDatabaseConstants.RosterVector);
+            }
 
             return query.ToString();
         }

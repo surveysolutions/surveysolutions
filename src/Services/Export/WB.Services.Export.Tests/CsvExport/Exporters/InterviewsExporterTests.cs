@@ -62,7 +62,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null,  null))
-                .Returns(Task.FromResult(new List<InterviewEntity>()));
+                .Returns(new List<InterviewEntity>());
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
@@ -86,7 +86,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
-            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("1"));
+            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("0"));
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));

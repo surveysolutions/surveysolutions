@@ -33,7 +33,7 @@ namespace WB.Services.Export.Interview
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
                 var connection = tenantContext.DbContext.Database.GetDbConnection();
-                var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(tenant, @group);
+                var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(@group);
                 using (var reader = connection.ExecuteReader(interviewsQuery, new {ids = interviewsId}))
                 {
                     while (reader.Read())

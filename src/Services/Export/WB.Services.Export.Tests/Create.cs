@@ -416,7 +416,7 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi());
+            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<ITenantContext>());
         }
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
