@@ -69,21 +69,21 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)
         {
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
+            if (!group.IsRoster && !questions.Any() && !variables.Any())
+                return;
+
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
-
-            if (!questions.Any() && !variables.Any())
-                return ;
 
             var commandText = GenerateCreateTableScript(group.TableName, columns);
             connection.Execute(commandText);
@@ -91,42 +91,41 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private void CreateEnablementTableForGroup(DbConnection connection, Group group)
         {
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
+            if (!group.IsRoster && !questions.Any() && !variables.Any())
+                return;
+
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
-            //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
-            if (!questions.Any() && !variables.Any())
-                return;
             var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
         }
 
         private void CreateValidityTableForGroup(DbConnection connection, Group group)
         {
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
+            if (!questions.Any())
+                return;
+
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
-            //columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "int4[]", isNullable: true));
-
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
-            
-            if (!questions.Any())
-                return;
 
             var commandText = GenerateCreateTableScript(group.ValidityTableName, columns);
             connection.Execute(commandText);

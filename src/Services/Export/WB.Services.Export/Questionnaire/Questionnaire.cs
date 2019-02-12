@@ -171,7 +171,7 @@ namespace WB.Services.Export.Questionnaire
                     queue.Enqueue(subChild);
                 }
 
-                if (current.HasAnyExportableQuestions)
+                if (current.IsRoster || current.HasAnyExportableQuestions)
                 {
                     yield return current;
                 }

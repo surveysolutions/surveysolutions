@@ -49,9 +49,9 @@ namespace WB.Services.Export.InterviewDataStorage
         IAsyncEventHandler<VariablesDisabled>,
         IAsyncEventHandler<VariablesEnabled>,
         IAsyncEventHandler<RosterInstancesAdded>,
-        IAsyncEventHandler<RosterInstancesRemoved>
-        //IAsyncEventHandler<GroupsDisabled>,
-        //IAsyncEventHandler<GroupsEnabled>
+        IAsyncEventHandler<RosterInstancesRemoved>,
+        IAsyncEventHandler<GroupsDisabled>,
+        IAsyncEventHandler<GroupsEnabled>
     {
 
         private readonly ITenantContext tenantContext;
@@ -373,31 +373,31 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        /*public Task Handle(PublishedEvent<GroupsDisabled> @event, CancellationToken token = default)
+        public async Task Handle(PublishedEvent<GroupsDisabled> @event, CancellationToken token = default)
         {
-            /*foreach (var identity in @event.Event.Groups)
+            foreach (var groupId in @event.Event.Groups)
             {
-                state.Commands.Add(InterviewDataStateChangeCommand.Disable(
+                await UpdateEnablementValue(
                     interviewId: @event.EventSourceId,
-                    entityId: identity.Id,
-                    rosterVector: identity.RosterVector.Coordinates.ToArray()
-                ));
-            }#1#
-            return Task.CompletedTask;
+                    entityId: groupId.Id,
+                    rosterVector: groupId.RosterVector,
+                    isEnabled: false, 
+                    token: token);
+            }
         }
 
-        public Task Handle(PublishedEvent<GroupsEnabled> @event, CancellationToken token = default)
+        public async Task Handle(PublishedEvent<GroupsEnabled> @event, CancellationToken token = default)
         {
-            /*foreach (var identity in @event.Event.Groups)
+            foreach (var groupId in @event.Event.Groups)
             {
-                state.Commands.Add(InterviewDataStateChangeCommand.Enable(
+                await UpdateEnablementValue(
                     interviewId: @event.EventSourceId,
-                    entityId: identity.Id,
-                    rosterVector: identity.RosterVector.Coordinates.ToArray()
-                ));
-            }#1#
-            return Task.CompletedTask;
-        }*/
+                    entityId: groupId.Id,
+                    rosterVector: groupId.RosterVector,
+                    isEnabled: true,
+                    token: token);
+            }
+        }
 
         private async Task AddInterview(Guid interviewId, CancellationToken token = default)
         {
@@ -421,12 +421,11 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var @group = questionnaire.Find<Group>(groupId);
-            if (@group.Children.Any(e => e is Question || e is Variable))
-            {
-                state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
-                state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
+            state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
+            state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
+
+            if (group.Children.Any(c => c is Question))
                 state.InsertRosterInTable(@group.ValidityTableName, interviewId, rosterVector);
-            }
         }
 
         public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, NpgsqlDbType valueType, CancellationToken token = default)
@@ -465,8 +464,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-            var tableName = ResolveGroupForEnablementOrValidity(entity).EnablementTableName;
-            var columnName = ResolveColumnNameForEnablementOrValidity(entity);
+            var tableName = ResolveGroupForEnablement(entity).EnablementTableName;
+            var columnName = ResolveColumnNameForEnablement(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
         }
         
@@ -475,9 +474,9 @@ namespace WB.Services.Export.InterviewDataStorage
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
-            var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-            var tableName = ResolveGroupForEnablementOrValidity(entity).ValidityTableName;
-            var columnName = ResolveColumnNameForEnablementOrValidity(entity);
+            var entity = questionnaire.Find<Question>(entityId);
+            var tableName = ((Group)entity.GetParent()).ValidityTableName;
+            var columnName = entity.ColumnName;
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, validityValue, NpgsqlDbType.Array | NpgsqlDbType.Integer);
         }
 
@@ -488,12 +487,11 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var @group = questionnaire.Find<Group>(groupId);
-            if (@group.Children.Any(e => e is Question || e is Variable))
-            {
-                state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
-                state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
+            state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
+            state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
+
+            if (group.Children.Any(c => c is Question))
                 state.RemoveRosterFromTable(@group.ValidityTableName, interviewId, rosterVector);
-            }
         }
 
         public async Task RemoveInterview(Guid interviewId, CancellationToken token = default)
@@ -564,17 +562,17 @@ namespace WB.Services.Export.InterviewDataStorage
                 });
         }
 
-        private Group ResolveGroupForEnablementOrValidity(IQuestionnaireEntity entity)
+        private Group ResolveGroupForEnablement(IQuestionnaireEntity entity)
         {
             return (entity as Group) ?? ((Group)entity.GetParent());
         }
 
-        private string ResolveColumnNameForEnablementOrValidity(IQuestionnaireEntity entity)
+        private string ResolveColumnNameForEnablement(IQuestionnaireEntity entity)
         {
             switch (entity)
             {
-//                case Group group:
-//                    return InterviewDatabaseConstants.InstanceValue;
+                case Group group:
+                    return InterviewDatabaseConstants.InstanceValue;
                 case Question question:
                     return question.ColumnName;
                 case Variable variable:
