@@ -55,7 +55,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         }
 
 
-        public DbCommand CreateInsertCommandForTable(string tableName, HashSet<Guid> interviewIds)
+        public DbCommand CreateInsertCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
             var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
                        $"           VALUES ";
@@ -76,7 +76,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return insertCommand;
         }
 
-        public DbCommand CreateDeleteCommandForTable(string tableName, HashSet<Guid> interviewIds)
+        public DbCommand CreateDeleteCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
             var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
