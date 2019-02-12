@@ -1,9 +1,7 @@
 ﻿select data.interview__id as data__interview_id , data.roster__vector as data__roster_vector , enablement.instance__state as enablement__instance__state
-, enablement."num1" as "enablement__num1" ,  data."num1" as "data__num1" ,  validity."num1" as "validity__num1"  from 
+ from 
 "qqqqqqqqqqqqqqqqqqqqqg$6_roster1" data 
     INNER JOIN "qqqqqqqqqqqqqqqqqqqqqg$6_roster1_e" enablement ON data.interview__id = enablement.interview__id
     AND data.roster__vector = enablement.roster__vector
-    INNER JOIN "qqqqqqqqqqqqqqqqqqqqqg$6_roster1_v" validity ON data.interview__id = validity.interview__id
-   AND data.roster__vector = validity.roster__vector 
 WHERE data.interview__id = ANY(@ids)
 ORDER BY data.roster__vector

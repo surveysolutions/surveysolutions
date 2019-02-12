@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure.EventSourcing;
@@ -38,6 +39,18 @@ namespace WB.Services.Export.Interview
                 {
                     while (reader.Read())
                     {
+
+                        var groupInterviewEntity = new InterviewEntity
+                        {
+                            Identity = new Identity(group.PublicKey,
+                                         @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty),
+                            EntityType = EntityType.Section,
+                            InterviewId = (Guid) reader["data__interview_id"],
+                            IsEnabled = (bool) reader[$"enablement__{InterviewDatabaseConstants.InstanceValue}"]
+                        };
+
+                        result.Add(groupInterviewEntity);
+
                         foreach (var groupChild in @group.Children)
                         {
                             if (groupChild is Question question)
