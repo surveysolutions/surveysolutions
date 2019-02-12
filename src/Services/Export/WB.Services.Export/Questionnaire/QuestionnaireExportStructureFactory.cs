@@ -255,7 +255,7 @@ namespace WB.Services.Export.Questionnaire
                 }
                 else
                 {
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i);
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i + 1);
                 }
 
                 if (!IsQuestionLinked(question))
