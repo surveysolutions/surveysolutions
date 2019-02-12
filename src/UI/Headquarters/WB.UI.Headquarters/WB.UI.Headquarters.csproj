@@ -1940,6 +1940,7 @@
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
+    <Content Include="Views\Settings\EmailProviders.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2208,6 +2209,7 @@
     <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
+    <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
