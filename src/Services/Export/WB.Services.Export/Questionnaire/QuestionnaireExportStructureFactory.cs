@@ -195,7 +195,7 @@ namespace WB.Services.Export.Questionnaire
             return exportedHeaderItem;
         }
 
-        private ExportValueType GetStorageType(Question question, QuestionSubtype? questionSubType = null)
+        private ExportValueType GetStorageType(Question question, QuestionSubtype? questionSubType)
         {
             switch (question.QuestionType)
             {
@@ -267,7 +267,7 @@ namespace WB.Services.Export.Questionnaire
                     }
                 }
 
-                headerColumn.ExportType = GetStorageType(question);
+                headerColumn.ExportType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
                 exportedHeaderItem.ColumnHeaders.Add(headerColumn);
             }
             return exportedHeaderItem;
