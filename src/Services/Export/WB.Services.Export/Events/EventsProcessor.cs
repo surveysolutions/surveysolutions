@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
