@@ -9,7 +9,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     {
         public IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         public IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        public IDictionary<string, IDictionary<RosterInfo, IDictionary<string, HashSet<UpdateValueInfo>>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, HashSet<UpdateValueInfo>>>>();
+        public IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
         public IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
         public IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
 
@@ -44,13 +44,13 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)
         {
             if (!UpdateValues.ContainsKey(tableName))
-                UpdateValues.Add(tableName, new Dictionary<RosterInfo, IDictionary<string, HashSet<UpdateValueInfo>>>());
+                UpdateValues.Add(tableName, new Dictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>());
             var updateValueForTable = UpdateValues[tableName];
             var rosterInfo = new RosterInfo() {InterviewId = interviewId, RosterVector = rosterVector};
             if (!updateValueForTable.ContainsKey(rosterInfo))
-                updateValueForTable.Add(rosterInfo, new Dictionary<string, HashSet<UpdateValueInfo>>());
+                updateValueForTable.Add(rosterInfo, new Dictionary<string, UpdateValueInfo>());
             var updateValueForRosterInstance = updateValueForTable[rosterInfo];
-            updateValueForRosterInstance[columnName].Add(new UpdateValueInfo() { ColumnName = columnName, Value = value, ValueType = valueType});
+            updateValueForRosterInstance[columnName] = new UpdateValueInfo() { ColumnName = columnName, Value = value, ValueType = valueType};
         }
     }
 }
