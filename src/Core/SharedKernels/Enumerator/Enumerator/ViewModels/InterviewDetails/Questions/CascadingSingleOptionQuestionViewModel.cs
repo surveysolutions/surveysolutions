@@ -76,6 +76,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
+            this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
+            this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
+
             UpdateOptions();
         }
         protected override CategoricalOption GetOptionByFilter(string filter)
@@ -149,12 +152,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (!showCascadingAsList)
                     return result;
 
-                this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
                 result.Add(this.optionsTopBorderViewModel);
-
                 result.AddCollection(Options);
-
-                this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
                 result.Add(this.optionsBottomBorderViewModel);
 
                 return result;
