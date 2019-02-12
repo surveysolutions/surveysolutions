@@ -22,7 +22,7 @@ namespace WB.Services.Export.Tests.Services.Interview
             questionnaire.ConnectChildrenWithParent();
 
             // Act
-            var query = InterviewQueryBuilder.GetInterviewsQuery(Create.Tenant(name: "tenant"), questionnaire.Find<Group>(Id.gB));
+            var query = InterviewQueryBuilder.GetInterviewsQuery(questionnaire.Find<Group>(Id.gB));
 
             // Assert
             Approvals.Verify(query);
@@ -37,7 +37,7 @@ namespace WB.Services.Export.Tests.Services.Interview
             questionnaire.ConnectChildrenWithParent();
 
             // Act
-            var query = InterviewQueryBuilder.GetInterviewsQuery(Create.Tenant(name: "tenant"), questionnaire.Find<Group>(Id.gB));
+            var query = InterviewQueryBuilder.GetInterviewsQuery(questionnaire.Find<Group>(Id.gB));
 
             // Assert
             Approvals.Verify(query);
