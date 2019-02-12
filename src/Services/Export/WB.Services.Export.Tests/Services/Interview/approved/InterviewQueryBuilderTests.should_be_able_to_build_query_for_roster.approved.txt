@@ -5,3 +5,4 @@
     INNER JOIN "qqqqqqqqqqqqqqqqqqqqqg$6_roster1_v" validity ON data.interview__id = validity.interview__id
    AND data.roster__vector = validity.roster__vector 
 WHERE data.interview__id = ANY(@ids)
+ORDER BY data.roster__vector
