@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Options;
 using NpgsqlTypes;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -9,10 +10,11 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     public class InterviewDataState
     {
         private IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-        private IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        private IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
-        private IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
         private IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
+        private IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        private IDictionary<string, HashSet<RosterInfo>> RemoveRostersBeforeInsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        private IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
+        private IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
@@ -23,11 +25,24 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public IEnumerable<InterviewTableInfo> GetInsertInterviewsData()
         {
-            return InsertInterviews.Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value});
+            return InsertInterviews
+                .Where(kv => kv.Value.Any())
+                .Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value});
         }
 
         public void RemoveInterviewFromTable(string tableName, Guid interviewId)
         {
+            if (InsertInterviews.ContainsKey(tableName)) InsertInterviews[tableName].Remove(interviewId);
+            if (InsertRosters.ContainsKey(tableName)) InsertRosters[tableName].RemoveWhere(r => r.InterviewId == interviewId);
+            if (RemoveRosters.ContainsKey(tableName)) RemoveRosters[tableName].RemoveWhere(r => r.InterviewId == interviewId);
+            if (RemoveRostersBeforeInsertRosters.ContainsKey(tableName)) RemoveRostersBeforeInsertRosters[tableName].RemoveWhere(r => r.InterviewId == interviewId);
+            if (UpdateValues.ContainsKey(tableName))
+            {
+                var rows = UpdateValues[tableName];
+                var rosterInfos = rows.Keys.Where(r => r.InterviewId == interviewId).ToList();
+                rosterInfos.ForEach(ri => rows.Remove(ri));
+            }
+
             if (!RemoveInterviews.ContainsKey(tableName))
                 RemoveInterviews.Add(tableName, new HashSet<Guid>());
             RemoveInterviews[tableName].Add(interviewId);
@@ -35,31 +50,61 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public IEnumerable<InterviewTableInfo> GetRemoveInterviewsData()
         {
-            return RemoveInterviews.Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value });
+            return RemoveInterviews
+                .Where(kv => kv.Value.Any())
+                .Select(kv => new InterviewTableInfo() { TableName = kv.Key, InterviewIds = kv.Value });
         }
 
         public void InsertRosterInTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
+            var rosterInfo = new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector };
+            var isExistsRemoveOperation = RemoveRosters.ContainsKey(tableName) && RemoveRosters[tableName].Contains(rosterInfo);
+            if (isExistsRemoveOperation)
+            {
+                if (!RemoveRostersBeforeInsertRosters.ContainsKey(tableName))
+                    RemoveRostersBeforeInsertRosters.Add(tableName, new HashSet<RosterInfo>());
+                RemoveRostersBeforeInsertRosters[tableName].Add(rosterInfo);
+
+                RemoveRosters[tableName].Remove(rosterInfo);
+            }
+
             if (!InsertRosters.ContainsKey(tableName))
                 InsertRosters.Add(tableName, new HashSet<RosterInfo>());
-            InsertRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector});
+            InsertRosters[tableName].Add(rosterInfo);
+        }
+
+        public IEnumerable<RosterLevelTableInfo> GetRemoveRostersBeforeInsertNewInstancesData()
+        {
+            return RemoveRostersBeforeInsertRosters
+                .Where(kv => kv.Value.Any())
+                .Select(r => new RosterLevelTableInfo() { TableName = r.Key, RosterLevelInfo = r.Value });
         }
 
         public IEnumerable<RosterLevelTableInfo> GetInsertRostersData()
         {
-            return InsertRosters.Select(r => new RosterLevelTableInfo() {TableName = r.Key, RosterLevelInfo = r.Value});
+            return InsertRosters
+                .Where(kv => kv.Value.Any())
+                .Select(r => new RosterLevelTableInfo() {TableName = r.Key, RosterLevelInfo = r.Value});
         }
 
         public void RemoveRosterFromTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
+            var rosterInfo = new RosterInfo() {InterviewId = interviewId, RosterVector = rosterVector};
+
+            if (InsertRosters.ContainsKey(tableName)) InsertRosters[tableName].Remove(rosterInfo);
+            if (RemoveRostersBeforeInsertRosters.ContainsKey(tableName)) RemoveRostersBeforeInsertRosters[tableName].Remove(rosterInfo);
+            if (UpdateValues.ContainsKey(tableName)) UpdateValues[tableName].Remove(rosterInfo);
+
             if (!RemoveRosters.ContainsKey(tableName))
                 RemoveRosters.Add(tableName, new HashSet<RosterInfo>());
-            RemoveRosters[tableName].Add(new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector });
+            RemoveRosters[tableName].Add(rosterInfo);
         }
 
         public IEnumerable<RosterLevelTableInfo> GetRemoveRostersData()
         {
-            return RemoveRosters.Select(r => new RosterLevelTableInfo() { TableName = r.Key, RosterLevelInfo = r.Value });
+            return RemoveRosters
+                .Where(kv => kv.Value.Any())
+                .Select(r => new RosterLevelTableInfo() { TableName = r.Key, RosterLevelInfo = r.Value });
         }
 
         public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)

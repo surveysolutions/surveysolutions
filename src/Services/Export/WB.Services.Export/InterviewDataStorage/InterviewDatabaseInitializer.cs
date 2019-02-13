@@ -41,14 +41,20 @@ namespace WB.Services.Export.InterviewDataStorage
             public bool IsNullable { get; }
         }
 
-        public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings, ITenantContext tenantContext)
+        private static readonly HashSet<string> createdQuestionnaires = new HashSet<string>();
+
+        public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings)
         {
             this.connectionSettings = connectionSettings;
         }
 
         public void CreateQuestionnaireDbStructure(ITenantContext tenantContext, QuestionnaireDocument questionnaireDocument)
         {
-            using(var dbContext = new TenantDbContext(tenantContext, connectionSettings))
+            var key = tenantContext.Tenant.SchemaName() + questionnaireDocument.QuestionnaireId.Id;
+            if (createdQuestionnaires.Contains(key))
+                return;
+
+            using (var dbContext = new TenantDbContext(tenantContext, connectionSettings))
             {
                 dbContext.Database.BeginTransaction();
                 var connection = dbContext.Database.GetDbConnection();
@@ -65,6 +71,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 dbContext.Database.CommitTransaction();
                 dbContext.SaveChanges();
             }
+
+            createdQuestionnaires.Add(key);
         }
 
         private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)
