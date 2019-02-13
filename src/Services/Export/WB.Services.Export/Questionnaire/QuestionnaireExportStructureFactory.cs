@@ -84,13 +84,6 @@ namespace WB.Services.Export.Questionnaire
             return headerStructureForLevel;
         }
 
-        private IExportedHeaderItem CreateExportedGroupHeaderItem(Group @group) => new ExportedGroupHeaderItem
-        {
-            PublicKey = @group.PublicKey,
-            VariableName = @group.VariableName,
-            ColumnHeaders = new List<HeaderColumn>()
-        };
-
         private ExportedVariableHeaderItem CreateExportedVariableHeaderItem(Variable variable)
         {
             var exportedHeaderItem = new ExportedVariableHeaderItem();
@@ -202,7 +195,7 @@ namespace WB.Services.Export.Questionnaire
             return exportedHeaderItem;
         }
 
-        private ExportValueType GetStorageType(Question question, QuestionSubtype? questionSubType = null)
+        private ExportValueType GetStorageType(Question question, QuestionSubtype? questionSubType)
         {
             switch (question.QuestionType)
             {
@@ -274,7 +267,7 @@ namespace WB.Services.Export.Questionnaire
                     }
                 }
 
-                headerColumn.ExportType = GetStorageType(question);
+                headerColumn.ExportType = GetStorageType(question, exportedHeaderItem.QuestionSubType);
                 exportedHeaderItem.ColumnHeaders.Add(headerColumn);
             }
             return exportedHeaderItem;
@@ -455,7 +448,6 @@ namespace WB.Services.Export.Questionnaire
                 {
                     if (innerGroup.IsRoster)
                         continue;
-                    this.AddHeadersForGroup(headerStructureForLevel.HeaderItems, innerGroup);
                     this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, questionnaire, supportVariables,
                         maxValuesForRosterSizeQuestions);
                 }
@@ -470,10 +462,6 @@ namespace WB.Services.Export.Questionnaire
         private bool IsQuestionTextList(Question question)
         {
             return question.QuestionType == QuestionType.TextList;
-        }
-        private void AddHeadersForGroup(IDictionary<Guid, IExportedHeaderItem> headerItems, Group @group)
-        {
-            headerItems.Add(@group.PublicKey, this.CreateExportedGroupHeaderItem(@group));
         }
 
         private void AddHeadersForVariable(IDictionary<Guid, IExportedHeaderItem> headerItems, Variable variable)
