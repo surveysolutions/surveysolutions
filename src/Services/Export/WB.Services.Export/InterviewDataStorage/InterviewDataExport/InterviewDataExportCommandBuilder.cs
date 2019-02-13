@@ -19,6 +19,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateUpdateValueForTable(string tableName, RosterInfo rosterInfo, IEnumerable<UpdateValueInfo> updateValueInfos)
         {
+            if (!updateValueInfos.Any())
+                throw new ArgumentException("don't have any update value info to create command");
+
             bool isTopLevel = rosterInfo.RosterVector == null || rosterInfo.RosterVector.Length == 0;
 
             NpgsqlCommand updateCommand = new NpgsqlCommand();
@@ -57,6 +60,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateInsertCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
+            if (!interviewIds.Any())
+                throw new ArgumentException("don't have any interview id to create command");
+
             var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
                        $"           VALUES ";
             NpgsqlCommand insertCommand = new NpgsqlCommand();
@@ -78,6 +84,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateDeleteCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
+            if (!interviewIds.Any())
+                throw new ArgumentException("don't have any interview id to create command");
+
             var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
             NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
@@ -87,6 +96,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
+            if (!rosterInfos.Any())
+                throw new ArgumentException("don't have any reoster info to create command");
+
             var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
                        $"           VALUES";
 
@@ -109,6 +121,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
         {
+            if (!rosterInfos.Any())
+                throw new ArgumentException("don't have any reoster info to create command");
+
             var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE ";
             NpgsqlCommand deleteCommand = new NpgsqlCommand();

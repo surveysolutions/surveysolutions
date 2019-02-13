@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -510,12 +510,19 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var topLevelGroups = questionnaire.GetInterviewLevelGroupsWithQuestionOrVariables();
-            foreach (var topLevelGroup in topLevelGroups)
+            var groups = questionnaire.GetAllGroups();
+            foreach (var groupId in groups)
             {
-                state.RemoveInterviewFromTable(topLevelGroup.TableName, interviewId);
-                state.RemoveInterviewFromTable(topLevelGroup.EnablementTableName, interviewId);
-                state.RemoveInterviewFromTable(topLevelGroup.ValidityTableName, interviewId);
+                var group = questionnaire.GetGroup(groupId);
+
+                if (group.IsRoster || group.HasAnyExportableQuestions)
+                {
+                    state.RemoveInterviewFromTable(group.TableName, interviewId);
+                    state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
+                }
+
+                if (group.HasAnyExportableQuestions)
+                    state.RemoveInterviewFromTable(group.ValidityTableName, interviewId);
             }
         }
 
@@ -535,6 +542,9 @@ namespace WB.Services.Export.InterviewDataStorage
 
             foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
                 commands.Add(commandBuilder.CreateInsertCommandForTable(tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds));
+
+            foreach (var tableWithAddRosters in state.GetRemoveRostersBeforeInsertNewInstancesData())
+                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
 
             foreach (var tableWithAddRosters in state.GetInsertRostersData())
                 commands.Add(commandBuilder.CreateAddRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
