@@ -39,7 +39,7 @@
     import { entityDetails } from "../mixins"
     import Vue from 'vue'
     import modal from "../modal"
-    import {find, map, includes, without} from "lodash"
+    import {find, map, includes, without, filter as loFilter} from "lodash"
     
     export default {
         name: 'MultiComboboxQuestion',
@@ -76,7 +76,14 @@
                 this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
             },
             optionsSource(filter) {
-                return Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 50))
+                const self = this;
+                const optionsPromise = Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 200))
+                return optionsPromise
+                    .then(options => {
+                        return loFilter(options, (o) => {
+                            return !includes(self.$me.answer, o.value)
+                        })
+                    })
             },
             confirmAndRemoveRow(valueToRemove){
                 if(!includes(this.$me.answer, valueToRemove)) return
