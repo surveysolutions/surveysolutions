@@ -47,7 +47,9 @@ namespace WB.UI.Headquarters.API.Export
                     json.WriteStartArray();
 
                     var events = headquartersEventStore.GetRawEventsFeed(sequence, pageSize);
-
+                    
+                    // writing events in stream "as is" without serialization/deserialization
+                    // to reduce memory pressure in HQ writing JSON manually
                     foreach (var ev in events)
                     {
                         json.WriteStartObject();
@@ -61,7 +63,7 @@ namespace WB.UI.Headquarters.API.Export
                         json.WritePropertyName(nameof(FeedEvent.Sequence));
                         json.WriteValue(ev.EventSequence);
                         json.WritePropertyName(nameof(FeedEvent.Payload));
-                        json.WriteRawValue(ev.Value);
+                        json.WriteRawValue(ev.Value); // writing event payload 
                         json.WritePropertyName(nameof(FeedEvent.EventTimeStamp));
                         json.WriteValue(ev.TimeStamp);
                         json.WriteEndObject();
@@ -88,7 +90,6 @@ namespace WB.UI.Headquarters.API.Export
             var eventsFeedPage = new EventsFeedPage
             {
                 Total = maximum,
-                //NextPageUrl = Url.Route("InterviewEventsFeed", new { lastSequence = events.LastOrDefault() }),
                 Events = events.Select(e => new FeedEvent(e)).ToList()
             };
 
@@ -99,9 +100,7 @@ namespace WB.UI.Headquarters.API.Export
     public class EventsFeedPage
     {
         public long NextSequence { get; set; }
-
         public long Total { get; set; }
-
         public List<FeedEvent> Events { get; set; }
     }
 
@@ -118,15 +117,10 @@ namespace WB.UI.Headquarters.API.Export
         }
 
         public DateTime EventTimeStamp { get; set; }
-
         public string EventTypeName { get; set; }
-
         public int Sequence { get; set; }
-
         public Guid EventSourceId { get; set; }
-
         public long GlobalSequence { get; set; }
-
         public Object Payload { get; set; }
     }
 }
