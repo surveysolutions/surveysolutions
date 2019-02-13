@@ -195,4 +195,13 @@
   <data name="AutoUpdateDescription" xml:space="preserve">
     <value>If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters</value>
   </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon SES</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>SendGrid</value>
+  </data>
 </root>
