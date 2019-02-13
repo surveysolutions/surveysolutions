@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
@@ -16,13 +13,13 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public interface IInterviewDatabaseInitializer
     {
-        void CreateQuestionnaireDbStructure(ITenantContext tenantContext, QuestionnaireDocument questionnaireDocument);
+        void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
     }
 
     public class InterviewDatabaseInitializer : IInterviewDatabaseInitializer
     {
-        private readonly IOptions<DbConnectionSettings> connectionSettings;
-        
+        private readonly ITenantContext tenantContext;
+
         private class ColumnInfo
         {
             public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
@@ -42,23 +39,21 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         private static readonly HashSet<string> createdQuestionnaires = new HashSet<string>();
-
-        public InterviewDatabaseInitializer(IOptions<DbConnectionSettings> connectionSettings)
+        public InterviewDatabaseInitializer(ITenantContext tenantContext)
         {
-            this.connectionSettings = connectionSettings;
+            this.tenantContext = tenantContext;
         }
 
-        public void CreateQuestionnaireDbStructure(ITenantContext tenantContext, QuestionnaireDocument questionnaireDocument)
+        public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
+            var dbContext = tenantContext.DbContext;
             var key = tenantContext.Tenant.SchemaName() + questionnaireDocument.QuestionnaireId.Id;
             if (createdQuestionnaires.Contains(key))
                 return;
-
-            using (var dbContext = new TenantDbContext(tenantContext, connectionSettings))
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
-                dbContext.Database.BeginTransaction();
                 var connection = dbContext.Database.GetDbConnection();
-                
+
                 CreateSchema(connection, tenantContext.Tenant);
 
                 foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
@@ -68,7 +63,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     CreateValidityTableForGroup(connection, storedGroup);
                 }
 
-                dbContext.Database.CommitTransaction();
+                transaction.Commit();
                 dbContext.SaveChanges();
             }
 

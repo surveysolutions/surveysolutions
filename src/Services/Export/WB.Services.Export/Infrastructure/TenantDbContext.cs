@@ -12,7 +12,7 @@ namespace WB.Services.Export.Infrastructure
         private readonly ITenantContext tenantContext;
         private readonly string connectionString;
 
-        public TenantDbContext(ITenantContext tenantContext, IOptions<DbConnectionSettings> connectionSettings)
+        public TenantDbContext(ITenantContext tenantContext, IOptions<DbConnectionSettings> connectionSettings, DbContextOptions options) : base(options)
         {
             this.tenantContext = tenantContext;
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
@@ -20,7 +20,7 @@ namespace WB.Services.Export.Infrastructure
             this.connectionString = connectionStringBuilder.ToString();
         }
 
-        public DbSet<InterviewSummary> InterviewReferences { get; set; }
+        public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,7 +54,7 @@ namespace WB.Services.Export.Infrastructure
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
             modelBuilder.HasDefaultSchema(tenantContext.Tenant.SchemaName());
-            modelBuilder.ApplyConfiguration(new InterviewSummaryEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration());
         }
     }
 }

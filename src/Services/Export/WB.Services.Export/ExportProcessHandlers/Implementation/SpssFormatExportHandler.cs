@@ -34,7 +34,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.SPSS;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override async void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);

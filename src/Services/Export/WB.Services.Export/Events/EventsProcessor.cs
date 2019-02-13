@@ -46,78 +46,74 @@ namespace WB.Services.Export.Events
                 using (var scope = serviceProvider.CreateScope())
                 {
                     scope.PropagateTenantContext(tenant);
-                    await scope.ServiceProvider.GetService<TenantDbContext>().Database.MigrateAsync(token);
+                    var tenantDbContext = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
+                    await tenantDbContext.Database.MigrateAsync(token);
 
-                    using (var db = scope.ServiceProvider.GetService<TenantDbContext>())
+                    using (var tr = tenantDbContext.Database.BeginTransaction())
                     {
-                        scope.SetDbContext(db);
-                        
-                        using (var tr = db.Database.BeginTransaction())
+                        var metadata = tenantDbContext.Metadata;
+                        startedReadAt = startedReadAt ?? metadata.GlobalSequence;
+
+                        if (maximumSequenceToQuery.HasValue
+                            && metadata.GlobalSequence >= maximumSequenceToQuery) break;
+
+                        dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
+
+                        var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
+                        maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+
+                        if (feed.Events.Any())
                         {
-                            var metadata = db.Metadata;
-                            startedReadAt = startedReadAt ?? metadata.GlobalSequence;
+                            var priorityHandlers = scope.ServiceProvider
+                                .GetServices<IHighPriorityFunctionalHandler>()
+                                .Cast<IStatefulDenormalizer>();
+                            var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
+                                .Cast<IStatefulDenormalizer>();
 
-                            if (maximumSequenceToQuery.HasValue 
-                                && metadata.GlobalSequence >= maximumSequenceToQuery) break;
+                            var all = priorityHandlers.Union(handlers).ToArray();
 
-                            dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
-
-                            var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
-                            maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
-                            
-                            if (feed.Events.Any())
+                            try
                             {
-                                var priorityHandlers = scope.ServiceProvider
-                                    .GetServices<IHighPriorityFunctionalHandler>()
-                                    .Cast<IStatefulDenormalizer>();
-                                var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
-                                    .Cast<IStatefulDenormalizer>();
-
-                                var all = priorityHandlers.Union(handlers).ToArray();
-
-                                try
+                                foreach (var handler in all)
                                 {
-                                    foreach (var handler in all)
+                                    foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
                                     {
-                                        foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                                        try
                                         {
-                                            try
-                                            {
-                                                await handler.Handle(ev, token);
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                e.Data.Add("Event", ev.EventTypeName);
-                                                e.Data.Add("GlobalSequence", ev.GlobalSequence);
-
-                                                throw;
-                                            }
+                                            await handler.Handle(ev, token);
                                         }
-                                        
-                                        await handler.SaveStateAsync(token);
+                                        catch (Exception e)
+                                        {
+                                            e.Data.Add("Event", ev.EventTypeName);
+                                            e.Data.Add("GlobalSequence", ev.GlobalSequence);
+
+                                            throw;
+                                        }
                                     }
 
-                                    metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+                                    await handler.SaveStateAsync(token);
+                                }
 
-                                    await db.SaveChangesAsync(token);
-                                }
-                                catch (Exception e)
-                                {
-                                    logger.LogCritical(e, "Unhandled exception during event handling");
-                                    throw;
-                                }
+                                metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+
+                                await tenantDbContext.SaveChangesAsync(token);
                             }
-                            
-                            tr.Commit();
-
-                            var totalEventsToRead = maximumSequenceToQuery - startedReadAt;
-                            var eventsProcessed = metadata.GlobalSequence - startedReadAt;
-                            var percent = eventsProcessed.PercentOf(totalEventsToRead);
-
-                            dataExportProcessesService.UpdateDataExportProgress(processId, percent);
-
-                            if (metadata.GlobalSequence >= maximumSequenceToQuery) break;
+                            catch (Exception e)
+                            {
+                                logger.LogCritical(e, "Unhandled exception during event handling");
+                                throw;
+                            }
                         }
+
+                        tr.Commit();
+
+                        var totalEventsToRead = maximumSequenceToQuery - startedReadAt;
+                        var eventsProcessed = metadata.GlobalSequence - startedReadAt;
+                        var percent = eventsProcessed.PercentOf(totalEventsToRead);
+
+                        dataExportProcessesService.UpdateDataExportProgress(processId, percent);
+
+                        if (metadata.GlobalSequence >= maximumSequenceToQuery) break;
                     }
                 }
             }

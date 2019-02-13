@@ -26,11 +26,11 @@ namespace WB.Services.Export.Infrastructure
             {
                 DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService;"
             });
-            var tenantContext = new TenantContext(null)
+            var tenantContext = new TenantContext(null, connectionSettings, optionsBuilder.Options)
             {
                 Tenant = tenantInfo
             };
-            return new TenantDbContext(tenantContext, connectionSettings);
+            return tenantContext.DbContext;
         }
     }
 }
