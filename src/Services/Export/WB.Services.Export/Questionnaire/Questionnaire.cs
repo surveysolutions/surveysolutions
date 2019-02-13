@@ -119,6 +119,8 @@ namespace WB.Services.Export.Questionnaire
         public Guid[] GetAllGroups()
             => this.GroupsCache.Values.Select(question => question.PublicKey).ToArray();
 
+        public Group GetGroup(Guid groupId) => this.GroupsCache[groupId];
+
         private Dictionary<ValueVector<Guid>, Guid[]> rostersInLevelCache = null;
 
         public Guid[] GetRostersInLevel(ValueVector<Guid> rosterScope)
