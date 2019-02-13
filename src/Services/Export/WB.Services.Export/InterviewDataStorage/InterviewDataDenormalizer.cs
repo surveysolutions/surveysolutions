@@ -22,6 +22,8 @@ namespace WB.Services.Export.InterviewDataStorage
     public class InterviewDataDenormalizer :
         IFunctionalHandler,
         IAsyncEventHandler<InterviewCreated>,
+        IAsyncEventHandler<InterviewFromPreloadedDataCreated>,
+        IAsyncEventHandler<InterviewOnClientCreated>,
         IAsyncEventHandler<InterviewDeleted>,
         IAsyncEventHandler<InterviewHardDeleted>,
         IAsyncEventHandler<TextQuestionAnswered>,
@@ -74,6 +76,16 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken token = default)
+        {
+            return AddInterview(@event.EventSourceId, token);
+        }
+
+        public Task Handle(PublishedEvent<InterviewFromPreloadedDataCreated> @event, CancellationToken token = default)
+        {
+            return AddInterview(@event.EventSourceId, token);
+        }
+
+        public Task Handle(PublishedEvent<InterviewOnClientCreated> @event, CancellationToken token = default)
         {
             return AddInterview(@event.EventSourceId, token);
         }
@@ -510,18 +522,13 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var groups = questionnaire.GetAllGroups();
-            foreach (var groupId in groups)
+            var groups = questionnaire.GetAllStoredGroups();
+            foreach (var group in groups)
             {
-                var group = questionnaire.GetGroup(groupId);
+                state.RemoveInterviewFromTable(group.TableName, interviewId);
+                state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
 
-                if (group.IsRoster || group.HasAnyExportableQuestions)
-                {
-                    state.RemoveInterviewFromTable(group.TableName, interviewId);
-                    state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
-                }
-
-                if (group.HasAnyExportableQuestions)
+                if (group.Children.Any(x => x is Question))
                     state.RemoveInterviewFromTable(group.ValidityTableName, interviewId);
             }
         }
