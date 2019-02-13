@@ -39,15 +39,15 @@ namespace WB.Services.Export.InterviewDataStorage
             this.tenantContext = tenantContext;
         }
 
-        private readonly Dictionary<Guid, InterviewSummary> added = new Dictionary<Guid, InterviewSummary>();
-        private readonly Dictionary<Guid, List<Action<InterviewSummary>>> changes = new Dictionary<Guid, List<Action<InterviewSummary>>>();
+        private readonly Dictionary<Guid, InterviewReference> added = new Dictionary<Guid, InterviewReference>();
+        private readonly Dictionary<Guid, List<Action<InterviewReference>>> changes = new Dictionary<Guid, List<Action<InterviewReference>>>();
         private readonly HashSet<Guid> removed = new HashSet<Guid>();
 
         public void Handle(PublishedEvent<InterviewCreated> @event)
         {
             added.Add(
                 @event.EventSourceId,
-                new InterviewSummary
+                new InterviewReference
                 {
                     InterviewId = @event.EventSourceId,
                     QuestionnaireId = @event.Event.QuestionnaireIdentity,
@@ -79,9 +79,9 @@ namespace WB.Services.Export.InterviewDataStorage
             EnlistChange(@event.EventSourceId, @event.EventTimeStamp, null);
         }
 
-        private void EnlistChange(Guid interviewId, DateTime updateDate, Action<InterviewSummary> action)
+        private void EnlistChange(Guid interviewId, DateTime updateDate, Action<InterviewReference> action)
         {
-            var changesList = this.changes.GetOrNull(interviewId) ?? new List<Action<InterviewSummary>>();
+            var changesList = this.changes.GetOrNull(interviewId) ?? new List<Action<InterviewReference>>();
             if (action != null)
             {
                 changesList.Add(action);
@@ -104,7 +104,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 db.InterviewReferences.Remove(reference);
             }
 
-            foreach (KeyValuePair<Guid, List<Action<InterviewSummary>>> change in changes)
+            foreach (KeyValuePair<Guid, List<Action<InterviewReference>>> change in changes)
             {
                 var reference = db.InterviewReferences.Find(change.Key);
                 if (reference != null)

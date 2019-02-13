@@ -23,20 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             this.comments = comments;
         }
 
-        public List<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
-            InterviewStatus? status, DateTime? fromDate, DateTime? toDate)
-        {
-            if (questionnaireIdentity == null) throw new ArgumentNullException(nameof(questionnaireIdentity));
-
-            List<InterviewToExport> batchInterviews = 
-                this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
-                        .OrderBy(x => x.InterviewId)
-                        .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.ErrorsCount, x.Status))
-                        .ToList());
-
-            return batchInterviews;
-        }
-
         public List<Views.InterviewApiComment> GetInterviewComments(Guid interviewId)
         {
                var result = this.comments.Query(_ =>

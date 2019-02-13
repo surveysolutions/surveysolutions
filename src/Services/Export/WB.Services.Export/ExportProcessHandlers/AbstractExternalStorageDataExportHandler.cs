@@ -30,7 +30,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override DataExportFormat Format => DataExportFormat.Binary;
         protected override bool CompressExportedData => false;
         
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
+        protected override async void ExportDataIntoDirectory(ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {

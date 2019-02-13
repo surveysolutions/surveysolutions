@@ -1,12 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
-    public class InterviewSummary
+    public class InterviewReference
     {
         public string QuestionnaireId { get; set; }
 

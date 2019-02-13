@@ -9,16 +9,16 @@
     <PackageReference Include="AWSSDK.Core" Version="3.3.31.4" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.12" />
-    <PackageReference Include="CsvHelper" Version="12.1.1" />
-    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
+    <PackageReference Include="Dapper" Version="1.50.7" />
     <PackageReference Include="Dropbox.Api" Version="4.9.3" />
     <PackageReference Include="Google.Apis" Version="1.37.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.37.0" />
     <PackageReference Include="Google.Apis.Core" Version="1.37.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.37.0.1477" />
-    <PackageReference Include="HtmlSanitizer" Version="4.0.204" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.205" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.2.0" />

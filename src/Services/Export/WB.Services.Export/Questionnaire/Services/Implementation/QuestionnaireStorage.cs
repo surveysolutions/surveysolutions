@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using WB.Services.Export.Events;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Services;
@@ -16,17 +18,20 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly ILogger<QuestionnaireStorage> logger;
         private readonly IMemoryCache memoryCache;
+        private readonly IServiceProvider serviceProvider;
         private readonly IInterviewDatabaseInitializer interviewDatabaseInitializer;
         private readonly JsonSerializerSettings serializer;
 
         public QuestionnaireStorage(ITenantApi<IHeadquartersApi> tenantApi,
             ILogger<QuestionnaireStorage> logger,
             IMemoryCache memoryCache,
+            IServiceProvider serviceProvider,
             IInterviewDatabaseInitializer interviewDatabaseInitializer)
         {
             this.tenantApi = tenantApi;
             this.logger = logger;
             this.memoryCache = memoryCache;
+            this.serviceProvider = serviceProvider;
             this.interviewDatabaseInitializer = interviewDatabaseInitializer;
             this.serializer = new JsonSerializerSettings
             {
@@ -65,10 +70,16 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                     SlidingExpiration = TimeSpan.FromMinutes(5)
                 });
 
-                interviewDatabaseInitializer.CreateQuestionnaireDbStructure(
-                    new TenantContext(null) { Tenant = tenant }, questionnaire);
-                var tenantName = tenant.Name;
-                logger.LogInformation("Created database structure for {tenantName} ({questionnaireId})", tenantName, questionnaireId);
+                using (var scope = this.serviceProvider.CreateScope())
+                {
+                    scope.ServiceProvider.SetTenant(tenant);
+                    var initializer = scope.ServiceProvider.GetService<IInterviewDatabaseInitializer>();
+                    initializer.CreateQuestionnaireDbStructure(questionnaire);
+                    
+                    var tenantName = tenant.Name;
+                    logger.LogInformation("Created database structure for {tenantName} ({questionnaireId})", tenantName, questionnaireId);
+
+                }
 
                 return questionnaire;
             }

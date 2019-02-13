@@ -20,12 +20,6 @@ namespace WB.Services.Export.Services
     
     public interface IHeadquartersApi
     {
-        [Get("/api/export/v1/interview?questionnaireIdentity={questionnaireIdentity}")]
-        Task<List<InterviewToExport>> GetInterviewsToExportAsync([Refit.AliasAs("questionnaireIdentity")]QuestionnaireId questionnaireIdentity,
-            InterviewStatus? status,
-            DateTime? fromDate,
-            DateTime? toDate);
-
         [Get("/api/export/v1/questionnaire/{id}")]
         Task<string> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
 
