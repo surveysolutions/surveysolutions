@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Refit;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events;
-using WB.Services.Export.Events.Interview.Base;
-using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
@@ -17,7 +14,6 @@ namespace WB.Services.Export.Services
     /// <summary>
     /// Should not be injected
     /// </summary>
-    
     public interface IHeadquartersApi
     {
         [Get("/api/export/v1/questionnaire/{id}")]
@@ -31,10 +27,7 @@ namespace WB.Services.Export.Services
         Task<List<InterviewComment>> GetInterviewCommentsBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
         [Get("/api/export/v1/interview/batch/summaries")]
-        Task<List<InterviewSummary>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
-
-        [Get("/api/export/v1/interview/{id}")]
-        Task<List<InterviewEntity>> GetInterviewAsync([Query] Guid id, [Query(CollectionFormat.Multi)] Guid[] entityId = null);
+        Task<List<InterviewAction>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
         [Get("/api/export/v1/interviews")]
         Task<List<InterviewEntity>> GetInterviewBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewId, 

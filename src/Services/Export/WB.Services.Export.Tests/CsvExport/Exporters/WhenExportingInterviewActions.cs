@@ -25,7 +25,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(It.IsAny<string>())).Returns(false);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(It.IsAny<string>())).Returns(new[] { fileName, "2.txt" });
 
-            var commentedStatuses = new List<InterviewSummary>
+            var commentedStatuses = new List<InterviewAction>
             {
                 Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.Created),
                 Create.InterviewSummary(key: InterviewKey, interviewId: interviewId, exportedAction: InterviewExportedAction.SupervisorAssigned),

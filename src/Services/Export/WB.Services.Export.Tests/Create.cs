@@ -136,7 +136,7 @@ namespace WB.Services.Export.Tests
             return QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
         }
 
-        public static InterviewSummary InterviewSummary(InterviewExportedAction exportedAction = InterviewExportedAction.ApprovedBySupervisor,
+        public static InterviewAction InterviewSummary(InterviewExportedAction exportedAction = InterviewExportedAction.ApprovedBySupervisor,
             string originatorName = "inter",
             UserRoles originatorRole = UserRoles.Interviewer,
             Guid? interviewId = null,
@@ -144,7 +144,7 @@ namespace WB.Services.Export.Tests
             string key = null,
             string interviewerName = "inter",
             string supervisorName = "supervisor")
-            => new InterviewSummary
+            => new InterviewAction
             {
                 Status = exportedAction,
                 InterviewId = interviewId ?? Guid.NewGuid(),
