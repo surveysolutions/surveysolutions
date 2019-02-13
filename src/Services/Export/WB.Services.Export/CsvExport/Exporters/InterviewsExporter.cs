@@ -300,7 +300,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     };
                 }
 
-                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
+                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel, questionnaire);
 
                 dataRecords.Add(new InterviewDataExportRecord(recordId,
                     referenceValues,
@@ -314,7 +314,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             return dataRecords.ToArray();
         }
 
-        private string[][] GetExportValues(InterviewLevel interviewLevel, HeaderStructureForLevel headerStructureForLevel)
+        private string[][] GetExportValues(InterviewLevel interviewLevel,
+            HeaderStructureForLevel headerStructureForLevel, QuestionnaireDocument questionnaire)
         {
             var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
@@ -327,7 +328,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey)
                         ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey]
                         : null;
-                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem);
+                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem, questionnaire);
                     result.Add(exportedQuestion);
                 }
                 else if (variableHeaderItem != null)
