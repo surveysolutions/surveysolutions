@@ -28,7 +28,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             ExportSettings exportSettings, string archiveName, 
             IProgress<int> exportProgress, CancellationToken cancellationToken)
         {
-            await this.ExportDataIntoDirectoryAsync(exportSettings, exportProgress, cancellationToken);
+            this.ExportDataIntoDirectory(exportSettings, exportProgress, cancellationToken);
 
             if (!this.CompressExportedData) return;
 
@@ -46,7 +46,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected virtual bool CompressExportedData => true;
 
-        protected abstract Task ExportDataIntoDirectoryAsync(ExportSettings settings,
+        protected abstract void ExportDataIntoDirectory(ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken);
     }

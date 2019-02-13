@@ -19,6 +19,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger logger;
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
 
@@ -27,11 +28,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IInterviewFactory interviewFactory,
             IQuestionnaireStorage questionnaireStorage,
             ITenantApi<IHeadquartersApi> tenantApi,
+            IInterviewsToExportSource interviewsToExportSource,
             ILogger<BinaryDataSource> logger)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.tenantApi = tenantApi;
+            this.interviewsToExportSource = interviewsToExportSource;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
@@ -44,7 +47,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
 
-            var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
+            var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(
+                settings.QuestionnaireId, settings.Status, settings.FromDate, settings.ToDate);
 
             var questionnaire = await this.questionnaireStorage
                 .GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, cancellationToken);

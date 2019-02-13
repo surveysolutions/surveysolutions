@@ -20,6 +20,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
     {
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger<TabularFormatParaDataExportProcessHandler> logger;
 
         public TabularFormatParaDataExportProcessHandler(
@@ -29,23 +30,26 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IFileSystemAccessor fs,
             IFileBasedExportedDataAccessor dataAccessor,
             IDataExportFileAccessor exportFileAccessor,
+            IInterviewsToExportSource interviewsToExportSource,
             ICsvWriter csvWriter,
             ILogger<TabularFormatParaDataExportProcessHandler> logger) 
             :  base(fs, dataAccessor, interviewDataExportSettings, dataExportProcessesService, exportFileAccessor)
         {
             this.tenantApi = tenantApi;
+            this.interviewsToExportSource = interviewsToExportSource;
             this.csvWriter = csvWriter;
             this.logger = logger;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Paradata;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             logger.LogInformation("Start paradata export for {settings}", settings);
             var api = this.tenantApi.For(settings.Tenant);
-            var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
+            var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
+                settings.Status, settings.FromDate, settings.ToDate);
             
             cancellationToken.ThrowIfCancellationRequested();
 

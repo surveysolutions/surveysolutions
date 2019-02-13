@@ -19,17 +19,6 @@ namespace WB.Services.Export.Events
             ctx.Tenant = context.Tenant;
         }
         
-        public static void SetDbContext(this IServiceScope scope, TenantDbContext connection)
-        {
-            var ctx = scope.ServiceProvider.GetService<ITenantContext>() as TenantContext;
-            if (ctx == null)
-            {
-                throw new ArgumentException("Cannot get tenant context implementation");
-            }
-
-            ctx.DbContext = connection;
-        }
-
         public static void SetTenant(this IServiceProvider scope, TenantInfo tenant)
         {
             var ctx = scope.GetService<ITenantContext>() as TenantContext;

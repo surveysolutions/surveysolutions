@@ -12,6 +12,7 @@ using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
@@ -512,5 +513,22 @@ namespace WB.Services.Export.Tests
 
         public static VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
+
+        public static InterviewReference InterviewReference(
+            string questionnaireId = null,
+            Guid? interviewId = null,
+            InterviewStatus? status = null,
+            string key = null,
+            DateTime? updateDateUtc = null)
+        {
+            return new InterviewReference
+            {
+                QuestionnaireId = questionnaireId ?? Id.gA.FormatGuid(),
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Status = status ?? InterviewStatus.Deleted,
+                Key = key,
+                UpdateDateUtc = updateDateUtc
+            };
+        }
     }
 }
