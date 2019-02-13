@@ -7,5 +7,6 @@ namespace WB.UI.Headquarters.Models.Admin
 {
     public class EmailProviders
     {
+        public dynamic Api { get; set; }
     }
 }

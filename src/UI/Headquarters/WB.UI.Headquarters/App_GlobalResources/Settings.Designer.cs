@@ -88,6 +88,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amazon SES.
+        /// </summary>
+        internal static string EmailProvider_Amazon {
+            get {
+                return ResourceManager.GetString("EmailProvider_Amazon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        internal static string EmailProvider_None {
+            get {
+                return ResourceManager.GetString("EmailProvider_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SendGrid.
+        /// </summary>
+        internal static string EmailProvider_Sendgrid {
+            get {
+                return ResourceManager.GetString("EmailProvider_Sendgrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable encryption.
         /// </summary>
         internal static string EnableEncryption {
