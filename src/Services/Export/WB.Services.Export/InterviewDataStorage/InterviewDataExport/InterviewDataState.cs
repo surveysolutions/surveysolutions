@@ -11,10 +11,10 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     {
         private IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         private IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
-        private IDictionary<string, HashSet<RosterInfo>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        private IDictionary<string, HashSet<RosterInfo>> RemoveRostersBeforeInsertRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        private IDictionary<string, HashSet<RosterInfo>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterInfo>>();
-        private IDictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>>();
+        private IDictionary<string, HashSet<RosterTableKey>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
+        private IDictionary<string, HashSet<RosterTableKey>> RemoveRostersBeforeInsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
+        private IDictionary<string, HashSet<RosterTableKey>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
+        private IDictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>>();
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
@@ -57,19 +57,19 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public void InsertRosterInTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
-            var rosterInfo = new RosterInfo() { InterviewId = interviewId, RosterVector = rosterVector };
+            var rosterInfo = new RosterTableKey() { InterviewId = interviewId, RosterVector = rosterVector };
             var isExistsRemoveOperation = RemoveRosters.ContainsKey(tableName) && RemoveRosters[tableName].Contains(rosterInfo);
             if (isExistsRemoveOperation)
             {
                 if (!RemoveRostersBeforeInsertRosters.ContainsKey(tableName))
-                    RemoveRostersBeforeInsertRosters.Add(tableName, new HashSet<RosterInfo>());
+                    RemoveRostersBeforeInsertRosters.Add(tableName, new HashSet<RosterTableKey>());
                 RemoveRostersBeforeInsertRosters[tableName].Add(rosterInfo);
 
                 RemoveRosters[tableName].Remove(rosterInfo);
             }
 
             if (!InsertRosters.ContainsKey(tableName))
-                InsertRosters.Add(tableName, new HashSet<RosterInfo>());
+                InsertRosters.Add(tableName, new HashSet<RosterTableKey>());
             InsertRosters[tableName].Add(rosterInfo);
         }
 
@@ -89,14 +89,14 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public void RemoveRosterFromTable(string tableName, Guid interviewId, RosterVector rosterVector)
         {
-            var rosterInfo = new RosterInfo() {InterviewId = interviewId, RosterVector = rosterVector};
+            var rosterInfo = new RosterTableKey() {InterviewId = interviewId, RosterVector = rosterVector};
 
             if (InsertRosters.ContainsKey(tableName)) InsertRosters[tableName].Remove(rosterInfo);
             if (RemoveRostersBeforeInsertRosters.ContainsKey(tableName)) RemoveRostersBeforeInsertRosters[tableName].Remove(rosterInfo);
             if (UpdateValues.ContainsKey(tableName)) UpdateValues[tableName].Remove(rosterInfo);
 
             if (!RemoveRosters.ContainsKey(tableName))
-                RemoveRosters.Add(tableName, new HashSet<RosterInfo>());
+                RemoveRosters.Add(tableName, new HashSet<RosterTableKey>());
             RemoveRosters[tableName].Add(rosterInfo);
         }
 
@@ -110,9 +110,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public void UpdateValueInTable(string tableName, Guid interviewId, RosterVector rosterVector, string columnName, object value, NpgsqlDbType valueType)
         {
             if (!UpdateValues.ContainsKey(tableName))
-                UpdateValues.Add(tableName, new Dictionary<RosterInfo, IDictionary<string, UpdateValueInfo>>());
+                UpdateValues.Add(tableName, new Dictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>());
             var updateValueForTable = UpdateValues[tableName];
-            var rosterInfo = new RosterInfo() {InterviewId = interviewId, RosterVector = rosterVector};
+            var rosterInfo = new RosterTableKey() {InterviewId = interviewId, RosterVector = rosterVector};
             if (!updateValueForTable.ContainsKey(rosterInfo))
                 updateValueForTable.Add(rosterInfo, new Dictionary<string, UpdateValueInfo>());
             var updateValueForRosterInstance = updateValueForTable[rosterInfo];
@@ -128,7 +128,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     yield return new UpdateValueForTableRowInfo()
                     {
                         TableName = updateValueInfo.Key,
-                        RosterLevelInfo = groupedByInterviewAndRoster.Key,
+                        RosterLevelTableKey = groupedByInterviewAndRoster.Key,
                         UpdateValuesInfo = groupedByInterviewAndRoster.Value.Select(v => v.Value)
                     };
                 }

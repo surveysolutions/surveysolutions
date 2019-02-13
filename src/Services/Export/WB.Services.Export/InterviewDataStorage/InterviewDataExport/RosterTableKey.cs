@@ -5,7 +5,7 @@ using WB.Services.Infrastructure.EventSourcing;
 namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class RosterInfo
+    public class RosterTableKey
     {
         public Guid InterviewId { get; set; }
         public RosterVector RosterVector { get; set; }
@@ -14,7 +14,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public override bool Equals(object obj)
         {
-            var item = obj as RosterInfo;
+            var item = obj as RosterTableKey;
             if (item == null)
                 return false;
 

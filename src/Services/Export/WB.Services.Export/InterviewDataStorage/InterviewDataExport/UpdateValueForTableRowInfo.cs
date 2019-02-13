@@ -5,7 +5,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     public class UpdateValueForTableRowInfo
     {
         public string TableName { get; set; }
-        public RosterInfo RosterLevelInfo { get; set; }
+        public RosterTableKey RosterLevelTableKey { get; set; }
         public IEnumerable<UpdateValueInfo> UpdateValuesInfo { get; set; }
     }
 }
