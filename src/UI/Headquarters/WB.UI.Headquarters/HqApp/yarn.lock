@@ -10539,9 +10539,9 @@ vary@~1.1.2:
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
 vee-validate@^2.0.0-rc.27:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.1.5.tgz#ced270f9c7f5eeac560b4d7ab63bda756b71761c"
-  integrity sha512-ygo3uQZrCZjFQcZ/AcFI5UZ3ouaNxtsrs+3o/u4yd3TeZveMwYBI3v6+uKbk2aHmNV6jXLl/aj5BTZTYaf73Lw==
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.1.7.tgz#33984454d8a633cdc4825a2cf5857747d91bae67"
+  integrity sha512-IyPDTTvIRY6o9y14jXlgfY76Qv+hmvYDwNaMn9JY5KbQN8a1tJAu7H/+a/+EdHg1w8Zl9tsdG8lndGqY1lyMzQ==
 
 vendors@^1.0.0:
   version "1.0.2"

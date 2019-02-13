@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API
 {
@@ -24,13 +25,17 @@ namespace WB.UI.Headquarters.API
         }
 
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
+        private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
-        public AdminSettingsController(IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
+        public AdminSettingsController(
+            IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
+            this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));;
         }
 
         [HttpGet]
@@ -80,6 +85,21 @@ namespace WB.UI.Headquarters.API
                 AppSetting.InterviewerSettings);
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+        }
+
+        [HttpPost]
+        public HttpResponseMessage UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
+        {
+            this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
+
+            return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public EmailProviderSettings EmailProviderSettings()
+        {
+            return this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
         }
     }
 }

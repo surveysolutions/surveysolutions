@@ -41,7 +41,15 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult EmailProviders()
         {
-            return View(new EmailProviders());
+            return View(new EmailProviders()
+            {
+                Api = new
+                {
+                    UpdateSettings = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "UpdateEmailProviderSettings" }),
+                    GetSettings = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "EmailProviderSettings" }),
+                    
+                }
+            });
         }
 
         [HttpPost]
