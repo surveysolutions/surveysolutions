@@ -442,7 +442,7 @@ namespace WB.Services.Export.InterviewDataStorage
             state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
             state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
 
-            if (group.Children.Any(c => c is Question))
+            if (group.DoesSupportValidityTable)
                 state.InsertRosterInTable(@group.ValidityTableName, interviewId, rosterVector);
         }
 
@@ -483,7 +483,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
 
-            if (entity is Group group && !group.IsRoster && !group.HasAnyExportableQuestions)
+            if (entity is Group group && !group.DoesSupportEnablementTable)
                 return;
 
             var tableName = ResolveGroupForEnablement(entity).EnablementTableName;
@@ -512,7 +512,7 @@ namespace WB.Services.Export.InterviewDataStorage
             state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
             state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
 
-            if (group.Children.Any(c => c is Question))
+            if (group.DoesSupportValidityTable)
                 state.RemoveRosterFromTable(@group.ValidityTableName, interviewId, rosterVector);
         }
 
@@ -525,10 +525,11 @@ namespace WB.Services.Export.InterviewDataStorage
             var groups = questionnaire.GetAllStoredGroups();
             foreach (var group in groups)
             {
-                state.RemoveInterviewFromTable(group.TableName, interviewId);
-                state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
-
-                if (group.Children.Any(x => x is Question))
+                if (group.DoesSupportDataTable)
+                    state.RemoveInterviewFromTable(group.TableName, interviewId);
+                if (group.DoesSupportEnablementTable)
+                    state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
+                if (group.DoesSupportValidityTable)
                     state.RemoveInterviewFromTable(group.ValidityTableName, interviewId);
             }
         }
