@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
-using Serilog.Formatting.Compact;
 using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Export.Host
@@ -124,6 +123,7 @@ namespace WB.Services.Export.Host
 
             host.ConfigureAppConfiguration(c =>
             {
+                c.AddJsonFile($"appsettings.Shared.json", true);
                 c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                 c.AddJsonFile($"appsettings.Production.json", true);
                 c.AddJsonFile($"appsettings.Staging.json", true);
