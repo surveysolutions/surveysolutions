@@ -38,7 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override async void ExportDataIntoDirectory(ExportSettings settings,
+        protected override async Task ExportDataIntoDirectory(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.TabDataFileExtension);

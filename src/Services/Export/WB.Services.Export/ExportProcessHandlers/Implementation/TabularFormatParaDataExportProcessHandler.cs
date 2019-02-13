@@ -43,7 +43,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Paradata;
 
-        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+        protected override Task ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             logger.LogInformation("Start paradata export for {settings}", settings);
@@ -109,6 +109,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             WriteDoFile();
 
             logger.LogInformation("Completed paradata export for {settings}", settings);
+
+            return Task.CompletedTask;
         }
 
         private void WriteDoFile()
