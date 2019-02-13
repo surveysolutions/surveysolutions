@@ -21,14 +21,14 @@ namespace WB.Services.Infrastructure.Logging
         private readonly LogEventLevel minLevel;
         private readonly Subject<LogEvent> queue;
         private readonly JsonFormatter formatter = new JsonFormatter();
+        private bool tableCreated = false;
+
         public Postgres(string connectionString, string schema, string tableName, LogEventLevel minLevel)
         {
             this.connectionString = connectionString;
             this.schema = schema;
             this.tableName = tableName;
             this.minLevel = minLevel;
-
-            EnsureTableCreated();
 
             this.queue = new Subject<LogEvent>();
 
@@ -46,6 +46,13 @@ namespace WB.Services.Infrastructure.Logging
                 .Subscribe(events =>
                 {
                     if (events.Length == 0) return;
+
+                    if (!tableCreated)
+                    {
+                        EnsureTableCreated();
+                        tableCreated = true;
+                    }
+
                     var sb = new StringBuilder();
                     using (var db = new NpgsqlConnection(connectionString))
                     {

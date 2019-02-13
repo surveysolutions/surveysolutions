@@ -27,22 +27,22 @@ namespace WB.Services.Infrastructure.Logging
             {
                 var fields = new List<object>();
 
-                void AddProp(string name)
+                void AddProp(string name, string title = null)
                 {
+                    title = title ?? name;
                     if (logEvent.Properties.ContainsKey(name))
                     {
                         fields.Add(new
                         {
-                            title = name,
-                            value = logEvent.Properties[name].ToString()
+                            title, value = logEvent.Properties[name].ToString()
                         });
                     }
                 }
 
-                AddProp("tenantName");
-                AddProp("jobId");
+                AddProp("tenantName", "Tenant");
+                AddProp("jobId", "Job");
                 AddProp("Host");
-                AddProp("Version");
+                AddProp("VersionInfo");
 
                 if (logEvent.Exception != null)
                 {
