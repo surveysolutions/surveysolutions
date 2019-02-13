@@ -528,42 +528,12 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
-            var commands = GenerateSqlCommandsAsync();
+            var commands = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
             foreach (var sqlCommand in commands)
             {
                 sqlCommand.Connection = tenantContext.DbContext.Database.GetDbConnection();
                 await sqlCommand.ExecuteNonQueryAsync(cancellationToken);
             }
-        }
-
-        private List<DbCommand> GenerateSqlCommandsAsync()
-        {
-            var commands = new List<DbCommand>();
-
-            foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
-                commands.Add(commandBuilder.CreateInsertInterviewCommandForTable(tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds));
-
-            foreach (var tableWithAddRosters in state.GetRemoveRostersBeforeInsertNewInstancesData())
-                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
-
-            foreach (var tableWithAddRosters in state.GetInsertRostersData())
-                commands.Add(commandBuilder.CreateAddRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
-
-            foreach (var updateValueInfo in state.GetUpdateValuesData())
-            {
-                var updateValueCommand = commandBuilder.CreateUpdateValueForTable(updateValueInfo.TableName,
-                    updateValueInfo.RosterLevelTableKey,
-                    updateValueInfo.UpdateValuesInfo);
-                commands.Add(updateValueCommand);
-            }
-
-            foreach (var tableWithRemoveRosters in state.GetRemoveRostersData())
-                commands.Add(commandBuilder.CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo));
-
-            foreach (var tableWithRemoveInterviews in state.GetRemoveInterviewsData())
-                commands.Add(commandBuilder.CreateDeleteInterviewCommandForTable(tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds));
-
-            return commands;
         }
 
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
