@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog.Context;
+using Prometheus;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.EventSourcing;
@@ -18,6 +18,7 @@ namespace WB.Services.Export.Events
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EventsProcessor> logger;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private static readonly Gauge eventsCounter = Metrics.CreateGauge("wb_events_processed_count", "Count of events processed by Export Service", "site");
 
         public EventsProcessor(
             ITenantContext tenant,
@@ -41,7 +42,7 @@ namespace WB.Services.Export.Events
             long? maximumSequenceToQuery = null;
             long? startedReadAt = null;
 
-            while(true)
+            while (true)
             {
                 using (var scope = serviceProvider.CreateScope())
                 {
@@ -53,6 +54,7 @@ namespace WB.Services.Export.Events
                     {
                         var metadata = tenantDbContext.Metadata;
                         startedReadAt = startedReadAt ?? metadata.GlobalSequence;
+                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
                         if (maximumSequenceToQuery.HasValue
                             && metadata.GlobalSequence >= maximumSequenceToQuery) break;
@@ -112,8 +114,10 @@ namespace WB.Services.Export.Events
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
                         dataExportProcessesService.UpdateDataExportProgress(processId, percent);
+                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        if (metadata.GlobalSequence >= maximumSequenceToQuery) break;
+                        if (metadata.GlobalSequence >= maximumSequenceToQuery)
+                            break;
                     }
                 }
             }
