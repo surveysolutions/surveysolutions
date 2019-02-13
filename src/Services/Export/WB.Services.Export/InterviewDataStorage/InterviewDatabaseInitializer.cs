@@ -38,7 +38,7 @@ namespace WB.Services.Export.InterviewDataStorage
             public bool IsNullable { get; }
         }
 
-        private static readonly HashSet<string> createdQuestionnaires = new HashSet<string>();
+        private static readonly HashSet<string> createdQuestionnaireTables = new HashSet<string>();
         public InterviewDatabaseInitializer(ITenantContext tenantContext)
         {
             this.tenantContext = tenantContext;
@@ -48,8 +48,9 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var dbContext = tenantContext.DbContext;
             var key = tenantContext.Tenant.SchemaName() + questionnaireDocument.QuestionnaireId.Id;
-            if (createdQuestionnaires.Contains(key))
+            if (createdQuestionnaireTables.Contains(key))
                 return;
+
             using (var transaction = dbContext.Database.BeginTransaction())
             {
                 var connection = dbContext.Database.GetDbConnection();
@@ -67,14 +68,12 @@ namespace WB.Services.Export.InterviewDataStorage
                 dbContext.SaveChanges();
             }
 
-            createdQuestionnaires.Add(key);
+            createdQuestionnaireTables.Add(key);
         }
 
         private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)
         {
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
-            if (!group.IsRoster && !questions.Any() && !variables.Any())
+            if (!group.DoesSupportDataTable)
                 return;
 
             var columns = new List<ColumnInfo>();
@@ -82,9 +81,11 @@ namespace WB.Services.Export.InterviewDataStorage
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
 
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
 
@@ -94,9 +95,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private void CreateEnablementTableForGroup(DbConnection connection, Group group)
         {
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>().ToList();
-            if (!group.IsRoster && !questions.Any() && !variables.Any())
+            if (!group.DoesSupportEnablementTable)
                 return;
 
             var columns = new List<ColumnInfo>();
@@ -106,9 +105,11 @@ namespace WB.Services.Export.InterviewDataStorage
 
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
 
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
+            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
 
@@ -118,8 +119,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         private void CreateValidityTableForGroup(DbConnection connection, Group group)
         {
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>().ToList();
-            if (!questions.Any())
+            if (!group.DoesSupportValidityTable)
                 return;
 
             var columns = new List<ColumnInfo>();
@@ -127,6 +127,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
+            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
 

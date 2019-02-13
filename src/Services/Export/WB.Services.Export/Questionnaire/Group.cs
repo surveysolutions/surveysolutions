@@ -115,6 +115,10 @@ namespace WB.Services.Export.Questionnaire
         public string EnablementTableName => $"{TableName}_e";
         public string ValidityTableName => $"{TableName}_v";
 
+        public bool DoesSupportDataTable => IsRoster || Children.Any(c => c is Question || c is Variable);
+        public bool DoesSupportEnablementTable => IsRoster || Children.Any(c => c is Question || c is Variable);
+        public bool DoesSupportValidityTable => Children.Any(c => c is Question);
+
         protected string CompressQuestionnaireId(QuestionnaireId questionnaireId)
         {
             var strings = questionnaireId.Id.Split('$');
