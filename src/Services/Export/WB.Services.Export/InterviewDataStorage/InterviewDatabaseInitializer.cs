@@ -77,7 +77,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
@@ -99,19 +99,19 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, "bool", defaultValue: "true"));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, InterviewDatabaseConstants.SqlTypes.Bool, defaultValue: "true"));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, "bool", isNullable: false, defaultValue: "true"));
+                columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
-                columns.Add(new ColumnInfo(variable.ColumnName, "bool", isNullable: false, defaultValue: "true"));
+                columns.Add(new ColumnInfo(variable.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
@@ -123,13 +123,13 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, "uuid", isPrimaryKey: true));
+            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.RosterLevel > 0)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
 
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, "int4[]", isNullable: true));
+                columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
             var commandText = GenerateCreateTableScript(group.ValidityTableName, columns);
             connection.Execute(commandText);
@@ -139,33 +139,33 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (question)
             {
-                case TextQuestion _ : return "text";
-                case NumericQuestion numericQuestion when (numericQuestion.IsInteger): return "int4";
-                case NumericQuestion numericQuestion when (!numericQuestion.IsInteger): return "float8";
-                case TextListQuestion _ : return "jsonb";
-                case MultimediaQuestion _ : return "text";
-                case DateTimeQuestion dateTimeQuestion : return "timestamp";
-                case AudioQuestion audioQuestion : return "jsonb";
-                case AreaQuestion areaQuestion : return "jsonb";
-                case GpsCoordinateQuestion gpsCoordinateQuestion : return "jsonb";
-                case QRBarcodeQuestion qrBarcodeQuestion : return "text";
+                case TextQuestion _ : return InterviewDatabaseConstants.SqlTypes.String;
+                case NumericQuestion numericQuestion when (numericQuestion.IsInteger): return InterviewDatabaseConstants.SqlTypes.Integer;
+                case NumericQuestion numericQuestion when (!numericQuestion.IsInteger): return InterviewDatabaseConstants.SqlTypes.Double;
+                case TextListQuestion _ : return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case MultimediaQuestion _ : return InterviewDatabaseConstants.SqlTypes.String;
+                case DateTimeQuestion dateTimeQuestion : return InterviewDatabaseConstants.SqlTypes.DateTime;
+                case AudioQuestion audioQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case AreaQuestion areaQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case GpsCoordinateQuestion gpsCoordinateQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case QRBarcodeQuestion qrBarcodeQuestion : return InterviewDatabaseConstants.SqlTypes.String;
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToRosterId.HasValue):
-                    return "int4[]";
+                    return InterviewDatabaseConstants.SqlTypes.IntArray;
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToQuestionId.HasValue):
                     var singleSourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
-                    return singleSourceQuestion is TextListQuestion ? "int4" : "int4[]";
+                    return singleSourceQuestion is TextListQuestion ? InterviewDatabaseConstants.SqlTypes.Integer : InterviewDatabaseConstants.SqlTypes.IntArray;
                 case SingleQuestion singleQuestion 
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
-                    return "int4";
+                    return InterviewDatabaseConstants.SqlTypes.Integer;
                 case MultyOptionsQuestion yesNoOptionsQuestion when (yesNoOptionsQuestion.YesNoView):
                 case MultyOptionsQuestion multiLinkedToRoster when (multiLinkedToRoster.LinkedToRosterId.HasValue):
-                    return "jsonb";
+                    return InterviewDatabaseConstants.SqlTypes.Jsonb;
                 case MultyOptionsQuestion multiLinkedToQuestion when (multiLinkedToQuestion.LinkedToQuestionId.HasValue):
                     var multiSourceQuestion = questionnaire.Find<Question>(multiLinkedToQuestion.LinkedToQuestionId.Value);
-                    return multiSourceQuestion is TextListQuestion ? "int4[]" : "jsonb";
+                    return multiSourceQuestion is TextListQuestion ? InterviewDatabaseConstants.SqlTypes.IntArray : InterviewDatabaseConstants.SqlTypes.Jsonb;
                 case MultyOptionsQuestion multiOptionsQuestion
                     when(!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
-                    return "int4[]";
+                    return InterviewDatabaseConstants.SqlTypes.IntArray;
                 default:
                     throw new ArgumentException("Unknown question type: " + question.GetType().Name);
             }
@@ -175,11 +175,11 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (variable.Type)
             {
-                case VariableType.Boolean: return "bool";
-                case VariableType.DateTime: return "timestamp";
-                case VariableType.Double: return "float8";
-                case VariableType.LongInteger: return "int8";
-                case VariableType.String: return "text";
+                case VariableType.Boolean: return InterviewDatabaseConstants.SqlTypes.Bool;
+                case VariableType.DateTime: return InterviewDatabaseConstants.SqlTypes.DateTime;
+                case VariableType.Double: return InterviewDatabaseConstants.SqlTypes.Double;
+                case VariableType.LongInteger: return InterviewDatabaseConstants.SqlTypes.Long;
+                case VariableType.String: return InterviewDatabaseConstants.SqlTypes.String;
                 default: 
                     throw new ArgumentException("Unknown variable type: " + variable.Type);
             }
