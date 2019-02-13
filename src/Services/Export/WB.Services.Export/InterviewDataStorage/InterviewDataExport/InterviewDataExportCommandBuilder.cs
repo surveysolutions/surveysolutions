@@ -10,19 +10,12 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataExportCommandBuilder : IInterviewDataExportCommandBuilder
     {
-        private readonly ITenantContext tenantContext;
-
-        public InterviewDataExportCommandBuilder(ITenantContext tenantContext)
-        {
-            this.tenantContext = tenantContext;
-        }
-
-        public DbCommand CreateUpdateValueForTable(string tableName, RosterInfo rosterInfo, IEnumerable<UpdateValueInfo> updateValueInfos)
+        public DbCommand CreateUpdateValueForTable(string tableName, RosterTableKey rosterTableKey, IEnumerable<UpdateValueInfo> updateValueInfos)
         {
             if (!updateValueInfos.Any())
                 throw new ArgumentException("don't have any update value info to create command");
 
-            bool isTopLevel = rosterInfo.RosterVector == null || rosterInfo.RosterVector.Length == 0;
+            bool isTopLevel = rosterTableKey.RosterVector == null || rosterTableKey.RosterVector.Length == 0;
 
             NpgsqlCommand updateCommand = new NpgsqlCommand();
 
@@ -45,12 +38,12 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                        $"   SET {setValues}" +
                        $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
 
-            updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+            updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterTableKey.InterviewId);
 
             if (!isTopLevel)
             {
                 text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
-                updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
+                updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterTableKey.RosterVector.Coordinates.ToArray());
             }
 
             updateCommand.CommandText = text;
@@ -58,7 +51,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         }
 
 
-        public DbCommand CreateInsertCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
+        public DbCommand CreateInsertInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
             if (!interviewIds.Any())
                 throw new ArgumentException("don't have any interview id to create command");
@@ -82,7 +75,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return insertCommand;
         }
 
-        public DbCommand CreateDeleteCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
+        public DbCommand CreateDeleteInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
             if (!interviewIds.Any())
                 throw new ArgumentException("don't have any interview id to create command");
@@ -94,10 +87,10 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return deleteCommand;
         }
 
-        public DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
+        public DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
             if (!rosterInfos.Any())
-                throw new ArgumentException("don't have any reoster info to create command");
+                throw new ArgumentException("don't have any roster info to create command");
 
             var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
                        $"           VALUES";
@@ -119,10 +112,10 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return insertCommand;
         }
 
-        public DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterInfo> rosterInfos)
+        public DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
             if (!rosterInfos.Any())
-                throw new ArgumentException("don't have any reoster info to create command");
+                throw new ArgumentException("don't have any roster info to create command");
 
             var text = $"DELETE FROM \"{tableName}\" " +
                        $"      WHERE ";
