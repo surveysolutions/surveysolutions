@@ -11,5 +11,6 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         DbCommand CreateDeleteInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds);
         DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos);
         DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos);
+        IEnumerable<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state);
     }
 }

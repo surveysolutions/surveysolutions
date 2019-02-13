@@ -141,5 +141,35 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
             return deleteCommand;
         }
+
+        public IEnumerable<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state)
+        {
+            var commands = new List<DbCommand>();
+
+            foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
+                commands.Add(CreateInsertInterviewCommandForTable(tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds));
+
+            foreach (var tableWithAddRosters in state.GetRemoveRostersBeforeInsertNewInstancesData())
+                commands.Add(CreateRemoveRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
+
+            foreach (var tableWithAddRosters in state.GetInsertRostersData())
+                commands.Add(CreateAddRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
+
+            foreach (var updateValueInfo in state.GetUpdateValuesData())
+            {
+                var updateValueCommand = CreateUpdateValueForTable(updateValueInfo.TableName,
+                    updateValueInfo.RosterLevelTableKey,
+                    updateValueInfo.UpdateValuesInfo);
+                commands.Add(updateValueCommand);
+            }
+
+            foreach (var tableWithRemoveRosters in state.GetRemoveRostersData())
+                commands.Add(CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo));
+
+            foreach (var tableWithRemoveInterviews in state.GetRemoveInterviewsData())
+                commands.Add(CreateDeleteInterviewCommandForTable(tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds));
+
+            return commands;
+        }
     }
 }
