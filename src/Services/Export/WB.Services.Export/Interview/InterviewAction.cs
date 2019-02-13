@@ -4,7 +4,7 @@ using WB.Services.Export.Interview.Entities;
 
 namespace WB.Services.Export.Interview
 {
-    public class InterviewSummary
+    public class InterviewAction
     {
         public Guid InterviewId { get; set; }
         public string Key { get; set; }
