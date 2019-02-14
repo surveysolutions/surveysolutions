@@ -113,6 +113,10 @@ namespace WB.Services.Export.InterviewDataStorage
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
+            var staticTexts = group.Children.Where(entity => entity is StaticText).Cast<StaticText>();
+            foreach (var staticText in staticTexts)
+                columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+
             var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
         }
@@ -130,6 +134,10 @@ namespace WB.Services.Export.InterviewDataStorage
             var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
+
+            var staticTexts = group.Children.Where(entity => entity is StaticText).Cast<StaticText>();
+            foreach (var staticText in staticTexts)
+                columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
             var commandText = GenerateCreateTableScript(group.ValidityTableName, columns);
             connection.Execute(commandText);
