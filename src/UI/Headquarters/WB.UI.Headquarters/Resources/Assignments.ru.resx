@@ -307,4 +307,16 @@
   <data name="NewAssignment" xml:space="preserve">
     <value>Новое задание</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Электронная почта будет использована для связи с получателем задания</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Пароль будет использован для защиты задания</value>
+  </data>
 </root>
