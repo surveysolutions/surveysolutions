@@ -173,7 +173,7 @@ namespace WB.Services.Export.Questionnaire
                     queue.Enqueue(subChild);
                 }
 
-                if (current.IsRoster || current.HasAnyExportableQuestions)
+                if (current.DoesSupportDataTable || current.DoesSupportEnablementTable || current.DoesSupportValidityTable)
                 {
                     yield return current;
                 }
@@ -191,7 +191,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        public IEnumerable<Group> GetInterviewLevelGroupsWithQuestionOrVariables()
+        public IEnumerable<Group> GetInterviewLevelGroups()
         {
             var itemsQueue = new Queue<Group>();
             itemsQueue.Enqueue(this);
@@ -200,8 +200,7 @@ namespace WB.Services.Export.Questionnaire
             {
                 var currentGroup = itemsQueue.Dequeue();
 
-                if (currentGroup.Children.Any(e => e is Question || e is Variable))
-                    yield return currentGroup;
+                yield return currentGroup;
 
                 var childGroups = currentGroup.Children
                     .Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();

@@ -112,12 +112,14 @@ namespace WB.Services.Export.Questionnaire
 
         public string TableNameQ => $"\"{TableName}\"";
 
-        public string EnablementTableName => $"{TableName}_e";
-        public string ValidityTableName => $"{TableName}_v";
+        private string enablementTableName, validityTableName;
+        public string EnablementTableName => enablementTableName ?? (enablementTableName = $"{TableName}_e");
+        public string ValidityTableName => validityTableName ?? (validityTableName = $"{TableName}_v");
 
-        public bool DoesSupportDataTable => IsRoster || Children.Any(c => c is Question || c is Variable);
-        public bool DoesSupportEnablementTable => IsRoster || Children.Any(c => c is Question || c is Variable);
-        public bool DoesSupportValidityTable => Children.Any(c => c is Question);
+        private bool? doesSupportDataTable, doesSupportEnablementTable, doesSupportValidityTable;
+        public bool DoesSupportDataTable => doesSupportDataTable ?? (doesSupportDataTable = this.IsRoster || Children.Any(c => c is Question || c is Variable)).Value;
+        public bool DoesSupportEnablementTable => doesSupportEnablementTable ?? (doesSupportEnablementTable = IsRoster || Children.Any(c => c is Question || c is Variable || c is StaticText)).Value;
+        public bool DoesSupportValidityTable => doesSupportValidityTable ?? (doesSupportValidityTable = Children.Any(c => c is Question || c is StaticText)).Value;
 
         protected string CompressQuestionnaireId(QuestionnaireId questionnaireId)
         {
