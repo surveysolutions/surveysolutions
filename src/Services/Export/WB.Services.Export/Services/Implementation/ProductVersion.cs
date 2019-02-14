@@ -7,7 +7,7 @@ namespace WB.Services.Export.Services.Implementation
     {
         public ProductVersion()
         {
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(typeof(ProductVersion).Assembly.Location);
+            var fvi = FileVersionInfo.GetVersionInfo(typeof(ProductVersion).Assembly.Location);
 
             if (fvi.IsPreReleaseVersion())
             {
@@ -15,7 +15,8 @@ namespace WB.Services.Export.Services.Implementation
             }
             else
             {
-                Version = fvi.ProductVersion;
+                // do not include trailing zero and build number for release
+                Version = $"{fvi.FileMajorPart}.{fvi.FileMinorPart}" + (fvi.FileBuildPart == 0 ? "" : $".{fvi.FileBuildPart}");
             }
         }
 
