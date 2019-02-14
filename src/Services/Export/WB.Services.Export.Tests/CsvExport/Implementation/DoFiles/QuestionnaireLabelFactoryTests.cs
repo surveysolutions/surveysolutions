@@ -167,7 +167,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 
             // assert
             DataExportVariable questionnaireLevelLabels = structure[0]["singleOption"];
-            Assert.That(questionnaireLevelLabels.VariableValueLabels[0].Label, Is.EqualTo("1"));
+            Assert.That(questionnaireLevelLabels.VariableValueLabels, Is.Empty);
         }   
     }
 }
