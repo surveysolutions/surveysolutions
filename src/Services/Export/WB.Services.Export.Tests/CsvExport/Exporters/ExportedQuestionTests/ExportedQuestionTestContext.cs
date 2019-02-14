@@ -17,8 +17,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
             object value,
             string[] columnNames = null,
             QuestionSubtype ? questionSubType = null,
-            bool isDisabled = false
-            )
+            bool isDisabled = false,
+            QuestionnaireDocument questionnaire = null)
         {
             InterviewEntity interviewQuestion = new InterviewEntity
             {
@@ -75,7 +75,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 ColumnHeaders = Create.ColumnHeaders(columnNames),
                 ColumnValues = columnValues,
             };
-            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
+            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem, questionnaire);
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,

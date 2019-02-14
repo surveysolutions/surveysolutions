@@ -117,7 +117,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 string fileName = $"{level.LevelName}{dataFilesExtension}";
-                var variables = level.HeaderItems.Values.Select(question => question.VariableName).Where(x=>!string.IsNullOrEmpty(x));
+                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
 
                 descriptionBuilder.AppendLine();
                 descriptionBuilder.AppendLine(fileName);
