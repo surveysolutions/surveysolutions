@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
-        public ActionResult Create(string id, Guid responsibleId, int? size)
+        public ActionResult Create(string id, Guid responsibleId, int? size, string email, string password)
         {
             var interview = this.interviews.Get(id);
             if (interview == null)
@@ -100,6 +100,8 @@ namespace WB.UI.Headquarters.Controllers
             assignment.UpdateQuantity(size);
             assignment.Reassign(responsibleId);
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
+            assignment.UpdateEmail(email);
+            assignment.UpdatePassword(password);
 
             this.assignmentsStorage.Store(assignment, null);
 

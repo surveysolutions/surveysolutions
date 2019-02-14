@@ -20,6 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
 
+        public AssignmentEmail Email { get; set; }
+        public AssignmentPassword Password { get; set; }
+
         public override string ToString() =>
             $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
     }
@@ -150,4 +153,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
         public int? Quantity { get; set; }
     }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentEmail : AssignmentValue { }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentPassword : AssignmentValue { }
 }
