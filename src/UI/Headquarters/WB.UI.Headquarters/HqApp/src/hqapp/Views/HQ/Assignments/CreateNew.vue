@@ -57,9 +57,9 @@
                                         <div class="field answered">
                                             <input v-model="sizeQuestion.answer" 
                                                 :title="this.$t('Assignments.SizeExplanation')"
-                                                v-validate="sizeValidations"
+                                                v-validate="sizeValidations" name="size"
                                                 maxlength="5"
-                                                type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
+                                                type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" />
                                         </div>
                                     </div>
                                   
@@ -68,11 +68,57 @@
                             </div>
                         </wb-question>
 
+                        <wb-question :question="emailQuestion" 
+                                     noValidation="true"
+                                     noComments="true"                                     
+                                     questionCssClassName="text-question">
+                            <h5>
+                                {{ this.$t("Assignments.Email") }}
+                            </h5>
+                            <div class="question-unit">
+                                <div class="options-group">
+                                    <div class="form-group">
+                                        <div class="field answered">
+                                            <input v-model="emailQuestion.answer" 
+                                                :title="this.$t('Assignments.EmailExplanation')"
+                                                v-validate="'email'" name="email"
+                                                type="text" autocomplete="off" class="field-to-fill"/>
+                                        </div>
+                                    </div>                                  
+                                </div>                                
+                            </div>
+                        </wb-question>
+
+                        <wb-question :question="passwordQuestion" 
+                                     noValidation="true"
+                                     noComments="true"                                     
+                                     questionCssClassName="text-question">
+                            <h5>
+                                {{ this.$t("Assignments.Password") }}
+                            </h5>
+                            <div class="question-unit">
+                                <div class="options-group">
+                                    <div class="form-group">
+                                        <div class="field answered">
+                                            <input v-model="passwordQuestion.answer" 
+                                                :title="this.$t('Assignments.PasswordExplanation')"                                                
+                                                name="password"
+                                                type="text" autocomplete="off" class="field-to-fill"/>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                                
+                            </div>
+                        </wb-question>                       
+
                         <div class="action-container">
                             <form ref="createForm" :action="config.createNewAssignmentUrl" method="post">
                                 <input type="hidden" name="interviewId" :vaue="config.id" />
                                 <input type="hidden" name="responsibleId" :value="responsibleId"/>
                                 <input type="hidden" name="size" :value="sizeQuestion.answer"/>
+                                <input type="hidden" name="email" :value="emailQuestion.answer"/>
+                                <input type="hidden" name="password" :value="passwordQuestion.answer"/>
 
                                 <button type="button" @click="create" class="btn btn-success btn-lg">
                                     {{ $t('Common.Create') }}
@@ -110,7 +156,25 @@ export default {
                     isValid: true
                 }
             },
-            newResponsibleId: null
+            newResponsibleId: null,
+
+            emailQuestion: {
+                id: "email",
+                acceptAnswer: true,
+                isAnswered: false,
+                validity: {
+                    isValid: true
+                }
+            },
+            passwordQuestion: {
+                id: "password",
+                acceptAnswer: true,
+                isAnswered: false,
+                validity: {
+                    isValid: true
+                }
+            }
+
         };
     },
     computed: {
@@ -120,7 +184,7 @@ export default {
                 min_value: -1,
                 max_value: this.config.maxInterviewsByAssignment
             };
-        },
+        },        
         entities() {
             return this.$store.state.takeNew.takeNew.entities;
         },
@@ -151,8 +215,9 @@ export default {
         async create(ev) {
             const validationResult = await this.$validator.validateAll()
            
-            this.sizeQuestion.validity.isValid = validationResult
-            
+            this.sizeQuestion.validity.isValid = !this.errors.has('size')            
+            this.emailQuestion.validity.isValid = !this.errors.has('email')
+
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false
             }

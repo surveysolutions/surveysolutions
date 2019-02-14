@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(file, questionnaire))
             {
-                foreach (var answerError in this.verifier.VerifyAnswers(assignmentRow, questionnaire))
+                foreach (var answerError in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
                 {
                     hasErrors = true;
                     yield return answerError;
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(importedFile, questionnaire))
                 {
-                    foreach (var answerError in this.verifier.VerifyAnswers(assignmentRow, questionnaire))
+                    foreach (var answerError in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
                     {
                         hasErrors = true;
                         yield return answerError;
@@ -314,6 +314,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var answers = assignment.SelectMany(_ => _.Answers.OfType<IAssignmentAnswer>().Select(y =>
                 ToInterviewAnswer(y, ToRosterVector(_.RosterInstanceCodes), questionnaire)));
 
+            var email = assignment.Select(_ => _.Email).FirstOrDefault(_ => _ != null)?.Value;
+            var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
+
             return new AssignmentToImport
             {
                 Quantity = quantity.HasValue ? (quantity > -1 ? quantity : null) : 1,
@@ -321,7 +324,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
                 Verified = false,
-                ProtectedVariables = protectedQuestions
+                ProtectedVariables = protectedQuestions,
+                Email = email,
+                Password = password
             };
         }
 

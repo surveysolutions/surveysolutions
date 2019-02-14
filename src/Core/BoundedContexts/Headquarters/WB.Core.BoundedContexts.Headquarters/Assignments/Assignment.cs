@@ -55,7 +55,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public virtual bool IsAudioRecordingEnabled { get; protected set; }
-        
+
+        public virtual string Email { get; protected set; }
+        public virtual string Password { get; protected set; }
+
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
@@ -130,6 +133,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void MarkAsReceivedByTablet()
         {
             this.ReceivedByTabletAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void UpdateEmail(string email)
+        {
+            this.Email = email;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void UpdatePassword(string password)
+        {
+            this.Email = password;
+            this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
         public static Assignment PrefillFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
