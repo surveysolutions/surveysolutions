@@ -27,7 +27,9 @@ namespace WB.Services.Export.Tests.Services
             var options = new DbContextOptionsBuilder<TenantDbContext>()
                 .UseInMemoryDatabase(databaseName: "TenantDbContext")
                 .Options;
-            var dbContext = new TenantDbContext(tenantContextMock.Object, Mock.Of<IOptions<DbConnectionSettings>>(), options);
+            var dbContext = new TenantDbContext(tenantContextMock.Object, 
+                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()), 
+                options);
             
             tenantContextMock.Setup(x => x.DbContext)
                 .Returns(dbContext);
