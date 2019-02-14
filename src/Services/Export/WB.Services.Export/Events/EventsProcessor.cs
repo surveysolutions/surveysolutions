@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,14 +44,16 @@ namespace WB.Services.Export.Events
             long? maximumSequenceToQuery = null;
             long? startedReadAt = null;
 
-            while (true)
-            {
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    scope.PropagateTenantContext(tenant);
-                    var tenantDbContext = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
-                    await tenantDbContext.Database.MigrateAsync(token);
+            Dictionary<Type, Stopwatch> denormalizerMeasure = new Dictionary<Type, Stopwatch>();
 
+            using (var scope = serviceProvider.CreateScope())
+            {
+                scope.PropagateTenantContext(tenant);
+
+                var tenantDbContext = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
+                await tenantDbContext.Database.MigrateAsync(token);
+                while (true)
+                {
                     using (var tr = tenantDbContext.Database.BeginTransaction())
                     {
                         var metadata = tenantDbContext.Metadata;
@@ -64,8 +68,11 @@ namespace WB.Services.Export.Events
                         var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
                         maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
 
+
                         if (feed.Events.Any())
                         {
+                            var feedProcessingStopwatch = Stopwatch.StartNew();
+
                             var priorityHandlers = scope.ServiceProvider
                                 .GetServices<IHighPriorityFunctionalHandler>()
                                 .Cast<IStatefulDenormalizer>();
@@ -78,11 +85,15 @@ namespace WB.Services.Export.Events
                             {
                                 foreach (var handler in all)
                                 {
+                                    var handlerType = handler.GetType();
                                     foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
                                     {
                                         try
                                         {
+                                            var denormalizerStopwatch = denormalizerMeasure.GetOrAdd(handlerType, Stopwatch.StartNew);
+                                            denormalizerStopwatch.Start();
                                             await handler.Handle(ev, token);
+                                            denormalizerStopwatch.Stop();
                                         }
                                         catch (Exception e)
                                         {
@@ -96,6 +107,13 @@ namespace WB.Services.Export.Events
                                     await handler.SaveStateAsync(token);
                                 }
 
+                                foreach (var s in denormalizerMeasure)
+                                {
+                                    this.logger.LogDebug("Per batch of {eventsCount:n0} denormalizer {denormalizer} spent {duration:g}",
+                                        feed.Events.Count, s.Key.Name, s.Value.Elapsed);
+                                }
+                                denormalizerMeasure.Clear();
+
                                 metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
 
                                 await tenantDbContext.SaveChangesAsync(token);
@@ -105,6 +123,10 @@ namespace WB.Services.Export.Events
                                 logger.LogCritical(e, "Unhandled exception during event handling");
                                 throw;
                             }
+
+                            feedProcessingStopwatch.Stop();
+                            this.logger.LogInformation("Reading batch of events done. Last received Global sequence {sequence:n0} out of {total:n0}. Took {duration:g}",
+                                 feed.Events.LastOrDefault().GlobalSequence, feed.Total, feedProcessingStopwatch.Elapsed);
                         }
 
                         tr.Commit();
@@ -121,6 +143,8 @@ namespace WB.Services.Export.Events
                     }
                 }
             }
+
+
         }
     }
 
