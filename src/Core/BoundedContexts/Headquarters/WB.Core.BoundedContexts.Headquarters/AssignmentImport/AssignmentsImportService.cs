@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -287,14 +288,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            AssignmentToImport GetAssignmentWithoutEmptyAnswers(AssignmentToImport assignmentToImport)
+            AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
             {
                 assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+
+                if (assignmentToImport.Password == ServiceColumns.PasswordSpecialValue)
+                    assignmentToImport.Password = System.Web.Security.Membership.GeneratePassword(6,0);
+
                 return assignmentToImport;
             }
 
             this.importAssignmentsRepository.Store(assignments.Select(x =>
-                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswers(x), x.Id)));
+                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x), x.Id)));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
