@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public interface IExportQuestionService
     {
-        string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header);
+        string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header,
+            QuestionnaireDocument questionnaire);
         string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled);
     }
 
@@ -18,9 +20,10 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
-        public string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header)
+        public string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header,
+            QuestionnaireDocument questionnaire)
         {
-            var answers = this.GetAnswers(question, header);
+            var answers = this.GetAnswers(question, header, questionnaire);
 
             if (answers.Length != header.ColumnHeaders.Count)
                 throw new InvalidOperationException(
@@ -52,7 +55,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private string[] GetAnswers(InterviewEntity question, ExportedQuestionHeaderItem header)
+        private string[] GetAnswers(InterviewEntity question, ExportedQuestionHeaderItem header,
+            QuestionnaireDocument questionnaire)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
@@ -90,7 +94,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.MultyOption:
                 case QuestionType.SingleOption:
                 case QuestionType.TextList:
-                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
+                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header, questionnaire);
                 default:
                     return Array.Empty<string>();
             }
@@ -162,7 +166,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header)
+        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header,
+            QuestionnaireDocument questionnaire)
         {
             if (header.ColumnHeaders.Count == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header) };
@@ -194,7 +199,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     }
                     else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Linked)
                     {
-                        FillMultioptionLinked(answers, header, result);
+                        return GetMultiLinkedAnswers(answer, header, header.ColumnHeaders.Count, questionnaire).ToArray();
                     }
                     else
                     {
@@ -211,12 +216,31 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private void FillMultioptionLinked(object[] answers, ExportedQuestionHeaderItem header, string[] result)
+        private IEnumerable<string> GetMultiLinkedAnswers(object answerObj, ExportedQuestionHeaderItem header, int expectedColumnCount,
+            QuestionnaireDocument questionnaire)
         {
-            for (int i = 0; i < result.Length; i++)
+            var linkedToQuestionOrRosterAnswers = answerObj as int[][];
+            var linkedToListAnswers = answerObj as int[];
+
+            if (linkedToQuestionOrRosterAnswers != null)
             {
-                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : ExportFormatSettings.MissingNumericQuestionValue;
+                var linkedTo = questionnaire.Find<Question>(header.PublicKey);
+                var isNumericRosterSource = questionnaire.GetRosterSizeSourcesForEntity(
+                        linkedTo.LinkedToQuestionId ?? linkedTo.LinkedToRosterId.Value)
+                    .Select(questionnaire.IsIntegerQuestion)
+                    .ToArray();
+
+                foreach (var answer in linkedToQuestionOrRosterAnswers)
+                    yield return this.ConvertAnswerToStringValue(answer.Select((value, index) => isNumericRosterSource[index] ? value + 1 : value).ToArray(), header);
             }
+            else if (linkedToListAnswers != null)
+            {
+                foreach (var answer in linkedToListAnswers)
+                    yield return this.ConvertAnswerToStringValue(answer, header);
+            }
+
+            for (int i = 0; i < expectedColumnCount - (linkedToQuestionOrRosterAnswers?.Length ?? 0) - (linkedToListAnswers?.Length ?? 0); i++)
+                yield return ExportFormatSettings.MissingNumericQuestionValue;
         }
 
         private static void FillMultioptionAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)

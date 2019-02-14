@@ -7,6 +7,7 @@ using CommonMark;
 using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -16,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -39,7 +41,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
-            Error("WB0281", QuestionnaireExceededEntitiesLimit, string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, MaxTotalRosterPropagationLimit)),
+            Error("WB0281", QuestionnaireExceededEntitiesLimit, limit => string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, limit, QuestionnaireTotalEntitiesLimit)),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
@@ -208,25 +210,46 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return Char.IsDigit(variable[0]) || variable[0] == '_';
         }
 
-        private static bool QuestionnaireExceededEntitiesLimit(MultiLanguageQuestionnaireDocument questionnaire)
+        private static Tuple<bool, int> QuestionnaireExceededEntitiesLimit(MultiLanguageQuestionnaireDocument questionnaire)
         {
             var questionnaireDocument = questionnaire.Questionnaire.Questionnaire;
-            var entitiesCount = GetMaxElementsCount(questionnaireDocument, levelMultiplier: 1);
-            return entitiesCount > MaxTotalRosterPropagationLimit;
+            var entitiesCount = GetMaxElementsCount(questionnaireDocument, questionnaire);
+            return new Tuple<bool, int>(entitiesCount > QuestionnaireTotalEntitiesLimit, entitiesCount);
         }
 
-        private static int GetMaxElementsCount(IComposite entity, int levelMultiplier)
+        private static int GetMaxElementsCount(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            int count = 1 * levelMultiplier;
+            int count = 0;
 
             foreach (var child in entity.Children)
             {
-                if (child is IGroup group && group.IsRoster && group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                if (child is IGroup group)
                 {
-                    levelMultiplier = levelMultiplier * group.FixedRosterTitles.Length;
-                }
+                    int rosterMaxSize = 1; // group: 1
+                    
+                    int countOfChildrenOnNestedLevel = GetMaxElementsCount(group, questionnaire);
+                    if (group.IsRoster)
+                    {
+                        if (group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                        {
+                            // fixed roster: length of titles
+                            rosterMaxSize = group.FixedRosterTitles.Length;
+                        }
 
-                count += GetMaxElementsCount(child, levelMultiplier);
+                        if (group.RosterSizeSource == RosterSizeSourceType.Question)
+                        {
+                            // any other roster type: rosterMaxSize = 1
+                            rosterMaxSize = 1;
+                        }
+                    }
+
+                    count +=  rosterMaxSize + countOfChildrenOnNestedLevel * rosterMaxSize;
+                }
+                else
+                {
+                    // Questions, Static texts, Variables
+                    count++;
+                }
             }
 
             return count;
@@ -540,7 +563,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 CalculateRosterInstancesCountAndUpdateCache(roster, rosterPropagationCounts, questionnaire);
             }
 
-            return rosterPropagationCounts.Values.Sum(x => x) > MaxTotalRosterPropagationLimit;
+            return rosterPropagationCounts.Values.Sum(x => x) > QuestionnaireTotalEntitiesLimit;
         }
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5Mb(MultiLanguageQuestionnaireDocument questionnaire)
