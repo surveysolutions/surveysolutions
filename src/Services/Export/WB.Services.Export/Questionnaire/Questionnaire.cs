@@ -121,6 +121,11 @@ namespace WB.Services.Export.Questionnaire
 
         public Group GetGroup(Guid groupId) => this.GroupsCache[groupId];
 
+        public T Find<T>(Guid publicKey) where T : class, IQuestionnaireEntity
+        {
+            return EntitiesCache[publicKey] as T; ;
+        }
+
         private Dictionary<ValueVector<Guid>, Guid[]> rostersInLevelCache = null;
 
         public Guid[] GetRostersInLevel(ValueVector<Guid> rosterScope)
@@ -143,9 +148,22 @@ namespace WB.Services.Export.Questionnaire
             });
         }
 
-        private Dictionary<Guid, Group> groupsCache;
         private MemoryCache memoryCache;
 
+        private Dictionary<Guid, IQuestionnaireEntity> entitiesCache;
+        private Dictionary<Guid, IQuestionnaireEntity> EntitiesCache
+        {
+            get
+            {
+                return this.entitiesCache ?? (
+                           this.entitiesCache = this.Find<IQuestionnaireEntity>(_ => true)
+                               .ToDictionary(
+                                   entity => entity.PublicKey,
+                                   entity => entity));
+            }
+        }
+
+        private Dictionary<Guid, Group> groupsCache;
         private Dictionary<Guid, Group> GroupsCache
         {
             get
