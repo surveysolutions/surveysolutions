@@ -54,7 +54,11 @@ namespace WB.Services.Export.InterviewDataStorage
         IAsyncEventHandler<RosterInstancesAdded>,
         IAsyncEventHandler<RosterInstancesRemoved>,
         IAsyncEventHandler<GroupsDisabled>,
-        IAsyncEventHandler<GroupsEnabled>
+        IAsyncEventHandler<GroupsEnabled>,
+        IAsyncEventHandler<StaticTextsEnabled>,
+        IAsyncEventHandler<StaticTextsDisabled>,
+        IAsyncEventHandler<StaticTextsDeclaredValid>,
+        IAsyncEventHandler<StaticTextsDeclaredInvalid>
     {
 
         private readonly ITenantContext tenantContext;
@@ -332,7 +336,8 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: question.Id,
                     rosterVector: question.RosterVector,
-                    validityValue: null, token: token);
+                    validityValue: null, 
+                    token: token);
             }
         }
 
@@ -417,18 +422,74 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
+        public async Task Handle(PublishedEvent<StaticTextsEnabled> @event, CancellationToken token = default)
+        {
+            foreach (var identity in @event.Event.StaticTexts)
+            {
+                await UpdateEnablementValue(
+                    interviewId: @event.EventSourceId,
+                    entityId: identity.Id,
+                    rosterVector: identity.RosterVector,
+                    isEnabled: true,
+                    token: token);
+            }
+        }
+
+        public async Task Handle(PublishedEvent<StaticTextsDisabled> @event, CancellationToken token = default)
+        {
+            foreach (var identity in @event.Event.StaticTexts)
+            {
+                await UpdateEnablementValue(
+                    interviewId: @event.EventSourceId,
+                    entityId: identity.Id,
+                    rosterVector: identity.RosterVector,
+                    isEnabled: false,
+                    token: token);
+            }
+        }
+
+        public async Task Handle(PublishedEvent<StaticTextsDeclaredValid> @event, CancellationToken token = default)
+        {
+            foreach (var staticTextId in @event.Event.StaticTexts)
+            {
+                await UpdateValidityValue(
+                    interviewId: @event.EventSourceId,
+                    entityId: staticTextId.Id,
+                    rosterVector: staticTextId.RosterVector,
+                    validityValue: null,
+                    token: token);
+            }
+        }
+
+        public async Task Handle(PublishedEvent<StaticTextsDeclaredInvalid> @event, CancellationToken token = default)
+        {
+            var failedValidationConditions = @event.Event.FailedValidationConditions;
+            foreach (var keyValuePair in failedValidationConditions)
+            {
+                await UpdateValidityValue(
+                    interviewId: @event.EventSourceId,
+                    entityId: keyValuePair.Key.Id,
+                    rosterVector: keyValuePair.Key.RosterVector,
+                    validityValue: keyValuePair.Value.Select(c => c.FailedConditionIndex).ToArray(), 
+                    token: token);
+            }
+        }
+
         private async Task AddInterview(Guid interviewId, CancellationToken token = default)
         {
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
 
-            var topLevelGroups = questionnaire.GetInterviewLevelGroupsWithQuestionOrVariables();
-            foreach (var topLevelGroup in topLevelGroups)
+            var groups = questionnaire.GetInterviewLevelGroups();
+            foreach (var group in groups)
             {
-                state.InsertInterviewInTable(topLevelGroup.TableName, interviewId);
-                state.InsertInterviewInTable(topLevelGroup.EnablementTableName, interviewId);
-                state.InsertInterviewInTable(topLevelGroup.ValidityTableName, interviewId);
+                if (group.DoesSupportDataTable)
+                    state.InsertInterviewInTable(group.TableName, interviewId);
+                if (group.DoesSupportEnablementTable)
+                    state.InsertInterviewInTable(group.EnablementTableName, interviewId);
+                if (group.DoesSupportValidityTable)
+                    state.InsertInterviewInTable(group.ValidityTableName, interviewId);
             }
         }
 
@@ -439,9 +500,10 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var @group = questionnaire.Find<Group>(groupId);
-            state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
-            state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
-
+            if (group.DoesSupportDataTable)
+                state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
+            if (group.DoesSupportEnablementTable)
+                state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
             if (group.DoesSupportValidityTable)
                 state.InsertRosterInTable(@group.ValidityTableName, interviewId, rosterVector);
         }
@@ -496,9 +558,13 @@ namespace WB.Services.Export.InterviewDataStorage
             var questionnaire = await GetQuestionnaireByInterviewIdAsync(interviewId, token);
             if (questionnaire == null)
                 return;
-            var entity = questionnaire.Find<Question>(entityId);
+
+            var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
+
             var tableName = ((Group)entity.GetParent()).ValidityTableName;
-            var columnName = entity.ColumnName;
+            var columnName = (entity as Question)?.ColumnName 
+                             ?? (entity as StaticText)?.ColumnName 
+                             ?? throw new ArgumentException("Does not support this entity type: " + entity.GetType().Name);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, validityValue, NpgsqlDbType.Array | NpgsqlDbType.Integer);
         }
 
@@ -509,9 +575,10 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var @group = questionnaire.Find<Group>(groupId);
-            state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
-            state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
-
+            if (group.DoesSupportDataTable)
+                state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
+            if (group.DoesSupportEnablementTable)
+                state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
             if (group.DoesSupportValidityTable)
                 state.RemoveRosterFromTable(@group.ValidityTableName, interviewId, rosterVector);
         }
@@ -578,6 +645,8 @@ namespace WB.Services.Export.InterviewDataStorage
                     return question.ColumnName;
                 case Variable variable:
                     return variable.ColumnName;
+                case StaticText staticText:
+                    return staticText.ColumnName;
                 default:
                     throw new ArgumentException("Unsupported entity type: " + entity.GetType().Name);
             }
