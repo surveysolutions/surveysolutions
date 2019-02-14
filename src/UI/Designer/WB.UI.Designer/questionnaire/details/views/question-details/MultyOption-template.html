@@ -1,20 +1,8 @@
 ﻿<div class="multyOption">
     <ng-include src="'views/question-details/OptionsEditor-template.html'"
-                ng-if="!activeQuestion.isLinked && !activeQuestion.isFilteredCombobox"></ng-include>
+                ng-if="!activeQuestion.isLinked"></ng-include>
     <ng-include src="'categorical-filter-expression'"></ng-include>
 </div>
-<p>
-    <a ng-if="activeQuestion.isFilteredCombobox"
-       href="javascript:void(0);"
-       class="btn btn-link"
-       ng-click="editFilteredComboboxOptions()" ng-i18next="QuestionUploadOptions">
-    </a>
-    <a ng-if="activeQuestion.isFilteredCombobox"
-       href="javascript:void(0);"
-       class="btn btn-link"
-       ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification">
-    </a>
-</p>
 <div class="table-holder">
     <div class="row">
         <div class="col-xs-5">
