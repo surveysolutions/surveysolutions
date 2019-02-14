@@ -150,14 +150,12 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
                         new Answer
                         {
                             AnswerValue = "1",
-                            AnswerText = "1",
-                            ParentValue = "1"
+                            AnswerText = "1"
                         },
                         new Answer
                         {
                             AnswerValue = "1",
-                            AnswerText = "1",
-                            ParentValue = "2"
+                            AnswerText = "1"
                         }
                     }));
 
