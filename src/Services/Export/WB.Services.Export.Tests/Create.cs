@@ -317,7 +317,8 @@ namespace WB.Services.Export.Tests
             GeoPosition asGps = null,
             int[] asIntArray = null,
             AnsweredYesNoOption[] asYesNo = null,
-            InterviewTextListAnswer[] asList = null)
+            InterviewTextListAnswer[] asList = null,
+            int[][] asIntMatrix = null)
         {
             return new InterviewEntity
             {
@@ -333,8 +334,8 @@ namespace WB.Services.Export.Tests
                 AsGps = asGps,
                 AsIntArray = asIntArray,
                 AsList = asList,
-                AsYesNo = asYesNo
-
+                AsYesNo = asYesNo,
+                AsIntMatrix = asIntMatrix
             };
         }
 
