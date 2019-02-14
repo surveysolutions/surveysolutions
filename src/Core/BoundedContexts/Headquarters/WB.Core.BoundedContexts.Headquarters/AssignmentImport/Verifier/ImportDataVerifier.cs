@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow, 
             BaseAssignmentValue value, IQuestionnaire questionnaire)
         {
-            if (!string.IsNullOrEmpty(assignmentRow.Email.Value) &&
+            if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
                 (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1))
                     yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
         }
