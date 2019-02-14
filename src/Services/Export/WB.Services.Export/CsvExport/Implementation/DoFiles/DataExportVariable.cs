@@ -17,7 +17,14 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.VariableName = variableName;
             this.Label = label;
             this.EntityId = entityId;
-            this.variableValueLabels = variableValueLabels.ToDictionary(x => x.Value, x => x);
+            var distinctValues = variableValueLabels.Select(x => x.Value).Distinct();
+
+            this.variableValueLabels = new Dictionary<string, VariableValueLabel>();
+            foreach (var answerValue in distinctValues)
+            {
+                this.variableValueLabels[answerValue] = variableValueLabels.First(x => x.Value == answerValue);
+            }
+
             this.ValueType = valueType;
         }
 
