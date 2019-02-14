@@ -38,6 +38,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.ResponsibleColumnName);
                 var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.AssignmentsCountColumnName);
 
+                var preloadingEmail = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.EmailColumnName);
+                var preloadingPassword = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.PasswordColumnName);
+
                 yield return new PreloadingAssignmentRow
                 {
                     Row = preloadingRow.RowIndex,
@@ -48,6 +51,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     Responsible = preloadingResponsible == null ? null : ToAssignmentResponsible(preloadingResponsible),
                     Quantity = preloadingQuantity == null ? null : ToAssignmentQuantity(preloadingQuantity),
                     InterviewIdValue = preloadingInterviewId == null ? null : this.ToAssignmentInterviewId(preloadingInterviewId),
+                    Email = preloadingEmail == null? null : new AssignmentEmail
+                    {
+                        Column = preloadingEmail.Column,
+                        Value = preloadingEmail.Value
+                    },
+                    Password = preloadingPassword == null ? null : new AssignmentPassword
+                    {
+                        Column = preloadingPassword.Column,
+                        Value = preloadingPassword.Value
+                    }
                 };
             }
         }

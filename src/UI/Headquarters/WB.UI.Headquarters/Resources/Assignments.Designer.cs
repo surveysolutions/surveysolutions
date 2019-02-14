@@ -223,6 +223,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email would be used in communication with assignment recipient.
+        /// </summary>
+        public static string EmailExplanation {
+            get {
+                return ResourceManager.GetString("EmailExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment can not be created. .
         /// </summary>
         public static string ErrorToCreateAssignment {
@@ -291,6 +309,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberOfAssignmentsAffected_plural {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password would be used to protect assignment.
+        /// </summary>
+        public static string PasswordExplanation {
+            get {
+                return ResourceManager.GetString("PasswordExplanation", resourceCulture);
             }
         }
         

@@ -312,4 +312,16 @@
   <data name="NewAssignment" xml:space="preserve">
     <value>New Assignment</value>
   </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Email would be used in communication with assignment recipient</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Password would be used to protect assignment</value>
+  </data>
 </root>
