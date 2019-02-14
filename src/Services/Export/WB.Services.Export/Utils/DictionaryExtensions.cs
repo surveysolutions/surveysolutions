@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Services.Export
 {
@@ -9,5 +10,16 @@ namespace WB.Services.Export
         {
             return dictionary.TryGetValue(key, out var value) ? value : null;
         }
+
+        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
+        {
+            if (dict.TryGetValue(key, out var value))
+                return value;
+
+            value = valueInit.Invoke();
+            dict.Add(key, value);
+            return value;
+        }
     }
+
 }
