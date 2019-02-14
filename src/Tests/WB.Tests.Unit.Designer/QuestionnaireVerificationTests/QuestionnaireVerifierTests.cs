@@ -279,5 +279,38 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.ShouldContainError("WB0281");
         }
+
+        [Test]
+        public void when_verifying_entities_count_on_nested_fixed_rosters_that_do_not_exceed_limit()
+        {
+            var questionnaire = Create.QuestionnaireDocument(children: Create.Chapter(children: new IComposite[]
+            {
+                Create.FixedRoster(fixedTitles: Enumerable.Range(1, 2).Select(i => i.ToString()), children: new IComposite[]
+                {
+                    Create.TextQuestion(),
+                    Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                    {
+                        Create.TextQuestion(),
+                        Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                        {
+                            Create.TextQuestion()
+                        })
+                    }),
+                    Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                    {
+                        Create.TextQuestion(),
+                        Create.FixedRoster(fixedTitles: Enumerable.Range(1, 60).Select(i => i.ToString()), children: new IComposite[]
+                        {
+                            Create.TextQuestion()
+                        })
+                    })
+                })
+            }));
+
+            var verifier = CreateQuestionnaireVerifier();
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+
+            verificationMessages.ShouldNotContainError("WB0281");
+        }
     }
 }
