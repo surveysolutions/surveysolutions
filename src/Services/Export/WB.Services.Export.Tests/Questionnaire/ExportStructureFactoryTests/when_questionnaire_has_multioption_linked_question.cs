@@ -38,6 +38,8 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
 
             exportedQuestionHeaderItem.ColumnHeaders.Count.Should().Be(2);
             exportedQuestionHeaderItem.ColumnHeaders.Select(x=>x.Name).SequenceEqual(new[] { "mult__0", "mult__1" }).Should().BeTrue();
+            exportedQuestionHeaderItem.ColumnHeaders[0].ExportType.Should().Be(ExportValueType.String);
+            exportedQuestionHeaderItem.ColumnHeaders[1].ExportType.Should().Be(ExportValueType.String);
             exportedQuestionHeaderItem.QuestionSubType.Should().Be(QuestionSubtype.MultyOption_Linked);
             exportedQuestionHeaderItem.QuestionType.Should().Be(QuestionType.MultyOption);
         }

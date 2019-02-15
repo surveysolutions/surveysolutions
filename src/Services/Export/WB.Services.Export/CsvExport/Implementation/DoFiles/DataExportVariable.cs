@@ -17,7 +17,19 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.VariableName = variableName;
             this.Label = label;
             this.EntityId = entityId;
-            this.variableValueLabels = variableValueLabels.ToDictionary(x => x.Value, x => x);
+
+            var uniqueValues = from v in variableValueLabels
+                group v by v.Value
+                into g
+                where g.Count() == 1
+                select new
+                {
+                    Value = g.Key,
+                    Label = g.Single()
+                };
+
+            this.variableValueLabels = uniqueValues.ToDictionary(x => x.Value, x => x.Label);
+
             this.ValueType = valueType;
         }
 
