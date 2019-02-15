@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
@@ -65,16 +67,21 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
         private readonly IInterviewDataExportCommandBuilder commandBuilder;
+        private readonly ILogger<InterviewDataDenormalizer> logger;
 
         private readonly InterviewDataState state;
 
-        public InterviewDataDenormalizer(ITenantContext tenantContext, IQuestionnaireStorage questionnaireStorage,
-            IMemoryCache memoryCache, IInterviewDataExportCommandBuilder commandBuilder)
+        public InterviewDataDenormalizer(ITenantContext tenantContext, 
+            IQuestionnaireStorage questionnaireStorage,
+            IMemoryCache memoryCache, 
+            IInterviewDataExportCommandBuilder commandBuilder,
+            ILogger<InterviewDataDenormalizer> logger)
         {
             this.tenantContext = tenantContext;
             this.questionnaireStorage = questionnaireStorage;
             this.memoryCache = memoryCache;
             this.commandBuilder = commandBuilder;
+            this.logger = logger;
 
             state = new InterviewDataState();
         }
@@ -603,13 +610,22 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
+            var sw = Stopwatch.StartNew();
             var commands = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
+
+            logger.LogDebug("Commands {count} generated in {time}", commands.Count, sw.Elapsed);
+            sw.Restart();
+            var db = tenantContext.DbContext.Database.GetDbConnection();
+
             foreach (var sqlCommand in commands)
             {
-                sqlCommand.Connection = tenantContext.DbContext.Database.GetDbConnection();
-                await sqlCommand.ExecuteNonQueryAsync(cancellationToken);
+                sqlCommand.Connection = db;
+                sqlCommand.ExecuteNonQuery();
             }
+
+            logger.LogDebug("Commands {count} applied on DB {time}", commands.Count, sw.Elapsed);
         }
+
 
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
