@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Services.Export.Infrastructure;
 
 namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
@@ -136,7 +135,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             return deleteCommand;
         }
 
-        public IEnumerable<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state)
+        public List<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state)
         {
             var commands = new List<DbCommand>();
 
