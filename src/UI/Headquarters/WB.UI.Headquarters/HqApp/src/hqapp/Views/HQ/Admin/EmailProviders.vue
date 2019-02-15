@@ -1,26 +1,26 @@
 <template>
     <HqLayout :hasFilter="false" :title="$t('Pages.EmailProvidersTitle')">
         <div class="row contain-input">
-            
             <div class="col-sm-7 ">
-            <div v-if="loading">Loading</div>
-            <form else data-vv-scope="settings">
+            <form data-vv-scope="settings">
+                <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                 <div class="radio">
                     <div class="field">
                         <input v-validate="'required'" name="provider" class="wb-radio" type="radio" v-model="provider" id="provider_none"  value="none">
                         <label for="provider_none"><span class="tick"></span>{{ $t('Settings.EmailProvider_None') }}</label>
                     </div>
                 </div>
-                <p>You cannot send invitations and notifications</p>
+                <p>{{ $t('Settings.EmailProvider_NoneDescription')}}</p>
                 <div class="radio">
                     <div class="field">
                         <input v-validate="'required'" class="wb-radio" name="provider" type="radio" v-model="provider" id="provider_amazon"  value="amazon">
                         <label for="provider_amazon"><span class="tick"></span>{{ $t('Settings.EmailProvider_Amazon') }}</label>
                     </div>
                 </div>
+                <p>{{ $t('Settings.EmailProvider_AmazonDescription')}}</p>
                 <div v-if="provider === 'amazon'">
-                    <div class="form-group">
-                        <label>Sender email address </label>
+                    <div class="form-group"  :class="{ 'has-error': errors.has('settings.senderAddress') }">
+                        <label>{{ $t('Settings.EmailProvider_SenderAddress')}}</label>
                         <input 
                             data-vv-as="email address"
                             v-validate="'required|email'" 
@@ -30,11 +30,11 @@
                             type="text" 
                             class="form-control" 
                             maxlength="200" />
-                        <span>{{ errors.first('settings.senderAddress') }}</span>
+                        <span class="help-block">{{ errors.first('settings.senderAddress') }}</span>
                     </div>
-                    <h4>AWS access keys</h4>
-                    <div class="form-group">
-                        <label>Access key ID</label>
+                    <h4>{{ $t('Settings.EmailProvider_AwsSecretAccessKeyHeader')}}</h4>
+                    <div class="form-group" :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }">
+                        <label>{{ $t('Settings.EmailProvider_AwsAccessKeyId')}}</label>
                         <input
                             data-
                             v-validate="'required'" 
@@ -44,10 +44,10 @@
                             type="text" 
                             v-model="awsAccessKeyId" 
                             maxlength="200" />
-                        <span>{{ errors.first('settings.awsAccessKeyId') }}</span>
+                        <span class="help-block">{{ errors.first('settings.awsAccessKeyId') }}</span>
                     </div>
-                    <div class="form-group">
-                        <label>Secret access key</label>
+                    <div class="form-group" :class="{ 'has-error': errors.has('settings.awsSecretAccessKey') }">
+                        <label>{{ $t('Settings.EmailProvider_AwsSecretAccessKey')}}</label>
                         <input 
                             v-validate="'required'" 
                             name="awsSecretAccessKey" 
@@ -56,7 +56,7 @@
                             class="form-control" 
                             type="text" 
                             maxlength="200" />
-                        <span>{{ errors.first('settings.awsSecretAccessKey') }}</span>
+                        <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                     </div>
                 </div>
                <div class="radio">
@@ -65,16 +65,17 @@
                         <label for="provider_sendgrid"><span class="tick"></span>{{ $t('Settings.EmailProvider_Sendgrid') }}</label>
                     </div>
                 </div>
+                <p>{{ $t('Settings.EmailProvider_SendgridDescription')}}</p>
                 <div  v-if="provider === 'sendgrid'">
-                    <div class="form-group">
-                        <label>Sender email address</label>
+                    <div class="form-group"  :class="{ 'has-error': errors.has('settings.senderAddress') }">
+                        <label>{{ $t('Settings.EmailProvider_SenderAddress')}}</label>
                         <input 
                         data-vv-as="email address"
                         v-validate="'required|email'" name="senderAddress" class="form-control" id="senderAddress" type="text" v-model="senderAddress" maxlength="200" />
-                        <span>{{ errors.first('settings.senderAddress') }}</span>
+                        <span class="help-block">{{ errors.first('settings.senderAddress') }}</span>
                     </div>
-                    <div class="form-group">
-                        <label>API key</label>
+                    <div class="form-group" :class="{ 'has-error': errors.has('settings.sendGridApiKey') }">
+                        <label>{{ $t('Settings.EmailProvider_SendGridApiKey')}}</label>
                         <input v-validate="'required'" 
                         data-vv-as="API key"
                         name="sendGridApiKey" 
@@ -82,24 +83,25 @@
                         id="sendGridApiKey" 
                         type="text" 
                         v-model="sendGridApiKey" maxlength="200" />
-                        <span>{{ errors.first('settings.sendGridApiKey') }}</span>
+                        <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                     </div>
 
                 </div>
                 
-                <button class="btn btn-success" type="button" :disabled="!isFormDirty" @click="save">Save</button>
+                <button class="btn btn-success" type="button" :disabled="!isFormDirty || isFetchInProgress" @click="save">Save</button>
             </form> 
 
             <form v-if="!sendGridIsNotSetUp || !awsIsNotSetUp" data-vv-scope="testEmail">
-                <h4>Send test email</h4>
+                <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+                <h4>{{ $t('Settings.EmailProvider_SendTestEmailHeader')}}</h4>
                 <div v-if="!sendGridIsNotSetUp">
-                    <div class="form-group">
-                        <label>Email address</label>
+                    <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
+                        <label>{{ $t('Settings.EmailProvider_TestEmailAddress')}}</label>
                         <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress" class="form-control" id="testEmailAddress" type="text" v-model="testEmailAddress" maxlength="200" />
-                        <span>{{ errors.first('testEmail.testEmailAddress') }}</span>
+                        <span class="help-block">{{ errors.first('testEmail.testEmailAddress') }}</span>
                     </div>
                     <button
-                     class="btn btn-success" type="submit"  @click="sendTestEmail">Send test email</button>
+                     class="btn btn-success" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
                 </div>
             </form>
 
@@ -114,7 +116,6 @@ import Vue from "vue"
 export default {
   data() {
     return {
-        loading: true,
         provider: 'none',
         senderAddress: null,
         awsAccessKeyId: null,
@@ -123,15 +124,25 @@ export default {
         testEmailAddress: null
     };
   },
-  async created() {
-    const response = await this.$http.get(this.$config.model.api.getSettings);
-    const settings = response.data || {};
-    this.loading = false;
-    this.provider = (settings.provider|| "").toLocaleLowerCase();
-    this.senderAddress = settings.senderAddress;
-    this.awsAccessKeyId = settings.awsAccessKeyId;
-    this.awsSecretAccessKey = settings.awsSecretAccessKey;
-    this.sendGridApiKey = settings.sendGridApiKey;
+  created() {
+    var self = this;
+    self.$store.dispatch("showProgress");
+
+    this.$http.get(this.$config.model.api.getSettings)
+        .then(function (response) { // handle success
+            const settings = response.data || {};
+            self.provider = (settings.provider|| "").toLocaleLowerCase();
+            self.senderAddress = settings.senderAddress;
+            self.awsAccessKeyId = settings.awsAccessKeyId;
+            self.awsSecretAccessKey = settings.awsSecretAccessKey;
+            self.sendGridApiKey = settings.sendGridApiKey;
+        })
+        .catch(function (error) { // handle error
+            Vue.config.errorHandler(error, self);
+        })
+        .then(function () { // always executed
+            self.$store.dispatch("hideProgress");
+        });
   },
   computed: {
     isFormDirty() {
@@ -139,23 +150,37 @@ export default {
         return keys.some(key => this.fields.$settings[key].dirty || this.fields.$settings[key].changed);
     },
     sendGridIsNotSetUp(){
-        return this.sendGridApiKey==null || this.senderAddress==null;
+        return this.provider!='sendgrid' && (this.sendGridApiKey==null || this.senderAddress==null);
     },
     awsIsNotSetUp(){
-        return this.awsSecretAccessKey==null || this.awsAccessKeyId==null || this.senderAddress==null;
+        return this.provider!='amazon' && (this.awsSecretAccessKey==null || this.awsAccessKeyId==null || this.senderAddress==null);
+    },
+    isFetchInProgress(){
+        return this.$store.state.progress.pendingProgress;
     }
   },
   methods: {
     async sendTestEmail(){
+        var self = this;
         var validationResult = await this.$validator.validateAll('testEmail');
         if (validationResult)
         {
-             this.$http.post(this.$config.model.api.sendTestEmail, {
-                    email: this.testEmailAddress
-                });  
+            self.$store.dispatch("showProgress");
+
+            this.$http.post(this.$config.model.api.sendTestEmail, { email: this.testEmailAddress })
+                .then(function (response) { // handle success
+                    self.$validator.reset('testEmail');
+                })
+                .catch(function (error) { // handle error
+                    Vue.config.errorHandler(error, self);
+                })
+                .then(function () { // always executed
+                    self.$store.dispatch("hideProgress");
+                });
         }
     },
     async save(){
+        var self = this;
         var validationResult = await this.$validator.validateAll('settings');
         if (validationResult)
         {
@@ -166,11 +191,18 @@ export default {
                 awsSecretAccessKey: this.awsSecretAccessKey,
                 sendGridApiKey: this.sendGridApiKey
             };
-            var response = await this.$http.post(this.$config.model.api.updateSettings, settings);
-            if (response.status != 200)
-            {
+            self.$store.dispatch("showProgress");
 
-            }
+            this.$http.post(this.$config.model.api.updateSettings, settings)
+                .then(function (response) { // handle success
+                    self.$validator.reset('settings');
+                })
+                .catch(function (error) { // handle error
+                    Vue.config.errorHandler(error, self);
+                })
+                .then(function () { // always executed
+                    self.$store.dispatch("hideProgress");
+                });
         }else{
             var fieldName = this.errors.items[0].field;
             const $firstFieldWithError = $("#"+fieldName);

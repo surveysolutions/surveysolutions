@@ -212,4 +212,37 @@
   <data name="EmailProvider_Sendgrid" xml:space="preserve">
     <value>SendGrid</value>
   </data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Вы не можете отправлять приглашения и напоминания</value>
+  </data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Использовать Amazon SES для отправки приглашений и напоминаний</value>
+  </data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Использовать SendGrid для отправки приглашений и напоминаний</value>
+  </data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>Электронная почта отправителя</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>API ключ</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>ID ключа доступа</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Секретный ключ доступа</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHeader" xml:space="preserve">
+    <value>Ключи AWS</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Отправить письмо</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Отправка пробного электронного письма</value>
+  </data>
 </root>

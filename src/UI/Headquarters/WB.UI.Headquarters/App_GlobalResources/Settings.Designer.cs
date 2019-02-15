@@ -97,6 +97,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Amazon SES to send invitations and reminders.
+        /// </summary>
+        internal static string EmailProvider_AmazonDescription {
+            get {
+                return ResourceManager.GetString("EmailProvider_AmazonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Access key ID.
+        /// </summary>
+        internal static string EmailProvider_AwsAccessKeyId {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsAccessKeyId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secret access key.
+        /// </summary>
+        internal static string EmailProvider_AwsSecretAccessKey {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsSecretAccessKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AWS access keys.
+        /// </summary>
+        internal static string EmailProvider_AwsSecretAccessKeyHeader {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsSecretAccessKeyHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         internal static string EmailProvider_None {
@@ -106,11 +142,74 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot send invitations and notifications.
+        /// </summary>
+        internal static string EmailProvider_NoneDescription {
+            get {
+                return ResourceManager.GetString("EmailProvider_NoneDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sender email address.
+        /// </summary>
+        internal static string EmailProvider_SenderAddress {
+            get {
+                return ResourceManager.GetString("EmailProvider_SenderAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SendGrid.
         /// </summary>
         internal static string EmailProvider_Sendgrid {
             get {
                 return ResourceManager.GetString("EmailProvider_Sendgrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API key.
+        /// </summary>
+        internal static string EmailProvider_SendGridApiKey {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendGridApiKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use SendGrid to send invitations and reminders.
+        /// </summary>
+        internal static string EmailProvider_SendgridDescription {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendgridDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send email.
+        /// </summary>
+        internal static string EmailProvider_SendTestEmail {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendTestEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send test email.
+        /// </summary>
+        internal static string EmailProvider_SendTestEmailHeader {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendTestEmailHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address.
+        /// </summary>
+        internal static string EmailProvider_TestEmailAddress {
+            get {
+                return ResourceManager.GetString("EmailProvider_TestEmailAddress", resourceCulture);
             }
         }
         
