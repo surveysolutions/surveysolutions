@@ -28,9 +28,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 sql.Append('"').Append(updateValueInfo.ColumnName).Append("\" = @answer").Append(index).Append(',');
 
                 if (updateValueInfo.Value == null)
-                    updateCommand.Parameters.AddWithValue($"@answer{index}", DBNull.Value);
+                    updateCommand.Parameters.AddWithValue("@answer" + index, DBNull.Value);
                 else
-                    updateCommand.Parameters.AddWithValue($"@answer{index}", updateValueInfo.ValueType, updateValueInfo.Value);
+                    updateCommand.Parameters.AddWithValue("@answer" + index, updateValueInfo.ValueType, updateValueInfo.Value);
             }
 
             sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
@@ -55,8 +55,8 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public DbCommand CreateInsertInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append($"INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append($")")
-                .Append("           VALUES ");
+            sql.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(")")
+                .Append(" VALUES ");
             NpgsqlCommand insertCommand = new NpgsqlCommand();
 
             int index = 0;
@@ -64,7 +64,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             {
                 index++;
                 sql.Append(" (@interviewId").Append(index).Append("),");
-                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, interviewId);
+                insertCommand.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, interviewId);
             }
 
             sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
@@ -96,8 +96,8 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             {
                 index++;
                 sql.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
-                insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                insertCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
+                insertCommand.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                insertCommand.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
             sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
@@ -124,8 +124,8 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     .Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector").Append(index)
                     .Append(')')
                     .Append(" OR");
-                deleteCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
-                deleteCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
+                deleteCommand.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
+                deleteCommand.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
             sql.Remove(sql.Length - 2, 2); // TrimEnd('OR');
