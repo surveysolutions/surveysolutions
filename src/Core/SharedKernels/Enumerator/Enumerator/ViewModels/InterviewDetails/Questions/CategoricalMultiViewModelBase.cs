@@ -24,19 +24,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         IDisposable
     {
-        private readonly ThrottlingViewModel throttlingModel;
+        protected readonly ThrottlingViewModel throttlingModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IPrincipal principal;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         private Guid interviewId;
         private bool areAnswersOrdered;
-        private int? maxAllowedAnswers;
+        protected int? maxAllowedAnswers;
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
         public IQuestionStateViewModel QuestionState { get; }
         public AnsweringViewModel Answering { get; }
-        public IObservableCollection<ICompositeEntity> Children
+        public virtual IObservableCollection<ICompositeEntity> Children
         {
             get
             {
@@ -110,11 +110,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Identity = entityIdentity;
             this.interviewId = interview.Id;
-
-            this.Init(interview, questionnaire);
-
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+
+            this.Init(interview, questionnaire);
 
             this.throttlingModel.Init(SaveAnswer);
 
@@ -156,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             CategoricalMultiOptionViewModel<TOptionValue> vm, bool isAnswerProtected = false)
             => vm.Init(this.QuestionState, title, value, isAnswerProtected, async () => await this.ToggleAnswerAsync(vm));
 
-        private async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
+        protected async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
         {
             var allSelectedOptions = this.Options.Where(x => x.IsAnswered()).ToArray();
 
@@ -213,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.maxAllowedAnswers.HasValue)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    filteredAnswers.Count, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
+                    filteredAnswers.Count, this.maxAllowedAnswers.Value);
             }
 
             this.HasOptions = this.Options.Any();
