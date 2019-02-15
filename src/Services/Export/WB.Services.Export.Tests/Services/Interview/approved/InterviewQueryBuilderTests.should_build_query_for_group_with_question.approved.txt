@@ -1,6 +1,6 @@
-﻿select data.interview__id as data__interview_id , enablement.instance__state as enablement__instance__state
-, enablement."num1" as "enablement__num1" ,  data."num1" as "data__num1" ,  validity."num1" as "validity__num1"  from 
+﻿select data.interview__id as data__interview_id ,  data."num1" as "data__num1" ,  enablement.instance__state as enablement__instance__state
+, enablement."num1" as "enablement__num1" ,  validity."num1" as "validity__num1"  from 
 "qqqqqqqqqqqqqqqqqqqqqg$6_group1" data 
-    INNER JOIN "qqqqqqqqqqqqqqqqqqqqqg$6_group1_e" enablement ON data.interview__id = enablement.interview__id
-    INNER JOIN "qqqqqqqqqqqqqqqqqqqqqg$6_group1_v" validity ON data.interview__id = validity.interview__id
-WHERE data.interview__id = ANY(@ids)
+ INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_group1_e" enablement ON data.interview__id = enablement.interview__id
+ INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_group1_v" validity ON data.interview__id = validity.interview__id
+WHERE validity.interview__id = ANY(@ids)
