@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.21.1" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.7.31" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
@@ -65,6 +66,7 @@
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
     <PackageReference Include="refit" Version="4.6.58" />
+    <PackageReference Include="Sendgrid" Version="9.10.0" />
     <PackageReference Include="SuperclusterBox" Version="0.1.16" />
   </ItemGroup>
   <ItemGroup>

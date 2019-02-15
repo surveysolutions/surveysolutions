@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
+using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,18 +28,28 @@ namespace WB.UI.Headquarters.API
             public int? HowManyMajorReleaseDontNeedUpdate { get; set; }
         }
 
+        public class TestEmailModel
+        {
+            public string Email{ get; set; }
+        }
+
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
+        private readonly IEmailService emailService;
+        private readonly IAuditLog auditLog;
 
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage)
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, IEmailService emailService, IAuditLog auditLog)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
-            this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));;
+            this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
+            this.emailService = emailService;
+            this.auditLog = auditLog;
+            ;
         }
 
         [HttpGet]
@@ -90,7 +104,14 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         public HttpResponseMessage UpdateEmailProviderSettings([FromBody] EmailProviderSettings settings)
         {
+            var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
+
+            
+            if (settings.Provider != (currentsSettings?.Provider ?? EmailProvider.None))
+            {
+                auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());
+            }
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
         }
@@ -100,6 +121,26 @@ namespace WB.UI.Headquarters.API
         public EmailProviderSettings EmailProviderSettings()
         {
             return this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+        }
+
+        [HttpPost]
+        [CamelCase]
+        public async Task<HttpResponseMessage> SendTestEmail([FromBody] TestEmailModel model)
+        {
+            try
+            {
+                await this.emailService.SendEmailAsync(model.Email, "Test email", "<h1>Hello there!</h1>", "Hello there!");
+                return Request.CreateResponse(HttpStatusCode.OK, new {Sucess = true});
+            }
+            catch (EmailServiceException e)
+            {
+                return Request.CreateResponse(e.StatusCode, new
+                {
+                    Sucess = false,
+                    Errors = e.Errors,
+                    Email = e.Email
+                });
+            }
         }
     }
 }

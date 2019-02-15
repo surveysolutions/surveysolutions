@@ -203,4 +203,13 @@
   <data name="AutoUpdateDescription" xml:space="preserve">
     <value>Если опция включена, то только последние версии Interviewer и Supervisor приложений смогут синхронизироваться с Headquarters сайтом</value>
   </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>Без рассылки</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>SendGrid</value>
+  </data>
 </root>
