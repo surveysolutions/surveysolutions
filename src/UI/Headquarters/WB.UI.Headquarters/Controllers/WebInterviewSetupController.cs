@@ -94,19 +94,44 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        [HttpPost]
-        [ActionName("SendInvitations")]
-        public ActionResult SendInvitationsPost(string id)
+        public ActionResult Settings(string id)
         {
-            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
-            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.Started)
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
             {
-                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name);
+                return this.HttpNotFound();
             }
-            sendInvitationsTask.Run();
-            return RedirectToAction("EmailDistributionProgress");
-        }
 
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
+            if (questionnaire == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var model = new SetupModel();
+            model.QuestionnaireTitle = questionnaire.Title;
+            model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
+            model.QuestionnaireIdentity = questionnaireIdentity;
+            model.UseCaptcha = true;
+            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
+
+            model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
+            model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
+                new { controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString() });
+            model.UpdateTextsUrl = Url.Action("UpdateMessages", new { id = questionnaireIdentity.ToString() });
+            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
+
+            model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
+                .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
+            model.DefaultTexts = WebInterviewConfig.DefaultMessages;
+            model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
+                .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            model.DefinedTexts = config.CustomMessages;
+
+            return View(model);
+        }
+        
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult EmailDistributionProgress()
         {
@@ -123,6 +148,7 @@ namespace WB.UI.Headquarters.Controllers
                 SurveySetupUrl = Url.Action("Index", "SurveySetup")
             }});
         }
+
 
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Start(string id)

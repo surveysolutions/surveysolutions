@@ -1942,6 +1942,7 @@
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
     <Content Include="Views\Settings\EmailProviders.cshtml" />
+    <Content Include="Views\WebInterviewSetup\Settings.cshtml" />
     <Content Include="Views\WebInterviewSetup\SendInvitations.cshtml" />
     <Content Include="Views\WebInterviewSetup\EmailDistributionProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
