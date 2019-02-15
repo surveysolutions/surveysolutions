@@ -11,81 +11,137 @@ namespace WB.Services.Export.Interview
     {
         public static string GetInterviewsQuery(Group group)
         {
-            string BuildSelectColumns(string alias, bool includeVariables = true)
+            StringBuilder query = new StringBuilder($"select ");// data.{InterviewDatabaseConstants.InterviewId} as data__interview_id ");
+            if (group.DoesSupportDataTable)
             {
-                List<string> columnsCollector = new List<string>();
-
-                foreach (var questionnaireEntity in group.Children)
+                query.AppendFormat("data.{0} as data__interview_id ", InterviewDatabaseConstants.InterviewId);
+                if (group.IsInsideRoster)
                 {
-                    if (questionnaireEntity is Question question)
-                    {
-                        columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");
-                    }
-
-                    if (includeVariables && questionnaireEntity is Variable variable)
-                    {
-                        columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
-                    }
+                    query.AppendFormat(", data.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
                 }
 
-                return string.Join(", ", columnsCollector);
+                if (group.HasAnyExportableQuestions)
+                {
+                    query.Append(", ");
+                    query.Append(BuildSelectColumns("data", @group));
+                }
             }
 
-            StringBuilder query = new StringBuilder($"select data.{InterviewDatabaseConstants.InterviewId} as data__interview_id ");
-            if (group.IsInsideRoster)
+            if (group.DoesSupportEnablementTable)
             {
-                query.AppendFormat(", data.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
+                if (group.DoesSupportDataTable)
+                {
+                    query.Append(", ");
+                }
+
+                query.AppendFormat(" enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue,
+                    Environment.NewLine);
+
+                if (group.HasAnyExportableQuestions)
+                {
+                    query.Append(',');
+                    query.Append(BuildSelectColumns("enablement", group));
+
+                }
             }
 
-            query.AppendFormat(", enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue, Environment.NewLine);
-            if (group.HasAnyExportableQuestions)
+            if (group.DoesSupportValidityTable)
             {
-                query.Append(",");
-            }
+                if (group.DoesSupportDataTable || group.DoesSupportEnablementTable)
+                {
+                    query.Append(", ");
+                }
 
-            query.Append(BuildSelectColumns("enablement"));
-
-            if (group.HasAnyExportableQuestions)
-            {
-                query.Append(", ");
-                query.Append(BuildSelectColumns("data"));
-            }
-
-            if (group.HasAnyExportableQuestions)
-            {
-                query.Append(", ");
-                query.Append(BuildSelectColumns("validity", false));
+                query.Append(BuildSelectColumns("validity", group, false));
             }
 
             query.AppendLine($" from ");
-            query.AppendLine($"\"{group.TableName}\" data ");
-                
-            query.Append($"    INNER JOIN \"{@group.EnablementTableName}\" enablement ON data.{InterviewDatabaseConstants.InterviewId} = enablement.{InterviewDatabaseConstants.InterviewId}{Environment.NewLine}");
-            if (group.IsInsideRoster)
+            string wherePrefix = "";
+
+            if (group.DoesSupportDataTable)
             {
-                query.AppendFormat("    AND data.{0} = enablement.{0}{1}", InterviewDatabaseConstants.RosterVector, Environment.NewLine);
+                wherePrefix = "data";
+                query.Append($"\"{group.TableName}\" data {Environment.NewLine}");
             }
 
-            if (group.HasAnyExportableQuestions)
+            if (group.DoesSupportEnablementTable)
             {
-                query.AppendFormat("    INNER JOIN \"{0}\" validity ON data.{1} = validity.{1}{2}",
-                    group.ValidityTableName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+                wherePrefix = "enablement";
 
-                if (group.IsInsideRoster)
+                if (group.DoesSupportDataTable)
                 {
-                    query.AppendFormat("   AND data.{0} = validity.{0} {1}", InterviewDatabaseConstants.RosterVector,
-                        Environment.NewLine);
+                    query.Append(" INNER JOIN ");
+                }
+
+                query.Append($"    \"{group.EnablementTableName}\" enablement "); 
+                if (group.DoesSupportDataTable)
+                {
+                    query.AppendFormat("ON data.{0} = enablement.{0}{1}",
+                        InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+
+                    if (group.IsInsideRoster)
+                    {
+                        query.AppendFormat("    AND data.{0} = enablement.{0}{1}",
+                            InterviewDatabaseConstants.RosterVector, Environment.NewLine);
+                    }
+                }
+            }
+            
+            if (group.DoesSupportValidityTable)
+            {
+                wherePrefix = "validity";
+                if (group.DoesSupportDataTable || group.DoesSupportEnablementTable)
+                {
+                    query.Append(" INNER JOIN ");
+
+                    var joinToTable = @group.DoesSupportDataTable ? "data" : "enablement";
+                    query.Append($"    \"{group.ValidityTableName}\" validity ON {joinToTable}.{InterviewDatabaseConstants.InterviewId} = validity.{InterviewDatabaseConstants.InterviewId}{Environment.NewLine}");
+
+                    if (group.IsInsideRoster)
+                    {
+                        query.AppendFormat("   AND {0}.{1} = validity.{1} {2}", 
+                            joinToTable,
+                            InterviewDatabaseConstants.RosterVector,
+                            Environment.NewLine);
+                    }
                 }
             }
 
-            query.AppendFormat("WHERE data.{0} = ANY(@ids){1}", InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+            query.AppendFormat("WHERE {0}.{1} = ANY(@ids){2}", 
+                wherePrefix,
+                InterviewDatabaseConstants.InterviewId,
+                Environment.NewLine);
             if (group.IsInsideRoster)
             {
-                query.AppendFormat("ORDER BY data.{0}", InterviewDatabaseConstants.RosterVector);
+                query.AppendFormat("ORDER BY {0}.{1}", wherePrefix, InterviewDatabaseConstants.RosterVector);
             }
 
             return query.ToString();
         }
 
+        private static string BuildSelectColumns(string alias, Group @group, bool includeVariables = true)
+        {
+            List<string> columnsCollector = new List<string>();
+
+            foreach (var questionnaireEntity in @group.Children)
+            {
+                if (questionnaireEntity is Question question)
+                {
+                    columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");
+                }
+
+                if (includeVariables && questionnaireEntity is Variable variable)
+                {
+                    columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
+                }
+
+                if (questionnaireEntity is StaticText staticText)
+                {
+                    columnsCollector.Add($" {alias}.\"{staticText.ColumnName}\" as \"{alias}__{staticText.ColumnName}\" ");
+                }
+            }
+
+            return string.Join(", ", columnsCollector);
+        }
     }
 }

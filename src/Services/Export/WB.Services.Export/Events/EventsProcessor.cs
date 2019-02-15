@@ -133,7 +133,7 @@ namespace WB.Services.Export.Events
                         if (feed.Events.Count > 0)
                         {
                             this.logger.LogInformation(
-                                "Events batch processeddone. Last received Global sequence {sequence:n0} out of {total:n0}. Took {duration:g}",
+                                "Last received Global sequence {sequence:n0} out of {total:n0}. Took {duration:g}",
                                 feed.Events.LastOrDefault().GlobalSequence, feed.Total,
                                 feedProcessingStopwatch.Elapsed);
                         }
