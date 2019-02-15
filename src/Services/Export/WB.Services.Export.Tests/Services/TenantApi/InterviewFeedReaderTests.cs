@@ -148,8 +148,7 @@ namespace WB.Services.Export.Tests.Services.TenantApi
         [Test]
         public void can_deserialize_event()
         {
-            var ev =
-                "{\r\n  \"userId\": \"bc606b47-d1d7-4fff-b032-41ef0c9c7635\",\r\n" +
+            var ev ="{\r\n  \"userId\": \"bc606b47-d1d7-4fff-b032-41ef0c9c7635\",\r\n" +
                 "  \"originDate\": \"2018-12-28T16:53:12.4357076+02:00\",\r\n " +
                 " \"questionnaireId\": \"12aabc0b-963d-4afc-b67f-1f8b838a094e\",\r\n  " +
                 "\"questionnaireVersion\": 1,\r\n  \"usesExpressionStorage\": true\r\n}";
@@ -158,6 +157,32 @@ namespace WB.Services.Export.Tests.Services.TenantApi
 
             Assert.That(obj.UserId, Is.EqualTo(Guid.Parse("bc606b47-d1d7-4fff-b032-41ef0c9c7635")));
             Assert.That(obj.QuestionnaireId, Is.EqualTo(Guid.Parse("12aabc0b-963d-4afc-b67f-1f8b838a094e")));
+        }
+
+        [Test]
+        public void can_deserialize_staticTextDeclaredInvalid()
+        {
+            var json = @"{
+              ""$type"": ""StaticTextsDeclaredInvalid"",
+              ""Payload"": {
+                ""originDate"": ""2018-12-06T13:51:50.3777853+02:00"",
+                ""failedValidationConditions"": [
+                  {
+                    ""key"": {
+                      ""id"": ""ed668113-2534-36a1-318c-6ba1ab8233ea"",
+                      ""rosterVector"": []
+                    },
+                    ""value"": [{}]
+                  }
+                ]
+              }
+            }";
+
+            var envelop = JsonConvert.DeserializeObject<Event>(json);
+            var @event =  envelop.Payload as StaticTextsDeclaredInvalid;
+            
+            Assert.NotNull(@event?.FailedValidationConditions);
+            Assert.That(@event?.FailedValidationConditions[0].Key, Is.EqualTo(Create.Identity("ed668113-2534-36a1-318c-6ba1ab8233ea")));
         }
 
         [Test]
