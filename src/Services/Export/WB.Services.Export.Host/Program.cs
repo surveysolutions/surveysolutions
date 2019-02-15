@@ -82,6 +82,7 @@ namespace WB.Services.Export.Host
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
             var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
+            var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
 
             logConfig
                 .MinimumLevel.Verbose()
@@ -93,6 +94,8 @@ namespace WB.Services.Export.Host
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
                 .WriteTo.Postgres(configuration.GetConnectionString("DefaultConnection"), LogEventLevel.Error)
+                .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose, 
+                    retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
                 .WriteTo
                     .File(Path.GetFullPath(fileLog), 
                         rollingInterval: RollingInterval.Day);
@@ -108,12 +111,6 @@ namespace WB.Services.Export.Host
             foreach (var assemblyMetadataAttribute in metadata)
             {
                 logConfig.Enrich.WithProperty(assemblyMetadataAttribute.Key, assemblyMetadataAttribute.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(seqConfig["Uri"]))
-            {
-                var apiKey = seqConfig["ApiKey"];
-                logConfig.WriteTo.Seq(seqConfig["Uri"], apiKey: apiKey, restrictedToMinimumLevel: LogEventLevel.Verbose);
             }
         }
 
