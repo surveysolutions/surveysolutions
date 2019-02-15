@@ -1,0 +1,6 @@
+﻿select data.interview__id as data__interview_id ,  data."numeric1" as "data__numeric1" ,  enablement.instance__state as enablement__instance__state
+, enablement."numeric1" as "enablement__numeric1" ,  enablement."cccccccc-cccc-cccc-cccc-cccccccccccc" as "enablement__cccccccc-cccc-cccc-cccc-cccccccccccc" ,  validity."numeric1" as "validity__numeric1" ,  validity."cccccccc-cccc-cccc-cccc-cccccccccccc" as "validity__cccccccc-cccc-cccc-cccc-cccccccccccc"  from 
+"qqqqqqqqqqqqqqqqqqqqqg$6_gr1" data 
+ INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_gr1_e" enablement ON data.interview__id = enablement.interview__id
+ INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_gr1_v" validity ON data.interview__id = validity.interview__id
+WHERE validity.interview__id = ANY(@ids)

@@ -23,7 +23,7 @@ namespace WB.Services.Export.Interview
                 if (group.HasAnyExportableQuestions)
                 {
                     query.Append(", ");
-                    query.Append(BuildSelectColumns("data", @group));
+                    query.Append(BuildSelectColumns("data", @group, inculdeStaticText: false));
                 }
             }
 
@@ -32,6 +32,14 @@ namespace WB.Services.Export.Interview
                 if (group.DoesSupportDataTable)
                 {
                     query.Append(", ");
+                }
+                else
+                {
+                    query.AppendFormat(" enablement.{0} as data__interview_id, ", InterviewDatabaseConstants.InterviewId);
+                    if (group.IsInsideRoster)
+                    {
+                        query.AppendFormat(" enablement.{0} as data__roster_vector, ", InterviewDatabaseConstants.RosterVector);
+                    }
                 }
 
                 query.AppendFormat(" enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue,
@@ -50,6 +58,14 @@ namespace WB.Services.Export.Interview
                 if (group.DoesSupportDataTable || group.DoesSupportEnablementTable)
                 {
                     query.Append(", ");
+                }
+                else
+                {
+                    query.AppendFormat(" validity.{0} as data__interview_id ", InterviewDatabaseConstants.InterviewId);
+                    if (group.IsInsideRoster)
+                    {
+                        query.AppendFormat(", validity.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
+                    }
                 }
 
                 query.Append(BuildSelectColumns("validity", group, false));
@@ -119,12 +135,17 @@ namespace WB.Services.Export.Interview
             return query.ToString();
         }
 
-        private static string BuildSelectColumns(string alias, Group @group, bool includeVariables = true)
+        private static string BuildSelectColumns(string alias, Group @group, bool includeVariables = true, bool inculdeStaticText = true)
         {
             List<string> columnsCollector = new List<string>();
 
             foreach (var questionnaireEntity in @group.Children)
             {
+                //2cd54b4e-4de1-582e-c327-a006eeebf89a
+                if (questionnaireEntity.PublicKey == Guid.Parse("2cd54b4e-4de1-582e-c327-a006eeebf89a"))
+                {
+                    int a = 5;
+                }
                 if (questionnaireEntity is Question question)
                 {
                     columnsCollector.Add($" {alias}.\"{question.ColumnName}\" as \"{alias}__{question.ColumnName}\" ");
@@ -135,7 +156,7 @@ namespace WB.Services.Export.Interview
                     columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
                 }
 
-                if (questionnaireEntity is StaticText staticText)
+                if (inculdeStaticText && questionnaireEntity is StaticText staticText)
                 {
                     columnsCollector.Add($" {alias}.\"{staticText.ColumnName}\" as \"{alias}__{staticText.ColumnName}\" ");
                 }

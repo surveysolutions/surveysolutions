@@ -35,6 +35,7 @@ namespace WB.Services.Export.Interview
             {
                 var connection = tenantContext.DbContext.Database.GetDbConnection();
                 var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(@group);
+
                 using (var reader = connection.ExecuteReader(interviewsQuery, new {ids = interviewsId}))
                 {
                     while (reader.Read())
@@ -90,12 +91,12 @@ namespace WB.Services.Export.Interview
                             else if (groupChild is StaticText staticText)
                             {
                                 var identity = new Identity(staticText.PublicKey,
-                                    @group.IsInsideRoster ? (int[]) reader["enablement__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
-                                    EntityType = EntityType.Variable,
-                                    InterviewId = (Guid) reader["enablement__interview_id"],
+                                    EntityType = EntityType.StaticText,
+                                    InterviewId = (Guid) reader["data__interview_id"],
                                     IsEnabled = (bool) reader[$"enablement__{staticText.ColumnName}"],
                                     InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
                                         ? Array.Empty<int>()
@@ -108,6 +109,8 @@ namespace WB.Services.Export.Interview
                     }
                 }
             }
+
+            var entity = result.Where(x => x.Identity.Id == Guid.Parse("2cd54b4e-4de1-582e-c327-a006eeebf89a"));
 
             return result;
         }
