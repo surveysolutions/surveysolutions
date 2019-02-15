@@ -23,7 +23,7 @@ namespace WB.Services.Export.Interview
                 if (group.HasAnyExportableQuestions)
                 {
                     query.Append(", ");
-                    query.Append(BuildSelectColumns("data", @group, inculdeStaticText: false));
+                    query.Append(BuildSelectColumns("data", @group, includeStaticText: false));
                 }
             }
 
@@ -45,12 +45,13 @@ namespace WB.Services.Export.Interview
                 query.AppendFormat(" enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue,
                     Environment.NewLine);
 
-                if (group.HasAnyExportableQuestions)
-                {
-                    query.Append(',');
-                    query.Append(BuildSelectColumns("enablement", group));
 
+                var enabledColumnsSelect = BuildSelectColumns("enablement", @group);
+                if (!string.IsNullOrWhiteSpace(enabledColumnsSelect))
+                {
+                    query.Append(", ");
                 }
+                query.Append(enabledColumnsSelect);
             }
 
             if (group.DoesSupportValidityTable)
@@ -135,7 +136,7 @@ namespace WB.Services.Export.Interview
             return query.ToString();
         }
 
-        private static string BuildSelectColumns(string alias, Group @group, bool includeVariables = true, bool inculdeStaticText = true)
+        private static string BuildSelectColumns(string alias, Group @group, bool includeVariables = true, bool includeStaticText = true)
         {
             List<string> columnsCollector = new List<string>();
 
@@ -156,7 +157,7 @@ namespace WB.Services.Export.Interview
                     columnsCollector.Add($" {alias}.\"{variable.ColumnName}\" as \"{alias}__{variable.ColumnName}\" ");
                 }
 
-                if (inculdeStaticText && questionnaireEntity is StaticText staticText)
+                if (includeStaticText && questionnaireEntity is StaticText staticText)
                 {
                     columnsCollector.Add($" {alias}.\"{staticText.ColumnName}\" as \"{alias}__{staticText.ColumnName}\" ");
                 }

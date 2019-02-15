@@ -110,8 +110,6 @@ namespace WB.Services.Export.Interview
                 }
             }
 
-            var entity = result.Where(x => x.Identity.Id == Guid.Parse("2cd54b4e-4de1-582e-c327-a006eeebf89a"));
-
             return result;
         }
 
