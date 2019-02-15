@@ -315,7 +315,12 @@ export default {
 
         selectQuestionnaire(value) {
             this.questionnaireId = value;
-            this.selectQuestionnaireVersion(this.$route.query.version ? { key: this.$route.query.version} : null);
+
+            if(this.$route.query.name !== value.value)
+                this.selectQuestionnaireVersion(null);
+            else
+                this.selectQuestionnaireVersion(this.$route.query.version ? { key: this.$route.query.version} : null);
+            
             this.selectGpsQuestion(null);
             this.gpsQuestions = [];
 
