@@ -19,7 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B749D4D6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Services.Scheduler", "Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj", "{B775DF58-5532-4357-92DD-60FF711ADB36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Services.Scheduler.Tests", "Core\WB.Services.Scheduler.Tests\WB.Services.Scheduler.Tests.csproj", "{6C537C22-8C3E-4434-B624-676C95508FE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Services.Scheduler.Tests", "Core\WB.Services.Scheduler.Tests\WB.Services.Scheduler.Tests.csproj", "{6C537C22-8C3E-4434-B624-676C95508FE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8FC42177-5AA1-41BB-8C01-7702E2D7B1F3}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
