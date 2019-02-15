@@ -35,7 +35,8 @@ const pages = {
             "UploadUsers",
             "MainMenu",
             "WebInterviewSetup",
-            "MapReport"
+            "MapReport",
+			"Settings"
         ]
     },
     webinterview: {
