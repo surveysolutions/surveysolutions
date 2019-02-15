@@ -227,7 +227,7 @@
         & > tr{
             & > td, & > th{
                 border-bottom: none;
-                border-right: none;
+                border-right-color: transparent;
                 border-left: 1px solid #f8f9f9;
                 &:first-child{
                     border-left: none;

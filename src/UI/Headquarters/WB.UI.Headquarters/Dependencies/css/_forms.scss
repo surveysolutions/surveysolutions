@@ -688,3 +688,27 @@ textarea.field-to-fill{
 	display: block;
 	height: 40px;
 }
+
+
+
+.form-block{
+	label{
+		font: 14px/16px "RobotoRegular";
+		font-weight: normal;
+		color: $gray-highlight-font;
+	}
+	input.checkbox-filter{
+		& ~ label{
+			&:hover, &:focus{
+				color: $gray_text
+			}
+	  		.tick {
+	  			left: -5px;
+	  		}
+		}
+		&:checked ~ label{
+			color: #3f3f3f;
+			font-weight: 700;
+		}
+	}
+}
