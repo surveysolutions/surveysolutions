@@ -40,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             LinkedToRosterSingleOptionQuestionModel = 172,
             FilteredSingleOptionQuestionModel = 173,
             CascadingSingleOptionQuestionModel = 174,
-            
+
+            MultiOptionComboboxQuestionModel = 179,
             MultiOptionQuestionModel = 180,
             LinkedMultiOptionQuestionModel = 181,
             YesNoQuestionModel = 182,
@@ -111,6 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         },
                         {InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel>},
                         {InterviewEntityType.MultiOptionQuestionModel, Load<CategoricalMultiViewModel>},
+                        {InterviewEntityType.MultiOptionComboboxQuestionModel, Load<CategoricalMultiComboboxViewModel>},
                         {
                             InterviewEntityType.LinkedMultiOptionQuestionModel,
                             Load<CategoricalMultiLinkedToQuestionViewModel>
@@ -240,9 +242,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(entityId))
-                        {
                             return InterviewEntityType.YesNoQuestionModel;
-                        }
+
+                        if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                            return InterviewEntityType.MultiOptionComboboxQuestionModel;
+
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
                             return questionnaire.IsLinkedToListQuestion(entityId)
