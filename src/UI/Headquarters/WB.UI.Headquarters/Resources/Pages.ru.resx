@@ -228,7 +228,7 @@
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Монитор проверки работоспособности</value>
   </data>
-    <data name="HistoryOfStatuses_By" xml:space="preserve">
+  <data name="HistoryOfStatuses_By" xml:space="preserve">
     <value>Кем</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
@@ -1281,5 +1281,11 @@
   </data>
   <data name="Kb" xml:space="preserve">
     <value>Кб</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Настройка рассылки</value>
+  </data>
+  <data name="EmailProvidersTitle" xml:space="preserve">
+    <value>Настроить сервисы рассылки</value>
   </data>
 </root>
