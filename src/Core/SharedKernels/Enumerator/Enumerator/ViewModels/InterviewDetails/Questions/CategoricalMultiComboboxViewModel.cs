@@ -94,9 +94,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
             if(answeredOptions == null) yield break;
 
-            foreach (var categoricalOption in this.filteredOptionsViewModel.GetOptions()
-                .Where(x => answeredOptions.Contains(x.Value)))
+            var allOptions = this.filteredOptionsViewModel.GetOptions();
+
+            foreach (var optionCode in answeredOptions)
             {
+                var categoricalOption = allOptions.Find(x => x.Value == optionCode);
+
                 var vm = new CategoricalMultiComboboxOptionViewModel(this.userInteraction);
 
                 base.InitViewModel(categoricalOption.Title, categoricalOption.Value, interview, vm,
