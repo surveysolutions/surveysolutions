@@ -1,0 +1,4 @@
+﻿select  enablement.instance__state as enablement__instance__state
+,  validity."cccccccc-cccc-cccc-cccc-cccccccccccc" as "validity__cccccccc-cccc-cccc-cccc-cccccccccccc"  from 
+    "qqqqqqqqqqqqqqqqqqqqqg$6_gr1_e" enablement  INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_gr1_v" validity ON enablement.interview__id = validity.interview__id
+WHERE validity.interview__id = ANY(@ids)

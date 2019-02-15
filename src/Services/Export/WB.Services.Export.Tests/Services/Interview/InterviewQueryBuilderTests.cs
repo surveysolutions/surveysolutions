@@ -56,5 +56,19 @@ namespace WB.Services.Export.Tests.Services.Interview
             // Assert
             Approvals.Verify(query);
         }
+
+        [Test]
+        public void should_be_able_to_build_query_for_group_with_static_text()
+        {
+            var questionnaire = Create.QuestionnaireDocument(Id.gA, 6, "quest", 
+                Create.Group(Id.gB, variable: "gr1", Create.StaticText(Id.gC)));
+            questionnaire.ConnectChildrenWithParent();
+
+            // Act
+            var query = InterviewQueryBuilder.GetInterviewsQuery(questionnaire.Find<Group>(Id.gB));
+
+            // Assert
+            Approvals.Verify(query);
+        }
     }
 }

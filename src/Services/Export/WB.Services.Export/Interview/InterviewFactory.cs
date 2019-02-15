@@ -87,6 +87,23 @@ namespace WB.Services.Export.Interview
                                 FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
                                 result.Add(interviewEntity);
                             }
+                            else if (groupChild is StaticText staticText)
+                            {
+                                var identity = new Identity(staticText.PublicKey,
+                                    @group.IsInsideRoster ? (int[]) reader["enablement__roster_vector"] : RosterVector.Empty);
+                                var interviewEntity = new InterviewEntity
+                                {
+                                    Identity = identity,
+                                    EntityType = EntityType.Variable,
+                                    InterviewId = (Guid) reader["enablement__interview_id"],
+                                    IsEnabled = (bool) reader[$"enablement__{staticText.ColumnName}"],
+                                    InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
+                                        ? Array.Empty<int>()
+                                        : (int[]) reader[$"validity__{staticText.ColumnName}"],
+                                };
+                                
+                                result.Add(interviewEntity);
+                            }
                         }
                     }
                 }
