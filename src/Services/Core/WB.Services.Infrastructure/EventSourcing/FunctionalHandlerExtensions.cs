@@ -32,7 +32,7 @@ namespace WB.Services.Infrastructure.EventSourcing
                 {
                     return interfaces.ToDictionary(i => i.GenericTypeArguments[0], GetHandler);
                 }
-                catch (ArgumentException)
+                catch (ArgumentException ae)
                 {
                     var errors = from @interface in interfaces
                         group @interface by @interface.GenericTypeArguments[0]
@@ -46,7 +46,7 @@ namespace WB.Services.Infrastructure.EventSourcing
                         message += $"\r\n - '{error.Name}'";
                     }
 
-                    throw new ArgumentException(message);
+                    throw new ArgumentException(message, ae);
                 }
             });
         }
