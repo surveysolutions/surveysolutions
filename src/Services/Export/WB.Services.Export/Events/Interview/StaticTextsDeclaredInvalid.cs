@@ -13,8 +13,13 @@ namespace WB.Services.Export.Events.Interview
 
         public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> GetFailedValidationConditionsDictionary()
             => this.failedValidationConditionsDictionary ?? (this.failedValidationConditionsDictionary
-                = this.FailedValidationConditions != null ?
-                   this.FailedValidationConditions.ToDictionary() :
+                   = this.FailedValidationConditions != null ?
+                       this.FailedValidationConditions.ToDictionary() :
                        new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>().ToDictionary());
+
+        public StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions)
+        {
+            this.FailedValidationConditions = failedValidationConditions;
+        }
     }
 }
