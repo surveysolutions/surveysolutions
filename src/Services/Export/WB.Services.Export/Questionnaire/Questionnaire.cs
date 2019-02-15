@@ -169,10 +169,10 @@ namespace WB.Services.Export.Questionnaire
             get
             {
                 return this.groupsCache ?? (
-                           this.groupsCache = this.Find<Group>(_ => true)
+                           this.groupsCache = EntitiesCache.Where(kv => kv.Value is Group)
                                .ToDictionary(
-                                   group => group.PublicKey,
-                                   group => group));
+                                   group => group.Key,
+                                   group => (Group)group.Value));
             }
         }
 
