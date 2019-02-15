@@ -15,6 +15,26 @@ namespace WB.Services.Export.Tests.Services.Interview
     public class InterviewQueryBuilderTests
     {
         [Test]
+        public void should_not_include_static_text_in_data_part_of_query()
+        {
+            var questionnaire = Create.QuestionnaireDocument(Id.gA, 6, "quest",
+                Create.Group(Id.gB, 
+                    variable: "gr1",
+                    children: new IQuestionnaireEntity[]
+                    {
+                        Create.NumericIntegerQuestion(Id.gE, variable: "numeric1"),
+                        Create.StaticText(Id.gC)
+                    }));
+            questionnaire.ConnectChildrenWithParent();
+
+            // Act
+            var query = InterviewQueryBuilder.GetInterviewsQuery(questionnaire.Find<Group>(Id.gB));
+
+            // Assert
+            Approvals.Verify(query);
+        }
+
+        [Test]
         public void should_build_query_for_group_with_question()
         {
             var questionnaire = Create.QuestionnaireDocument(Id.gA, 6, "quest", Create.Group(Id.gB, "group1",
