@@ -50,6 +50,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Diag;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -288,6 +289,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
+
+            registry.Bind<IEmailService, EmailService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
