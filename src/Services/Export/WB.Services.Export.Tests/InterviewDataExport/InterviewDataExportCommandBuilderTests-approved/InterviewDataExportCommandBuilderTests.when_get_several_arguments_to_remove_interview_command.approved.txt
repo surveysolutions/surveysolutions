@@ -1,1 +1,1 @@
-﻿DELETE FROM "fakeTableName1"       WHERE interview__id = ANY(@interviewIds);
+﻿DELETE FROM "fakeTableName1" WHERE interview__id = ANY(@interviewIds);

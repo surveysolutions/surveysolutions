@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Text;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Services.Export.Infrastructure;
@@ -12,132 +13,125 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
     {
         public DbCommand CreateUpdateValueForTable(string tableName, RosterTableKey rosterTableKey, IEnumerable<UpdateValueInfo> updateValueInfos)
         {
-            if (!updateValueInfos.Any())
-                throw new ArgumentException("don't have any update value info to create command");
-
             bool isTopLevel = rosterTableKey.RosterVector == null || rosterTableKey.RosterVector.Length == 0;
 
             NpgsqlCommand updateCommand = new NpgsqlCommand();
 
-            var setValues = string.Empty;
+            StringBuilder sql = new StringBuilder();
+            sql.Append("UPDATE \"").Append(tableName).Append('"')
+                .Append(" SET ");
 
             int index = 0;
             foreach (var updateValueInfo in updateValueInfos)
             {
                 index++;
-                setValues += $"   \"{updateValueInfo.ColumnName}\" = @answer{index},";
+                sql.Append('"').Append(updateValueInfo.ColumnName).Append("\" = @answer").Append(index).Append(',');
 
                 if (updateValueInfo.Value == null)
                     updateCommand.Parameters.AddWithValue($"@answer{index}", DBNull.Value);
                 else
                     updateCommand.Parameters.AddWithValue($"@answer{index}", updateValueInfo.ValueType, updateValueInfo.Value);
             }
-            setValues = setValues.TrimEnd(',');
 
-            var text = $"UPDATE \"{tableName}\" " +
-                       $"   SET {setValues}" +
-                       $" WHERE {InterviewDatabaseConstants.InterviewId} = @interviewId";
+            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
+
+            sql.Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId");
 
             updateCommand.Parameters.AddWithValue("@interviewId", NpgsqlDbType.Uuid, rosterTableKey.InterviewId);
 
             if (!isTopLevel)
             {
-                text += $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector;";
+                sql.Append(" AND ").Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector");
                 updateCommand.Parameters.AddWithValue("@rosterVector", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterTableKey.RosterVector.Coordinates.ToArray());
             }
 
-            updateCommand.CommandText = text;
+            sql.Append(';');
+
+            updateCommand.CommandText = sql.ToString();
             return updateCommand;
         }
 
 
         public DbCommand CreateInsertInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
-            if (!interviewIds.Any())
-                throw new ArgumentException("don't have any interview id to create command");
-
-            var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId})" +
-                       $"           VALUES ";
+            StringBuilder sql = new StringBuilder();
+            sql.Append($"INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append($")")
+                .Append("           VALUES ");
             NpgsqlCommand insertCommand = new NpgsqlCommand();
 
             int index = 0;
             foreach (var interviewId in interviewIds)
             {
                 index++;
-                text += $" (@interviewId{index}),";
+                sql.Append(" (@interviewId").Append(index).Append("),");
                 insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, interviewId);
             }
 
-            text = text.TrimEnd(',');
-            text += ";";
+            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
+            sql.Append(';');
 
-            insertCommand.CommandText = text;
+            insertCommand.CommandText = sql.ToString();
             return insertCommand;
         }
 
         public DbCommand CreateDeleteInterviewCommandForTable(string tableName, IEnumerable<Guid> interviewIds)
         {
-            if (!interviewIds.Any())
-                throw new ArgumentException("don't have any interview id to create command");
-
-            var text = $"DELETE FROM \"{tableName}\" " +
-                       $"      WHERE {InterviewDatabaseConstants.InterviewId} = ANY(@interviewIds);";
-            NpgsqlCommand deleteCommand = new NpgsqlCommand(text);
+            StringBuilder sql = new StringBuilder();
+            sql.Append("DELETE FROM \"").Append(tableName).Append('"')
+                .Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = ANY(@interviewIds);");
+            NpgsqlCommand deleteCommand = new NpgsqlCommand(sql.ToString());
             deleteCommand.Parameters.AddWithValue("@interviewIds", NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
             return deleteCommand;
         }
 
         public DbCommand CreateAddRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
-            if (!rosterInfos.Any())
-                throw new ArgumentException("don't have any roster info to create command");
-
-            var text = $"INSERT INTO \"{tableName}\" ({InterviewDatabaseConstants.InterviewId}, {InterviewDatabaseConstants.RosterVector})" +
-                       $"           VALUES";
+            StringBuilder sql = new StringBuilder();
+            sql.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(", ").Append(InterviewDatabaseConstants.RosterVector).Append(")")
+                .Append(" VALUES");
 
             NpgsqlCommand insertCommand = new NpgsqlCommand();
             int index = 0;
             foreach (var rosterInfo in rosterInfos)
             {
                 index++;
-                text += $"       (@interviewId{index}, @rosterVector{index}),";
+                sql.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
                 insertCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
                 insertCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
-            text = text.TrimEnd(',');
-            text += ";";
+            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
+            sql.Append(';');
 
-            insertCommand.CommandText = text;
+            insertCommand.CommandText = sql.ToString();
             return insertCommand;
         }
 
         public DbCommand CreateRemoveRosterInstanceForTable(string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
-            if (!rosterInfos.Any())
-                throw new ArgumentException("don't have any roster info to create command");
-
-            var text = $"DELETE FROM \"{tableName}\" " +
-                       $"      WHERE ";
+            StringBuilder sql = new StringBuilder();
+            sql.Append("DELETE FROM \"").Append(tableName).Append('"')
+                .Append(" WHERE ");
             NpgsqlCommand deleteCommand = new NpgsqlCommand();
 
             int index = 0;
             foreach (var rosterInfo in rosterInfos)
             {
                 index++;
-                text += $" (" +
-                        $"   {InterviewDatabaseConstants.InterviewId} = @interviewId{index}" +
-                        $"   AND {InterviewDatabaseConstants.RosterVector} = @rosterVector{index}" +
-                        $" ) " +
-                        $" OR";
+                sql.Append(" (")
+                    .Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId").Append(index)
+                    .Append(" AND ")
+                    .Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector").Append(index)
+                    .Append(')')
+                    .Append(" OR");
                 deleteCommand.Parameters.AddWithValue($"@interviewId{index}", NpgsqlDbType.Uuid, rosterInfo.InterviewId);
                 deleteCommand.Parameters.AddWithValue($"@rosterVector{index}", NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
-            text = text.TrimEnd('O', 'R');
-            text += ";";
+            sql.Remove(sql.Length - 2, 2); // TrimEnd('OR');
+            sql.Append(';');
 
-            deleteCommand.CommandText = text;
+            deleteCommand.CommandText = sql.ToString();
 
             return deleteCommand;
         }
