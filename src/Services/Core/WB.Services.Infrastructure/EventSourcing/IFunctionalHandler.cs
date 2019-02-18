@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.Services.Infrastructure.EventSourcing
@@ -16,11 +17,8 @@ namespace WB.Services.Infrastructure.EventSourcing
         Task SaveStateAsync(CancellationToken cancellationToken = default);
     }
 
-    /// <summary>
-    /// Functional handlers marked with this interface will be executed earlier than other handlers
-    /// </summary>
-    public interface IHighPriorityFunctionalHandler : IStatefulDenormalizer
+    public interface IEventsFilter
     {
-       
+        Task<List<Event>> FilterAsync(ICollection<Event> feed);
     }
 }

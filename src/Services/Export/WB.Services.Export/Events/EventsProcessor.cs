@@ -72,20 +72,19 @@ namespace WB.Services.Export.Events
                         var feedProcessingStopwatch = Stopwatch.StartNew();
                         if (feed.Events.Count > 0)
                         {
-                            var priorityHandlers = scope.ServiceProvider
-                                .GetServices<IHighPriorityFunctionalHandler>()
-                                .Cast<IStatefulDenormalizer>();
+                            var eventsFilter = scope.ServiceProvider.GetService<IEventsFilter>();
+                            var eventsToPublish = await eventsFilter.FilterAsync(feed.Events);
+
                             var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
                                 .Cast<IStatefulDenormalizer>();
 
-                            var all = priorityHandlers.Union(handlers).ToArray();
-
                             try
                             {
-                                foreach (var handler in all)
+                                foreach (var handler in handlers)
                                 {
-                                    foreach (var ev in feed.Events.Where(ev => ev.Payload != null))
+                                    foreach (var ev in eventsToPublish)
                                     {
+                                        
                                         try
                                         {
                                             await handler.Handle(ev, token);

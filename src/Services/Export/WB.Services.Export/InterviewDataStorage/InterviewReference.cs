@@ -16,6 +16,22 @@ namespace WB.Services.Export.InterviewDataStorage
         public string Key { get; set; }
 
         public DateTime? UpdateDateUtc { get; set; }
+
+        public DateTime? DeletedAtUtc { get; set; }
+    }
+
+    public class DeletedQuestionnaireReference
+    {
+        protected DeletedQuestionnaireReference()
+        {
+        }
+
+        public DeletedQuestionnaireReference(string id)
+        {
+            this.Id = id;
+        }
+
+        public string Id { get; set; }
     }
 
     [Table("metadata")]

@@ -209,6 +209,8 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
+        public bool IsDeleted { get; set; }
+
         public IEnumerable<Group> GetInterviewLevelGroups()
         {
             var itemsQueue = new Queue<Group>();

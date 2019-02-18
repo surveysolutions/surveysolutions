@@ -6,6 +6,8 @@ namespace WB.Services.Export.Questionnaire.Services
 {
     public interface IQuestionnaireStorage
     {
-        Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, CancellationToken token = default);
+        Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, 
+            bool forceUpdate = false,
+            CancellationToken token = default);
     }
 }
