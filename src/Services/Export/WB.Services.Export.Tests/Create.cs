@@ -491,7 +491,8 @@ namespace WB.Services.Export.Tests
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 QuestionText = questionText,
-                VariableName = variable?? "single"
+                VariableName = variable?? "single",
+                LinkedToQuestionId = linkedToQuestionId
             };
         }
 
