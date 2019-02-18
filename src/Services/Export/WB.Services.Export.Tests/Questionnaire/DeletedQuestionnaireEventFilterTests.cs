@@ -46,6 +46,53 @@ namespace WB.Services.Export.Tests.Questionnaire
         }
 
         [Test]
+        public async Task should_be_able_to_handle_two_interview_created_events()
+        {
+            var interviewId = Id.g1;
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                id: Id.gA,
+                children: Create.TextQuestion(Id.gB));
+            questionnaire.Id = $"{Id.gA:N}$1";
+
+            var eventFeed = new List<Event>
+            {
+                new Event
+                {
+                    EventSourceId = interviewId,
+                    Payload = new InterviewCreated
+                    {
+                        QuestionnaireId = questionnaire.PublicKey,
+                        QuestionnaireVersion = 1
+                    }
+                },
+                new Event
+                {
+                    EventSourceId = interviewId,
+                    Payload = new InterviewOnClientCreated
+                    {
+                        QuestionnaireId = questionnaire.PublicKey,
+                        QuestionnaireVersion = 1
+                    }
+                }
+
+            };
+
+            var questionnaireStorage = Create.QuestionnaireStorage(questionnaire);
+
+            var filter = CreateFilter(questionnaireStorage: questionnaireStorage);
+
+            // Act
+            var result = await filter.FilterAsync(eventFeed);
+
+            // Assert
+            Assert.That(result, Has.Count.EqualTo(2));
+
+            var storedReference = this.tenantContext.DbContext.InterviewReferences.Find(interviewId);
+            Assert.That(storedReference, Is.Not.Null, "Should store questionnaire id <-> interview id relation");
+        }
+
+        [Test]
         public async Task should_handle_questionnaire_deletion()
         {
             var interviewId = Id.g1;
