@@ -11,4 +11,13 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasKey(x => x.InterviewId);
         }
     }
+
+    public class DeletedQuestionnaireReferenceTypeConfiguration : IEntityTypeConfiguration<DeletedQuestionnaireReference>
+    {
+        public void Configure(EntityTypeBuilder<DeletedQuestionnaireReference> builder)
+        {
+            builder.ToTable("__deleted_questionnaire_reference");
+            builder.HasKey(x => x.Id);
+        }
+    }
 }

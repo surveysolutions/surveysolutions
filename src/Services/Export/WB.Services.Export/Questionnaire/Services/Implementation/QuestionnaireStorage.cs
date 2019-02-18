@@ -19,20 +19,17 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
         private readonly ILogger<QuestionnaireStorage> logger;
         private readonly IMemoryCache memoryCache;
         private readonly IServiceProvider serviceProvider;
-        private readonly IInterviewDatabaseInitializer interviewDatabaseInitializer;
         private readonly JsonSerializerSettings serializer;
 
         public QuestionnaireStorage(ITenantApi<IHeadquartersApi> tenantApi,
             ILogger<QuestionnaireStorage> logger,
             IMemoryCache memoryCache,
-            IServiceProvider serviceProvider,
-            IInterviewDatabaseInitializer interviewDatabaseInitializer)
+            IServiceProvider serviceProvider)
         {
             this.tenantApi = tenantApi;
             this.logger = logger;
             this.memoryCache = memoryCache;
             this.serviceProvider = serviceProvider;
-            this.interviewDatabaseInitializer = interviewDatabaseInitializer;
             this.serializer = new JsonSerializerSettings
             {
                 SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
@@ -42,13 +39,26 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1);
 
-        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, CancellationToken token = default)
+        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, 
+            QuestionnaireId questionnaireId, 
+            bool forceUpdate = false,
+            CancellationToken token = default)
         {
             var key = $"{nameof(QuestionnaireStorage)}:{tenant}:{questionnaireId}";
 
-            if (memoryCache.TryGetValue(key, out var result))
+            var gotFromCache = memoryCache.TryGetValue(key, out var result);
+
+            if (gotFromCache)
             {
-                return (QuestionnaireDocument)result;
+                var questionnaireDocument = (QuestionnaireDocument)result;
+                if (!questionnaireDocument.IsDeleted && forceUpdate)
+                {
+                    memoryCache.Remove(key);
+                }
+                else
+                {
+                    return questionnaireDocument;
+                }
             }
 
             await CacheLock.WaitAsync(token);
@@ -70,15 +80,17 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
                     SlidingExpiration = TimeSpan.FromMinutes(5)
                 });
 
-                using (var scope = this.serviceProvider.CreateScope())
+                if (!questionnaire.IsDeleted)
                 {
-                    scope.ServiceProvider.SetTenant(tenant);
-                    var initializer = scope.ServiceProvider.GetService<IInterviewDatabaseInitializer>();
-                    initializer.CreateQuestionnaireDbStructure(questionnaire);
-                    
-                    var tenantName = tenant.Name;
-                    logger.LogInformation("Created database structure for {tenantName} ({questionnaireId})", tenantName, questionnaireId);
+                    using (var scope = this.serviceProvider.CreateScope())
+                    {
+                        scope.ServiceProvider.SetTenant(tenant);
+                        var initializer = scope.ServiceProvider.GetService<IDatabaseSchemaService>();
+                        initializer.CreateQuestionnaireDbStructure(questionnaire);
 
+                        var tenantName = tenant.Name;
+                        logger.LogInformation("Created database structure for {tenantName} ({questionnaireId})", tenantName, questionnaireId);
+                    }
                 }
 
                 return questionnaire;

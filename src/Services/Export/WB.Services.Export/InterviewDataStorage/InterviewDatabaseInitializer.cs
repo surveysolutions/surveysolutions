@@ -11,12 +11,14 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
-    public interface IInterviewDatabaseInitializer
+    public interface IDatabaseSchemaService
     {
         void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
+
+        void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
     }
 
-    public class InterviewDatabaseInitializer : IInterviewDatabaseInitializer
+    public class DatabaseSchemaService : IDatabaseSchemaService
     {
         private readonly ITenantContext tenantContext;
 
@@ -39,7 +41,7 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         private static readonly HashSet<string> createdQuestionnaireTables = new HashSet<string>();
-        public InterviewDatabaseInitializer(ITenantContext tenantContext)
+        public DatabaseSchemaService(ITenantContext tenantContext)
         {
             this.tenantContext = tenantContext;
         }
@@ -69,6 +71,28 @@ namespace WB.Services.Export.InterviewDataStorage
             }
 
             createdQuestionnaireTables.Add(key);
+        }
+
+        public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        {
+            var db = tenantContext.DbContext.Database.GetDbConnection();
+            foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
+            {
+                if (storedGroup.DoesSupportDataTable)
+                {
+                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE ");
+                }
+
+                if (storedGroup.DoesSupportEnablementTable)
+                {
+                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE");
+                }
+
+                if (storedGroup.DoesSupportValidityTable)
+                {
+                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
+                }
+            }
         }
 
         private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)

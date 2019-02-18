@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
     public class InterviewSummaryDenormalizer:
-        IHighPriorityFunctionalHandler,
+        IFunctionalHandler,
         IEventHandler<InterviewCreated>,
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewStatusChanged>,
@@ -39,29 +40,16 @@ namespace WB.Services.Export.InterviewDataStorage
             this.tenantContext = tenantContext;
         }
 
-        private readonly Dictionary<Guid, InterviewReference> added = new Dictionary<Guid, InterviewReference>();
         private readonly Dictionary<Guid, List<Action<InterviewReference>>> changes = new Dictionary<Guid, List<Action<InterviewReference>>>();
-        private readonly HashSet<Guid> removed = new HashSet<Guid>();
 
         public void Handle(PublishedEvent<InterviewCreated> @event)
         {
-            added.Add(
-                @event.EventSourceId,
-                new InterviewReference
-                {
-                    InterviewId = @event.EventSourceId,
-                    QuestionnaireId = @event.Event.QuestionnaireIdentity,
-                    Status = InterviewStatus.Created,
-                    UpdateDateUtc = @event.EventTimeStamp
-                });
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s=> s.Status = InterviewStatus.Created);
         }
 
         public void Handle(PublishedEvent<InterviewHardDeleted> @event)
         {
-            if (!added.Remove(@event.EventSourceId))
-            {
-                removed.Add(@event.EventSourceId);
-            }
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, summary => summary.Status = InterviewStatus.Deleted);
         }
 
         public void Handle(PublishedEvent<InterviewStatusChanged> @event)
@@ -93,16 +81,6 @@ namespace WB.Services.Export.InterviewDataStorage
         public async Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
             var db = this.tenantContext.DbContext;
-
-            db.InterviewReferences.AddRange(added.Values);
-
-            var arg = new object[1];
-            foreach (var remove in removed)
-            {
-                arg[0] = remove;
-                var reference = await db.InterviewReferences.FindAsync(arg, cancellationToken);
-                db.InterviewReferences.Remove(reference);
-            }
 
             foreach (KeyValuePair<Guid, List<Action<InterviewReference>>> change in changes)
             {

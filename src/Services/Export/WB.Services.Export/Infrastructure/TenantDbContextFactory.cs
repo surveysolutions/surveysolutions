@@ -19,7 +19,7 @@ namespace WB.Services.Export.Infrastructure
 
             var tenantInfo = new TenantInfo
             {
-                Id = new TenantId("11111111111111111111111111111111"),
+                Id = TenantId.None,
                 Name = null
             };
             var connectionSettings = Options.Create(new DbConnectionSettings

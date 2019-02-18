@@ -19,6 +19,8 @@
             return string.Equals(Id, other.Id);
         }
 
+        public static TenantId None { get; } = new TenantId(string.Empty);
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
