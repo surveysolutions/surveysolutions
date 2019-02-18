@@ -40,6 +40,7 @@ namespace WB.Services.Export
 
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
+            services.AddTransient<IEventsFilter, DeletedQuestionnaireEventFilter>();
             services.AddTransient<IInterviewsToExportSource, InterviewsToExportSource>();
             services.AddTransient<ICsvWriter, CsvWriter>();
             services.AddTransient<ITabularFormatExportService, CsvExport.Implementation.TabularFormatExportService>();
@@ -76,7 +77,7 @@ namespace WB.Services.Export
             services.AddTransient<IMetadataWriter, MetadataWriter>();
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
             services.AddTransient<IExportJob, ExportJob>();
-            services.AddTransient<IInterviewDatabaseInitializer, InterviewDatabaseInitializer>();
+            services.AddTransient<IDatabaseSchemaService, DatabaseSchemaService>();
             services.AddTransient<IInterviewDataExportCommandBuilder, InterviewDataExportCommandBuilder>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
@@ -96,10 +97,6 @@ namespace WB.Services.Export
         public static void RegisterFunctionalHandlers(this IServiceCollection services, params Type[] implementingTypes)
         {
             services.Scan(scan => scan
-                .FromAssembliesOf(implementingTypes)
-                    .AddClasses(classes => classes.AssignableTo<IHighPriorityFunctionalHandler>())
-                    .AsImplementedInterfaces()
-                .WithTransientLifetime()
                 .FromAssembliesOf(implementingTypes)
                     .AddClasses(classes => classes.AssignableTo<IFunctionalHandler>())
                     .AsImplementedInterfaces()

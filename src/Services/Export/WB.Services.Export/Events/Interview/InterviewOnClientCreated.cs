@@ -12,5 +12,8 @@ namespace WB.Services.Export.Events.Interview
         public bool UsesExpressionStorage { get; set; }
 
         public bool? IsAudioRecordingEnabled { get; set; }
+
+        public string QuestionnaireIdentity => QuestionnaireId.ToString("N") + "$" +
+                                               QuestionnaireVersion;
     }
 }

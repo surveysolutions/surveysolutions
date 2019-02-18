@@ -4,6 +4,7 @@ using Npgsql;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Infrastructure.Storage;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -22,6 +23,7 @@ namespace WB.Services.Export.Infrastructure
 
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
+        public DbSet<DeletedQuestionnaireReference> DeletedQuestionnaires { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -53,8 +55,14 @@ namespace WB.Services.Export.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.UseSnakeCaseNaming();
-            modelBuilder.HasDefaultSchema(tenantContext.Tenant.SchemaName());
+
+            if (!this.tenantContext.Tenant.Id.Equals(TenantId.None))
+            {
+                modelBuilder.HasDefaultSchema(tenantContext.Tenant.SchemaName());
+            }
+
             modelBuilder.ApplyConfiguration(new InterviewReferenceEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new DeletedQuestionnaireReferenceTypeConfiguration());
         }
     }
 }

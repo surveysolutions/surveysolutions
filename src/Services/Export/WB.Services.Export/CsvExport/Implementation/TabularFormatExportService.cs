@@ -71,7 +71,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             var fromDate = settings.FromDate;
             var toDate = settings.ToDate;
 
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity, cancellationToken);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity, token: cancellationToken);
 
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
