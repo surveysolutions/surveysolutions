@@ -52,8 +52,13 @@ namespace WB.Services.Export.Events
                 await tenantDbContext.Database.MigrateAsync(token);
 
                 Stopwatch globalStopwatch = Stopwatch.StartNew();
+                var pageSize = 10000;
+                var eta = new SimpleRunningAverage(5);
+
                 while (true)
                 {
+                    var executionTrack = Stopwatch.StartNew();
+
                     using (var tr = tenantDbContext.Database.BeginTransaction())
                     {
                         var metadata = tenantDbContext.Metadata;
@@ -65,9 +70,9 @@ namespace WB.Services.Export.Events
 
                         dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
 
-                        var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
+                        var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, pageSize);
                         maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
-
+                        
 
                         var feedProcessingStopwatch = Stopwatch.StartNew();
                         if (feed.Events.Count > 0)
@@ -116,8 +121,6 @@ namespace WB.Services.Export.Events
 
                         tr.Commit();
 
-                     
-
                         var totalEventsToRead = maximumSequenceToQuery - startedReadAt;
                         var eventsProcessed = metadata.GlobalSequence - startedReadAt;
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
@@ -128,13 +131,16 @@ namespace WB.Services.Export.Events
                         if (metadata.GlobalSequence >= maximumSequenceToQuery)
                             break;
 
+                        pageSize = (int)eta.Add(pageSize / executionTrack.Elapsed.TotalSeconds);
+
                         feedProcessingStopwatch.Stop();
                         if (feed.Events.Count > 0)
                         {
                             this.logger.LogInformation(
-                                "Last received Global sequence {sequence:n0} out of {total:n0}. Took {duration:g}",
-                                feed.Events.LastOrDefault().GlobalSequence, feed.Total,
-                                feedProcessingStopwatch.Elapsed);
+                                "Processed {pageSize} events. GlobalSequence: {sequence:n0} out of {total:n0}. Took {duration:g}. ETA: {eta}",
+                                    pageSize,
+                                feed.Events.Last().GlobalSequence, feed.Total,
+                                feedProcessingStopwatch.Elapsed, eta.Eta(maximumSequenceToQuery.Value - feed.Events.Last().GlobalSequence));
                         }
                     }
                 }

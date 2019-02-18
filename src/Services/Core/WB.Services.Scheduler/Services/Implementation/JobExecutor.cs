@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Storage;
 using WB.Services.Scheduler.Model;
-using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {
