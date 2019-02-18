@@ -1,5 +1,6 @@
 <template>
-    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')">
+    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')" :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')" 
+      :hasSearch="true">
         <DataTables ref="table" :tableOptions="tableOptions" exportable hasTotalRow></DataTables>
     </HqLayout>
 </template>

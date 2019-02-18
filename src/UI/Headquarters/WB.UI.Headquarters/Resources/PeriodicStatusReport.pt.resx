@@ -183,7 +183,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Número de transações de entrevista pelo Supervisor</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>Número de aprovações e rejeições, realizadas por um supervisor em questionários coletados por um {0}.</value>
   </data>
   <data name="Period" xml:space="preserve">

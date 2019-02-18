@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 {
     internal class when_handling_question_answered_event_when_ordered_functionality_is_enabled : YesNoQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 && _.IsRosterSizeQuestion(questionId.Id) == false
             );
 
-            var filteredOptionsViewModel = Abc.Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -64,22 +65,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         public void BecauseOf()
         {
-            viewModel.Options.Single(o => o.Value == 4).YesSelected = true;
+            viewModel.Options.Single(o => o.Value == 4).Checked = true;
+            viewModel.Options.Single(o => o.Value == 4).CheckAnswerCommand.Execute();
         }
 
 
-        [NUnit.Framework.Test] public void should_send_answers_to_command_service () 
+        [Test] public void should_send_answers_to_command_service () 
         {
             answering.Verify(s => s.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerYesNoQuestion>()), Times.Once());
         }
 
-        [NUnit.Framework.Test] public void should_send_answers_in_correct_order () 
+        [Test] public void should_send_answers_in_correct_order () 
         {
             answering.Verify(s => s.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
                 c =>
                     c.AnsweredOptions.Length == 5
-                    && c.AnsweredOptions[0].Yes == true  && c.AnsweredOptions[0].OptionValue == 5
-                    && c.AnsweredOptions[1].Yes == false && c.AnsweredOptions[1].OptionValue == 1
+                    && c.AnsweredOptions[0].Yes == false && c.AnsweredOptions[0].OptionValue == 1
+                    && c.AnsweredOptions[1].Yes == true  && c.AnsweredOptions[1].OptionValue == 5
                     && c.AnsweredOptions[2].Yes == true  && c.AnsweredOptions[2].OptionValue == 3
                     && c.AnsweredOptions[3].Yes == true  && c.AnsweredOptions[3].OptionValue == 2
                     && c.AnsweredOptions[4].Yes == true  && c.AnsweredOptions[4].OptionValue == 4
@@ -88,7 +90,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         }
 
         static Mock<AnsweringViewModel> answering;
-        static YesNoQuestionViewModel viewModel;
+        static CategoricalYesNoViewModel viewModel;
         static Identity questionId;
         private static Guid questionGuid;
     }

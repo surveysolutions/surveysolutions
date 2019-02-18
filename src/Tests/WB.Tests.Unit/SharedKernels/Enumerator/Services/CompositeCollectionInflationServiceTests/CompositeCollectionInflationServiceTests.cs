@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Core;
 using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 
@@ -20,6 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         {
             base.Setup();
             Mvx.Resolve<IMvxSettings>().AlwaysRaiseInpcOnUserInterfaceThread = false;
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(Stub.MvxMainThreadAsyncDispatcher());
         }
 
         [Test]
@@ -262,6 +266,28 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
             //Assert
             Assert.That(inflatedViewModels, Contains.Item(questionWithoutProgressViewModel.Answering));
             Assert.That(inflatedViewModels, Contains.Item(questionWithProgressQuestionViewModel.Answering));
+        }
+
+        [Test]
+        public void should_handle_plain_rosters()
+        {
+
+            var rosterViewModel = Create.ViewModel.RosterViewModel();
+            var nestedRoster = Create.ViewModel.RosterViewModel();
+            rosterViewModel.RosterInstances = new CovariantObservableCollection<IInterviewEntityViewModel>
+            {
+                Create.ViewModel.TextQuestionViewModel(), nestedRoster
+            };
+
+            var service = CreateCompositeCollectionInflationService();
+            var viewModels = new List<IInterviewEntityViewModel>{rosterViewModel};
+
+            // Act
+            CompositeCollection<ICompositeEntity> inflatedCompositeCollection = service.GetInflatedCompositeCollection(viewModels);
+            
+            // Assert
+            inflatedCompositeCollection.Should().NotContain(x => x.Equals(rosterViewModel));
+            inflatedCompositeCollection.Should().Contain(x => x.Equals(nestedRoster));
         }
 
         private static CompositeCollectionInflationService CreateCompositeCollectionInflationService()

@@ -228,4 +228,10 @@
   <data name="WithErrors" xml:space="preserve">
     <value>有错误</value>
   </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>用户未被授权执行被提供的操作</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>团队</value>
+  </data>
 </root>

@@ -125,8 +125,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             });
 
         [HttpPost]
-        public void ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request) 
-            => this.interviewBrokenPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
+        public HttpResponseMessage ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request)
+        {
+            this.interviewBrokenPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
+            return Request.CreateResponse(HttpStatusCode.NoContent);
+        }
 
         [HttpGet]
         [ApiNoCache]

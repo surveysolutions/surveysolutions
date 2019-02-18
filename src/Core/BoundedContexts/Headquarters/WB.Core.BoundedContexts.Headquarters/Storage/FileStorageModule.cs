@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
+            registry.Bind<IAudioAuditFileStorage, AudioAuditFileStorage>();
 
             var isS3Enabled = ConfigurationManager.AppSettings["Storage.S3.Enable"].ToBool(true);
 

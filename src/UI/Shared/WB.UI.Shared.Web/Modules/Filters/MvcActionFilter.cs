@@ -2,38 +2,34 @@
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class MvcActionFilter : ActionFilterAttribute
+    public class MvcActionFilter<TFilter> : IActionFilter, IResultFilter
+        where TFilter : System.Web.Mvc.ActionFilterAttribute
     {
-        private readonly ActionFilterAttribute filterInstance;
+        private readonly TFilter filterInstance;
 
-        public MvcActionFilter(ActionFilterAttribute filter)
+        public MvcActionFilter(TFilter filter)
         {
             this.filterInstance = filter;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             filterInstance.OnActionExecuting(filterContext);
-
-            base.OnActionExecuting(filterContext);
         }
 
-        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        public void OnActionExecuted(ActionExecutedContext filterContext)
         {
             filterInstance.OnActionExecuted(filterContext);
-            base.OnActionExecuted(filterContext);
         }
 
-        public override void OnResultExecuting(ResultExecutingContext filterContext)
+        public void OnResultExecuting(ResultExecutingContext filterContext)
         {
             filterInstance.OnResultExecuting(filterContext);
-            base.OnResultExecuting(filterContext);
         }
 
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        public void OnResultExecuted(ResultExecutedContext filterContext)
         {
             filterInstance.OnResultExecuted(filterContext);
-            base.OnResultExecuted(filterContext);
         }
     }
 }

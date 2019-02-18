@@ -259,6 +259,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Record audio.
+        /// </summary>
+        internal static string RecordAudio {
+            get {
+                return ResourceManager.GetString("RecordAudio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, interviewer application will record interview process. When audio audit is on an amount of synchronization data would be significantly larger.
+        /// </summary>
+        internal static string RecordAudioTitle {
+            get {
+                return ResourceManager.GetString("RecordAudioTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {

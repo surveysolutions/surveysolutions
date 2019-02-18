@@ -628,6 +628,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When audio audit is on an amount of synchronization data would be significantly larger. Do you want to proceed?.
+        /// </summary>
+        public static string GlobalSettings_TurningAudioAuditOn {
+            get {
+                return ResourceManager.GetString("GlobalSettings_TurningAudioAuditOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An unexpected error occurred. We are sorry for inconvenience..
         /// </summary>
         public static string GlobalSettings_UnhandledExceptionMessage {
@@ -1258,15 +1267,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database.
-        /// </summary>
-        public static string InterviewerProfile_DatabaseInfo {
-            get {
-                return ResourceManager.GetString("InterviewerProfile_DatabaseInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} uploaded, {1} downloaded.
         /// </summary>
         public static string InterviewerProfile_DataStatsFormat {
@@ -1623,6 +1623,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_StorageInfo {
             get {
                 return ResourceManager.GetString("InterviewerProfile_StorageInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System info and non-synchronized interview data.
+        /// </summary>
+        public static string InterviewerProfile_StorageSizeInfo {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_StorageSizeInfo", resourceCulture);
             }
         }
         
@@ -2073,6 +2082,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_UserNameTitle {
             get {
                 return ResourceManager.GetString("Interviewers_UserNameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Devices/Interviewer report shows number of interviewer accounts on this server affected by each issue.
+        /// </summary>
+        public static string InterviewersAndDevicesSubtitle {
+            get {
+                return ResourceManager.GetString("InterviewersAndDevicesSubtitle", resourceCulture);
             }
         }
         
@@ -3104,6 +3122,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status by surveys.
+        /// </summary>
+        public static string SurveysAndStatuses_HeadquartersDescription {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_HeadquartersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} interviews.
         /// </summary>
         public static string SurveysAndStatuses_InterviewerStatisticsFormat {
@@ -3127,6 +3154,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveysAndStatuses_Overview {
             get {
                 return ResourceManager.GetString("SurveysAndStatuses_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Surveys and Statuses report shows number of interviews in each status for surveys in which this supervisor is involved.
+        /// </summary>
+        public static string SurveysAndStatuses_SupervisorDescription {
+            get {
+                return ResourceManager.GetString("SurveysAndStatuses_SupervisorDescription", resourceCulture);
             }
         }
         
@@ -3235,6 +3271,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SurveysStatuses_Total {
             get {
                 return ResourceManager.GetString("SurveysStatuses_Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The report presents basic statistics, one way and two way tables calculated on survey data.
+        /// </summary>
+        public static string SurveyStatisticsDescription {
+            get {
+                return ResourceManager.GetString("SurveyStatisticsDescription", resourceCulture);
             }
         }
         

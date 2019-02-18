@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     internal class when_rejecting_interview_from_HQ_in_deleted_state : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null, DateTimeOffset.Now));

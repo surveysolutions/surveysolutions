@@ -61,11 +61,11 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         public HttpResponseMessage AutoUpdateSettings()
-        {
+     {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
             return Request.CreateResponse(new AutoUpdateModel
             {
-                InterviewerAutoUpdatesEnabled = interviewerSettings?.AutoUpdateEnabled ?? true,
+                InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled()
             });
         }
 

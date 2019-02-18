@@ -40,7 +40,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
 
-            Setup.InstanceToMockedServiceLocator(sessionFactory);
             var UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             var origin = "hq";

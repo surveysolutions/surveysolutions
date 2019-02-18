@@ -120,6 +120,9 @@
   <data name="CumulativeInterviewChart" xml:space="preserve">
     <value>Cumulative Interview Chart</value>
   </data>
+  <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+    <value>The Cumulative Interview Chart shows evolution of the number of interviews in each status over time</value>
+  </data>
   <data name="InterviewChart" xml:space="preserve">
     <value>Interview Chart</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Teams and Statuses</value>
+  </data>
+  <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+    <value>The Teams and Statuses report shows the number of interviews in each status by interviewer</value>
+  </data>
+  <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+    <value>The Teams and Statuses report shows the number of interviews in each status by teams</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Count Days of interview in Status</value>
@@ -341,5 +350,38 @@
   </data>
   <data name="ToAllQuestionnaires" xml:space="preserve">
     <value>Back to questionnaires</value>
+  </data>
+  <data name="SaveAsImage" xml:space="preserve">
+    <value>Save as image</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>Last week</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Last month</value>
+  </data>
+  <data name="PreviousWeek" xml:space="preserve">
+    <value>Previous week</value>
+  </data>
+  <data name="PreviousMonth" xml:space="preserve">
+    <value>Previous month</value>
+  </data>
+  <data name="LastNDays" xml:space="preserve">
+    <value>Last {{days}} days</value>
+  </data>
+  <data name="QuickRanges" xml:space="preserve">
+    <value>Quick date ranges</value>
+  </data>
+  <data name="RangeRelativeToData" xml:space="preserve">
+    <value>Range relative to data</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>All data</value>
   </data>
 </root>

@@ -297,4 +297,8 @@
   <data name="Processing" xml:space="preserve">
     <value>En cours de traitement...</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>Sélectionner un questionnaire</value>
+      <comment>Sélectionner un questionnaire</comment>
+  </data>
 </root>

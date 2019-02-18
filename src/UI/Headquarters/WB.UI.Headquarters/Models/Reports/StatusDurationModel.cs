@@ -12,5 +12,7 @@ namespace WB.UI.Headquarters.Models.Reports
         public string AssignmentsBaseUrl { get; set; }
 
         public string QuestionnairesUrl { get; set; }
+
+        public string QuestionnaireByIdUrl { get; set; }
     }
 }

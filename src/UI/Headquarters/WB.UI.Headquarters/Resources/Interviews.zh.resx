@@ -212,4 +212,7 @@
   <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
     <value>显示问卷中无效问题和静态文本的总数。同一个问题下多个验证失败的条件将被计为1。</value>
   </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
+  </data>
 </root>

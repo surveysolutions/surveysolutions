@@ -14,14 +14,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
 
         public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage,
             IAudioFileStorage audioFileStorage,
-            IImageFileStorage imageFileStorage)
+            IImageFileStorage imageFileStorage, 
+            IAudioAuditFileStorage audioAuditFileStorage)
         {
             this.logoStorage = logoStorage;
             this.audioFileStorage = audioFileStorage;
             this.imageFileStorage = imageFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -30,6 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             requestHandler.RegisterHandler<UploadInterviewImageRequest, OkResponse>(UploadImage);
             requestHandler.RegisterHandler<UploadInterviewAudioRequest, OkResponse>(UploadAudio);
+            requestHandler.RegisterHandler<UploadInterviewAudioAuditRequest, OkResponse>(UploadAudioAudit);
         }
 
         public Task<GetCompanyLogoResponse> GetCompanyLogo(GetCompanyLogoRequest request)
@@ -59,6 +63,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     HasCustomLogo = true
                 }
             });
+        }
+        
+        private Task<OkResponse> UploadAudioAudit(UploadInterviewAudioAuditRequest request)
+        {
+            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
+                request.InterviewAudio.FileName,
+                Convert.FromBase64String(request.InterviewAudio.Data), 
+                request.InterviewAudio.ContentType);
+
+            return Task.FromResult(new OkResponse());
         }
 
         private Task<OkResponse> UploadAudio(UploadInterviewAudioRequest request)

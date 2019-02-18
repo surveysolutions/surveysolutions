@@ -99,7 +99,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         Archived = x.Archived,
                         Responsible = x.Responsible.Name,
                         ResponsibleRole = x.Responsible.RoleIds.First().ToUserRole().ToString(),
-                        IdentifyingQuestions = this.GetIdentifyingColumnText(x)
+                        IdentifyingQuestions = this.GetIdentifyingColumnText(x),
+                        IsAudioRecordingEnabled = x.IsAudioRecordingEnabled
                     };
 
                     if (input.ShowQuestionnaireTitle)

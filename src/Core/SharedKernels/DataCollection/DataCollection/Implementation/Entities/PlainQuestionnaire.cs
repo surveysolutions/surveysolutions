@@ -340,6 +340,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                 ?.PublicKey;
 
+        public Guid? GetSectionIdByVariable(string variableName)
+            => this.GroupCache.Values.SingleOrDefault(x =>
+                    string.Equals(x.VariableName, variableName, StringComparison.InvariantCultureIgnoreCase))
+                ?.PublicKey;
+
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
         public string GetQuestionVariableName(Guid questionId) => this.GetQuestionOrThrow(questionId).StataExportCaption;
@@ -357,6 +362,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var attachment = this.innerDocument.Attachments.SingleOrDefault(kv => kv.Name == staticText.AttachmentName);
             return attachment;
         }
+
+        public Guid? GetAttachmentIdByName(string name) 
+            => this.innerDocument.Attachments.Find(x => x.Name.ToLower() == name.ToLower())?.AttachmentId;
+
+        public Attachment GetAttachmentById(Guid attachmentId)
+            => this.innerDocument.Attachments.Find(x => x.AttachmentId == attachmentId);
 
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
@@ -986,7 +997,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
             }
 
-            return (entity as IConditional)?.HideIfDisabled ?? false;
+            var parent = entity.GetParent();
+            bool shouldBeHiddenByParentHideIfDisabled = false;
+            if(IsPlainRoster(parent.PublicKey))
+            {
+                shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
+            }
+
+            return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
+        }
+
+        public bool IsPlainRoster(Guid entityId)
+        {
+            return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)

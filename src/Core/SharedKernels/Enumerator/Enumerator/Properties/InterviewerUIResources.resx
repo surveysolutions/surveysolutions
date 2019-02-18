@@ -503,10 +503,10 @@ for further instructions</value>
     <value>Assigned on {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>All collected data will be saved to backup file on this device.</value>
+    <value>Save all relevant information to the file on this device.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Backup all gathered information</value>
+    <value>Generate support package</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>We will check for the newer version on HQ server</value>

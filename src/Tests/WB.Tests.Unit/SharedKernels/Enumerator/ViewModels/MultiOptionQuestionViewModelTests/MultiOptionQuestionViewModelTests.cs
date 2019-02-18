@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             interview.AnswerMultipleOptionsQuestion(userId, questionGuid, RosterVector.Empty, DateTime.Now, new[] { 1 });
 
             var viewModel = CreateViewModel(
-                questionnaireStorage: Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
+                questionnaireStorage: SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository: Stub<IStatefulInterviewRepository>.Returning((IStatefulInterview)interview),
                 filteredOptionsViewModel: Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview));
 
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             StatefulInterview interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
 
             var viewModel = CreateViewModel(
-                questionnaireStorage: Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
+                questionnaireStorage: SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire),
                 interviewRepository: Stub<IStatefulInterviewRepository>.Returning((IStatefulInterview)interview),
                 filteredOptionsViewModel: Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview));
 

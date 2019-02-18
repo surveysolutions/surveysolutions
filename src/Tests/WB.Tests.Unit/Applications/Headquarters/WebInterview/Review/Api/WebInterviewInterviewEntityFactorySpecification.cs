@@ -53,7 +53,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             Subject = new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUserMock.Object,
                 new EnumeratorGroupGroupStateCalculationStrategy(), 
-                new SupervisorGroupStateCalculationStrategy());
+                new SupervisorGroupStateCalculationStrategy(), 
+                Create.Service.WebNavigationService());
         }
 
         [SetUp]
@@ -88,6 +89,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 };
 
                 CurrentInterview.Apply(Create.Event.AnswersDeclaredInvalid(failedConditions));
+            }
+        }
+
+        protected void MarkStaticTextAsInvalid(params Identity[] ids)
+        {
+            foreach (var identity in ids)
+            {
+                var failedConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+                {
+                    {
+                        identity,
+                        new List<FailedValidationCondition> {new FailedValidationCondition(0)}
+                    }
+                };
+
+                CurrentInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(ids));
             }
         }
 

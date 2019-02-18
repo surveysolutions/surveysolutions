@@ -40,6 +40,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -145,9 +146,10 @@ namespace WB.Tests.Abc.TestFactories
                 Content = content,
             };
 
-        public AttachmentContentMetadata AttachmentContentMetadata(string contentType)
+        public AttachmentContentMetadata AttachmentContentMetadata(string contentType, string id = null)
             => new AttachmentContentMetadata
             {
+                Id = id ?? Guid.NewGuid().ToString(),
                 ContentType = contentType,
             };
 
@@ -262,6 +264,7 @@ namespace WB.Tests.Abc.TestFactories
             IEnumerable<IComposite> children = null,
             string variable = "roster_var",
             string title = "Roster X",
+            bool isPlainMode = false,
             FixedRosterTitle[] fixedTitles = null) => Create.Entity.Roster(
                         rosterId: rosterId,
                         children: children,
@@ -269,6 +272,7 @@ namespace WB.Tests.Abc.TestFactories
                         variable: variable,
                         enablementCondition: enablementCondition,
                         fixedRosterTitles: fixedTitles,
+                        isPlainMode: isPlainMode,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
 
@@ -1044,7 +1048,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             string enablementCondition = null,
-            IEnumerable<IComposite> children = null)
+            IEnumerable<IComposite> children = null,
+            bool isPlainMode = false)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -1054,6 +1059,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
+            group.IsPlainMode = isPlainMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1073,6 +1079,7 @@ namespace WB.Tests.Abc.TestFactories
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null,
+            bool isPlainMode = false,
             bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(
@@ -1081,7 +1088,7 @@ namespace WB.Tests.Abc.TestFactories
                 variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
-
+            group.IsPlainMode = isPlainMode;
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
             group.HideIfDisabled = hideIfDisabled;
@@ -2329,9 +2336,33 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerSettings InterviewerSettings(bool autoUpdateEnabled = false)
         {
-            return new InterviewerSettings()
+            return new InterviewerSettings
             {
                 AutoUpdateEnabled = autoUpdateEnabled,
+            };
+        }
+
+        public SpeedReportInterviewItem SpeedReportInterviewItem(InterviewSummary interviewSummary)
+        {
+            var firstAnswerSet = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.FirstAnswerSet);
+            var created = interviewSummary.InterviewCommentedStatuses.FirstOrDefault(s =>
+                s.Status == InterviewExportedAction.Created);
+
+            return new SpeedReportInterviewItem()
+            {
+                InterviewId = interviewSummary.SummaryId,
+                QuestionnaireId = interviewSummary.QuestionnaireId,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
+
+                CreatedDate = created?.Timestamp ?? DateTime.UtcNow,
+                FirstAnswerDate = firstAnswerSet?.Timestamp,
+                InterviewerName = firstAnswerSet?.InterviewerName,
+                InterviewerId = firstAnswerSet?.InterviewerId,
+                SupervisorName = firstAnswerSet?.SupervisorName,
+                SupervisorId = firstAnswerSet?.SupervisorId,
+
+                InterviewSummary = interviewSummary
             };
         }
     }

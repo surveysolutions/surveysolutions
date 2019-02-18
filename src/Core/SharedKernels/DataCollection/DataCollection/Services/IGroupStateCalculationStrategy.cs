@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IGroupStateCalculationStrategy
     {
-        GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview);
+        GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire);
     }
 
     public interface IEnumeratorGroupStateCalculationStrategy : IGroupStateCalculationStrategy

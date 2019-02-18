@@ -69,8 +69,16 @@ export default {
             type: Boolean,
             default: false
         },
+        withClear: {
+            type: Boolean,
+            default: false
+        },
         id: {
             type: String
+        },
+        clearLabel: {
+            type: String,
+            default: null
         }
     },
     data() {
@@ -81,10 +89,37 @@ export default {
     },
     mounted() {
         // Load flatPickr if not loaded yet
+
         if (!this.fp) {
             // Bind on parent element if wrap is true
-            let elem = this.config.wrap ? this.$el.parentNode : this.$el;
-            this.fp = new Flatpickr(elem, this.config);
+            const elem = this.config.wrap ? this.$el.parentNode : this.$el;
+            const self = this;
+            let config = this.config;
+            if (this.withClear) {
+                config = _.assign(
+                    {
+                        onReady: function(dateObj, dateStr, instance) {
+                            $(".flatpickr-calendar").each(function() {
+                                var $this = $(this);
+                                if ($this.find(".flatpickr-clear").length < 1) {
+                                    $this.append(
+                                        '<div class="flatpickr-clear" style=" cursor: pointer;">' +
+                                            (self.clearLabel || 'Clear') +
+                                            "</div>"
+                                    );
+                                    $this.find(".flatpickr-clear").on("click", function() {
+                                        instance.close();
+                                        self.$emit("clear");
+                                    });
+                                }
+                            });
+                        }
+                    },
+                    this.config
+                );
+            }
+
+            this.fp = new Flatpickr(elem, config);
         }
     },
     beforeDestroy() {
@@ -101,7 +136,7 @@ export default {
          * @param newConfig Object
          */
         config(newConfig) {
-            this.fp.config = Object.assign(this.fp.config, newConfig);
+            this.fp.config = _.assign(this.fp.config, newConfig);
             this.fp.redraw();
             this.fp.setDate(this.value, true);
         },

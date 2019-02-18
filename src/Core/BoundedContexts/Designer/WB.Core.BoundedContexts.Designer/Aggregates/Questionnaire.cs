@@ -721,7 +721,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
-            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId,
+            bool isPlainMode)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -743,7 +744,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableName,
                 description,
                 condition,
-                hideIfDisabled);
+                hideIfDisabled,
+                isPlainMode);
 
             if (isRoster)
             {
@@ -1166,6 +1168,38 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
                 ? linkedToEntityId.Value
                 : (Guid?) null;
+        }
+
+        public void ReplaceOptionsWithClassification(ReplaceOptionsWithClassification command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(command.QuestionId,
+                categoricalOneAnswerQuestion.QuestionType,
+                categoricalOneAnswerQuestion.QuestionScope,
+                categoricalOneAnswerQuestion.QuestionText,
+                categoricalOneAnswerQuestion.StataExportCaption,
+                categoricalOneAnswerQuestion.VariableLabel,
+                categoricalOneAnswerQuestion.ConditionExpression,
+                categoricalOneAnswerQuestion.HideIfDisabled,
+                null,
+                categoricalOneAnswerQuestion.Featured,
+                categoricalOneAnswerQuestion.Instructions,
+                categoricalOneAnswerQuestion.Properties,
+                null,
+                ConvertOptionsToAnswers(command.Options),
+                categoricalOneAnswerQuestion.LinkedToQuestionId,
+                categoricalOneAnswerQuestion.LinkedToRosterId,
+                null, null, null, null, null,
+                true,
+                null/*categoricalOneAnswerQuestion.CascadeFromQuestionId*/,
+                null,
+                categoricalOneAnswerQuestion.ValidationConditions,
+                null,
+                false);
+
+            this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
 
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, QuestionnaireCategoricalOption[] options)

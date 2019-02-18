@@ -43,17 +43,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get; set; }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId;
             this.Identity = entityIdentity;
+            this.navigationState = navigationState;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
             this.UpdateValidStateAsync();
         }
         
         private bool isImplausible;
+        private NavigationState navigationState;
+
         public bool IsImplausible
         {
             get => this.isImplausible;
@@ -74,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var validationMessages = interview.GetFailedWarningMessages(this.Identity, UIResources.Warning);
                     
-                    this.Warning.ChangeValidationErrors(validationMessages, this.Identity);
+                    this.Warning.ChangeValidationErrors(validationMessages, this.interviewId, this.Identity, this.navigationState);
                 }
 
                 this.IsImplausible = isInvalidEntity;

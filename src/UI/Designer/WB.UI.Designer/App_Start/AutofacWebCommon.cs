@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Designer.Api.Designer;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
@@ -122,6 +123,8 @@ namespace WB.UI.Designer.App_Start
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container));
+
+            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(kernel.Container));
         }
     }
 }

@@ -6,7 +6,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToListViewModel))]
     public class when_title_of_textlist_item_changed
     {
         [Test]
@@ -21,14 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
                 Create.Entity.TextListQuestion(textListQuestionId),
                 Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, linkedToQuestionId: textListQuestionId));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
             {
                 new Tuple<decimal, string>(1, "old title") 
             });
 
             var viewModel = Create.ViewModel.MultiOptionLinkedToListQuestionQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
 
             var answers = new[] {new Tuple<decimal, string>(1, expectedTitle)};
 

@@ -5,6 +5,7 @@ using System.Web.Http.Hosting;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -12,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -43,14 +45,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IAllInterviewsFactory allInterviewsViewFactory = null)
+            IAllInterviewsFactory allInterviewsViewFactory = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItems = null)
         {
-            return new QuestionnairesController(
+            var questionnairesController = new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                 allInterviewsViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
                 serializer: Mock.Of<ISerializer>(),
-                questionnaireStorage: Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage: Mock.Of<IQuestionnaireStorage>(),
+                questionnaireBrowseItems ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>());
+            questionnairesController.Request = new HttpRequestMessage();
+            questionnairesController.Request.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, 
+                new HttpConfiguration());
+            return questionnairesController;
         }
 
         protected static InterviewsController CreateInterviewsController(

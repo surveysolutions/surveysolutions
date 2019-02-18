@@ -127,10 +127,10 @@
     <value>Приложение {0} {1} инструкции</value>
   </data>
   <data name="Appendix_OptionFilters" xml:space="preserve">
-    <value>Приложение {0} {1} фильтры опций</value>
+    <value>Приложение {0} {1} фильтры категорий</value>
   </data>
   <data name="Appendix_Options" xml:space="preserve">
-    <value>Приложение {0} {1} опции</value>
+    <value>Приложение {0} {1} категории</value>
   </data>
   <data name="Appendix_SpecialValues" xml:space="preserve">
     <value>Приложение {0} {1} специальные значения</value>
@@ -163,7 +163,7 @@
     <value>Ни у кого нет доступа</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Опции:</value>
+    <value>Категории:</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
     <value>Легенда и структура информации в этом файле</value>

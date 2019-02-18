@@ -6,7 +6,8 @@ using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilter<TFilter> : IAutofacAuthorizationFilter where TFilter : AuthorizationFilterAttribute
+    public class WebApiAuthorizationFilter<TFilter> : IAutofacAuthorizationFilter 
+        where TFilter : AuthorizationFilterAttribute
     {
         private readonly TFilter filter;
 

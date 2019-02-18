@@ -25,9 +25,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        private readonly IImageFileStorage imageFileStorage;
-        private readonly IAudioFileStorage audioFileStorage;
-
         public InterviewsApiV3Controller(
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
@@ -37,13 +34,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore) :
+            IHeadquartersEventStore eventStore,
+            IAudioAuditFileStorage audioAuditFileStorage) :
             base(imageFileStorage,
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
-                synchronizationSerializer, eventStore)
+                synchronizationSerializer, eventStore, audioAuditFileStorage)
         {
-            this.imageFileStorage = imageFileStorage;
-            this.audioFileStorage = audioFileStorage;
         }
 
         [HttpGet]
@@ -52,7 +48,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
 
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
-        public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
+        public override HttpResponseMessage LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
@@ -81,9 +77,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         }
 
         [HttpPost]
-        public override void PostImage(PostFileRequest request) => base.PostImage(request);
+        public override HttpResponseMessage PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
-        public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
+        public override HttpResponseMessage PostAudio(PostFileRequest request) => base.PostAudio(request);
+        [HttpPost]
+        public override HttpResponseMessage PostAudioAudit(PostFileRequest request) => base.PostAudioAudit(request);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]

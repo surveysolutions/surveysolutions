@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             invalidTitle = "Invalid [Title>";
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+                = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
             questionnaire = Create.AggregateRoot.Questionnaire(

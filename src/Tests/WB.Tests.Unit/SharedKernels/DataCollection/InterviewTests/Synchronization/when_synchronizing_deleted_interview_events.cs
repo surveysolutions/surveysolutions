@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
          [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);

@@ -34,6 +34,7 @@ namespace WB.UI.Shared.Web.Extensions
             {
                 var byteRange = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType);
                 var partialResponse = this.request.CreateResponse(HttpStatusCode.PartialContent);
+
                 partialResponse.Content = new PushStreamContent((outputStream, content, context) =>
                 {
                     try
@@ -47,10 +48,12 @@ namespace WB.UI.Shared.Web.Extensions
                         {
                             if (rangeHeader.To != null)
                             {
-                                bufferSize = Math.Min(bufferSize, rangeHeader.To.Value - stream.Position);
+                                bufferSize = Math.Min(buffer.Length, rangeHeader.To.Value - stream.Position + 1);
                             }
 
-                            int count = stream.Read(buffer, 0, (int) bufferSize);
+                            if (bufferSize == 0) return;
+
+                            int count = stream.Read(buffer, 0, (int)bufferSize);
                             if (count != 0)
                             {
                                 outputStream.Write(buffer, 0, count);
@@ -80,7 +83,7 @@ namespace WB.UI.Shared.Web.Extensions
                 partialResponse.Content.Headers.ContentType = byteRange.Headers.ContentType;
                 partialResponse.Content.Headers.ContentLength = byteRange.Headers.ContentLength;
                 partialResponse.Content.Headers.ContentRange = byteRange.Headers.ContentRange;
-
+                partialResponse.Headers.AcceptRanges.Add("bytes");
                 return partialResponse;
             }
 
@@ -88,6 +91,8 @@ namespace WB.UI.Shared.Web.Extensions
 
             nonPartialResponse.Content = new StreamContent(stream);
             nonPartialResponse.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+            nonPartialResponse.Headers.AcceptRanges.Add("bytes");
+
             if (!string.IsNullOrEmpty(fileName))
             {
                 nonPartialResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")

@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl,
     $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl,
-    $migrateAssignmentsUrl) {
+    $migrateAssignmentsUrl, $questionnairesApiEndpoint) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -45,7 +45,38 @@
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
         var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
         window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
-        console.log(selectedRow);
+    };
+
+    self.recordAudio = function(key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+
+        var checked = !opt.$selected.find('input:checkbox').prop('checked');
+        var url = $questionnairesApiEndpoint + "/" + selectedRow.questionnaireId + "/" + selectedRow.version + "/recordAudio";
+
+        if (checked) {
+            notifier.confirm('Confirmation Needed',
+                input.settings.messages.enablingAuditConfirmationMessage,
+                // confirm
+                function() {
+                    self.SendRequest(url,
+                        { enabled: checked },
+                        function() {
+                            selectedRow.isAudioRecordingEnabled = checked;
+                        },
+                        false,
+                        false);
+                },
+                // cancel
+                function() {});
+        } else {
+            self.SendRequest(url,
+                { enabled: checked },
+                function () {
+                    selectedRow.isAudioRecordingEnabled = checked;
+                },
+                false,
+                false);
+        }
     };
 
     self.interviewsBatchUpload = function (key, opt) {

@@ -331,13 +331,13 @@
     <value>已开始的部分：{0}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0}个子模块</value>
+    <value>{0}个问卷子块</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>一个子模块</value>
+    <value>一个问卷子块</value>
   </data>
   <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>无子模块</value>
+    <value>无问卷子块</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
     <value>总部评论</value>
@@ -581,5 +581,86 @@
   </data>
   <data name="Warnings" xml:space="preserve">
     <value>警告</value>
+  </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>您的定位已经离开地图的边界</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>参数：</value>
+  </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{1} 个选项中的 {0} 个已被选中</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>概览</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>附加信息</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>评论</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>概览</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>未回答</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>受保护问题的新答案应该大于或等于 {0}</value>
+  </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>显示 PDF</value>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>中止</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>回到仪表盘</value>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>此设备不被支持</value>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>必须先安装Google Play服务</value>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>速度： {0}， 剩余时间： {1}</value>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>重试</value>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>任务和面访的同步</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>为调查员app下载更新</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>If interviewers don't have an access to the internet, 如果调研员无法连网，此功能应被启用，应该它可以让他们的app可以借助督导员的app进行离线更新。</value>
+  </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions 督导员</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>接受</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>分配</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>驳回</value>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>发现调查员设备 ({0})</value>
+  </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>当前的二维表不再存在。请使用导航菜单导航至下一个可用的问卷模块或者二维表。</value>
   </data>
 </root>

@@ -160,6 +160,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classifications.
+        /// </summary>
+        public static string Classifications {
+            get {
+                return ResourceManager.GetString("Classifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {

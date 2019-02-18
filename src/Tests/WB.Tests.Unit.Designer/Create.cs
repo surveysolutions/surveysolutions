@@ -1,15 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs;
+using NHibernate;
+using NHibernate.Cfg;
+using NHibernate.Cfg.MappingSchema;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -21,7 +29,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
@@ -56,6 +66,8 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -804,7 +816,8 @@ namespace WB.Tests.Unit.Designer
             string enablementCondition = null,
             IEnumerable<IComposite> children = null,
             Guid? rosterSizeQuestionId = null,
-            Guid? rosterTitleQuestionId = null)
+            Guid? rosterTitleQuestionId = null,
+            bool isPlainMode = false)
         {
             Group roster = Create.Group(
                 groupId: rosterId,
@@ -814,6 +827,7 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             roster.IsRoster = true;
+            roster.IsPlainMode = isPlainMode;
             roster.RosterSizeSource = RosterSizeSourceType.Question;
             roster.RosterSizeQuestionId = rosterSizeQuestionId;
             roster.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1090,10 +1104,10 @@ namespace WB.Tests.Unit.Designer
                 string title = null, string variableName = null, Guid? rosterSizeQuestionId = null,
                 string condition = null, bool hideIfDisabled = false, bool isRoster = false,
                 RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null)
+                FixedRosterTitleItem[] fixedRosterTitles = null, Guid? rosterTitleQuestionId = null, bool isPlainMode = false)
                 => new UpdateGroup(questionnaireId, groupId, responsibleId ?? Guid.NewGuid(), title, variableName,
                     rosterSizeQuestionId, condition, hideIfDisabled, isRoster,
-                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId);
+                    rosterSizeSource, fixedRosterTitles, rosterTitleQuestionId, isPlainMode);
 
             public static UpdateVariable UpdateVariable(Guid questionnaireId, Guid entityId, VariableType type, string name, string expression, string label = null, Guid? userId = null)
             {
@@ -1457,5 +1471,49 @@ namespace WB.Tests.Unit.Designer
                             document
                         }
                     }));
+
+        public static ClassificationsStorage ClassificationStorage(
+            IPlainStorageAccessor<ClassificationEntity> classificationsAccessor = null,
+            IUnitOfWork unitOfWork = null)
+        {
+            return new ClassificationsStorage(
+                classificationsAccessor ??  new TestPlainStorage<ClassificationEntity>(), 
+                unitOfWork ?? Mock.Of<IUnitOfWork>());
+        }
+
+        public static IMembershipUserService MembershipUserService(Guid userId, bool isAdmin = false)
+        {
+            return Mock.Of<IMembershipUserService>(
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId && u.IsAdmin == isAdmin)
+                     && _.WebServiceUser == Mock.Of<IMembershipWebServiceUser>(u => u.UserId == userId && u.IsAdmin == isAdmin));
+        }
+
+        public static IPlainStorageAccessor<ClassificationEntity> ClassificationsAccessor(params ClassificationEntity[] entities)
+        {
+            var storage = new TestPlainStorage<ClassificationEntity>();
+            storage.Store(entities.Select(x => new Tuple<ClassificationEntity, object>(x, x.Id)));
+            return storage;
+        }
+
+        public static PublicFoldersStorage PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage = null,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage = null,
+            IPlainStorageAccessor<User> accountStorage = null)
+        {
+            return new PublicFoldersStorage(
+                folderStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewFolder>>(),
+                questionnaireStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem> >(),
+                accountStorage ?? Mock.Of<IPlainStorageAccessor<User>>()
+                );
+        }
+
+        public static QuestionnaireListViewFolder QuestionnaireListViewFolder(Guid? id=null, string title = null, Guid? parent = null)
+        {
+            return new QuestionnaireListViewFolder
+            {
+                Parent = parent,
+                PublicId = id ?? Guid.NewGuid(),
+                Title = title
+            };
+        }
     }
 }
