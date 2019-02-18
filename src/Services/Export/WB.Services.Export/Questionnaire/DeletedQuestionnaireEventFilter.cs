@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
@@ -31,42 +32,47 @@ namespace WB.Services.Export.Questionnaire
                 if (@event.Payload == null) continue;
 
                 InterviewReference reference;
-                bool rereadQuestionanire = false;
+                bool forceUpdateQuestionnaire = false;
+                
                 switch (@event.Payload)
                 {
                     case InterviewCreated interviewCreated:
-                        reference =
-                            this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId)
-                            ?? new InterviewReference();
-
-                        reference.QuestionnaireId = interviewCreated.QuestionnaireIdentity;
-                        reference.InterviewId = @event.EventSourceId;
-                        this.tenantContext.DbContext.Add(reference);
+                        AddInterviewReference(@event.EventSourceId, interviewCreated.QuestionnaireIdentity);
                         break;
                     case InterviewOnClientCreated interviewOnClientCreated:
-                        reference =
-                            this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId)
-                            ?? new InterviewReference();
-
-                        reference.QuestionnaireId = interviewOnClientCreated.QuestionnaireIdentity;
-                        reference.InterviewId = @event.EventSourceId;
-                        this.tenantContext.DbContext.Add(reference);
+                        AddInterviewReference(@event.EventSourceId, interviewOnClientCreated.QuestionnaireIdentity);
                         break;
                     case InterviewDeleted _:
                     case InterviewHardDeleted _:
-
                         reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
-
                         reference.DeletedAtUtc = @event.EventTimeStamp;
-                        rereadQuestionanire = true;
+                        forceUpdateQuestionnaire = true;
                         break;
                     default:
                         reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
                         break;
                 }
 
+                void AddInterviewReference(Guid interviewId, string questionnaireIdentity)
+                {
+                    reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
+                    if (reference == null)
+                    {
+                        reference = new InterviewReference
+                        {
+                            QuestionnaireId = questionnaireIdentity,
+                            InterviewId = interviewId
+                        };
+
+                        this.tenantContext.DbContext.Add(reference);
+                    }
+
+                    reference.QuestionnaireId = questionnaireIdentity;
+                    reference.InterviewId = @event.EventSourceId;
+                }
+
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant,
-                    new QuestionnaireId(reference.QuestionnaireId), rereadQuestionanire);
+                    new QuestionnaireId(reference.QuestionnaireId), forceUpdateQuestionnaire);
 
                 if (questionnaire.IsDeleted)
                 {
@@ -85,6 +91,8 @@ namespace WB.Services.Export.Questionnaire
                 }
 
             }
+
+            this.tenantContext.DbContext.SaveChanges();
 
             return result;
         }
