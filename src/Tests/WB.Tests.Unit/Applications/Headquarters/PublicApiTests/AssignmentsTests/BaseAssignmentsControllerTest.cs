@@ -49,7 +49,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Mock.Of<IAuditLog>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 this.interviewImportService.Object,
-                Mock.Of<ICommandTransformator>());
+                Mock.Of<ICommandTransformator>(),
+                Create.Service.AssignmentFactory());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();

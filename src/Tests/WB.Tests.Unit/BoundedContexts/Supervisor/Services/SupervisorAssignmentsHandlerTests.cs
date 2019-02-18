@@ -10,6 +10,32 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
     public class SupervisorAssignmentsHandlerTests
     {
         [Test]
+        public async Task GetAssignments_should_set_is_audio_enabled_flag()
+        {
+            var interviewerId = Id.g1;
+
+            var assignment = Create.Entity.AssignmentDocument(1, 
+                                                             quantity: 5,
+                                                             interviewsCount: 2, 
+                                                             questionnaireIdentity: Create.Entity.QuestionnaireIdentity().ToString())
+                                          .WithResponsible(interviewerId).Build();
+            assignment.IsAudioRecordingEnabled = true;
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(assignment);
+            var handler = Create.Service.SupervisorAssignmentsHandler(assignments);
+
+            // Act
+            var assignmentFromResponse = await handler.GetAssignments(new GetAssignmentsRequest
+            {
+                UserId = interviewerId
+            });
+
+            // Assert
+            Assert.That(assignmentFromResponse.Assignments[0].IsAudioRecordingEnabled, Is.True);
+        }
+
+        [Test]
         public async Task GetAssignments_should_reduce_assignment_size_when_pushing_interviews_to_IN()
         {
             var interviewerId = Id.g1;

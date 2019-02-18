@@ -39,7 +39,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 commandService: mockOfCommandService.Object,
                 interviewViewRepository: interviewViewRepositoryMock.Object,
                 aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,
-                snapshotStoreWithCache: mockOfSnapshotStoreWithCache.Object,
                 principal: principal,
                 eventStore: eventStore.Object,
                 interviewMultimediaViewRepository: inMemoryMultimediaViewRepository,
@@ -110,7 +109,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static readonly Mock<IPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IPlainStorage<InterviewView>>();
         private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
-        private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IEnumeratorEventStorage> eventStore;
         private static IPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;

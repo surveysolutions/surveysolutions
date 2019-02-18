@@ -404,4 +404,16 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>请关闭页面。您可以回到问卷设计网站打开新页面。</value>
   </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>附加的问题信息</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>未回答</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value> 多媒体文件回放不被您的浏览器支持。您可以下载后观看。</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>输入的值不能小于受保护的答案</value>
+  </data>
 </root>

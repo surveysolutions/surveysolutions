@@ -36,4 +36,15 @@
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
+
+    <style name="Interview_Group_Plain_Roster">
+        <item name="android:textColor">@color/group_plain_roster_text</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:paddingRight">@dimen/Interview_Entity_margin_with_border_right</item>
+        <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
+        <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
+        <item name="android:background">@color/group_plain_roster_background</item>
+    </style>
 </resources>

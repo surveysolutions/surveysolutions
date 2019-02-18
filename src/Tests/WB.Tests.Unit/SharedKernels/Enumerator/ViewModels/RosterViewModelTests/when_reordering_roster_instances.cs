@@ -2,8 +2,11 @@
 using System.Threading.Tasks;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
@@ -20,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 Create.Entity.Roster(rosterId: Id.g2, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: Id.g1),
             });
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: Id.g1,
                 answeredOptions: new[]
                 {
@@ -30,18 +33,27 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                 }));
 
             var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
 
-            var viewModel = this.CreateViewModel(
-                statefulInterviewRepository, 
-                questionnaireRepository: questionnaireStorage);
+            ILiteEventRegistry registry = Create.Service.LiteEventRegistry();
+
+            var viewModel = this.CreateViewModel(statefulInterviewRepository, eventRegistry: registry);
 
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.gA, RosterVector.Empty)));
 
             viewModel.Init(null, Create.Identity(Id.g2), navigationState);
-          
+
+            interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: Id.g1,
+                answeredOptions: new[]
+                {
+                    Create.Entity.AnsweredYesNoOption(1, false),
+                    Create.Entity.AnsweredYesNoOption(2, false),
+                    Create.Entity.AnsweredYesNoOption(3, false),
+                }));
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interview.Id);
+
+            // act
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                 questionId: Id.g1,
                 answeredOptions: new[]
@@ -50,14 +62,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
                     Create.Entity.AnsweredYesNoOption(value: 3, answer: true),
                     Create.Entity.AnsweredYesNoOption(value: 1, answer: true),
                 }));
+            Abc.SetUp.ApplyInterviewEventsToViewModels(interview, registry, interview.Id);
 
-            viewModel.Handle(Create.Event.YesNoQuestionAnswered(Id.g1, new []
-            {
-                Create.Entity.AnsweredYesNoOption(2, true),
-                Create.Entity.AnsweredYesNoOption(3, true),
-                Create.Entity.AnsweredYesNoOption(1, true),
-            }));
-
+            //assert
             var rosters = viewModel.RosterInstances.Select(x => x.Identity).ToArray();
             Assert.That(rosters[0].RosterVector.Last(), Is.EqualTo(2));
             Assert.That(rosters[1].RosterVector.Last(), Is.EqualTo(3));

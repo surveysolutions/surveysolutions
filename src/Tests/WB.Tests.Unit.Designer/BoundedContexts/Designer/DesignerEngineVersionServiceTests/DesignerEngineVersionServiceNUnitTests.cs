@@ -1,4 +1,5 @@
 ﻿using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -33,6 +34,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
  
             Assert.That(contentVersion, Is.EqualTo(24));
+        }
+
+        [Test]
+        public void should_return_version_25_when_section_has_variable_name()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Group(variable:"test")
+            });
+            
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(25));
         }
     }
 }

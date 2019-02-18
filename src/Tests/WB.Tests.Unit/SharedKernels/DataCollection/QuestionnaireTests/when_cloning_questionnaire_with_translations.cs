@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     _.GetQuestionnaireDocument(sourceQuestionnaireId.QuestionnaireId, sourceQuestionnaireId.Version) == questionnaireDocument));
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-              = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+              = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                   id: sourceQuestionnaireId.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: sourceQuestionnaireId));
 
 

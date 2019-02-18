@@ -21,17 +21,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IPreloadedDataVerifier importService;
         private readonly IQuestionnaireStorage questionnaireStorage;
        private readonly IAssignmentsUpgradeService upgradeService;
+       private readonly IAssignmentFactory assignmentFactory;
 
-        public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
+       public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
             IPreloadedDataVerifier importService,
             IQuestionnaireStorage questionnaireStorage,
-            IAssignmentsUpgradeService upgradeService
+            IAssignmentsUpgradeService upgradeService,
+            IAssignmentFactory assignmentFactory
            )
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
             this.importService = importService ?? throw new ArgumentNullException(nameof(importService));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.upgradeService = upgradeService;
+            this.assignmentFactory = assignmentFactory;
         }
 
         public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
@@ -59,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         {
                             oldAssignment.Archive();
 
-                            var newAssignment = new Assignment(migrateTo, oldAssignment.ResponsibleId,
+                            var newAssignment = assignmentFactory.CreateAssignment(migrateTo, oldAssignment.ResponsibleId,
                                 oldAssignment.InterviewsNeeded);
 
                             newAssignment.SetAnswers(oldAssignment.Answers.ToList());

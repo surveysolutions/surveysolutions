@@ -55,7 +55,8 @@ namespace WB.UI.Headquarters.API.DataCollection
                     Quantity = assignment.InterviewsNeeded, // + assignment.InterviewsProvided,
                     QuestionnaireId = assignment.QuestionnaireId,
                     ResponsibleId = assignment.ResponsibleId,
-                    ResponsibleName = assignment.Responsible.Name
+                    ResponsibleName = assignment.Responsible.Name,
+                    IsAudioRecordingEnabled = assignment.IsAudioRecordingEnabled
                 });
             }
 

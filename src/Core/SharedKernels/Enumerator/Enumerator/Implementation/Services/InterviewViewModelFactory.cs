@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300,
             VariableModel = 400,
             ReadOnlyQuestion = 500,
+            PlainRoster = 600
         }
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -94,11 +95,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         },
                         {
                             InterviewEntityType.LinkedToRosterMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToRosterQuestionViewModel>
+                            Load<CategoricalMultiLinkedToRosterTitleViewModel>
                         },
                         {
                             InterviewEntityType.LinkedToListQuestionMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToListQuestionQuestionViewModel>
+                            Load<CategoricalMultiLinkedToListViewModel>
                         },
                         {
                             InterviewEntityType.FilteredSingleOptionQuestionModel,
@@ -109,15 +110,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             Load<CascadingSingleOptionQuestionViewModel>
                         },
                         {InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel>},
-                        {InterviewEntityType.MultiOptionQuestionModel, Load<MultiOptionQuestionViewModel>},
+                        {InterviewEntityType.MultiOptionQuestionModel, Load<CategoricalMultiViewModel>},
                         {
                             InterviewEntityType.LinkedMultiOptionQuestionModel,
-                            Load<MultiOptionLinkedToRosterQuestionQuestionViewModel>
+                            Load<CategoricalMultiLinkedToQuestionViewModel>
                         },
                         {InterviewEntityType.GpsCoordinatesQuestionModel, Load<GpsCoordinatesQuestionViewModel>},
                         {InterviewEntityType.MultimediaQuestionModel, Load<MultimediaQuestionViewModel>},
                         {InterviewEntityType.QRBarcodeQuestionModel, Load<QRBarcodeQuestionViewModel>},
-                        {InterviewEntityType.YesNoQuestionModel, Load<YesNoQuestionViewModel>},
+                        {InterviewEntityType.YesNoQuestionModel, Load<CategoricalYesNoViewModel>},
                         {InterviewEntityType.GroupModel, Load<GroupViewModel>},
                         {InterviewEntityType.RosterModel, Load<RosterViewModel>},
                         {InterviewEntityType.TimestampQuestionModel, Load<TimestampQuestionViewModel>},
@@ -125,6 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {InterviewEntityType.ReadOnlyQuestion, Load<ReadOnlyQuestionViewModel>},
                         {InterviewEntityType.AreaQuestionModel, Load<AreaQuestionViewModel>},
                         {InterviewEntityType.AudioQuestionModel, Load<AudioQuestionViewModel>},
+                        {InterviewEntityType.PlainRoster, Load<PlainRosterViewModel>},
                     };
                 }
 
@@ -202,7 +204,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (questionnaire.HasGroup(entityId))
             {
-                return questionnaire.IsRosterGroup(entityId) ? InterviewEntityType.RosterModel : InterviewEntityType.GroupModel;
+                if (questionnaire.IsRosterGroup(entityId))
+                    return questionnaire.IsPlainRoster(entityId) ? InterviewEntityType.PlainRoster : InterviewEntityType.RosterModel;
+                else
+                    return InterviewEntityType.GroupModel;
             }
 
             if (questionnaire.HasQuestion(entityId))
@@ -283,6 +288,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
 
             throw new ArgumentException("Don't found type for entity : " + entityId);
+        }
+
+        public IInterviewEntityViewModel GetEntity(Identity identity,
+            string interviewid, 
+            NavigationState navigationState)
+        {
+            var interview = this.interviewRepository.Get(interviewid);
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            var modelType = GetEntityModelType(identity, questionnaire, interview);
+
+            return CreateInterviewEntityViewModel(identity, modelType, interviewid, navigationState);
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(

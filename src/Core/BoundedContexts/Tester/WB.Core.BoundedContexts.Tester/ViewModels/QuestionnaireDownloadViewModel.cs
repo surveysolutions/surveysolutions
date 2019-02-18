@@ -110,15 +110,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    if (navigationIdentity.TargetScreen == ScreenType.Identifying)
-                    {
-                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
-                    }
-                    else
-                    {
-                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
-                            NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup));
-                    }
+                    var targetGroup = navigationIdentity.TargetGroup != null
+                        ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
+                        : null;
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
+                        targetGroup);
                 }
                 catch (Exception e)
                 {
@@ -220,7 +216,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
-                assignmentId: null));
+                assignmentId: null,
+                isAudioRecordingEnabled:false));
 
             return interviewId;
         }
@@ -279,7 +276,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 requiredAttachments.Add(attachment.ContentId);
             }
 
-            foreach (var contentId in this.attachmentContentStorage.EnumerateCache())
+            foreach (var contentId in await this.attachmentContentStorage.EnumerateCacheAsync())
             {
                 if (!requiredAttachments.Contains(contentId))
                     this.attachmentContentStorage.Remove(contentId);

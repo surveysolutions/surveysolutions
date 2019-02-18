@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User has not permissions to access requested questionnaire.
+        ///   Looks up a localized string similar to User doesn&apos;t have permissions to access requested questionnaire.
         /// </summary>
         internal static string NoAccessToQuestionnaire {
             get {
@@ -251,6 +251,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire&apos;s title can&apos;t have more than {1} symbols..
+        /// </summary>
+        internal static string QuestionnaireTitle_MaxLength {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_MaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire title is required.
         /// </summary>
         internal static string QuestionnaireTitle_required {
@@ -260,7 +269,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable names and roster IDs may be from 1 to 32 characters long.
+        ///   Looks up a localized string similar to Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space, and shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        internal static string QuestionnaireTitle_rules {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable names and roster IDs may be from 1 to {1} characters long.
         /// </summary>
         internal static string QuestionnaireVariable_MaxLength {
             get {

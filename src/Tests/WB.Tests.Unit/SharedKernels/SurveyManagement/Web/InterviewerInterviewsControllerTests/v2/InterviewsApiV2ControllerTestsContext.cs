@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         public static InterviewsApiV2Controller CreateInterviewerInterviewsController(
             IImageFileStorage imageFileStorage = null,
             IAudioFileStorage audioFileStorage = null,
+            IAudioAuditFileStorage audioAuditFileStorage = null,
             IAuthorizedUser authorizedUser = null,
             IInterviewInformationFactory interviewsFactory = null,
             IInterviewPackagesService incomingSyncPackagesQueue = null,
@@ -33,7 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 metaBuilder: metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
-                eventStore: Mock.Of<IHeadquartersEventStore>());
+                eventStore: Mock.Of<IHeadquartersEventStore>(),
+                audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>());
         }
     }
 }

@@ -41,7 +41,7 @@ export default {
             // apply accumulated changes to query
             changes.forEach(change => change(data));
 
-            const state = Object.assign(_.clone(this.queryString), data);
+            const state = _.assign(_.clone(this.queryString), data);
             this.updateRoute(state);
         },
 
@@ -59,9 +59,9 @@ export default {
         },
 
         
-        checkedChange(ev) {
+        checkedChange(value, el) {
             this.onChange(q => {
-                q[ev.name] = ev.checked;
+                q[el.name] = value;
             });
         },
 

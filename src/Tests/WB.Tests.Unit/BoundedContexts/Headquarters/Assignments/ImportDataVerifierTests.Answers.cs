@@ -8,6 +8,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
     internal partial class ImportDataVerifierTests
     {
         [Test]
+        public void when_verify_answers_and_quantity_is_more_than_10000_should_return_PL0054_error()
+        {
+            // arrange
+            int quantity = 10001;
+
+            var fileName = "mainfile.tab";
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, quantity: Create.Entity.AssignmentQuantity(parsedQuantity: quantity));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0054"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(quantity.ToString()));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
         public void when_verify_answers_and_quantity_is_not_integer_should_return_PL0035_error()
         {
             // arrange

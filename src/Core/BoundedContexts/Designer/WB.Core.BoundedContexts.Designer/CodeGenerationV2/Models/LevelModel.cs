@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public List<QuestionModel> Questions { get; } = new List<QuestionModel>();
         public List<RosterModel> Rosters { get; } = new List<RosterModel>();
         public List<VariableModel> Variables { get; } = new List<VariableModel>();
+        public List<SectionModel> Sections { get; } = new List<SectionModel>();
 
         public void Init(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames, IQuestionTypeToCSharpTypeMapper questionTypeMapper)
         {
@@ -30,6 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             this.CreateVariablesForCurrentAndParentLevels(questionnaire, questionTypeMapper);
 
             this.CreateRostersForCurrentAndParentLevels(questionnaire, levelClassNames);
+
+            this.CreateSectionsForCurrentAndParentLevels(questionnaire);
         }
 
         private void CreateRostersForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
@@ -86,6 +89,23 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                     Variable = questionnaire.GetVariable(question),
                     TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
                     RosterScope = rosterScope
+                });
+            }
+        }
+
+
+        private void CreateSectionsForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            foreach (var section in questionnaire.Find<IGroup>(x => !x.IsRoster))
+            {
+                var rosterScope = questionnaire.GetRosterScope(section);
+                if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
+
+                this.Sections.Add(new SectionModel
+                {
+                    Variable = questionnaire.GetVariable(section),
+                    RosterScope = rosterScope,
+                    //ClassName = className
                 });
             }
         }

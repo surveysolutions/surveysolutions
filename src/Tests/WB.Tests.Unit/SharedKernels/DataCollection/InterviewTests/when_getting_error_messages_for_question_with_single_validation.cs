@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
               //arrange
             var questionId = Create.Identity();
 
-            var interview = Setup.StatefulInterview(
+            var interview = SetUp.StatefulInterview(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {
                     Create.Entity.NumericIntegerQuestion(

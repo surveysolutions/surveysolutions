@@ -11,6 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
 
         protected GroupStateViewModel()
@@ -18,10 +19,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         }
 
         public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
-            IGroupStateCalculationStrategy groupStateCalculationStrategy)
+            IGroupStateCalculationStrategy groupStateCalculationStrategy,
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.interviewRepository = interviewRepository;
             this.groupStateCalculationStrategy = groupStateCalculationStrategy;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private string interviewId;
@@ -57,11 +60,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public virtual void UpdateFromGroupModel()
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.QuestionsCount = interview.CountEnabledQuestions(this.group);
             this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
             this.AnsweredQuestionsCount = interview.CountEnabledAnsweredQuestions(this.group);
             this.InvalidAnswersCount = interview.CountEnabledInvalidQuestionsAndStaticTexts(this.group);
-            this.Status = this.CalculateDetailedStatus(this.group, interview);
+            this.Status = this.CalculateDetailedStatus(this.group, interview, questionnaire);
             this.SimpleStatus = CalculateSimpleStatus();
         }
 
@@ -79,9 +83,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
+        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            return this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, interview);
+            return this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, interview, questionnaire);
         }
     }
 }

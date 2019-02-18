@@ -126,7 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>文件不能与问卷中的任何登记表相匹配。</value>
   </data>
-    <data name="PL0006_IdDublication" xml:space="preserve">
+  <data name="PL0006_IdDublication" xml:space="preserve">
     <value>发现了重复的编号。</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -138,10 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>登记表编号与登记表大小不一致。</value>
   </data>
-    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>[PL0014] 提供的问题数值不被允许。</value>
   </data>
-    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>无效的日期或时间数值。</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -156,10 +156,10 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>登记表大小问题不能有负值。</value>
   </data>
-    <data name="PL0024_DataWasNotFound" xml:space="preserve">
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>未找到预加载数据</value>
   </data>
-    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
     <value>没有找到提供的负责人</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
@@ -192,7 +192,7 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>数量需大于等于-1</value>
   </data>
-    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>问卷模板层级的数据文件丢失。</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
@@ -203,5 +203,26 @@
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>Id一列没有包含任何值</value>
+  </data>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>不支持被保护的密码进行存档</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>必须有的列 {0} 缺失</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>提供的问卷中未找到受保护的变量</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>某些类型的变量不支持受保护</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>负值不被多选型题目支持</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>列表型二维表应该有用于列出答案的列</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>数字型二维表的二维表编码不一致。二维表的序列编码应该是1,2,…一直到总的表个数</value>
   </data>
 </root>

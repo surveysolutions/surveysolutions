@@ -1,6 +1,7 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
 @using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.UI.Headquarters.Code
@@ -22,7 +23,7 @@
     @Scripts.Render("~/js/interviews-sv")
     @Scripts.Render("~/js/common")
 
-    <script type="text/javascript">
+<script type="text/javascript">
         var $interviewsPageUrl = '@Url.Action("Interviews", "Survey")';
         var $detailsUrl = '@Url.Action("Review", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatusesForSv", "Reports")';
@@ -51,7 +52,12 @@
         };
 
         $(function () {
-            var $questionnaires = @Model.Templates.AsJsonValue();
+            var $questionnaires = @Model.Templates.Select(x => new
+                             {
+                                 TemplateId = x.TemplateId.FormatGuid(),
+                                 x.TemplateName,
+                                 x.TemplateVersion
+                             }).AsJsonValue();;
             var notifier = new Notifier();
             var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
             var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
@@ -120,7 +126,7 @@
             ko.applyBindings(model);
             model.load();
         });
-    </script>
+</script>
 }
 
 
@@ -156,6 +162,17 @@
                                            selectPicker: {},
                                            options: QuestionnaireVersions,
                                            optionsCaption: '@Html.ToSafeJavascriptMessage(Common.AllVersions)',"></select>
+                    </div>
+                    
+                    <div class="block-filter">
+                        <h5 title="@Interviews.Tooltip_Filter_Status">@Common.Status</h5>
+                        <select data-bind="value: SelectedStatus" class="selectpicker">
+                            <option value="">@Common.AllStatuses</option>
+                            @foreach (var item in Model.Statuses)
+                            {
+                                <option value="@item.Status">@item.StatusName</option>
+                            }
+                        </select>
                     </div>
 
                     <div class="block-filter">

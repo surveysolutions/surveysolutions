@@ -110,7 +110,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public void ShowToast(string message)
         {
-            this.mvxCurrentTopActivity.Activity.RunOnUiThread(() => Toast.MakeText(this.mvxCurrentTopActivity.Activity, message, ToastLength.Short).Show());
+            var activity = this.mvxCurrentTopActivity.Activity; //sometime activity is null
+            activity?.RunOnUiThread(() => Toast.MakeText(activity, message, ToastLength.Short).Show());
         }
 
         public bool HasPendingUserInteractions => UserInteractions.Count > 0;

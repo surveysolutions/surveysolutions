@@ -49,6 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false);
 
+        Guid? GetSectionIdByVariable(string variable);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -58,6 +60,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetStaticText(Guid staticTextId);
 
         Attachment GetAttachmentForEntity(Guid entityId);
+        Guid? GetAttachmentIdByName(string name);
+        Attachment GetAttachmentById(Guid attachmentId);
 
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
@@ -280,5 +284,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsSignature(Guid entityIdentityId);
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
+        bool IsPlainRoster(Guid groupId);
     }
 }

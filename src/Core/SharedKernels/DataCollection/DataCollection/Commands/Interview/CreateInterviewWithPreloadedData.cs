@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             Guid supervisorId,
             Guid? interviewerId,
             InterviewKey interviewKey,
-            int? assignmentId)
+            int? assignmentId,
+            bool? isAudioRecordingEnabled)
             : base(interviewId, userId)
         {
             this.Id = interviewId;
@@ -38,6 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.InterviewerId = interviewerId;
             this.InterviewKey = interviewKey;
             this.AssignmentId = assignmentId;
+            this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
         }
 
         public Guid Id { get; private set; }
@@ -49,5 +51,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewKey InterviewKey { get; private set; }
         public int? AssignmentId { get; }
+
+        public bool? IsAudioRecordingEnabled { get; private set; }
     }
 }

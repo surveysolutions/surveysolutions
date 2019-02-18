@@ -95,12 +95,12 @@ namespace WB.UI.Shared.Enumerator.Services
 
         protected abstract void NavigateToSettingsImpl();
 
-        public Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
+        public Task<bool> NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
         {
             if (this.HasPendingOperations)
             {
                 this.ShowWaitMessage();
-                return Task.CompletedTask;
+                return Task.FromResult(false);
             }
             else
                 return this.navigationService.Navigate<TViewModel, TParam>(param);
@@ -117,7 +117,7 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.navigationService.Navigate<TViewModel>();
         }
 
-        public abstract Task NavigateToDashboardAsync(string interviewId = null);
+        public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);
 
         public async Task SignOutAndNavigateToLoginAsync()
         {

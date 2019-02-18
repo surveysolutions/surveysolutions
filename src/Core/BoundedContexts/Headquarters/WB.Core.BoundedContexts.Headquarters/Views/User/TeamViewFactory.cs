@@ -33,11 +33,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 Users = this.interviewSummaryReader.Query(interviews =>
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
+                        .Select(x => new UsersViewItem
+                        {
+                            UserId = x.TeamLeadId,
+                            UserName = x.TeamLeadName
+                        })
+                        .OrderBy(x => x.UserName)
+                        .Distinct()
                         .Take(pageSize)
                         .ToList()),
 
                 TotalCountByQuery = this.interviewSummaryReader.Query(interviews =>
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
+                        .Select(x => x.TeamLeadId)
+                        .Distinct()
                         .Count())
             };
             FillUserRoles(assigneeSupervisors);
@@ -103,23 +112,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return responsiblesFromInterviews;
         }
 
-        private static IQueryable<UsersViewItem> ApplyFilterByTeamLead(string searchBy, IQueryable<InterviewSummary> interviews)
+        private static IQueryable<InterviewSummary> ApplyFilterByTeamLead(string searchBy, IQueryable<InterviewSummary> interviews)
         {
+            var filteredInterviews = interviews;
+
             if (!string.IsNullOrWhiteSpace(searchBy))
             {
-                interviews = interviews.Where(x => x.TeamLeadName.ToLower().Contains(searchBy.ToLower()));
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName.ToLower().Contains(searchBy.ToLower()));
             }
 
-            var responsiblesFromInterviews = interviews.GroupBy(x => new {x.TeamLeadId, x.TeamLeadName})
-                .Where(x => x.Count() > 0)
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.Key.TeamLeadId,
-                    UserName = x.Key.TeamLeadName
-                })
-                .OrderBy(x => x.UserName);
-
-            return responsiblesFromInterviews;
+            return filteredInterviews;
         }
 
         private List<UsersViewItem> GetUsersFilteredByTeamLeadAndResponsible(string searchBy, int pageSize)

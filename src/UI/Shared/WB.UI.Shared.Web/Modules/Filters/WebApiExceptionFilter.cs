@@ -19,19 +19,4 @@ namespace WB.UI.Shared.Web.Modules.Filters
             return filter.OnExceptionAsync(actionExecutedContext, cancellationToken);
         }
     }
-//
-//    public class MvcExceptionFilter<TFilter> : IAutofacExceptionFilter where TFilter : System.Web.Mvc.IExceptionFilter
-//    {
-//        private readonly TFilter filter;
-//
-//        public MvcExceptionFilter(TFilter filter)
-//        {
-//            this.filter = filter;
-//        }
-//
-//        public Task OnExceptionAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
-//        {
-//            return filter.OnException(actionExecutedContext);
-//        }
-//    }
 }

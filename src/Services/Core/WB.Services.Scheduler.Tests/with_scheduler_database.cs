@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -64,10 +66,27 @@ namespace WB.Services.Scheduler.Tests
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
 
+                await EnsurePublicSchemaExists(db.Database);
                 await db.Database.MigrateAsync();
                 await db.Database.ExecuteSqlCommandAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
             }
         }
+
+          
+        private static async Task EnsurePublicSchemaExists(DatabaseFacade db)
+        {
+            try
+            {
+                await db.GetDbConnection().ExecuteAsync("create schema if not exists public");
+            }
+            catch { /* 
+                    If DB is not created, then db.Database.MigrateAsync will create it with public schema
+                    but if there is already created DB without public schema, them MigrateAsync will fail.
+                    So it's OK to fail here and om om om exception and fail later on Migrate if there is a 
+                    problem with migrations or DB access
+                 */ }
+         }
+ 
 
         [TearDown]
         public async Task Down()

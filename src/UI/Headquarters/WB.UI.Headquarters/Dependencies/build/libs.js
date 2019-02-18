@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v3.2.1
+ * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2017-03-20T18:59Z
+ * Date: 2018-01-20T17:24Z
  */
 ( function( global, factory ) {
 
@@ -71,16 +71,57 @@ var ObjectFunctionString = fnToString.call( Object );
 
 var support = {};
 
+var isFunction = function isFunction( obj ) {
+
+      // Support: Chrome <=57, Firefox <=52
+      // In some browsers, typeof returns "function" for HTML <object> elements
+      // (i.e., `typeof document.createElement( "object" ) === "function"`).
+      // We don't want to classify *any* DOM node as a function.
+      return typeof obj === "function" && typeof obj.nodeType !== "number";
+  };
 
 
-	function DOMEval( code, doc ) {
+var isWindow = function isWindow( obj ) {
+		return obj != null && obj === obj.window;
+	};
+
+
+
+
+	var preservedScriptAttributes = {
+		type: true,
+		src: true,
+		noModule: true
+	};
+
+	function DOMEval( code, doc, node ) {
 		doc = doc || document;
 
-		var script = doc.createElement( "script" );
+		var i,
+			script = doc.createElement( "script" );
 
 		script.text = code;
+		if ( node ) {
+			for ( i in preservedScriptAttributes ) {
+				if ( node[ i ] ) {
+					script[ i ] = node[ i ];
+				}
+			}
+		}
 		doc.head.appendChild( script ).parentNode.removeChild( script );
 	}
+
+
+function toType( obj ) {
+	if ( obj == null ) {
+		return obj + "";
+	}
+
+	// Support: Android <=2.3 only (functionish RegExp)
+	return typeof obj === "object" || typeof obj === "function" ?
+		class2type[ toString.call( obj ) ] || "object" :
+		typeof obj;
+}
 /* global Symbol */
 // Defining this global in .eslintrc.json would create a danger of using the global
 // unguarded in another place, it seems safer to define global only for this module
@@ -88,7 +129,7 @@ var support = {};
 
 
 var
-	version = "3.2.1",
+	version = "3.3.1",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -100,16 +141,7 @@ var
 
 	// Support: Android <=4.0 only
 	// Make sure we trim BOM and NBSP
-	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-
-	// Matches dashed string for camelizing
-	rmsPrefix = /^-ms-/,
-	rdashAlpha = /-([a-z])/g,
-
-	// Used by jQuery.camelCase as callback to replace()
-	fcamelCase = function( all, letter ) {
-		return letter.toUpperCase();
-	};
+	rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 
 jQuery.fn = jQuery.prototype = {
 
@@ -209,7 +241,7 @@ jQuery.extend = jQuery.fn.extend = function() {
 	}
 
 	// Handle case when target is a string or something (possible in deep copy)
-	if ( typeof target !== "object" && !jQuery.isFunction( target ) ) {
+	if ( typeof target !== "object" && !isFunction( target ) ) {
 		target = {};
 	}
 
@@ -275,28 +307,6 @@ jQuery.extend( {
 
 	noop: function() {},
 
-	isFunction: function( obj ) {
-		return jQuery.type( obj ) === "function";
-	},
-
-	isWindow: function( obj ) {
-		return obj != null && obj === obj.window;
-	},
-
-	isNumeric: function( obj ) {
-
-		// As of jQuery 3.0, isNumeric is limited to
-		// strings and numbers (primitives or objects)
-		// that can be coerced to finite numbers (gh-2662)
-		var type = jQuery.type( obj );
-		return ( type === "number" || type === "string" ) &&
-
-			// parseFloat NaNs numeric-cast false positives ("")
-			// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
-			// subtraction forces infinities to NaN
-			!isNaN( obj - parseFloat( obj ) );
-	},
-
 	isPlainObject: function( obj ) {
 		var proto, Ctor;
 
@@ -330,27 +340,9 @@ jQuery.extend( {
 		return true;
 	},
 
-	type: function( obj ) {
-		if ( obj == null ) {
-			return obj + "";
-		}
-
-		// Support: Android <=2.3 only (functionish RegExp)
-		return typeof obj === "object" || typeof obj === "function" ?
-			class2type[ toString.call( obj ) ] || "object" :
-			typeof obj;
-	},
-
 	// Evaluates a script in a global context
 	globalEval: function( code ) {
 		DOMEval( code );
-	},
-
-	// Convert dashed to camelCase; used by the css and data modules
-	// Support: IE <=9 - 11, Edge 12 - 13
-	// Microsoft forgot to hump their vendor prefix (#9572)
-	camelCase: function( string ) {
-		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
 
 	each: function( obj, callback ) {
@@ -473,37 +465,6 @@ jQuery.extend( {
 	// A global GUID counter for objects
 	guid: 1,
 
-	// Bind a function to a context, optionally partially applying any
-	// arguments.
-	proxy: function( fn, context ) {
-		var tmp, args, proxy;
-
-		if ( typeof context === "string" ) {
-			tmp = fn[ context ];
-			context = fn;
-			fn = tmp;
-		}
-
-		// Quick check to determine if target is callable, in the spec
-		// this throws a TypeError, but we will just return undefined.
-		if ( !jQuery.isFunction( fn ) ) {
-			return undefined;
-		}
-
-		// Simulated bind
-		args = slice.call( arguments, 2 );
-		proxy = function() {
-			return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
-		};
-
-		// Set the guid of unique handler to the same of original handler, so it can be removed
-		proxy.guid = fn.guid = fn.guid || jQuery.guid++;
-
-		return proxy;
-	},
-
-	now: Date.now,
-
 	// jQuery.support is not used in Core but other projects attach their
 	// properties to it so it needs to exist.
 	support: support
@@ -526,9 +487,9 @@ function isArrayLike( obj ) {
 	// hasOwn isn't used here due to false negatives
 	// regarding Nodelist length in IE
 	var length = !!obj && "length" in obj && obj.length,
-		type = jQuery.type( obj );
+		type = toType( obj );
 
-	if ( type === "function" || jQuery.isWindow( obj ) ) {
+	if ( isFunction( obj ) || isWindow( obj ) ) {
 		return false;
 	}
 
@@ -2848,11 +2809,9 @@ var rsingleTag = ( /^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|
 
 
 
-var risSimple = /^.[^:#\[\.,]*$/;
-
 // Implement the identical functionality for filter and not
 function winnow( elements, qualifier, not ) {
-	if ( jQuery.isFunction( qualifier ) ) {
+	if ( isFunction( qualifier ) ) {
 		return jQuery.grep( elements, function( elem, i ) {
 			return !!qualifier.call( elem, i, elem ) !== not;
 		} );
@@ -2872,16 +2831,8 @@ function winnow( elements, qualifier, not ) {
 		} );
 	}
 
-	// Simple selector that can be filtered directly, removing non-Elements
-	if ( risSimple.test( qualifier ) ) {
-		return jQuery.filter( qualifier, elements, not );
-	}
-
-	// Complex selector, compare the two sets, removing non-Elements
-	qualifier = jQuery.filter( qualifier, elements );
-	return jQuery.grep( elements, function( elem ) {
-		return ( indexOf.call( qualifier, elem ) > -1 ) !== not && elem.nodeType === 1;
-	} );
+	// Filtered directly for both simple and complex selectors
+	return jQuery.filter( qualifier, elements, not );
 }
 
 jQuery.filter = function( expr, elems, not ) {
@@ -3002,7 +2953,7 @@ var rootjQuery,
 						for ( match in context ) {
 
 							// Properties of context are called as methods if possible
-							if ( jQuery.isFunction( this[ match ] ) ) {
+							if ( isFunction( this[ match ] ) ) {
 								this[ match ]( context[ match ] );
 
 							// ...and otherwise set as attributes
@@ -3045,7 +2996,7 @@ var rootjQuery,
 
 		// HANDLE: $(function)
 		// Shortcut for document ready
-		} else if ( jQuery.isFunction( selector ) ) {
+		} else if ( isFunction( selector ) ) {
 			return root.ready !== undefined ?
 				root.ready( selector ) :
 
@@ -3360,11 +3311,11 @@ jQuery.Callbacks = function( options ) {
 
 					( function add( args ) {
 						jQuery.each( args, function( _, arg ) {
-							if ( jQuery.isFunction( arg ) ) {
+							if ( isFunction( arg ) ) {
 								if ( !options.unique || !self.has( arg ) ) {
 									list.push( arg );
 								}
-							} else if ( arg && arg.length && jQuery.type( arg ) !== "string" ) {
+							} else if ( arg && arg.length && toType( arg ) !== "string" ) {
 
 								// Inspect recursively
 								add( arg );
@@ -3479,11 +3430,11 @@ function adoptValue( value, resolve, reject, noValue ) {
 	try {
 
 		// Check for promise aspect first to privilege synchronous behavior
-		if ( value && jQuery.isFunction( ( method = value.promise ) ) ) {
+		if ( value && isFunction( ( method = value.promise ) ) ) {
 			method.call( value ).done( resolve ).fail( reject );
 
 		// Other thenables
-		} else if ( value && jQuery.isFunction( ( method = value.then ) ) ) {
+		} else if ( value && isFunction( ( method = value.then ) ) ) {
 			method.call( value, resolve, reject );
 
 		// Other non-thenables
@@ -3541,14 +3492,14 @@ jQuery.extend( {
 						jQuery.each( tuples, function( i, tuple ) {
 
 							// Map tuples (progress, done, fail) to arguments (done, fail, progress)
-							var fn = jQuery.isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];
+							var fn = isFunction( fns[ tuple[ 4 ] ] ) && fns[ tuple[ 4 ] ];
 
 							// deferred.progress(function() { bind to newDefer or newDefer.notify })
 							// deferred.done(function() { bind to newDefer or newDefer.resolve })
 							// deferred.fail(function() { bind to newDefer or newDefer.reject })
 							deferred[ tuple[ 1 ] ]( function() {
 								var returned = fn && fn.apply( this, arguments );
-								if ( returned && jQuery.isFunction( returned.promise ) ) {
+								if ( returned && isFunction( returned.promise ) ) {
 									returned.promise()
 										.progress( newDefer.notify )
 										.done( newDefer.resolve )
@@ -3602,7 +3553,7 @@ jQuery.extend( {
 										returned.then;
 
 									// Handle a returned thenable
-									if ( jQuery.isFunction( then ) ) {
+									if ( isFunction( then ) ) {
 
 										// Special processors (notify) just wait for resolution
 										if ( special ) {
@@ -3698,7 +3649,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onProgress ) ?
+								isFunction( onProgress ) ?
 									onProgress :
 									Identity,
 								newDefer.notifyWith
@@ -3710,7 +3661,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onFulfilled ) ?
+								isFunction( onFulfilled ) ?
 									onFulfilled :
 									Identity
 							)
@@ -3721,7 +3672,7 @@ jQuery.extend( {
 							resolve(
 								0,
 								newDefer,
-								jQuery.isFunction( onRejected ) ?
+								isFunction( onRejected ) ?
 									onRejected :
 									Thrower
 							)
@@ -3761,8 +3712,15 @@ jQuery.extend( {
 					// fulfilled_callbacks.disable
 					tuples[ 3 - i ][ 2 ].disable,
 
+					// rejected_handlers.disable
+					// fulfilled_handlers.disable
+					tuples[ 3 - i ][ 3 ].disable,
+
 					// progress_callbacks.lock
-					tuples[ 0 ][ 2 ].lock
+					tuples[ 0 ][ 2 ].lock,
+
+					// progress_handlers.lock
+					tuples[ 0 ][ 3 ].lock
 				);
 			}
 
@@ -3832,7 +3790,7 @@ jQuery.extend( {
 
 			// Use .then() to unwrap secondary thenables (cf. gh-3000)
 			if ( master.state() === "pending" ||
-				jQuery.isFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {
+				isFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {
 
 				return master.then();
 			}
@@ -3960,7 +3918,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		bulk = key == null;
 
 	// Sets many values
-	if ( jQuery.type( key ) === "object" ) {
+	if ( toType( key ) === "object" ) {
 		chainable = true;
 		for ( i in key ) {
 			access( elems, fn, i, key[ i ], true, emptyGet, raw );
@@ -3970,7 +3928,7 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 	} else if ( value !== undefined ) {
 		chainable = true;
 
-		if ( !jQuery.isFunction( value ) ) {
+		if ( !isFunction( value ) ) {
 			raw = true;
 		}
 
@@ -4012,6 +3970,23 @@ var access = function( elems, fn, key, value, chainable, emptyGet, raw ) {
 
 	return len ? fn( elems[ 0 ], key ) : emptyGet;
 };
+
+
+// Matches dashed string for camelizing
+var rmsPrefix = /^-ms-/,
+	rdashAlpha = /-([a-z])/g;
+
+// Used by camelCase as callback to replace()
+function fcamelCase( all, letter ) {
+	return letter.toUpperCase();
+}
+
+// Convert dashed to camelCase; used by the css and data modules
+// Support: IE <=9 - 11, Edge 12 - 15
+// Microsoft forgot to hump their vendor prefix (#9572)
+function camelCase( string ) {
+	return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
+}
 var acceptData = function( owner ) {
 
 	// Accepts only:
@@ -4074,14 +4049,14 @@ Data.prototype = {
 		// Handle: [ owner, key, value ] args
 		// Always use camelCase key (gh-2257)
 		if ( typeof data === "string" ) {
-			cache[ jQuery.camelCase( data ) ] = value;
+			cache[ camelCase( data ) ] = value;
 
 		// Handle: [ owner, { properties } ] args
 		} else {
 
 			// Copy the properties one-by-one to the cache object
 			for ( prop in data ) {
-				cache[ jQuery.camelCase( prop ) ] = data[ prop ];
+				cache[ camelCase( prop ) ] = data[ prop ];
 			}
 		}
 		return cache;
@@ -4091,7 +4066,7 @@ Data.prototype = {
 			this.cache( owner ) :
 
 			// Always use camelCase key (gh-2257)
-			owner[ this.expando ] && owner[ this.expando ][ jQuery.camelCase( key ) ];
+			owner[ this.expando ] && owner[ this.expando ][ camelCase( key ) ];
 	},
 	access: function( owner, key, value ) {
 
@@ -4139,9 +4114,9 @@ Data.prototype = {
 
 				// If key is an array of keys...
 				// We always set camelCase keys, so remove that.
-				key = key.map( jQuery.camelCase );
+				key = key.map( camelCase );
 			} else {
-				key = jQuery.camelCase( key );
+				key = camelCase( key );
 
 				// If a key with the spaces exists, use it.
 				// Otherwise, create an array by matching non-whitespace
@@ -4287,7 +4262,7 @@ jQuery.fn.extend( {
 						if ( attrs[ i ] ) {
 							name = attrs[ i ].name;
 							if ( name.indexOf( "data-" ) === 0 ) {
-								name = jQuery.camelCase( name.slice( 5 ) );
+								name = camelCase( name.slice( 5 ) );
 								dataAttr( elem, name, data[ name ] );
 							}
 						}
@@ -4534,8 +4509,7 @@ var swap = function( elem, options, callback, args ) {
 
 
 function adjustCSS( elem, prop, valueParts, tween ) {
-	var adjusted,
-		scale = 1,
+	var adjusted, scale,
 		maxIterations = 20,
 		currentValue = tween ?
 			function() {
@@ -4553,30 +4527,33 @@ function adjustCSS( elem, prop, valueParts, tween ) {
 
 	if ( initialInUnit && initialInUnit[ 3 ] !== unit ) {
 
+		// Support: Firefox <=54
+		// Halve the iteration target value to prevent interference from CSS upper bounds (gh-2144)
+		initial = initial / 2;
+
 		// Trust units reported by jQuery.css
 		unit = unit || initialInUnit[ 3 ];
-
-		// Make sure we update the tween properties later on
-		valueParts = valueParts || [];
 
 		// Iteratively approximate from a nonzero starting point
 		initialInUnit = +initial || 1;
 
-		do {
+		while ( maxIterations-- ) {
 
-			// If previous iteration zeroed out, double until we get *something*.
-			// Use string for doubling so we don't accidentally see scale as unchanged below
-			scale = scale || ".5";
-
-			// Adjust and apply
-			initialInUnit = initialInUnit / scale;
+			// Evaluate and update our best guess (doubling guesses that zero out).
+			// Finish if the scale equals or crosses 1 (making the old*new product non-positive).
 			jQuery.style( elem, prop, initialInUnit + unit );
+			if ( ( 1 - scale ) * ( 1 - ( scale = currentValue() / initial || 0.5 ) ) <= 0 ) {
+				maxIterations = 0;
+			}
+			initialInUnit = initialInUnit / scale;
 
-		// Update scale, tolerating zero or NaN from tween.cur()
-		// Break the loop if scale is unchanged or perfect, or if we've just had enough.
-		} while (
-			scale !== ( scale = currentValue() / initial ) && scale !== 1 && --maxIterations
-		);
+		}
+
+		initialInUnit = initialInUnit * 2;
+		jQuery.style( elem, prop, initialInUnit + unit );
+
+		// Make sure we update the tween properties later on
+		valueParts = valueParts || [];
 	}
 
 	if ( valueParts ) {
@@ -4694,7 +4671,7 @@ var rcheckableType = ( /^(?:checkbox|radio)$/i );
 
 var rtagName = ( /<([a-z][^\/\0>\x20\t\r\n\f]+)/i );
 
-var rscriptType = ( /^$|\/(?:java|ecma)script/i );
+var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 
 
 
@@ -4776,7 +4753,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		if ( elem || elem === 0 ) {
 
 			// Add nodes directly
-			if ( jQuery.type( elem ) === "object" ) {
+			if ( toType( elem ) === "object" ) {
 
 				// Support: Android <=4.0 only, PhantomJS 1 only
 				// push.apply(_, arraylike) throws on ancient WebKit
@@ -5286,7 +5263,7 @@ jQuery.event = {
 			enumerable: true,
 			configurable: true,
 
-			get: jQuery.isFunction( hook ) ?
+			get: isFunction( hook ) ?
 				function() {
 					if ( this.originalEvent ) {
 							return hook( this.originalEvent );
@@ -5421,7 +5398,7 @@ jQuery.Event = function( src, props ) {
 	}
 
 	// Create a timestamp if incoming event doesn't have one
-	this.timeStamp = src && src.timeStamp || jQuery.now();
+	this.timeStamp = src && src.timeStamp || Date.now();
 
 	// Mark it as fixed
 	this[ jQuery.expando ] = true;
@@ -5620,14 +5597,13 @@ var
 
 	/* eslint-enable */
 
-	// Support: IE <=10 - 11, Edge 12 - 13
+	// Support: IE <=10 - 11, Edge 12 - 13 only
 	// In IE/Edge using regex groups here causes severe slowdowns.
 	// See https://connect.microsoft.com/IE/feedback/details/1736512/
 	rnoInnerhtml = /<script|<style|<link/i,
 
 	// checked="checked" or checked
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
-	rscriptTypeMasked = /^true\/(.*)/,
 	rcleanScript = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
 // Prefer a tbody over its parent table for containing new rows
@@ -5635,7 +5611,7 @@ function manipulationTarget( elem, content ) {
 	if ( nodeName( elem, "table" ) &&
 		nodeName( content.nodeType !== 11 ? content : content.firstChild, "tr" ) ) {
 
-		return jQuery( ">tbody", elem )[ 0 ] || elem;
+		return jQuery( elem ).children( "tbody" )[ 0 ] || elem;
 	}
 
 	return elem;
@@ -5647,10 +5623,8 @@ function disableScript( elem ) {
 	return elem;
 }
 function restoreScript( elem ) {
-	var match = rscriptTypeMasked.exec( elem.type );
-
-	if ( match ) {
-		elem.type = match[ 1 ];
+	if ( ( elem.type || "" ).slice( 0, 5 ) === "true/" ) {
+		elem.type = elem.type.slice( 5 );
 	} else {
 		elem.removeAttribute( "type" );
 	}
@@ -5716,15 +5690,15 @@ function domManip( collection, args, callback, ignored ) {
 		l = collection.length,
 		iNoClone = l - 1,
 		value = args[ 0 ],
-		isFunction = jQuery.isFunction( value );
+		valueIsFunction = isFunction( value );
 
 	// We can't cloneNode fragments that contain checked, in WebKit
-	if ( isFunction ||
+	if ( valueIsFunction ||
 			( l > 1 && typeof value === "string" &&
 				!support.checkClone && rchecked.test( value ) ) ) {
 		return collection.each( function( index ) {
 			var self = collection.eq( index );
-			if ( isFunction ) {
+			if ( valueIsFunction ) {
 				args[ 0 ] = value.call( this, index, self.html() );
 			}
 			domManip( self, args, callback, ignored );
@@ -5778,14 +5752,14 @@ function domManip( collection, args, callback, ignored ) {
 						!dataPriv.access( node, "globalEval" ) &&
 						jQuery.contains( doc, node ) ) {
 
-						if ( node.src ) {
+						if ( node.src && ( node.type || "" ).toLowerCase()  !== "module" ) {
 
 							// Optional AJAX dependency, but won't run scripts if not present
 							if ( jQuery._evalUrl ) {
 								jQuery._evalUrl( node.src );
 							}
 						} else {
-							DOMEval( node.textContent.replace( rcleanScript, "" ), doc );
+							DOMEval( node.textContent.replace( rcleanScript, "" ), doc, node );
 						}
 					}
 				}
@@ -6065,8 +6039,6 @@ jQuery.each( {
 		return this.pushStack( ret );
 	};
 } );
-var rmargin = ( /^margin/ );
-
 var rnumnonpx = new RegExp( "^(" + pnum + ")(?!px)[a-z%]+$", "i" );
 
 var getStyles = function( elem ) {
@@ -6083,6 +6055,8 @@ var getStyles = function( elem ) {
 		return view.getComputedStyle( elem );
 	};
 
+var rboxStyle = new RegExp( cssExpand.join( "|" ), "i" );
+
 
 
 ( function() {
@@ -6096,25 +6070,33 @@ var getStyles = function( elem ) {
 			return;
 		}
 
+		container.style.cssText = "position:absolute;left:-11111px;width:60px;" +
+			"margin-top:1px;padding:0;border:0";
 		div.style.cssText =
-			"box-sizing:border-box;" +
-			"position:relative;display:block;" +
+			"position:relative;display:block;box-sizing:border-box;overflow:scroll;" +
 			"margin:auto;border:1px;padding:1px;" +
-			"top:1%;width:50%";
-		div.innerHTML = "";
-		documentElement.appendChild( container );
+			"width:60%;top:1%";
+		documentElement.appendChild( container ).appendChild( div );
 
 		var divStyle = window.getComputedStyle( div );
 		pixelPositionVal = divStyle.top !== "1%";
 
 		// Support: Android 4.0 - 4.3 only, Firefox <=3 - 44
-		reliableMarginLeftVal = divStyle.marginLeft === "2px";
-		boxSizingReliableVal = divStyle.width === "4px";
+		reliableMarginLeftVal = roundPixelMeasures( divStyle.marginLeft ) === 12;
 
-		// Support: Android 4.0 - 4.3 only
+		// Support: Android 4.0 - 4.3 only, Safari <=9.1 - 10.1, iOS <=7.0 - 9.3
 		// Some styles come back with percentage values, even though they shouldn't
-		div.style.marginRight = "50%";
-		pixelMarginRightVal = divStyle.marginRight === "4px";
+		div.style.right = "60%";
+		pixelBoxStylesVal = roundPixelMeasures( divStyle.right ) === 36;
+
+		// Support: IE 9 - 11 only
+		// Detect misreporting of content dimensions for box-sizing:border-box elements
+		boxSizingReliableVal = roundPixelMeasures( divStyle.width ) === 36;
+
+		// Support: IE 9 only
+		// Detect overflow:scroll screwiness (gh-3699)
+		div.style.position = "absolute";
+		scrollboxSizeVal = div.offsetWidth === 36 || "absolute";
 
 		documentElement.removeChild( container );
 
@@ -6123,7 +6105,12 @@ var getStyles = function( elem ) {
 		div = null;
 	}
 
-	var pixelPositionVal, boxSizingReliableVal, pixelMarginRightVal, reliableMarginLeftVal,
+	function roundPixelMeasures( measure ) {
+		return Math.round( parseFloat( measure ) );
+	}
+
+	var pixelPositionVal, boxSizingReliableVal, scrollboxSizeVal, pixelBoxStylesVal,
+		reliableMarginLeftVal,
 		container = document.createElement( "div" ),
 		div = document.createElement( "div" );
 
@@ -6138,26 +6125,26 @@ var getStyles = function( elem ) {
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	container.style.cssText = "border:0;width:8px;height:0;top:0;left:-9999px;" +
-		"padding:0;margin-top:1px;position:absolute";
-	container.appendChild( div );
-
 	jQuery.extend( support, {
-		pixelPosition: function() {
-			computeStyleTests();
-			return pixelPositionVal;
-		},
 		boxSizingReliable: function() {
 			computeStyleTests();
 			return boxSizingReliableVal;
 		},
-		pixelMarginRight: function() {
+		pixelBoxStyles: function() {
 			computeStyleTests();
-			return pixelMarginRightVal;
+			return pixelBoxStylesVal;
+		},
+		pixelPosition: function() {
+			computeStyleTests();
+			return pixelPositionVal;
 		},
 		reliableMarginLeft: function() {
 			computeStyleTests();
 			return reliableMarginLeftVal;
+		},
+		scrollboxSize: function() {
+			computeStyleTests();
+			return scrollboxSizeVal;
 		}
 	} );
 } )();
@@ -6189,7 +6176,7 @@ function curCSS( elem, name, computed ) {
 		// but width seems to be reliably pixels.
 		// This is against the CSSOM draft spec:
 		// https://drafts.csswg.org/cssom/#resolved-values
-		if ( !support.pixelMarginRight() && rnumnonpx.test( ret ) && rmargin.test( name ) ) {
+		if ( !support.pixelBoxStyles() && rnumnonpx.test( ret ) && rboxStyle.test( name ) ) {
 
 			// Remember the original values
 			width = style.width;
@@ -6294,87 +6281,120 @@ function setPositiveNumber( elem, value, subtract ) {
 		value;
 }
 
-function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
-	var i,
-		val = 0;
+function boxModelAdjustment( elem, dimension, box, isBorderBox, styles, computedVal ) {
+	var i = dimension === "width" ? 1 : 0,
+		extra = 0,
+		delta = 0;
 
-	// If we already have the right measurement, avoid augmentation
-	if ( extra === ( isBorderBox ? "border" : "content" ) ) {
-		i = 4;
-
-	// Otherwise initialize for horizontal or vertical properties
-	} else {
-		i = name === "width" ? 1 : 0;
+	// Adjustment may not be necessary
+	if ( box === ( isBorderBox ? "border" : "content" ) ) {
+		return 0;
 	}
 
 	for ( ; i < 4; i += 2 ) {
 
-		// Both box models exclude margin, so add it if we want it
-		if ( extra === "margin" ) {
-			val += jQuery.css( elem, extra + cssExpand[ i ], true, styles );
+		// Both box models exclude margin
+		if ( box === "margin" ) {
+			delta += jQuery.css( elem, box + cssExpand[ i ], true, styles );
 		}
 
-		if ( isBorderBox ) {
+		// If we get here with a content-box, we're seeking "padding" or "border" or "margin"
+		if ( !isBorderBox ) {
 
-			// border-box includes padding, so remove it if we want content
-			if ( extra === "content" ) {
-				val -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			// Add padding
+			delta += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+
+			// For "border" or "margin", add border
+			if ( box !== "padding" ) {
+				delta += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+
+			// But still keep track of it otherwise
+			} else {
+				extra += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 
-			// At this point, extra isn't border nor margin, so remove border
-			if ( extra !== "margin" ) {
-				val -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
-			}
+		// If we get here with a border-box (content + padding + border), we're seeking "content" or
+		// "padding" or "margin"
 		} else {
 
-			// At this point, extra isn't content, so add padding
-			val += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			// For "content", subtract padding
+			if ( box === "content" ) {
+				delta -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			}
 
-			// At this point, extra isn't content nor padding, so add border
-			if ( extra !== "padding" ) {
-				val += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+			// For "content" or "padding", subtract border
+			if ( box !== "margin" ) {
+				delta -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 		}
 	}
 
-	return val;
+	// Account for positive content-box scroll gutter when requested by providing computedVal
+	if ( !isBorderBox && computedVal >= 0 ) {
+
+		// offsetWidth/offsetHeight is a rounded sum of content, padding, scroll gutter, and border
+		// Assuming integer scroll gutter, subtract the rest and round down
+		delta += Math.max( 0, Math.ceil(
+			elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+			computedVal -
+			delta -
+			extra -
+			0.5
+		) );
+	}
+
+	return delta;
 }
 
-function getWidthOrHeight( elem, name, extra ) {
+function getWidthOrHeight( elem, dimension, extra ) {
 
 	// Start with computed style
-	var valueIsBorderBox,
-		styles = getStyles( elem ),
-		val = curCSS( elem, name, styles ),
-		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box";
+	var styles = getStyles( elem ),
+		val = curCSS( elem, dimension, styles ),
+		isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+		valueIsBorderBox = isBorderBox;
 
-	// Computed unit is not pixels. Stop here and return.
+	// Support: Firefox <=54
+	// Return a confounding non-pixel value or feign ignorance, as appropriate.
 	if ( rnumnonpx.test( val ) ) {
-		return val;
+		if ( !extra ) {
+			return val;
+		}
+		val = "auto";
 	}
 
 	// Check for style in case a browser which returns unreliable values
 	// for getComputedStyle silently falls back to the reliable elem.style
-	valueIsBorderBox = isBorderBox &&
-		( support.boxSizingReliable() || val === elem.style[ name ] );
+	valueIsBorderBox = valueIsBorderBox &&
+		( support.boxSizingReliable() || val === elem.style[ dimension ] );
 
-	// Fall back to offsetWidth/Height when value is "auto"
+	// Fall back to offsetWidth/offsetHeight when value is "auto"
 	// This happens for inline elements with no explicit setting (gh-3571)
-	if ( val === "auto" ) {
-		val = elem[ "offset" + name[ 0 ].toUpperCase() + name.slice( 1 ) ];
+	// Support: Android <=4.1 - 4.3 only
+	// Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)
+	if ( val === "auto" ||
+		!parseFloat( val ) && jQuery.css( elem, "display", false, styles ) === "inline" ) {
+
+		val = elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ];
+
+		// offsetWidth/offsetHeight provide border-box values
+		valueIsBorderBox = true;
 	}
 
-	// Normalize "", auto, and prepare for extra
+	// Normalize "" and auto
 	val = parseFloat( val ) || 0;
 
-	// Use the active box-sizing model to add/subtract irrelevant styles
+	// Adjust for the element's box model
 	return ( val +
-		augmentWidthOrHeight(
+		boxModelAdjustment(
 			elem,
-			name,
+			dimension,
 			extra || ( isBorderBox ? "border" : "content" ),
 			valueIsBorderBox,
-			styles
+			styles,
+
+			// Provide the current computed size to request scroll gutter calculation (gh-3589)
+			val
 		)
 	) + "px";
 }
@@ -6415,9 +6435,7 @@ jQuery.extend( {
 
 	// Add in properties whose names you wish to fix before
 	// setting or getting the value
-	cssProps: {
-		"float": "cssFloat"
-	},
+	cssProps: {},
 
 	// Get and set the style property on a DOM Node
 	style: function( elem, name, value, extra ) {
@@ -6429,7 +6447,7 @@ jQuery.extend( {
 
 		// Make sure that we're working with the right name
 		var ret, type, hooks,
-			origName = jQuery.camelCase( name ),
+			origName = camelCase( name ),
 			isCustomProp = rcustomProp.test( name ),
 			style = elem.style;
 
@@ -6497,7 +6515,7 @@ jQuery.extend( {
 
 	css: function( elem, name, extra, styles ) {
 		var val, num, hooks,
-			origName = jQuery.camelCase( name ),
+			origName = camelCase( name ),
 			isCustomProp = rcustomProp.test( name );
 
 		// Make sure that we're working with the right name. We don't
@@ -6535,8 +6553,8 @@ jQuery.extend( {
 	}
 } );
 
-jQuery.each( [ "height", "width" ], function( i, name ) {
-	jQuery.cssHooks[ name ] = {
+jQuery.each( [ "height", "width" ], function( i, dimension ) {
+	jQuery.cssHooks[ dimension ] = {
 		get: function( elem, computed, extra ) {
 			if ( computed ) {
 
@@ -6552,29 +6570,41 @@ jQuery.each( [ "height", "width" ], function( i, name ) {
 					// in IE throws an error.
 					( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?
 						swap( elem, cssShow, function() {
-							return getWidthOrHeight( elem, name, extra );
+							return getWidthOrHeight( elem, dimension, extra );
 						} ) :
-						getWidthOrHeight( elem, name, extra );
+						getWidthOrHeight( elem, dimension, extra );
 			}
 		},
 
 		set: function( elem, value, extra ) {
 			var matches,
-				styles = extra && getStyles( elem ),
-				subtract = extra && augmentWidthOrHeight(
+				styles = getStyles( elem ),
+				isBorderBox = jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+				subtract = extra && boxModelAdjustment(
 					elem,
-					name,
+					dimension,
 					extra,
-					jQuery.css( elem, "boxSizing", false, styles ) === "border-box",
+					isBorderBox,
 					styles
 				);
+
+			// Account for unreliable border-box dimensions by comparing offset* to computed and
+			// faking a content-box to get border and padding (gh-3699)
+			if ( isBorderBox && support.scrollboxSize() === styles.position ) {
+				subtract -= Math.ceil(
+					elem[ "offset" + dimension[ 0 ].toUpperCase() + dimension.slice( 1 ) ] -
+					parseFloat( styles[ dimension ] ) -
+					boxModelAdjustment( elem, dimension, "border", false, styles ) -
+					0.5
+				);
+			}
 
 			// Convert to pixels if value adjustment is needed
 			if ( subtract && ( matches = rcssNum.exec( value ) ) &&
 				( matches[ 3 ] || "px" ) !== "px" ) {
 
-				elem.style[ name ] = value;
-				value = jQuery.css( elem, name );
+				elem.style[ dimension ] = value;
+				value = jQuery.css( elem, dimension );
 			}
 
 			return setPositiveNumber( elem, value, subtract );
@@ -6618,7 +6648,7 @@ jQuery.each( {
 		}
 	};
 
-	if ( !rmargin.test( prefix ) ) {
+	if ( prefix !== "margin" ) {
 		jQuery.cssHooks[ prefix + suffix ].set = setPositiveNumber;
 	}
 } );
@@ -6789,7 +6819,7 @@ function createFxNow() {
 	window.setTimeout( function() {
 		fxNow = undefined;
 	} );
-	return ( fxNow = jQuery.now() );
+	return ( fxNow = Date.now() );
 }
 
 // Generate parameters to create a standard animation
@@ -6893,9 +6923,10 @@ function defaultPrefilter( elem, props, opts ) {
 	// Restrict "overflow" and "display" styles during box animations
 	if ( isBox && elem.nodeType === 1 ) {
 
-		// Support: IE <=9 - 11, Edge 12 - 13
+		// Support: IE <=9 - 11, Edge 12 - 15
 		// Record all 3 overflow attributes because IE does not infer the shorthand
-		// from identically-valued overflowX and overflowY
+		// from identically-valued overflowX and overflowY and Edge just mirrors
+		// the overflowX value there.
 		opts.overflow = [ style.overflow, style.overflowX, style.overflowY ];
 
 		// Identify a display type, preferring old show/hide data over the CSS cascade
@@ -7003,7 +7034,7 @@ function propFilter( props, specialEasing ) {
 
 	// camelCase, specialEasing and expand cssHook pass
 	for ( index in props ) {
-		name = jQuery.camelCase( index );
+		name = camelCase( index );
 		easing = specialEasing[ name ];
 		value = props[ index ];
 		if ( Array.isArray( value ) ) {
@@ -7128,9 +7159,9 @@ function Animation( elem, properties, options ) {
 	for ( ; index < length; index++ ) {
 		result = Animation.prefilters[ index ].call( animation, elem, props, animation.opts );
 		if ( result ) {
-			if ( jQuery.isFunction( result.stop ) ) {
+			if ( isFunction( result.stop ) ) {
 				jQuery._queueHooks( animation.elem, animation.opts.queue ).stop =
-					jQuery.proxy( result.stop, result );
+					result.stop.bind( result );
 			}
 			return result;
 		}
@@ -7138,7 +7169,7 @@ function Animation( elem, properties, options ) {
 
 	jQuery.map( props, createTween, animation );
 
-	if ( jQuery.isFunction( animation.opts.start ) ) {
+	if ( isFunction( animation.opts.start ) ) {
 		animation.opts.start.call( elem, animation );
 	}
 
@@ -7171,7 +7202,7 @@ jQuery.Animation = jQuery.extend( Animation, {
 	},
 
 	tweener: function( props, callback ) {
-		if ( jQuery.isFunction( props ) ) {
+		if ( isFunction( props ) ) {
 			callback = props;
 			props = [ "*" ];
 		} else {
@@ -7203,9 +7234,9 @@ jQuery.Animation = jQuery.extend( Animation, {
 jQuery.speed = function( speed, easing, fn ) {
 	var opt = speed && typeof speed === "object" ? jQuery.extend( {}, speed ) : {
 		complete: fn || !fn && easing ||
-			jQuery.isFunction( speed ) && speed,
+			isFunction( speed ) && speed,
 		duration: speed,
-		easing: fn && easing || easing && !jQuery.isFunction( easing ) && easing
+		easing: fn && easing || easing && !isFunction( easing ) && easing
 	};
 
 	// Go to the end state if fx are off
@@ -7232,7 +7263,7 @@ jQuery.speed = function( speed, easing, fn ) {
 	opt.old = opt.complete;
 
 	opt.complete = function() {
-		if ( jQuery.isFunction( opt.old ) ) {
+		if ( isFunction( opt.old ) ) {
 			opt.old.call( this );
 		}
 
@@ -7396,7 +7427,7 @@ jQuery.fx.tick = function() {
 		i = 0,
 		timers = jQuery.timers;
 
-	fxNow = jQuery.now();
+	fxNow = Date.now();
 
 	for ( ; i < timers.length; i++ ) {
 		timer = timers[ i ];
@@ -7749,7 +7780,7 @@ jQuery.each( [
 
 
 	// Strip and collapse whitespace according to HTML spec
-	// https://html.spec.whatwg.org/multipage/infrastructure.html#strip-and-collapse-whitespace
+	// https://infra.spec.whatwg.org/#strip-and-collapse-ascii-whitespace
 	function stripAndCollapse( value ) {
 		var tokens = value.match( rnothtmlwhite ) || [];
 		return tokens.join( " " );
@@ -7760,20 +7791,30 @@ function getClass( elem ) {
 	return elem.getAttribute && elem.getAttribute( "class" ) || "";
 }
 
+function classesToArray( value ) {
+	if ( Array.isArray( value ) ) {
+		return value;
+	}
+	if ( typeof value === "string" ) {
+		return value.match( rnothtmlwhite ) || [];
+	}
+	return [];
+}
+
 jQuery.fn.extend( {
 	addClass: function( value ) {
 		var classes, elem, cur, curValue, clazz, j, finalValue,
 			i = 0;
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( j ) {
 				jQuery( this ).addClass( value.call( this, j, getClass( this ) ) );
 			} );
 		}
 
-		if ( typeof value === "string" && value ) {
-			classes = value.match( rnothtmlwhite ) || [];
+		classes = classesToArray( value );
 
+		if ( classes.length ) {
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
 				cur = elem.nodeType === 1 && ( " " + stripAndCollapse( curValue ) + " " );
@@ -7802,7 +7843,7 @@ jQuery.fn.extend( {
 		var classes, elem, cur, curValue, clazz, j, finalValue,
 			i = 0;
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( j ) {
 				jQuery( this ).removeClass( value.call( this, j, getClass( this ) ) );
 			} );
@@ -7812,9 +7853,9 @@ jQuery.fn.extend( {
 			return this.attr( "class", "" );
 		}
 
-		if ( typeof value === "string" && value ) {
-			classes = value.match( rnothtmlwhite ) || [];
+		classes = classesToArray( value );
 
+		if ( classes.length ) {
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
 
@@ -7844,13 +7885,14 @@ jQuery.fn.extend( {
 	},
 
 	toggleClass: function( value, stateVal ) {
-		var type = typeof value;
+		var type = typeof value,
+			isValidValue = type === "string" || Array.isArray( value );
 
-		if ( typeof stateVal === "boolean" && type === "string" ) {
+		if ( typeof stateVal === "boolean" && isValidValue ) {
 			return stateVal ? this.addClass( value ) : this.removeClass( value );
 		}
 
-		if ( jQuery.isFunction( value ) ) {
+		if ( isFunction( value ) ) {
 			return this.each( function( i ) {
 				jQuery( this ).toggleClass(
 					value.call( this, i, getClass( this ), stateVal ),
@@ -7862,12 +7904,12 @@ jQuery.fn.extend( {
 		return this.each( function() {
 			var className, i, self, classNames;
 
-			if ( type === "string" ) {
+			if ( isValidValue ) {
 
 				// Toggle individual class names
 				i = 0;
 				self = jQuery( this );
-				classNames = value.match( rnothtmlwhite ) || [];
+				classNames = classesToArray( value );
 
 				while ( ( className = classNames[ i++ ] ) ) {
 
@@ -7926,7 +7968,7 @@ var rreturn = /\r/g;
 
 jQuery.fn.extend( {
 	val: function( value ) {
-		var hooks, ret, isFunction,
+		var hooks, ret, valueIsFunction,
 			elem = this[ 0 ];
 
 		if ( !arguments.length ) {
@@ -7955,7 +7997,7 @@ jQuery.fn.extend( {
 			return;
 		}
 
-		isFunction = jQuery.isFunction( value );
+		valueIsFunction = isFunction( value );
 
 		return this.each( function( i ) {
 			var val;
@@ -7964,7 +8006,7 @@ jQuery.fn.extend( {
 				return;
 			}
 
-			if ( isFunction ) {
+			if ( valueIsFunction ) {
 				val = value.call( this, i, jQuery( this ).val() );
 			} else {
 				val = value;
@@ -8106,18 +8148,24 @@ jQuery.each( [ "radio", "checkbox" ], function() {
 // Return jQuery for attributes-only inclusion
 
 
-var rfocusMorph = /^(?:focusinfocus|focusoutblur)$/;
+support.focusin = "onfocusin" in window;
+
+
+var rfocusMorph = /^(?:focusinfocus|focusoutblur)$/,
+	stopPropagationCallback = function( e ) {
+		e.stopPropagation();
+	};
 
 jQuery.extend( jQuery.event, {
 
 	trigger: function( event, data, elem, onlyHandlers ) {
 
-		var i, cur, tmp, bubbleType, ontype, handle, special,
+		var i, cur, tmp, bubbleType, ontype, handle, special, lastElement,
 			eventPath = [ elem || document ],
 			type = hasOwn.call( event, "type" ) ? event.type : event,
 			namespaces = hasOwn.call( event, "namespace" ) ? event.namespace.split( "." ) : [];
 
-		cur = tmp = elem = elem || document;
+		cur = lastElement = tmp = elem = elem || document;
 
 		// Don't do events on text and comment nodes
 		if ( elem.nodeType === 3 || elem.nodeType === 8 ) {
@@ -8169,7 +8217,7 @@ jQuery.extend( jQuery.event, {
 
 		// Determine event propagation path in advance, per W3C events spec (#9951)
 		// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
-		if ( !onlyHandlers && !special.noBubble && !jQuery.isWindow( elem ) ) {
+		if ( !onlyHandlers && !special.noBubble && !isWindow( elem ) ) {
 
 			bubbleType = special.delegateType || type;
 			if ( !rfocusMorph.test( bubbleType + type ) ) {
@@ -8189,7 +8237,7 @@ jQuery.extend( jQuery.event, {
 		// Fire handlers on the event path
 		i = 0;
 		while ( ( cur = eventPath[ i++ ] ) && !event.isPropagationStopped() ) {
-
+			lastElement = cur;
 			event.type = i > 1 ?
 				bubbleType :
 				special.bindType || type;
@@ -8221,7 +8269,7 @@ jQuery.extend( jQuery.event, {
 
 				// Call a native DOM method on the target with the same name as the event.
 				// Don't do default actions on window, that's where global variables be (#6170)
-				if ( ontype && jQuery.isFunction( elem[ type ] ) && !jQuery.isWindow( elem ) ) {
+				if ( ontype && isFunction( elem[ type ] ) && !isWindow( elem ) ) {
 
 					// Don't re-trigger an onFOO event when we call its FOO() method
 					tmp = elem[ ontype ];
@@ -8232,7 +8280,17 @@ jQuery.extend( jQuery.event, {
 
 					// Prevent re-triggering of the same event, since we already bubbled it above
 					jQuery.event.triggered = type;
+
+					if ( event.isPropagationStopped() ) {
+						lastElement.addEventListener( type, stopPropagationCallback );
+					}
+
 					elem[ type ]();
+
+					if ( event.isPropagationStopped() ) {
+						lastElement.removeEventListener( type, stopPropagationCallback );
+					}
+
 					jQuery.event.triggered = undefined;
 
 					if ( tmp ) {
@@ -8278,31 +8336,6 @@ jQuery.fn.extend( {
 } );
 
 
-jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
-	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
-	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
-	function( i, name ) {
-
-	// Handle event binding
-	jQuery.fn[ name ] = function( data, fn ) {
-		return arguments.length > 0 ?
-			this.on( name, null, data, fn ) :
-			this.trigger( name );
-	};
-} );
-
-jQuery.fn.extend( {
-	hover: function( fnOver, fnOut ) {
-		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
-	}
-} );
-
-
-
-
-support.focusin = "onfocusin" in window;
-
-
 // Support: Firefox <=44
 // Firefox doesn't have focus(in | out) events
 // Related ticket - https://bugzilla.mozilla.org/show_bug.cgi?id=687787
@@ -8346,7 +8379,7 @@ if ( !support.focusin ) {
 }
 var location = window.location;
 
-var nonce = jQuery.now();
+var nonce = Date.now();
 
 var rquery = ( /\?/ );
 
@@ -8404,7 +8437,7 @@ function buildParams( prefix, obj, traditional, add ) {
 			}
 		} );
 
-	} else if ( !traditional && jQuery.type( obj ) === "object" ) {
+	} else if ( !traditional && toType( obj ) === "object" ) {
 
 		// Serialize object item.
 		for ( name in obj ) {
@@ -8426,7 +8459,7 @@ jQuery.param = function( a, traditional ) {
 		add = function( key, valueOrFunction ) {
 
 			// If value is a function, invoke it and use its return value
-			var value = jQuery.isFunction( valueOrFunction ) ?
+			var value = isFunction( valueOrFunction ) ?
 				valueOrFunction() :
 				valueOrFunction;
 
@@ -8544,7 +8577,7 @@ function addToPrefiltersOrTransports( structure ) {
 			i = 0,
 			dataTypes = dataTypeExpression.toLowerCase().match( rnothtmlwhite ) || [];
 
-		if ( jQuery.isFunction( func ) ) {
+		if ( isFunction( func ) ) {
 
 			// For each dataType in the dataTypeExpression
 			while ( ( dataType = dataTypes[ i++ ] ) ) {
@@ -9016,7 +9049,7 @@ jQuery.extend( {
 		if ( s.crossDomain == null ) {
 			urlAnchor = document.createElement( "a" );
 
-			// Support: IE <=8 - 11, Edge 12 - 13
+			// Support: IE <=8 - 11, Edge 12 - 15
 			// IE throws exception on accessing the href property if url is malformed,
 			// e.g. http://example.com:80x/
 			try {
@@ -9074,8 +9107,8 @@ jQuery.extend( {
 			// Remember the hash so we can put it back
 			uncached = s.url.slice( cacheURL.length );
 
-			// If data is available, append data to url
-			if ( s.data ) {
+			// If data is available and should be processed, append data to url
+			if ( s.data && ( s.processData || typeof s.data === "string" ) ) {
 				cacheURL += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data;
 
 				// #9682: remove data so that it's not used in an eventual retry
@@ -9312,7 +9345,7 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 	jQuery[ method ] = function( url, data, callback, type ) {
 
 		// Shift arguments if data argument was omitted
-		if ( jQuery.isFunction( data ) ) {
+		if ( isFunction( data ) ) {
 			type = type || callback;
 			callback = data;
 			data = undefined;
@@ -9350,7 +9383,7 @@ jQuery.fn.extend( {
 		var wrap;
 
 		if ( this[ 0 ] ) {
-			if ( jQuery.isFunction( html ) ) {
+			if ( isFunction( html ) ) {
 				html = html.call( this[ 0 ] );
 			}
 
@@ -9376,7 +9409,7 @@ jQuery.fn.extend( {
 	},
 
 	wrapInner: function( html ) {
-		if ( jQuery.isFunction( html ) ) {
+		if ( isFunction( html ) ) {
 			return this.each( function( i ) {
 				jQuery( this ).wrapInner( html.call( this, i ) );
 			} );
@@ -9396,10 +9429,10 @@ jQuery.fn.extend( {
 	},
 
 	wrap: function( html ) {
-		var isFunction = jQuery.isFunction( html );
+		var htmlIsFunction = isFunction( html );
 
 		return this.each( function( i ) {
-			jQuery( this ).wrapAll( isFunction ? html.call( this, i ) : html );
+			jQuery( this ).wrapAll( htmlIsFunction ? html.call( this, i ) : html );
 		} );
 	},
 
@@ -9491,7 +9524,8 @@ jQuery.ajaxTransport( function( options ) {
 					return function() {
 						if ( callback ) {
 							callback = errorCallback = xhr.onload =
-								xhr.onerror = xhr.onabort = xhr.onreadystatechange = null;
+								xhr.onerror = xhr.onabort = xhr.ontimeout =
+									xhr.onreadystatechange = null;
 
 							if ( type === "abort" ) {
 								xhr.abort();
@@ -9531,7 +9565,7 @@ jQuery.ajaxTransport( function( options ) {
 
 				// Listen to events
 				xhr.onload = callback();
-				errorCallback = xhr.onerror = callback( "error" );
+				errorCallback = xhr.onerror = xhr.ontimeout = callback( "error" );
 
 				// Support: IE 9 only
 				// Use onreadystatechange to replace onabort
@@ -9685,7 +9719,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 	if ( jsonProp || s.dataTypes[ 0 ] === "jsonp" ) {
 
 		// Get callback name, remembering preexisting value associated with it
-		callbackName = s.jsonpCallback = jQuery.isFunction( s.jsonpCallback ) ?
+		callbackName = s.jsonpCallback = isFunction( s.jsonpCallback ) ?
 			s.jsonpCallback() :
 			s.jsonpCallback;
 
@@ -9736,7 +9770,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			}
 
 			// Call if it was a function and we have a response
-			if ( responseContainer && jQuery.isFunction( overwritten ) ) {
+			if ( responseContainer && isFunction( overwritten ) ) {
 				overwritten( responseContainer[ 0 ] );
 			}
 
@@ -9828,7 +9862,7 @@ jQuery.fn.load = function( url, params, callback ) {
 	}
 
 	// If it's a function
-	if ( jQuery.isFunction( params ) ) {
+	if ( isFunction( params ) ) {
 
 		// We assume that it's the callback
 		callback = params;
@@ -9936,7 +9970,7 @@ jQuery.offset = {
 			curLeft = parseFloat( curCSSLeft ) || 0;
 		}
 
-		if ( jQuery.isFunction( options ) ) {
+		if ( isFunction( options ) ) {
 
 			// Use jQuery.extend here to allow modification of coordinates argument (gh-1848)
 			options = options.call( elem, i, jQuery.extend( {}, curOffset ) );
@@ -9959,6 +9993,8 @@ jQuery.offset = {
 };
 
 jQuery.fn.extend( {
+
+	// offset() relates an element's border box to the document origin
 	offset: function( options ) {
 
 		// Preserve chaining for setter
@@ -9970,7 +10006,7 @@ jQuery.fn.extend( {
 				} );
 		}
 
-		var doc, docElem, rect, win,
+		var rect, win,
 			elem = this[ 0 ];
 
 		if ( !elem ) {
@@ -9985,50 +10021,52 @@ jQuery.fn.extend( {
 			return { top: 0, left: 0 };
 		}
 
+		// Get document-relative position by adding viewport scroll to viewport-relative gBCR
 		rect = elem.getBoundingClientRect();
-
-		doc = elem.ownerDocument;
-		docElem = doc.documentElement;
-		win = doc.defaultView;
-
+		win = elem.ownerDocument.defaultView;
 		return {
-			top: rect.top + win.pageYOffset - docElem.clientTop,
-			left: rect.left + win.pageXOffset - docElem.clientLeft
+			top: rect.top + win.pageYOffset,
+			left: rect.left + win.pageXOffset
 		};
 	},
 
+	// position() relates an element's margin box to its offset parent's padding box
+	// This corresponds to the behavior of CSS absolute positioning
 	position: function() {
 		if ( !this[ 0 ] ) {
 			return;
 		}
 
-		var offsetParent, offset,
+		var offsetParent, offset, doc,
 			elem = this[ 0 ],
 			parentOffset = { top: 0, left: 0 };
 
-		// Fixed elements are offset from window (parentOffset = {top:0, left: 0},
-		// because it is its only offset parent
+		// position:fixed elements are offset from the viewport, which itself always has zero offset
 		if ( jQuery.css( elem, "position" ) === "fixed" ) {
 
-			// Assume getBoundingClientRect is there when computed position is fixed
+			// Assume position:fixed implies availability of getBoundingClientRect
 			offset = elem.getBoundingClientRect();
 
 		} else {
-
-			// Get *real* offsetParent
-			offsetParent = this.offsetParent();
-
-			// Get correct offsets
 			offset = this.offset();
-			if ( !nodeName( offsetParent[ 0 ], "html" ) ) {
-				parentOffset = offsetParent.offset();
-			}
 
-			// Add offsetParent borders
-			parentOffset = {
-				top: parentOffset.top + jQuery.css( offsetParent[ 0 ], "borderTopWidth", true ),
-				left: parentOffset.left + jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true )
-			};
+			// Account for the *real* offset parent, which can be the document or its root element
+			// when a statically positioned element is identified
+			doc = elem.ownerDocument;
+			offsetParent = elem.offsetParent || doc.documentElement;
+			while ( offsetParent &&
+				( offsetParent === doc.body || offsetParent === doc.documentElement ) &&
+				jQuery.css( offsetParent, "position" ) === "static" ) {
+
+				offsetParent = offsetParent.parentNode;
+			}
+			if ( offsetParent && offsetParent !== elem && offsetParent.nodeType === 1 ) {
+
+				// Incorporate borders into its offset, since they are outside its content origin
+				parentOffset = jQuery( offsetParent ).offset();
+				parentOffset.top += jQuery.css( offsetParent, "borderTopWidth", true );
+				parentOffset.left += jQuery.css( offsetParent, "borderLeftWidth", true );
+			}
 		}
 
 		// Subtract parent offsets and element margins
@@ -10070,7 +10108,7 @@ jQuery.each( { scrollLeft: "pageXOffset", scrollTop: "pageYOffset" }, function( 
 
 			// Coalesce documents and windows
 			var win;
-			if ( jQuery.isWindow( elem ) ) {
+			if ( isWindow( elem ) ) {
 				win = elem;
 			} else if ( elem.nodeType === 9 ) {
 				win = elem.defaultView;
@@ -10128,7 +10166,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 			return access( this, function( elem, type, value ) {
 				var doc;
 
-				if ( jQuery.isWindow( elem ) ) {
+				if ( isWindow( elem ) ) {
 
 					// $( window ).outerWidth/Height return w/h including scrollbars (gh-1729)
 					return funcName.indexOf( "outer" ) === 0 ?
@@ -10162,6 +10200,28 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 } );
 
 
+jQuery.each( ( "blur focus focusin focusout resize scroll click dblclick " +
+	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
+	"change select submit keydown keypress keyup contextmenu" ).split( " " ),
+	function( i, name ) {
+
+	// Handle event binding
+	jQuery.fn[ name ] = function( data, fn ) {
+		return arguments.length > 0 ?
+			this.on( name, null, data, fn ) :
+			this.trigger( name );
+	};
+} );
+
+jQuery.fn.extend( {
+	hover: function( fnOver, fnOut ) {
+		return this.mouseenter( fnOver ).mouseleave( fnOut || fnOver );
+	}
+} );
+
+
+
+
 jQuery.fn.extend( {
 
 	bind: function( types, data, fn ) {
@@ -10183,6 +10243,37 @@ jQuery.fn.extend( {
 	}
 } );
 
+// Bind a function to a context, optionally partially applying any
+// arguments.
+// jQuery.proxy is deprecated to promote standards (specifically Function#bind)
+// However, it is not slated for removal any time soon
+jQuery.proxy = function( fn, context ) {
+	var tmp, args, proxy;
+
+	if ( typeof context === "string" ) {
+		tmp = fn[ context ];
+		context = fn;
+		fn = tmp;
+	}
+
+	// Quick check to determine if target is callable, in the spec
+	// this throws a TypeError, but we will just return undefined.
+	if ( !isFunction( fn ) ) {
+		return undefined;
+	}
+
+	// Simulated bind
+	args = slice.call( arguments, 2 );
+	proxy = function() {
+		return fn.apply( context || this, args.concat( slice.call( arguments ) ) );
+	};
+
+	// Set the guid of unique handler to the same of original handler, so it can be removed
+	proxy.guid = fn.guid = fn.guid || jQuery.guid++;
+
+	return proxy;
+};
+
 jQuery.holdReady = function( hold ) {
 	if ( hold ) {
 		jQuery.readyWait++;
@@ -10193,6 +10284,26 @@ jQuery.holdReady = function( hold ) {
 jQuery.isArray = Array.isArray;
 jQuery.parseJSON = JSON.parse;
 jQuery.nodeName = nodeName;
+jQuery.isFunction = isFunction;
+jQuery.isWindow = isWindow;
+jQuery.camelCase = camelCase;
+jQuery.type = toType;
+
+jQuery.now = Date.now;
+
+jQuery.isNumeric = function( obj ) {
+
+	// As of jQuery 3.0, isNumeric is limited to
+	// strings and numbers (primitives or objects)
+	// that can be coerced to finite numbers (gh-2662)
+	var type = jQuery.type( obj );
+	return ( type === "number" || type === "string" ) &&
+
+		// parseFloat NaNs numeric-cast false positives ("")
+		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
+		// subtraction forces infinities to NaN
+		!isNaN( obj - parseFloat( obj ) );
+};
 
 
 
@@ -10253,8 +10364,8 @@ return jQuery;
 } );
 
 /*!
- * Bootstrap v3.3.7 (http://getbootstrap.com)
- * Copyright 2011-2016 Twitter, Inc.
+ * Bootstrap v3.4.0 (https://getbootstrap.com/)
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under the MIT license
  */
 
@@ -10271,10 +10382,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: transition.js v3.3.7
- * http://getbootstrap.com/javascript/#transitions
+ * Bootstrap: transition.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#transitions
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -10282,7 +10393,7 @@ if (typeof jQuery === 'undefined') {
 +function ($) {
   'use strict';
 
-  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // CSS TRANSITION SUPPORT (Shoutout: https://modernizr.com/)
   // ============================================================
 
   function transitionEnd() {
@@ -10304,7 +10415,7 @@ if (typeof jQuery === 'undefined') {
     return false // explicit for ie8 (  ._.)
   }
 
-  // http://blog.alexmaccaw.com/css-transitions
+  // https://blog.alexmaccaw.com/css-transitions
   $.fn.emulateTransitionEnd = function (duration) {
     var called = false
     var $el = this
@@ -10331,10 +10442,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.3.7
- * http://getbootstrap.com/javascript/#alerts
+ * Bootstrap: alert.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#alerts
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -10350,7 +10461,7 @@ if (typeof jQuery === 'undefined') {
     $(el).on('click', dismiss, this.close)
   }
 
-  Alert.VERSION = '3.3.7'
+  Alert.VERSION = '3.4.0'
 
   Alert.TRANSITION_DURATION = 150
 
@@ -10363,7 +10474,8 @@ if (typeof jQuery === 'undefined') {
       selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    var $parent = $(selector === '#' ? [] : selector)
+    selector    = selector === '#' ? [] : selector
+    var $parent = $(document).find(selector)
 
     if (e) e.preventDefault()
 
@@ -10426,10 +10538,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.3.7
- * http://getbootstrap.com/javascript/#buttons
+ * Bootstrap: button.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#buttons
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -10446,7 +10558,7 @@ if (typeof jQuery === 'undefined') {
     this.isLoading = false
   }
 
-  Button.VERSION  = '3.3.7'
+  Button.VERSION  = '3.4.0'
 
   Button.DEFAULTS = {
     loadingText: 'loading...'
@@ -10552,10 +10664,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.3.7
- * http://getbootstrap.com/javascript/#carousel
+ * Bootstrap: carousel.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#carousel
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -10583,7 +10695,7 @@ if (typeof jQuery === 'undefined') {
       .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
   }
 
-  Carousel.VERSION  = '3.3.7'
+  Carousel.VERSION  = '3.4.0'
 
   Carousel.TRANSITION_DURATION = 600
 
@@ -10697,7 +10809,9 @@ if (typeof jQuery === 'undefined') {
     var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
     if ($.support.transition && this.$element.hasClass('slide')) {
       $next.addClass(type)
-      $next[0].offsetWidth // force reflow
+      if (typeof $next === 'object' && $next.length) {
+        $next[0].offsetWidth // force reflow
+      }
       $active.addClass(direction)
       $next.addClass(direction)
       $active
@@ -10759,10 +10873,17 @@ if (typeof jQuery === 'undefined') {
   // =================
 
   var clickHandler = function (e) {
-    var href
     var $this   = $(this)
-    var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) // strip for ie7
+    var href    = $this.attr('href')
+    if (href) {
+      href = href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+    }
+
+    var target  = $this.attr('data-target') || href
+    var $target = $(document).find(target)
+
     if (!$target.hasClass('carousel')) return
+
     var options = $.extend({}, $target.data(), $this.data())
     var slideIndex = $this.attr('data-slide-to')
     if (slideIndex) options.interval = false
@@ -10790,10 +10911,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.3.7
- * http://getbootstrap.com/javascript/#collapse
+ * Bootstrap: collapse.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#collapse
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -10821,7 +10942,7 @@ if (typeof jQuery === 'undefined') {
     if (this.options.toggle) this.toggle()
   }
 
-  Collapse.VERSION  = '3.3.7'
+  Collapse.VERSION  = '3.4.0'
 
   Collapse.TRANSITION_DURATION = 350
 
@@ -10928,7 +11049,7 @@ if (typeof jQuery === 'undefined') {
   }
 
   Collapse.prototype.getParent = function () {
-    return $(this.options.parent)
+    return $(document).find(this.options.parent)
       .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
       .each($.proxy(function (i, element) {
         var $element = $(element)
@@ -10951,7 +11072,7 @@ if (typeof jQuery === 'undefined') {
     var target = $trigger.attr('data-target')
       || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
 
-    return $(target)
+    return $(document).find(target)
   }
 
 
@@ -11003,10 +11124,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.3.7
- * http://getbootstrap.com/javascript/#dropdowns
+ * Bootstrap: dropdown.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#dropdowns
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -11023,7 +11144,7 @@ if (typeof jQuery === 'undefined') {
     $(element).on('click.bs.dropdown', this.toggle)
   }
 
-  Dropdown.VERSION = '3.3.7'
+  Dropdown.VERSION = '3.4.0'
 
   function getParent($this) {
     var selector = $this.attr('data-target')
@@ -11033,7 +11154,7 @@ if (typeof jQuery === 'undefined') {
       selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
     }
 
-    var $parent = selector && $(selector)
+    var $parent = selector && $(document).find(selector)
 
     return $parent && $parent.length ? $parent : $this.parent()
   }
@@ -11169,10 +11290,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.3.7
- * http://getbootstrap.com/javascript/#modals
+ * Bootstrap: modal.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#modals
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -11184,15 +11305,16 @@ if (typeof jQuery === 'undefined') {
   // ======================
 
   var Modal = function (element, options) {
-    this.options             = options
-    this.$body               = $(document.body)
-    this.$element            = $(element)
-    this.$dialog             = this.$element.find('.modal-dialog')
-    this.$backdrop           = null
-    this.isShown             = null
-    this.originalBodyPad     = null
-    this.scrollbarWidth      = 0
+    this.options = options
+    this.$body = $(document.body)
+    this.$element = $(element)
+    this.$dialog = this.$element.find('.modal-dialog')
+    this.$backdrop = null
+    this.isShown = null
+    this.originalBodyPad = null
+    this.scrollbarWidth = 0
     this.ignoreBackdropClick = false
+    this.fixedContent = '.navbar-fixed-top, .navbar-fixed-bottom'
 
     if (this.options.remote) {
       this.$element
@@ -11203,7 +11325,7 @@ if (typeof jQuery === 'undefined') {
     }
   }
 
-  Modal.VERSION  = '3.3.7'
+  Modal.VERSION = '3.4.0'
 
   Modal.TRANSITION_DURATION = 300
   Modal.BACKDROP_TRANSITION_DURATION = 150
@@ -11220,7 +11342,7 @@ if (typeof jQuery === 'undefined') {
 
   Modal.prototype.show = function (_relatedTarget) {
     var that = this
-    var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+    var e = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
 
     this.$element.trigger(e)
 
@@ -11311,8 +11433,8 @@ if (typeof jQuery === 'undefined') {
       .off('focusin.bs.modal') // guard against infinite focus loop
       .on('focusin.bs.modal', $.proxy(function (e) {
         if (document !== e.target &&
-            this.$element[0] !== e.target &&
-            !this.$element.has(e.target).length) {
+          this.$element[0] !== e.target &&
+          !this.$element.has(e.target).length) {
           this.$element.trigger('focus')
         }
       }, this))
@@ -11414,7 +11536,7 @@ if (typeof jQuery === 'undefined') {
     var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
 
     this.$element.css({
-      paddingLeft:  !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
+      paddingLeft: !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
       paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
     })
   }
@@ -11439,11 +11561,26 @@ if (typeof jQuery === 'undefined') {
   Modal.prototype.setScrollbar = function () {
     var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
     this.originalBodyPad = document.body.style.paddingRight || ''
-    if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
+    var scrollbarWidth = this.scrollbarWidth
+    if (this.bodyIsOverflowing) {
+      this.$body.css('padding-right', bodyPad + scrollbarWidth)
+      $(this.fixedContent).each(function (index, element) {
+        var actualPadding = element.style.paddingRight
+        var calculatedPadding = $(element).css('padding-right')
+        $(element)
+          .data('padding-right', actualPadding)
+          .css('padding-right', parseFloat(calculatedPadding) + scrollbarWidth + 'px')
+      })
+    }
   }
 
   Modal.prototype.resetScrollbar = function () {
     this.$body.css('padding-right', this.originalBodyPad)
+    $(this.fixedContent).each(function (index, element) {
+      var padding = $(element).data('padding-right')
+      $(element).removeData('padding-right')
+      element.style.paddingRight = padding ? padding : ''
+    })
   }
 
   Modal.prototype.measureScrollbar = function () { // thx walsh
@@ -11461,8 +11598,8 @@ if (typeof jQuery === 'undefined') {
 
   function Plugin(option, _relatedTarget) {
     return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.modal')
+      var $this = $(this)
+      var data = $this.data('bs.modal')
       var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
 
       if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
@@ -11473,7 +11610,7 @@ if (typeof jQuery === 'undefined') {
 
   var old = $.fn.modal
 
-  $.fn.modal             = Plugin
+  $.fn.modal = Plugin
   $.fn.modal.Constructor = Modal
 
 
@@ -11490,10 +11627,13 @@ if (typeof jQuery === 'undefined') {
   // ==============
 
   $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
-    var $this   = $(this)
-    var href    = $this.attr('href')
-    var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
-    var option  = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+    var $this = $(this)
+    var href = $this.attr('href')
+    var target = $this.attr('data-target') ||
+      (href && href.replace(/.*(?=#[^\s]+$)/, '')) // strip for ie7
+
+    var $target = $(document).find(target)
+    var option = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
 
     if ($this.is('a')) e.preventDefault()
 
@@ -11509,11 +11649,11 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.3.7
- * http://getbootstrap.com/javascript/#tooltip
+ * Bootstrap: tooltip.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -11536,7 +11676,7 @@ if (typeof jQuery === 'undefined') {
     this.init('tooltip', element, options)
   }
 
-  Tooltip.VERSION  = '3.3.7'
+  Tooltip.VERSION  = '3.4.0'
 
   Tooltip.TRANSITION_DURATION = 150
 
@@ -11561,7 +11701,7 @@ if (typeof jQuery === 'undefined') {
     this.type      = type
     this.$element  = $(element)
     this.options   = this.getOptions(options)
-    this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : (this.options.viewport.selector || this.options.viewport))
+    this.$viewport = this.options.viewport && $(document).find($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : (this.options.viewport.selector || this.options.viewport))
     this.inState   = { click: false, hover: false, focus: false }
 
     if (this.$element[0] instanceof document.constructor && !this.options.selector) {
@@ -11714,7 +11854,7 @@ if (typeof jQuery === 'undefined') {
         .addClass(placement)
         .data('bs.' + this.type, this)
 
-      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+      this.options.container ? $tip.appendTo($(document).find(this.options.container)) : $tip.insertAfter(this.$element)
       this.$element.trigger('inserted.bs.' + this.type)
 
       var pos          = this.getPosition()
@@ -12030,10 +12170,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.3.7
- * http://getbootstrap.com/javascript/#popovers
+ * Bootstrap: popover.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#popovers
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -12050,7 +12190,7 @@ if (typeof jQuery === 'undefined') {
 
   if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
 
-  Popover.VERSION  = '3.3.7'
+  Popover.VERSION  = '3.4.0'
 
   Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
     placement: 'right',
@@ -12098,8 +12238,8 @@ if (typeof jQuery === 'undefined') {
 
     return $e.attr('data-content')
       || (typeof o.content == 'function' ?
-            o.content.call($e[0]) :
-            o.content)
+        o.content.call($e[0]) :
+        o.content)
   }
 
   Popover.prototype.arrow = function () {
@@ -12139,10 +12279,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.3.7
- * http://getbootstrap.com/javascript/#scrollspy
+ * Bootstrap: scrollspy.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#scrollspy
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -12168,7 +12308,7 @@ if (typeof jQuery === 'undefined') {
     this.process()
   }
 
-  ScrollSpy.VERSION  = '3.3.7'
+  ScrollSpy.VERSION  = '3.4.0'
 
   ScrollSpy.DEFAULTS = {
     offset: 10
@@ -12312,10 +12452,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.3.7
- * http://getbootstrap.com/javascript/#tabs
+ * Bootstrap: tab.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#tabs
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -12332,7 +12472,7 @@ if (typeof jQuery === 'undefined') {
     // jscs:enable requireDollarBeforejQueryAssignment
   }
 
-  Tab.VERSION = '3.3.7'
+  Tab.VERSION = '3.4.0'
 
   Tab.TRANSITION_DURATION = 150
 
@@ -12361,7 +12501,7 @@ if (typeof jQuery === 'undefined') {
 
     if (showEvent.isDefaultPrevented() || hideEvent.isDefaultPrevented()) return
 
-    var $target = $(selector)
+    var $target = $(document).find(selector)
 
     this.activate($this.closest('li'), $ul)
     this.activate($target, $target.parent(), function () {
@@ -12386,15 +12526,15 @@ if (typeof jQuery === 'undefined') {
       $active
         .removeClass('active')
         .find('> .dropdown-menu > .active')
-          .removeClass('active')
+        .removeClass('active')
         .end()
         .find('[data-toggle="tab"]')
-          .attr('aria-expanded', false)
+        .attr('aria-expanded', false)
 
       element
         .addClass('active')
         .find('[data-toggle="tab"]')
-          .attr('aria-expanded', true)
+        .attr('aria-expanded', true)
 
       if (transition) {
         element[0].offsetWidth // reflow for transition
@@ -12406,10 +12546,10 @@ if (typeof jQuery === 'undefined') {
       if (element.parent('.dropdown-menu').length) {
         element
           .closest('li.dropdown')
-            .addClass('active')
+          .addClass('active')
           .end()
           .find('[data-toggle="tab"]')
-            .attr('aria-expanded', true)
+          .attr('aria-expanded', true)
       }
 
       callback && callback()
@@ -12468,10 +12608,10 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.3.7
- * http://getbootstrap.com/javascript/#affix
+ * Bootstrap: affix.js v3.4.0
+ * https://getbootstrap.com/docs/3.4/javascript/#affix
  * ========================================================================
- * Copyright 2011-2016 Twitter, Inc.
+ * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
@@ -12485,7 +12625,9 @@ if (typeof jQuery === 'undefined') {
   var Affix = function (element, options) {
     this.options = $.extend({}, Affix.DEFAULTS, options)
 
-    this.$target = $(this.options.target)
+    var target = this.options.target === Affix.DEFAULTS.target ? $(this.options.target) : $(document).find(this.options.target)
+
+    this.$target = target
       .on('scroll.bs.affix.data-api', $.proxy(this.checkPosition, this))
       .on('click.bs.affix.data-api',  $.proxy(this.checkPositionWithEventLoop, this))
 
@@ -12497,7 +12639,7 @@ if (typeof jQuery === 'undefined') {
     this.checkPosition()
   }
 
-  Affix.VERSION  = '3.3.7'
+  Affix.VERSION  = '3.4.0'
 
   Affix.RESET    = 'affix affix-top affix-bottom'
 
@@ -19440,511 +19582,7 @@ ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
     }
 }));
 
-!function(a,b){"object"==typeof exports&&"undefined"!=typeof module?module.exports=b():"function"==typeof define&&define.amd?define(b):a.moment=b()}(this,function(){"use strict";function a(){return re.apply(null,arguments)}function b(a){re=a}function c(a){return a instanceof Array||"[object Array]"===Object.prototype.toString.call(a)}function d(a){return null!=a&&"[object Object]"===Object.prototype.toString.call(a)}function e(a){var b;for(b in a)return!1;return!0}function f(a){return void 0===a}function g(a){return"number"==typeof a||"[object Number]"===Object.prototype.toString.call(a)}function h(a){return a instanceof Date||"[object Date]"===Object.prototype.toString.call(a)}function i(a,b){var c,d=[];for(c=0;c<a.length;++c)d.push(b(a[c],c));return d}function j(a,b){return Object.prototype.hasOwnProperty.call(a,b)}function k(a,b){for(var c in b)j(b,c)&&(a[c]=b[c]);return j(b,"toString")&&(a.toString=b.toString),j(b,"valueOf")&&(a.valueOf=b.valueOf),a}function l(a,b,c,d){return sb(a,b,c,d,!0).utc()}function m(){return{empty:!1,unusedTokens:[],unusedInput:[],overflow:-2,charsLeftOver:0,nullInput:!1,invalidMonth:null,invalidFormat:!1,userInvalidated:!1,iso:!1,parsedDateParts:[],meridiem:null,rfc2822:!1,weekdayMismatch:!1}}function n(a){return null==a._pf&&(a._pf=m()),a._pf}function o(a){if(null==a._isValid){var b=n(a),c=te.call(b.parsedDateParts,function(a){return null!=a}),d=!isNaN(a._d.getTime())&&b.overflow<0&&!b.empty&&!b.invalidMonth&&!b.invalidWeekday&&!b.nullInput&&!b.invalidFormat&&!b.userInvalidated&&(!b.meridiem||b.meridiem&&c);if(a._strict&&(d=d&&0===b.charsLeftOver&&0===b.unusedTokens.length&&void 0===b.bigHour),null!=Object.isFrozen&&Object.isFrozen(a))return d;a._isValid=d}return a._isValid}function p(a){var b=l(NaN);return null!=a?k(n(b),a):n(b).userInvalidated=!0,b}function q(a,b){var c,d,e;if(f(b._isAMomentObject)||(a._isAMomentObject=b._isAMomentObject),f(b._i)||(a._i=b._i),f(b._f)||(a._f=b._f),f(b._l)||(a._l=b._l),f(b._strict)||(a._strict=b._strict),f(b._tzm)||(a._tzm=b._tzm),f(b._isUTC)||(a._isUTC=b._isUTC),f(b._offset)||(a._offset=b._offset),f(b._pf)||(a._pf=n(b)),f(b._locale)||(a._locale=b._locale),ue.length>0)for(c=0;c<ue.length;c++)d=ue[c],e=b[d],f(e)||(a[d]=e);return a}function r(b){q(this,b),this._d=new Date(null!=b._d?b._d.getTime():NaN),this.isValid()||(this._d=new Date(NaN)),ve===!1&&(ve=!0,a.updateOffset(this),ve=!1)}function s(a){return a instanceof r||null!=a&&null!=a._isAMomentObject}function t(a){return a<0?Math.ceil(a)||0:Math.floor(a)}function u(a){var b=+a,c=0;return 0!==b&&isFinite(b)&&(c=t(b)),c}function v(a,b,c){var d,e=Math.min(a.length,b.length),f=Math.abs(a.length-b.length),g=0;for(d=0;d<e;d++)(c&&a[d]!==b[d]||!c&&u(a[d])!==u(b[d]))&&g++;return g+f}function w(b){a.suppressDeprecationWarnings===!1&&"undefined"!=typeof console&&console.warn&&console.warn("Deprecation warning: "+b)}function x(b,c){var d=!0;return k(function(){if(null!=a.deprecationHandler&&a.deprecationHandler(null,b),d){for(var e,f=[],g=0;g<arguments.length;g++){if(e="","object"==typeof arguments[g]){e+="\n["+g+"] ";for(var h in arguments[0])e+=h+": "+arguments[0][h]+", ";e=e.slice(0,-2)}else e=arguments[g];f.push(e)}w(b+"\nArguments: "+Array.prototype.slice.call(f).join("")+"\n"+(new Error).stack),d=!1}return c.apply(this,arguments)},c)}function y(b,c){null!=a.deprecationHandler&&a.deprecationHandler(b,c),we[b]||(w(c),we[b]=!0)}function z(a){return a instanceof Function||"[object Function]"===Object.prototype.toString.call(a)}function A(a){var b,c;for(c in a)b=a[c],z(b)?this[c]=b:this["_"+c]=b;this._config=a,this._dayOfMonthOrdinalParseLenient=new RegExp((this._dayOfMonthOrdinalParse.source||this._ordinalParse.source)+"|"+/\d{1,2}/.source)}function B(a,b){var c,e=k({},a);for(c in b)j(b,c)&&(d(a[c])&&d(b[c])?(e[c]={},k(e[c],a[c]),k(e[c],b[c])):null!=b[c]?e[c]=b[c]:delete e[c]);for(c in a)j(a,c)&&!j(b,c)&&d(a[c])&&(e[c]=k({},e[c]));return e}function C(a){null!=a&&this.set(a)}function D(a,b,c){var d=this._calendar[a]||this._calendar.sameElse;return z(d)?d.call(b,c):d}function E(a){var b=this._longDateFormat[a],c=this._longDateFormat[a.toUpperCase()];return b||!c?b:(this._longDateFormat[a]=c.replace(/MMMM|MM|DD|dddd/g,function(a){return a.slice(1)}),this._longDateFormat[a])}function F(){return this._invalidDate}function G(a){return this._ordinal.replace("%d",a)}function H(a,b,c,d){var e=this._relativeTime[c];return z(e)?e(a,b,c,d):e.replace(/%d/i,a)}function I(a,b){var c=this._relativeTime[a>0?"future":"past"];return z(c)?c(b):c.replace(/%s/i,b)}function J(a,b){var c=a.toLowerCase();Ge[c]=Ge[c+"s"]=Ge[b]=a}function K(a){return"string"==typeof a?Ge[a]||Ge[a.toLowerCase()]:void 0}function L(a){var b,c,d={};for(c in a)j(a,c)&&(b=K(c),b&&(d[b]=a[c]));return d}function M(a,b){He[a]=b}function N(a){var b=[];for(var c in a)b.push({unit:c,priority:He[c]});return b.sort(function(a,b){return a.priority-b.priority}),b}function O(b,c){return function(d){return null!=d?(Q(this,b,d),a.updateOffset(this,c),this):P(this,b)}}function P(a,b){return a.isValid()?a._d["get"+(a._isUTC?"UTC":"")+b]():NaN}function Q(a,b,c){a.isValid()&&a._d["set"+(a._isUTC?"UTC":"")+b](c)}function R(a){return a=K(a),z(this[a])?this[a]():this}function S(a,b){if("object"==typeof a){a=L(a);for(var c=N(a),d=0;d<c.length;d++)this[c[d].unit](a[c[d].unit])}else if(a=K(a),z(this[a]))return this[a](b);return this}function T(a,b,c){var d=""+Math.abs(a),e=b-d.length,f=a>=0;return(f?c?"+":"":"-")+Math.pow(10,Math.max(0,e)).toString().substr(1)+d}function U(a,b,c,d){var e=d;"string"==typeof d&&(e=function(){return this[d]()}),a&&(Le[a]=e),b&&(Le[b[0]]=function(){return T(e.apply(this,arguments),b[1],b[2])}),c&&(Le[c]=function(){return this.localeData().ordinal(e.apply(this,arguments),a)})}function V(a){return a.match(/\[[\s\S]/)?a.replace(/^\[|\]$/g,""):a.replace(/\\/g,"")}function W(a){var b,c,d=a.match(Ie);for(b=0,c=d.length;b<c;b++)Le[d[b]]?d[b]=Le[d[b]]:d[b]=V(d[b]);return function(b){var e,f="";for(e=0;e<c;e++)f+=z(d[e])?d[e].call(b,a):d[e];return f}}function X(a,b){return a.isValid()?(b=Y(b,a.localeData()),Ke[b]=Ke[b]||W(b),Ke[b](a)):a.localeData().invalidDate()}function Y(a,b){function c(a){return b.longDateFormat(a)||a}var d=5;for(Je.lastIndex=0;d>=0&&Je.test(a);)a=a.replace(Je,c),Je.lastIndex=0,d-=1;return a}function Z(a,b,c){bf[a]=z(b)?b:function(a,d){return a&&c?c:b}}function $(a,b){return j(bf,a)?bf[a](b._strict,b._locale):new RegExp(_(a))}function _(a){return aa(a.replace("\\","").replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,function(a,b,c,d,e){return b||c||d||e}))}function aa(a){return a.replace(/[-\/\\^$*+?.()|[\]{}]/g,"\\$&")}function ba(a,b){var c,d=b;for("string"==typeof a&&(a=[a]),g(b)&&(d=function(a,c){c[b]=u(a)}),c=0;c<a.length;c++)cf[a[c]]=d}function ca(a,b){ba(a,function(a,c,d,e){d._w=d._w||{},b(a,d._w,d,e)})}function da(a,b,c){null!=b&&j(cf,a)&&cf[a](b,c._a,c,a)}function ea(a,b){return new Date(Date.UTC(a,b+1,0)).getUTCDate()}function fa(a,b){return a?c(this._months)?this._months[a.month()]:this._months[(this._months.isFormat||of).test(b)?"format":"standalone"][a.month()]:c(this._months)?this._months:this._months.standalone}function ga(a,b){return a?c(this._monthsShort)?this._monthsShort[a.month()]:this._monthsShort[of.test(b)?"format":"standalone"][a.month()]:c(this._monthsShort)?this._monthsShort:this._monthsShort.standalone}function ha(a,b,c){var d,e,f,g=a.toLocaleLowerCase();if(!this._monthsParse)for(this._monthsParse=[],this._longMonthsParse=[],this._shortMonthsParse=[],d=0;d<12;++d)f=l([2e3,d]),this._shortMonthsParse[d]=this.monthsShort(f,"").toLocaleLowerCase(),this._longMonthsParse[d]=this.months(f,"").toLocaleLowerCase();return c?"MMM"===b?(e=nf.call(this._shortMonthsParse,g),e!==-1?e:null):(e=nf.call(this._longMonthsParse,g),e!==-1?e:null):"MMM"===b?(e=nf.call(this._shortMonthsParse,g),e!==-1?e:(e=nf.call(this._longMonthsParse,g),e!==-1?e:null)):(e=nf.call(this._longMonthsParse,g),e!==-1?e:(e=nf.call(this._shortMonthsParse,g),e!==-1?e:null))}function ia(a,b,c){var d,e,f;if(this._monthsParseExact)return ha.call(this,a,b,c);for(this._monthsParse||(this._monthsParse=[],this._longMonthsParse=[],this._shortMonthsParse=[]),d=0;d<12;d++){if(e=l([2e3,d]),c&&!this._longMonthsParse[d]&&(this._longMonthsParse[d]=new RegExp("^"+this.months(e,"").replace(".","")+"$","i"),this._shortMonthsParse[d]=new RegExp("^"+this.monthsShort(e,"").replace(".","")+"$","i")),c||this._monthsParse[d]||(f="^"+this.months(e,"")+"|^"+this.monthsShort(e,""),this._monthsParse[d]=new RegExp(f.replace(".",""),"i")),c&&"MMMM"===b&&this._longMonthsParse[d].test(a))return d;if(c&&"MMM"===b&&this._shortMonthsParse[d].test(a))return d;if(!c&&this._monthsParse[d].test(a))return d}}function ja(a,b){var c;if(!a.isValid())return a;if("string"==typeof b)if(/^\d+$/.test(b))b=u(b);else if(b=a.localeData().monthsParse(b),!g(b))return a;return c=Math.min(a.date(),ea(a.year(),b)),a._d["set"+(a._isUTC?"UTC":"")+"Month"](b,c),a}function ka(b){return null!=b?(ja(this,b),a.updateOffset(this,!0),this):P(this,"Month")}function la(){return ea(this.year(),this.month())}function ma(a){return this._monthsParseExact?(j(this,"_monthsRegex")||oa.call(this),a?this._monthsShortStrictRegex:this._monthsShortRegex):(j(this,"_monthsShortRegex")||(this._monthsShortRegex=rf),this._monthsShortStrictRegex&&a?this._monthsShortStrictRegex:this._monthsShortRegex)}function na(a){return this._monthsParseExact?(j(this,"_monthsRegex")||oa.call(this),a?this._monthsStrictRegex:this._monthsRegex):(j(this,"_monthsRegex")||(this._monthsRegex=sf),this._monthsStrictRegex&&a?this._monthsStrictRegex:this._monthsRegex)}function oa(){function a(a,b){return b.length-a.length}var b,c,d=[],e=[],f=[];for(b=0;b<12;b++)c=l([2e3,b]),d.push(this.monthsShort(c,"")),e.push(this.months(c,"")),f.push(this.months(c,"")),f.push(this.monthsShort(c,""));for(d.sort(a),e.sort(a),f.sort(a),b=0;b<12;b++)d[b]=aa(d[b]),e[b]=aa(e[b]);for(b=0;b<24;b++)f[b]=aa(f[b]);this._monthsRegex=new RegExp("^("+f.join("|")+")","i"),this._monthsShortRegex=this._monthsRegex,this._monthsStrictRegex=new RegExp("^("+e.join("|")+")","i"),this._monthsShortStrictRegex=new RegExp("^("+d.join("|")+")","i")}function pa(a){return qa(a)?366:365}function qa(a){return a%4===0&&a%100!==0||a%400===0}function ra(){return qa(this.year())}function sa(a,b,c,d,e,f,g){var h=new Date(a,b,c,d,e,f,g);return a<100&&a>=0&&isFinite(h.getFullYear())&&h.setFullYear(a),h}function ta(a){var b=new Date(Date.UTC.apply(null,arguments));return a<100&&a>=0&&isFinite(b.getUTCFullYear())&&b.setUTCFullYear(a),b}function ua(a,b,c){var d=7+b-c,e=(7+ta(a,0,d).getUTCDay()-b)%7;return-e+d-1}function va(a,b,c,d,e){var f,g,h=(7+c-d)%7,i=ua(a,d,e),j=1+7*(b-1)+h+i;return j<=0?(f=a-1,g=pa(f)+j):j>pa(a)?(f=a+1,g=j-pa(a)):(f=a,g=j),{year:f,dayOfYear:g}}function wa(a,b,c){var d,e,f=ua(a.year(),b,c),g=Math.floor((a.dayOfYear()-f-1)/7)+1;return g<1?(e=a.year()-1,d=g+xa(e,b,c)):g>xa(a.year(),b,c)?(d=g-xa(a.year(),b,c),e=a.year()+1):(e=a.year(),d=g),{week:d,year:e}}function xa(a,b,c){var d=ua(a,b,c),e=ua(a+1,b,c);return(pa(a)-d+e)/7}function ya(a){return wa(a,this._week.dow,this._week.doy).week}function za(){return this._week.dow}function Aa(){return this._week.doy}function Ba(a){var b=this.localeData().week(this);return null==a?b:this.add(7*(a-b),"d")}function Ca(a){var b=wa(this,1,4).week;return null==a?b:this.add(7*(a-b),"d")}function Da(a,b){return"string"!=typeof a?a:isNaN(a)?(a=b.weekdaysParse(a),"number"==typeof a?a:null):parseInt(a,10)}function Ea(a,b){return"string"==typeof a?b.weekdaysParse(a)%7||7:isNaN(a)?null:a}function Fa(a,b){return a?c(this._weekdays)?this._weekdays[a.day()]:this._weekdays[this._weekdays.isFormat.test(b)?"format":"standalone"][a.day()]:c(this._weekdays)?this._weekdays:this._weekdays.standalone}function Ga(a){return a?this._weekdaysShort[a.day()]:this._weekdaysShort}function Ha(a){return a?this._weekdaysMin[a.day()]:this._weekdaysMin}function Ia(a,b,c){var d,e,f,g=a.toLocaleLowerCase();if(!this._weekdaysParse)for(this._weekdaysParse=[],this._shortWeekdaysParse=[],this._minWeekdaysParse=[],d=0;d<7;++d)f=l([2e3,1]).day(d),this._minWeekdaysParse[d]=this.weekdaysMin(f,"").toLocaleLowerCase(),this._shortWeekdaysParse[d]=this.weekdaysShort(f,"").toLocaleLowerCase(),this._weekdaysParse[d]=this.weekdays(f,"").toLocaleLowerCase();return c?"dddd"===b?(e=nf.call(this._weekdaysParse,g),e!==-1?e:null):"ddd"===b?(e=nf.call(this._shortWeekdaysParse,g),e!==-1?e:null):(e=nf.call(this._minWeekdaysParse,g),e!==-1?e:null):"dddd"===b?(e=nf.call(this._weekdaysParse,g),e!==-1?e:(e=nf.call(this._shortWeekdaysParse,g),e!==-1?e:(e=nf.call(this._minWeekdaysParse,g),e!==-1?e:null))):"ddd"===b?(e=nf.call(this._shortWeekdaysParse,g),e!==-1?e:(e=nf.call(this._weekdaysParse,g),e!==-1?e:(e=nf.call(this._minWeekdaysParse,g),e!==-1?e:null))):(e=nf.call(this._minWeekdaysParse,g),e!==-1?e:(e=nf.call(this._weekdaysParse,g),e!==-1?e:(e=nf.call(this._shortWeekdaysParse,g),e!==-1?e:null)))}function Ja(a,b,c){var d,e,f;if(this._weekdaysParseExact)return Ia.call(this,a,b,c);for(this._weekdaysParse||(this._weekdaysParse=[],this._minWeekdaysParse=[],this._shortWeekdaysParse=[],this._fullWeekdaysParse=[]),d=0;d<7;d++){if(e=l([2e3,1]).day(d),c&&!this._fullWeekdaysParse[d]&&(this._fullWeekdaysParse[d]=new RegExp("^"+this.weekdays(e,"").replace(".",".?")+"$","i"),this._shortWeekdaysParse[d]=new RegExp("^"+this.weekdaysShort(e,"").replace(".",".?")+"$","i"),this._minWeekdaysParse[d]=new RegExp("^"+this.weekdaysMin(e,"").replace(".",".?")+"$","i")),this._weekdaysParse[d]||(f="^"+this.weekdays(e,"")+"|^"+this.weekdaysShort(e,"")+"|^"+this.weekdaysMin(e,""),this._weekdaysParse[d]=new RegExp(f.replace(".",""),"i")),c&&"dddd"===b&&this._fullWeekdaysParse[d].test(a))return d;if(c&&"ddd"===b&&this._shortWeekdaysParse[d].test(a))return d;if(c&&"dd"===b&&this._minWeekdaysParse[d].test(a))return d;if(!c&&this._weekdaysParse[d].test(a))return d}}function Ka(a){if(!this.isValid())return null!=a?this:NaN;var b=this._isUTC?this._d.getUTCDay():this._d.getDay();return null!=a?(a=Da(a,this.localeData()),this.add(a-b,"d")):b}function La(a){if(!this.isValid())return null!=a?this:NaN;var b=(this.day()+7-this.localeData()._week.dow)%7;return null==a?b:this.add(a-b,"d")}function Ma(a){if(!this.isValid())return null!=a?this:NaN;if(null!=a){var b=Ea(a,this.localeData());return this.day(this.day()%7?b:b-7)}return this.day()||7}function Na(a){return this._weekdaysParseExact?(j(this,"_weekdaysRegex")||Qa.call(this),a?this._weekdaysStrictRegex:this._weekdaysRegex):(j(this,"_weekdaysRegex")||(this._weekdaysRegex=yf),this._weekdaysStrictRegex&&a?this._weekdaysStrictRegex:this._weekdaysRegex)}function Oa(a){return this._weekdaysParseExact?(j(this,"_weekdaysRegex")||Qa.call(this),a?this._weekdaysShortStrictRegex:this._weekdaysShortRegex):(j(this,"_weekdaysShortRegex")||(this._weekdaysShortRegex=zf),this._weekdaysShortStrictRegex&&a?this._weekdaysShortStrictRegex:this._weekdaysShortRegex)}function Pa(a){return this._weekdaysParseExact?(j(this,"_weekdaysRegex")||Qa.call(this),a?this._weekdaysMinStrictRegex:this._weekdaysMinRegex):(j(this,"_weekdaysMinRegex")||(this._weekdaysMinRegex=Af),this._weekdaysMinStrictRegex&&a?this._weekdaysMinStrictRegex:this._weekdaysMinRegex)}function Qa(){function a(a,b){return b.length-a.length}var b,c,d,e,f,g=[],h=[],i=[],j=[];for(b=0;b<7;b++)c=l([2e3,1]).day(b),d=this.weekdaysMin(c,""),e=this.weekdaysShort(c,""),f=this.weekdays(c,""),g.push(d),h.push(e),i.push(f),j.push(d),j.push(e),j.push(f);for(g.sort(a),h.sort(a),i.sort(a),j.sort(a),b=0;b<7;b++)h[b]=aa(h[b]),i[b]=aa(i[b]),j[b]=aa(j[b]);this._weekdaysRegex=new RegExp("^("+j.join("|")+")","i"),this._weekdaysShortRegex=this._weekdaysRegex,this._weekdaysMinRegex=this._weekdaysRegex,this._weekdaysStrictRegex=new RegExp("^("+i.join("|")+")","i"),this._weekdaysShortStrictRegex=new RegExp("^("+h.join("|")+")","i"),this._weekdaysMinStrictRegex=new RegExp("^("+g.join("|")+")","i")}function Ra(){return this.hours()%12||12}function Sa(){return this.hours()||24}function Ta(a,b){U(a,0,0,function(){return this.localeData().meridiem(this.hours(),this.minutes(),b)})}function Ua(a,b){return b._meridiemParse}function Va(a){return"p"===(a+"").toLowerCase().charAt(0)}function Wa(a,b,c){return a>11?c?"pm":"PM":c?"am":"AM"}function Xa(a){return a?a.toLowerCase().replace("_","-"):a}function Ya(a){for(var b,c,d,e,f=0;f<a.length;){for(e=Xa(a[f]).split("-"),b=e.length,c=Xa(a[f+1]),c=c?c.split("-"):null;b>0;){if(d=Za(e.slice(0,b).join("-")))return d;if(c&&c.length>=b&&v(e,c,!0)>=b-1)break;b--}f++}return null}function Za(a){var b=null;if(!Ff[a]&&"undefined"!=typeof module&&module&&module.exports)try{b=Bf._abbr,require("./locale/"+a),$a(b)}catch(a){}return Ff[a]}function $a(a,b){var c;return a&&(c=f(b)?bb(a):_a(a,b),c&&(Bf=c)),Bf._abbr}function _a(a,b){if(null!==b){var c=Ef;if(b.abbr=a,null!=Ff[a])y("defineLocaleOverride","use moment.updateLocale(localeName, config) to change an existing locale. moment.defineLocale(localeName, config) should only be used for creating a new locale See http://momentjs.com/guides/#/warnings/define-locale/ for more info."),c=Ff[a]._config;else if(null!=b.parentLocale){if(null==Ff[b.parentLocale])return Gf[b.parentLocale]||(Gf[b.parentLocale]=[]),Gf[b.parentLocale].push({name:a,config:b}),null;c=Ff[b.parentLocale]._config}return Ff[a]=new C(B(c,b)),Gf[a]&&Gf[a].forEach(function(a){_a(a.name,a.config)}),$a(a),Ff[a]}return delete Ff[a],null}function ab(a,b){if(null!=b){var c,d=Ef;null!=Ff[a]&&(d=Ff[a]._config),b=B(d,b),c=new C(b),c.parentLocale=Ff[a],Ff[a]=c,$a(a)}else null!=Ff[a]&&(null!=Ff[a].parentLocale?Ff[a]=Ff[a].parentLocale:null!=Ff[a]&&delete Ff[a]);return Ff[a]}function bb(a){var b;if(a&&a._locale&&a._locale._abbr&&(a=a._locale._abbr),!a)return Bf;if(!c(a)){if(b=Za(a))return b;a=[a]}return Ya(a)}function cb(){return ze(Ff)}function db(a){var b,c=a._a;return c&&n(a).overflow===-2&&(b=c[ef]<0||c[ef]>11?ef:c[ff]<1||c[ff]>ea(c[df],c[ef])?ff:c[gf]<0||c[gf]>24||24===c[gf]&&(0!==c[hf]||0!==c[jf]||0!==c[kf])?gf:c[hf]<0||c[hf]>59?hf:c[jf]<0||c[jf]>59?jf:c[kf]<0||c[kf]>999?kf:-1,n(a)._overflowDayOfYear&&(b<df||b>ff)&&(b=ff),n(a)._overflowWeeks&&b===-1&&(b=lf),n(a)._overflowWeekday&&b===-1&&(b=mf),n(a).overflow=b),a}function eb(a){var b,c,d,e,f,g,h=a._i,i=Hf.exec(h)||If.exec(h);if(i){for(n(a).iso=!0,b=0,c=Kf.length;b<c;b++)if(Kf[b][1].exec(i[1])){e=Kf[b][0],d=Kf[b][2]!==!1;break}if(null==e)return void(a._isValid=!1);if(i[3]){for(b=0,c=Lf.length;b<c;b++)if(Lf[b][1].exec(i[3])){f=(i[2]||" ")+Lf[b][0];break}if(null==f)return void(a._isValid=!1)}if(!d&&null!=f)return void(a._isValid=!1);if(i[4]){if(!Jf.exec(i[4]))return void(a._isValid=!1);g="Z"}a._f=e+(f||"")+(g||""),lb(a)}else a._isValid=!1}function fb(a){var b,c,d,e,f,g,h,i,j={" GMT":" +0000"," EDT":" -0400"," EST":" -0500"," CDT":" -0500"," CST":" -0600"," MDT":" -0600"," MST":" -0700"," PDT":" -0700"," PST":" -0800"},k="YXWVUTSRQPONZABCDEFGHIKLM";if(b=a._i.replace(/\([^\)]*\)|[\n\t]/g," ").replace(/(\s\s+)/g," ").replace(/^\s|\s$/g,""),c=Nf.exec(b)){if(d=c[1]?"ddd"+(5===c[1].length?", ":" "):"",e="D MMM "+(c[2].length>10?"YYYY ":"YY "),f="HH:mm"+(c[4]?":ss":""),c[1]){var l=new Date(c[2]),m=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][l.getDay()];if(c[1].substr(0,3)!==m)return n(a).weekdayMismatch=!0,void(a._isValid=!1)}switch(c[5].length){case 2:0===i?h=" +0000":(i=k.indexOf(c[5][1].toUpperCase())-12,h=(i<0?" -":" +")+(""+i).replace(/^-?/,"0").match(/..$/)[0]+"00");break;case 4:h=j[c[5]];break;default:h=j[" GMT"]}c[5]=h,a._i=c.splice(1).join(""),g=" ZZ",a._f=d+e+f+g,lb(a),n(a).rfc2822=!0}else a._isValid=!1}function gb(b){var c=Mf.exec(b._i);return null!==c?void(b._d=new Date(+c[1])):(eb(b),void(b._isValid===!1&&(delete b._isValid,fb(b),b._isValid===!1&&(delete b._isValid,a.createFromInputFallback(b)))))}function hb(a,b,c){return null!=a?a:null!=b?b:c}function ib(b){var c=new Date(a.now());return b._useUTC?[c.getUTCFullYear(),c.getUTCMonth(),c.getUTCDate()]:[c.getFullYear(),c.getMonth(),c.getDate()]}function jb(a){var b,c,d,e,f=[];if(!a._d){for(d=ib(a),a._w&&null==a._a[ff]&&null==a._a[ef]&&kb(a),null!=a._dayOfYear&&(e=hb(a._a[df],d[df]),(a._dayOfYear>pa(e)||0===a._dayOfYear)&&(n(a)._overflowDayOfYear=!0),c=ta(e,0,a._dayOfYear),a._a[ef]=c.getUTCMonth(),a._a[ff]=c.getUTCDate()),b=0;b<3&&null==a._a[b];++b)a._a[b]=f[b]=d[b];for(;b<7;b++)a._a[b]=f[b]=null==a._a[b]?2===b?1:0:a._a[b];24===a._a[gf]&&0===a._a[hf]&&0===a._a[jf]&&0===a._a[kf]&&(a._nextDay=!0,a._a[gf]=0),a._d=(a._useUTC?ta:sa).apply(null,f),null!=a._tzm&&a._d.setUTCMinutes(a._d.getUTCMinutes()-a._tzm),a._nextDay&&(a._a[gf]=24)}}function kb(a){var b,c,d,e,f,g,h,i;if(b=a._w,null!=b.GG||null!=b.W||null!=b.E)f=1,g=4,c=hb(b.GG,a._a[df],wa(tb(),1,4).year),d=hb(b.W,1),e=hb(b.E,1),(e<1||e>7)&&(i=!0);else{f=a._locale._week.dow,g=a._locale._week.doy;var j=wa(tb(),f,g);c=hb(b.gg,a._a[df],j.year),d=hb(b.w,j.week),null!=b.d?(e=b.d,(e<0||e>6)&&(i=!0)):null!=b.e?(e=b.e+f,(b.e<0||b.e>6)&&(i=!0)):e=f}d<1||d>xa(c,f,g)?n(a)._overflowWeeks=!0:null!=i?n(a)._overflowWeekday=!0:(h=va(c,d,e,f,g),a._a[df]=h.year,a._dayOfYear=h.dayOfYear)}function lb(b){if(b._f===a.ISO_8601)return void eb(b);if(b._f===a.RFC_2822)return void fb(b);b._a=[],n(b).empty=!0;var c,d,e,f,g,h=""+b._i,i=h.length,j=0;for(e=Y(b._f,b._locale).match(Ie)||[],c=0;c<e.length;c++)f=e[c],d=(h.match($(f,b))||[])[0],d&&(g=h.substr(0,h.indexOf(d)),g.length>0&&n(b).unusedInput.push(g),h=h.slice(h.indexOf(d)+d.length),j+=d.length),Le[f]?(d?n(b).empty=!1:n(b).unusedTokens.push(f),da(f,d,b)):b._strict&&!d&&n(b).unusedTokens.push(f);n(b).charsLeftOver=i-j,h.length>0&&n(b).unusedInput.push(h),b._a[gf]<=12&&n(b).bigHour===!0&&b._a[gf]>0&&(n(b).bigHour=void 0),n(b).parsedDateParts=b._a.slice(0),n(b).meridiem=b._meridiem,b._a[gf]=mb(b._locale,b._a[gf],b._meridiem),jb(b),db(b)}function mb(a,b,c){var d;return null==c?b:null!=a.meridiemHour?a.meridiemHour(b,c):null!=a.isPM?(d=a.isPM(c),d&&b<12&&(b+=12),d||12!==b||(b=0),b):b}function nb(a){var b,c,d,e,f;if(0===a._f.length)return n(a).invalidFormat=!0,void(a._d=new Date(NaN));for(e=0;e<a._f.length;e++)f=0,b=q({},a),null!=a._useUTC&&(b._useUTC=a._useUTC),b._f=a._f[e],lb(b),o(b)&&(f+=n(b).charsLeftOver,f+=10*n(b).unusedTokens.length,n(b).score=f,(null==d||f<d)&&(d=f,c=b));k(a,c||b)}function ob(a){if(!a._d){var b=L(a._i);a._a=i([b.year,b.month,b.day||b.date,b.hour,b.minute,b.second,b.millisecond],function(a){return a&&parseInt(a,10)}),jb(a)}}function pb(a){var b=new r(db(qb(a)));return b._nextDay&&(b.add(1,"d"),b._nextDay=void 0),b}function qb(a){var b=a._i,d=a._f;return a._locale=a._locale||bb(a._l),null===b||void 0===d&&""===b?p({nullInput:!0}):("string"==typeof b&&(a._i=b=a._locale.preparse(b)),s(b)?new r(db(b)):(h(b)?a._d=b:c(d)?nb(a):d?lb(a):rb(a),o(a)||(a._d=null),a))}function rb(b){var e=b._i;f(e)?b._d=new Date(a.now()):h(e)?b._d=new Date(e.valueOf()):"string"==typeof e?gb(b):c(e)?(b._a=i(e.slice(0),function(a){return parseInt(a,10)}),jb(b)):d(e)?ob(b):g(e)?b._d=new Date(e):a.createFromInputFallback(b)}function sb(a,b,f,g,h){var i={};return f!==!0&&f!==!1||(g=f,f=void 0),(d(a)&&e(a)||c(a)&&0===a.length)&&(a=void 0),i._isAMomentObject=!0,i._useUTC=i._isUTC=h,i._l=f,i._i=a,i._f=b,i._strict=g,pb(i)}function tb(a,b,c,d){return sb(a,b,c,d,!1)}function ub(a,b){var d,e;if(1===b.length&&c(b[0])&&(b=b[0]),!b.length)return tb();for(d=b[0],e=1;e<b.length;++e)b[e].isValid()&&!b[e][a](d)||(d=b[e]);return d}function vb(){var a=[].slice.call(arguments,0);return ub("isBefore",a)}function wb(){var a=[].slice.call(arguments,0);return ub("isAfter",a)}function xb(a){for(var b in a)if(Rf.indexOf(b)===-1||null!=a[b]&&isNaN(a[b]))return!1;for(var c=!1,d=0;d<Rf.length;++d)if(a[Rf[d]]){if(c)return!1;parseFloat(a[Rf[d]])!==u(a[Rf[d]])&&(c=!0)}return!0}function yb(){return this._isValid}function zb(){return Sb(NaN)}function Ab(a){var b=L(a),c=b.year||0,d=b.quarter||0,e=b.month||0,f=b.week||0,g=b.day||0,h=b.hour||0,i=b.minute||0,j=b.second||0,k=b.millisecond||0;this._isValid=xb(b),this._milliseconds=+k+1e3*j+6e4*i+1e3*h*60*60,this._days=+g+7*f,this._months=+e+3*d+12*c,this._data={},this._locale=bb(),this._bubble()}function Bb(a){return a instanceof Ab}function Cb(a){return a<0?Math.round(-1*a)*-1:Math.round(a)}function Db(a,b){U(a,0,0,function(){var a=this.utcOffset(),c="+";return a<0&&(a=-a,c="-"),c+T(~~(a/60),2)+b+T(~~a%60,2)})}function Eb(a,b){var c=(b||"").match(a);if(null===c)return null;var d=c[c.length-1]||[],e=(d+"").match(Sf)||["-",0,0],f=+(60*e[1])+u(e[2]);return 0===f?0:"+"===e[0]?f:-f}function Fb(b,c){var d,e;return c._isUTC?(d=c.clone(),e=(s(b)||h(b)?b.valueOf():tb(b).valueOf())-d.valueOf(),d._d.setTime(d._d.valueOf()+e),a.updateOffset(d,!1),d):tb(b).local()}function Gb(a){return 15*-Math.round(a._d.getTimezoneOffset()/15)}function Hb(b,c,d){var e,f=this._offset||0;if(!this.isValid())return null!=b?this:NaN;if(null!=b){if("string"==typeof b){if(b=Eb($e,b),null===b)return this}else Math.abs(b)<16&&!d&&(b=60*b);return!this._isUTC&&c&&(e=Gb(this)),this._offset=b,this._isUTC=!0,null!=e&&this.add(e,"m"),f!==b&&(!c||this._changeInProgress?Xb(this,Sb(b-f,"m"),1,!1):this._changeInProgress||(this._changeInProgress=!0,a.updateOffset(this,!0),this._changeInProgress=null)),this}return this._isUTC?f:Gb(this)}function Ib(a,b){return null!=a?("string"!=typeof a&&(a=-a),this.utcOffset(a,b),this):-this.utcOffset()}function Jb(a){return this.utcOffset(0,a)}function Kb(a){return this._isUTC&&(this.utcOffset(0,a),this._isUTC=!1,a&&this.subtract(Gb(this),"m")),this}function Lb(){if(null!=this._tzm)this.utcOffset(this._tzm,!1,!0);else if("string"==typeof this._i){var a=Eb(Ze,this._i);null!=a?this.utcOffset(a):this.utcOffset(0,!0)}return this}function Mb(a){return!!this.isValid()&&(a=a?tb(a).utcOffset():0,(this.utcOffset()-a)%60===0)}function Nb(){return this.utcOffset()>this.clone().month(0).utcOffset()||this.utcOffset()>this.clone().month(5).utcOffset()}function Ob(){if(!f(this._isDSTShifted))return this._isDSTShifted;var a={};if(q(a,this),a=qb(a),a._a){var b=a._isUTC?l(a._a):tb(a._a);this._isDSTShifted=this.isValid()&&v(a._a,b.toArray())>0}else this._isDSTShifted=!1;return this._isDSTShifted}function Pb(){return!!this.isValid()&&!this._isUTC}function Qb(){return!!this.isValid()&&this._isUTC}function Rb(){return!!this.isValid()&&(this._isUTC&&0===this._offset)}function Sb(a,b){var c,d,e,f=a,h=null;return Bb(a)?f={ms:a._milliseconds,d:a._days,M:a._months}:g(a)?(f={},b?f[b]=a:f.milliseconds=a):(h=Tf.exec(a))?(c="-"===h[1]?-1:1,f={y:0,d:u(h[ff])*c,h:u(h[gf])*c,m:u(h[hf])*c,s:u(h[jf])*c,ms:u(Cb(1e3*h[kf]))*c}):(h=Uf.exec(a))?(c="-"===h[1]?-1:1,f={y:Tb(h[2],c),M:Tb(h[3],c),w:Tb(h[4],c),d:Tb(h[5],c),h:Tb(h[6],c),m:Tb(h[7],c),s:Tb(h[8],c)}):null==f?f={}:"object"==typeof f&&("from"in f||"to"in f)&&(e=Vb(tb(f.from),tb(f.to)),f={},f.ms=e.milliseconds,f.M=e.months),d=new Ab(f),Bb(a)&&j(a,"_locale")&&(d._locale=a._locale),d}function Tb(a,b){var c=a&&parseFloat(a.replace(",","."));return(isNaN(c)?0:c)*b}function Ub(a,b){var c={milliseconds:0,months:0};return c.months=b.month()-a.month()+12*(b.year()-a.year()),a.clone().add(c.months,"M").isAfter(b)&&--c.months,c.milliseconds=+b-+a.clone().add(c.months,"M"),c}function Vb(a,b){var c;return a.isValid()&&b.isValid()?(b=Fb(b,a),a.isBefore(b)?c=Ub(a,b):(c=Ub(b,a),c.milliseconds=-c.milliseconds,c.months=-c.months),c):{milliseconds:0,months:0}}function Wb(a,b){return function(c,d){var e,f;return null===d||isNaN(+d)||(y(b,"moment()."+b+"(period, number) is deprecated. Please use moment()."+b+"(number, period). See http://momentjs.com/guides/#/warnings/add-inverted-param/ for more info."),f=c,c=d,d=f),c="string"==typeof c?+c:c,e=Sb(c,d),Xb(this,e,a),this}}function Xb(b,c,d,e){var f=c._milliseconds,g=Cb(c._days),h=Cb(c._months);b.isValid()&&(e=null==e||e,f&&b._d.setTime(b._d.valueOf()+f*d),g&&Q(b,"Date",P(b,"Date")+g*d),h&&ja(b,P(b,"Month")+h*d),e&&a.updateOffset(b,g||h))}function Yb(a,b){var c=a.diff(b,"days",!0);return c<-6?"sameElse":c<-1?"lastWeek":c<0?"lastDay":c<1?"sameDay":c<2?"nextDay":c<7?"nextWeek":"sameElse"}function Zb(b,c){var d=b||tb(),e=Fb(d,this).startOf("day"),f=a.calendarFormat(this,e)||"sameElse",g=c&&(z(c[f])?c[f].call(this,d):c[f]);return this.format(g||this.localeData().calendar(f,this,tb(d)))}function $b(){return new r(this)}function _b(a,b){var c=s(a)?a:tb(a);return!(!this.isValid()||!c.isValid())&&(b=K(f(b)?"millisecond":b),"millisecond"===b?this.valueOf()>c.valueOf():c.valueOf()<this.clone().startOf(b).valueOf())}function ac(a,b){var c=s(a)?a:tb(a);return!(!this.isValid()||!c.isValid())&&(b=K(f(b)?"millisecond":b),"millisecond"===b?this.valueOf()<c.valueOf():this.clone().endOf(b).valueOf()<c.valueOf())}function bc(a,b,c,d){return d=d||"()",("("===d[0]?this.isAfter(a,c):!this.isBefore(a,c))&&(")"===d[1]?this.isBefore(b,c):!this.isAfter(b,c))}function cc(a,b){var c,d=s(a)?a:tb(a);return!(!this.isValid()||!d.isValid())&&(b=K(b||"millisecond"),"millisecond"===b?this.valueOf()===d.valueOf():(c=d.valueOf(),this.clone().startOf(b).valueOf()<=c&&c<=this.clone().endOf(b).valueOf()))}function dc(a,b){return this.isSame(a,b)||this.isAfter(a,b)}function ec(a,b){return this.isSame(a,b)||this.isBefore(a,b)}function fc(a,b,c){var d,e,f,g;return this.isValid()?(d=Fb(a,this),d.isValid()?(e=6e4*(d.utcOffset()-this.utcOffset()),b=K(b),"year"===b||"month"===b||"quarter"===b?(g=gc(this,d),"quarter"===b?g/=3:"year"===b&&(g/=12)):(f=this-d,g="second"===b?f/1e3:"minute"===b?f/6e4:"hour"===b?f/36e5:"day"===b?(f-e)/864e5:"week"===b?(f-e)/6048e5:f),c?g:t(g)):NaN):NaN}function gc(a,b){var c,d,e=12*(b.year()-a.year())+(b.month()-a.month()),f=a.clone().add(e,"months");return b-f<0?(c=a.clone().add(e-1,"months"),d=(b-f)/(f-c)):(c=a.clone().add(e+1,"months"),d=(b-f)/(c-f)),-(e+d)||0}function hc(){return this.clone().locale("en").format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ")}function ic(){if(!this.isValid())return null;var a=this.clone().utc();return a.year()<0||a.year()>9999?X(a,"YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]"):z(Date.prototype.toISOString)?this.toDate().toISOString():X(a,"YYYY-MM-DD[T]HH:mm:ss.SSS[Z]")}function jc(){if(!this.isValid())return"moment.invalid(/* "+this._i+" */)";var a="moment",b="";this.isLocal()||(a=0===this.utcOffset()?"moment.utc":"moment.parseZone",b="Z");var c="["+a+'("]',d=0<=this.year()&&this.year()<=9999?"YYYY":"YYYYYY",e="-MM-DD[T]HH:mm:ss.SSS",f=b+'[")]';return this.format(c+d+e+f)}function kc(b){b||(b=this.isUtc()?a.defaultFormatUtc:a.defaultFormat);var c=X(this,b);return this.localeData().postformat(c)}function lc(a,b){return this.isValid()&&(s(a)&&a.isValid()||tb(a).isValid())?Sb({to:this,from:a}).locale(this.locale()).humanize(!b):this.localeData().invalidDate()}function mc(a){return this.from(tb(),a)}function nc(a,b){return this.isValid()&&(s(a)&&a.isValid()||tb(a).isValid())?Sb({from:this,to:a}).locale(this.locale()).humanize(!b):this.localeData().invalidDate()}function oc(a){return this.to(tb(),a)}function pc(a){var b;return void 0===a?this._locale._abbr:(b=bb(a),null!=b&&(this._locale=b),this)}function qc(){return this._locale}function rc(a){switch(a=K(a)){case"year":this.month(0);case"quarter":case"month":this.date(1);case"week":case"isoWeek":case"day":case"date":this.hours(0);case"hour":this.minutes(0);case"minute":this.seconds(0);case"second":this.milliseconds(0)}return"week"===a&&this.weekday(0),"isoWeek"===a&&this.isoWeekday(1),"quarter"===a&&this.month(3*Math.floor(this.month()/3)),this}function sc(a){return a=K(a),void 0===a||"millisecond"===a?this:("date"===a&&(a="day"),this.startOf(a).add(1,"isoWeek"===a?"week":a).subtract(1,"ms"))}function tc(){return this._d.valueOf()-6e4*(this._offset||0)}function uc(){return Math.floor(this.valueOf()/1e3)}function vc(){return new Date(this.valueOf())}function wc(){var a=this;return[a.year(),a.month(),a.date(),a.hour(),a.minute(),a.second(),a.millisecond()]}function xc(){var a=this;return{years:a.year(),months:a.month(),date:a.date(),hours:a.hours(),minutes:a.minutes(),seconds:a.seconds(),milliseconds:a.milliseconds()}}function yc(){return this.isValid()?this.toISOString():null}function zc(){return o(this)}function Ac(){
-return k({},n(this))}function Bc(){return n(this).overflow}function Cc(){return{input:this._i,format:this._f,locale:this._locale,isUTC:this._isUTC,strict:this._strict}}function Dc(a,b){U(0,[a,a.length],0,b)}function Ec(a){return Ic.call(this,a,this.week(),this.weekday(),this.localeData()._week.dow,this.localeData()._week.doy)}function Fc(a){return Ic.call(this,a,this.isoWeek(),this.isoWeekday(),1,4)}function Gc(){return xa(this.year(),1,4)}function Hc(){var a=this.localeData()._week;return xa(this.year(),a.dow,a.doy)}function Ic(a,b,c,d,e){var f;return null==a?wa(this,d,e).year:(f=xa(a,d,e),b>f&&(b=f),Jc.call(this,a,b,c,d,e))}function Jc(a,b,c,d,e){var f=va(a,b,c,d,e),g=ta(f.year,0,f.dayOfYear);return this.year(g.getUTCFullYear()),this.month(g.getUTCMonth()),this.date(g.getUTCDate()),this}function Kc(a){return null==a?Math.ceil((this.month()+1)/3):this.month(3*(a-1)+this.month()%3)}function Lc(a){var b=Math.round((this.clone().startOf("day")-this.clone().startOf("year"))/864e5)+1;return null==a?b:this.add(a-b,"d")}function Mc(a,b){b[kf]=u(1e3*("0."+a))}function Nc(){return this._isUTC?"UTC":""}function Oc(){return this._isUTC?"Coordinated Universal Time":""}function Pc(a){return tb(1e3*a)}function Qc(){return tb.apply(null,arguments).parseZone()}function Rc(a){return a}function Sc(a,b,c,d){var e=bb(),f=l().set(d,b);return e[c](f,a)}function Tc(a,b,c){if(g(a)&&(b=a,a=void 0),a=a||"",null!=b)return Sc(a,b,c,"month");var d,e=[];for(d=0;d<12;d++)e[d]=Sc(a,d,c,"month");return e}function Uc(a,b,c,d){"boolean"==typeof a?(g(b)&&(c=b,b=void 0),b=b||""):(b=a,c=b,a=!1,g(b)&&(c=b,b=void 0),b=b||"");var e=bb(),f=a?e._week.dow:0;if(null!=c)return Sc(b,(c+f)%7,d,"day");var h,i=[];for(h=0;h<7;h++)i[h]=Sc(b,(h+f)%7,d,"day");return i}function Vc(a,b){return Tc(a,b,"months")}function Wc(a,b){return Tc(a,b,"monthsShort")}function Xc(a,b,c){return Uc(a,b,c,"weekdays")}function Yc(a,b,c){return Uc(a,b,c,"weekdaysShort")}function Zc(a,b,c){return Uc(a,b,c,"weekdaysMin")}function $c(){var a=this._data;return this._milliseconds=dg(this._milliseconds),this._days=dg(this._days),this._months=dg(this._months),a.milliseconds=dg(a.milliseconds),a.seconds=dg(a.seconds),a.minutes=dg(a.minutes),a.hours=dg(a.hours),a.months=dg(a.months),a.years=dg(a.years),this}function _c(a,b,c,d){var e=Sb(b,c);return a._milliseconds+=d*e._milliseconds,a._days+=d*e._days,a._months+=d*e._months,a._bubble()}function ad(a,b){return _c(this,a,b,1)}function bd(a,b){return _c(this,a,b,-1)}function cd(a){return a<0?Math.floor(a):Math.ceil(a)}function dd(){var a,b,c,d,e,f=this._milliseconds,g=this._days,h=this._months,i=this._data;return f>=0&&g>=0&&h>=0||f<=0&&g<=0&&h<=0||(f+=864e5*cd(fd(h)+g),g=0,h=0),i.milliseconds=f%1e3,a=t(f/1e3),i.seconds=a%60,b=t(a/60),i.minutes=b%60,c=t(b/60),i.hours=c%24,g+=t(c/24),e=t(ed(g)),h+=e,g-=cd(fd(e)),d=t(h/12),h%=12,i.days=g,i.months=h,i.years=d,this}function ed(a){return 4800*a/146097}function fd(a){return 146097*a/4800}function gd(a){if(!this.isValid())return NaN;var b,c,d=this._milliseconds;if(a=K(a),"month"===a||"year"===a)return b=this._days+d/864e5,c=this._months+ed(b),"month"===a?c:c/12;switch(b=this._days+Math.round(fd(this._months)),a){case"week":return b/7+d/6048e5;case"day":return b+d/864e5;case"hour":return 24*b+d/36e5;case"minute":return 1440*b+d/6e4;case"second":return 86400*b+d/1e3;case"millisecond":return Math.floor(864e5*b)+d;default:throw new Error("Unknown unit "+a)}}function hd(){return this.isValid()?this._milliseconds+864e5*this._days+this._months%12*2592e6+31536e6*u(this._months/12):NaN}function id(a){return function(){return this.as(a)}}function jd(a){return a=K(a),this.isValid()?this[a+"s"]():NaN}function kd(a){return function(){return this.isValid()?this._data[a]:NaN}}function ld(){return t(this.days()/7)}function md(a,b,c,d,e){return e.relativeTime(b||1,!!c,a,d)}function nd(a,b,c){var d=Sb(a).abs(),e=tg(d.as("s")),f=tg(d.as("m")),g=tg(d.as("h")),h=tg(d.as("d")),i=tg(d.as("M")),j=tg(d.as("y")),k=e<=ug.ss&&["s",e]||e<ug.s&&["ss",e]||f<=1&&["m"]||f<ug.m&&["mm",f]||g<=1&&["h"]||g<ug.h&&["hh",g]||h<=1&&["d"]||h<ug.d&&["dd",h]||i<=1&&["M"]||i<ug.M&&["MM",i]||j<=1&&["y"]||["yy",j];return k[2]=b,k[3]=+a>0,k[4]=c,md.apply(null,k)}function od(a){return void 0===a?tg:"function"==typeof a&&(tg=a,!0)}function pd(a,b){return void 0!==ug[a]&&(void 0===b?ug[a]:(ug[a]=b,"s"===a&&(ug.ss=b-1),!0))}function qd(a){if(!this.isValid())return this.localeData().invalidDate();var b=this.localeData(),c=nd(this,!a,b);return a&&(c=b.pastFuture(+this,c)),b.postformat(c)}function rd(){if(!this.isValid())return this.localeData().invalidDate();var a,b,c,d=vg(this._milliseconds)/1e3,e=vg(this._days),f=vg(this._months);a=t(d/60),b=t(a/60),d%=60,a%=60,c=t(f/12),f%=12;var g=c,h=f,i=e,j=b,k=a,l=d,m=this.asSeconds();return m?(m<0?"-":"")+"P"+(g?g+"Y":"")+(h?h+"M":"")+(i?i+"D":"")+(j||k||l?"T":"")+(j?j+"H":"")+(k?k+"M":"")+(l?l+"S":""):"P0D"}
-//! moment.js locale configuration
-//! locale : Belarusian [be]
-//! author : Dmitry Demidov : https://github.com/demidov91
-//! author: Praleska: http://praleska.pro/
-//! Author : Menelion Elensúle : https://github.com/Oire
-function sd(a,b){var c=a.split("_");return b%10===1&&b%100!==11?c[0]:b%10>=2&&b%10<=4&&(b%100<10||b%100>=20)?c[1]:c[2]}function td(a,b,c){var d={mm:b?"хвіліна_хвіліны_хвілін":"хвіліну_хвіліны_хвілін",hh:b?"гадзіна_гадзіны_гадзін":"гадзіну_гадзіны_гадзін",dd:"дзень_дні_дзён",MM:"месяц_месяцы_месяцаў",yy:"год_гады_гадоў"};return"m"===c?b?"хвіліна":"хвіліну":"h"===c?b?"гадзіна":"гадзіну":a+" "+sd(d[c],+a)}
-//! moment.js locale configuration
-//! locale : Breton [br]
-//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
-function ud(a,b,c){var d={mm:"munutenn",MM:"miz",dd:"devezh"};return a+" "+xd(d[c],a)}function vd(a){switch(wd(a)){case 1:case 3:case 4:case 5:case 9:return a+" bloaz";default:return a+" vloaz"}}function wd(a){return a>9?wd(a%10):a}function xd(a,b){return 2===b?yd(a):a}function yd(a){var b={m:"v",b:"v",d:"z"};return void 0===b[a.charAt(0)]?a:b[a.charAt(0)]+a.substring(1)}
-//! moment.js locale configuration
-//! locale : Bosnian [bs]
-//! author : Nedim Cholich : https://github.com/frontyard
-//! based on (hr) translation by Bojan Marković
-function zd(a,b,c){var d=a+" ";switch(c){case"m":return b?"jedna minuta":"jedne minute";case"mm":return d+=1===a?"minuta":2===a||3===a||4===a?"minute":"minuta";case"h":return b?"jedan sat":"jednog sata";case"hh":return d+=1===a?"sat":2===a||3===a||4===a?"sata":"sati";case"dd":return d+=1===a?"dan":"dana";case"MM":return d+=1===a?"mjesec":2===a||3===a||4===a?"mjeseca":"mjeseci";case"yy":return d+=1===a?"godina":2===a||3===a||4===a?"godine":"godina"}}function Ad(a){return a>1&&a<5&&1!==~~(a/10)}function Bd(a,b,c,d){var e=a+" ";switch(c){case"s":return b||d?"pár sekund":"pár sekundami";case"m":return b?"minuta":d?"minutu":"minutou";case"mm":return b||d?e+(Ad(a)?"minuty":"minut"):e+"minutami";break;case"h":return b?"hodina":d?"hodinu":"hodinou";case"hh":return b||d?e+(Ad(a)?"hodiny":"hodin"):e+"hodinami";break;case"d":return b||d?"den":"dnem";case"dd":return b||d?e+(Ad(a)?"dny":"dní"):e+"dny";break;case"M":return b||d?"měsíc":"měsícem";case"MM":return b||d?e+(Ad(a)?"měsíce":"měsíců"):e+"měsíci";break;case"y":return b||d?"rok":"rokem";case"yy":return b||d?e+(Ad(a)?"roky":"let"):e+"lety"}}
-//! moment.js locale configuration
-//! locale : German (Austria) [de-at]
-//! author : lluchs : https://github.com/lluchs
-//! author: Menelion Elensúle: https://github.com/Oire
-//! author : Martin Groller : https://github.com/MadMG
-//! author : Mikolaj Dadela : https://github.com/mik01aj
-function Cd(a,b,c,d){var e={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[a+" Tage",a+" Tagen"],M:["ein Monat","einem Monat"],MM:[a+" Monate",a+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[a+" Jahre",a+" Jahren"]};return b?e[c][0]:e[c][1]}
-//! moment.js locale configuration
-//! locale : German (Switzerland) [de-ch]
-//! author : sschueller : https://github.com/sschueller
-function Dd(a,b,c,d){var e={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[a+" Tage",a+" Tagen"],M:["ein Monat","einem Monat"],MM:[a+" Monate",a+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[a+" Jahre",a+" Jahren"]};return b?e[c][0]:e[c][1]}
-//! moment.js locale configuration
-//! locale : German [de]
-//! author : lluchs : https://github.com/lluchs
-//! author: Menelion Elensúle: https://github.com/Oire
-//! author : Mikolaj Dadela : https://github.com/mik01aj
-function Ed(a,b,c,d){var e={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[a+" Tage",a+" Tagen"],M:["ein Monat","einem Monat"],MM:[a+" Monate",a+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[a+" Jahre",a+" Jahren"]};return b?e[c][0]:e[c][1]}
-//! moment.js locale configuration
-//! locale : Estonian [et]
-//! author : Henry Kehlmann : https://github.com/madhenry
-//! improvements : Illimar Tambek : https://github.com/ragulka
-function Fd(a,b,c,d){var e={s:["mõne sekundi","mõni sekund","paar sekundit"],m:["ühe minuti","üks minut"],mm:[a+" minuti",a+" minutit"],h:["ühe tunni","tund aega","üks tund"],hh:[a+" tunni",a+" tundi"],d:["ühe päeva","üks päev"],M:["kuu aja","kuu aega","üks kuu"],MM:[a+" kuu",a+" kuud"],y:["ühe aasta","aasta","üks aasta"],yy:[a+" aasta",a+" aastat"]};return b?e[c][2]?e[c][2]:e[c][1]:d?e[c][0]:e[c][1]}function Gd(a,b,c,d){var e="";switch(c){case"s":return d?"muutaman sekunnin":"muutama sekunti";case"m":return d?"minuutin":"minuutti";case"mm":e=d?"minuutin":"minuuttia";break;case"h":return d?"tunnin":"tunti";case"hh":e=d?"tunnin":"tuntia";break;case"d":return d?"päivän":"päivä";case"dd":e=d?"päivän":"päivää";break;case"M":return d?"kuukauden":"kuukausi";case"MM":e=d?"kuukauden":"kuukautta";break;case"y":return d?"vuoden":"vuosi";case"yy":e=d?"vuoden":"vuotta"}return e=Hd(a,d)+" "+e}function Hd(a,b){return a<10?b?$g[a]:Zg[a]:a}
-//! moment.js locale configuration
-//! locale : Konkani Latin script [gom-latn]
-//! author : The Discoverer : https://github.com/WikiDiscoverer
-function Id(a,b,c,d){var e={s:["thodde secondanim","thodde second"],m:["eka mintan","ek minute"],mm:[a+" mintanim",a+" mintam"],h:["eka horan","ek hor"],hh:[a+" horanim",a+" hor"],d:["eka disan","ek dis"],dd:[a+" disanim",a+" dis"],M:["eka mhoinean","ek mhoino"],MM:[a+" mhoineanim",a+" mhoine"],y:["eka vorsan","ek voros"],yy:[a+" vorsanim",a+" vorsam"]};return b?e[c][0]:e[c][1]}
-//! moment.js locale configuration
-//! locale : Croatian [hr]
-//! author : Bojan Marković : https://github.com/bmarkovic
-function Jd(a,b,c){var d=a+" ";switch(c){case"m":return b?"jedna minuta":"jedne minute";case"mm":return d+=1===a?"minuta":2===a||3===a||4===a?"minute":"minuta";case"h":return b?"jedan sat":"jednog sata";case"hh":return d+=1===a?"sat":2===a||3===a||4===a?"sata":"sati";case"dd":return d+=1===a?"dan":"dana";case"MM":return d+=1===a?"mjesec":2===a||3===a||4===a?"mjeseca":"mjeseci";case"yy":return d+=1===a?"godina":2===a||3===a||4===a?"godine":"godina"}}function Kd(a,b,c,d){var e=a;switch(c){case"s":return d||b?"néhány másodperc":"néhány másodperce";case"m":return"egy"+(d||b?" perc":" perce");case"mm":return e+(d||b?" perc":" perce");case"h":return"egy"+(d||b?" óra":" órája");case"hh":return e+(d||b?" óra":" órája");case"d":return"egy"+(d||b?" nap":" napja");case"dd":return e+(d||b?" nap":" napja");case"M":return"egy"+(d||b?" hónap":" hónapja");case"MM":return e+(d||b?" hónap":" hónapja");case"y":return"egy"+(d||b?" év":" éve");case"yy":return e+(d||b?" év":" éve")}return""}function Ld(a){return(a?"":"[múlt] ")+"["+ih[this.day()]+"] LT[-kor]"}
-//! moment.js locale configuration
-//! locale : Icelandic [is]
-//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
-function Md(a){return a%100===11||a%10!==1}function Nd(a,b,c,d){var e=a+" ";switch(c){case"s":return b||d?"nokkrar sekúndur":"nokkrum sekúndum";case"m":return b?"mínúta":"mínútu";case"mm":return Md(a)?e+(b||d?"mínútur":"mínútum"):b?e+"mínúta":e+"mínútu";case"hh":return Md(a)?e+(b||d?"klukkustundir":"klukkustundum"):e+"klukkustund";case"d":return b?"dagur":d?"dag":"degi";case"dd":return Md(a)?b?e+"dagar":e+(d?"daga":"dögum"):b?e+"dagur":e+(d?"dag":"degi");case"M":return b?"mánuður":d?"mánuð":"mánuði";case"MM":return Md(a)?b?e+"mánuðir":e+(d?"mánuði":"mánuðum"):b?e+"mánuður":e+(d?"mánuð":"mánuði");case"y":return b||d?"ár":"ári";case"yy":return Md(a)?e+(b||d?"ár":"árum"):e+(b||d?"ár":"ári")}}
-//! moment.js locale configuration
-//! locale : Luxembourgish [lb]
-//! author : mweimerskirch : https://github.com/mweimerskirch
-//! author : David Raison : https://github.com/kwisatz
-function Od(a,b,c,d){var e={m:["eng Minutt","enger Minutt"],h:["eng Stonn","enger Stonn"],d:["een Dag","engem Dag"],M:["ee Mount","engem Mount"],y:["ee Joer","engem Joer"]};return b?e[c][0]:e[c][1]}function Pd(a){var b=a.substr(0,a.indexOf(" "));return Rd(b)?"a "+a:"an "+a}function Qd(a){var b=a.substr(0,a.indexOf(" "));return Rd(b)?"viru "+a:"virun "+a}function Rd(a){if(a=parseInt(a,10),isNaN(a))return!1;if(a<0)return!0;if(a<10)return 4<=a&&a<=7;if(a<100){var b=a%10,c=a/10;return Rd(0===b?c:b)}if(a<1e4){for(;a>=10;)a/=10;return Rd(a)}return a/=1e3,Rd(a)}function Sd(a,b,c,d){return b?"kelios sekundės":d?"kelių sekundžių":"kelias sekundes"}function Td(a,b,c,d){return b?Vd(c)[0]:d?Vd(c)[1]:Vd(c)[2]}function Ud(a){return a%10===0||a>10&&a<20}function Vd(a){return nh[a].split("_")}function Wd(a,b,c,d){var e=a+" ";return 1===a?e+Td(a,b,c[0],d):b?e+(Ud(a)?Vd(c)[1]:Vd(c)[0]):d?e+Vd(c)[1]:e+(Ud(a)?Vd(c)[1]:Vd(c)[2])}function Xd(a,b,c){return c?b%10===1&&b%100!==11?a[2]:a[3]:b%10===1&&b%100!==11?a[0]:a[1]}function Yd(a,b,c){return a+" "+Xd(oh[c],a,b)}function Zd(a,b,c){return Xd(oh[c],a,b)}function $d(a,b){return b?"dažas sekundes":"dažām sekundēm"}function _d(a,b,c,d){var e="";if(b)switch(c){case"s":e="काही सेकंद";break;case"m":e="एक मिनिट";break;case"mm":e="%d मिनिटे";break;case"h":e="एक तास";break;case"hh":e="%d तास";break;case"d":e="एक दिवस";break;case"dd":e="%d दिवस";break;case"M":e="एक महिना";break;case"MM":e="%d महिने";break;case"y":e="एक वर्ष";break;case"yy":e="%d वर्षे"}else switch(c){case"s":e="काही सेकंदां";break;case"m":e="एका मिनिटा";break;case"mm":e="%d मिनिटां";break;case"h":e="एका तासा";break;case"hh":e="%d तासां";break;case"d":e="एका दिवसा";break;case"dd":e="%d दिवसां";break;case"M":e="एका महिन्या";break;case"MM":e="%d महिन्यां";break;case"y":e="एका वर्षा";break;case"yy":e="%d वर्षां"}return e.replace(/%d/i,a)}function ae(a){return a%10<5&&a%10>1&&~~(a/10)%10!==1}function be(a,b,c){var d=a+" ";switch(c){case"m":return b?"minuta":"minutę";case"mm":return d+(ae(a)?"minuty":"minut");case"h":return b?"godzina":"godzinę";case"hh":return d+(ae(a)?"godziny":"godzin");case"MM":return d+(ae(a)?"miesiące":"miesięcy");case"yy":return d+(ae(a)?"lata":"lat")}}
-//! moment.js locale configuration
-//! locale : Romanian [ro]
-//! author : Vlad Gurdiga : https://github.com/gurdiga
-//! author : Valentin Agachi : https://github.com/avaly
-function ce(a,b,c){var d={mm:"minute",hh:"ore",dd:"zile",MM:"luni",yy:"ani"},e=" ";return(a%100>=20||a>=100&&a%100===0)&&(e=" de "),a+e+d[c]}
-//! moment.js locale configuration
-//! locale : Russian [ru]
-//! author : Viktorminator : https://github.com/Viktorminator
-//! Author : Menelion Elensúle : https://github.com/Oire
-//! author : Коренберг Марк : https://github.com/socketpair
-function de(a,b){var c=a.split("_");return b%10===1&&b%100!==11?c[0]:b%10>=2&&b%10<=4&&(b%100<10||b%100>=20)?c[1]:c[2]}function ee(a,b,c){var d={mm:b?"минута_минуты_минут":"минуту_минуты_минут",hh:"час_часа_часов",dd:"день_дня_дней",MM:"месяц_месяца_месяцев",yy:"год_года_лет"};return"m"===c?b?"минута":"минуту":a+" "+de(d[c],+a)}function fe(a){return a>1&&a<5}function ge(a,b,c,d){var e=a+" ";switch(c){case"s":return b||d?"pár sekúnd":"pár sekundami";case"m":return b?"minúta":d?"minútu":"minútou";case"mm":return b||d?e+(fe(a)?"minúty":"minút"):e+"minútami";break;case"h":return b?"hodina":d?"hodinu":"hodinou";case"hh":return b||d?e+(fe(a)?"hodiny":"hodín"):e+"hodinami";break;case"d":return b||d?"deň":"dňom";case"dd":return b||d?e+(fe(a)?"dni":"dní"):e+"dňami";break;case"M":return b||d?"mesiac":"mesiacom";case"MM":return b||d?e+(fe(a)?"mesiace":"mesiacov"):e+"mesiacmi";break;case"y":return b||d?"rok":"rokom";case"yy":return b||d?e+(fe(a)?"roky":"rokov"):e+"rokmi"}}
-//! moment.js locale configuration
-//! locale : Slovenian [sl]
-//! author : Robert Sedovšek : https://github.com/sedovsek
-function he(a,b,c,d){var e=a+" ";switch(c){case"s":return b||d?"nekaj sekund":"nekaj sekundami";case"m":return b?"ena minuta":"eno minuto";case"mm":return e+=1===a?b?"minuta":"minuto":2===a?b||d?"minuti":"minutama":a<5?b||d?"minute":"minutami":b||d?"minut":"minutami";case"h":return b?"ena ura":"eno uro";case"hh":return e+=1===a?b?"ura":"uro":2===a?b||d?"uri":"urama":a<5?b||d?"ure":"urami":b||d?"ur":"urami";case"d":return b||d?"en dan":"enim dnem";case"dd":return e+=1===a?b||d?"dan":"dnem":2===a?b||d?"dni":"dnevoma":b||d?"dni":"dnevi";case"M":return b||d?"en mesec":"enim mesecem";case"MM":return e+=1===a?b||d?"mesec":"mesecem":2===a?b||d?"meseca":"mesecema":a<5?b||d?"mesece":"meseci":b||d?"mesecev":"meseci";case"y":return b||d?"eno leto":"enim letom";case"yy":return e+=1===a?b||d?"leto":"letom":2===a?b||d?"leti":"letoma":a<5?b||d?"leta":"leti":b||d?"let":"leti"}}function ie(a){var b=a;return b=a.indexOf("jaj")!==-1?b.slice(0,-3)+"leS":a.indexOf("jar")!==-1?b.slice(0,-3)+"waQ":a.indexOf("DIS")!==-1?b.slice(0,-3)+"nem":b+" pIq"}function je(a){var b=a;return b=a.indexOf("jaj")!==-1?b.slice(0,-3)+"Hu’":a.indexOf("jar")!==-1?b.slice(0,-3)+"wen":a.indexOf("DIS")!==-1?b.slice(0,-3)+"ben":b+" ret"}function ke(a,b,c,d){var e=le(a);switch(c){case"mm":return e+" tup";case"hh":return e+" rep";case"dd":return e+" jaj";case"MM":return e+" jar";case"yy":return e+" DIS"}}function le(a){var b=Math.floor(a%1e3/100),c=Math.floor(a%100/10),d=a%10,e="";return b>0&&(e+=Rh[b]+"vatlh"),c>0&&(e+=(""!==e?" ":"")+Rh[c]+"maH"),d>0&&(e+=(""!==e?" ":"")+Rh[d]),""===e?"pagh":e}function me(a,b,c,d){var e={s:["viensas secunds","'iensas secunds"],m:["'n míut","'iens míut"],mm:[a+" míuts",""+a+" míuts"],h:["'n þora","'iensa þora"],hh:[a+" þoras",""+a+" þoras"],d:["'n ziua","'iensa ziua"],dd:[a+" ziuas",""+a+" ziuas"],M:["'n mes","'iens mes"],MM:[a+" mesen",""+a+" mesen"],y:["'n ar","'iens ar"],yy:[a+" ars",""+a+" ars"]};return d?e[c][0]:b?e[c][0]:e[c][1]}
-//! moment.js locale configuration
-//! locale : Ukrainian [uk]
-//! author : zemlanin : https://github.com/zemlanin
-//! Author : Menelion Elensúle : https://github.com/Oire
-function ne(a,b){var c=a.split("_");return b%10===1&&b%100!==11?c[0]:b%10>=2&&b%10<=4&&(b%100<10||b%100>=20)?c[1]:c[2]}function oe(a,b,c){var d={mm:b?"хвилина_хвилини_хвилин":"хвилину_хвилини_хвилин",hh:b?"година_години_годин":"годину_години_годин",dd:"день_дні_днів",MM:"місяць_місяці_місяців",yy:"рік_роки_років"};return"m"===c?b?"хвилина":"хвилину":"h"===c?b?"година":"годину":a+" "+ne(d[c],+a)}function pe(a,b){var c={nominative:"неділя_понеділок_вівторок_середа_четвер_п’ятниця_субота".split("_"),accusative:"неділю_понеділок_вівторок_середу_четвер_п’ятницю_суботу".split("_"),genitive:"неділі_понеділка_вівторка_середи_четверга_п’ятниці_суботи".split("_")};if(!a)return c.nominative;var d=/(\[[ВвУу]\]) ?dddd/.test(b)?"accusative":/\[?(?:минулої|наступної)? ?\] ?dddd/.test(b)?"genitive":"nominative";return c[d][a.day()]}function qe(a){return function(){return a+"о"+(11===this.hours()?"б":"")+"] LT"}}var re,se;se=Array.prototype.some?Array.prototype.some:function(a){for(var b=Object(this),c=b.length>>>0,d=0;d<c;d++)if(d in b&&a.call(this,b[d],d,b))return!0;return!1};var te=se,ue=a.momentProperties=[],ve=!1,we={};a.suppressDeprecationWarnings=!1,a.deprecationHandler=null;var xe;xe=Object.keys?Object.keys:function(a){var b,c=[];for(b in a)j(a,b)&&c.push(b);return c};var ye,ze=xe,Ae={sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},Be={LTS:"h:mm:ss A",LT:"h:mm A",L:"MM/DD/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY h:mm A",LLLL:"dddd, MMMM D, YYYY h:mm A"},Ce="Invalid date",De="%d",Ee=/\d{1,2}/,Fe={future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},Ge={},He={},Ie=/(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g,Je=/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,Ke={},Le={},Me=/\d/,Ne=/\d\d/,Oe=/\d{3}/,Pe=/\d{4}/,Qe=/[+-]?\d{6}/,Re=/\d\d?/,Se=/\d\d\d\d?/,Te=/\d\d\d\d\d\d?/,Ue=/\d{1,3}/,Ve=/\d{1,4}/,We=/[+-]?\d{1,6}/,Xe=/\d+/,Ye=/[+-]?\d+/,Ze=/Z|[+-]\d\d:?\d\d/gi,$e=/Z|[+-]\d\d(?::?\d\d)?/gi,_e=/[+-]?\d+(\.\d{1,3})?/,af=/[0-9]*['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+|[\u0600-\u06FF\/]+(\s*?[\u0600-\u06FF]+){1,2}/i,bf={},cf={},df=0,ef=1,ff=2,gf=3,hf=4,jf=5,kf=6,lf=7,mf=8;ye=Array.prototype.indexOf?Array.prototype.indexOf:function(a){var b;for(b=0;b<this.length;++b)if(this[b]===a)return b;return-1};var nf=ye;U("M",["MM",2],"Mo",function(){return this.month()+1}),U("MMM",0,0,function(a){return this.localeData().monthsShort(this,a)}),U("MMMM",0,0,function(a){return this.localeData().months(this,a)}),J("month","M"),M("month",8),Z("M",Re),Z("MM",Re,Ne),Z("MMM",function(a,b){return b.monthsShortRegex(a)}),Z("MMMM",function(a,b){return b.monthsRegex(a)}),ba(["M","MM"],function(a,b){b[ef]=u(a)-1}),ba(["MMM","MMMM"],function(a,b,c,d){var e=c._locale.monthsParse(a,d,c._strict);null!=e?b[ef]=e:n(c).invalidMonth=a});var of=/D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/,pf="January_February_March_April_May_June_July_August_September_October_November_December".split("_"),qf="Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),rf=af,sf=af;U("Y",0,0,function(){var a=this.year();return a<=9999?""+a:"+"+a}),U(0,["YY",2],0,function(){return this.year()%100}),U(0,["YYYY",4],0,"year"),U(0,["YYYYY",5],0,"year"),U(0,["YYYYYY",6,!0],0,"year"),J("year","y"),M("year",1),Z("Y",Ye),Z("YY",Re,Ne),Z("YYYY",Ve,Pe),Z("YYYYY",We,Qe),Z("YYYYYY",We,Qe),ba(["YYYYY","YYYYYY"],df),ba("YYYY",function(b,c){c[df]=2===b.length?a.parseTwoDigitYear(b):u(b)}),ba("YY",function(b,c){c[df]=a.parseTwoDigitYear(b)}),ba("Y",function(a,b){b[df]=parseInt(a,10)}),a.parseTwoDigitYear=function(a){return u(a)+(u(a)>68?1900:2e3)};var tf=O("FullYear",!0);U("w",["ww",2],"wo","week"),U("W",["WW",2],"Wo","isoWeek"),J("week","w"),J("isoWeek","W"),M("week",5),M("isoWeek",5),Z("w",Re),Z("ww",Re,Ne),Z("W",Re),Z("WW",Re,Ne),ca(["w","ww","W","WW"],function(a,b,c,d){b[d.substr(0,1)]=u(a)});var uf={dow:0,doy:6};U("d",0,"do","day"),U("dd",0,0,function(a){return this.localeData().weekdaysMin(this,a)}),U("ddd",0,0,function(a){return this.localeData().weekdaysShort(this,a)}),U("dddd",0,0,function(a){return this.localeData().weekdays(this,a)}),U("e",0,0,"weekday"),U("E",0,0,"isoWeekday"),J("day","d"),J("weekday","e"),J("isoWeekday","E"),M("day",11),M("weekday",11),M("isoWeekday",11),Z("d",Re),Z("e",Re),Z("E",Re),Z("dd",function(a,b){return b.weekdaysMinRegex(a)}),Z("ddd",function(a,b){return b.weekdaysShortRegex(a)}),Z("dddd",function(a,b){return b.weekdaysRegex(a)}),ca(["dd","ddd","dddd"],function(a,b,c,d){var e=c._locale.weekdaysParse(a,d,c._strict);null!=e?b.d=e:n(c).invalidWeekday=a}),ca(["d","e","E"],function(a,b,c,d){b[d]=u(a)});var vf="Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),wf="Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),xf="Su_Mo_Tu_We_Th_Fr_Sa".split("_"),yf=af,zf=af,Af=af;U("H",["HH",2],0,"hour"),U("h",["hh",2],0,Ra),U("k",["kk",2],0,Sa),U("hmm",0,0,function(){return""+Ra.apply(this)+T(this.minutes(),2)}),U("hmmss",0,0,function(){return""+Ra.apply(this)+T(this.minutes(),2)+T(this.seconds(),2)}),U("Hmm",0,0,function(){return""+this.hours()+T(this.minutes(),2)}),U("Hmmss",0,0,function(){return""+this.hours()+T(this.minutes(),2)+T(this.seconds(),2)}),Ta("a",!0),Ta("A",!1),J("hour","h"),M("hour",13),Z("a",Ua),Z("A",Ua),Z("H",Re),Z("h",Re),Z("k",Re),Z("HH",Re,Ne),Z("hh",Re,Ne),Z("kk",Re,Ne),Z("hmm",Se),Z("hmmss",Te),Z("Hmm",Se),Z("Hmmss",Te),ba(["H","HH"],gf),ba(["k","kk"],function(a,b,c){var d=u(a);b[gf]=24===d?0:d}),ba(["a","A"],function(a,b,c){c._isPm=c._locale.isPM(a),c._meridiem=a}),ba(["h","hh"],function(a,b,c){b[gf]=u(a),n(c).bigHour=!0}),ba("hmm",function(a,b,c){var d=a.length-2;b[gf]=u(a.substr(0,d)),b[hf]=u(a.substr(d)),n(c).bigHour=!0}),ba("hmmss",function(a,b,c){var d=a.length-4,e=a.length-2;b[gf]=u(a.substr(0,d)),b[hf]=u(a.substr(d,2)),b[jf]=u(a.substr(e)),n(c).bigHour=!0}),ba("Hmm",function(a,b,c){var d=a.length-2;b[gf]=u(a.substr(0,d)),b[hf]=u(a.substr(d))}),ba("Hmmss",function(a,b,c){var d=a.length-4,e=a.length-2;b[gf]=u(a.substr(0,d)),b[hf]=u(a.substr(d,2)),b[jf]=u(a.substr(e))});var Bf,Cf=/[ap]\.?m?\.?/i,Df=O("Hours",!0),Ef={calendar:Ae,longDateFormat:Be,invalidDate:Ce,ordinal:De,dayOfMonthOrdinalParse:Ee,relativeTime:Fe,months:pf,monthsShort:qf,week:uf,weekdays:vf,weekdaysMin:xf,weekdaysShort:wf,meridiemParse:Cf},Ff={},Gf={},Hf=/^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,If=/^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,Jf=/Z|[+-]\d\d(?::?\d\d)?/,Kf=[["YYYYYY-MM-DD",/[+-]\d{6}-\d\d-\d\d/],["YYYY-MM-DD",/\d{4}-\d\d-\d\d/],["GGGG-[W]WW-E",/\d{4}-W\d\d-\d/],["GGGG-[W]WW",/\d{4}-W\d\d/,!1],["YYYY-DDD",/\d{4}-\d{3}/],["YYYY-MM",/\d{4}-\d\d/,!1],["YYYYYYMMDD",/[+-]\d{10}/],["YYYYMMDD",/\d{8}/],["GGGG[W]WWE",/\d{4}W\d{3}/],["GGGG[W]WW",/\d{4}W\d{2}/,!1],["YYYYDDD",/\d{7}/]],Lf=[["HH:mm:ss.SSSS",/\d\d:\d\d:\d\d\.\d+/],["HH:mm:ss,SSSS",/\d\d:\d\d:\d\d,\d+/],["HH:mm:ss",/\d\d:\d\d:\d\d/],["HH:mm",/\d\d:\d\d/],["HHmmss.SSSS",/\d\d\d\d\d\d\.\d+/],["HHmmss,SSSS",/\d\d\d\d\d\d,\d+/],["HHmmss",/\d\d\d\d\d\d/],["HHmm",/\d\d\d\d/],["HH",/\d\d/]],Mf=/^\/?Date\((\-?\d+)/i,Nf=/^((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d?\d\s(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(?:\d\d)?\d\d\s)(\d\d:\d\d)(\:\d\d)?(\s(?:UT|GMT|[ECMP][SD]T|[A-IK-Za-ik-z]|[+-]\d{4}))$/;a.createFromInputFallback=x("value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged and will be removed in an upcoming major release. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.",function(a){a._d=new Date(a._i+(a._useUTC?" UTC":""))}),a.ISO_8601=function(){},a.RFC_2822=function(){};var Of=x("moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/",function(){var a=tb.apply(null,arguments);return this.isValid()&&a.isValid()?a<this?this:a:p()}),Pf=x("moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/",function(){var a=tb.apply(null,arguments);return this.isValid()&&a.isValid()?a>this?this:a:p()}),Qf=function(){return Date.now?Date.now():+new Date},Rf=["year","quarter","month","week","day","hour","minute","second","millisecond"];Db("Z",":"),Db("ZZ",""),Z("Z",$e),Z("ZZ",$e),ba(["Z","ZZ"],function(a,b,c){c._useUTC=!0,c._tzm=Eb($e,a)});var Sf=/([\+\-]|\d\d)/gi;a.updateOffset=function(){};var Tf=/^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/,Uf=/^(-)?P(?:(-?[0-9,.]*)Y)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)W)?(?:(-?[0-9,.]*)D)?(?:T(?:(-?[0-9,.]*)H)?(?:(-?[0-9,.]*)M)?(?:(-?[0-9,.]*)S)?)?$/;Sb.fn=Ab.prototype,Sb.invalid=zb;var Vf=Wb(1,"add"),Wf=Wb(-1,"subtract");a.defaultFormat="YYYY-MM-DDTHH:mm:ssZ",a.defaultFormatUtc="YYYY-MM-DDTHH:mm:ss[Z]";var Xf=x("moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.",function(a){return void 0===a?this.localeData():this.locale(a)});U(0,["gg",2],0,function(){return this.weekYear()%100}),U(0,["GG",2],0,function(){return this.isoWeekYear()%100}),Dc("gggg","weekYear"),Dc("ggggg","weekYear"),Dc("GGGG","isoWeekYear"),Dc("GGGGG","isoWeekYear"),J("weekYear","gg"),J("isoWeekYear","GG"),M("weekYear",1),M("isoWeekYear",1),Z("G",Ye),Z("g",Ye),Z("GG",Re,Ne),Z("gg",Re,Ne),Z("GGGG",Ve,Pe),Z("gggg",Ve,Pe),Z("GGGGG",We,Qe),Z("ggggg",We,Qe),ca(["gggg","ggggg","GGGG","GGGGG"],function(a,b,c,d){b[d.substr(0,2)]=u(a)}),ca(["gg","GG"],function(b,c,d,e){c[e]=a.parseTwoDigitYear(b)}),U("Q",0,"Qo","quarter"),J("quarter","Q"),M("quarter",7),Z("Q",Me),ba("Q",function(a,b){b[ef]=3*(u(a)-1)}),U("D",["DD",2],"Do","date"),J("date","D"),M("date",9),Z("D",Re),Z("DD",Re,Ne),Z("Do",function(a,b){return a?b._dayOfMonthOrdinalParse||b._ordinalParse:b._dayOfMonthOrdinalParseLenient}),ba(["D","DD"],ff),ba("Do",function(a,b){b[ff]=u(a.match(Re)[0],10)});var Yf=O("Date",!0);U("DDD",["DDDD",3],"DDDo","dayOfYear"),J("dayOfYear","DDD"),M("dayOfYear",4),Z("DDD",Ue),Z("DDDD",Oe),ba(["DDD","DDDD"],function(a,b,c){c._dayOfYear=u(a)}),U("m",["mm",2],0,"minute"),J("minute","m"),M("minute",14),Z("m",Re),Z("mm",Re,Ne),ba(["m","mm"],hf);var Zf=O("Minutes",!1);U("s",["ss",2],0,"second"),J("second","s"),M("second",15),Z("s",Re),Z("ss",Re,Ne),ba(["s","ss"],jf);var $f=O("Seconds",!1);U("S",0,0,function(){return~~(this.millisecond()/100)}),U(0,["SS",2],0,function(){return~~(this.millisecond()/10)}),U(0,["SSS",3],0,"millisecond"),U(0,["SSSS",4],0,function(){return 10*this.millisecond()}),U(0,["SSSSS",5],0,function(){return 100*this.millisecond()}),U(0,["SSSSSS",6],0,function(){return 1e3*this.millisecond()}),U(0,["SSSSSSS",7],0,function(){return 1e4*this.millisecond()}),U(0,["SSSSSSSS",8],0,function(){return 1e5*this.millisecond()}),U(0,["SSSSSSSSS",9],0,function(){return 1e6*this.millisecond()}),J("millisecond","ms"),M("millisecond",16),Z("S",Ue,Me),Z("SS",Ue,Ne),Z("SSS",Ue,Oe);var _f;for(_f="SSSS";_f.length<=9;_f+="S")Z(_f,Xe);for(_f="S";_f.length<=9;_f+="S")ba(_f,Mc);var ag=O("Milliseconds",!1);U("z",0,0,"zoneAbbr"),U("zz",0,0,"zoneName");var bg=r.prototype;bg.add=Vf,bg.calendar=Zb,bg.clone=$b,bg.diff=fc,bg.endOf=sc,bg.format=kc,bg.from=lc,bg.fromNow=mc,bg.to=nc,bg.toNow=oc,bg.get=R,bg.invalidAt=Bc,bg.isAfter=_b,bg.isBefore=ac,bg.isBetween=bc,bg.isSame=cc,bg.isSameOrAfter=dc,bg.isSameOrBefore=ec,bg.isValid=zc,bg.lang=Xf,bg.locale=pc,bg.localeData=qc,bg.max=Pf,bg.min=Of,bg.parsingFlags=Ac,bg.set=S,bg.startOf=rc,bg.subtract=Wf,bg.toArray=wc,bg.toObject=xc,bg.toDate=vc,bg.toISOString=ic,bg.inspect=jc,bg.toJSON=yc,bg.toString=hc,bg.unix=uc,bg.valueOf=tc,bg.creationData=Cc,bg.year=tf,bg.isLeapYear=ra,bg.weekYear=Ec,bg.isoWeekYear=Fc,bg.quarter=bg.quarters=Kc,bg.month=ka,bg.daysInMonth=la,bg.week=bg.weeks=Ba,bg.isoWeek=bg.isoWeeks=Ca,bg.weeksInYear=Hc,bg.isoWeeksInYear=Gc,bg.date=Yf,bg.day=bg.days=Ka,bg.weekday=La,bg.isoWeekday=Ma,bg.dayOfYear=Lc,bg.hour=bg.hours=Df,bg.minute=bg.minutes=Zf,bg.second=bg.seconds=$f,bg.millisecond=bg.milliseconds=ag,bg.utcOffset=Hb,bg.utc=Jb,bg.local=Kb,bg.parseZone=Lb,bg.hasAlignedHourOffset=Mb,bg.isDST=Nb,bg.isLocal=Pb,bg.isUtcOffset=Qb,bg.isUtc=Rb,bg.isUTC=Rb,bg.zoneAbbr=Nc,bg.zoneName=Oc,bg.dates=x("dates accessor is deprecated. Use date instead.",Yf),bg.months=x("months accessor is deprecated. Use month instead",ka),bg.years=x("years accessor is deprecated. Use year instead",tf),bg.zone=x("moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/",Ib),bg.isDSTShifted=x("isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information",Ob);var cg=C.prototype;cg.calendar=D,cg.longDateFormat=E,cg.invalidDate=F,cg.ordinal=G,cg.preparse=Rc,cg.postformat=Rc,cg.relativeTime=H,cg.pastFuture=I,cg.set=A,cg.months=fa,cg.monthsShort=ga,cg.monthsParse=ia,cg.monthsRegex=na,cg.monthsShortRegex=ma,cg.week=ya,cg.firstDayOfYear=Aa,cg.firstDayOfWeek=za,cg.weekdays=Fa,cg.weekdaysMin=Ha,cg.weekdaysShort=Ga,cg.weekdaysParse=Ja,cg.weekdaysRegex=Na,cg.weekdaysShortRegex=Oa,cg.weekdaysMinRegex=Pa,cg.isPM=Va,cg.meridiem=Wa,$a("en",{dayOfMonthOrdinalParse:/\d{1,2}(th|st|nd|rd)/,ordinal:function(a){var b=a%10,c=1===u(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c}}),a.lang=x("moment.lang is deprecated. Use moment.locale instead.",$a),a.langData=x("moment.langData is deprecated. Use moment.localeData instead.",bb);var dg=Math.abs,eg=id("ms"),fg=id("s"),gg=id("m"),hg=id("h"),ig=id("d"),jg=id("w"),kg=id("M"),lg=id("y"),mg=kd("milliseconds"),ng=kd("seconds"),og=kd("minutes"),pg=kd("hours"),qg=kd("days"),rg=kd("months"),sg=kd("years"),tg=Math.round,ug={ss:44,s:45,m:45,h:22,d:26,M:11},vg=Math.abs,wg=Ab.prototype;wg.isValid=yb,wg.abs=$c,wg.add=ad,wg.subtract=bd,wg.as=gd,wg.asMilliseconds=eg,wg.asSeconds=fg,wg.asMinutes=gg,wg.asHours=hg,wg.asDays=ig,wg.asWeeks=jg,wg.asMonths=kg,wg.asYears=lg,wg.valueOf=hd,wg._bubble=dd,wg.get=jd,wg.milliseconds=mg,wg.seconds=ng,wg.minutes=og,wg.hours=pg,wg.days=qg,wg.weeks=ld,wg.months=rg,wg.years=sg,wg.humanize=qd,wg.toISOString=rd,wg.toString=rd,wg.toJSON=rd,wg.locale=pc,wg.localeData=qc,wg.toIsoString=x("toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)",rd),wg.lang=Xf,U("X",0,0,"unix"),U("x",0,0,"valueOf"),Z("x",Ye),Z("X",_e),ba("X",function(a,b,c){c._d=new Date(1e3*parseFloat(a,10))}),ba("x",function(a,b,c){c._d=new Date(u(a))}),
-//! moment.js
-//! version : 2.18.1
-//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
-//! license : MIT
-//! momentjs.com
-a.version="2.18.1",b(tb),a.fn=bg,a.min=vb,a.max=wb,a.now=Qf,a.utc=l,a.unix=Pc,a.months=Vc,a.isDate=h,a.locale=$a,a.invalid=p,a.duration=Sb,a.isMoment=s,a.weekdays=Xc,a.parseZone=Qc,a.localeData=bb,a.isDuration=Bb,a.monthsShort=Wc,a.weekdaysMin=Zc,a.defineLocale=_a,a.updateLocale=ab,a.locales=cb,a.weekdaysShort=Yc,a.normalizeUnits=K,a.relativeTimeRounding=od,a.relativeTimeThreshold=pd,a.calendarFormat=Yb,a.prototype=bg,
-//! moment.js locale configuration
-//! locale : Afrikaans [af]
-//! author : Werner Mollentze : https://github.com/wernerm
-a.defineLocale("af",{months:"Januarie_Februarie_Maart_April_Mei_Junie_Julie_Augustus_September_Oktober_November_Desember".split("_"),monthsShort:"Jan_Feb_Mrt_Apr_Mei_Jun_Jul_Aug_Sep_Okt_Nov_Des".split("_"),weekdays:"Sondag_Maandag_Dinsdag_Woensdag_Donderdag_Vrydag_Saterdag".split("_"),weekdaysShort:"Son_Maa_Din_Woe_Don_Vry_Sat".split("_"),weekdaysMin:"So_Ma_Di_Wo_Do_Vr_Sa".split("_"),meridiemParse:/vm|nm/i,isPM:function(a){return/^nm$/i.test(a)},meridiem:function(a,b,c){return a<12?c?"vm":"VM":c?"nm":"NM"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Vandag om] LT",nextDay:"[Môre om] LT",nextWeek:"dddd [om] LT",lastDay:"[Gister om] LT",lastWeek:"[Laas] dddd [om] LT",sameElse:"L"},relativeTime:{future:"oor %s",past:"%s gelede",s:"'n paar sekondes",m:"'n minuut",mm:"%d minute",h:"'n uur",hh:"%d ure",d:"'n dag",dd:"%d dae",M:"'n maand",MM:"%d maande",y:"'n jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(a){return a+(1===a||8===a||a>=20?"ste":"de")},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Arabic (Algeria) [ar-dz]
-//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
-a.defineLocale("ar-dz",{months:"جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),monthsShort:"جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),weekdays:"الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"احد_اثنين_ثلاثاء_اربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"أح_إث_ثلا_أر_خم_جم_سب".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[اليوم على الساعة] LT",nextDay:"[غدا على الساعة] LT",nextWeek:"dddd [على الساعة] LT",lastDay:"[أمس على الساعة] LT",lastWeek:"dddd [على الساعة] LT",sameElse:"L"},relativeTime:{future:"في %s",past:"منذ %s",s:"ثوان",m:"دقيقة",mm:"%d دقائق",h:"ساعة",hh:"%d ساعات",d:"يوم",dd:"%d أيام",M:"شهر",MM:"%d أشهر",y:"سنة",yy:"%d سنوات"},week:{dow:0,doy:4}}),
-//! moment.js locale configuration
-//! locale : Arabic (Kuwait) [ar-kw]
-//! author : Nusret Parlak: https://github.com/nusretparlak
-a.defineLocale("ar-kw",{months:"يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),monthsShort:"يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),weekdays:"الأحد_الإتنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"احد_اتنين_ثلاثاء_اربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[اليوم على الساعة] LT",nextDay:"[غدا على الساعة] LT",nextWeek:"dddd [على الساعة] LT",lastDay:"[أمس على الساعة] LT",lastWeek:"dddd [على الساعة] LT",sameElse:"L"},relativeTime:{future:"في %s",past:"منذ %s",s:"ثوان",m:"دقيقة",mm:"%d دقائق",h:"ساعة",hh:"%d ساعات",d:"يوم",dd:"%d أيام",M:"شهر",MM:"%d أشهر",y:"سنة",yy:"%d سنوات"},week:{dow:0,doy:12}});
-//! moment.js locale configuration
-//! locale : Arabic (Lybia) [ar-ly]
-//! author : Ali Hmer: https://github.com/kikoanis
-var xg={1:"1",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",0:"0"},yg=function(a){return 0===a?0:1===a?1:2===a?2:a%100>=3&&a%100<=10?3:a%100>=11?4:5},zg={s:["أقل من ثانية","ثانية واحدة",["ثانيتان","ثانيتين"],"%d ثوان","%d ثانية","%d ثانية"],m:["أقل من دقيقة","دقيقة واحدة",["دقيقتان","دقيقتين"],"%d دقائق","%d دقيقة","%d دقيقة"],h:["أقل من ساعة","ساعة واحدة",["ساعتان","ساعتين"],"%d ساعات","%d ساعة","%d ساعة"],d:["أقل من يوم","يوم واحد",["يومان","يومين"],"%d أيام","%d يومًا","%d يوم"],M:["أقل من شهر","شهر واحد",["شهران","شهرين"],"%d أشهر","%d شهرا","%d شهر"],y:["أقل من عام","عام واحد",["عامان","عامين"],"%d أعوام","%d عامًا","%d عام"]},Ag=function(a){return function(b,c,d,e){var f=yg(b),g=zg[a][yg(b)];return 2===f&&(g=g[c?0:1]),g.replace(/%d/i,b)}},Bg=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];a.defineLocale("ar-ly",{months:Bg,monthsShort:Bg,weekdays:"الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/‏M/‏YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/ص|م/,isPM:function(a){return"م"===a},meridiem:function(a,b,c){return a<12?"ص":"م"},calendar:{sameDay:"[اليوم عند الساعة] LT",nextDay:"[غدًا عند الساعة] LT",nextWeek:"dddd [عند الساعة] LT",lastDay:"[أمس عند الساعة] LT",lastWeek:"dddd [عند الساعة] LT",sameElse:"L"},relativeTime:{future:"بعد %s",past:"منذ %s",s:Ag("s"),m:Ag("m"),mm:Ag("m"),h:Ag("h"),hh:Ag("h"),d:Ag("d"),dd:Ag("d"),M:Ag("M"),MM:Ag("M"),y:Ag("y"),yy:Ag("y")},preparse:function(a){return a.replace(/\u200f/g,"").replace(/،/g,",")},postformat:function(a){return a.replace(/\d/g,function(a){return xg[a]}).replace(/,/g,"،")},week:{dow:6,doy:12}}),
-//! moment.js locale configuration
-//! locale : Arabic (Morocco) [ar-ma]
-//! author : ElFadili Yassine : https://github.com/ElFadiliY
-//! author : Abdel Said : https://github.com/abdelsaid
-a.defineLocale("ar-ma",{months:"يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),monthsShort:"يناير_فبراير_مارس_أبريل_ماي_يونيو_يوليوز_غشت_شتنبر_أكتوبر_نونبر_دجنبر".split("_"),weekdays:"الأحد_الإتنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"احد_اتنين_ثلاثاء_اربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[اليوم على الساعة] LT",nextDay:"[غدا على الساعة] LT",nextWeek:"dddd [على الساعة] LT",lastDay:"[أمس على الساعة] LT",lastWeek:"dddd [على الساعة] LT",sameElse:"L"},relativeTime:{future:"في %s",past:"منذ %s",s:"ثوان",m:"دقيقة",mm:"%d دقائق",h:"ساعة",hh:"%d ساعات",d:"يوم",dd:"%d أيام",M:"شهر",MM:"%d أشهر",y:"سنة",yy:"%d سنوات"},week:{dow:6,doy:12}});
-//! moment.js locale configuration
-//! locale : Arabic (Saudi Arabia) [ar-sa]
-//! author : Suhail Alkowaileet : https://github.com/xsoh
-var Cg={1:"١",2:"٢",3:"٣",4:"٤",5:"٥",6:"٦",7:"٧",8:"٨",9:"٩",0:"٠"},Dg={"١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9","٠":"0"};a.defineLocale("ar-sa",{months:"يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),monthsShort:"يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),weekdays:"الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/ص|م/,isPM:function(a){return"م"===a},meridiem:function(a,b,c){return a<12?"ص":"م"},calendar:{sameDay:"[اليوم على الساعة] LT",nextDay:"[غدا على الساعة] LT",nextWeek:"dddd [على الساعة] LT",lastDay:"[أمس على الساعة] LT",lastWeek:"dddd [على الساعة] LT",sameElse:"L"},relativeTime:{future:"في %s",past:"منذ %s",s:"ثوان",m:"دقيقة",mm:"%d دقائق",h:"ساعة",hh:"%d ساعات",d:"يوم",dd:"%d أيام",M:"شهر",MM:"%d أشهر",y:"سنة",yy:"%d سنوات"},preparse:function(a){return a.replace(/[١٢٣٤٥٦٧٨٩٠]/g,function(a){return Dg[a]}).replace(/،/g,",")},postformat:function(a){return a.replace(/\d/g,function(a){return Cg[a]}).replace(/,/g,"،")},week:{dow:0,doy:6}}),
-//! moment.js locale configuration
-//! locale  :  Arabic (Tunisia) [ar-tn]
-//! author : Nader Toukabri : https://github.com/naderio
-a.defineLocale("ar-tn",{months:"جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),monthsShort:"جانفي_فيفري_مارس_أفريل_ماي_جوان_جويلية_أوت_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split("_"),weekdays:"الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[اليوم على الساعة] LT",nextDay:"[غدا على الساعة] LT",nextWeek:"dddd [على الساعة] LT",lastDay:"[أمس على الساعة] LT",lastWeek:"dddd [على الساعة] LT",sameElse:"L"},relativeTime:{future:"في %s",past:"منذ %s",s:"ثوان",m:"دقيقة",mm:"%d دقائق",h:"ساعة",hh:"%d ساعات",d:"يوم",dd:"%d أيام",M:"شهر",MM:"%d أشهر",y:"سنة",yy:"%d سنوات"},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Arabic [ar]
-//! author : Abdel Said: https://github.com/abdelsaid
-//! author : Ahmed Elkhatib
-//! author : forabi https://github.com/forabi
-var Eg={1:"١",2:"٢",3:"٣",4:"٤",5:"٥",6:"٦",7:"٧",8:"٨",9:"٩",0:"٠"},Fg={"١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9","٠":"0"},Gg=function(a){return 0===a?0:1===a?1:2===a?2:a%100>=3&&a%100<=10?3:a%100>=11?4:5},Hg={s:["أقل من ثانية","ثانية واحدة",["ثانيتان","ثانيتين"],"%d ثوان","%d ثانية","%d ثانية"],m:["أقل من دقيقة","دقيقة واحدة",["دقيقتان","دقيقتين"],"%d دقائق","%d دقيقة","%d دقيقة"],h:["أقل من ساعة","ساعة واحدة",["ساعتان","ساعتين"],"%d ساعات","%d ساعة","%d ساعة"],d:["أقل من يوم","يوم واحد",["يومان","يومين"],"%d أيام","%d يومًا","%d يوم"],M:["أقل من شهر","شهر واحد",["شهران","شهرين"],"%d أشهر","%d شهرا","%d شهر"],y:["أقل من عام","عام واحد",["عامان","عامين"],"%d أعوام","%d عامًا","%d عام"]},Ig=function(a){return function(b,c,d,e){var f=Gg(b),g=Hg[a][Gg(b)];return 2===f&&(g=g[c?0:1]),g.replace(/%d/i,b)}},Jg=["كانون الثاني يناير","شباط فبراير","آذار مارس","نيسان أبريل","أيار مايو","حزيران يونيو","تموز يوليو","آب أغسطس","أيلول سبتمبر","تشرين الأول أكتوبر","تشرين الثاني نوفمبر","كانون الأول ديسمبر"];a.defineLocale("ar",{months:Jg,monthsShort:Jg,weekdays:"الأحد_الإثنين_الثلاثاء_الأربعاء_الخميس_الجمعة_السبت".split("_"),weekdaysShort:"أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت".split("_"),weekdaysMin:"ح_ن_ث_ر_خ_ج_س".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/‏M/‏YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/ص|م/,isPM:function(a){return"م"===a},meridiem:function(a,b,c){return a<12?"ص":"م"},calendar:{sameDay:"[اليوم عند الساعة] LT",nextDay:"[غدًا عند الساعة] LT",nextWeek:"dddd [عند الساعة] LT",lastDay:"[أمس عند الساعة] LT",lastWeek:"dddd [عند الساعة] LT",sameElse:"L"},relativeTime:{future:"بعد %s",past:"منذ %s",s:Ig("s"),m:Ig("m"),mm:Ig("m"),h:Ig("h"),hh:Ig("h"),d:Ig("d"),dd:Ig("d"),M:Ig("M"),MM:Ig("M"),y:Ig("y"),yy:Ig("y")},preparse:function(a){return a.replace(/\u200f/g,"").replace(/[١٢٣٤٥٦٧٨٩٠]/g,function(a){return Fg[a]}).replace(/،/g,",")},postformat:function(a){return a.replace(/\d/g,function(a){return Eg[a]}).replace(/,/g,"،")},week:{dow:6,doy:12}});
-//! moment.js locale configuration
-//! locale : Azerbaijani [az]
-//! author : topchiyev : https://github.com/topchiyev
-var Kg={1:"-inci",5:"-inci",8:"-inci",70:"-inci",80:"-inci",2:"-nci",7:"-nci",20:"-nci",50:"-nci",3:"-üncü",4:"-üncü",100:"-üncü",6:"-ncı",9:"-uncu",10:"-uncu",30:"-uncu",60:"-ıncı",90:"-ıncı"};a.defineLocale("az",{months:"yanvar_fevral_mart_aprel_may_iyun_iyul_avqust_sentyabr_oktyabr_noyabr_dekabr".split("_"),monthsShort:"yan_fev_mar_apr_may_iyn_iyl_avq_sen_okt_noy_dek".split("_"),weekdays:"Bazar_Bazar ertəsi_Çərşənbə axşamı_Çərşənbə_Cümə axşamı_Cümə_Şənbə".split("_"),weekdaysShort:"Baz_BzE_ÇAx_Çər_CAx_Cüm_Şən".split("_"),weekdaysMin:"Bz_BE_ÇA_Çə_CA_Cü_Şə".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[bugün saat] LT",nextDay:"[sabah saat] LT",nextWeek:"[gələn həftə] dddd [saat] LT",lastDay:"[dünən] LT",lastWeek:"[keçən həftə] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s sonra",past:"%s əvvəl",s:"birneçə saniyyə",m:"bir dəqiqə",mm:"%d dəqiqə",h:"bir saat",hh:"%d saat",d:"bir gün",dd:"%d gün",M:"bir ay",MM:"%d ay",y:"bir il",yy:"%d il"},meridiemParse:/gecə|səhər|gündüz|axşam/,isPM:function(a){return/^(gündüz|axşam)$/.test(a)},meridiem:function(a,b,c){return a<4?"gecə":a<12?"səhər":a<17?"gündüz":"axşam"},dayOfMonthOrdinalParse:/\d{1,2}-(ıncı|inci|nci|üncü|ncı|uncu)/,ordinal:function(a){if(0===a)return a+"-ıncı";var b=a%10,c=a%100-b,d=a>=100?100:null;return a+(Kg[b]||Kg[c]||Kg[d])},week:{dow:1,doy:7}}),a.defineLocale("be",{months:{format:"студзеня_лютага_сакавіка_красавіка_траўня_чэрвеня_ліпеня_жніўня_верасня_кастрычніка_лістапада_снежня".split("_"),standalone:"студзень_люты_сакавік_красавік_травень_чэрвень_ліпень_жнівень_верасень_кастрычнік_лістапад_снежань".split("_")},monthsShort:"студ_лют_сак_крас_трав_чэрв_ліп_жнів_вер_каст_ліст_снеж".split("_"),weekdays:{format:"нядзелю_панядзелак_аўторак_сераду_чацвер_пятніцу_суботу".split("_"),standalone:"нядзеля_панядзелак_аўторак_серада_чацвер_пятніца_субота".split("_"),isFormat:/\[ ?[Вв] ?(?:мінулую|наступную)? ?\] ?dddd/},weekdaysShort:"нд_пн_ат_ср_чц_пт_сб".split("_"),weekdaysMin:"нд_пн_ат_ср_чц_пт_сб".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY г.",LLL:"D MMMM YYYY г., HH:mm",LLLL:"dddd, D MMMM YYYY г., HH:mm"},calendar:{sameDay:"[Сёння ў] LT",nextDay:"[Заўтра ў] LT",lastDay:"[Учора ў] LT",nextWeek:function(){return"[У] dddd [ў] LT"},lastWeek:function(){switch(this.day()){case 0:case 3:case 5:case 6:return"[У мінулую] dddd [ў] LT";case 1:case 2:case 4:return"[У мінулы] dddd [ў] LT"}},sameElse:"L"},relativeTime:{future:"праз %s",past:"%s таму",s:"некалькі секунд",m:td,mm:td,h:td,hh:td,d:"дзень",dd:td,M:"месяц",MM:td,y:"год",yy:td},meridiemParse:/ночы|раніцы|дня|вечара/,isPM:function(a){return/^(дня|вечара)$/.test(a)},meridiem:function(a,b,c){return a<4?"ночы":a<12?"раніцы":a<17?"дня":"вечара"},dayOfMonthOrdinalParse:/\d{1,2}-(і|ы|га)/,ordinal:function(a,b){switch(b){case"M":case"d":case"DDD":case"w":case"W":return a%10!==2&&a%10!==3||a%100===12||a%100===13?a+"-ы":a+"-і";case"D":return a+"-га";default:return a}},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Bulgarian [bg]
-//! author : Krasen Borisov : https://github.com/kraz
-a.defineLocale("bg",{months:"януари_февруари_март_април_май_юни_юли_август_септември_октомври_ноември_декември".split("_"),monthsShort:"янр_фев_мар_апр_май_юни_юли_авг_сеп_окт_ное_дек".split("_"),weekdays:"неделя_понеделник_вторник_сряда_четвъртък_петък_събота".split("_"),weekdaysShort:"нед_пон_вто_сря_чет_пет_съб".split("_"),weekdaysMin:"нд_пн_вт_ср_чт_пт_сб".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"D.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[Днес в] LT",nextDay:"[Утре в] LT",nextWeek:"dddd [в] LT",lastDay:"[Вчера в] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[В изминалата] dddd [в] LT";case 1:case 2:case 4:case 5:return"[В изминалия] dddd [в] LT"}},sameElse:"L"},relativeTime:{future:"след %s",past:"преди %s",s:"няколко секунди",m:"минута",mm:"%d минути",h:"час",hh:"%d часа",d:"ден",dd:"%d дни",M:"месец",MM:"%d месеца",y:"година",yy:"%d години"},dayOfMonthOrdinalParse:/\d{1,2}-(ев|ен|ти|ви|ри|ми)/,ordinal:function(a){var b=a%10,c=a%100;return 0===a?a+"-ев":0===c?a+"-ен":c>10&&c<20?a+"-ти":1===b?a+"-ви":2===b?a+"-ри":7===b||8===b?a+"-ми":a+"-ти"},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Bengali [bn]
-//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
-var Lg={1:"১",2:"২",3:"৩",4:"৪",5:"৫",6:"৬",7:"৭",8:"৮",9:"৯",0:"০"},Mg={"১":"1","২":"2","৩":"3","৪":"4","৫":"5","৬":"6","৭":"7","৮":"8","৯":"9","০":"0"};a.defineLocale("bn",{months:"জানুয়ারী_ফেব্রুয়ারি_মার্চ_এপ্রিল_মে_জুন_জুলাই_আগস্ট_সেপ্টেম্বর_অক্টোবর_নভেম্বর_ডিসেম্বর".split("_"),monthsShort:"জানু_ফেব_মার্চ_এপ্র_মে_জুন_জুল_আগ_সেপ্ট_অক্টো_নভে_ডিসে".split("_"),weekdays:"রবিবার_সোমবার_মঙ্গলবার_বুধবার_বৃহস্পতিবার_শুক্রবার_শনিবার".split("_"),weekdaysShort:"রবি_সোম_মঙ্গল_বুধ_বৃহস্পতি_শুক্র_শনি".split("_"),weekdaysMin:"রবি_সোম_মঙ্গ_বুধ_বৃহঃ_শুক্র_শনি".split("_"),longDateFormat:{LT:"A h:mm সময়",LTS:"A h:mm:ss সময়",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm সময়",LLLL:"dddd, D MMMM YYYY, A h:mm সময়"},calendar:{sameDay:"[আজ] LT",nextDay:"[আগামীকাল] LT",nextWeek:"dddd, LT",lastDay:"[গতকাল] LT",lastWeek:"[গত] dddd, LT",sameElse:"L"},relativeTime:{future:"%s পরে",past:"%s আগে",s:"কয়েক সেকেন্ড",m:"এক মিনিট",mm:"%d মিনিট",h:"এক ঘন্টা",hh:"%d ঘন্টা",d:"এক দিন",dd:"%d দিন",M:"এক মাস",MM:"%d মাস",y:"এক বছর",yy:"%d বছর"},preparse:function(a){return a.replace(/[১২৩৪৫৬৭৮৯০]/g,function(a){return Mg[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return Lg[a]})},meridiemParse:/রাত|সকাল|দুপুর|বিকাল|রাত/,meridiemHour:function(a,b){return 12===a&&(a=0),"রাত"===b&&a>=4||"দুপুর"===b&&a<5||"বিকাল"===b?a+12:a},meridiem:function(a,b,c){return a<4?"রাত":a<10?"সকাল":a<17?"দুপুর":a<20?"বিকাল":"রাত"},week:{dow:0,doy:6}});
-//! moment.js locale configuration
-//! locale : Tibetan [bo]
-//! author : Thupten N. Chakrishar : https://github.com/vajradog
-var Ng={1:"༡",2:"༢",3:"༣",4:"༤",5:"༥",6:"༦",7:"༧",8:"༨",9:"༩",0:"༠"},Og={"༡":"1","༢":"2","༣":"3","༤":"4","༥":"5","༦":"6","༧":"7","༨":"8","༩":"9","༠":"0"};a.defineLocale("bo",{months:"ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),monthsShort:"ཟླ་བ་དང་པོ_ཟླ་བ་གཉིས་པ_ཟླ་བ་གསུམ་པ_ཟླ་བ་བཞི་པ_ཟླ་བ་ལྔ་པ_ཟླ་བ་དྲུག་པ_ཟླ་བ་བདུན་པ_ཟླ་བ་བརྒྱད་པ_ཟླ་བ་དགུ་པ_ཟླ་བ་བཅུ་པ_ཟླ་བ་བཅུ་གཅིག་པ_ཟླ་བ་བཅུ་གཉིས་པ".split("_"),weekdays:"གཟའ་ཉི་མ་_གཟའ་ཟླ་བ་_གཟའ་མིག་དམར་_གཟའ་ལྷག་པ་_གཟའ་ཕུར་བུ_གཟའ་པ་སངས་_གཟའ་སྤེན་པ་".split("_"),weekdaysShort:"ཉི་མ་_ཟླ་བ་_མིག་དམར་_ལྷག་པ་_ཕུར་བུ_པ་སངས་_སྤེན་པ་".split("_"),weekdaysMin:"ཉི་མ་_ཟླ་བ་_མིག་དམར་_ལྷག་པ་_ཕུར་བུ_པ་སངས་_སྤེན་པ་".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[དི་རིང] LT",nextDay:"[སང་ཉིན] LT",nextWeek:"[བདུན་ཕྲག་རྗེས་མ], LT",lastDay:"[ཁ་སང] LT",lastWeek:"[བདུན་ཕྲག་མཐའ་མ] dddd, LT",sameElse:"L"},relativeTime:{future:"%s ལ་",past:"%s སྔན་ལ",s:"ལམ་སང",m:"སྐར་མ་གཅིག",mm:"%d སྐར་མ",h:"ཆུ་ཚོད་གཅིག",hh:"%d ཆུ་ཚོད",d:"ཉིན་གཅིག",dd:"%d ཉིན་",M:"ཟླ་བ་གཅིག",MM:"%d ཟླ་བ",y:"ལོ་གཅིག",yy:"%d ལོ"},preparse:function(a){return a.replace(/[༡༢༣༤༥༦༧༨༩༠]/g,function(a){return Og[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return Ng[a]})},meridiemParse:/མཚན་མོ|ཞོགས་ཀས|ཉིན་གུང|དགོང་དག|མཚན་མོ/,meridiemHour:function(a,b){return 12===a&&(a=0),"མཚན་མོ"===b&&a>=4||"ཉིན་གུང"===b&&a<5||"དགོང་དག"===b?a+12:a},meridiem:function(a,b,c){return a<4?"མཚན་མོ":a<10?"ཞོགས་ཀས":a<17?"ཉིན་གུང":a<20?"དགོང་དག":"མཚན་མོ"},week:{dow:0,doy:6}}),a.defineLocale("br",{months:"Genver_C'hwevrer_Meurzh_Ebrel_Mae_Mezheven_Gouere_Eost_Gwengolo_Here_Du_Kerzu".split("_"),monthsShort:"Gen_C'hwe_Meu_Ebr_Mae_Eve_Gou_Eos_Gwe_Her_Du_Ker".split("_"),weekdays:"Sul_Lun_Meurzh_Merc'her_Yaou_Gwener_Sadorn".split("_"),weekdaysShort:"Sul_Lun_Meu_Mer_Yao_Gwe_Sad".split("_"),weekdaysMin:"Su_Lu_Me_Mer_Ya_Gw_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h[e]mm A",LTS:"h[e]mm:ss A",L:"DD/MM/YYYY",LL:"D [a viz] MMMM YYYY",LLL:"D [a viz] MMMM YYYY h[e]mm A",LLLL:"dddd, D [a viz] MMMM YYYY h[e]mm A"},calendar:{sameDay:"[Hiziv da] LT",nextDay:"[Warc'hoazh da] LT",nextWeek:"dddd [da] LT",lastDay:"[Dec'h da] LT",lastWeek:"dddd [paset da] LT",sameElse:"L"},relativeTime:{future:"a-benn %s",past:"%s 'zo",s:"un nebeud segondennoù",m:"ur vunutenn",mm:ud,h:"un eur",hh:"%d eur",d:"un devezh",dd:ud,M:"ur miz",MM:ud,y:"ur bloaz",yy:vd},dayOfMonthOrdinalParse:/\d{1,2}(añ|vet)/,ordinal:function(a){var b=1===a?"añ":"vet";return a+b},week:{dow:1,doy:4}}),a.defineLocale("bs",{months:"januar_februar_mart_april_maj_juni_juli_august_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._aug._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[jučer u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[prošlu] dddd [u] LT";case 6:return"[prošle] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[prošli] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"par sekundi",m:zd,mm:zd,h:zd,hh:zd,d:"dan",dd:zd,M:"mjesec",MM:zd,y:"godinu",yy:zd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Catalan [ca]
-//! author : Juan G. Hurtado : https://github.com/juanghurtado
-a.defineLocale("ca",{months:{standalone:"gener_febrer_març_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre".split("_"),format:"de gener_de febrer_de març_d'abril_de maig_de juny_de juliol_d'agost_de setembre_d'octubre_de novembre_de desembre".split("_"),isFormat:/D[oD]?(\s)+MMMM/},monthsShort:"gen._febr._març_abr._maig_juny_jul._ag._set._oct._nov._des.".split("_"),monthsParseExact:!0,weekdays:"diumenge_dilluns_dimarts_dimecres_dijous_divendres_dissabte".split("_"),weekdaysShort:"dg._dl._dt._dc._dj._dv._ds.".split("_"),weekdaysMin:"Dg_Dl_Dt_Dc_Dj_Dv_Ds".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"[el] D MMMM [de] YYYY",ll:"D MMM YYYY",LLL:"[el] D MMMM [de] YYYY [a les] H:mm",lll:"D MMM YYYY, H:mm",LLLL:"[el] dddd D MMMM [de] YYYY [a les] H:mm",llll:"ddd D MMM YYYY, H:mm"},calendar:{sameDay:function(){return"[avui a "+(1!==this.hours()?"les":"la")+"] LT"},nextDay:function(){return"[demà a "+(1!==this.hours()?"les":"la")+"] LT"},nextWeek:function(){return"dddd [a "+(1!==this.hours()?"les":"la")+"] LT"},lastDay:function(){return"[ahir a "+(1!==this.hours()?"les":"la")+"] LT"},lastWeek:function(){return"[el] dddd [passat a "+(1!==this.hours()?"les":"la")+"] LT"},sameElse:"L"},relativeTime:{future:"d'aquí %s",past:"fa %s",s:"uns segons",m:"un minut",mm:"%d minuts",h:"una hora",hh:"%d hores",d:"un dia",dd:"%d dies",M:"un mes",MM:"%d mesos",y:"un any",yy:"%d anys"},dayOfMonthOrdinalParse:/\d{1,2}(r|n|t|è|a)/,ordinal:function(a,b){var c=1===a?"r":2===a?"n":3===a?"r":4===a?"t":"è";return"w"!==b&&"W"!==b||(c="a"),a+c},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Czech [cs]
-//! author : petrbela : https://github.com/petrbela
-var Pg="leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec".split("_"),Qg="led_úno_bře_dub_kvě_čvn_čvc_srp_zář_říj_lis_pro".split("_");a.defineLocale("cs",{months:Pg,monthsShort:Qg,monthsParse:function(a,b){var c,d=[];for(c=0;c<12;c++)d[c]=new RegExp("^"+a[c]+"$|^"+b[c]+"$","i");return d}(Pg,Qg),shortMonthsParse:function(a){var b,c=[];for(b=0;b<12;b++)c[b]=new RegExp("^"+a[b]+"$","i");return c}(Qg),longMonthsParse:function(a){var b,c=[];for(b=0;b<12;b++)c[b]=new RegExp("^"+a[b]+"$","i");return c}(Pg),weekdays:"neděle_pondělí_úterý_středa_čtvrtek_pátek_sobota".split("_"),weekdaysShort:"ne_po_út_st_čt_pá_so".split("_"),weekdaysMin:"ne_po_út_st_čt_pá_so".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd D. MMMM YYYY H:mm",l:"D. M. YYYY"},calendar:{sameDay:"[dnes v] LT",nextDay:"[zítra v] LT",nextWeek:function(){switch(this.day()){case 0:return"[v neděli v] LT";case 1:case 2:return"[v] dddd [v] LT";case 3:return"[ve středu v] LT";case 4:return"[ve čtvrtek v] LT";case 5:return"[v pátek v] LT";case 6:return"[v sobotu v] LT"}},lastDay:"[včera v] LT",lastWeek:function(){switch(this.day()){case 0:return"[minulou neděli v] LT";case 1:case 2:return"[minulé] dddd [v] LT";case 3:return"[minulou středu v] LT";case 4:case 5:return"[minulý] dddd [v] LT";case 6:return"[minulou sobotu v] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"před %s",s:Bd,m:Bd,mm:Bd,h:Bd,hh:Bd,d:Bd,dd:Bd,M:Bd,MM:Bd,y:Bd,yy:Bd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Chuvash [cv]
-//! author : Anatoly Mironov : https://github.com/mirontoli
-a.defineLocale("cv",{months:"кӑрлач_нарӑс_пуш_ака_май_ҫӗртме_утӑ_ҫурла_авӑн_юпа_чӳк_раштав".split("_"),monthsShort:"кӑр_нар_пуш_ака_май_ҫӗр_утӑ_ҫур_авн_юпа_чӳк_раш".split("_"),weekdays:"вырсарникун_тунтикун_ытларикун_юнкун_кӗҫнерникун_эрнекун_шӑматкун".split("_"),weekdaysShort:"выр_тун_ытл_юн_кӗҫ_эрн_шӑм".split("_"),weekdaysMin:"вр_тн_ыт_юн_кҫ_эр_шм".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"YYYY [ҫулхи] MMMM [уйӑхӗн] D[-мӗшӗ]",LLL:"YYYY [ҫулхи] MMMM [уйӑхӗн] D[-мӗшӗ], HH:mm",LLLL:"dddd, YYYY [ҫулхи] MMMM [уйӑхӗн] D[-мӗшӗ], HH:mm"},calendar:{sameDay:"[Паян] LT [сехетре]",nextDay:"[Ыран] LT [сехетре]",lastDay:"[Ӗнер] LT [сехетре]",nextWeek:"[Ҫитес] dddd LT [сехетре]",lastWeek:"[Иртнӗ] dddd LT [сехетре]",sameElse:"L"},relativeTime:{future:function(a){var b=/сехет$/i.exec(a)?"рен":/ҫул$/i.exec(a)?"тан":"ран";return a+b},past:"%s каялла",s:"пӗр-ик ҫеккунт",m:"пӗр минут",mm:"%d минут",h:"пӗр сехет",hh:"%d сехет",d:"пӗр кун",dd:"%d кун",M:"пӗр уйӑх",MM:"%d уйӑх",y:"пӗр ҫул",yy:"%d ҫул"},dayOfMonthOrdinalParse:/\d{1,2}-мӗш/,ordinal:"%d-мӗш",week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Welsh [cy]
-//! author : Robert Allen : https://github.com/robgallen
-//! author : https://github.com/ryangreaves
-a.defineLocale("cy",{months:"Ionawr_Chwefror_Mawrth_Ebrill_Mai_Mehefin_Gorffennaf_Awst_Medi_Hydref_Tachwedd_Rhagfyr".split("_"),monthsShort:"Ion_Chwe_Maw_Ebr_Mai_Meh_Gor_Aws_Med_Hyd_Tach_Rhag".split("_"),weekdays:"Dydd Sul_Dydd Llun_Dydd Mawrth_Dydd Mercher_Dydd Iau_Dydd Gwener_Dydd Sadwrn".split("_"),weekdaysShort:"Sul_Llun_Maw_Mer_Iau_Gwe_Sad".split("_"),weekdaysMin:"Su_Ll_Ma_Me_Ia_Gw_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Heddiw am] LT",nextDay:"[Yfory am] LT",nextWeek:"dddd [am] LT",lastDay:"[Ddoe am] LT",lastWeek:"dddd [diwethaf am] LT",sameElse:"L"},relativeTime:{future:"mewn %s",past:"%s yn ôl",s:"ychydig eiliadau",m:"munud",mm:"%d munud",h:"awr",hh:"%d awr",d:"diwrnod",dd:"%d diwrnod",M:"mis",MM:"%d mis",y:"blwyddyn",yy:"%d flynedd"},dayOfMonthOrdinalParse:/\d{1,2}(fed|ain|af|il|ydd|ed|eg)/,ordinal:function(a){var b=a,c="",d=["","af","il","ydd","ydd","ed","ed","ed","fed","fed","fed","eg","fed","eg","eg","fed","eg","eg","fed","eg","fed"];return b>20?c=40===b||50===b||60===b||80===b||100===b?"fed":"ain":b>0&&(c=d[b]),a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Danish [da]
-//! author : Ulrik Nielsen : https://github.com/mrbase
-a.defineLocale("da",{months:"januar_februar_marts_april_maj_juni_juli_august_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),weekdaysShort:"søn_man_tir_ons_tor_fre_lør".split("_"),weekdaysMin:"sø_ma_ti_on_to_fr_lø".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd [d.] D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[i dag kl.] LT",nextDay:"[i morgen kl.] LT",nextWeek:"på dddd [kl.] LT",lastDay:"[i går kl.] LT",lastWeek:"[i] dddd[s kl.] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s siden",s:"få sekunder",m:"et minut",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dage",M:"en måned",MM:"%d måneder",y:"et år",yy:"%d år"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),a.defineLocale("de-at",{months:"Jänner_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jän._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So._Mo._Di._Mi._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd, D. MMMM YYYY HH:mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",m:Cd,mm:"%d Minuten",h:Cd,hh:"%d Stunden",d:Cd,dd:Cd,M:Cd,MM:Cd,y:Cd,yy:Cd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),a.defineLocale("de-ch",{months:"Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._März_April_Mai_Juni_Juli_Aug._Sept._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH.mm",LLLL:"dddd, D. MMMM YYYY HH.mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",m:Dd,mm:"%d Minuten",h:Dd,hh:"%d Stunden",d:Dd,dd:Dd,M:Dd,MM:Dd,y:Dd,yy:Dd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),a.defineLocale("de",{months:"Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So._Mo._Di._Mi._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd, D. MMMM YYYY HH:mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",m:Ed,mm:"%d Minuten",h:Ed,hh:"%d Stunden",d:Ed,dd:Ed,M:Ed,MM:Ed,y:Ed,yy:Ed},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Maldivian [dv]
-//! author : Jawish Hameed : https://github.com/jawish
-var Rg=["ޖެނުއަރީ","ފެބްރުއަރީ","މާރިޗު","އޭޕްރީލު","މޭ","ޖޫން","ޖުލައި","އޯގަސްޓު","ސެޕްޓެމްބަރު","އޮކްޓޯބަރު","ނޮވެމްބަރު","ޑިސެމްބަރު"],Sg=["އާދިއްތަ","ހޯމަ","އަންގާރަ","ބުދަ","ބުރާސްފަތި","ހުކުރު","ހޮނިހިރު"];a.defineLocale("dv",{months:Rg,monthsShort:Rg,weekdays:Sg,weekdaysShort:Sg,weekdaysMin:"އާދި_ހޯމަ_އަން_ބުދަ_ބުރާ_ހުކު_ހޮނި".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/M/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/މކ|މފ/,isPM:function(a){return"މފ"===a},meridiem:function(a,b,c){return a<12?"މކ":"މފ"},calendar:{sameDay:"[މިއަދު] LT",nextDay:"[މާދަމާ] LT",nextWeek:"dddd LT",lastDay:"[އިއްޔެ] LT",lastWeek:"[ފާއިތުވި] dddd LT",sameElse:"L"},relativeTime:{future:"ތެރޭގައި %s",past:"ކުރިން %s",s:"ސިކުންތުކޮޅެއް",m:"މިނިޓެއް",mm:"މިނިޓު %d",h:"ގަޑިއިރެއް",hh:"ގަޑިއިރު %d",d:"ދުވަހެއް",dd:"ދުވަސް %d",M:"މަހެއް",MM:"މަސް %d",y:"އަހަރެއް",yy:"އަހަރު %d"},preparse:function(a){return a.replace(/،/g,",")},postformat:function(a){return a.replace(/,/g,"،")},week:{dow:7,doy:12}}),
-//! moment.js locale configuration
-//! locale : Greek [el]
-//! author : Aggelos Karalias : https://github.com/mehiel
-a.defineLocale("el",{monthsNominativeEl:"Ιανουάριος_Φεβρουάριος_Μάρτιος_Απρίλιος_Μάιος_Ιούνιος_Ιούλιος_Αύγουστος_Σεπτέμβριος_Οκτώβριος_Νοέμβριος_Δεκέμβριος".split("_"),monthsGenitiveEl:"Ιανουαρίου_Φεβρουαρίου_Μαρτίου_Απριλίου_Μαΐου_Ιουνίου_Ιουλίου_Αυγούστου_Σεπτεμβρίου_Οκτωβρίου_Νοεμβρίου_Δεκεμβρίου".split("_"),months:function(a,b){return a?/D/.test(b.substring(0,b.indexOf("MMMM")))?this._monthsGenitiveEl[a.month()]:this._monthsNominativeEl[a.month()]:this._monthsNominativeEl},monthsShort:"Ιαν_Φεβ_Μαρ_Απρ_Μαϊ_Ιουν_Ιουλ_Αυγ_Σεπ_Οκτ_Νοε_Δεκ".split("_"),weekdays:"Κυριακή_Δευτέρα_Τρίτη_Τετάρτη_Πέμπτη_Παρασκευή_Σάββατο".split("_"),weekdaysShort:"Κυρ_Δευ_Τρι_Τετ_Πεμ_Παρ_Σαβ".split("_"),weekdaysMin:"Κυ_Δε_Τρ_Τε_Πε_Πα_Σα".split("_"),meridiem:function(a,b,c){return a>11?c?"μμ":"ΜΜ":c?"πμ":"ΠΜ"},isPM:function(a){return"μ"===(a+"").toLowerCase()[0]},meridiemParse:/[ΠΜ]\.?Μ?\.?/i,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendarEl:{sameDay:"[Σήμερα {}] LT",nextDay:"[Αύριο {}] LT",nextWeek:"dddd [{}] LT",lastDay:"[Χθες {}] LT",lastWeek:function(){switch(this.day()){case 6:return"[το προηγούμενο] dddd [{}] LT";default:return"[την προηγούμενη] dddd [{}] LT"}},sameElse:"L"},calendar:function(a,b){var c=this._calendarEl[a],d=b&&b.hours();return z(c)&&(c=c.apply(b)),c.replace("{}",d%12===1?"στη":"στις")},relativeTime:{future:"σε %s",past:"%s πριν",s:"λίγα δευτερόλεπτα",m:"ένα λεπτό",mm:"%d λεπτά",h:"μία ώρα",hh:"%d ώρες",d:"μία μέρα",dd:"%d μέρες",M:"ένας μήνας",MM:"%d μήνες",y:"ένας χρόνος",yy:"%d χρόνια"},dayOfMonthOrdinalParse:/\d{1,2}η/,ordinal:"%dη",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : English (Australia) [en-au]
-//! author : Jared Morse : https://github.com/jarcoal
-a.defineLocale("en-au",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : English (Canada) [en-ca]
-//! author : Jonathan Abourbih : https://github.com/jonbca
-a.defineLocale("en-ca",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"YYYY-MM-DD",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY h:mm A",LLLL:"dddd, MMMM D, YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c}}),
-//! moment.js locale configuration
-//! locale : English (United Kingdom) [en-gb]
-//! author : Chris Gedrim : https://github.com/chrisgedrim
-a.defineLocale("en-gb",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : English (Ireland) [en-ie]
-//! author : Chris Cartlidge : https://github.com/chriscartlidge
-a.defineLocale("en-ie",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : English (New Zealand) [en-nz]
-//! author : Luke McGregor : https://github.com/lukemcgregor
-a.defineLocale("en-nz",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Esperanto [eo]
-//! author : Colin Dean : https://github.com/colindean
-//! author : Mia Nordentoft Imperatori : https://github.com/miestasmia
-//! comment : miestasmia corrected the translation by colindean
-a.defineLocale("eo",{months:"januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aŭg_sep_okt_nov_dec".split("_"),weekdays:"dimanĉo_lundo_mardo_merkredo_ĵaŭdo_vendredo_sabato".split("_"),weekdaysShort:"dim_lun_mard_merk_ĵaŭ_ven_sab".split("_"),weekdaysMin:"di_lu_ma_me_ĵa_ve_sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D[-a de] MMMM, YYYY",LLL:"D[-a de] MMMM, YYYY HH:mm",LLLL:"dddd, [la] D[-a de] MMMM, YYYY HH:mm"},meridiemParse:/[ap]\.t\.m/i,isPM:function(a){return"p"===a.charAt(0).toLowerCase()},meridiem:function(a,b,c){return a>11?c?"p.t.m.":"P.T.M.":c?"a.t.m.":"A.T.M."},calendar:{sameDay:"[Hodiaŭ je] LT",nextDay:"[Morgaŭ je] LT",nextWeek:"dddd [je] LT",lastDay:"[Hieraŭ je] LT",lastWeek:"[pasinta] dddd [je] LT",sameElse:"L"},relativeTime:{future:"post %s",past:"antaŭ %s",s:"sekundoj",m:"minuto",mm:"%d minutoj",h:"horo",hh:"%d horoj",d:"tago",dd:"%d tagoj",M:"monato",MM:"%d monatoj",y:"jaro",yy:"%d jaroj"},dayOfMonthOrdinalParse:/\d{1,2}a/,ordinal:"%da",week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Spanish (Dominican Republic) [es-do]
-var Tg="ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),Ug="ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");a.defineLocale("es-do",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:function(a,b){return a?/-MMM-/.test(b)?Ug[a.month()]:Tg[a.month()]:Tg},monthsParseExact:!0,weekdays:"domingo_lunes_martes_miércoles_jueves_viernes_sábado".split("_"),weekdaysShort:"dom._lun._mar._mié._jue._vie._sáb.".split("_"),weekdaysMin:"do_lu_ma_mi_ju_vi_sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY h:mm A",LLLL:"dddd, D [de] MMMM [de] YYYY h:mm A"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[mañana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un día",dd:"%d días",M:"un mes",MM:"%d meses",y:"un año",yy:"%d años"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Spanish [es]
-//! author : Julio Napurí : https://github.com/julionc
-var Vg="ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),Wg="ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");a.defineLocale("es",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:function(a,b){return a?/-MMM-/.test(b)?Wg[a.month()]:Vg[a.month()]:Vg},monthsParseExact:!0,weekdays:"domingo_lunes_martes_miércoles_jueves_viernes_sábado".split("_"),weekdaysShort:"dom._lun._mar._mié._jue._vie._sáb.".split("_"),weekdaysMin:"do_lu_ma_mi_ju_vi_sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY H:mm",LLLL:"dddd, D [de] MMMM [de] YYYY H:mm"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[mañana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un día",dd:"%d días",M:"un mes",MM:"%d meses",y:"un año",yy:"%d años"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}}),a.defineLocale("et",{months:"jaanuar_veebruar_märts_aprill_mai_juuni_juuli_august_september_oktoober_november_detsember".split("_"),monthsShort:"jaan_veebr_märts_apr_mai_juuni_juuli_aug_sept_okt_nov_dets".split("_"),weekdays:"pühapäev_esmaspäev_teisipäev_kolmapäev_neljapäev_reede_laupäev".split("_"),weekdaysShort:"P_E_T_K_N_R_L".split("_"),weekdaysMin:"P_E_T_K_N_R_L".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[Täna,] LT",nextDay:"[Homme,] LT",nextWeek:"[Järgmine] dddd LT",lastDay:"[Eile,] LT",lastWeek:"[Eelmine] dddd LT",sameElse:"L"},relativeTime:{future:"%s pärast",past:"%s tagasi",s:Fd,m:Fd,mm:Fd,h:Fd,hh:Fd,d:Fd,dd:"%d päeva",M:Fd,MM:Fd,y:Fd,yy:Fd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Basque [eu]
-//! author : Eneko Illarramendi : https://github.com/eillarra
-a.defineLocale("eu",{months:"urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua".split("_"),monthsShort:"urt._ots._mar._api._mai._eka._uzt._abu._ira._urr._aza._abe.".split("_"),monthsParseExact:!0,weekdays:"igandea_astelehena_asteartea_asteazkena_osteguna_ostirala_larunbata".split("_"),weekdaysShort:"ig._al._ar._az._og._ol._lr.".split("_"),weekdaysMin:"ig_al_ar_az_og_ol_lr".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY[ko] MMMM[ren] D[a]",LLL:"YYYY[ko] MMMM[ren] D[a] HH:mm",LLLL:"dddd, YYYY[ko] MMMM[ren] D[a] HH:mm",l:"YYYY-M-D",ll:"YYYY[ko] MMM D[a]",lll:"YYYY[ko] MMM D[a] HH:mm",llll:"ddd, YYYY[ko] MMM D[a] HH:mm"},calendar:{sameDay:"[gaur] LT[etan]",nextDay:"[bihar] LT[etan]",nextWeek:"dddd LT[etan]",lastDay:"[atzo] LT[etan]",lastWeek:"[aurreko] dddd LT[etan]",sameElse:"L"},relativeTime:{future:"%s barru",past:"duela %s",s:"segundo batzuk",m:"minutu bat",mm:"%d minutu",h:"ordu bat",hh:"%d ordu",d:"egun bat",dd:"%d egun",M:"hilabete bat",MM:"%d hilabete",y:"urte bat",yy:"%d urte"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Persian [fa]
-//! author : Ebrahim Byagowi : https://github.com/ebraminio
-var Xg={1:"۱",2:"۲",3:"۳",4:"۴",5:"۵",6:"۶",7:"۷",8:"۸",9:"۹",0:"۰"},Yg={"۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9","۰":"0"};a.defineLocale("fa",{months:"ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),monthsShort:"ژانویه_فوریه_مارس_آوریل_مه_ژوئن_ژوئیه_اوت_سپتامبر_اکتبر_نوامبر_دسامبر".split("_"),weekdays:"یک‌شنبه_دوشنبه_سه‌شنبه_چهارشنبه_پنج‌شنبه_جمعه_شنبه".split("_"),weekdaysShort:"یک‌شنبه_دوشنبه_سه‌شنبه_چهارشنبه_پنج‌شنبه_جمعه_شنبه".split("_"),weekdaysMin:"ی_د_س_چ_پ_ج_ش".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},meridiemParse:/قبل از ظهر|بعد از ظهر/,isPM:function(a){return/بعد از ظهر/.test(a)},meridiem:function(a,b,c){return a<12?"قبل از ظهر":"بعد از ظهر"},calendar:{sameDay:"[امروز ساعت] LT",nextDay:"[فردا ساعت] LT",nextWeek:"dddd [ساعت] LT",lastDay:"[دیروز ساعت] LT",lastWeek:"dddd [پیش] [ساعت] LT",sameElse:"L"},relativeTime:{future:"در %s",past:"%s پیش",s:"چند ثانیه",m:"یک دقیقه",mm:"%d دقیقه",h:"یک ساعت",hh:"%d ساعت",d:"یک روز",dd:"%d روز",M:"یک ماه",MM:"%d ماه",y:"یک سال",yy:"%d سال"},preparse:function(a){return a.replace(/[۰-۹]/g,function(a){return Yg[a]}).replace(/،/g,",")},postformat:function(a){return a.replace(/\d/g,function(a){return Xg[a]}).replace(/,/g,"،")},dayOfMonthOrdinalParse:/\d{1,2}م/,ordinal:"%dم",week:{dow:6,doy:12}});
-//! moment.js locale configuration
-//! locale : Finnish [fi]
-//! author : Tarmo Aidantausta : https://github.com/bleadof
-var Zg="nolla yksi kaksi kolme neljä viisi kuusi seitsemän kahdeksan yhdeksän".split(" "),$g=["nolla","yhden","kahden","kolmen","neljän","viiden","kuuden",Zg[7],Zg[8],Zg[9]];a.defineLocale("fi",{months:"tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),monthsShort:"tammi_helmi_maalis_huhti_touko_kesä_heinä_elo_syys_loka_marras_joulu".split("_"),weekdays:"sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai".split("_"),weekdaysShort:"su_ma_ti_ke_to_pe_la".split("_"),weekdaysMin:"su_ma_ti_ke_to_pe_la".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD.MM.YYYY",LL:"Do MMMM[ta] YYYY",LLL:"Do MMMM[ta] YYYY, [klo] HH.mm",LLLL:"dddd, Do MMMM[ta] YYYY, [klo] HH.mm",l:"D.M.YYYY",ll:"Do MMM YYYY",lll:"Do MMM YYYY, [klo] HH.mm",llll:"ddd, Do MMM YYYY, [klo] HH.mm"},calendar:{sameDay:"[tänään] [klo] LT",nextDay:"[huomenna] [klo] LT",nextWeek:"dddd [klo] LT",lastDay:"[eilen] [klo] LT",lastWeek:"[viime] dddd[na] [klo] LT",sameElse:"L"},relativeTime:{future:"%s päästä",past:"%s sitten",s:Gd,m:Gd,mm:Gd,h:Gd,hh:Gd,d:Gd,dd:Gd,M:Gd,MM:Gd,y:Gd,yy:Gd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Faroese [fo]
-//! author : Ragnar Johannesen : https://github.com/ragnar123
-a.defineLocale("fo",{months:"januar_februar_mars_apríl_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sunnudagur_mánadagur_týsdagur_mikudagur_hósdagur_fríggjadagur_leygardagur".split("_"),weekdaysShort:"sun_mán_týs_mik_hós_frí_ley".split("_"),weekdaysMin:"su_má_tý_mi_hó_fr_le".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D. MMMM, YYYY HH:mm"},calendar:{sameDay:"[Í dag kl.] LT",nextDay:"[Í morgin kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[Í gjár kl.] LT",lastWeek:"[síðstu] dddd [kl] LT",sameElse:"L"},relativeTime:{future:"um %s",past:"%s síðani",s:"fá sekund",m:"ein minutt",mm:"%d minuttir",h:"ein tími",hh:"%d tímar",d:"ein dagur",dd:"%d dagar",M:"ein mánaði",MM:"%d mánaðir",y:"eitt ár",yy:"%d ár"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : French (Canada) [fr-ca]
-//! author : Jonathan Abourbih : https://github.com/jonbca
-a.defineLocale("fr-ca",{months:"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),monthsShort:"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd’hui à] LT",nextDay:"[Demain à] LT",nextWeek:"dddd [à] LT",lastDay:"[Hier à] LT",lastWeek:"dddd [dernier à] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|e)/,ordinal:function(a,b){switch(b){default:case"M":case"Q":case"D":case"DDD":case"d":return a+(1===a?"er":"e");case"w":case"W":return a+(1===a?"re":"e")}}}),
-//! moment.js locale configuration
-//! locale : French (Switzerland) [fr-ch]
-//! author : Gaspard Bucher : https://github.com/gaspard
-a.defineLocale("fr-ch",{months:"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),monthsShort:"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd’hui à] LT",nextDay:"[Demain à] LT",nextWeek:"dddd [à] LT",lastDay:"[Hier à] LT",lastWeek:"dddd [dernier à] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|e)/,ordinal:function(a,b){switch(b){default:case"M":case"Q":case"D":case"DDD":case"d":return a+(1===a?"er":"e");case"w":case"W":return a+(1===a?"re":"e")}},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : French [fr]
-//! author : John Fischer : https://github.com/jfroffice
-a.defineLocale("fr",{months:"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),monthsShort:"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd’hui à] LT",nextDay:"[Demain à] LT",nextWeek:"dddd [à] LT",lastDay:"[Hier à] LT",lastWeek:"dddd [dernier à] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|)/,ordinal:function(a,b){switch(b){case"D":return a+(1===a?"er":"");default:case"M":case"Q":case"DDD":case"d":return a+(1===a?"er":"e");case"w":case"W":return a+(1===a?"re":"e")}},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Frisian [fy]
-//! author : Robin van der Vliet : https://github.com/robin0van0der0v
-var _g="jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.".split("_"),ah="jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_");a.defineLocale("fy",{months:"jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber".split("_"),monthsShort:function(a,b){return a?/-MMM-/.test(b)?ah[a.month()]:_g[a.month()]:_g},monthsParseExact:!0,weekdays:"snein_moandei_tiisdei_woansdei_tongersdei_freed_sneon".split("_"),weekdaysShort:"si._mo._ti._wo._to._fr._so.".split("_"),weekdaysMin:"Si_Mo_Ti_Wo_To_Fr_So".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[hjoed om] LT",nextDay:"[moarn om] LT",nextWeek:"dddd [om] LT",lastDay:"[juster om] LT",lastWeek:"[ôfrûne] dddd [om] LT",sameElse:"L"},relativeTime:{future:"oer %s",past:"%s lyn",s:"in pear sekonden",m:"ien minút",mm:"%d minuten",h:"ien oere",hh:"%d oeren",d:"ien dei",dd:"%d dagen",M:"ien moanne",MM:"%d moannen",y:"ien jier",yy:"%d jierren"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(a){return a+(1===a||8===a||a>=20?"ste":"de")},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Scottish Gaelic [gd]
-//! author : Jon Ashdown : https://github.com/jonashdown
-var bh=["Am Faoilleach","An Gearran","Am Màrt","An Giblean","An Cèitean","An t-Ògmhios","An t-Iuchar","An Lùnastal","An t-Sultain","An Dàmhair","An t-Samhain","An Dùbhlachd"],ch=["Faoi","Gear","Màrt","Gibl","Cèit","Ògmh","Iuch","Lùn","Sult","Dàmh","Samh","Dùbh"],dh=["Didòmhnaich","Diluain","Dimàirt","Diciadain","Diardaoin","Dihaoine","Disathairne"],eh=["Did","Dil","Dim","Dic","Dia","Dih","Dis"],fh=["Dò","Lu","Mà","Ci","Ar","Ha","Sa"];a.defineLocale("gd",{months:bh,monthsShort:ch,monthsParseExact:!0,weekdays:dh,weekdaysShort:eh,weekdaysMin:fh,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[An-diugh aig] LT",nextDay:"[A-màireach aig] LT",nextWeek:"dddd [aig] LT",lastDay:"[An-dè aig] LT",lastWeek:"dddd [seo chaidh] [aig] LT",sameElse:"L"},relativeTime:{future:"ann an %s",past:"bho chionn %s",s:"beagan diogan",m:"mionaid",mm:"%d mionaidean",h:"uair",hh:"%d uairean",d:"latha",dd:"%d latha",M:"mìos",MM:"%d mìosan",y:"bliadhna",yy:"%d bliadhna"},dayOfMonthOrdinalParse:/\d{1,2}(d|na|mh)/,ordinal:function(a){var b=1===a?"d":a%10===2?"na":"mh";return a+b},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Galician [gl]
-//! author : Juan G. Hurtado : https://github.com/juanghurtado
-a.defineLocale("gl",{months:"xaneiro_febreiro_marzo_abril_maio_xuño_xullo_agosto_setembro_outubro_novembro_decembro".split("_"),monthsShort:"xan._feb._mar._abr._mai._xuñ._xul._ago._set._out._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"domingo_luns_martes_mércores_xoves_venres_sábado".split("_"),weekdaysShort:"dom._lun._mar._mér._xov._ven._sáb.".split("_"),weekdaysMin:"do_lu_ma_mé_xo_ve_sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY H:mm",LLLL:"dddd, D [de] MMMM [de] YYYY H:mm"},calendar:{sameDay:function(){return"[hoxe "+(1!==this.hours()?"ás":"á")+"] LT"},nextDay:function(){return"[mañá "+(1!==this.hours()?"ás":"á")+"] LT"},nextWeek:function(){return"dddd ["+(1!==this.hours()?"ás":"a")+"] LT"},lastDay:function(){return"[onte "+(1!==this.hours()?"á":"a")+"] LT"},lastWeek:function(){return"[o] dddd [pasado "+(1!==this.hours()?"ás":"a")+"] LT"},sameElse:"L"},relativeTime:{future:function(a){return 0===a.indexOf("un")?"n"+a:"en "+a},past:"hai %s",s:"uns segundos",m:"un minuto",mm:"%d minutos",h:"unha hora",hh:"%d horas",d:"un día",dd:"%d días",M:"un mes",MM:"%d meses",y:"un ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}}),a.defineLocale("gom-latn",{months:"Janer_Febrer_Mars_Abril_Mai_Jun_Julai_Agost_Setembr_Otubr_Novembr_Dezembr".split("_"),monthsShort:"Jan._Feb._Mars_Abr._Mai_Jun_Jul._Ago._Set._Otu._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Aitar_Somar_Mongllar_Budvar_Brestar_Sukrar_Son'var".split("_"),weekdaysShort:"Ait._Som._Mon._Bud._Bre._Suk._Son.".split("_"),weekdaysMin:"Ai_Sm_Mo_Bu_Br_Su_Sn".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"A h:mm [vazta]",LTS:"A h:mm:ss [vazta]",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY A h:mm [vazta]",LLLL:"dddd, MMMM[achea] Do, YYYY, A h:mm [vazta]",llll:"ddd, D MMM YYYY, A h:mm [vazta]"},calendar:{sameDay:"[Aiz] LT",nextDay:"[Faleam] LT",nextWeek:"[Ieta to] dddd[,] LT",lastDay:"[Kal] LT",lastWeek:"[Fatlo] dddd[,] LT",sameElse:"L"},relativeTime:{future:"%s",past:"%s adim",s:Id,m:Id,mm:Id,h:Id,hh:Id,d:Id,dd:Id,M:Id,MM:Id,y:Id,yy:Id},dayOfMonthOrdinalParse:/\d{1,2}(er)/,ordinal:function(a,b){switch(b){case"D":return a+"er";default:case"M":case"Q":case"DDD":case"d":case"w":case"W":return a}},week:{dow:1,doy:4},meridiemParse:/rati|sokalli|donparam|sanje/,meridiemHour:function(a,b){return 12===a&&(a=0),"rati"===b?a<4?a:a+12:"sokalli"===b?a:"donparam"===b?a>12?a:a+12:"sanje"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"rati":a<12?"sokalli":a<16?"donparam":a<20?"sanje":"rati"}}),
-//! moment.js locale configuration
-//! locale : Hebrew [he]
-//! author : Tomer Cohen : https://github.com/tomer
-//! author : Moshe Simantov : https://github.com/DevelopmentIL
-//! author : Tal Ater : https://github.com/TalAter
-a.defineLocale("he",{months:"ינואר_פברואר_מרץ_אפריל_מאי_יוני_יולי_אוגוסט_ספטמבר_אוקטובר_נובמבר_דצמבר".split("_"),monthsShort:"ינו׳_פבר׳_מרץ_אפר׳_מאי_יוני_יולי_אוג׳_ספט׳_אוק׳_נוב׳_דצמ׳".split("_"),weekdays:"ראשון_שני_שלישי_רביעי_חמישי_שישי_שבת".split("_"),weekdaysShort:"א׳_ב׳_ג׳_ד׳_ה׳_ו׳_ש׳".split("_"),weekdaysMin:"א_ב_ג_ד_ה_ו_ש".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [ב]MMMM YYYY",LLL:"D [ב]MMMM YYYY HH:mm",LLLL:"dddd, D [ב]MMMM YYYY HH:mm",l:"D/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY HH:mm",llll:"ddd, D MMM YYYY HH:mm"},calendar:{sameDay:"[היום ב־]LT",nextDay:"[מחר ב־]LT",nextWeek:"dddd [בשעה] LT",lastDay:"[אתמול ב־]LT",lastWeek:"[ביום] dddd [האחרון בשעה] LT",sameElse:"L"},relativeTime:{future:"בעוד %s",past:"לפני %s",s:"מספר שניות",m:"דקה",mm:"%d דקות",h:"שעה",hh:function(a){return 2===a?"שעתיים":a+" שעות"},d:"יום",dd:function(a){return 2===a?"יומיים":a+" ימים"},M:"חודש",MM:function(a){return 2===a?"חודשיים":a+" חודשים"},y:"שנה",yy:function(a){return 2===a?"שנתיים":a%10===0&&10!==a?a+" שנה":a+" שנים"}},meridiemParse:/אחה"צ|לפנה"צ|אחרי הצהריים|לפני הצהריים|לפנות בוקר|בבוקר|בערב/i,isPM:function(a){return/^(אחה"צ|אחרי הצהריים|בערב)$/.test(a)},meridiem:function(a,b,c){return a<5?"לפנות בוקר":a<10?"בבוקר":a<12?c?'לפנה"צ':"לפני הצהריים":a<18?c?'אחה"צ':"אחרי הצהריים":"בערב"}});
-//! moment.js locale configuration
-//! locale : Hindi [hi]
-//! author : Mayank Singhal : https://github.com/mayanksinghal
-var gh={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},hh={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};a.defineLocale("hi",{months:"जनवरी_फ़रवरी_मार्च_अप्रैल_मई_जून_जुलाई_अगस्त_सितम्बर_अक्टूबर_नवम्बर_दिसम्बर".split("_"),monthsShort:"जन._फ़र._मार्च_अप्रै._मई_जून_जुल._अग._सित._अक्टू._नव._दिस.".split("_"),monthsParseExact:!0,weekdays:"रविवार_सोमवार_मंगलवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),weekdaysShort:"रवि_सोम_मंगल_बुध_गुरू_शुक्र_शनि".split("_"),weekdaysMin:"र_सो_मं_बु_गु_शु_श".split("_"),longDateFormat:{LT:"A h:mm बजे",LTS:"A h:mm:ss बजे",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm बजे",LLLL:"dddd, D MMMM YYYY, A h:mm बजे"},calendar:{sameDay:"[आज] LT",nextDay:"[कल] LT",nextWeek:"dddd, LT",lastDay:"[कल] LT",lastWeek:"[पिछले] dddd, LT",sameElse:"L"},relativeTime:{future:"%s में",past:"%s पहले",s:"कुछ ही क्षण",m:"एक मिनट",mm:"%d मिनट",h:"एक घंटा",hh:"%d घंटे",d:"एक दिन",dd:"%d दिन",M:"एक महीने",MM:"%d महीने",y:"एक वर्ष",yy:"%d वर्ष"},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return hh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return gh[a]})},meridiemParse:/रात|सुबह|दोपहर|शाम/,meridiemHour:function(a,b){return 12===a&&(a=0),"रात"===b?a<4?a:a+12:"सुबह"===b?a:"दोपहर"===b?a>=10?a:a+12:"शाम"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"रात":a<10?"सुबह":a<17?"दोपहर":a<20?"शाम":"रात"},week:{dow:0,doy:6}}),a.defineLocale("hr",{months:{format:"siječnja_veljače_ožujka_travnja_svibnja_lipnja_srpnja_kolovoza_rujna_listopada_studenoga_prosinca".split("_"),standalone:"siječanj_veljača_ožujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac".split("_")},monthsShort:"sij._velj._ožu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[jučer u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[prošlu] dddd [u] LT";case 6:return"[prošle] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[prošli] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"par sekundi",m:Jd,mm:Jd,h:Jd,hh:Jd,d:"dan",dd:Jd,M:"mjesec",MM:Jd,y:"godinu",yy:Jd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Hungarian [hu]
-//! author : Adam Brunner : https://github.com/adambrunner
-var ih="vasárnap hétfőn kedden szerdán csütörtökön pénteken szombaton".split(" ");a.defineLocale("hu",{months:"január_február_március_április_május_június_július_augusztus_szeptember_október_november_december".split("_"),monthsShort:"jan_feb_márc_ápr_máj_jún_júl_aug_szept_okt_nov_dec".split("_"),weekdays:"vasárnap_hétfő_kedd_szerda_csütörtök_péntek_szombat".split("_"),weekdaysShort:"vas_hét_kedd_sze_csüt_pén_szo".split("_"),weekdaysMin:"v_h_k_sze_cs_p_szo".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"YYYY.MM.DD.",LL:"YYYY. MMMM D.",LLL:"YYYY. MMMM D. H:mm",LLLL:"YYYY. MMMM D., dddd H:mm"},meridiemParse:/de|du/i,isPM:function(a){return"u"===a.charAt(1).toLowerCase()},meridiem:function(a,b,c){return a<12?c===!0?"de":"DE":c===!0?"du":"DU"},calendar:{sameDay:"[ma] LT[-kor]",nextDay:"[holnap] LT[-kor]",nextWeek:function(){return Ld.call(this,!0)},lastDay:"[tegnap] LT[-kor]",lastWeek:function(){return Ld.call(this,!1)},sameElse:"L"},relativeTime:{future:"%s múlva",past:"%s",s:Kd,m:Kd,mm:Kd,h:Kd,hh:Kd,d:Kd,dd:Kd,M:Kd,MM:Kd,y:Kd,yy:Kd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Armenian [hy-am]
-//! author : Armendarabyan : https://github.com/armendarabyan
-a.defineLocale("hy-am",{months:{format:"հունվարի_փետրվարի_մարտի_ապրիլի_մայիսի_հունիսի_հուլիսի_օգոստոսի_սեպտեմբերի_հոկտեմբերի_նոյեմբերի_դեկտեմբերի".split("_"),standalone:"հունվար_փետրվար_մարտ_ապրիլ_մայիս_հունիս_հուլիս_օգոստոս_սեպտեմբեր_հոկտեմբեր_նոյեմբեր_դեկտեմբեր".split("_")},monthsShort:"հնվ_փտր_մրտ_ապր_մյս_հնս_հլս_օգս_սպտ_հկտ_նմբ_դկտ".split("_"),weekdays:"կիրակի_երկուշաբթի_երեքշաբթի_չորեքշաբթի_հինգշաբթի_ուրբաթ_շաբաթ".split("_"),weekdaysShort:"կրկ_երկ_երք_չրք_հնգ_ուրբ_շբթ".split("_"),weekdaysMin:"կրկ_երկ_երք_չրք_հնգ_ուրբ_շբթ".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY թ.",LLL:"D MMMM YYYY թ., HH:mm",LLLL:"dddd, D MMMM YYYY թ., HH:mm"},calendar:{sameDay:"[այսօր] LT",nextDay:"[վաղը] LT",lastDay:"[երեկ] LT",nextWeek:function(){return"dddd [օրը ժամը] LT"},lastWeek:function(){return"[անցած] dddd [օրը ժամը] LT"},sameElse:"L"},relativeTime:{future:"%s հետո",past:"%s առաջ",s:"մի քանի վայրկյան",m:"րոպե",mm:"%d րոպե",h:"ժամ",hh:"%d ժամ",d:"օր",dd:"%d օր",M:"ամիս",MM:"%d ամիս",y:"տարի",yy:"%d տարի"},meridiemParse:/գիշերվա|առավոտվա|ցերեկվա|երեկոյան/,isPM:function(a){return/^(ցերեկվա|երեկոյան)$/.test(a)},meridiem:function(a){return a<4?"գիշերվա":a<12?"առավոտվա":a<17?"ցերեկվա":"երեկոյան"},dayOfMonthOrdinalParse:/\d{1,2}|\d{1,2}-(ին|րդ)/,ordinal:function(a,b){switch(b){case"DDD":case"w":case"W":case"DDDo":return 1===a?a+"-ին":a+"-րդ";default:return a}},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Indonesian [id]
-//! author : Mohammad Satrio Utomo : https://github.com/tyok
-//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
-a.defineLocale("id",{months:"Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_November_Desember".split("_"),monthsShort:"Jan_Feb_Mar_Apr_Mei_Jun_Jul_Ags_Sep_Okt_Nov_Des".split("_"),weekdays:"Minggu_Senin_Selasa_Rabu_Kamis_Jumat_Sabtu".split("_"),weekdaysShort:"Min_Sen_Sel_Rab_Kam_Jum_Sab".split("_"),weekdaysMin:"Mg_Sn_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|siang|sore|malam/,meridiemHour:function(a,b){return 12===a&&(a=0),"pagi"===b?a:"siang"===b?a>=11?a:a+12:"sore"===b||"malam"===b?a+12:void 0},meridiem:function(a,b,c){return a<11?"pagi":a<15?"siang":a<19?"sore":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Besok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kemarin pukul] LT",lastWeek:"dddd [lalu pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lalu",s:"beberapa detik",m:"semenit",mm:"%d menit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}}),a.defineLocale("is",{months:"janúar_febrúar_mars_apríl_maí_júní_júlí_ágúst_september_október_nóvember_desember".split("_"),monthsShort:"jan_feb_mar_apr_maí_jún_júl_ágú_sep_okt_nóv_des".split("_"),weekdays:"sunnudagur_mánudagur_þriðjudagur_miðvikudagur_fimmtudagur_föstudagur_laugardagur".split("_"),weekdaysShort:"sun_mán_þri_mið_fim_fös_lau".split("_"),weekdaysMin:"Su_Má_Þr_Mi_Fi_Fö_La".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] H:mm",LLLL:"dddd, D. MMMM YYYY [kl.] H:mm"},calendar:{sameDay:"[í dag kl.] LT",nextDay:"[á morgun kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[í gær kl.] LT",lastWeek:"[síðasta] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"eftir %s",past:"fyrir %s síðan",s:Nd,m:Nd,mm:Nd,h:"klukkustund",hh:Nd,d:Nd,dd:Nd,M:Nd,MM:Nd,y:Nd,yy:Nd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Italian [it]
-//! author : Lorenzo : https://github.com/aliem
-//! author: Mattia Larentis: https://github.com/nostalgiaz
-a.defineLocale("it",{months:"gennaio_febbraio_marzo_aprile_maggio_giugno_luglio_agosto_settembre_ottobre_novembre_dicembre".split("_"),monthsShort:"gen_feb_mar_apr_mag_giu_lug_ago_set_ott_nov_dic".split("_"),weekdays:"domenica_lunedì_martedì_mercoledì_giovedì_venerdì_sabato".split("_"),weekdaysShort:"dom_lun_mar_mer_gio_ven_sab".split("_"),weekdaysMin:"do_lu_ma_me_gi_ve_sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Oggi alle] LT",nextDay:"[Domani alle] LT",nextWeek:"dddd [alle] LT",lastDay:"[Ieri alle] LT",lastWeek:function(){switch(this.day()){case 0:return"[la scorsa] dddd [alle] LT";default:return"[lo scorso] dddd [alle] LT"}},sameElse:"L"},relativeTime:{future:function(a){return(/^[0-9].+$/.test(a)?"tra":"in")+" "+a},past:"%s fa",s:"alcuni secondi",m:"un minuto",mm:"%d minuti",h:"un'ora",hh:"%d ore",d:"un giorno",dd:"%d giorni",M:"un mese",MM:"%d mesi",y:"un anno",yy:"%d anni"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Japanese [ja]
-//! author : LI Long : https://github.com/baryon
-a.defineLocale("ja",{months:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"日曜日_月曜日_火曜日_水曜日_木曜日_金曜日_土曜日".split("_"),weekdaysShort:"日_月_火_水_木_金_土".split("_"),weekdaysMin:"日_月_火_水_木_金_土".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY/MM/DD",LL:"YYYY年M月D日",LLL:"YYYY年M月D日 HH:mm",LLLL:"YYYY年M月D日 HH:mm dddd",l:"YYYY/MM/DD",ll:"YYYY年M月D日",lll:"YYYY年M月D日 HH:mm",llll:"YYYY年M月D日 HH:mm dddd"},meridiemParse:/午前|午後/i,isPM:function(a){return"午後"===a},meridiem:function(a,b,c){return a<12?"午前":"午後"},calendar:{sameDay:"[今日] LT",nextDay:"[明日] LT",nextWeek:"[来週]dddd LT",lastDay:"[昨日] LT",lastWeek:"[前週]dddd LT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}日/,ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";default:return a}},relativeTime:{future:"%s後",past:"%s前",s:"数秒",m:"1分",mm:"%d分",h:"1時間",hh:"%d時間",d:"1日",dd:"%d日",M:"1ヶ月",MM:"%dヶ月",y:"1年",yy:"%d年"}}),
-//! moment.js locale configuration
-//! locale : Javanese [jv]
-//! author : Rony Lantip : https://github.com/lantip
-//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
-a.defineLocale("jv",{months:"Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_Nopember_Desember".split("_"),monthsShort:"Jan_Feb_Mar_Apr_Mei_Jun_Jul_Ags_Sep_Okt_Nop_Des".split("_"),weekdays:"Minggu_Senen_Seloso_Rebu_Kemis_Jemuwah_Septu".split("_"),weekdaysShort:"Min_Sen_Sel_Reb_Kem_Jem_Sep".split("_"),weekdaysMin:"Mg_Sn_Sl_Rb_Km_Jm_Sp".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/enjing|siyang|sonten|ndalu/,meridiemHour:function(a,b){return 12===a&&(a=0),"enjing"===b?a:"siyang"===b?a>=11?a:a+12:"sonten"===b||"ndalu"===b?a+12:void 0},meridiem:function(a,b,c){return a<11?"enjing":a<15?"siyang":a<19?"sonten":"ndalu"},calendar:{sameDay:"[Dinten puniko pukul] LT",nextDay:"[Mbenjang pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kala wingi pukul] LT",lastWeek:"dddd [kepengker pukul] LT",sameElse:"L"},relativeTime:{future:"wonten ing %s",past:"%s ingkang kepengker",s:"sawetawis detik",m:"setunggal menit",mm:"%d menit",h:"setunggal jam",hh:"%d jam",d:"sedinten",dd:"%d dinten",M:"sewulan",MM:"%d wulan",y:"setaun",yy:"%d taun"},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Georgian [ka]
-//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
-a.defineLocale("ka",{months:{standalone:"იანვარი_თებერვალი_მარტი_აპრილი_მაისი_ივნისი_ივლისი_აგვისტო_სექტემბერი_ოქტომბერი_ნოემბერი_დეკემბერი".split("_"),format:"იანვარს_თებერვალს_მარტს_აპრილის_მაისს_ივნისს_ივლისს_აგვისტს_სექტემბერს_ოქტომბერს_ნოემბერს_დეკემბერს".split("_")},monthsShort:"იან_თებ_მარ_აპრ_მაი_ივნ_ივლ_აგვ_სექ_ოქტ_ნოე_დეკ".split("_"),weekdays:{standalone:"კვირა_ორშაბათი_სამშაბათი_ოთხშაბათი_ხუთშაბათი_პარასკევი_შაბათი".split("_"),format:"კვირას_ორშაბათს_სამშაბათს_ოთხშაბათს_ხუთშაბათს_პარასკევს_შაბათს".split("_"),isFormat:/(წინა|შემდეგ)/},weekdaysShort:"კვი_ორშ_სამ_ოთხ_ხუთ_პარ_შაბ".split("_"),weekdaysMin:"კვ_ორ_სა_ოთ_ხუ_პა_შა".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[დღეს] LT[-ზე]",nextDay:"[ხვალ] LT[-ზე]",lastDay:"[გუშინ] LT[-ზე]",nextWeek:"[შემდეგ] dddd LT[-ზე]",lastWeek:"[წინა] dddd LT-ზე",sameElse:"L"},relativeTime:{future:function(a){return/(წამი|წუთი|საათი|წელი)/.test(a)?a.replace(/ი$/,"ში"):a+"ში"},past:function(a){return/(წამი|წუთი|საათი|დღე|თვე)/.test(a)?a.replace(/(ი|ე)$/,"ის უკან"):/წელი/.test(a)?a.replace(/წელი$/,"წლის უკან"):void 0},s:"რამდენიმე წამი",m:"წუთი",mm:"%d წუთი",h:"საათი",hh:"%d საათი",d:"დღე",dd:"%d დღე",M:"თვე",MM:"%d თვე",y:"წელი",yy:"%d წელი"},dayOfMonthOrdinalParse:/0|1-ლი|მე-\d{1,2}|\d{1,2}-ე/,ordinal:function(a){return 0===a?a:1===a?a+"-ლი":a<20||a<=100&&a%20===0||a%100===0?"მე-"+a:a+"-ე"},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Kazakh [kk]
-//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
-var jh={0:"-ші",1:"-ші",2:"-ші",3:"-ші",4:"-ші",5:"-ші",6:"-шы",7:"-ші",8:"-ші",9:"-шы",10:"-шы",20:"-шы",30:"-шы",40:"-шы",50:"-ші",60:"-шы",70:"-ші",80:"-ші",90:"-шы",100:"-ші"};a.defineLocale("kk",{months:"қаңтар_ақпан_наурыз_сәуір_мамыр_маусым_шілде_тамыз_қыркүйек_қазан_қараша_желтоқсан".split("_"),monthsShort:"қаң_ақп_нау_сәу_мам_мау_шіл_там_қыр_қаз_қар_жел".split("_"),weekdays:"жексенбі_дүйсенбі_сейсенбі_сәрсенбі_бейсенбі_жұма_сенбі".split("_"),weekdaysShort:"жек_дүй_сей_сәр_бей_жұм_сен".split("_"),weekdaysMin:"жк_дй_сй_ср_бй_жм_сн".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Бүгін сағат] LT",nextDay:"[Ертең сағат] LT",nextWeek:"dddd [сағат] LT",lastDay:"[Кеше сағат] LT",lastWeek:"[Өткен аптаның] dddd [сағат] LT",sameElse:"L"},relativeTime:{future:"%s ішінде",past:"%s бұрын",s:"бірнеше секунд",m:"бір минут",mm:"%d минут",h:"бір сағат",hh:"%d сағат",d:"бір күн",dd:"%d күн",M:"бір ай",MM:"%d ай",y:"бір жыл",yy:"%d жыл"},dayOfMonthOrdinalParse:/\d{1,2}-(ші|шы)/,ordinal:function(a){var b=a%10,c=a>=100?100:null;return a+(jh[a]||jh[b]||jh[c])},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Cambodian [km]
-//! author : Kruy Vanna : https://github.com/kruyvanna
-a.defineLocale("km",{months:"មករា_កុម្ភៈ_មីនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),monthsShort:"មករា_កុម្ភៈ_មីនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),weekdays:"អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍".split("_"),weekdaysShort:"អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍".split("_"),weekdaysMin:"អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[ថ្ងៃនេះ ម៉ោង] LT",nextDay:"[ស្អែក ម៉ោង] LT",nextWeek:"dddd [ម៉ោង] LT",lastDay:"[ម្សិលមិញ ម៉ោង] LT",lastWeek:"dddd [សប្តាហ៍មុន] [ម៉ោង] LT",sameElse:"L"},relativeTime:{future:"%sទៀត",past:"%sមុន",s:"ប៉ុន្មានវិនាទី",m:"មួយនាទី",mm:"%d នាទី",h:"មួយម៉ោង",hh:"%d ម៉ោង",d:"មួយថ្ងៃ",dd:"%d ថ្ងៃ",M:"មួយខែ",MM:"%d ខែ",y:"មួយឆ្នាំ",yy:"%d ឆ្នាំ"},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Kannada [kn]
-//! author : Rajeev Naik : https://github.com/rajeevnaikte
-var kh={1:"೧",2:"೨",3:"೩",4:"೪",5:"೫",6:"೬",7:"೭",8:"೮",9:"೯",0:"೦"},lh={"೧":"1","೨":"2","೩":"3","೪":"4","೫":"5","೬":"6","೭":"7","೮":"8","೯":"9","೦":"0"};a.defineLocale("kn",{months:"ಜನವರಿ_ಫೆಬ್ರವರಿ_ಮಾರ್ಚ್_ಏಪ್ರಿಲ್_ಮೇ_ಜೂನ್_ಜುಲೈ_ಆಗಸ್ಟ್_ಸೆಪ್ಟೆಂಬರ್_ಅಕ್ಟೋಬರ್_ನವೆಂಬರ್_ಡಿಸೆಂಬರ್".split("_"),monthsShort:"ಜನ_ಫೆಬ್ರ_ಮಾರ್ಚ್_ಏಪ್ರಿಲ್_ಮೇ_ಜೂನ್_ಜುಲೈ_ಆಗಸ್ಟ್_ಸೆಪ್ಟೆಂಬ_ಅಕ್ಟೋಬ_ನವೆಂಬ_ಡಿಸೆಂಬ".split("_"),monthsParseExact:!0,weekdays:"ಭಾನುವಾರ_ಸೋಮವಾರ_ಮಂಗಳವಾರ_ಬುಧವಾರ_ಗುರುವಾರ_ಶುಕ್ರವಾರ_ಶನಿವಾರ".split("_"),weekdaysShort:"ಭಾನು_ಸೋಮ_ಮಂಗಳ_ಬುಧ_ಗುರು_ಶುಕ್ರ_ಶನಿ".split("_"),weekdaysMin:"ಭಾ_ಸೋ_ಮಂ_ಬು_ಗು_ಶು_ಶ".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[ಇಂದು] LT",nextDay:"[ನಾಳೆ] LT",nextWeek:"dddd, LT",lastDay:"[ನಿನ್ನೆ] LT",lastWeek:"[ಕೊನೆಯ] dddd, LT",sameElse:"L"},relativeTime:{future:"%s ನಂತರ",past:"%s ಹಿಂದೆ",s:"ಕೆಲವು ಕ್ಷಣಗಳು",m:"ಒಂದು ನಿಮಿಷ",mm:"%d ನಿಮಿಷ",h:"ಒಂದು ಗಂಟೆ",hh:"%d ಗಂಟೆ",d:"ಒಂದು ದಿನ",dd:"%d ದಿನ",M:"ಒಂದು ತಿಂಗಳು",MM:"%d ತಿಂಗಳು",y:"ಒಂದು ವರ್ಷ",yy:"%d ವರ್ಷ"},preparse:function(a){return a.replace(/[೧೨೩೪೫೬೭೮೯೦]/g,function(a){return lh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return kh[a]})},meridiemParse:/ರಾತ್ರಿ|ಬೆಳಿಗ್ಗೆ|ಮಧ್ಯಾಹ್ನ|ಸಂಜೆ/,meridiemHour:function(a,b){return 12===a&&(a=0),"ರಾತ್ರಿ"===b?a<4?a:a+12:"ಬೆಳಿಗ್ಗೆ"===b?a:"ಮಧ್ಯಾಹ್ನ"===b?a>=10?a:a+12:"ಸಂಜೆ"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"ರಾತ್ರಿ":a<10?"ಬೆಳಿಗ್ಗೆ":a<17?"ಮಧ್ಯಾಹ್ನ":a<20?"ಸಂಜೆ":"ರಾತ್ರಿ"},dayOfMonthOrdinalParse:/\d{1,2}(ನೇ)/,ordinal:function(a){return a+"ನೇ"},week:{dow:0,doy:6}}),
-//! moment.js locale configuration
-//! locale : Korean [ko]
-//! author : Kyungwook, Park : https://github.com/kyungw00k
-//! author : Jeeeyul Lee <jeeeyul@gmail.com>
-a.defineLocale("ko",{months:"1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),monthsShort:"1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),weekdays:"일요일_월요일_화요일_수요일_목요일_금요일_토요일".split("_"),weekdaysShort:"일_월_화_수_목_금_토".split("_"),weekdaysMin:"일_월_화_수_목_금_토".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"YYYY.MM.DD",LL:"YYYY년 MMMM D일",LLL:"YYYY년 MMMM D일 A h:mm",LLLL:"YYYY년 MMMM D일 dddd A h:mm",l:"YYYY.MM.DD",ll:"YYYY년 MMMM D일",lll:"YYYY년 MMMM D일 A h:mm",llll:"YYYY년 MMMM D일 dddd A h:mm"},calendar:{sameDay:"오늘 LT",nextDay:"내일 LT",nextWeek:"dddd LT",lastDay:"어제 LT",lastWeek:"지난주 dddd LT",sameElse:"L"},relativeTime:{future:"%s 후",past:"%s 전",s:"몇 초",ss:"%d초",m:"1분",mm:"%d분",h:"한 시간",hh:"%d시간",d:"하루",dd:"%d일",M:"한 달",MM:"%d달",y:"일 년",yy:"%d년"},dayOfMonthOrdinalParse:/\d{1,2}일/,ordinal:"%d일",meridiemParse:/오전|오후/,isPM:function(a){return"오후"===a},meridiem:function(a,b,c){return a<12?"오전":"오후"}});
-//! moment.js locale configuration
-//! locale : Kyrgyz [ky]
-//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
-var mh={0:"-чү",1:"-чи",2:"-чи",3:"-чү",4:"-чү",5:"-чи",6:"-чы",7:"-чи",8:"-чи",9:"-чу",10:"-чу",20:"-чы",30:"-чу",40:"-чы",50:"-чү",60:"-чы",70:"-чи",80:"-чи",90:"-чу",100:"-чү"};a.defineLocale("ky",{months:"январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_"),monthsShort:"янв_фев_март_апр_май_июнь_июль_авг_сен_окт_ноя_дек".split("_"),weekdays:"Жекшемби_Дүйшөмбү_Шейшемби_Шаршемби_Бейшемби_Жума_Ишемби".split("_"),weekdaysShort:"Жек_Дүй_Шей_Шар_Бей_Жум_Ише".split("_"),weekdaysMin:"Жк_Дй_Шй_Шр_Бй_Жм_Иш".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Бүгүн саат] LT",nextDay:"[Эртең саат] LT",nextWeek:"dddd [саат] LT",lastDay:"[Кече саат] LT",lastWeek:"[Өткен аптанын] dddd [күнү] [саат] LT",sameElse:"L"},relativeTime:{future:"%s ичинде",past:"%s мурун",s:"бирнече секунд",m:"бир мүнөт",mm:"%d мүнөт",h:"бир саат",hh:"%d саат",d:"бир күн",dd:"%d күн",M:"бир ай",MM:"%d ай",y:"бир жыл",yy:"%d жыл"},dayOfMonthOrdinalParse:/\d{1,2}-(чи|чы|чү|чу)/,ordinal:function(a){var b=a%10,c=a>=100?100:null;return a+(mh[a]||mh[b]||mh[c])},week:{dow:1,doy:7}}),a.defineLocale("lb",{months:"Januar_Februar_Mäerz_Abrëll_Mee_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._Mrz._Abr._Mee_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonndeg_Méindeg_Dënschdeg_Mëttwoch_Donneschdeg_Freideg_Samschdeg".split("_"),weekdaysShort:"So._Mé._Dë._Më._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mé_Dë_Më_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm [Auer]",LTS:"H:mm:ss [Auer]",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm [Auer]",LLLL:"dddd, D. MMMM YYYY H:mm [Auer]"},calendar:{sameDay:"[Haut um] LT",sameElse:"L",nextDay:"[Muer um] LT",nextWeek:"dddd [um] LT",lastDay:"[Gëschter um] LT",lastWeek:function(){switch(this.day()){case 2:case 4:return"[Leschten] dddd [um] LT";default:return"[Leschte] dddd [um] LT"}}},relativeTime:{future:Pd,past:Qd,s:"e puer Sekonnen",m:Od,mm:"%d Minutten",h:Od,hh:"%d Stonnen",d:Od,dd:"%d Deeg",M:Od,MM:"%d Méint",y:Od,yy:"%d Joer"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Lao [lo]
-//! author : Ryan Hart : https://github.com/ryanhart2
-a.defineLocale("lo",{months:"ມັງກອນ_ກຸມພາ_ມີນາ_ເມສາ_ພຶດສະພາ_ມິຖຸນາ_ກໍລະກົດ_ສິງຫາ_ກັນຍາ_ຕຸລາ_ພະຈິກ_ທັນວາ".split("_"),monthsShort:"ມັງກອນ_ກຸມພາ_ມີນາ_ເມສາ_ພຶດສະພາ_ມິຖຸນາ_ກໍລະກົດ_ສິງຫາ_ກັນຍາ_ຕຸລາ_ພະຈິກ_ທັນວາ".split("_"),weekdays:"ອາທິດ_ຈັນ_ອັງຄານ_ພຸດ_ພະຫັດ_ສຸກ_ເສົາ".split("_"),weekdaysShort:"ທິດ_ຈັນ_ອັງຄານ_ພຸດ_ພະຫັດ_ສຸກ_ເສົາ".split("_"),weekdaysMin:"ທ_ຈ_ອຄ_ພ_ພຫ_ສກ_ສ".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"ວັນdddd D MMMM YYYY HH:mm"},meridiemParse:/ຕອນເຊົ້າ|ຕອນແລງ/,isPM:function(a){return"ຕອນແລງ"===a},meridiem:function(a,b,c){return a<12?"ຕອນເຊົ້າ":"ຕອນແລງ"},calendar:{sameDay:"[ມື້ນີ້ເວລາ] LT",nextDay:"[ມື້ອື່ນເວລາ] LT",nextWeek:"[ວັນ]dddd[ໜ້າເວລາ] LT",lastDay:"[ມື້ວານນີ້ເວລາ] LT",lastWeek:"[ວັນ]dddd[ແລ້ວນີ້ເວລາ] LT",sameElse:"L"},relativeTime:{future:"ອີກ %s",past:"%sຜ່ານມາ",s:"ບໍ່ເທົ່າໃດວິນາທີ",m:"1 ນາທີ",mm:"%d ນາທີ",h:"1 ຊົ່ວໂມງ",hh:"%d ຊົ່ວໂມງ",d:"1 ມື້",dd:"%d ມື້",M:"1 ເດືອນ",MM:"%d ເດືອນ",y:"1 ປີ",yy:"%d ປີ"},dayOfMonthOrdinalParse:/(ທີ່)\d{1,2}/,ordinal:function(a){return"ທີ່"+a}});
-//! moment.js locale configuration
-//! locale : Lithuanian [lt]
-//! author : Mindaugas Mozūras : https://github.com/mmozuras
-var nh={m:"minutė_minutės_minutę",mm:"minutės_minučių_minutes",h:"valanda_valandos_valandą",hh:"valandos_valandų_valandas",d:"diena_dienos_dieną",dd:"dienos_dienų_dienas",M:"mėnuo_mėnesio_mėnesį",MM:"mėnesiai_mėnesių_mėnesius",y:"metai_metų_metus",yy:"metai_metų_metus"};a.defineLocale("lt",{months:{format:"sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio".split("_"),standalone:"sausis_vasaris_kovas_balandis_gegužė_birželis_liepa_rugpjūtis_rugsėjis_spalis_lapkritis_gruodis".split("_"),isFormat:/D[oD]?(\[[^\[\]]*\]|\s)+MMMM?|MMMM?(\[[^\[\]]*\]|\s)+D[oD]?/},monthsShort:"sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd".split("_"),weekdays:{format:"sekmadienį_pirmadienį_antradienį_trečiadienį_ketvirtadienį_penktadienį_šeštadienį".split("_"),standalone:"sekmadienis_pirmadienis_antradienis_trečiadienis_ketvirtadienis_penktadienis_šeštadienis".split("_"),isFormat:/dddd HH:mm/},weekdaysShort:"Sek_Pir_Ant_Tre_Ket_Pen_Šeš".split("_"),weekdaysMin:"S_P_A_T_K_Pn_Š".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY [m.] MMMM D [d.]",LLL:"YYYY [m.] MMMM D [d.], HH:mm [val.]",LLLL:"YYYY [m.] MMMM D [d.], dddd, HH:mm [val.]",l:"YYYY-MM-DD",ll:"YYYY [m.] MMMM D [d.]",lll:"YYYY [m.] MMMM D [d.], HH:mm [val.]",llll:"YYYY [m.] MMMM D [d.], ddd, HH:mm [val.]"},calendar:{sameDay:"[Šiandien] LT",nextDay:"[Rytoj] LT",nextWeek:"dddd LT",lastDay:"[Vakar] LT",lastWeek:"[Praėjusį] dddd LT",sameElse:"L"},relativeTime:{future:"po %s",past:"prieš %s",s:Sd,m:Td,mm:Wd,h:Td,hh:Wd,d:Td,dd:Wd,M:Td,MM:Wd,y:Td,yy:Wd},dayOfMonthOrdinalParse:/\d{1,2}-oji/,ordinal:function(a){return a+"-oji"},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Latvian [lv]
-//! author : Kristaps Karlsons : https://github.com/skakri
-//! author : Jānis Elmeris : https://github.com/JanisE
-var oh={m:"minūtes_minūtēm_minūte_minūtes".split("_"),mm:"minūtes_minūtēm_minūte_minūtes".split("_"),h:"stundas_stundām_stunda_stundas".split("_"),hh:"stundas_stundām_stunda_stundas".split("_"),d:"dienas_dienām_diena_dienas".split("_"),dd:"dienas_dienām_diena_dienas".split("_"),M:"mēneša_mēnešiem_mēnesis_mēneši".split("_"),MM:"mēneša_mēnešiem_mēnesis_mēneši".split("_"),y:"gada_gadiem_gads_gadi".split("_"),yy:"gada_gadiem_gads_gadi".split("_")};a.defineLocale("lv",{months:"janvāris_februāris_marts_aprīlis_maijs_jūnijs_jūlijs_augusts_septembris_oktobris_novembris_decembris".split("_"),monthsShort:"jan_feb_mar_apr_mai_jūn_jūl_aug_sep_okt_nov_dec".split("_"),weekdays:"svētdiena_pirmdiena_otrdiena_trešdiena_ceturtdiena_piektdiena_sestdiena".split("_"),weekdaysShort:"Sv_P_O_T_C_Pk_S".split("_"),weekdaysMin:"Sv_P_O_T_C_Pk_S".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY.",LL:"YYYY. [gada] D. MMMM",LLL:"YYYY. [gada] D. MMMM, HH:mm",LLLL:"YYYY. [gada] D. MMMM, dddd, HH:mm"},calendar:{sameDay:"[Šodien pulksten] LT",nextDay:"[Rīt pulksten] LT",nextWeek:"dddd [pulksten] LT",lastDay:"[Vakar pulksten] LT",lastWeek:"[Pagājušā] dddd [pulksten] LT",sameElse:"L"},relativeTime:{future:"pēc %s",past:"pirms %s",s:$d,m:Zd,mm:Yd,h:Zd,hh:Yd,d:Zd,dd:Yd,M:Zd,MM:Yd,y:Zd,yy:Yd},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Montenegrin [me]
-//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
-var ph={words:{m:["jedan minut","jednog minuta"],mm:["minut","minuta","minuta"],h:["jedan sat","jednog sata"],hh:["sat","sata","sati"],dd:["dan","dana","dana"],MM:["mjesec","mjeseca","mjeseci"],yy:["godina","godine","godina"]},correctGrammaticalCase:function(a,b){return 1===a?b[0]:a>=2&&a<=4?b[1]:b[2]},translate:function(a,b,c){var d=ph.words[c];return 1===c.length?b?d[0]:d[1]:a+" "+ph.correctGrammaticalCase(a,d)}};a.defineLocale("me",{months:"januar_februar_mart_april_maj_jun_jul_avgust_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj_jun_jul_avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sjutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[juče u] LT",lastWeek:function(){var a=["[prošle] [nedjelje] [u] LT","[prošlog] [ponedjeljka] [u] LT","[prošlog] [utorka] [u] LT","[prošle] [srijede] [u] LT","[prošlog] [četvrtka] [u] LT","[prošlog] [petka] [u] LT","[prošle] [subote] [u] LT"];return a[this.day()]},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"nekoliko sekundi",m:ph.translate,mm:ph.translate,h:ph.translate,hh:ph.translate,d:"dan",dd:ph.translate,M:"mjesec",MM:ph.translate,y:"godinu",yy:ph.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Maori [mi]
-//! author : John Corrigan <robbiecloset@gmail.com> : https://github.com/johnideal
-a.defineLocale("mi",{months:"Kohi-tāte_Hui-tanguru_Poutū-te-rangi_Paenga-whāwhā_Haratua_Pipiri_Hōngoingoi_Here-turi-kōkā_Mahuru_Whiringa-ā-nuku_Whiringa-ā-rangi_Hakihea".split("_"),monthsShort:"Kohi_Hui_Pou_Pae_Hara_Pipi_Hōngoi_Here_Mahu_Whi-nu_Whi-ra_Haki".split("_"),monthsRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsStrictRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsShortRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsShortStrictRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,2}/i,weekdays:"Rātapu_Mane_Tūrei_Wenerei_Tāite_Paraire_Hātarei".split("_"),weekdaysShort:"Ta_Ma_Tū_We_Tāi_Pa_Hā".split("_"),weekdaysMin:"Ta_Ma_Tū_We_Tāi_Pa_Hā".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [i] HH:mm",LLLL:"dddd, D MMMM YYYY [i] HH:mm"},calendar:{sameDay:"[i teie mahana, i] LT",nextDay:"[apopo i] LT",nextWeek:"dddd [i] LT",lastDay:"[inanahi i] LT",lastWeek:"dddd [whakamutunga i] LT",sameElse:"L"},relativeTime:{future:"i roto i %s",past:"%s i mua",s:"te hēkona ruarua",m:"he meneti",mm:"%d meneti",h:"te haora",hh:"%d haora",d:"he ra",dd:"%d ra",M:"he marama",MM:"%d marama",y:"he tau",yy:"%d tau"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Macedonian [mk]
-//! author : Borislav Mickov : https://github.com/B0k0
-a.defineLocale("mk",{months:"јануари_февруари_март_април_мај_јуни_јули_август_септември_октомври_ноември_декември".split("_"),monthsShort:"јан_фев_мар_апр_мај_јун_јул_авг_сеп_окт_ное_дек".split("_"),weekdays:"недела_понеделник_вторник_среда_четврток_петок_сабота".split("_"),weekdaysShort:"нед_пон_вто_сре_чет_пет_саб".split("_"),weekdaysMin:"нe_пo_вт_ср_че_пе_сa".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"D.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[Денес во] LT",nextDay:"[Утре во] LT",nextWeek:"[Во] dddd [во] LT",lastDay:"[Вчера во] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[Изминатата] dddd [во] LT";case 1:case 2:case 4:case 5:return"[Изминатиот] dddd [во] LT"}},sameElse:"L"},relativeTime:{future:"после %s",past:"пред %s",s:"неколку секунди",m:"минута",mm:"%d минути",h:"час",hh:"%d часа",d:"ден",dd:"%d дена",M:"месец",MM:"%d месеци",y:"година",yy:"%d години"},dayOfMonthOrdinalParse:/\d{1,2}-(ев|ен|ти|ви|ри|ми)/,ordinal:function(a){var b=a%10,c=a%100;return 0===a?a+"-ев":0===c?a+"-ен":c>10&&c<20?a+"-ти":1===b?a+"-ви":2===b?a+"-ри":7===b||8===b?a+"-ми":a+"-ти"},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Malayalam [ml]
-//! author : Floyd Pink : https://github.com/floydpink
-a.defineLocale("ml",{months:"ജനുവരി_ഫെബ്രുവരി_മാർച്ച്_ഏപ്രിൽ_മേയ്_ജൂൺ_ജൂലൈ_ഓഗസ്റ്റ്_സെപ്റ്റംബർ_ഒക്ടോബർ_നവംബർ_ഡിസംബർ".split("_"),monthsShort:"ജനു._ഫെബ്രു._മാർ._ഏപ്രി._മേയ്_ജൂൺ_ജൂലൈ._ഓഗ._സെപ്റ്റ._ഒക്ടോ._നവം._ഡിസം.".split("_"),monthsParseExact:!0,weekdays:"ഞായറാഴ്ച_തിങ്കളാഴ്ച_ചൊവ്വാഴ്ച_ബുധനാഴ്ച_വ്യാഴാഴ്ച_വെള്ളിയാഴ്ച_ശനിയാഴ്ച".split("_"),weekdaysShort:"ഞായർ_തിങ്കൾ_ചൊവ്വ_ബുധൻ_വ്യാഴം_വെള്ളി_ശനി".split("_"),weekdaysMin:"ഞാ_തി_ചൊ_ബു_വ്യാ_വെ_ശ".split("_"),longDateFormat:{LT:"A h:mm -നു",LTS:"A h:mm:ss -നു",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm -നു",LLLL:"dddd, D MMMM YYYY, A h:mm -നു"},calendar:{sameDay:"[ഇന്ന്] LT",nextDay:"[നാളെ] LT",nextWeek:"dddd, LT",lastDay:"[ഇന്നലെ] LT",lastWeek:"[കഴിഞ്ഞ] dddd, LT",sameElse:"L"},relativeTime:{future:"%s കഴിഞ്ഞ്",past:"%s മുൻപ്",s:"അൽപ നിമിഷങ്ങൾ",m:"ഒരു മിനിറ്റ്",mm:"%d മിനിറ്റ്",h:"ഒരു മണിക്കൂർ",hh:"%d മണിക്കൂർ",d:"ഒരു ദിവസം",dd:"%d ദിവസം",M:"ഒരു മാസം",MM:"%d മാസം",y:"ഒരു വർഷം",yy:"%d വർഷം"},meridiemParse:/രാത്രി|രാവിലെ|ഉച്ച കഴിഞ്ഞ്|വൈകുന്നേരം|രാത്രി/i,meridiemHour:function(a,b){return 12===a&&(a=0),"രാത്രി"===b&&a>=4||"ഉച്ച കഴിഞ്ഞ്"===b||"വൈകുന്നേരം"===b?a+12:a},meridiem:function(a,b,c){return a<4?"രാത്രി":a<12?"രാവിലെ":a<17?"ഉച്ച കഴിഞ്ഞ്":a<20?"വൈകുന്നേരം":"രാത്രി"}});
-//! moment.js locale configuration
-//! locale : Marathi [mr]
-//! author : Harshad Kale : https://github.com/kalehv
-//! author : Vivek Athalye : https://github.com/vnathalye
-var qh={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},rh={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};a.defineLocale("mr",{months:"जानेवारी_फेब्रुवारी_मार्च_एप्रिल_मे_जून_जुलै_ऑगस्ट_सप्टेंबर_ऑक्टोबर_नोव्हेंबर_डिसेंबर".split("_"),monthsShort:"जाने._फेब्रु._मार्च._एप्रि._मे._जून._जुलै._ऑग._सप्टें._ऑक्टो._नोव्हें._डिसें.".split("_"),monthsParseExact:!0,weekdays:"रविवार_सोमवार_मंगळवार_बुधवार_गुरूवार_शुक्रवार_शनिवार".split("_"),weekdaysShort:"रवि_सोम_मंगळ_बुध_गुरू_शुक्र_शनि".split("_"),weekdaysMin:"र_सो_मं_बु_गु_शु_श".split("_"),longDateFormat:{LT:"A h:mm वाजता",LTS:"A h:mm:ss वाजता",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm वाजता",LLLL:"dddd, D MMMM YYYY, A h:mm वाजता"},calendar:{sameDay:"[आज] LT",nextDay:"[उद्या] LT",nextWeek:"dddd, LT",lastDay:"[काल] LT",lastWeek:"[मागील] dddd, LT",sameElse:"L"},relativeTime:{future:"%sमध्ये",past:"%sपूर्वी",s:_d,m:_d,mm:_d,h:_d,hh:_d,d:_d,dd:_d,M:_d,MM:_d,y:_d,yy:_d},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return rh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return qh[a]})},meridiemParse:/रात्री|सकाळी|दुपारी|सायंकाळी/,meridiemHour:function(a,b){return 12===a&&(a=0),"रात्री"===b?a<4?a:a+12:"सकाळी"===b?a:"दुपारी"===b?a>=10?a:a+12:"सायंकाळी"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"रात्री":a<10?"सकाळी":a<17?"दुपारी":a<20?"सायंकाळी":"रात्री"},week:{dow:0,doy:6}}),
-//! moment.js locale configuration
-//! locale : Malay [ms-my]
-//! note : DEPRECATED, the correct one is [ms]
-//! author : Weldan Jamili : https://github.com/weldan
-a.defineLocale("ms-my",{months:"Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),weekdays:"Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),weekdaysShort:"Ahd_Isn_Sel_Rab_Kha_Jum_Sab".split("_"),weekdaysMin:"Ah_Is_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|tengahari|petang|malam/,meridiemHour:function(a,b){return 12===a&&(a=0),"pagi"===b?a:"tengahari"===b?a>=11?a:a+12:"petang"===b||"malam"===b?a+12:void 0},meridiem:function(a,b,c){return a<11?"pagi":a<15?"tengahari":a<19?"petang":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Esok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kelmarin pukul] LT",lastWeek:"dddd [lepas pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lepas",s:"beberapa saat",m:"seminit",mm:"%d minit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Malay [ms]
-//! author : Weldan Jamili : https://github.com/weldan
-a.defineLocale("ms",{months:"Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),weekdays:"Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),weekdaysShort:"Ahd_Isn_Sel_Rab_Kha_Jum_Sab".split("_"),weekdaysMin:"Ah_Is_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|tengahari|petang|malam/,meridiemHour:function(a,b){return 12===a&&(a=0),"pagi"===b?a:"tengahari"===b?a>=11?a:a+12:"petang"===b||"malam"===b?a+12:void 0},meridiem:function(a,b,c){return a<11?"pagi":a<15?"tengahari":a<19?"petang":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Esok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kelmarin pukul] LT",lastWeek:"dddd [lepas pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lepas",s:"beberapa saat",m:"seminit",mm:"%d minit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Burmese [my]
-//! author : Squar team, mysquar.com
-//! author : David Rossellat : https://github.com/gholadr
-//! author : Tin Aung Lin : https://github.com/thanyawzinmin
-var sh={1:"၁",2:"၂",3:"၃",4:"၄",5:"၅",6:"၆",7:"၇",8:"၈",9:"၉",0:"၀"},th={"၁":"1","၂":"2","၃":"3","၄":"4","၅":"5","၆":"6","၇":"7","၈":"8","၉":"9","၀":"0"};a.defineLocale("my",{months:"ဇန်နဝါရီ_ဖေဖော်ဝါရီ_မတ်_ဧပြီ_မေ_ဇွန်_ဇူလိုင်_သြဂုတ်_စက်တင်ဘာ_အောက်တိုဘာ_နိုဝင်ဘာ_ဒီဇင်ဘာ".split("_"),monthsShort:"ဇန်_ဖေ_မတ်_ပြီ_မေ_ဇွန်_လိုင်_သြ_စက်_အောက်_နို_ဒီ".split("_"),weekdays:"တနင်္ဂနွေ_တနင်္လာ_အင်္ဂါ_ဗုဒ္ဓဟူး_ကြာသပတေး_သောကြာ_စနေ".split("_"),weekdaysShort:"နွေ_လာ_ဂါ_ဟူး_ကြာ_သော_နေ".split("_"),weekdaysMin:"နွေ_လာ_ဂါ_ဟူး_ကြာ_သော_နေ".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[ယနေ.] LT [မှာ]",nextDay:"[မနက်ဖြန်] LT [မှာ]",nextWeek:"dddd LT [မှာ]",lastDay:"[မနေ.က] LT [မှာ]",lastWeek:"[ပြီးခဲ့သော] dddd LT [မှာ]",sameElse:"L"},relativeTime:{future:"လာမည့် %s မှာ",past:"လွန်ခဲ့သော %s က",s:"စက္ကန်.အနည်းငယ်",m:"တစ်မိနစ်",mm:"%d မိနစ်",h:"တစ်နာရီ",hh:"%d နာရီ",d:"တစ်ရက်",dd:"%d ရက်",M:"တစ်လ",MM:"%d လ",y:"တစ်နှစ်",yy:"%d နှစ်"},preparse:function(a){return a.replace(/[၁၂၃၄၅၆၇၈၉၀]/g,function(a){return th[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return sh[a]})},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Norwegian Bokmål [nb]
-//! authors : Espen Hovlandsdal : https://github.com/rexxars
-//!           Sigurd Gartmann : https://github.com/sigurdga
-a.defineLocale("nb",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.".split("_"),monthsParseExact:!0,weekdays:"søndag_mandag_tirsdag_onsdag_torsdag_fredag_lørdag".split("_"),weekdaysShort:"sø._ma._ti._on._to._fr._lø.".split("_"),weekdaysMin:"sø_ma_ti_on_to_fr_lø".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] HH:mm",LLLL:"dddd D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[i dag kl.] LT",nextDay:"[i morgen kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[i går kl.] LT",lastWeek:"[forrige] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s siden",s:"noen sekunder",m:"ett minutt",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dager",M:"en måned",MM:"%d måneder",y:"ett år",yy:"%d år"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Nepalese [ne]
-//! author : suvash : https://github.com/suvash
-var uh={1:"१",2:"२",3:"३",4:"४",5:"५",6:"६",7:"७",8:"८",9:"९",0:"०"},vh={"१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9","०":"0"};a.defineLocale("ne",{months:"जनवरी_फेब्रुवरी_मार्च_अप्रिल_मई_जुन_जुलाई_अगष्ट_सेप्टेम्बर_अक्टोबर_नोभेम्बर_डिसेम्बर".split("_"),monthsShort:"जन._फेब्रु._मार्च_अप्रि._मई_जुन_जुलाई._अग._सेप्ट._अक्टो._नोभे._डिसे.".split("_"),monthsParseExact:!0,weekdays:"आइतबार_सोमबार_मङ्गलबार_बुधबार_बिहिबार_शुक्रबार_शनिबार".split("_"),weekdaysShort:"आइत._सोम._मङ्गल._बुध._बिहि._शुक्र._शनि.".split("_"),weekdaysMin:"आ._सो._मं._बु._बि._शु._श.".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"Aको h:mm बजे",LTS:"Aको h:mm:ss बजे",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, Aको h:mm बजे",LLLL:"dddd, D MMMM YYYY, Aको h:mm बजे"},preparse:function(a){return a.replace(/[१२३४५६७८९०]/g,function(a){return vh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return uh[a]})},meridiemParse:/राति|बिहान|दिउँसो|साँझ/,meridiemHour:function(a,b){return 12===a&&(a=0),"राति"===b?a<4?a:a+12:"बिहान"===b?a:"दिउँसो"===b?a>=10?a:a+12:"साँझ"===b?a+12:void 0},meridiem:function(a,b,c){return a<3?"राति":a<12?"बिहान":a<16?"दिउँसो":a<20?"साँझ":"राति"},calendar:{sameDay:"[आज] LT",nextDay:"[भोलि] LT",nextWeek:"[आउँदो] dddd[,] LT",lastDay:"[हिजो] LT",lastWeek:"[गएको] dddd[,] LT",sameElse:"L"},relativeTime:{future:"%sमा",past:"%s अगाडि",s:"केही क्षण",m:"एक मिनेट",mm:"%d मिनेट",h:"एक घण्टा",hh:"%d घण्टा",d:"एक दिन",dd:"%d दिन",M:"एक महिना",MM:"%d महिना",y:"एक बर्ष",yy:"%d बर्ष"},week:{dow:0,doy:6}});
-//! moment.js locale configuration
-//! locale : Dutch (Belgium) [nl-be]
-//! author : Joris Röling : https://github.com/jorisroling
-//! author : Jacob Middag : https://github.com/middagj
-var wh="jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),xh="jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_"),yh=[/^jan/i,/^feb/i,/^maart|mrt.?$/i,/^apr/i,/^mei$/i,/^jun[i.]?$/i,/^jul[i.]?$/i,/^aug/i,/^sep/i,/^okt/i,/^nov/i,/^dec/i],zh=/^(januari|februari|maart|april|mei|april|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;a.defineLocale("nl-be",{months:"januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),monthsShort:function(a,b){return a?/-MMM-/.test(b)?xh[a.month()]:wh[a.month()]:wh},monthsRegex:zh,monthsShortRegex:zh,monthsStrictRegex:/^(januari|februari|maart|mei|ju[nl]i|april|augustus|september|oktober|november|december)/i,monthsShortStrictRegex:/^(jan\.?|feb\.?|mrt\.?|apr\.?|mei|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i,monthsParse:yh,longMonthsParse:yh,shortMonthsParse:yh,weekdays:"zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag".split("_"),weekdaysShort:"zo._ma._di._wo._do._vr._za.".split("_"),weekdaysMin:"Zo_Ma_Di_Wo_Do_Vr_Za".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[vandaag om] LT",nextDay:"[morgen om] LT",nextWeek:"dddd [om] LT",lastDay:"[gisteren om] LT",lastWeek:"[afgelopen] dddd [om] LT",sameElse:"L"},relativeTime:{future:"over %s",past:"%s geleden",s:"een paar seconden",m:"één minuut",mm:"%d minuten",h:"één uur",hh:"%d uur",d:"één dag",dd:"%d dagen",M:"één maand",MM:"%d maanden",y:"één jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(a){return a+(1===a||8===a||a>=20?"ste":"de")},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Dutch [nl]
-//! author : Joris Röling : https://github.com/jorisroling
-//! author : Jacob Middag : https://github.com/middagj
-var Ah="jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),Bh="jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_"),Ch=[/^jan/i,/^feb/i,/^maart|mrt.?$/i,/^apr/i,/^mei$/i,/^jun[i.]?$/i,/^jul[i.]?$/i,/^aug/i,/^sep/i,/^okt/i,/^nov/i,/^dec/i],Dh=/^(januari|februari|maart|april|mei|april|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;a.defineLocale("nl",{months:"januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),monthsShort:function(a,b){return a?/-MMM-/.test(b)?Bh[a.month()]:Ah[a.month()]:Ah},monthsRegex:Dh,monthsShortRegex:Dh,monthsStrictRegex:/^(januari|februari|maart|mei|ju[nl]i|april|augustus|september|oktober|november|december)/i,monthsShortStrictRegex:/^(jan\.?|feb\.?|mrt\.?|apr\.?|mei|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i,monthsParse:Ch,longMonthsParse:Ch,shortMonthsParse:Ch,weekdays:"zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag".split("_"),weekdaysShort:"zo._ma._di._wo._do._vr._za.".split("_"),weekdaysMin:"Zo_Ma_Di_Wo_Do_Vr_Za".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[vandaag om] LT",nextDay:"[morgen om] LT",nextWeek:"dddd [om] LT",lastDay:"[gisteren om] LT",lastWeek:"[afgelopen] dddd [om] LT",sameElse:"L"},relativeTime:{future:"over %s",past:"%s geleden",s:"een paar seconden",m:"één minuut",mm:"%d minuten",h:"één uur",hh:"%d uur",d:"één dag",dd:"%d dagen",M:"één maand",MM:"%d maanden",y:"één jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(a){return a+(1===a||8===a||a>=20?"ste":"de")},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Nynorsk [nn]
-//! author : https://github.com/mechuwind
-a.defineLocale("nn",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sundag_måndag_tysdag_onsdag_torsdag_fredag_laurdag".split("_"),weekdaysShort:"sun_mån_tys_ons_tor_fre_lau".split("_"),weekdaysMin:"su_må_ty_on_to_fr_lø".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] H:mm",LLLL:"dddd D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[I dag klokka] LT",nextDay:"[I morgon klokka] LT",nextWeek:"dddd [klokka] LT",lastDay:"[I går klokka] LT",lastWeek:"[Føregåande] dddd [klokka] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s sidan",s:"nokre sekund",m:"eit minutt",mm:"%d minutt",h:"ein time",hh:"%d timar",d:"ein dag",dd:"%d dagar",M:"ein månad",MM:"%d månader",y:"eit år",yy:"%d år"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Punjabi (India) [pa-in]
-//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
-var Eh={1:"੧",2:"੨",3:"੩",4:"੪",5:"੫",6:"੬",7:"੭",8:"੮",9:"੯",0:"੦"},Fh={"੧":"1","੨":"2","੩":"3","੪":"4","੫":"5","੬":"6","੭":"7","੮":"8","੯":"9","੦":"0"};a.defineLocale("pa-in",{months:"ਜਨਵਰੀ_ਫ਼ਰਵਰੀ_ਮਾਰਚ_ਅਪ੍ਰੈਲ_ਮਈ_ਜੂਨ_ਜੁਲਾਈ_ਅਗਸਤ_ਸਤੰਬਰ_ਅਕਤੂਬਰ_ਨਵੰਬਰ_ਦਸੰਬਰ".split("_"),monthsShort:"ਜਨਵਰੀ_ਫ਼ਰਵਰੀ_ਮਾਰਚ_ਅਪ੍ਰੈਲ_ਮਈ_ਜੂਨ_ਜੁਲਾਈ_ਅਗਸਤ_ਸਤੰਬਰ_ਅਕਤੂਬਰ_ਨਵੰਬਰ_ਦਸੰਬਰ".split("_"),weekdays:"ਐਤਵਾਰ_ਸੋਮਵਾਰ_ਮੰਗਲਵਾਰ_ਬੁਧਵਾਰ_ਵੀਰਵਾਰ_ਸ਼ੁੱਕਰਵਾਰ_ਸ਼ਨੀਚਰਵਾਰ".split("_"),weekdaysShort:"ਐਤ_ਸੋਮ_ਮੰਗਲ_ਬੁਧ_ਵੀਰ_ਸ਼ੁਕਰ_ਸ਼ਨੀ".split("_"),weekdaysMin:"ਐਤ_ਸੋਮ_ਮੰਗਲ_ਬੁਧ_ਵੀਰ_ਸ਼ੁਕਰ_ਸ਼ਨੀ".split("_"),longDateFormat:{LT:"A h:mm ਵਜੇ",LTS:"A h:mm:ss ਵਜੇ",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm ਵਜੇ",LLLL:"dddd, D MMMM YYYY, A h:mm ਵਜੇ"},calendar:{sameDay:"[ਅਜ] LT",nextDay:"[ਕਲ] LT",nextWeek:"dddd, LT",lastDay:"[ਕਲ] LT",lastWeek:"[ਪਿਛਲੇ] dddd, LT",sameElse:"L"},relativeTime:{future:"%s ਵਿੱਚ",past:"%s ਪਿਛਲੇ",s:"ਕੁਝ ਸਕਿੰਟ",m:"ਇਕ ਮਿੰਟ",mm:"%d ਮਿੰਟ",h:"ਇੱਕ ਘੰਟਾ",hh:"%d ਘੰਟੇ",d:"ਇੱਕ ਦਿਨ",dd:"%d ਦਿਨ",M:"ਇੱਕ ਮਹੀਨਾ",MM:"%d ਮਹੀਨੇ",y:"ਇੱਕ ਸਾਲ",yy:"%d ਸਾਲ"},preparse:function(a){return a.replace(/[੧੨੩੪੫੬੭੮੯੦]/g,function(a){return Fh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return Eh[a]})},meridiemParse:/ਰਾਤ|ਸਵੇਰ|ਦੁਪਹਿਰ|ਸ਼ਾਮ/,meridiemHour:function(a,b){return 12===a&&(a=0),"ਰਾਤ"===b?a<4?a:a+12:"ਸਵੇਰ"===b?a:"ਦੁਪਹਿਰ"===b?a>=10?a:a+12:"ਸ਼ਾਮ"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"ਰਾਤ":a<10?"ਸਵੇਰ":a<17?"ਦੁਪਹਿਰ":a<20?"ਸ਼ਾਮ":"ਰਾਤ"},week:{dow:0,doy:6}});
-//! moment.js locale configuration
-//! locale : Polish [pl]
-//! author : Rafal Hirsz : https://github.com/evoL
-var Gh="styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"),Hh="stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");a.defineLocale("pl",{months:function(a,b){return a?""===b?"("+Hh[a.month()]+"|"+Gh[a.month()]+")":/D MMMM/.test(b)?Hh[a.month()]:Gh[a.month()]:Gh},monthsShort:"sty_lut_mar_kwi_maj_cze_lip_sie_wrz_paź_lis_gru".split("_"),weekdays:"niedziela_poniedziałek_wtorek_środa_czwartek_piątek_sobota".split("_"),weekdaysShort:"ndz_pon_wt_śr_czw_pt_sob".split("_"),weekdaysMin:"Nd_Pn_Wt_Śr_Cz_Pt_So".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Dziś o] LT",nextDay:"[Jutro o] LT",nextWeek:"[W] dddd [o] LT",lastDay:"[Wczoraj o] LT",lastWeek:function(){switch(this.day()){case 0:return"[W zeszłą niedzielę o] LT";case 3:return"[W zeszłą środę o] LT";case 6:return"[W zeszłą sobotę o] LT";default:return"[W zeszły] dddd [o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"%s temu",s:"kilka sekund",m:be,mm:be,h:be,hh:be,d:"1 dzień",dd:"%d dni",M:"miesiąc",MM:be,y:"rok",yy:be},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Portuguese (Brazil) [pt-br]
-//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
-a.defineLocale("pt-br",{months:"Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez".split("_"),weekdays:"Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_Sáb".split("_"),weekdaysMin:"Do_2ª_3ª_4ª_5ª_6ª_Sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY [às] HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY [às] HH:mm"},calendar:{sameDay:"[Hoje às] LT",nextDay:"[Amanhã às] LT",nextWeek:"dddd [às] LT",lastDay:"[Ontem às] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[Último] dddd [às] LT":"[Última] dddd [às] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"%s atrás",s:"poucos segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº"}),
-//! moment.js locale configuration
-//! locale : Portuguese [pt]
-//! author : Jefferson : https://github.com/jalex79
-a.defineLocale("pt",{months:"Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez".split("_"),weekdays:"Domingo_Segunda-Feira_Terça-Feira_Quarta-Feira_Quinta-Feira_Sexta-Feira_Sábado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_Sáb".split("_"),weekdaysMin:"Do_2ª_3ª_4ª_5ª_6ª_Sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY HH:mm"},calendar:{sameDay:"[Hoje às] LT",nextDay:"[Amanhã às] LT",nextWeek:"dddd [às] LT",lastDay:"[Ontem às] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[Último] dddd [às] LT":"[Última] dddd [às] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"há %s",s:"segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um mês",MM:"%d meses",y:"um ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}º/,ordinal:"%dº",week:{dow:1,doy:4}}),a.defineLocale("ro",{months:"ianuarie_februarie_martie_aprilie_mai_iunie_iulie_august_septembrie_octombrie_noiembrie_decembrie".split("_"),monthsShort:"ian._febr._mart._apr._mai_iun._iul._aug._sept._oct._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"duminică_luni_marți_miercuri_joi_vineri_sâmbătă".split("_"),weekdaysShort:"Dum_Lun_Mar_Mie_Joi_Vin_Sâm".split("_"),weekdaysMin:"Du_Lu_Ma_Mi_Jo_Vi_Sâ".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[azi la] LT",nextDay:"[mâine la] LT",nextWeek:"dddd [la] LT",lastDay:"[ieri la] LT",lastWeek:"[fosta] dddd [la] LT",sameElse:"L"},relativeTime:{future:"peste %s",past:"%s în urmă",s:"câteva secunde",m:"un minut",mm:ce,h:"o oră",hh:ce,d:"o zi",dd:ce,M:"o lună",MM:ce,y:"un an",yy:ce},week:{dow:1,doy:7}});var Ih=[/^янв/i,/^фев/i,/^мар/i,/^апр/i,/^ма[йя]/i,/^июн/i,/^июл/i,/^авг/i,/^сен/i,/^окт/i,/^ноя/i,/^дек/i];a.defineLocale("ru",{months:{format:"января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря".split("_"),standalone:"январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь".split("_")},monthsShort:{format:"янв._февр._мар._апр._мая_июня_июля_авг._сент._окт._нояб._дек.".split("_"),standalone:"янв._февр._март_апр._май_июнь_июль_авг._сент._окт._нояб._дек.".split("_")},weekdays:{standalone:"воскресенье_понедельник_вторник_среда_четверг_пятница_суббота".split("_"),format:"воскресенье_понедельник_вторник_среду_четверг_пятницу_субботу".split("_"),isFormat:/\[ ?[Вв] ?(?:прошлую|следующую|эту)? ?\] ?dddd/},weekdaysShort:"вс_пн_вт_ср_чт_пт_сб".split("_"),weekdaysMin:"вс_пн_вт_ср_чт_пт_сб".split("_"),monthsParse:Ih,longMonthsParse:Ih,shortMonthsParse:Ih,monthsRegex:/^(январ[ья]|янв\.?|феврал[ья]|февр?\.?|марта?|мар\.?|апрел[ья]|апр\.?|ма[йя]|июн[ья]|июн\.?|июл[ья]|июл\.?|августа?|авг\.?|сентябр[ья]|сент?\.?|октябр[ья]|окт\.?|ноябр[ья]|нояб?\.?|декабр[ья]|дек\.?)/i,monthsShortRegex:/^(январ[ья]|янв\.?|феврал[ья]|февр?\.?|марта?|мар\.?|апрел[ья]|апр\.?|ма[йя]|июн[ья]|июн\.?|июл[ья]|июл\.?|августа?|авг\.?|сентябр[ья]|сент?\.?|октябр[ья]|окт\.?|ноябр[ья]|нояб?\.?|декабр[ья]|дек\.?)/i,monthsStrictRegex:/^(январ[яь]|феврал[яь]|марта?|апрел[яь]|ма[яй]|июн[яь]|июл[яь]|августа?|сентябр[яь]|октябр[яь]|ноябр[яь]|декабр[яь])/i,monthsShortStrictRegex:/^(янв\.|февр?\.|мар[т.]|апр\.|ма[яй]|июн[ья.]|июл[ья.]|авг\.|сент?\.|окт\.|нояб?\.|дек\.)/i,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY г.",LLL:"D MMMM YYYY г., HH:mm",LLLL:"dddd, D MMMM YYYY г., HH:mm"},calendar:{sameDay:"[Сегодня в] LT",nextDay:"[Завтра в] LT",lastDay:"[Вчера в] LT",nextWeek:function(a){if(a.week()===this.week())return 2===this.day()?"[Во] dddd [в] LT":"[В] dddd [в] LT";switch(this.day()){case 0:return"[В следующее] dddd [в] LT";case 1:case 2:case 4:return"[В следующий] dddd [в] LT";case 3:case 5:case 6:return"[В следующую] dddd [в] LT"}},lastWeek:function(a){if(a.week()===this.week())return 2===this.day()?"[Во] dddd [в] LT":"[В] dddd [в] LT";switch(this.day()){case 0:return"[В прошлое] dddd [в] LT";case 1:case 2:case 4:return"[В прошлый] dddd [в] LT";case 3:case 5:case 6:return"[В прошлую] dddd [в] LT"}},sameElse:"L"},relativeTime:{future:"через %s",past:"%s назад",s:"несколько секунд",m:ee,mm:ee,h:"час",hh:ee,d:"день",dd:ee,M:"месяц",MM:ee,y:"год",yy:ee},meridiemParse:/ночи|утра|дня|вечера/i,isPM:function(a){return/^(дня|вечера)$/.test(a)},meridiem:function(a,b,c){return a<4?"ночи":a<12?"утра":a<17?"дня":"вечера"},dayOfMonthOrdinalParse:/\d{1,2}-(й|го|я)/,ordinal:function(a,b){switch(b){case"M":case"d":case"DDD":return a+"-й";case"D":return a+"-го";case"w":case"W":return a+"-я";default:return a}},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Sindhi [sd]
-//! author : Narain Sagar : https://github.com/narainsagar
-var Jh=["جنوري","فيبروري","مارچ","اپريل","مئي","جون","جولاءِ","آگسٽ","سيپٽمبر","آڪٽوبر","نومبر","ڊسمبر"],Kh=["آچر","سومر","اڱارو","اربع","خميس","جمع","ڇنڇر"];a.defineLocale("sd",{months:Jh,monthsShort:Jh,weekdays:Kh,weekdaysShort:Kh,weekdaysMin:Kh,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd، D MMMM YYYY HH:mm"},meridiemParse:/صبح|شام/,isPM:function(a){return"شام"===a},meridiem:function(a,b,c){return a<12?"صبح":"شام"},calendar:{sameDay:"[اڄ] LT",nextDay:"[سڀاڻي] LT",nextWeek:"dddd [اڳين هفتي تي] LT",lastDay:"[ڪالهه] LT",lastWeek:"[گزريل هفتي] dddd [تي] LT",sameElse:"L"},relativeTime:{future:"%s پوء",past:"%s اڳ",s:"چند سيڪنڊ",m:"هڪ منٽ",mm:"%d منٽ",h:"هڪ ڪلاڪ",hh:"%d ڪلاڪ",d:"هڪ ڏينهن",dd:"%d ڏينهن",M:"هڪ مهينو",MM:"%d مهينا",y:"هڪ سال",yy:"%d سال"},preparse:function(a){return a.replace(/،/g,",")},postformat:function(a){return a.replace(/,/g,"،")},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Northern Sami [se]
-//! authors : Bård Rolstad Henriksen : https://github.com/karamell
-a.defineLocale("se",{months:"ođđajagemánnu_guovvamánnu_njukčamánnu_cuoŋománnu_miessemánnu_geassemánnu_suoidnemánnu_borgemánnu_čakčamánnu_golggotmánnu_skábmamánnu_juovlamánnu".split("_"),monthsShort:"ođđj_guov_njuk_cuo_mies_geas_suoi_borg_čakč_golg_skáb_juov".split("_"),weekdays:"sotnabeaivi_vuossárga_maŋŋebárga_gaskavahkku_duorastat_bearjadat_lávvardat".split("_"),weekdaysShort:"sotn_vuos_maŋ_gask_duor_bear_láv".split("_"),weekdaysMin:"s_v_m_g_d_b_L".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"MMMM D. [b.] YYYY",LLL:"MMMM D. [b.] YYYY [ti.] HH:mm",LLLL:"dddd, MMMM D. [b.] YYYY [ti.] HH:mm"},calendar:{sameDay:"[otne ti] LT",nextDay:"[ihttin ti] LT",nextWeek:"dddd [ti] LT",lastDay:"[ikte ti] LT",lastWeek:"[ovddit] dddd [ti] LT",sameElse:"L"},relativeTime:{future:"%s geažes",past:"maŋit %s",s:"moadde sekunddat",m:"okta minuhta",mm:"%d minuhtat",h:"okta diimmu",hh:"%d diimmut",d:"okta beaivi",dd:"%d beaivvit",M:"okta mánnu",MM:"%d mánut",y:"okta jahki",yy:"%d jagit"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Sinhalese [si]
-//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
-a.defineLocale("si",{months:"ජනවාරි_පෙබරවාරි_මාර්තු_අප්‍රේල්_මැයි_ජූනි_ජූලි_අගෝස්තු_සැප්තැම්බර්_ඔක්තෝබර්_නොවැම්බර්_දෙසැම්බර්".split("_"),monthsShort:"ජන_පෙබ_මාර්_අප්_මැයි_ජූනි_ජූලි_අගෝ_සැප්_ඔක්_නොවැ_දෙසැ".split("_"),weekdays:"ඉරිදා_සඳුදා_අඟහරුවාදා_බදාදා_බ්‍රහස්පතින්දා_සිකුරාදා_සෙනසුරාදා".split("_"),weekdaysShort:"ඉරි_සඳු_අඟ_බදා_බ්‍රහ_සිකු_සෙන".split("_"),weekdaysMin:"ඉ_ස_අ_බ_බ්‍ර_සි_සෙ".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"a h:mm",LTS:"a h:mm:ss",L:"YYYY/MM/DD",LL:"YYYY MMMM D",LLL:"YYYY MMMM D, a h:mm",LLLL:"YYYY MMMM D [වැනි] dddd, a h:mm:ss"},calendar:{sameDay:"[අද] LT[ට]",nextDay:"[හෙට] LT[ට]",nextWeek:"dddd LT[ට]",lastDay:"[ඊයේ] LT[ට]",lastWeek:"[පසුගිය] dddd LT[ට]",sameElse:"L"},relativeTime:{future:"%sකින්",past:"%sකට පෙර",s:"තත්පර කිහිපය",m:"මිනිත්තුව",mm:"මිනිත්තු %d",h:"පැය",hh:"පැය %d",d:"දිනය",dd:"දින %d",M:"මාසය",MM:"මාස %d",y:"වසර",yy:"වසර %d"},dayOfMonthOrdinalParse:/\d{1,2} වැනි/,ordinal:function(a){return a+" වැනි"},meridiemParse:/පෙර වරු|පස් වරු|පෙ.ව|ප.ව./,isPM:function(a){return"ප.ව."===a||"පස් වරු"===a},meridiem:function(a,b,c){return a>11?c?"ප.ව.":"පස් වරු":c?"පෙ.ව.":"පෙර වරු"}});
-//! moment.js locale configuration
-//! locale : Slovak [sk]
-//! author : Martin Minka : https://github.com/k2s
-//! based on work of petrbela : https://github.com/petrbela
-var Lh="január_február_marec_apríl_máj_jún_júl_august_september_október_november_december".split("_"),Mh="jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec".split("_");a.defineLocale("sk",{months:Lh,monthsShort:Mh,weekdays:"nedeľa_pondelok_utorok_streda_štvrtok_piatok_sobota".split("_"),weekdaysShort:"ne_po_ut_st_št_pi_so".split("_"),weekdaysMin:"ne_po_ut_st_št_pi_so".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd D. MMMM YYYY H:mm"},calendar:{sameDay:"[dnes o] LT",nextDay:"[zajtra o] LT",nextWeek:function(){switch(this.day()){case 0:return"[v nedeľu o] LT";case 1:case 2:return"[v] dddd [o] LT";case 3:return"[v stredu o] LT";case 4:return"[vo štvrtok o] LT";case 5:return"[v piatok o] LT";case 6:return"[v sobotu o] LT"}},lastDay:"[včera o] LT",lastWeek:function(){switch(this.day()){case 0:return"[minulú nedeľu o] LT";case 1:case 2:return"[minulý] dddd [o] LT";case 3:return"[minulú stredu o] LT";case 4:case 5:return"[minulý] dddd [o] LT";case 6:return"[minulú sobotu o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"pred %s",s:ge,m:ge,mm:ge,h:ge,hh:ge,d:ge,dd:ge,M:ge,MM:ge,y:ge,yy:ge},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),a.defineLocale("sl",{months:"januar_februar_marec_april_maj_junij_julij_avgust_september_oktober_november_december".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedelja_ponedeljek_torek_sreda_četrtek_petek_sobota".split("_"),weekdaysShort:"ned._pon._tor._sre._čet._pet._sob.".split("_"),weekdaysMin:"ne_po_to_sr_če_pe_so".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danes ob] LT",nextDay:"[jutri ob] LT",nextWeek:function(){switch(this.day()){case 0:return"[v] [nedeljo] [ob] LT";case 3:return"[v] [sredo] [ob] LT";case 6:return"[v] [soboto] [ob] LT";case 1:case 2:case 4:case 5:return"[v] dddd [ob] LT"}},lastDay:"[včeraj ob] LT",lastWeek:function(){switch(this.day()){case 0:return"[prejšnjo] [nedeljo] [ob] LT";case 3:return"[prejšnjo] [sredo] [ob] LT";case 6:return"[prejšnjo] [soboto] [ob] LT";case 1:case 2:case 4:case 5:return"[prejšnji] dddd [ob] LT"}},sameElse:"L"},relativeTime:{future:"čez %s",past:"pred %s",s:he,m:he,mm:he,h:he,hh:he,d:he,dd:he,M:he,MM:he,y:he,yy:he},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Albanian [sq]
-//! author : Flakërim Ismani : https://github.com/flakerimi
-//! author : Menelion Elensúle : https://github.com/Oire
-//! author : Oerd Cukalla : https://github.com/oerd
-a.defineLocale("sq",{months:"Janar_Shkurt_Mars_Prill_Maj_Qershor_Korrik_Gusht_Shtator_Tetor_Nëntor_Dhjetor".split("_"),monthsShort:"Jan_Shk_Mar_Pri_Maj_Qer_Kor_Gus_Sht_Tet_Nën_Dhj".split("_"),weekdays:"E Diel_E Hënë_E Martë_E Mërkurë_E Enjte_E Premte_E Shtunë".split("_"),weekdaysShort:"Die_Hën_Mar_Mër_Enj_Pre_Sht".split("_"),weekdaysMin:"D_H_Ma_Më_E_P_Sh".split("_"),weekdaysParseExact:!0,meridiemParse:/PD|MD/,isPM:function(a){return"M"===a.charAt(0)},meridiem:function(a,b,c){return a<12?"PD":"MD"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Sot në] LT",nextDay:"[Nesër në] LT",nextWeek:"dddd [në] LT",lastDay:"[Dje në] LT",lastWeek:"dddd [e kaluar në] LT",sameElse:"L"},relativeTime:{future:"në %s",past:"%s më parë",s:"disa sekonda",m:"një minutë",mm:"%d minuta",h:"një orë",hh:"%d orë",d:"një ditë",dd:"%d ditë",M:"një muaj",MM:"%d muaj",y:"një vit",yy:"%d vite"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Serbian Cyrillic [sr-cyrl]
-//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
-var Nh={words:{m:["један минут","једне минуте"],mm:["минут","минуте","минута"],h:["један сат","једног сата"],hh:["сат","сата","сати"],dd:["дан","дана","дана"],MM:["месец","месеца","месеци"],yy:["година","године","година"]},correctGrammaticalCase:function(a,b){return 1===a?b[0]:a>=2&&a<=4?b[1]:b[2]},translate:function(a,b,c){var d=Nh.words[c];return 1===c.length?b?d[0]:d[1]:a+" "+Nh.correctGrammaticalCase(a,d)}};a.defineLocale("sr-cyrl",{months:"јануар_фебруар_март_април_мај_јун_јул_август_септембар_октобар_новембар_децембар".split("_"),monthsShort:"јан._феб._мар._апр._мај_јун_јул_авг._сеп._окт._нов._дец.".split("_"),monthsParseExact:!0,weekdays:"недеља_понедељак_уторак_среда_четвртак_петак_субота".split("_"),weekdaysShort:"нед._пон._уто._сре._чет._пет._суб.".split("_"),weekdaysMin:"не_по_ут_ср_че_пе_су".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[данас у] LT",nextDay:"[сутра у] LT",nextWeek:function(){switch(this.day()){case 0:return"[у] [недељу] [у] LT";case 3:return"[у] [среду] [у] LT";case 6:return"[у] [суботу] [у] LT";case 1:case 2:case 4:case 5:return"[у] dddd [у] LT"}},lastDay:"[јуче у] LT",lastWeek:function(){var a=["[прошле] [недеље] [у] LT","[прошлог] [понедељка] [у] LT","[прошлог] [уторка] [у] LT","[прошле] [среде] [у] LT","[прошлог] [четвртка] [у] LT","[прошлог] [петка] [у] LT","[прошле] [суботе] [у] LT"];return a[this.day()]},sameElse:"L"},relativeTime:{future:"за %s",past:"пре %s",s:"неколико секунди",m:Nh.translate,mm:Nh.translate,h:Nh.translate,hh:Nh.translate,d:"дан",dd:Nh.translate,M:"месец",MM:Nh.translate,y:"годину",yy:Nh.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Serbian [sr]
-//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
-var Oh={words:{m:["jedan minut","jedne minute"],mm:["minut","minute","minuta"],h:["jedan sat","jednog sata"],hh:["sat","sata","sati"],dd:["dan","dana","dana"],MM:["mesec","meseca","meseci"],yy:["godina","godine","godina"]},correctGrammaticalCase:function(a,b){return 1===a?b[0]:a>=2&&a<=4?b[1]:b[2]},translate:function(a,b,c){var d=Oh.words[c];return 1===c.length?b?d[0]:d[1]:a+" "+Oh.correctGrammaticalCase(a,d)}};a.defineLocale("sr",{months:"januar_februar_mart_april_maj_jun_jul_avgust_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj_jun_jul_avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedelja_ponedeljak_utorak_sreda_četvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sre._čet._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_če_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedelju] [u] LT";case 3:return"[u] [sredu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[juče u] LT",lastWeek:function(){var a=["[prošle] [nedelje] [u] LT","[prošlog] [ponedeljka] [u] LT","[prošlog] [utorka] [u] LT","[prošle] [srede] [u] LT","[prošlog] [četvrtka] [u] LT","[prošlog] [petka] [u] LT","[prošle] [subote] [u] LT"];return a[this.day()]},sameElse:"L"},relativeTime:{future:"za %s",past:"pre %s",s:"nekoliko sekundi",m:Oh.translate,mm:Oh.translate,h:Oh.translate,hh:Oh.translate,d:"dan",dd:Oh.translate,M:"mesec",MM:Oh.translate,y:"godinu",yy:Oh.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : siSwati [ss]
-//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
-a.defineLocale("ss",{months:"Bhimbidvwane_Indlovana_Indlov'lenkhulu_Mabasa_Inkhwekhweti_Inhlaba_Kholwane_Ingci_Inyoni_Imphala_Lweti_Ingongoni".split("_"),monthsShort:"Bhi_Ina_Inu_Mab_Ink_Inh_Kho_Igc_Iny_Imp_Lwe_Igo".split("_"),weekdays:"Lisontfo_Umsombuluko_Lesibili_Lesitsatfu_Lesine_Lesihlanu_Umgcibelo".split("_"),weekdaysShort:"Lis_Umb_Lsb_Les_Lsi_Lsh_Umg".split("_"),weekdaysMin:"Li_Us_Lb_Lt_Ls_Lh_Ug".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Namuhla nga] LT",nextDay:"[Kusasa nga] LT",nextWeek:"dddd [nga] LT",lastDay:"[Itolo nga] LT",lastWeek:"dddd [leliphelile] [nga] LT",sameElse:"L"},relativeTime:{future:"nga %s",past:"wenteka nga %s",s:"emizuzwana lomcane",m:"umzuzu",mm:"%d emizuzu",h:"lihora",hh:"%d emahora",d:"lilanga",dd:"%d emalanga",M:"inyanga",MM:"%d tinyanga",y:"umnyaka",yy:"%d iminyaka"},meridiemParse:/ekuseni|emini|entsambama|ebusuku/,meridiem:function(a,b,c){return a<11?"ekuseni":a<15?"emini":a<19?"entsambama":"ebusuku"},meridiemHour:function(a,b){return 12===a&&(a=0),"ekuseni"===b?a:"emini"===b?a>=11?a:a+12:"entsambama"===b||"ebusuku"===b?0===a?0:a+12:void 0},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:"%d",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Swedish [sv]
-//! author : Jens Alm : https://github.com/ulmus
-a.defineLocale("sv",{months:"januari_februari_mars_april_maj_juni_juli_augusti_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"söndag_måndag_tisdag_onsdag_torsdag_fredag_lördag".split("_"),weekdaysShort:"sön_mån_tis_ons_tor_fre_lör".split("_"),weekdaysMin:"sö_må_ti_on_to_fr_lö".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [kl.] HH:mm",LLLL:"dddd D MMMM YYYY [kl.] HH:mm",lll:"D MMM YYYY HH:mm",llll:"ddd D MMM YYYY HH:mm"},calendar:{sameDay:"[Idag] LT",nextDay:"[Imorgon] LT",lastDay:"[Igår] LT",nextWeek:"[På] dddd LT",lastWeek:"[I] dddd[s] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"för %s sedan",s:"några sekunder",m:"en minut",mm:"%d minuter",h:"en timme",hh:"%d timmar",d:"en dag",dd:"%d dagar",M:"en månad",MM:"%d månader",y:"ett år",yy:"%d år"},dayOfMonthOrdinalParse:/\d{1,2}(e|a)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"e":1===b?"a":2===b?"a":"e";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Swahili [sw]
-//! author : Fahad Kassim : https://github.com/fadsel
-a.defineLocale("sw",{months:"Januari_Februari_Machi_Aprili_Mei_Juni_Julai_Agosti_Septemba_Oktoba_Novemba_Desemba".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ago_Sep_Okt_Nov_Des".split("_"),weekdays:"Jumapili_Jumatatu_Jumanne_Jumatano_Alhamisi_Ijumaa_Jumamosi".split("_"),weekdaysShort:"Jpl_Jtat_Jnne_Jtan_Alh_Ijm_Jmos".split("_"),weekdaysMin:"J2_J3_J4_J5_Al_Ij_J1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[leo saa] LT",nextDay:"[kesho saa] LT",nextWeek:"[wiki ijayo] dddd [saat] LT",lastDay:"[jana] LT",lastWeek:"[wiki iliyopita] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s baadaye",past:"tokea %s",s:"hivi punde",m:"dakika moja",mm:"dakika %d",h:"saa limoja",hh:"masaa %d",d:"siku moja",dd:"masiku %d",M:"mwezi mmoja",MM:"miezi %d",y:"mwaka mmoja",yy:"miaka %d"},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Tamil [ta]
-//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
-var Ph={1:"௧",2:"௨",3:"௩",4:"௪",5:"௫",6:"௬",7:"௭",8:"௮",9:"௯",0:"௦"},Qh={"௧":"1","௨":"2","௩":"3","௪":"4","௫":"5","௬":"6","௭":"7","௮":"8","௯":"9","௦":"0"};a.defineLocale("ta",{months:"ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),monthsShort:"ஜனவரி_பிப்ரவரி_மார்ச்_ஏப்ரல்_மே_ஜூன்_ஜூலை_ஆகஸ்ட்_செப்டெம்பர்_அக்டோபர்_நவம்பர்_டிசம்பர்".split("_"),weekdays:"ஞாயிற்றுக்கிழமை_திங்கட்கிழமை_செவ்வாய்கிழமை_புதன்கிழமை_வியாழக்கிழமை_வெள்ளிக்கிழமை_சனிக்கிழமை".split("_"),weekdaysShort:"ஞாயிறு_திங்கள்_செவ்வாய்_புதன்_வியாழன்_வெள்ளி_சனி".split("_"),weekdaysMin:"ஞா_தி_செ_பு_வி_வெ_ச".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, HH:mm",LLLL:"dddd, D MMMM YYYY, HH:mm"},calendar:{sameDay:"[இன்று] LT",nextDay:"[நாளை] LT",nextWeek:"dddd, LT",lastDay:"[நேற்று] LT",lastWeek:"[கடந்த வாரம்] dddd, LT",sameElse:"L"},relativeTime:{future:"%s இல்",past:"%s முன்",s:"ஒரு சில விநாடிகள்",m:"ஒரு நிமிடம்",mm:"%d நிமிடங்கள்",h:"ஒரு மணி நேரம்",hh:"%d மணி நேரம்",d:"ஒரு நாள்",dd:"%d நாட்கள்",M:"ஒரு மாதம்",MM:"%d மாதங்கள்",y:"ஒரு வருடம்",yy:"%d ஆண்டுகள்"},dayOfMonthOrdinalParse:/\d{1,2}வது/,ordinal:function(a){return a+"வது"},preparse:function(a){return a.replace(/[௧௨௩௪௫௬௭௮௯௦]/g,function(a){return Qh[a]})},postformat:function(a){return a.replace(/\d/g,function(a){return Ph[a]})},meridiemParse:/யாமம்|வைகறை|காலை|நண்பகல்|எற்பாடு|மாலை/,meridiem:function(a,b,c){return a<2?" யாமம்":a<6?" வைகறை":a<10?" காலை":a<14?" நண்பகல்":a<18?" எற்பாடு":a<22?" மாலை":" யாமம்"},meridiemHour:function(a,b){return 12===a&&(a=0),"யாமம்"===b?a<2?a:a+12:"வைகறை"===b||"காலை"===b?a:"நண்பகல்"===b&&a>=10?a:a+12},week:{dow:0,doy:6}}),
-//! moment.js locale configuration
-//! locale : Telugu [te]
-//! author : Krishna Chaitanya Thota : https://github.com/kcthota
-a.defineLocale("te",{months:"జనవరి_ఫిబ్రవరి_మార్చి_ఏప్రిల్_మే_జూన్_జూలై_ఆగస్టు_సెప్టెంబర్_అక్టోబర్_నవంబర్_డిసెంబర్".split("_"),monthsShort:"జన._ఫిబ్ర._మార్చి_ఏప్రి._మే_జూన్_జూలై_ఆగ._సెప్._అక్టో._నవ._డిసె.".split("_"),monthsParseExact:!0,weekdays:"ఆదివారం_సోమవారం_మంగళవారం_బుధవారం_గురువారం_శుక్రవారం_శనివారం".split("_"),weekdaysShort:"ఆది_సోమ_మంగళ_బుధ_గురు_శుక్ర_శని".split("_"),weekdaysMin:"ఆ_సో_మం_బు_గు_శు_శ".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[నేడు] LT",nextDay:"[రేపు] LT",nextWeek:"dddd, LT",lastDay:"[నిన్న] LT",lastWeek:"[గత] dddd, LT",sameElse:"L"},relativeTime:{future:"%s లో",past:"%s క్రితం",s:"కొన్ని క్షణాలు",m:"ఒక నిమిషం",mm:"%d నిమిషాలు",h:"ఒక గంట",hh:"%d గంటలు",d:"ఒక రోజు",dd:"%d రోజులు",M:"ఒక నెల",MM:"%d నెలలు",y:"ఒక సంవత్సరం",yy:"%d సంవత్సరాలు"},dayOfMonthOrdinalParse:/\d{1,2}వ/,ordinal:"%dవ",meridiemParse:/రాత్రి|ఉదయం|మధ్యాహ్నం|సాయంత్రం/,meridiemHour:function(a,b){return 12===a&&(a=0),"రాత్రి"===b?a<4?a:a+12:"ఉదయం"===b?a:"మధ్యాహ్నం"===b?a>=10?a:a+12:"సాయంత్రం"===b?a+12:void 0},meridiem:function(a,b,c){return a<4?"రాత్రి":a<10?"ఉదయం":a<17?"మధ్యాహ్నం":a<20?"సాయంత్రం":"రాత్రి"},week:{dow:0,doy:6}}),
-//! moment.js locale configuration
-//! locale : Tetun Dili (East Timor) [tet]
-//! author : Joshua Brooks : https://github.com/joshbrooks
-//! author : Onorio De J. Afonso : https://github.com/marobo
-a.defineLocale("tet",{months:"Janeiru_Fevereiru_Marsu_Abril_Maiu_Juniu_Juliu_Augustu_Setembru_Outubru_Novembru_Dezembru".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Aug_Set_Out_Nov_Dez".split("_"),weekdays:"Domingu_Segunda_Tersa_Kuarta_Kinta_Sexta_Sabadu".split("_"),weekdaysShort:"Dom_Seg_Ters_Kua_Kint_Sext_Sab".split("_"),weekdaysMin:"Do_Seg_Te_Ku_Ki_Sex_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Ohin iha] LT",nextDay:"[Aban iha] LT",nextWeek:"dddd [iha] LT",lastDay:"[Horiseik iha] LT",lastWeek:"dddd [semana kotuk] [iha] LT",sameElse:"L"},relativeTime:{future:"iha %s",past:"%s liuba",s:"minutu balun",m:"minutu ida",mm:"minutus %d",h:"horas ida",hh:"horas %d",d:"loron ida",dd:"loron %d",M:"fulan ida",MM:"fulan %d",y:"tinan ida",yy:"tinan %d"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Thai [th]
-//! author : Kridsada Thanabulpong : https://github.com/sirn
-a.defineLocale("th",{months:"มกราคม_กุมภาพันธ์_มีนาคม_เมษายน_พฤษภาคม_มิถุนายน_กรกฎาคม_สิงหาคม_กันยายน_ตุลาคม_พฤศจิกายน_ธันวาคม".split("_"),monthsShort:"ม.ค._ก.พ._มี.ค._เม.ย._พ.ค._มิ.ย._ก.ค._ส.ค._ก.ย._ต.ค._พ.ย._ธ.ค.".split("_"),monthsParseExact:!0,weekdays:"อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัสบดี_ศุกร์_เสาร์".split("_"),weekdaysShort:"อาทิตย์_จันทร์_อังคาร_พุธ_พฤหัส_ศุกร์_เสาร์".split("_"),weekdaysMin:"อา._จ._อ._พ._พฤ._ศ._ส.".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY เวลา H:mm",LLLL:"วันddddที่ D MMMM YYYY เวลา H:mm"},meridiemParse:/ก่อนเที่ยง|หลังเที่ยง/,isPM:function(a){return"หลังเที่ยง"===a},meridiem:function(a,b,c){return a<12?"ก่อนเที่ยง":"หลังเที่ยง"},calendar:{sameDay:"[วันนี้ เวลา] LT",nextDay:"[พรุ่งนี้ เวลา] LT",nextWeek:"dddd[หน้า เวลา] LT",lastDay:"[เมื่อวานนี้ เวลา] LT",lastWeek:"[วัน]dddd[ที่แล้ว เวลา] LT",sameElse:"L"},relativeTime:{future:"อีก %s",past:"%sที่แล้ว",s:"ไม่กี่วินาที",m:"1 นาที",mm:"%d นาที",h:"1 ชั่วโมง",hh:"%d ชั่วโมง",d:"1 วัน",dd:"%d วัน",M:"1 เดือน",MM:"%d เดือน",y:"1 ปี",yy:"%d ปี"}}),
-//! moment.js locale configuration
-//! locale : Tagalog (Philippines) [tl-ph]
-//! author : Dan Hagman : https://github.com/hagmandan
-a.defineLocale("tl-ph",{months:"Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre".split("_"),monthsShort:"Ene_Peb_Mar_Abr_May_Hun_Hul_Ago_Set_Okt_Nob_Dis".split("_"),weekdays:"Linggo_Lunes_Martes_Miyerkules_Huwebes_Biyernes_Sabado".split("_"),weekdaysShort:"Lin_Lun_Mar_Miy_Huw_Biy_Sab".split("_"),weekdaysMin:"Li_Lu_Ma_Mi_Hu_Bi_Sab".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"MM/D/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY HH:mm",LLLL:"dddd, MMMM DD, YYYY HH:mm"},calendar:{sameDay:"LT [ngayong araw]",nextDay:"[Bukas ng] LT",nextWeek:"LT [sa susunod na] dddd",lastDay:"LT [kahapon]",lastWeek:"LT [noong nakaraang] dddd",sameElse:"L"},relativeTime:{future:"sa loob ng %s",past:"%s ang nakalipas",s:"ilang segundo",m:"isang minuto",mm:"%d minuto",h:"isang oras",hh:"%d oras",d:"isang araw",dd:"%d araw",M:"isang buwan",MM:"%d buwan",y:"isang taon",yy:"%d taon"},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:function(a){return a},week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Klingon [tlh]
-//! author : Dominika Kruk : https://github.com/amaranthrose
-var Rh="pagh_wa’_cha’_wej_loS_vagh_jav_Soch_chorgh_Hut".split("_");a.defineLocale("tlh",{months:"tera’ jar wa’_tera’ jar cha’_tera’ jar wej_tera’ jar loS_tera’ jar vagh_tera’ jar jav_tera’ jar Soch_tera’ jar chorgh_tera’ jar Hut_tera’ jar wa’maH_tera’ jar wa’maH wa’_tera’ jar wa’maH cha’".split("_"),monthsShort:"jar wa’_jar cha’_jar wej_jar loS_jar vagh_jar jav_jar Soch_jar chorgh_jar Hut_jar wa’maH_jar wa’maH wa’_jar wa’maH cha’".split("_"),monthsParseExact:!0,weekdays:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),weekdaysShort:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),weekdaysMin:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[DaHjaj] LT",nextDay:"[wa’leS] LT",nextWeek:"LLL",lastDay:"[wa’Hu’] LT",lastWeek:"LLL",sameElse:"L"},relativeTime:{future:ie,past:je,s:"puS lup",m:"wa’ tup",mm:ke,h:"wa’ rep",hh:ke,d:"wa’ jaj",dd:ke,M:"wa’ jar",MM:ke,y:"wa’ DIS",yy:ke},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});
-//! moment.js locale configuration
-//! locale : Turkish [tr]
-//! authors : Erhan Gundogan : https://github.com/erhangundogan,
-//!           Burak Yiğit Kaya: https://github.com/BYK
-var Sh={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7:"'nci",20:"'nci",50:"'nci",3:"'üncü",4:"'üncü",100:"'üncü",6:"'ncı",9:"'uncu",10:"'uncu",30:"'uncu",60:"'ıncı",90:"'ıncı"};a.defineLocale("tr",{months:"Ocak_Şubat_Mart_Nisan_Mayıs_Haziran_Temmuz_Ağustos_Eylül_Ekim_Kasım_Aralık".split("_"),monthsShort:"Oca_Şub_Mar_Nis_May_Haz_Tem_Ağu_Eyl_Eki_Kas_Ara".split("_"),weekdays:"Pazar_Pazartesi_Salı_Çarşamba_Perşembe_Cuma_Cumartesi".split("_"),weekdaysShort:"Paz_Pts_Sal_Çar_Per_Cum_Cts".split("_"),weekdaysMin:"Pz_Pt_Sa_Ça_Pe_Cu_Ct".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[bugün saat] LT",nextDay:"[yarın saat] LT",nextWeek:"[haftaya] dddd [saat] LT",lastDay:"[dün] LT",lastWeek:"[geçen hafta] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s sonra",past:"%s önce",s:"birkaç saniye",m:"bir dakika",mm:"%d dakika",h:"bir saat",hh:"%d saat",d:"bir gün",dd:"%d gün",M:"bir ay",MM:"%d ay",y:"bir yıl",yy:"%d yıl"},dayOfMonthOrdinalParse:/\d{1,2}'(inci|nci|üncü|ncı|uncu|ıncı)/,ordinal:function(a){if(0===a)return a+"'ıncı";var b=a%10,c=a%100-b,d=a>=100?100:null;return a+(Sh[b]||Sh[c]||Sh[d])},week:{dow:1,doy:7}}),
-//! moment.js locale configuration
-//! locale : Talossan [tzl]
-//! author : Robin van der Vliet : https://github.com/robin0van0der0v
-//! author : Iustì Canun
-a.defineLocale("tzl",{months:"Januar_Fevraglh_Març_Avrïu_Mai_Gün_Julia_Guscht_Setemvar_Listopäts_Noemvar_Zecemvar".split("_"),monthsShort:"Jan_Fev_Mar_Avr_Mai_Gün_Jul_Gus_Set_Lis_Noe_Zec".split("_"),weekdays:"Súladi_Lúneçi_Maitzi_Márcuri_Xhúadi_Viénerçi_Sáturi".split("_"),weekdaysShort:"Súl_Lún_Mai_Már_Xhú_Vié_Sát".split("_"),weekdaysMin:"Sú_Lú_Ma_Má_Xh_Vi_Sá".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD.MM.YYYY",LL:"D. MMMM [dallas] YYYY",LLL:"D. MMMM [dallas] YYYY HH.mm",LLLL:"dddd, [li] D. MMMM [dallas] YYYY HH.mm"},meridiemParse:/d\'o|d\'a/i,isPM:function(a){return"d'o"===a.toLowerCase()},meridiem:function(a,b,c){return a>11?c?"d'o":"D'O":c?"d'a":"D'A"},calendar:{sameDay:"[oxhi à] LT",nextDay:"[demà à] LT",nextWeek:"dddd [à] LT",lastDay:"[ieiri à] LT",lastWeek:"[sür el] dddd [lasteu à] LT",sameElse:"L"},relativeTime:{future:"osprei %s",past:"ja%s",s:me,m:me,mm:me,h:me,hh:me,d:me,dd:me,M:me,MM:me,y:me,yy:me},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),
-//! moment.js locale configuration
-//! locale : Central Atlas Tamazight Latin [tzm-latn]
-//! author : Abdel Said : https://github.com/abdelsaid
-a.defineLocale("tzm-latn",{months:"innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),monthsShort:"innayr_brˤayrˤ_marˤsˤ_ibrir_mayyw_ywnyw_ywlywz_ɣwšt_šwtanbir_ktˤwbrˤ_nwwanbir_dwjnbir".split("_"),weekdays:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),weekdaysShort:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),weekdaysMin:"asamas_aynas_asinas_akras_akwas_asimwas_asiḍyas".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[asdkh g] LT",nextDay:"[aska g] LT",nextWeek:"dddd [g] LT",lastDay:"[assant g] LT",lastWeek:"dddd [g] LT",sameElse:"L"},relativeTime:{future:"dadkh s yan %s",past:"yan %s",s:"imik",m:"minuḍ",mm:"%d minuḍ",h:"saɛa",hh:"%d tassaɛin",d:"ass",dd:"%d ossan",M:"ayowr",MM:"%d iyyirn",y:"asgas",yy:"%d isgasn"},week:{dow:6,doy:12}}),
-//! moment.js locale configuration
-//! locale : Central Atlas Tamazight [tzm]
-//! author : Abdel Said : https://github.com/abdelsaid
-a.defineLocale("tzm",{months:"ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),monthsShort:"ⵉⵏⵏⴰⵢⵔ_ⴱⵕⴰⵢⵕ_ⵎⴰⵕⵚ_ⵉⴱⵔⵉⵔ_ⵎⴰⵢⵢⵓ_ⵢⵓⵏⵢⵓ_ⵢⵓⵍⵢⵓⵣ_ⵖⵓⵛⵜ_ⵛⵓⵜⴰⵏⴱⵉⵔ_ⴽⵟⵓⴱⵕ_ⵏⵓⵡⴰⵏⴱⵉⵔ_ⴷⵓⵊⵏⴱⵉⵔ".split("_"),weekdays:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),weekdaysShort:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),weekdaysMin:"ⴰⵙⴰⵎⴰⵙ_ⴰⵢⵏⴰⵙ_ⴰⵙⵉⵏⴰⵙ_ⴰⴽⵔⴰⵙ_ⴰⴽⵡⴰⵙ_ⴰⵙⵉⵎⵡⴰⵙ_ⴰⵙⵉⴹⵢⴰⵙ".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[ⴰⵙⴷⵅ ⴴ] LT",nextDay:"[ⴰⵙⴽⴰ ⴴ] LT",nextWeek:"dddd [ⴴ] LT",lastDay:"[ⴰⵚⴰⵏⵜ ⴴ] LT",lastWeek:"dddd [ⴴ] LT",sameElse:"L"},relativeTime:{future:"ⴷⴰⴷⵅ ⵙ ⵢⴰⵏ %s",past:"ⵢⴰⵏ %s",s:"ⵉⵎⵉⴽ",m:"ⵎⵉⵏⵓⴺ",mm:"%d ⵎⵉⵏⵓⴺ",h:"ⵙⴰⵄⴰ",hh:"%d ⵜⴰⵙⵙⴰⵄⵉⵏ",d:"ⴰⵙⵙ",dd:"%d oⵙⵙⴰⵏ",M:"ⴰⵢoⵓⵔ",MM:"%d ⵉⵢⵢⵉⵔⵏ",y:"ⴰⵙⴳⴰⵙ",yy:"%d ⵉⵙⴳⴰⵙⵏ"},week:{dow:6,doy:12}}),a.defineLocale("uk",{months:{format:"січня_лютого_березня_квітня_травня_червня_липня_серпня_вересня_жовтня_листопада_грудня".split("_"),standalone:"січень_лютий_березень_квітень_травень_червень_липень_серпень_вересень_жовтень_листопад_грудень".split("_")},monthsShort:"січ_лют_бер_квіт_трав_черв_лип_серп_вер_жовт_лист_груд".split("_"),weekdays:pe,weekdaysShort:"нд_пн_вт_ср_чт_пт_сб".split("_"),weekdaysMin:"нд_пн_вт_ср_чт_пт_сб".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY р.",LLL:"D MMMM YYYY р., HH:mm",LLLL:"dddd, D MMMM YYYY р., HH:mm"},calendar:{sameDay:qe("[Сьогодні "),nextDay:qe("[Завтра "),lastDay:qe("[Вчора "),nextWeek:qe("[У] dddd ["),lastWeek:function(){switch(this.day()){case 0:case 3:case 5:case 6:return qe("[Минулої] dddd [").call(this);case 1:case 2:case 4:return qe("[Минулого] dddd [").call(this)}},sameElse:"L"},relativeTime:{future:"за %s",past:"%s тому",s:"декілька секунд",m:oe,mm:oe,h:"годину",hh:oe,d:"день",dd:oe,M:"місяць",MM:oe,y:"рік",yy:oe},meridiemParse:/ночі|ранку|дня|вечора/,isPM:function(a){return/^(дня|вечора)$/.test(a)},meridiem:function(a,b,c){return a<4?"ночі":a<12?"ранку":a<17?"дня":"вечора"},dayOfMonthOrdinalParse:/\d{1,2}-(й|го)/,ordinal:function(a,b){switch(b){case"M":case"d":case"DDD":case"w":case"W":return a+"-й";case"D":return a+"-го";default:return a}},week:{dow:1,doy:7}});
-//! moment.js locale configuration
-//! locale : Urdu [ur]
-//! author : Sawood Alam : https://github.com/ibnesayeed
-//! author : Zack : https://github.com/ZackVision
-var Th=["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"],Uh=["اتوار","پیر","منگل","بدھ","جمعرات","جمعہ","ہفتہ"];
-//! moment.js locale configuration
-//! locale : Uzbek Latin [uz-latn]
-//! author : Rasulbek Mirzayev : github.com/Rasulbeeek
-//! moment.js locale configuration
-//! locale : Uzbek [uz]
-//! author : Sardor Muminov : https://github.com/muminoff
-//! moment.js locale configuration
-//! locale : Vietnamese [vi]
-//! author : Bang Nguyen : https://github.com/bangnk
-//! moment.js locale configuration
-//! locale : Pseudo [x-pseudo]
-//! author : Andrew Hood : https://github.com/andrewhood125
-//! moment.js locale configuration
-//! locale : Yoruba Nigeria [yo]
-//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
-//! moment.js locale configuration
-//! locale : Chinese (China) [zh-cn]
-//! author : suupic : https://github.com/suupic
-//! author : Zeno Zeng : https://github.com/zenozeng
-//! moment.js locale configuration
-//! locale : Chinese (Hong Kong) [zh-hk]
-//! author : Ben : https://github.com/ben-lin
-//! author : Chris Lam : https://github.com/hehachris
-//! author : Konstantin : https://github.com/skfd
-//! moment.js locale configuration
-//! locale : Chinese (Taiwan) [zh-tw]
-//! author : Ben : https://github.com/ben-lin
-//! author : Chris Lam : https://github.com/hehachris
-return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:Uh,weekdaysMin:Uh,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd، D MMMM YYYY HH:mm"},meridiemParse:/صبح|شام/,isPM:function(a){return"شام"===a},meridiem:function(a,b,c){return a<12?"صبح":"شام"},calendar:{sameDay:"[آج بوقت] LT",nextDay:"[کل بوقت] LT",nextWeek:"dddd [بوقت] LT",lastDay:"[گذشتہ روز بوقت] LT",lastWeek:"[گذشتہ] dddd [بوقت] LT",sameElse:"L"},relativeTime:{future:"%s بعد",past:"%s قبل",s:"چند سیکنڈ",m:"ایک منٹ",mm:"%d منٹ",h:"ایک گھنٹہ",hh:"%d گھنٹے",d:"ایک دن",dd:"%d دن",M:"ایک ماہ",MM:"%d ماہ",y:"ایک سال",yy:"%d سال"},preparse:function(a){return a.replace(/،/g,",")},postformat:function(a){return a.replace(/,/g,"،")},week:{dow:1,doy:4}}),a.defineLocale("uz-latn",{months:"Yanvar_Fevral_Mart_Aprel_May_Iyun_Iyul_Avgust_Sentabr_Oktabr_Noyabr_Dekabr".split("_"),monthsShort:"Yan_Fev_Mar_Apr_May_Iyun_Iyul_Avg_Sen_Okt_Noy_Dek".split("_"),weekdays:"Yakshanba_Dushanba_Seshanba_Chorshanba_Payshanba_Juma_Shanba".split("_"),weekdaysShort:"Yak_Dush_Sesh_Chor_Pay_Jum_Shan".split("_"),weekdaysMin:"Ya_Du_Se_Cho_Pa_Ju_Sha".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"D MMMM YYYY, dddd HH:mm"},calendar:{sameDay:"[Bugun soat] LT [da]",nextDay:"[Ertaga] LT [da]",nextWeek:"dddd [kuni soat] LT [da]",lastDay:"[Kecha soat] LT [da]",lastWeek:"[O'tgan] dddd [kuni soat] LT [da]",sameElse:"L"},relativeTime:{future:"Yaqin %s ichida",past:"Bir necha %s oldin",s:"soniya",m:"bir daqiqa",mm:"%d daqiqa",h:"bir soat",hh:"%d soat",d:"bir kun",dd:"%d kun",M:"bir oy",MM:"%d oy",y:"bir yil",yy:"%d yil"},week:{dow:1,doy:7}}),a.defineLocale("uz",{months:"январ_феврал_март_апрел_май_июн_июл_август_сентябр_октябр_ноябр_декабр".split("_"),monthsShort:"янв_фев_мар_апр_май_июн_июл_авг_сен_окт_ноя_дек".split("_"),weekdays:"Якшанба_Душанба_Сешанба_Чоршанба_Пайшанба_Жума_Шанба".split("_"),weekdaysShort:"Якш_Душ_Сеш_Чор_Пай_Жум_Шан".split("_"),weekdaysMin:"Як_Ду_Се_Чо_Па_Жу_Ша".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"D MMMM YYYY, dddd HH:mm"},calendar:{sameDay:"[Бугун соат] LT [да]",nextDay:"[Эртага] LT [да]",nextWeek:"dddd [куни соат] LT [да]",lastDay:"[Кеча соат] LT [да]",lastWeek:"[Утган] dddd [куни соат] LT [да]",sameElse:"L"},relativeTime:{future:"Якин %s ичида",past:"Бир неча %s олдин",s:"фурсат",m:"бир дакика",mm:"%d дакика",h:"бир соат",hh:"%d соат",d:"бир кун",dd:"%d кун",M:"бир ой",MM:"%d ой",y:"бир йил",yy:"%d йил"},week:{dow:1,doy:7}}),a.defineLocale("vi",{months:"tháng 1_tháng 2_tháng 3_tháng 4_tháng 5_tháng 6_tháng 7_tháng 8_tháng 9_tháng 10_tháng 11_tháng 12".split("_"),monthsShort:"Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12".split("_"),monthsParseExact:!0,weekdays:"chủ nhật_thứ hai_thứ ba_thứ tư_thứ năm_thứ sáu_thứ bảy".split("_"),weekdaysShort:"CN_T2_T3_T4_T5_T6_T7".split("_"),weekdaysMin:"CN_T2_T3_T4_T5_T6_T7".split("_"),weekdaysParseExact:!0,meridiemParse:/sa|ch/i,isPM:function(a){return/^ch$/i.test(a)},meridiem:function(a,b,c){return a<12?c?"sa":"SA":c?"ch":"CH"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM [năm] YYYY",LLL:"D MMMM [năm] YYYY HH:mm",LLLL:"dddd, D MMMM [năm] YYYY HH:mm",l:"DD/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY HH:mm",llll:"ddd, D MMM YYYY HH:mm"},calendar:{sameDay:"[Hôm nay lúc] LT",nextDay:"[Ngày mai lúc] LT",nextWeek:"dddd [tuần tới lúc] LT",lastDay:"[Hôm qua lúc] LT",lastWeek:"dddd [tuần rồi lúc] LT",sameElse:"L"},relativeTime:{future:"%s tới",past:"%s trước",s:"vài giây",m:"một phút",mm:"%d phút",h:"một giờ",hh:"%d giờ",d:"một ngày",dd:"%d ngày",M:"một tháng",MM:"%d tháng",y:"một năm",yy:"%d năm"},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:function(a){return a},week:{dow:1,doy:4}}),a.defineLocale("x-pseudo",{months:"J~áñúá~rý_F~ébrú~árý_~Márc~h_Áp~ríl_~Máý_~Júñé~_Júl~ý_Áú~gúst~_Sép~témb~ér_Ó~ctób~ér_Ñ~óvém~bér_~Décé~mbér".split("_"),monthsShort:"J~áñ_~Féb_~Már_~Ápr_~Máý_~Júñ_~Júl_~Áúg_~Sép_~Óct_~Ñóv_~Déc".split("_"),monthsParseExact:!0,weekdays:"S~úñdá~ý_Mó~ñdáý~_Túé~sdáý~_Wéd~ñésd~áý_T~húrs~dáý_~Fríd~áý_S~átúr~dáý".split("_"),weekdaysShort:"S~úñ_~Móñ_~Túé_~Wéd_~Thú_~Frí_~Sát".split("_"),weekdaysMin:"S~ú_Mó~_Tú_~Wé_T~h_Fr~_Sá".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[T~ódá~ý át] LT",nextDay:"[T~ómó~rró~w át] LT",nextWeek:"dddd [át] LT",lastDay:"[Ý~ést~érdá~ý át] LT",lastWeek:"[L~ást] dddd [át] LT",sameElse:"L"},relativeTime:{future:"í~ñ %s",past:"%s á~gó",s:"á ~féw ~sécó~ñds",m:"á ~míñ~úté",mm:"%d m~íñú~tés",h:"á~ñ hó~úr",hh:"%d h~óúrs",d:"á ~dáý",dd:"%d d~áýs",M:"á ~móñ~th",MM:"%d m~óñt~hs",y:"á ~ýéár",yy:"%d ý~éárs"},dayOfMonthOrdinalParse:/\d{1,2}(th|st|nd|rd)/,ordinal:function(a){var b=a%10,c=1===~~(a%100/10)?"th":1===b?"st":2===b?"nd":3===b?"rd":"th";return a+c},week:{dow:1,doy:4}}),a.defineLocale("yo",{months:"Sẹ́rẹ́_Èrèlè_Ẹrẹ̀nà_Ìgbé_Èbibi_Òkùdu_Agẹmo_Ògún_Owewe_Ọ̀wàrà_Bélú_Ọ̀pẹ̀̀".split("_"),monthsShort:"Sẹ́r_Èrl_Ẹrn_Ìgb_Èbi_Òkù_Agẹ_Ògú_Owe_Ọ̀wà_Bél_Ọ̀pẹ̀̀".split("_"),weekdays:"Àìkú_Ajé_Ìsẹ́gun_Ọjọ́rú_Ọjọ́bọ_Ẹtì_Àbámẹ́ta".split("_"),weekdaysShort:"Àìk_Ajé_Ìsẹ́_Ọjr_Ọjb_Ẹtì_Àbá".split("_"),weekdaysMin:"Àì_Aj_Ìs_Ọr_Ọb_Ẹt_Àb".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Ònì ni] LT",nextDay:"[Ọ̀la ni] LT",nextWeek:"dddd [Ọsẹ̀ tón'bọ] [ni] LT",lastDay:"[Àna ni] LT",lastWeek:"dddd [Ọsẹ̀ tólọ́] [ni] LT",sameElse:"L"},relativeTime:{future:"ní %s",past:"%s kọjá",s:"ìsẹjú aayá die",m:"ìsẹjú kan",mm:"ìsẹjú %d",h:"wákati kan",hh:"wákati %d",d:"ọjọ́ kan",dd:"ọjọ́ %d",M:"osù kan",MM:"osù %d",y:"ọdún kan",yy:"ọdún %d"},dayOfMonthOrdinalParse:/ọjọ́\s\d{1,2}/,ordinal:"ọjọ́ %d",week:{dow:1,doy:4}}),a.defineLocale("zh-cn",{months:"一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),weekdaysShort:"周日_周一_周二_周三_周四_周五_周六".split("_"),weekdaysMin:"日_一_二_三_四_五_六".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY年MMMD日",LL:"YYYY年MMMD日",LLL:"YYYY年MMMD日Ah点mm分",LLLL:"YYYY年MMMD日ddddAh点mm分",l:"YYYY年MMMD日",ll:"YYYY年MMMD日",lll:"YYYY年MMMD日 HH:mm",llll:"YYYY年MMMD日dddd HH:mm"},meridiemParse:/凌晨|早上|上午|中午|下午|晚上/,meridiemHour:function(a,b){return 12===a&&(a=0),"凌晨"===b||"早上"===b||"上午"===b?a:"下午"===b||"晚上"===b?a+12:a>=11?a:a+12},meridiem:function(a,b,c){var d=100*a+b;return d<600?"凌晨":d<900?"早上":d<1130?"上午":d<1230?"中午":d<1800?"下午":"晚上"},calendar:{sameDay:"[今天]LT",nextDay:"[明天]LT",nextWeek:"[下]ddddLT",lastDay:"[昨天]LT",lastWeek:"[上]ddddLT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(日|月|周)/,ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";case"M":return a+"月";case"w":case"W":return a+"周";default:return a}},relativeTime:{future:"%s内",past:"%s前",s:"几秒",m:"1 分钟",mm:"%d 分钟",h:"1 小时",hh:"%d 小时",d:"1 天",dd:"%d 天",M:"1 个月",MM:"%d 个月",y:"1 年",yy:"%d 年"},week:{dow:1,doy:4}}),a.defineLocale("zh-hk",{months:"一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),weekdaysShort:"週日_週一_週二_週三_週四_週五_週六".split("_"),weekdaysMin:"日_一_二_三_四_五_六".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY年MMMD日",LL:"YYYY年MMMD日",LLL:"YYYY年MMMD日 HH:mm",LLLL:"YYYY年MMMD日dddd HH:mm",l:"YYYY年MMMD日",ll:"YYYY年MMMD日",lll:"YYYY年MMMD日 HH:mm",llll:"YYYY年MMMD日dddd HH:mm"},meridiemParse:/凌晨|早上|上午|中午|下午|晚上/,meridiemHour:function(a,b){return 12===a&&(a=0),"凌晨"===b||"早上"===b||"上午"===b?a:"中午"===b?a>=11?a:a+12:"下午"===b||"晚上"===b?a+12:void 0},meridiem:function(a,b,c){var d=100*a+b;return d<600?"凌晨":d<900?"早上":d<1130?"上午":d<1230?"中午":d<1800?"下午":"晚上"},calendar:{sameDay:"[今天]LT",nextDay:"[明天]LT",nextWeek:"[下]ddddLT",lastDay:"[昨天]LT",lastWeek:"[上]ddddLT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(日|月|週)/,ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";case"M":return a+"月";case"w":case"W":return a+"週";default:return a}},relativeTime:{future:"%s內",past:"%s前",s:"幾秒",m:"1 分鐘",mm:"%d 分鐘",h:"1 小時",hh:"%d 小時",d:"1 天",dd:"%d 天",M:"1 個月",MM:"%d 個月",y:"1 年",yy:"%d 年"}}),a.defineLocale("zh-tw",{months:"一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split("_"),monthsShort:"1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月".split("_"),weekdays:"星期日_星期一_星期二_星期三_星期四_星期五_星期六".split("_"),weekdaysShort:"週日_週一_週二_週三_週四_週五_週六".split("_"),weekdaysMin:"日_一_二_三_四_五_六".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY年MMMD日",LL:"YYYY年MMMD日",LLL:"YYYY年MMMD日 HH:mm",LLLL:"YYYY年MMMD日dddd HH:mm",l:"YYYY年MMMD日",ll:"YYYY年MMMD日",lll:"YYYY年MMMD日 HH:mm",llll:"YYYY年MMMD日dddd HH:mm"},meridiemParse:/凌晨|早上|上午|中午|下午|晚上/,meridiemHour:function(a,b){return 12===a&&(a=0),"凌晨"===b||"早上"===b||"上午"===b?a:"中午"===b?a>=11?a:a+12:"下午"===b||"晚上"===b?a+12:void 0},meridiem:function(a,b,c){var d=100*a+b;return d<600?"凌晨":d<900?"早上":d<1130?"上午":d<1230?"中午":d<1800?"下午":"晚上"},calendar:{sameDay:"[今天]LT",nextDay:"[明天]LT",nextWeek:"[下]ddddLT",lastDay:"[昨天]LT",lastWeek:"[上]ddddLT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(日|月|週)/,ordinal:function(a,b){switch(b){case"d":case"D":case"DDD":return a+"日";case"M":return a+"月";case"w":case"W":return a+"週";default:return a}},relativeTime:{future:"%s內",past:"%s前",s:"幾秒",m:"1 分鐘",mm:"%d 分鐘",h:"1 小時",hh:"%d 小時",d:"1 天",dd:"%d 天",M:"1 個月",MM:"%d 個月",y:"1 年",yy:"%d 年"}}),a.locale("en"),a});
+!function(e,a){"object"==typeof exports&&"undefined"!=typeof module?module.exports=a():"function"==typeof define&&define.amd?define(a):e.moment=a()}(this,function(){"use strict";var e,n;function l(){return e.apply(null,arguments)}function _(e){return e instanceof Array||"[object Array]"===Object.prototype.toString.call(e)}function i(e){return null!=e&&"[object Object]"===Object.prototype.toString.call(e)}function o(e){return void 0===e}function m(e){return"number"==typeof e||"[object Number]"===Object.prototype.toString.call(e)}function u(e){return e instanceof Date||"[object Date]"===Object.prototype.toString.call(e)}function M(e,a){var t,s=[];for(t=0;t<e.length;++t)s.push(a(e[t],t));return s}function h(e,a){return Object.prototype.hasOwnProperty.call(e,a)}function L(e,a){for(var t in a)h(a,t)&&(e[t]=a[t]);return h(a,"toString")&&(e.toString=a.toString),h(a,"valueOf")&&(e.valueOf=a.valueOf),e}function c(e,a,t,s){return va(e,a,t,s,!0).utc()}function Y(e){return null==e._pf&&(e._pf={empty:!1,unusedTokens:[],unusedInput:[],overflow:-2,charsLeftOver:0,nullInput:!1,invalidMonth:null,invalidFormat:!1,userInvalidated:!1,iso:!1,parsedDateParts:[],meridiem:null,rfc2822:!1,weekdayMismatch:!1}),e._pf}function y(e){if(null==e._isValid){var a=Y(e),t=n.call(a.parsedDateParts,function(e){return null!=e}),s=!isNaN(e._d.getTime())&&a.overflow<0&&!a.empty&&!a.invalidMonth&&!a.invalidWeekday&&!a.weekdayMismatch&&!a.nullInput&&!a.invalidFormat&&!a.userInvalidated&&(!a.meridiem||a.meridiem&&t);if(e._strict&&(s=s&&0===a.charsLeftOver&&0===a.unusedTokens.length&&void 0===a.bigHour),null!=Object.isFrozen&&Object.isFrozen(e))return s;e._isValid=s}return e._isValid}function f(e){var a=c(NaN);return null!=e?L(Y(a),e):Y(a).userInvalidated=!0,a}n=Array.prototype.some?Array.prototype.some:function(e){for(var a=Object(this),t=a.length>>>0,s=0;s<t;s++)if(s in a&&e.call(this,a[s],s,a))return!0;return!1};var d=l.momentProperties=[];function k(e,a){var t,s,n;if(o(a._isAMomentObject)||(e._isAMomentObject=a._isAMomentObject),o(a._i)||(e._i=a._i),o(a._f)||(e._f=a._f),o(a._l)||(e._l=a._l),o(a._strict)||(e._strict=a._strict),o(a._tzm)||(e._tzm=a._tzm),o(a._isUTC)||(e._isUTC=a._isUTC),o(a._offset)||(e._offset=a._offset),o(a._pf)||(e._pf=Y(a)),o(a._locale)||(e._locale=a._locale),0<d.length)for(t=0;t<d.length;t++)o(n=a[s=d[t]])||(e[s]=n);return e}var a=!1;function p(e){k(this,e),this._d=new Date(null!=e._d?e._d.getTime():NaN),this.isValid()||(this._d=new Date(NaN)),!1===a&&(a=!0,l.updateOffset(this),a=!1)}function D(e){return e instanceof p||null!=e&&null!=e._isAMomentObject}function T(e){return e<0?Math.ceil(e)||0:Math.floor(e)}function g(e){var a=+e,t=0;return 0!==a&&isFinite(a)&&(t=T(a)),t}function r(e,a,t){var s,n=Math.min(e.length,a.length),d=Math.abs(e.length-a.length),r=0;for(s=0;s<n;s++)(t&&e[s]!==a[s]||!t&&g(e[s])!==g(a[s]))&&r++;return r+d}function w(e){!1===l.suppressDeprecationWarnings&&"undefined"!=typeof console&&console.warn&&console.warn("Deprecation warning: "+e)}function t(n,d){var r=!0;return L(function(){if(null!=l.deprecationHandler&&l.deprecationHandler(null,n),r){for(var e,a=[],t=0;t<arguments.length;t++){if(e="","object"==typeof arguments[t]){for(var s in e+="\n["+t+"] ",arguments[0])e+=s+": "+arguments[0][s]+", ";e=e.slice(0,-2)}else e=arguments[t];a.push(e)}w(n+"\nArguments: "+Array.prototype.slice.call(a).join("")+"\n"+(new Error).stack),r=!1}return d.apply(this,arguments)},d)}var s,v={};function H(e,a){null!=l.deprecationHandler&&l.deprecationHandler(e,a),v[e]||(w(a),v[e]=!0)}function S(e){return e instanceof Function||"[object Function]"===Object.prototype.toString.call(e)}function b(e,a){var t,s=L({},e);for(t in a)h(a,t)&&(i(e[t])&&i(a[t])?(s[t]={},L(s[t],e[t]),L(s[t],a[t])):null!=a[t]?s[t]=a[t]:delete s[t]);for(t in e)h(e,t)&&!h(a,t)&&i(e[t])&&(s[t]=L({},s[t]));return s}function j(e){null!=e&&this.set(e)}l.suppressDeprecationWarnings=!1,l.deprecationHandler=null,s=Object.keys?Object.keys:function(e){var a,t=[];for(a in e)h(e,a)&&t.push(a);return t};var x={};function P(e,a){var t=e.toLowerCase();x[t]=x[t+"s"]=x[a]=e}function O(e){return"string"==typeof e?x[e]||x[e.toLowerCase()]:void 0}function W(e){var a,t,s={};for(t in e)h(e,t)&&(a=O(t))&&(s[a]=e[t]);return s}var E={};function A(e,a){E[e]=a}function F(e,a,t){var s=""+Math.abs(e),n=a-s.length;return(0<=e?t?"+":"":"-")+Math.pow(10,Math.max(0,n)).toString().substr(1)+s}var z=/(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g,J=/(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g,N={},R={};function I(e,a,t,s){var n=s;"string"==typeof s&&(n=function(){return this[s]()}),e&&(R[e]=n),a&&(R[a[0]]=function(){return F(n.apply(this,arguments),a[1],a[2])}),t&&(R[t]=function(){return this.localeData().ordinal(n.apply(this,arguments),e)})}function C(e,a){return e.isValid()?(a=G(a,e.localeData()),N[a]=N[a]||function(s){var e,n,a,d=s.match(z);for(e=0,n=d.length;e<n;e++)R[d[e]]?d[e]=R[d[e]]:d[e]=(a=d[e]).match(/\[[\s\S]/)?a.replace(/^\[|\]$/g,""):a.replace(/\\/g,"");return function(e){var a,t="";for(a=0;a<n;a++)t+=S(d[a])?d[a].call(e,s):d[a];return t}}(a),N[a](e)):e.localeData().invalidDate()}function G(e,a){var t=5;function s(e){return a.longDateFormat(e)||e}for(J.lastIndex=0;0<=t&&J.test(e);)e=e.replace(J,s),J.lastIndex=0,t-=1;return e}var U=/\d/,V=/\d\d/,K=/\d{3}/,$=/\d{4}/,Z=/[+-]?\d{6}/,B=/\d\d?/,q=/\d\d\d\d?/,Q=/\d\d\d\d\d\d?/,X=/\d{1,3}/,ee=/\d{1,4}/,ae=/[+-]?\d{1,6}/,te=/\d+/,se=/[+-]?\d+/,ne=/Z|[+-]\d\d:?\d\d/gi,de=/Z|[+-]\d\d(?::?\d\d)?/gi,re=/[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i,_e={};function ie(e,t,s){_e[e]=S(t)?t:function(e,a){return e&&s?s:t}}function oe(e,a){return h(_e,e)?_e[e](a._strict,a._locale):new RegExp(me(e.replace("\\","").replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g,function(e,a,t,s,n){return a||t||s||n})))}function me(e){return e.replace(/[-\/\\^$*+?.()|[\]{}]/g,"\\$&")}var ue={};function le(e,t){var a,s=t;for("string"==typeof e&&(e=[e]),m(t)&&(s=function(e,a){a[t]=g(e)}),a=0;a<e.length;a++)ue[e[a]]=s}function Me(e,n){le(e,function(e,a,t,s){t._w=t._w||{},n(e,t._w,t,s)})}var he=0,Le=1,ce=2,Ye=3,ye=4,fe=5,ke=6,pe=7,De=8;function Te(e){return ge(e)?366:365}function ge(e){return e%4==0&&e%100!=0||e%400==0}I("Y",0,0,function(){var e=this.year();return e<=9999?""+e:"+"+e}),I(0,["YY",2],0,function(){return this.year()%100}),I(0,["YYYY",4],0,"year"),I(0,["YYYYY",5],0,"year"),I(0,["YYYYYY",6,!0],0,"year"),P("year","y"),A("year",1),ie("Y",se),ie("YY",B,V),ie("YYYY",ee,$),ie("YYYYY",ae,Z),ie("YYYYYY",ae,Z),le(["YYYYY","YYYYYY"],he),le("YYYY",function(e,a){a[he]=2===e.length?l.parseTwoDigitYear(e):g(e)}),le("YY",function(e,a){a[he]=l.parseTwoDigitYear(e)}),le("Y",function(e,a){a[he]=parseInt(e,10)}),l.parseTwoDigitYear=function(e){return g(e)+(68<g(e)?1900:2e3)};var we,ve=He("FullYear",!0);function He(a,t){return function(e){return null!=e?(be(this,a,e),l.updateOffset(this,t),this):Se(this,a)}}function Se(e,a){return e.isValid()?e._d["get"+(e._isUTC?"UTC":"")+a]():NaN}function be(e,a,t){e.isValid()&&!isNaN(t)&&("FullYear"===a&&ge(e.year())&&1===e.month()&&29===e.date()?e._d["set"+(e._isUTC?"UTC":"")+a](t,e.month(),je(t,e.month())):e._d["set"+(e._isUTC?"UTC":"")+a](t))}function je(e,a){if(isNaN(e)||isNaN(a))return NaN;var t,s=(a%(t=12)+t)%t;return e+=(a-s)/12,1===s?ge(e)?29:28:31-s%7%2}we=Array.prototype.indexOf?Array.prototype.indexOf:function(e){var a;for(a=0;a<this.length;++a)if(this[a]===e)return a;return-1},I("M",["MM",2],"Mo",function(){return this.month()+1}),I("MMM",0,0,function(e){return this.localeData().monthsShort(this,e)}),I("MMMM",0,0,function(e){return this.localeData().months(this,e)}),P("month","M"),A("month",8),ie("M",B),ie("MM",B,V),ie("MMM",function(e,a){return a.monthsShortRegex(e)}),ie("MMMM",function(e,a){return a.monthsRegex(e)}),le(["M","MM"],function(e,a){a[Le]=g(e)-1}),le(["MMM","MMMM"],function(e,a,t,s){var n=t._locale.monthsParse(e,s,t._strict);null!=n?a[Le]=n:Y(t).invalidMonth=e});var xe=/D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/,Pe="January_February_March_April_May_June_July_August_September_October_November_December".split("_");var Oe="Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_");function We(e,a){var t;if(!e.isValid())return e;if("string"==typeof a)if(/^\d+$/.test(a))a=g(a);else if(!m(a=e.localeData().monthsParse(a)))return e;return t=Math.min(e.date(),je(e.year(),a)),e._d["set"+(e._isUTC?"UTC":"")+"Month"](a,t),e}function Ee(e){return null!=e?(We(this,e),l.updateOffset(this,!0),this):Se(this,"Month")}var Ae=re;var Fe=re;function ze(){function e(e,a){return a.length-e.length}var a,t,s=[],n=[],d=[];for(a=0;a<12;a++)t=c([2e3,a]),s.push(this.monthsShort(t,"")),n.push(this.months(t,"")),d.push(this.months(t,"")),d.push(this.monthsShort(t,""));for(s.sort(e),n.sort(e),d.sort(e),a=0;a<12;a++)s[a]=me(s[a]),n[a]=me(n[a]);for(a=0;a<24;a++)d[a]=me(d[a]);this._monthsRegex=new RegExp("^("+d.join("|")+")","i"),this._monthsShortRegex=this._monthsRegex,this._monthsStrictRegex=new RegExp("^("+n.join("|")+")","i"),this._monthsShortStrictRegex=new RegExp("^("+s.join("|")+")","i")}function Je(e){var a=new Date(Date.UTC.apply(null,arguments));return e<100&&0<=e&&isFinite(a.getUTCFullYear())&&a.setUTCFullYear(e),a}function Ne(e,a,t){var s=7+a-t;return-((7+Je(e,0,s).getUTCDay()-a)%7)+s-1}function Re(e,a,t,s,n){var d,r,_=1+7*(a-1)+(7+t-s)%7+Ne(e,s,n);return r=_<=0?Te(d=e-1)+_:_>Te(e)?(d=e+1,_-Te(e)):(d=e,_),{year:d,dayOfYear:r}}function Ie(e,a,t){var s,n,d=Ne(e.year(),a,t),r=Math.floor((e.dayOfYear()-d-1)/7)+1;return r<1?s=r+Ce(n=e.year()-1,a,t):r>Ce(e.year(),a,t)?(s=r-Ce(e.year(),a,t),n=e.year()+1):(n=e.year(),s=r),{week:s,year:n}}function Ce(e,a,t){var s=Ne(e,a,t),n=Ne(e+1,a,t);return(Te(e)-s+n)/7}I("w",["ww",2],"wo","week"),I("W",["WW",2],"Wo","isoWeek"),P("week","w"),P("isoWeek","W"),A("week",5),A("isoWeek",5),ie("w",B),ie("ww",B,V),ie("W",B),ie("WW",B,V),Me(["w","ww","W","WW"],function(e,a,t,s){a[s.substr(0,1)]=g(e)});I("d",0,"do","day"),I("dd",0,0,function(e){return this.localeData().weekdaysMin(this,e)}),I("ddd",0,0,function(e){return this.localeData().weekdaysShort(this,e)}),I("dddd",0,0,function(e){return this.localeData().weekdays(this,e)}),I("e",0,0,"weekday"),I("E",0,0,"isoWeekday"),P("day","d"),P("weekday","e"),P("isoWeekday","E"),A("day",11),A("weekday",11),A("isoWeekday",11),ie("d",B),ie("e",B),ie("E",B),ie("dd",function(e,a){return a.weekdaysMinRegex(e)}),ie("ddd",function(e,a){return a.weekdaysShortRegex(e)}),ie("dddd",function(e,a){return a.weekdaysRegex(e)}),Me(["dd","ddd","dddd"],function(e,a,t,s){var n=t._locale.weekdaysParse(e,s,t._strict);null!=n?a.d=n:Y(t).invalidWeekday=e}),Me(["d","e","E"],function(e,a,t,s){a[s]=g(e)});var Ge="Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_");var Ue="Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_");var Ve="Su_Mo_Tu_We_Th_Fr_Sa".split("_");var Ke=re;var $e=re;var Ze=re;function Be(){function e(e,a){return a.length-e.length}var a,t,s,n,d,r=[],_=[],i=[],o=[];for(a=0;a<7;a++)t=c([2e3,1]).day(a),s=this.weekdaysMin(t,""),n=this.weekdaysShort(t,""),d=this.weekdays(t,""),r.push(s),_.push(n),i.push(d),o.push(s),o.push(n),o.push(d);for(r.sort(e),_.sort(e),i.sort(e),o.sort(e),a=0;a<7;a++)_[a]=me(_[a]),i[a]=me(i[a]),o[a]=me(o[a]);this._weekdaysRegex=new RegExp("^("+o.join("|")+")","i"),this._weekdaysShortRegex=this._weekdaysRegex,this._weekdaysMinRegex=this._weekdaysRegex,this._weekdaysStrictRegex=new RegExp("^("+i.join("|")+")","i"),this._weekdaysShortStrictRegex=new RegExp("^("+_.join("|")+")","i"),this._weekdaysMinStrictRegex=new RegExp("^("+r.join("|")+")","i")}function qe(){return this.hours()%12||12}function Qe(e,a){I(e,0,0,function(){return this.localeData().meridiem(this.hours(),this.minutes(),a)})}function Xe(e,a){return a._meridiemParse}I("H",["HH",2],0,"hour"),I("h",["hh",2],0,qe),I("k",["kk",2],0,function(){return this.hours()||24}),I("hmm",0,0,function(){return""+qe.apply(this)+F(this.minutes(),2)}),I("hmmss",0,0,function(){return""+qe.apply(this)+F(this.minutes(),2)+F(this.seconds(),2)}),I("Hmm",0,0,function(){return""+this.hours()+F(this.minutes(),2)}),I("Hmmss",0,0,function(){return""+this.hours()+F(this.minutes(),2)+F(this.seconds(),2)}),Qe("a",!0),Qe("A",!1),P("hour","h"),A("hour",13),ie("a",Xe),ie("A",Xe),ie("H",B),ie("h",B),ie("k",B),ie("HH",B,V),ie("hh",B,V),ie("kk",B,V),ie("hmm",q),ie("hmmss",Q),ie("Hmm",q),ie("Hmmss",Q),le(["H","HH"],Ye),le(["k","kk"],function(e,a,t){var s=g(e);a[Ye]=24===s?0:s}),le(["a","A"],function(e,a,t){t._isPm=t._locale.isPM(e),t._meridiem=e}),le(["h","hh"],function(e,a,t){a[Ye]=g(e),Y(t).bigHour=!0}),le("hmm",function(e,a,t){var s=e.length-2;a[Ye]=g(e.substr(0,s)),a[ye]=g(e.substr(s)),Y(t).bigHour=!0}),le("hmmss",function(e,a,t){var s=e.length-4,n=e.length-2;a[Ye]=g(e.substr(0,s)),a[ye]=g(e.substr(s,2)),a[fe]=g(e.substr(n)),Y(t).bigHour=!0}),le("Hmm",function(e,a,t){var s=e.length-2;a[Ye]=g(e.substr(0,s)),a[ye]=g(e.substr(s))}),le("Hmmss",function(e,a,t){var s=e.length-4,n=e.length-2;a[Ye]=g(e.substr(0,s)),a[ye]=g(e.substr(s,2)),a[fe]=g(e.substr(n))});var ea,aa=He("Hours",!0),ta={calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},longDateFormat:{LTS:"h:mm:ss A",LT:"h:mm A",L:"MM/DD/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY h:mm A",LLLL:"dddd, MMMM D, YYYY h:mm A"},invalidDate:"Invalid date",ordinal:"%d",dayOfMonthOrdinalParse:/\d{1,2}/,relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},months:Pe,monthsShort:Oe,week:{dow:0,doy:6},weekdays:Ge,weekdaysMin:Ve,weekdaysShort:Ue,meridiemParse:/[ap]\.?m?\.?/i},sa={},na={};function da(e){return e?e.toLowerCase().replace("_","-"):e}function ra(e){var a=null;if(!sa[e]&&"undefined"!=typeof module&&module&&module.exports)try{a=ea._abbr,require("./locale/"+e),_a(a)}catch(e){}return sa[e]}function _a(e,a){var t;return e&&((t=o(a)?oa(e):ia(e,a))?ea=t:"undefined"!=typeof console&&console.warn&&console.warn("Locale "+e+" not found. Did you forget to load it?")),ea._abbr}function ia(e,a){if(null===a)return delete sa[e],null;var t,s=ta;if(a.abbr=e,null!=sa[e])H("defineLocaleOverride","use moment.updateLocale(localeName, config) to change an existing locale. moment.defineLocale(localeName, config) should only be used for creating a new locale See http://momentjs.com/guides/#/warnings/define-locale/ for more info."),s=sa[e]._config;else if(null!=a.parentLocale)if(null!=sa[a.parentLocale])s=sa[a.parentLocale]._config;else{if(null==(t=ra(a.parentLocale)))return na[a.parentLocale]||(na[a.parentLocale]=[]),na[a.parentLocale].push({name:e,config:a}),null;s=t._config}return sa[e]=new j(b(s,a)),na[e]&&na[e].forEach(function(e){ia(e.name,e.config)}),_a(e),sa[e]}function oa(e){var a;if(e&&e._locale&&e._locale._abbr&&(e=e._locale._abbr),!e)return ea;if(!_(e)){if(a=ra(e))return a;e=[e]}return function(e){for(var a,t,s,n,d=0;d<e.length;){for(a=(n=da(e[d]).split("-")).length,t=(t=da(e[d+1]))?t.split("-"):null;0<a;){if(s=ra(n.slice(0,a).join("-")))return s;if(t&&t.length>=a&&r(n,t,!0)>=a-1)break;a--}d++}return ea}(e)}function ma(e){var a,t=e._a;return t&&-2===Y(e).overflow&&(a=t[Le]<0||11<t[Le]?Le:t[ce]<1||t[ce]>je(t[he],t[Le])?ce:t[Ye]<0||24<t[Ye]||24===t[Ye]&&(0!==t[ye]||0!==t[fe]||0!==t[ke])?Ye:t[ye]<0||59<t[ye]?ye:t[fe]<0||59<t[fe]?fe:t[ke]<0||999<t[ke]?ke:-1,Y(e)._overflowDayOfYear&&(a<he||ce<a)&&(a=ce),Y(e)._overflowWeeks&&-1===a&&(a=pe),Y(e)._overflowWeekday&&-1===a&&(a=De),Y(e).overflow=a),e}function ua(e,a,t){return null!=e?e:null!=a?a:t}function la(e){var a,t,s,n,d,r=[];if(!e._d){var _,i;for(_=e,i=new Date(l.now()),s=_._useUTC?[i.getUTCFullYear(),i.getUTCMonth(),i.getUTCDate()]:[i.getFullYear(),i.getMonth(),i.getDate()],e._w&&null==e._a[ce]&&null==e._a[Le]&&function(e){var a,t,s,n,d,r,_,i;if(null!=(a=e._w).GG||null!=a.W||null!=a.E)d=1,r=4,t=ua(a.GG,e._a[he],Ie(Ha(),1,4).year),s=ua(a.W,1),((n=ua(a.E,1))<1||7<n)&&(i=!0);else{d=e._locale._week.dow,r=e._locale._week.doy;var o=Ie(Ha(),d,r);t=ua(a.gg,e._a[he],o.year),s=ua(a.w,o.week),null!=a.d?((n=a.d)<0||6<n)&&(i=!0):null!=a.e?(n=a.e+d,(a.e<0||6<a.e)&&(i=!0)):n=d}s<1||s>Ce(t,d,r)?Y(e)._overflowWeeks=!0:null!=i?Y(e)._overflowWeekday=!0:(_=Re(t,s,n,d,r),e._a[he]=_.year,e._dayOfYear=_.dayOfYear)}(e),null!=e._dayOfYear&&(d=ua(e._a[he],s[he]),(e._dayOfYear>Te(d)||0===e._dayOfYear)&&(Y(e)._overflowDayOfYear=!0),t=Je(d,0,e._dayOfYear),e._a[Le]=t.getUTCMonth(),e._a[ce]=t.getUTCDate()),a=0;a<3&&null==e._a[a];++a)e._a[a]=r[a]=s[a];for(;a<7;a++)e._a[a]=r[a]=null==e._a[a]?2===a?1:0:e._a[a];24===e._a[Ye]&&0===e._a[ye]&&0===e._a[fe]&&0===e._a[ke]&&(e._nextDay=!0,e._a[Ye]=0),e._d=(e._useUTC?Je:function(e,a,t,s,n,d,r){var _=new Date(e,a,t,s,n,d,r);return e<100&&0<=e&&isFinite(_.getFullYear())&&_.setFullYear(e),_}).apply(null,r),n=e._useUTC?e._d.getUTCDay():e._d.getDay(),null!=e._tzm&&e._d.setUTCMinutes(e._d.getUTCMinutes()-e._tzm),e._nextDay&&(e._a[Ye]=24),e._w&&void 0!==e._w.d&&e._w.d!==n&&(Y(e).weekdayMismatch=!0)}}var Ma=/^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,ha=/^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/,La=/Z|[+-]\d\d(?::?\d\d)?/,ca=[["YYYYYY-MM-DD",/[+-]\d{6}-\d\d-\d\d/],["YYYY-MM-DD",/\d{4}-\d\d-\d\d/],["GGGG-[W]WW-E",/\d{4}-W\d\d-\d/],["GGGG-[W]WW",/\d{4}-W\d\d/,!1],["YYYY-DDD",/\d{4}-\d{3}/],["YYYY-MM",/\d{4}-\d\d/,!1],["YYYYYYMMDD",/[+-]\d{10}/],["YYYYMMDD",/\d{8}/],["GGGG[W]WWE",/\d{4}W\d{3}/],["GGGG[W]WW",/\d{4}W\d{2}/,!1],["YYYYDDD",/\d{7}/]],Ya=[["HH:mm:ss.SSSS",/\d\d:\d\d:\d\d\.\d+/],["HH:mm:ss,SSSS",/\d\d:\d\d:\d\d,\d+/],["HH:mm:ss",/\d\d:\d\d:\d\d/],["HH:mm",/\d\d:\d\d/],["HHmmss.SSSS",/\d\d\d\d\d\d\.\d+/],["HHmmss,SSSS",/\d\d\d\d\d\d,\d+/],["HHmmss",/\d\d\d\d\d\d/],["HHmm",/\d\d\d\d/],["HH",/\d\d/]],ya=/^\/?Date\((\-?\d+)/i;function fa(e){var a,t,s,n,d,r,_=e._i,i=Ma.exec(_)||ha.exec(_);if(i){for(Y(e).iso=!0,a=0,t=ca.length;a<t;a++)if(ca[a][1].exec(i[1])){n=ca[a][0],s=!1!==ca[a][2];break}if(null==n)return void(e._isValid=!1);if(i[3]){for(a=0,t=Ya.length;a<t;a++)if(Ya[a][1].exec(i[3])){d=(i[2]||" ")+Ya[a][0];break}if(null==d)return void(e._isValid=!1)}if(!s&&null!=d)return void(e._isValid=!1);if(i[4]){if(!La.exec(i[4]))return void(e._isValid=!1);r="Z"}e._f=n+(d||"")+(r||""),ga(e)}else e._isValid=!1}var ka=/^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/;function pa(e,a,t,s,n,d){var r=[function(e){var a=parseInt(e,10);{if(a<=49)return 2e3+a;if(a<=999)return 1900+a}return a}(e),Oe.indexOf(a),parseInt(t,10),parseInt(s,10),parseInt(n,10)];return d&&r.push(parseInt(d,10)),r}var Da={UT:0,GMT:0,EDT:-240,EST:-300,CDT:-300,CST:-360,MDT:-360,MST:-420,PDT:-420,PST:-480};function Ta(e){var a,t,s,n=ka.exec(e._i.replace(/\([^)]*\)|[\n\t]/g," ").replace(/(\s\s+)/g," ").replace(/^\s\s*/,"").replace(/\s\s*$/,""));if(n){var d=pa(n[4],n[3],n[2],n[5],n[6],n[7]);if(a=n[1],t=d,s=e,a&&Ue.indexOf(a)!==new Date(t[0],t[1],t[2]).getDay()&&(Y(s).weekdayMismatch=!0,!(s._isValid=!1)))return;e._a=d,e._tzm=function(e,a,t){if(e)return Da[e];if(a)return 0;var s=parseInt(t,10),n=s%100;return(s-n)/100*60+n}(n[8],n[9],n[10]),e._d=Je.apply(null,e._a),e._d.setUTCMinutes(e._d.getUTCMinutes()-e._tzm),Y(e).rfc2822=!0}else e._isValid=!1}function ga(e){if(e._f!==l.ISO_8601)if(e._f!==l.RFC_2822){e._a=[],Y(e).empty=!0;var a,t,s,n,d,r,_,i,o=""+e._i,m=o.length,u=0;for(s=G(e._f,e._locale).match(z)||[],a=0;a<s.length;a++)n=s[a],(t=(o.match(oe(n,e))||[])[0])&&(0<(d=o.substr(0,o.indexOf(t))).length&&Y(e).unusedInput.push(d),o=o.slice(o.indexOf(t)+t.length),u+=t.length),R[n]?(t?Y(e).empty=!1:Y(e).unusedTokens.push(n),r=n,i=e,null!=(_=t)&&h(ue,r)&&ue[r](_,i._a,i,r)):e._strict&&!t&&Y(e).unusedTokens.push(n);Y(e).charsLeftOver=m-u,0<o.length&&Y(e).unusedInput.push(o),e._a[Ye]<=12&&!0===Y(e).bigHour&&0<e._a[Ye]&&(Y(e).bigHour=void 0),Y(e).parsedDateParts=e._a.slice(0),Y(e).meridiem=e._meridiem,e._a[Ye]=function(e,a,t){var s;if(null==t)return a;return null!=e.meridiemHour?e.meridiemHour(a,t):(null!=e.isPM&&((s=e.isPM(t))&&a<12&&(a+=12),s||12!==a||(a=0)),a)}(e._locale,e._a[Ye],e._meridiem),la(e),ma(e)}else Ta(e);else fa(e)}function wa(e){var a,t,s,n,d=e._i,r=e._f;return e._locale=e._locale||oa(e._l),null===d||void 0===r&&""===d?f({nullInput:!0}):("string"==typeof d&&(e._i=d=e._locale.preparse(d)),D(d)?new p(ma(d)):(u(d)?e._d=d:_(r)?function(e){var a,t,s,n,d;if(0===e._f.length)return Y(e).invalidFormat=!0,e._d=new Date(NaN);for(n=0;n<e._f.length;n++)d=0,a=k({},e),null!=e._useUTC&&(a._useUTC=e._useUTC),a._f=e._f[n],ga(a),y(a)&&(d+=Y(a).charsLeftOver,d+=10*Y(a).unusedTokens.length,Y(a).score=d,(null==s||d<s)&&(s=d,t=a));L(e,t||a)}(e):r?ga(e):o(t=(a=e)._i)?a._d=new Date(l.now()):u(t)?a._d=new Date(t.valueOf()):"string"==typeof t?(s=a,null===(n=ya.exec(s._i))?(fa(s),!1===s._isValid&&(delete s._isValid,Ta(s),!1===s._isValid&&(delete s._isValid,l.createFromInputFallback(s)))):s._d=new Date(+n[1])):_(t)?(a._a=M(t.slice(0),function(e){return parseInt(e,10)}),la(a)):i(t)?function(e){if(!e._d){var a=W(e._i);e._a=M([a.year,a.month,a.day||a.date,a.hour,a.minute,a.second,a.millisecond],function(e){return e&&parseInt(e,10)}),la(e)}}(a):m(t)?a._d=new Date(t):l.createFromInputFallback(a),y(e)||(e._d=null),e))}function va(e,a,t,s,n){var d,r={};return!0!==t&&!1!==t||(s=t,t=void 0),(i(e)&&function(e){if(Object.getOwnPropertyNames)return 0===Object.getOwnPropertyNames(e).length;var a;for(a in e)if(e.hasOwnProperty(a))return!1;return!0}(e)||_(e)&&0===e.length)&&(e=void 0),r._isAMomentObject=!0,r._useUTC=r._isUTC=n,r._l=t,r._i=e,r._f=a,r._strict=s,(d=new p(ma(wa(r))))._nextDay&&(d.add(1,"d"),d._nextDay=void 0),d}function Ha(e,a,t,s){return va(e,a,t,s,!1)}l.createFromInputFallback=t("value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are discouraged and will be removed in an upcoming major release. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.",function(e){e._d=new Date(e._i+(e._useUTC?" UTC":""))}),l.ISO_8601=function(){},l.RFC_2822=function(){};var Sa=t("moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/",function(){var e=Ha.apply(null,arguments);return this.isValid()&&e.isValid()?e<this?this:e:f()}),ba=t("moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/",function(){var e=Ha.apply(null,arguments);return this.isValid()&&e.isValid()?this<e?this:e:f()});function ja(e,a){var t,s;if(1===a.length&&_(a[0])&&(a=a[0]),!a.length)return Ha();for(t=a[0],s=1;s<a.length;++s)a[s].isValid()&&!a[s][e](t)||(t=a[s]);return t}var xa=["year","quarter","month","week","day","hour","minute","second","millisecond"];function Pa(e){var a=W(e),t=a.year||0,s=a.quarter||0,n=a.month||0,d=a.week||a.isoWeek||0,r=a.day||0,_=a.hour||0,i=a.minute||0,o=a.second||0,m=a.millisecond||0;this._isValid=function(e){for(var a in e)if(-1===we.call(xa,a)||null!=e[a]&&isNaN(e[a]))return!1;for(var t=!1,s=0;s<xa.length;++s)if(e[xa[s]]){if(t)return!1;parseFloat(e[xa[s]])!==g(e[xa[s]])&&(t=!0)}return!0}(a),this._milliseconds=+m+1e3*o+6e4*i+1e3*_*60*60,this._days=+r+7*d,this._months=+n+3*s+12*t,this._data={},this._locale=oa(),this._bubble()}function Oa(e){return e instanceof Pa}function Wa(e){return e<0?-1*Math.round(-1*e):Math.round(e)}function Ea(e,t){I(e,0,0,function(){var e=this.utcOffset(),a="+";return e<0&&(e=-e,a="-"),a+F(~~(e/60),2)+t+F(~~e%60,2)})}Ea("Z",":"),Ea("ZZ",""),ie("Z",de),ie("ZZ",de),le(["Z","ZZ"],function(e,a,t){t._useUTC=!0,t._tzm=Fa(de,e)});var Aa=/([\+\-]|\d\d)/gi;function Fa(e,a){var t=(a||"").match(e);if(null===t)return null;var s=((t[t.length-1]||[])+"").match(Aa)||["-",0,0],n=60*s[1]+g(s[2]);return 0===n?0:"+"===s[0]?n:-n}function za(e,a){var t,s;return a._isUTC?(t=a.clone(),s=(D(e)||u(e)?e.valueOf():Ha(e).valueOf())-t.valueOf(),t._d.setTime(t._d.valueOf()+s),l.updateOffset(t,!1),t):Ha(e).local()}function Ja(e){return 15*-Math.round(e._d.getTimezoneOffset()/15)}function Na(){return!!this.isValid()&&(this._isUTC&&0===this._offset)}l.updateOffset=function(){};var Ra=/^(\-|\+)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/,Ia=/^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;function Ca(e,a){var t,s,n,d=e,r=null;return Oa(e)?d={ms:e._milliseconds,d:e._days,M:e._months}:m(e)?(d={},a?d[a]=e:d.milliseconds=e):(r=Ra.exec(e))?(t="-"===r[1]?-1:1,d={y:0,d:g(r[ce])*t,h:g(r[Ye])*t,m:g(r[ye])*t,s:g(r[fe])*t,ms:g(Wa(1e3*r[ke]))*t}):(r=Ia.exec(e))?(t="-"===r[1]?-1:1,d={y:Ga(r[2],t),M:Ga(r[3],t),w:Ga(r[4],t),d:Ga(r[5],t),h:Ga(r[6],t),m:Ga(r[7],t),s:Ga(r[8],t)}):null==d?d={}:"object"==typeof d&&("from"in d||"to"in d)&&(n=function(e,a){var t;if(!e.isValid()||!a.isValid())return{milliseconds:0,months:0};a=za(a,e),e.isBefore(a)?t=Ua(e,a):((t=Ua(a,e)).milliseconds=-t.milliseconds,t.months=-t.months);return t}(Ha(d.from),Ha(d.to)),(d={}).ms=n.milliseconds,d.M=n.months),s=new Pa(d),Oa(e)&&h(e,"_locale")&&(s._locale=e._locale),s}function Ga(e,a){var t=e&&parseFloat(e.replace(",","."));return(isNaN(t)?0:t)*a}function Ua(e,a){var t={milliseconds:0,months:0};return t.months=a.month()-e.month()+12*(a.year()-e.year()),e.clone().add(t.months,"M").isAfter(a)&&--t.months,t.milliseconds=+a-+e.clone().add(t.months,"M"),t}function Va(s,n){return function(e,a){var t;return null===a||isNaN(+a)||(H(n,"moment()."+n+"(period, number) is deprecated. Please use moment()."+n+"(number, period). See http://momentjs.com/guides/#/warnings/add-inverted-param/ for more info."),t=e,e=a,a=t),Ka(this,Ca(e="string"==typeof e?+e:e,a),s),this}}function Ka(e,a,t,s){var n=a._milliseconds,d=Wa(a._days),r=Wa(a._months);e.isValid()&&(s=null==s||s,r&&We(e,Se(e,"Month")+r*t),d&&be(e,"Date",Se(e,"Date")+d*t),n&&e._d.setTime(e._d.valueOf()+n*t),s&&l.updateOffset(e,d||r))}Ca.fn=Pa.prototype,Ca.invalid=function(){return Ca(NaN)};var $a=Va(1,"add"),Za=Va(-1,"subtract");function Ba(e,a){var t=12*(a.year()-e.year())+(a.month()-e.month()),s=e.clone().add(t,"months");return-(t+(a-s<0?(a-s)/(s-e.clone().add(t-1,"months")):(a-s)/(e.clone().add(t+1,"months")-s)))||0}function qa(e){var a;return void 0===e?this._locale._abbr:(null!=(a=oa(e))&&(this._locale=a),this)}l.defaultFormat="YYYY-MM-DDTHH:mm:ssZ",l.defaultFormatUtc="YYYY-MM-DDTHH:mm:ss[Z]";var Qa=t("moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.",function(e){return void 0===e?this.localeData():this.locale(e)});function Xa(){return this._locale}function et(e,a){I(0,[e,e.length],0,a)}function at(e,a,t,s,n){var d;return null==e?Ie(this,s,n).year:((d=Ce(e,s,n))<a&&(a=d),function(e,a,t,s,n){var d=Re(e,a,t,s,n),r=Je(d.year,0,d.dayOfYear);return this.year(r.getUTCFullYear()),this.month(r.getUTCMonth()),this.date(r.getUTCDate()),this}.call(this,e,a,t,s,n))}I(0,["gg",2],0,function(){return this.weekYear()%100}),I(0,["GG",2],0,function(){return this.isoWeekYear()%100}),et("gggg","weekYear"),et("ggggg","weekYear"),et("GGGG","isoWeekYear"),et("GGGGG","isoWeekYear"),P("weekYear","gg"),P("isoWeekYear","GG"),A("weekYear",1),A("isoWeekYear",1),ie("G",se),ie("g",se),ie("GG",B,V),ie("gg",B,V),ie("GGGG",ee,$),ie("gggg",ee,$),ie("GGGGG",ae,Z),ie("ggggg",ae,Z),Me(["gggg","ggggg","GGGG","GGGGG"],function(e,a,t,s){a[s.substr(0,2)]=g(e)}),Me(["gg","GG"],function(e,a,t,s){a[s]=l.parseTwoDigitYear(e)}),I("Q",0,"Qo","quarter"),P("quarter","Q"),A("quarter",7),ie("Q",U),le("Q",function(e,a){a[Le]=3*(g(e)-1)}),I("D",["DD",2],"Do","date"),P("date","D"),A("date",9),ie("D",B),ie("DD",B,V),ie("Do",function(e,a){return e?a._dayOfMonthOrdinalParse||a._ordinalParse:a._dayOfMonthOrdinalParseLenient}),le(["D","DD"],ce),le("Do",function(e,a){a[ce]=g(e.match(B)[0])});var tt=He("Date",!0);I("DDD",["DDDD",3],"DDDo","dayOfYear"),P("dayOfYear","DDD"),A("dayOfYear",4),ie("DDD",X),ie("DDDD",K),le(["DDD","DDDD"],function(e,a,t){t._dayOfYear=g(e)}),I("m",["mm",2],0,"minute"),P("minute","m"),A("minute",14),ie("m",B),ie("mm",B,V),le(["m","mm"],ye);var st=He("Minutes",!1);I("s",["ss",2],0,"second"),P("second","s"),A("second",15),ie("s",B),ie("ss",B,V),le(["s","ss"],fe);var nt,dt=He("Seconds",!1);for(I("S",0,0,function(){return~~(this.millisecond()/100)}),I(0,["SS",2],0,function(){return~~(this.millisecond()/10)}),I(0,["SSS",3],0,"millisecond"),I(0,["SSSS",4],0,function(){return 10*this.millisecond()}),I(0,["SSSSS",5],0,function(){return 100*this.millisecond()}),I(0,["SSSSSS",6],0,function(){return 1e3*this.millisecond()}),I(0,["SSSSSSS",7],0,function(){return 1e4*this.millisecond()}),I(0,["SSSSSSSS",8],0,function(){return 1e5*this.millisecond()}),I(0,["SSSSSSSSS",9],0,function(){return 1e6*this.millisecond()}),P("millisecond","ms"),A("millisecond",16),ie("S",X,U),ie("SS",X,V),ie("SSS",X,K),nt="SSSS";nt.length<=9;nt+="S")ie(nt,te);function rt(e,a){a[ke]=g(1e3*("0."+e))}for(nt="S";nt.length<=9;nt+="S")le(nt,rt);var _t=He("Milliseconds",!1);I("z",0,0,"zoneAbbr"),I("zz",0,0,"zoneName");var it=p.prototype;function ot(e){return e}it.add=$a,it.calendar=function(e,a){var t=e||Ha(),s=za(t,this).startOf("day"),n=l.calendarFormat(this,s)||"sameElse",d=a&&(S(a[n])?a[n].call(this,t):a[n]);return this.format(d||this.localeData().calendar(n,this,Ha(t)))},it.clone=function(){return new p(this)},it.diff=function(e,a,t){var s,n,d;if(!this.isValid())return NaN;if(!(s=za(e,this)).isValid())return NaN;switch(n=6e4*(s.utcOffset()-this.utcOffset()),a=O(a)){case"year":d=Ba(this,s)/12;break;case"month":d=Ba(this,s);break;case"quarter":d=Ba(this,s)/3;break;case"second":d=(this-s)/1e3;break;case"minute":d=(this-s)/6e4;break;case"hour":d=(this-s)/36e5;break;case"day":d=(this-s-n)/864e5;break;case"week":d=(this-s-n)/6048e5;break;default:d=this-s}return t?d:T(d)},it.endOf=function(e){return void 0===(e=O(e))||"millisecond"===e?this:("date"===e&&(e="day"),this.startOf(e).add(1,"isoWeek"===e?"week":e).subtract(1,"ms"))},it.format=function(e){e||(e=this.isUtc()?l.defaultFormatUtc:l.defaultFormat);var a=C(this,e);return this.localeData().postformat(a)},it.from=function(e,a){return this.isValid()&&(D(e)&&e.isValid()||Ha(e).isValid())?Ca({to:this,from:e}).locale(this.locale()).humanize(!a):this.localeData().invalidDate()},it.fromNow=function(e){return this.from(Ha(),e)},it.to=function(e,a){return this.isValid()&&(D(e)&&e.isValid()||Ha(e).isValid())?Ca({from:this,to:e}).locale(this.locale()).humanize(!a):this.localeData().invalidDate()},it.toNow=function(e){return this.to(Ha(),e)},it.get=function(e){return S(this[e=O(e)])?this[e]():this},it.invalidAt=function(){return Y(this).overflow},it.isAfter=function(e,a){var t=D(e)?e:Ha(e);return!(!this.isValid()||!t.isValid())&&("millisecond"===(a=O(a)||"millisecond")?this.valueOf()>t.valueOf():t.valueOf()<this.clone().startOf(a).valueOf())},it.isBefore=function(e,a){var t=D(e)?e:Ha(e);return!(!this.isValid()||!t.isValid())&&("millisecond"===(a=O(a)||"millisecond")?this.valueOf()<t.valueOf():this.clone().endOf(a).valueOf()<t.valueOf())},it.isBetween=function(e,a,t,s){var n=D(e)?e:Ha(e),d=D(a)?a:Ha(a);return!!(this.isValid()&&n.isValid()&&d.isValid())&&("("===(s=s||"()")[0]?this.isAfter(n,t):!this.isBefore(n,t))&&(")"===s[1]?this.isBefore(d,t):!this.isAfter(d,t))},it.isSame=function(e,a){var t,s=D(e)?e:Ha(e);return!(!this.isValid()||!s.isValid())&&("millisecond"===(a=O(a)||"millisecond")?this.valueOf()===s.valueOf():(t=s.valueOf(),this.clone().startOf(a).valueOf()<=t&&t<=this.clone().endOf(a).valueOf()))},it.isSameOrAfter=function(e,a){return this.isSame(e,a)||this.isAfter(e,a)},it.isSameOrBefore=function(e,a){return this.isSame(e,a)||this.isBefore(e,a)},it.isValid=function(){return y(this)},it.lang=Qa,it.locale=qa,it.localeData=Xa,it.max=ba,it.min=Sa,it.parsingFlags=function(){return L({},Y(this))},it.set=function(e,a){if("object"==typeof e)for(var t=function(e){var a=[];for(var t in e)a.push({unit:t,priority:E[t]});return a.sort(function(e,a){return e.priority-a.priority}),a}(e=W(e)),s=0;s<t.length;s++)this[t[s].unit](e[t[s].unit]);else if(S(this[e=O(e)]))return this[e](a);return this},it.startOf=function(e){switch(e=O(e)){case"year":this.month(0);case"quarter":case"month":this.date(1);case"week":case"isoWeek":case"day":case"date":this.hours(0);case"hour":this.minutes(0);case"minute":this.seconds(0);case"second":this.milliseconds(0)}return"week"===e&&this.weekday(0),"isoWeek"===e&&this.isoWeekday(1),"quarter"===e&&this.month(3*Math.floor(this.month()/3)),this},it.subtract=Za,it.toArray=function(){var e=this;return[e.year(),e.month(),e.date(),e.hour(),e.minute(),e.second(),e.millisecond()]},it.toObject=function(){var e=this;return{years:e.year(),months:e.month(),date:e.date(),hours:e.hours(),minutes:e.minutes(),seconds:e.seconds(),milliseconds:e.milliseconds()}},it.toDate=function(){return new Date(this.valueOf())},it.toISOString=function(e){if(!this.isValid())return null;var a=!0!==e,t=a?this.clone().utc():this;return t.year()<0||9999<t.year()?C(t,a?"YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]":"YYYYYY-MM-DD[T]HH:mm:ss.SSSZ"):S(Date.prototype.toISOString)?a?this.toDate().toISOString():new Date(this.valueOf()+60*this.utcOffset()*1e3).toISOString().replace("Z",C(t,"Z")):C(t,a?"YYYY-MM-DD[T]HH:mm:ss.SSS[Z]":"YYYY-MM-DD[T]HH:mm:ss.SSSZ")},it.inspect=function(){if(!this.isValid())return"moment.invalid(/* "+this._i+" */)";var e="moment",a="";this.isLocal()||(e=0===this.utcOffset()?"moment.utc":"moment.parseZone",a="Z");var t="["+e+'("]',s=0<=this.year()&&this.year()<=9999?"YYYY":"YYYYYY",n=a+'[")]';return this.format(t+s+"-MM-DD[T]HH:mm:ss.SSS"+n)},it.toJSON=function(){return this.isValid()?this.toISOString():null},it.toString=function(){return this.clone().locale("en").format("ddd MMM DD YYYY HH:mm:ss [GMT]ZZ")},it.unix=function(){return Math.floor(this.valueOf()/1e3)},it.valueOf=function(){return this._d.valueOf()-6e4*(this._offset||0)},it.creationData=function(){return{input:this._i,format:this._f,locale:this._locale,isUTC:this._isUTC,strict:this._strict}},it.year=ve,it.isLeapYear=function(){return ge(this.year())},it.weekYear=function(e){return at.call(this,e,this.week(),this.weekday(),this.localeData()._week.dow,this.localeData()._week.doy)},it.isoWeekYear=function(e){return at.call(this,e,this.isoWeek(),this.isoWeekday(),1,4)},it.quarter=it.quarters=function(e){return null==e?Math.ceil((this.month()+1)/3):this.month(3*(e-1)+this.month()%3)},it.month=Ee,it.daysInMonth=function(){return je(this.year(),this.month())},it.week=it.weeks=function(e){var a=this.localeData().week(this);return null==e?a:this.add(7*(e-a),"d")},it.isoWeek=it.isoWeeks=function(e){var a=Ie(this,1,4).week;return null==e?a:this.add(7*(e-a),"d")},it.weeksInYear=function(){var e=this.localeData()._week;return Ce(this.year(),e.dow,e.doy)},it.isoWeeksInYear=function(){return Ce(this.year(),1,4)},it.date=tt,it.day=it.days=function(e){if(!this.isValid())return null!=e?this:NaN;var a,t,s=this._isUTC?this._d.getUTCDay():this._d.getDay();return null!=e?(a=e,t=this.localeData(),e="string"!=typeof a?a:isNaN(a)?"number"==typeof(a=t.weekdaysParse(a))?a:null:parseInt(a,10),this.add(e-s,"d")):s},it.weekday=function(e){if(!this.isValid())return null!=e?this:NaN;var a=(this.day()+7-this.localeData()._week.dow)%7;return null==e?a:this.add(e-a,"d")},it.isoWeekday=function(e){if(!this.isValid())return null!=e?this:NaN;if(null==e)return this.day()||7;var a,t,s=(a=e,t=this.localeData(),"string"==typeof a?t.weekdaysParse(a)%7||7:isNaN(a)?null:a);return this.day(this.day()%7?s:s-7)},it.dayOfYear=function(e){var a=Math.round((this.clone().startOf("day")-this.clone().startOf("year"))/864e5)+1;return null==e?a:this.add(e-a,"d")},it.hour=it.hours=aa,it.minute=it.minutes=st,it.second=it.seconds=dt,it.millisecond=it.milliseconds=_t,it.utcOffset=function(e,a,t){var s,n=this._offset||0;if(!this.isValid())return null!=e?this:NaN;if(null==e)return this._isUTC?n:Ja(this);if("string"==typeof e){if(null===(e=Fa(de,e)))return this}else Math.abs(e)<16&&!t&&(e*=60);return!this._isUTC&&a&&(s=Ja(this)),this._offset=e,this._isUTC=!0,null!=s&&this.add(s,"m"),n!==e&&(!a||this._changeInProgress?Ka(this,Ca(e-n,"m"),1,!1):this._changeInProgress||(this._changeInProgress=!0,l.updateOffset(this,!0),this._changeInProgress=null)),this},it.utc=function(e){return this.utcOffset(0,e)},it.local=function(e){return this._isUTC&&(this.utcOffset(0,e),this._isUTC=!1,e&&this.subtract(Ja(this),"m")),this},it.parseZone=function(){if(null!=this._tzm)this.utcOffset(this._tzm,!1,!0);else if("string"==typeof this._i){var e=Fa(ne,this._i);null!=e?this.utcOffset(e):this.utcOffset(0,!0)}return this},it.hasAlignedHourOffset=function(e){return!!this.isValid()&&(e=e?Ha(e).utcOffset():0,(this.utcOffset()-e)%60==0)},it.isDST=function(){return this.utcOffset()>this.clone().month(0).utcOffset()||this.utcOffset()>this.clone().month(5).utcOffset()},it.isLocal=function(){return!!this.isValid()&&!this._isUTC},it.isUtcOffset=function(){return!!this.isValid()&&this._isUTC},it.isUtc=Na,it.isUTC=Na,it.zoneAbbr=function(){return this._isUTC?"UTC":""},it.zoneName=function(){return this._isUTC?"Coordinated Universal Time":""},it.dates=t("dates accessor is deprecated. Use date instead.",tt),it.months=t("months accessor is deprecated. Use month instead",Ee),it.years=t("years accessor is deprecated. Use year instead",ve),it.zone=t("moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/",function(e,a){return null!=e?("string"!=typeof e&&(e=-e),this.utcOffset(e,a),this):-this.utcOffset()}),it.isDSTShifted=t("isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information",function(){if(!o(this._isDSTShifted))return this._isDSTShifted;var e={};if(k(e,this),(e=wa(e))._a){var a=e._isUTC?c(e._a):Ha(e._a);this._isDSTShifted=this.isValid()&&0<r(e._a,a.toArray())}else this._isDSTShifted=!1;return this._isDSTShifted});var mt=j.prototype;function ut(e,a,t,s){var n=oa(),d=c().set(s,a);return n[t](d,e)}function lt(e,a,t){if(m(e)&&(a=e,e=void 0),e=e||"",null!=a)return ut(e,a,t,"month");var s,n=[];for(s=0;s<12;s++)n[s]=ut(e,s,t,"month");return n}function Mt(e,a,t,s){a=("boolean"==typeof e?m(a)&&(t=a,a=void 0):(a=e,e=!1,m(t=a)&&(t=a,a=void 0)),a||"");var n,d=oa(),r=e?d._week.dow:0;if(null!=t)return ut(a,(t+r)%7,s,"day");var _=[];for(n=0;n<7;n++)_[n]=ut(a,(n+r)%7,s,"day");return _}mt.calendar=function(e,a,t){var s=this._calendar[e]||this._calendar.sameElse;return S(s)?s.call(a,t):s},mt.longDateFormat=function(e){var a=this._longDateFormat[e],t=this._longDateFormat[e.toUpperCase()];return a||!t?a:(this._longDateFormat[e]=t.replace(/MMMM|MM|DD|dddd/g,function(e){return e.slice(1)}),this._longDateFormat[e])},mt.invalidDate=function(){return this._invalidDate},mt.ordinal=function(e){return this._ordinal.replace("%d",e)},mt.preparse=ot,mt.postformat=ot,mt.relativeTime=function(e,a,t,s){var n=this._relativeTime[t];return S(n)?n(e,a,t,s):n.replace(/%d/i,e)},mt.pastFuture=function(e,a){var t=this._relativeTime[0<e?"future":"past"];return S(t)?t(a):t.replace(/%s/i,a)},mt.set=function(e){var a,t;for(t in e)S(a=e[t])?this[t]=a:this["_"+t]=a;this._config=e,this._dayOfMonthOrdinalParseLenient=new RegExp((this._dayOfMonthOrdinalParse.source||this._ordinalParse.source)+"|"+/\d{1,2}/.source)},mt.months=function(e,a){return e?_(this._months)?this._months[e.month()]:this._months[(this._months.isFormat||xe).test(a)?"format":"standalone"][e.month()]:_(this._months)?this._months:this._months.standalone},mt.monthsShort=function(e,a){return e?_(this._monthsShort)?this._monthsShort[e.month()]:this._monthsShort[xe.test(a)?"format":"standalone"][e.month()]:_(this._monthsShort)?this._monthsShort:this._monthsShort.standalone},mt.monthsParse=function(e,a,t){var s,n,d;if(this._monthsParseExact)return function(e,a,t){var s,n,d,r=e.toLocaleLowerCase();if(!this._monthsParse)for(this._monthsParse=[],this._longMonthsParse=[],this._shortMonthsParse=[],s=0;s<12;++s)d=c([2e3,s]),this._shortMonthsParse[s]=this.monthsShort(d,"").toLocaleLowerCase(),this._longMonthsParse[s]=this.months(d,"").toLocaleLowerCase();return t?"MMM"===a?-1!==(n=we.call(this._shortMonthsParse,r))?n:null:-1!==(n=we.call(this._longMonthsParse,r))?n:null:"MMM"===a?-1!==(n=we.call(this._shortMonthsParse,r))?n:-1!==(n=we.call(this._longMonthsParse,r))?n:null:-1!==(n=we.call(this._longMonthsParse,r))?n:-1!==(n=we.call(this._shortMonthsParse,r))?n:null}.call(this,e,a,t);for(this._monthsParse||(this._monthsParse=[],this._longMonthsParse=[],this._shortMonthsParse=[]),s=0;s<12;s++){if(n=c([2e3,s]),t&&!this._longMonthsParse[s]&&(this._longMonthsParse[s]=new RegExp("^"+this.months(n,"").replace(".","")+"$","i"),this._shortMonthsParse[s]=new RegExp("^"+this.monthsShort(n,"").replace(".","")+"$","i")),t||this._monthsParse[s]||(d="^"+this.months(n,"")+"|^"+this.monthsShort(n,""),this._monthsParse[s]=new RegExp(d.replace(".",""),"i")),t&&"MMMM"===a&&this._longMonthsParse[s].test(e))return s;if(t&&"MMM"===a&&this._shortMonthsParse[s].test(e))return s;if(!t&&this._monthsParse[s].test(e))return s}},mt.monthsRegex=function(e){return this._monthsParseExact?(h(this,"_monthsRegex")||ze.call(this),e?this._monthsStrictRegex:this._monthsRegex):(h(this,"_monthsRegex")||(this._monthsRegex=Fe),this._monthsStrictRegex&&e?this._monthsStrictRegex:this._monthsRegex)},mt.monthsShortRegex=function(e){return this._monthsParseExact?(h(this,"_monthsRegex")||ze.call(this),e?this._monthsShortStrictRegex:this._monthsShortRegex):(h(this,"_monthsShortRegex")||(this._monthsShortRegex=Ae),this._monthsShortStrictRegex&&e?this._monthsShortStrictRegex:this._monthsShortRegex)},mt.week=function(e){return Ie(e,this._week.dow,this._week.doy).week},mt.firstDayOfYear=function(){return this._week.doy},mt.firstDayOfWeek=function(){return this._week.dow},mt.weekdays=function(e,a){return e?_(this._weekdays)?this._weekdays[e.day()]:this._weekdays[this._weekdays.isFormat.test(a)?"format":"standalone"][e.day()]:_(this._weekdays)?this._weekdays:this._weekdays.standalone},mt.weekdaysMin=function(e){return e?this._weekdaysMin[e.day()]:this._weekdaysMin},mt.weekdaysShort=function(e){return e?this._weekdaysShort[e.day()]:this._weekdaysShort},mt.weekdaysParse=function(e,a,t){var s,n,d;if(this._weekdaysParseExact)return function(e,a,t){var s,n,d,r=e.toLocaleLowerCase();if(!this._weekdaysParse)for(this._weekdaysParse=[],this._shortWeekdaysParse=[],this._minWeekdaysParse=[],s=0;s<7;++s)d=c([2e3,1]).day(s),this._minWeekdaysParse[s]=this.weekdaysMin(d,"").toLocaleLowerCase(),this._shortWeekdaysParse[s]=this.weekdaysShort(d,"").toLocaleLowerCase(),this._weekdaysParse[s]=this.weekdays(d,"").toLocaleLowerCase();return t?"dddd"===a?-1!==(n=we.call(this._weekdaysParse,r))?n:null:"ddd"===a?-1!==(n=we.call(this._shortWeekdaysParse,r))?n:null:-1!==(n=we.call(this._minWeekdaysParse,r))?n:null:"dddd"===a?-1!==(n=we.call(this._weekdaysParse,r))?n:-1!==(n=we.call(this._shortWeekdaysParse,r))?n:-1!==(n=we.call(this._minWeekdaysParse,r))?n:null:"ddd"===a?-1!==(n=we.call(this._shortWeekdaysParse,r))?n:-1!==(n=we.call(this._weekdaysParse,r))?n:-1!==(n=we.call(this._minWeekdaysParse,r))?n:null:-1!==(n=we.call(this._minWeekdaysParse,r))?n:-1!==(n=we.call(this._weekdaysParse,r))?n:-1!==(n=we.call(this._shortWeekdaysParse,r))?n:null}.call(this,e,a,t);for(this._weekdaysParse||(this._weekdaysParse=[],this._minWeekdaysParse=[],this._shortWeekdaysParse=[],this._fullWeekdaysParse=[]),s=0;s<7;s++){if(n=c([2e3,1]).day(s),t&&!this._fullWeekdaysParse[s]&&(this._fullWeekdaysParse[s]=new RegExp("^"+this.weekdays(n,"").replace(".","\\.?")+"$","i"),this._shortWeekdaysParse[s]=new RegExp("^"+this.weekdaysShort(n,"").replace(".","\\.?")+"$","i"),this._minWeekdaysParse[s]=new RegExp("^"+this.weekdaysMin(n,"").replace(".","\\.?")+"$","i")),this._weekdaysParse[s]||(d="^"+this.weekdays(n,"")+"|^"+this.weekdaysShort(n,"")+"|^"+this.weekdaysMin(n,""),this._weekdaysParse[s]=new RegExp(d.replace(".",""),"i")),t&&"dddd"===a&&this._fullWeekdaysParse[s].test(e))return s;if(t&&"ddd"===a&&this._shortWeekdaysParse[s].test(e))return s;if(t&&"dd"===a&&this._minWeekdaysParse[s].test(e))return s;if(!t&&this._weekdaysParse[s].test(e))return s}},mt.weekdaysRegex=function(e){return this._weekdaysParseExact?(h(this,"_weekdaysRegex")||Be.call(this),e?this._weekdaysStrictRegex:this._weekdaysRegex):(h(this,"_weekdaysRegex")||(this._weekdaysRegex=Ke),this._weekdaysStrictRegex&&e?this._weekdaysStrictRegex:this._weekdaysRegex)},mt.weekdaysShortRegex=function(e){return this._weekdaysParseExact?(h(this,"_weekdaysRegex")||Be.call(this),e?this._weekdaysShortStrictRegex:this._weekdaysShortRegex):(h(this,"_weekdaysShortRegex")||(this._weekdaysShortRegex=$e),this._weekdaysShortStrictRegex&&e?this._weekdaysShortStrictRegex:this._weekdaysShortRegex)},mt.weekdaysMinRegex=function(e){return this._weekdaysParseExact?(h(this,"_weekdaysRegex")||Be.call(this),e?this._weekdaysMinStrictRegex:this._weekdaysMinRegex):(h(this,"_weekdaysMinRegex")||(this._weekdaysMinRegex=Ze),this._weekdaysMinStrictRegex&&e?this._weekdaysMinStrictRegex:this._weekdaysMinRegex)},mt.isPM=function(e){return"p"===(e+"").toLowerCase().charAt(0)},mt.meridiem=function(e,a,t){return 11<e?t?"pm":"PM":t?"am":"AM"},_a("en",{dayOfMonthOrdinalParse:/\d{1,2}(th|st|nd|rd)/,ordinal:function(e){var a=e%10;return e+(1===g(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")}}),l.lang=t("moment.lang is deprecated. Use moment.locale instead.",_a),l.langData=t("moment.langData is deprecated. Use moment.localeData instead.",oa);var ht=Math.abs;function Lt(e,a,t,s){var n=Ca(a,t);return e._milliseconds+=s*n._milliseconds,e._days+=s*n._days,e._months+=s*n._months,e._bubble()}function ct(e){return e<0?Math.floor(e):Math.ceil(e)}function Yt(e){return 4800*e/146097}function yt(e){return 146097*e/4800}function ft(e){return function(){return this.as(e)}}var kt=ft("ms"),pt=ft("s"),Dt=ft("m"),Tt=ft("h"),gt=ft("d"),wt=ft("w"),vt=ft("M"),Ht=ft("y");function St(e){return function(){return this.isValid()?this._data[e]:NaN}}var bt=St("milliseconds"),jt=St("seconds"),xt=St("minutes"),Pt=St("hours"),Ot=St("days"),Wt=St("months"),Et=St("years");var At=Math.round,Ft={ss:44,s:45,m:45,h:22,d:26,M:11};var zt=Math.abs;function Jt(e){return(0<e)-(e<0)||+e}function Nt(){if(!this.isValid())return this.localeData().invalidDate();var e,a,t=zt(this._milliseconds)/1e3,s=zt(this._days),n=zt(this._months);a=T((e=T(t/60))/60),t%=60,e%=60;var d=T(n/12),r=n%=12,_=s,i=a,o=e,m=t?t.toFixed(3).replace(/\.?0+$/,""):"",u=this.asSeconds();if(!u)return"P0D";var l=u<0?"-":"",M=Jt(this._months)!==Jt(u)?"-":"",h=Jt(this._days)!==Jt(u)?"-":"",L=Jt(this._milliseconds)!==Jt(u)?"-":"";return l+"P"+(d?M+d+"Y":"")+(r?M+r+"M":"")+(_?h+_+"D":"")+(i||o||m?"T":"")+(i?L+i+"H":"")+(o?L+o+"M":"")+(m?L+m+"S":"")}var Rt=Pa.prototype;Rt.isValid=function(){return this._isValid},Rt.abs=function(){var e=this._data;return this._milliseconds=ht(this._milliseconds),this._days=ht(this._days),this._months=ht(this._months),e.milliseconds=ht(e.milliseconds),e.seconds=ht(e.seconds),e.minutes=ht(e.minutes),e.hours=ht(e.hours),e.months=ht(e.months),e.years=ht(e.years),this},Rt.add=function(e,a){return Lt(this,e,a,1)},Rt.subtract=function(e,a){return Lt(this,e,a,-1)},Rt.as=function(e){if(!this.isValid())return NaN;var a,t,s=this._milliseconds;if("month"===(e=O(e))||"year"===e)return a=this._days+s/864e5,t=this._months+Yt(a),"month"===e?t:t/12;switch(a=this._days+Math.round(yt(this._months)),e){case"week":return a/7+s/6048e5;case"day":return a+s/864e5;case"hour":return 24*a+s/36e5;case"minute":return 1440*a+s/6e4;case"second":return 86400*a+s/1e3;case"millisecond":return Math.floor(864e5*a)+s;default:throw new Error("Unknown unit "+e)}},Rt.asMilliseconds=kt,Rt.asSeconds=pt,Rt.asMinutes=Dt,Rt.asHours=Tt,Rt.asDays=gt,Rt.asWeeks=wt,Rt.asMonths=vt,Rt.asYears=Ht,Rt.valueOf=function(){return this.isValid()?this._milliseconds+864e5*this._days+this._months%12*2592e6+31536e6*g(this._months/12):NaN},Rt._bubble=function(){var e,a,t,s,n,d=this._milliseconds,r=this._days,_=this._months,i=this._data;return 0<=d&&0<=r&&0<=_||d<=0&&r<=0&&_<=0||(d+=864e5*ct(yt(_)+r),_=r=0),i.milliseconds=d%1e3,e=T(d/1e3),i.seconds=e%60,a=T(e/60),i.minutes=a%60,t=T(a/60),i.hours=t%24,_+=n=T(Yt(r+=T(t/24))),r-=ct(yt(n)),s=T(_/12),_%=12,i.days=r,i.months=_,i.years=s,this},Rt.clone=function(){return Ca(this)},Rt.get=function(e){return e=O(e),this.isValid()?this[e+"s"]():NaN},Rt.milliseconds=bt,Rt.seconds=jt,Rt.minutes=xt,Rt.hours=Pt,Rt.days=Ot,Rt.weeks=function(){return T(this.days()/7)},Rt.months=Wt,Rt.years=Et,Rt.humanize=function(e){if(!this.isValid())return this.localeData().invalidDate();var a,t,s,n,d,r,_,i,o,m,u,l=this.localeData(),M=(t=!e,s=l,n=Ca(a=this).abs(),d=At(n.as("s")),r=At(n.as("m")),_=At(n.as("h")),i=At(n.as("d")),o=At(n.as("M")),m=At(n.as("y")),(u=d<=Ft.ss&&["s",d]||d<Ft.s&&["ss",d]||r<=1&&["m"]||r<Ft.m&&["mm",r]||_<=1&&["h"]||_<Ft.h&&["hh",_]||i<=1&&["d"]||i<Ft.d&&["dd",i]||o<=1&&["M"]||o<Ft.M&&["MM",o]||m<=1&&["y"]||["yy",m])[2]=t,u[3]=0<+a,u[4]=s,function(e,a,t,s,n){return n.relativeTime(a||1,!!t,e,s)}.apply(null,u));return e&&(M=l.pastFuture(+this,M)),l.postformat(M)},Rt.toISOString=Nt,Rt.toString=Nt,Rt.toJSON=Nt,Rt.locale=qa,Rt.localeData=Xa,Rt.toIsoString=t("toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)",Nt),Rt.lang=Qa,I("X",0,0,"unix"),I("x",0,0,"valueOf"),ie("x",se),ie("X",/[+-]?\d+(\.\d{1,3})?/),le("X",function(e,a,t){t._d=new Date(1e3*parseFloat(e,10))}),le("x",function(e,a,t){t._d=new Date(g(e))}),l.version="2.23.0",e=Ha,l.fn=it,l.min=function(){return ja("isBefore",[].slice.call(arguments,0))},l.max=function(){return ja("isAfter",[].slice.call(arguments,0))},l.now=function(){return Date.now?Date.now():+new Date},l.utc=c,l.unix=function(e){return Ha(1e3*e)},l.months=function(e,a){return lt(e,a,"months")},l.isDate=u,l.locale=_a,l.invalid=f,l.duration=Ca,l.isMoment=D,l.weekdays=function(e,a,t){return Mt(e,a,t,"weekdays")},l.parseZone=function(){return Ha.apply(null,arguments).parseZone()},l.localeData=oa,l.isDuration=Oa,l.monthsShort=function(e,a){return lt(e,a,"monthsShort")},l.weekdaysMin=function(e,a,t){return Mt(e,a,t,"weekdaysMin")},l.defineLocale=ia,l.updateLocale=function(e,a){if(null!=a){var t,s,n=ta;null!=(s=ra(e))&&(n=s._config),(t=new j(a=b(n,a))).parentLocale=sa[e],sa[e]=t,_a(e)}else null!=sa[e]&&(null!=sa[e].parentLocale?sa[e]=sa[e].parentLocale:null!=sa[e]&&delete sa[e]);return sa[e]},l.locales=function(){return s(sa)},l.weekdaysShort=function(e,a,t){return Mt(e,a,t,"weekdaysShort")},l.normalizeUnits=O,l.relativeTimeRounding=function(e){return void 0===e?At:"function"==typeof e&&(At=e,!0)},l.relativeTimeThreshold=function(e,a){return void 0!==Ft[e]&&(void 0===a?Ft[e]:(Ft[e]=a,"s"===e&&(Ft.ss=a-1),!0))},l.calendarFormat=function(e,a){var t=e.diff(a,"days",!0);return t<-6?"sameElse":t<-1?"lastWeek":t<0?"lastDay":t<1?"sameDay":t<2?"nextDay":t<7?"nextWeek":"sameElse"},l.prototype=it,l.HTML5_FMT={DATETIME_LOCAL:"YYYY-MM-DDTHH:mm",DATETIME_LOCAL_SECONDS:"YYYY-MM-DDTHH:mm:ss",DATETIME_LOCAL_MS:"YYYY-MM-DDTHH:mm:ss.SSS",DATE:"YYYY-MM-DD",TIME:"HH:mm",TIME_SECONDS:"HH:mm:ss",TIME_MS:"HH:mm:ss.SSS",WEEK:"GGGG-[W]WW",MONTH:"YYYY-MM"},l.defineLocale("af",{months:"Januarie_Februarie_Maart_April_Mei_Junie_Julie_Augustus_September_Oktober_November_Desember".split("_"),monthsShort:"Jan_Feb_Mrt_Apr_Mei_Jun_Jul_Aug_Sep_Okt_Nov_Des".split("_"),weekdays:"Sondag_Maandag_Dinsdag_Woensdag_Donderdag_Vrydag_Saterdag".split("_"),weekdaysShort:"Son_Maa_Din_Woe_Don_Vry_Sat".split("_"),weekdaysMin:"So_Ma_Di_Wo_Do_Vr_Sa".split("_"),meridiemParse:/vm|nm/i,isPM:function(e){return/^nm$/i.test(e)},meridiem:function(e,a,t){return e<12?t?"vm":"VM":t?"nm":"NM"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Vandag om] LT",nextDay:"[M\xf4re om] LT",nextWeek:"dddd [om] LT",lastDay:"[Gister om] LT",lastWeek:"[Laas] dddd [om] LT",sameElse:"L"},relativeTime:{future:"oor %s",past:"%s gelede",s:"'n paar sekondes",ss:"%d sekondes",m:"'n minuut",mm:"%d minute",h:"'n uur",hh:"%d ure",d:"'n dag",dd:"%d dae",M:"'n maand",MM:"%d maande",y:"'n jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(e){return e+(1===e||8===e||20<=e?"ste":"de")},week:{dow:1,doy:4}}),l.defineLocale("ar-dz",{months:"\u062c\u0627\u0646\u0641\u064a_\u0641\u064a\u0641\u0631\u064a_\u0645\u0627\u0631\u0633_\u0623\u0641\u0631\u064a\u0644_\u0645\u0627\u064a_\u062c\u0648\u0627\u0646_\u062c\u0648\u064a\u0644\u064a\u0629_\u0623\u0648\u062a_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),monthsShort:"\u062c\u0627\u0646\u0641\u064a_\u0641\u064a\u0641\u0631\u064a_\u0645\u0627\u0631\u0633_\u0623\u0641\u0631\u064a\u0644_\u0645\u0627\u064a_\u062c\u0648\u0627\u0646_\u062c\u0648\u064a\u0644\u064a\u0629_\u0623\u0648\u062a_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062b\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0627\u062d\u062f_\u0627\u062b\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u0623\u062d_\u0625\u062b_\u062b\u0644\u0627_\u0623\u0631_\u062e\u0645_\u062c\u0645_\u0633\u0628".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u0627 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0641\u064a %s",past:"\u0645\u0646\u0630 %s",s:"\u062b\u0648\u0627\u0646",ss:"%d \u062b\u0627\u0646\u064a\u0629",m:"\u062f\u0642\u064a\u0642\u0629",mm:"%d \u062f\u0642\u0627\u0626\u0642",h:"\u0633\u0627\u0639\u0629",hh:"%d \u0633\u0627\u0639\u0627\u062a",d:"\u064a\u0648\u0645",dd:"%d \u0623\u064a\u0627\u0645",M:"\u0634\u0647\u0631",MM:"%d \u0623\u0634\u0647\u0631",y:"\u0633\u0646\u0629",yy:"%d \u0633\u0646\u0648\u0627\u062a"},week:{dow:0,doy:4}}),l.defineLocale("ar-kw",{months:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648\u0632_\u063a\u0634\u062a_\u0634\u062a\u0646\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0646\u0628\u0631_\u062f\u062c\u0646\u0628\u0631".split("_"),monthsShort:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648\u0632_\u063a\u0634\u062a_\u0634\u062a\u0646\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0646\u0628\u0631_\u062f\u062c\u0646\u0628\u0631".split("_"),weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062a\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0627\u062d\u062f_\u0627\u062a\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u0627 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0641\u064a %s",past:"\u0645\u0646\u0630 %s",s:"\u062b\u0648\u0627\u0646",ss:"%d \u062b\u0627\u0646\u064a\u0629",m:"\u062f\u0642\u064a\u0642\u0629",mm:"%d \u062f\u0642\u0627\u0626\u0642",h:"\u0633\u0627\u0639\u0629",hh:"%d \u0633\u0627\u0639\u0627\u062a",d:"\u064a\u0648\u0645",dd:"%d \u0623\u064a\u0627\u0645",M:"\u0634\u0647\u0631",MM:"%d \u0623\u0634\u0647\u0631",y:"\u0633\u0646\u0629",yy:"%d \u0633\u0646\u0648\u0627\u062a"},week:{dow:0,doy:12}});var It={1:"1",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",0:"0"},Ct=function(e){return 0===e?0:1===e?1:2===e?2:3<=e%100&&e%100<=10?3:11<=e%100?4:5},Gt={s:["\u0623\u0642\u0644 \u0645\u0646 \u062b\u0627\u0646\u064a\u0629","\u062b\u0627\u0646\u064a\u0629 \u0648\u0627\u062d\u062f\u0629",["\u062b\u0627\u0646\u064a\u062a\u0627\u0646","\u062b\u0627\u0646\u064a\u062a\u064a\u0646"],"%d \u062b\u0648\u0627\u0646","%d \u062b\u0627\u0646\u064a\u0629","%d \u062b\u0627\u0646\u064a\u0629"],m:["\u0623\u0642\u0644 \u0645\u0646 \u062f\u0642\u064a\u0642\u0629","\u062f\u0642\u064a\u0642\u0629 \u0648\u0627\u062d\u062f\u0629",["\u062f\u0642\u064a\u0642\u062a\u0627\u0646","\u062f\u0642\u064a\u0642\u062a\u064a\u0646"],"%d \u062f\u0642\u0627\u0626\u0642","%d \u062f\u0642\u064a\u0642\u0629","%d \u062f\u0642\u064a\u0642\u0629"],h:["\u0623\u0642\u0644 \u0645\u0646 \u0633\u0627\u0639\u0629","\u0633\u0627\u0639\u0629 \u0648\u0627\u062d\u062f\u0629",["\u0633\u0627\u0639\u062a\u0627\u0646","\u0633\u0627\u0639\u062a\u064a\u0646"],"%d \u0633\u0627\u0639\u0627\u062a","%d \u0633\u0627\u0639\u0629","%d \u0633\u0627\u0639\u0629"],d:["\u0623\u0642\u0644 \u0645\u0646 \u064a\u0648\u0645","\u064a\u0648\u0645 \u0648\u0627\u062d\u062f",["\u064a\u0648\u0645\u0627\u0646","\u064a\u0648\u0645\u064a\u0646"],"%d \u0623\u064a\u0627\u0645","%d \u064a\u0648\u0645\u064b\u0627","%d \u064a\u0648\u0645"],M:["\u0623\u0642\u0644 \u0645\u0646 \u0634\u0647\u0631","\u0634\u0647\u0631 \u0648\u0627\u062d\u062f",["\u0634\u0647\u0631\u0627\u0646","\u0634\u0647\u0631\u064a\u0646"],"%d \u0623\u0634\u0647\u0631","%d \u0634\u0647\u0631\u0627","%d \u0634\u0647\u0631"],y:["\u0623\u0642\u0644 \u0645\u0646 \u0639\u0627\u0645","\u0639\u0627\u0645 \u0648\u0627\u062d\u062f",["\u0639\u0627\u0645\u0627\u0646","\u0639\u0627\u0645\u064a\u0646"],"%d \u0623\u0639\u0648\u0627\u0645","%d \u0639\u0627\u0645\u064b\u0627","%d \u0639\u0627\u0645"]},Ut=function(r){return function(e,a,t,s){var n=Ct(e),d=Gt[r][Ct(e)];return 2===n&&(d=d[a?0:1]),d.replace(/%d/i,e)}},Vt=["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"];l.defineLocale("ar-ly",{months:Vt,monthsShort:Vt,weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062b\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0623\u062d\u062f_\u0625\u062b\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0623\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/\u200fM/\u200fYYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/\u0635|\u0645/,isPM:function(e){return"\u0645"===e},meridiem:function(e,a,t){return e<12?"\u0635":"\u0645"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u064b\u0627 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0628\u0639\u062f %s",past:"\u0645\u0646\u0630 %s",s:Ut("s"),ss:Ut("s"),m:Ut("m"),mm:Ut("m"),h:Ut("h"),hh:Ut("h"),d:Ut("d"),dd:Ut("d"),M:Ut("M"),MM:Ut("M"),y:Ut("y"),yy:Ut("y")},preparse:function(e){return e.replace(/\u060c/g,",")},postformat:function(e){return e.replace(/\d/g,function(e){return It[e]}).replace(/,/g,"\u060c")},week:{dow:6,doy:12}}),l.defineLocale("ar-ma",{months:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648\u0632_\u063a\u0634\u062a_\u0634\u062a\u0646\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0646\u0628\u0631_\u062f\u062c\u0646\u0628\u0631".split("_"),monthsShort:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648\u0632_\u063a\u0634\u062a_\u0634\u062a\u0646\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0646\u0628\u0631_\u062f\u062c\u0646\u0628\u0631".split("_"),weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062a\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0627\u062d\u062f_\u0627\u062a\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u0627 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0641\u064a %s",past:"\u0645\u0646\u0630 %s",s:"\u062b\u0648\u0627\u0646",ss:"%d \u062b\u0627\u0646\u064a\u0629",m:"\u062f\u0642\u064a\u0642\u0629",mm:"%d \u062f\u0642\u0627\u0626\u0642",h:"\u0633\u0627\u0639\u0629",hh:"%d \u0633\u0627\u0639\u0627\u062a",d:"\u064a\u0648\u0645",dd:"%d \u0623\u064a\u0627\u0645",M:"\u0634\u0647\u0631",MM:"%d \u0623\u0634\u0647\u0631",y:"\u0633\u0646\u0629",yy:"%d \u0633\u0646\u0648\u0627\u062a"},week:{dow:6,doy:12}});var Kt={1:"\u0661",2:"\u0662",3:"\u0663",4:"\u0664",5:"\u0665",6:"\u0666",7:"\u0667",8:"\u0668",9:"\u0669",0:"\u0660"},$t={"\u0661":"1","\u0662":"2","\u0663":"3","\u0664":"4","\u0665":"5","\u0666":"6","\u0667":"7","\u0668":"8","\u0669":"9","\u0660":"0"};l.defineLocale("ar-sa",{months:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a\u0648_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648_\u0623\u063a\u0633\u0637\u0633_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),monthsShort:"\u064a\u0646\u0627\u064a\u0631_\u0641\u0628\u0631\u0627\u064a\u0631_\u0645\u0627\u0631\u0633_\u0623\u0628\u0631\u064a\u0644_\u0645\u0627\u064a\u0648_\u064a\u0648\u0646\u064a\u0648_\u064a\u0648\u0644\u064a\u0648_\u0623\u063a\u0633\u0637\u0633_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062b\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0623\u062d\u062f_\u0625\u062b\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0623\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/\u0635|\u0645/,isPM:function(e){return"\u0645"===e},meridiem:function(e,a,t){return e<12?"\u0635":"\u0645"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u0627 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0641\u064a %s",past:"\u0645\u0646\u0630 %s",s:"\u062b\u0648\u0627\u0646",ss:"%d \u062b\u0627\u0646\u064a\u0629",m:"\u062f\u0642\u064a\u0642\u0629",mm:"%d \u062f\u0642\u0627\u0626\u0642",h:"\u0633\u0627\u0639\u0629",hh:"%d \u0633\u0627\u0639\u0627\u062a",d:"\u064a\u0648\u0645",dd:"%d \u0623\u064a\u0627\u0645",M:"\u0634\u0647\u0631",MM:"%d \u0623\u0634\u0647\u0631",y:"\u0633\u0646\u0629",yy:"%d \u0633\u0646\u0648\u0627\u062a"},preparse:function(e){return e.replace(/[\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669\u0660]/g,function(e){return $t[e]}).replace(/\u060c/g,",")},postformat:function(e){return e.replace(/\d/g,function(e){return Kt[e]}).replace(/,/g,"\u060c")},week:{dow:0,doy:6}}),l.defineLocale("ar-tn",{months:"\u062c\u0627\u0646\u0641\u064a_\u0641\u064a\u0641\u0631\u064a_\u0645\u0627\u0631\u0633_\u0623\u0641\u0631\u064a\u0644_\u0645\u0627\u064a_\u062c\u0648\u0627\u0646_\u062c\u0648\u064a\u0644\u064a\u0629_\u0623\u0648\u062a_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),monthsShort:"\u062c\u0627\u0646\u0641\u064a_\u0641\u064a\u0641\u0631\u064a_\u0645\u0627\u0631\u0633_\u0623\u0641\u0631\u064a\u0644_\u0645\u0627\u064a_\u062c\u0648\u0627\u0646_\u062c\u0648\u064a\u0644\u064a\u0629_\u0623\u0648\u062a_\u0633\u0628\u062a\u0645\u0628\u0631_\u0623\u0643\u062a\u0648\u0628\u0631_\u0646\u0648\u0641\u0645\u0628\u0631_\u062f\u064a\u0633\u0645\u0628\u0631".split("_"),weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062b\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0623\u062d\u062f_\u0625\u062b\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0623\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u0627 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0644\u0649 \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0641\u064a %s",past:"\u0645\u0646\u0630 %s",s:"\u062b\u0648\u0627\u0646",ss:"%d \u062b\u0627\u0646\u064a\u0629",m:"\u062f\u0642\u064a\u0642\u0629",mm:"%d \u062f\u0642\u0627\u0626\u0642",h:"\u0633\u0627\u0639\u0629",hh:"%d \u0633\u0627\u0639\u0627\u062a",d:"\u064a\u0648\u0645",dd:"%d \u0623\u064a\u0627\u0645",M:"\u0634\u0647\u0631",MM:"%d \u0623\u0634\u0647\u0631",y:"\u0633\u0646\u0629",yy:"%d \u0633\u0646\u0648\u0627\u062a"},week:{dow:1,doy:4}});var Zt={1:"\u0661",2:"\u0662",3:"\u0663",4:"\u0664",5:"\u0665",6:"\u0666",7:"\u0667",8:"\u0668",9:"\u0669",0:"\u0660"},Bt={"\u0661":"1","\u0662":"2","\u0663":"3","\u0664":"4","\u0665":"5","\u0666":"6","\u0667":"7","\u0668":"8","\u0669":"9","\u0660":"0"},qt=function(e){return 0===e?0:1===e?1:2===e?2:3<=e%100&&e%100<=10?3:11<=e%100?4:5},Qt={s:["\u0623\u0642\u0644 \u0645\u0646 \u062b\u0627\u0646\u064a\u0629","\u062b\u0627\u0646\u064a\u0629 \u0648\u0627\u062d\u062f\u0629",["\u062b\u0627\u0646\u064a\u062a\u0627\u0646","\u062b\u0627\u0646\u064a\u062a\u064a\u0646"],"%d \u062b\u0648\u0627\u0646","%d \u062b\u0627\u0646\u064a\u0629","%d \u062b\u0627\u0646\u064a\u0629"],m:["\u0623\u0642\u0644 \u0645\u0646 \u062f\u0642\u064a\u0642\u0629","\u062f\u0642\u064a\u0642\u0629 \u0648\u0627\u062d\u062f\u0629",["\u062f\u0642\u064a\u0642\u062a\u0627\u0646","\u062f\u0642\u064a\u0642\u062a\u064a\u0646"],"%d \u062f\u0642\u0627\u0626\u0642","%d \u062f\u0642\u064a\u0642\u0629","%d \u062f\u0642\u064a\u0642\u0629"],h:["\u0623\u0642\u0644 \u0645\u0646 \u0633\u0627\u0639\u0629","\u0633\u0627\u0639\u0629 \u0648\u0627\u062d\u062f\u0629",["\u0633\u0627\u0639\u062a\u0627\u0646","\u0633\u0627\u0639\u062a\u064a\u0646"],"%d \u0633\u0627\u0639\u0627\u062a","%d \u0633\u0627\u0639\u0629","%d \u0633\u0627\u0639\u0629"],d:["\u0623\u0642\u0644 \u0645\u0646 \u064a\u0648\u0645","\u064a\u0648\u0645 \u0648\u0627\u062d\u062f",["\u064a\u0648\u0645\u0627\u0646","\u064a\u0648\u0645\u064a\u0646"],"%d \u0623\u064a\u0627\u0645","%d \u064a\u0648\u0645\u064b\u0627","%d \u064a\u0648\u0645"],M:["\u0623\u0642\u0644 \u0645\u0646 \u0634\u0647\u0631","\u0634\u0647\u0631 \u0648\u0627\u062d\u062f",["\u0634\u0647\u0631\u0627\u0646","\u0634\u0647\u0631\u064a\u0646"],"%d \u0623\u0634\u0647\u0631","%d \u0634\u0647\u0631\u0627","%d \u0634\u0647\u0631"],y:["\u0623\u0642\u0644 \u0645\u0646 \u0639\u0627\u0645","\u0639\u0627\u0645 \u0648\u0627\u062d\u062f",["\u0639\u0627\u0645\u0627\u0646","\u0639\u0627\u0645\u064a\u0646"],"%d \u0623\u0639\u0648\u0627\u0645","%d \u0639\u0627\u0645\u064b\u0627","%d \u0639\u0627\u0645"]},Xt=function(r){return function(e,a,t,s){var n=qt(e),d=Qt[r][qt(e)];return 2===n&&(d=d[a?0:1]),d.replace(/%d/i,e)}},es=["\u064a\u0646\u0627\u064a\u0631","\u0641\u0628\u0631\u0627\u064a\u0631","\u0645\u0627\u0631\u0633","\u0623\u0628\u0631\u064a\u0644","\u0645\u0627\u064a\u0648","\u064a\u0648\u0646\u064a\u0648","\u064a\u0648\u0644\u064a\u0648","\u0623\u063a\u0633\u0637\u0633","\u0633\u0628\u062a\u0645\u0628\u0631","\u0623\u0643\u062a\u0648\u0628\u0631","\u0646\u0648\u0641\u0645\u0628\u0631","\u062f\u064a\u0633\u0645\u0628\u0631"];l.defineLocale("ar",{months:es,monthsShort:es,weekdays:"\u0627\u0644\u0623\u062d\u062f_\u0627\u0644\u0625\u062b\u0646\u064a\u0646_\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621_\u0627\u0644\u0623\u0631\u0628\u0639\u0627\u0621_\u0627\u0644\u062e\u0645\u064a\u0633_\u0627\u0644\u062c\u0645\u0639\u0629_\u0627\u0644\u0633\u0628\u062a".split("_"),weekdaysShort:"\u0623\u062d\u062f_\u0625\u062b\u0646\u064a\u0646_\u062b\u0644\u0627\u062b\u0627\u0621_\u0623\u0631\u0628\u0639\u0627\u0621_\u062e\u0645\u064a\u0633_\u062c\u0645\u0639\u0629_\u0633\u0628\u062a".split("_"),weekdaysMin:"\u062d_\u0646_\u062b_\u0631_\u062e_\u062c_\u0633".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/\u200fM/\u200fYYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/\u0635|\u0645/,isPM:function(e){return"\u0645"===e},meridiem:function(e,a,t){return e<12?"\u0635":"\u0645"},calendar:{sameDay:"[\u0627\u0644\u064a\u0648\u0645 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextDay:"[\u063a\u062f\u064b\u0627 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",nextWeek:"dddd [\u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastDay:"[\u0623\u0645\u0633 \u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",lastWeek:"dddd [\u0639\u0646\u062f \u0627\u0644\u0633\u0627\u0639\u0629] LT",sameElse:"L"},relativeTime:{future:"\u0628\u0639\u062f %s",past:"\u0645\u0646\u0630 %s",s:Xt("s"),ss:Xt("s"),m:Xt("m"),mm:Xt("m"),h:Xt("h"),hh:Xt("h"),d:Xt("d"),dd:Xt("d"),M:Xt("M"),MM:Xt("M"),y:Xt("y"),yy:Xt("y")},preparse:function(e){return e.replace(/[\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669\u0660]/g,function(e){return Bt[e]}).replace(/\u060c/g,",")},postformat:function(e){return e.replace(/\d/g,function(e){return Zt[e]}).replace(/,/g,"\u060c")},week:{dow:6,doy:12}});var as={1:"-inci",5:"-inci",8:"-inci",70:"-inci",80:"-inci",2:"-nci",7:"-nci",20:"-nci",50:"-nci",3:"-\xfcnc\xfc",4:"-\xfcnc\xfc",100:"-\xfcnc\xfc",6:"-nc\u0131",9:"-uncu",10:"-uncu",30:"-uncu",60:"-\u0131nc\u0131",90:"-\u0131nc\u0131"};function ts(e,a,t){var s,n;return"m"===t?a?"\u0445\u0432\u0456\u043b\u0456\u043d\u0430":"\u0445\u0432\u0456\u043b\u0456\u043d\u0443":"h"===t?a?"\u0433\u0430\u0434\u0437\u0456\u043d\u0430":"\u0433\u0430\u0434\u0437\u0456\u043d\u0443":e+" "+(s=+e,n={ss:a?"\u0441\u0435\u043a\u0443\u043d\u0434\u0430_\u0441\u0435\u043a\u0443\u043d\u0434\u044b_\u0441\u0435\u043a\u0443\u043d\u0434":"\u0441\u0435\u043a\u0443\u043d\u0434\u0443_\u0441\u0435\u043a\u0443\u043d\u0434\u044b_\u0441\u0435\u043a\u0443\u043d\u0434",mm:a?"\u0445\u0432\u0456\u043b\u0456\u043d\u0430_\u0445\u0432\u0456\u043b\u0456\u043d\u044b_\u0445\u0432\u0456\u043b\u0456\u043d":"\u0445\u0432\u0456\u043b\u0456\u043d\u0443_\u0445\u0432\u0456\u043b\u0456\u043d\u044b_\u0445\u0432\u0456\u043b\u0456\u043d",hh:a?"\u0433\u0430\u0434\u0437\u0456\u043d\u0430_\u0433\u0430\u0434\u0437\u0456\u043d\u044b_\u0433\u0430\u0434\u0437\u0456\u043d":"\u0433\u0430\u0434\u0437\u0456\u043d\u0443_\u0433\u0430\u0434\u0437\u0456\u043d\u044b_\u0433\u0430\u0434\u0437\u0456\u043d",dd:"\u0434\u0437\u0435\u043d\u044c_\u0434\u043d\u0456_\u0434\u0437\u0451\u043d",MM:"\u043c\u0435\u0441\u044f\u0446_\u043c\u0435\u0441\u044f\u0446\u044b_\u043c\u0435\u0441\u044f\u0446\u0430\u045e",yy:"\u0433\u043e\u0434_\u0433\u0430\u0434\u044b_\u0433\u0430\u0434\u043e\u045e"}[t].split("_"),s%10==1&&s%100!=11?n[0]:2<=s%10&&s%10<=4&&(s%100<10||20<=s%100)?n[1]:n[2])}l.defineLocale("az",{months:"yanvar_fevral_mart_aprel_may_iyun_iyul_avqust_sentyabr_oktyabr_noyabr_dekabr".split("_"),monthsShort:"yan_fev_mar_apr_may_iyn_iyl_avq_sen_okt_noy_dek".split("_"),weekdays:"Bazar_Bazar ert\u0259si_\xc7\u0259r\u015f\u0259nb\u0259 ax\u015fam\u0131_\xc7\u0259r\u015f\u0259nb\u0259_C\xfcm\u0259 ax\u015fam\u0131_C\xfcm\u0259_\u015e\u0259nb\u0259".split("_"),weekdaysShort:"Baz_BzE_\xc7Ax_\xc7\u0259r_CAx_C\xfcm_\u015e\u0259n".split("_"),weekdaysMin:"Bz_BE_\xc7A_\xc7\u0259_CA_C\xfc_\u015e\u0259".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[bug\xfcn saat] LT",nextDay:"[sabah saat] LT",nextWeek:"[g\u0259l\u0259n h\u0259ft\u0259] dddd [saat] LT",lastDay:"[d\xfcn\u0259n] LT",lastWeek:"[ke\xe7\u0259n h\u0259ft\u0259] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s sonra",past:"%s \u0259vv\u0259l",s:"birne\xe7\u0259 saniy\u0259",ss:"%d saniy\u0259",m:"bir d\u0259qiq\u0259",mm:"%d d\u0259qiq\u0259",h:"bir saat",hh:"%d saat",d:"bir g\xfcn",dd:"%d g\xfcn",M:"bir ay",MM:"%d ay",y:"bir il",yy:"%d il"},meridiemParse:/gec\u0259|s\u0259h\u0259r|g\xfcnd\xfcz|ax\u015fam/,isPM:function(e){return/^(g\xfcnd\xfcz|ax\u015fam)$/.test(e)},meridiem:function(e,a,t){return e<4?"gec\u0259":e<12?"s\u0259h\u0259r":e<17?"g\xfcnd\xfcz":"ax\u015fam"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0131nc\u0131|inci|nci|\xfcnc\xfc|nc\u0131|uncu)/,ordinal:function(e){if(0===e)return e+"-\u0131nc\u0131";var a=e%10;return e+(as[a]||as[e%100-a]||as[100<=e?100:null])},week:{dow:1,doy:7}}),l.defineLocale("be",{months:{format:"\u0441\u0442\u0443\u0434\u0437\u0435\u043d\u044f_\u043b\u044e\u0442\u0430\u0433\u0430_\u0441\u0430\u043a\u0430\u0432\u0456\u043a\u0430_\u043a\u0440\u0430\u0441\u0430\u0432\u0456\u043a\u0430_\u0442\u0440\u0430\u045e\u043d\u044f_\u0447\u044d\u0440\u0432\u0435\u043d\u044f_\u043b\u0456\u043f\u0435\u043d\u044f_\u0436\u043d\u0456\u045e\u043d\u044f_\u0432\u0435\u0440\u0430\u0441\u043d\u044f_\u043a\u0430\u0441\u0442\u0440\u044b\u0447\u043d\u0456\u043a\u0430_\u043b\u0456\u0441\u0442\u0430\u043f\u0430\u0434\u0430_\u0441\u043d\u0435\u0436\u043d\u044f".split("_"),standalone:"\u0441\u0442\u0443\u0434\u0437\u0435\u043d\u044c_\u043b\u044e\u0442\u044b_\u0441\u0430\u043a\u0430\u0432\u0456\u043a_\u043a\u0440\u0430\u0441\u0430\u0432\u0456\u043a_\u0442\u0440\u0430\u0432\u0435\u043d\u044c_\u0447\u044d\u0440\u0432\u0435\u043d\u044c_\u043b\u0456\u043f\u0435\u043d\u044c_\u0436\u043d\u0456\u0432\u0435\u043d\u044c_\u0432\u0435\u0440\u0430\u0441\u0435\u043d\u044c_\u043a\u0430\u0441\u0442\u0440\u044b\u0447\u043d\u0456\u043a_\u043b\u0456\u0441\u0442\u0430\u043f\u0430\u0434_\u0441\u043d\u0435\u0436\u0430\u043d\u044c".split("_")},monthsShort:"\u0441\u0442\u0443\u0434_\u043b\u044e\u0442_\u0441\u0430\u043a_\u043a\u0440\u0430\u0441_\u0442\u0440\u0430\u0432_\u0447\u044d\u0440\u0432_\u043b\u0456\u043f_\u0436\u043d\u0456\u0432_\u0432\u0435\u0440_\u043a\u0430\u0441\u0442_\u043b\u0456\u0441\u0442_\u0441\u043d\u0435\u0436".split("_"),weekdays:{format:"\u043d\u044f\u0434\u0437\u0435\u043b\u044e_\u043f\u0430\u043d\u044f\u0434\u0437\u0435\u043b\u0430\u043a_\u0430\u045e\u0442\u043e\u0440\u0430\u043a_\u0441\u0435\u0440\u0430\u0434\u0443_\u0447\u0430\u0446\u0432\u0435\u0440_\u043f\u044f\u0442\u043d\u0456\u0446\u0443_\u0441\u0443\u0431\u043e\u0442\u0443".split("_"),standalone:"\u043d\u044f\u0434\u0437\u0435\u043b\u044f_\u043f\u0430\u043d\u044f\u0434\u0437\u0435\u043b\u0430\u043a_\u0430\u045e\u0442\u043e\u0440\u0430\u043a_\u0441\u0435\u0440\u0430\u0434\u0430_\u0447\u0430\u0446\u0432\u0435\u0440_\u043f\u044f\u0442\u043d\u0456\u0446\u0430_\u0441\u0443\u0431\u043e\u0442\u0430".split("_"),isFormat:/\[ ?[\u0423\u0443\u045e] ?(?:\u043c\u0456\u043d\u0443\u043b\u0443\u044e|\u043d\u0430\u0441\u0442\u0443\u043f\u043d\u0443\u044e)? ?\] ?dddd/},weekdaysShort:"\u043d\u0434_\u043f\u043d_\u0430\u0442_\u0441\u0440_\u0447\u0446_\u043f\u0442_\u0441\u0431".split("_"),weekdaysMin:"\u043d\u0434_\u043f\u043d_\u0430\u0442_\u0441\u0440_\u0447\u0446_\u043f\u0442_\u0441\u0431".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY \u0433.",LLL:"D MMMM YYYY \u0433., HH:mm",LLLL:"dddd, D MMMM YYYY \u0433., HH:mm"},calendar:{sameDay:"[\u0421\u0451\u043d\u043d\u044f \u045e] LT",nextDay:"[\u0417\u0430\u045e\u0442\u0440\u0430 \u045e] LT",lastDay:"[\u0423\u0447\u043e\u0440\u0430 \u045e] LT",nextWeek:function(){return"[\u0423] dddd [\u045e] LT"},lastWeek:function(){switch(this.day()){case 0:case 3:case 5:case 6:return"[\u0423 \u043c\u0456\u043d\u0443\u043b\u0443\u044e] dddd [\u045e] LT";case 1:case 2:case 4:return"[\u0423 \u043c\u0456\u043d\u0443\u043b\u044b] dddd [\u045e] LT"}},sameElse:"L"},relativeTime:{future:"\u043f\u0440\u0430\u0437 %s",past:"%s \u0442\u0430\u043c\u0443",s:"\u043d\u0435\u043a\u0430\u043b\u044c\u043a\u0456 \u0441\u0435\u043a\u0443\u043d\u0434",m:ts,mm:ts,h:ts,hh:ts,d:"\u0434\u0437\u0435\u043d\u044c",dd:ts,M:"\u043c\u0435\u0441\u044f\u0446",MM:ts,y:"\u0433\u043e\u0434",yy:ts},meridiemParse:/\u043d\u043e\u0447\u044b|\u0440\u0430\u043d\u0456\u0446\u044b|\u0434\u043d\u044f|\u0432\u0435\u0447\u0430\u0440\u0430/,isPM:function(e){return/^(\u0434\u043d\u044f|\u0432\u0435\u0447\u0430\u0440\u0430)$/.test(e)},meridiem:function(e,a,t){return e<4?"\u043d\u043e\u0447\u044b":e<12?"\u0440\u0430\u043d\u0456\u0446\u044b":e<17?"\u0434\u043d\u044f":"\u0432\u0435\u0447\u0430\u0440\u0430"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0456|\u044b|\u0433\u0430)/,ordinal:function(e,a){switch(a){case"M":case"d":case"DDD":case"w":case"W":return e%10!=2&&e%10!=3||e%100==12||e%100==13?e+"-\u044b":e+"-\u0456";case"D":return e+"-\u0433\u0430";default:return e}},week:{dow:1,doy:7}}),l.defineLocale("bg",{months:"\u044f\u043d\u0443\u0430\u0440\u0438_\u0444\u0435\u0432\u0440\u0443\u0430\u0440\u0438_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0438\u043b_\u043c\u0430\u0439_\u044e\u043d\u0438_\u044e\u043b\u0438_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043f\u0442\u0435\u043c\u0432\u0440\u0438_\u043e\u043a\u0442\u043e\u043c\u0432\u0440\u0438_\u043d\u043e\u0435\u043c\u0432\u0440\u0438_\u0434\u0435\u043a\u0435\u043c\u0432\u0440\u0438".split("_"),monthsShort:"\u044f\u043d\u0440_\u0444\u0435\u0432_\u043c\u0430\u0440_\u0430\u043f\u0440_\u043c\u0430\u0439_\u044e\u043d\u0438_\u044e\u043b\u0438_\u0430\u0432\u0433_\u0441\u0435\u043f_\u043e\u043a\u0442_\u043d\u043e\u0435_\u0434\u0435\u043a".split("_"),weekdays:"\u043d\u0435\u0434\u0435\u043b\u044f_\u043f\u043e\u043d\u0435\u0434\u0435\u043b\u043d\u0438\u043a_\u0432\u0442\u043e\u0440\u043d\u0438\u043a_\u0441\u0440\u044f\u0434\u0430_\u0447\u0435\u0442\u0432\u044a\u0440\u0442\u044a\u043a_\u043f\u0435\u0442\u044a\u043a_\u0441\u044a\u0431\u043e\u0442\u0430".split("_"),weekdaysShort:"\u043d\u0435\u0434_\u043f\u043e\u043d_\u0432\u0442\u043e_\u0441\u0440\u044f_\u0447\u0435\u0442_\u043f\u0435\u0442_\u0441\u044a\u0431".split("_"),weekdaysMin:"\u043d\u0434_\u043f\u043d_\u0432\u0442_\u0441\u0440_\u0447\u0442_\u043f\u0442_\u0441\u0431".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"D.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[\u0414\u043d\u0435\u0441 \u0432] LT",nextDay:"[\u0423\u0442\u0440\u0435 \u0432] LT",nextWeek:"dddd [\u0432] LT",lastDay:"[\u0412\u0447\u0435\u0440\u0430 \u0432] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[\u0412 \u0438\u0437\u043c\u0438\u043d\u0430\u043b\u0430\u0442\u0430] dddd [\u0432] LT";case 1:case 2:case 4:case 5:return"[\u0412 \u0438\u0437\u043c\u0438\u043d\u0430\u043b\u0438\u044f] dddd [\u0432] LT"}},sameElse:"L"},relativeTime:{future:"\u0441\u043b\u0435\u0434 %s",past:"\u043f\u0440\u0435\u0434\u0438 %s",s:"\u043d\u044f\u043a\u043e\u043b\u043a\u043e \u0441\u0435\u043a\u0443\u043d\u0434\u0438",ss:"%d \u0441\u0435\u043a\u0443\u043d\u0434\u0438",m:"\u043c\u0438\u043d\u0443\u0442\u0430",mm:"%d \u043c\u0438\u043d\u0443\u0442\u0438",h:"\u0447\u0430\u0441",hh:"%d \u0447\u0430\u0441\u0430",d:"\u0434\u0435\u043d",dd:"%d \u0434\u043d\u0438",M:"\u043c\u0435\u0441\u0435\u0446",MM:"%d \u043c\u0435\u0441\u0435\u0446\u0430",y:"\u0433\u043e\u0434\u0438\u043d\u0430",yy:"%d \u0433\u043e\u0434\u0438\u043d\u0438"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0435\u0432|\u0435\u043d|\u0442\u0438|\u0432\u0438|\u0440\u0438|\u043c\u0438)/,ordinal:function(e){var a=e%10,t=e%100;return 0===e?e+"-\u0435\u0432":0===t?e+"-\u0435\u043d":10<t&&t<20?e+"-\u0442\u0438":1===a?e+"-\u0432\u0438":2===a?e+"-\u0440\u0438":7===a||8===a?e+"-\u043c\u0438":e+"-\u0442\u0438"},week:{dow:1,doy:7}}),l.defineLocale("bm",{months:"Zanwuyekalo_Fewuruyekalo_Marisikalo_Awirilikalo_M\u025bkalo_Zuw\u025bnkalo_Zuluyekalo_Utikalo_S\u025btanburukalo_\u0254kut\u0254burukalo_Nowanburukalo_Desanburukalo".split("_"),monthsShort:"Zan_Few_Mar_Awi_M\u025b_Zuw_Zul_Uti_S\u025bt_\u0254ku_Now_Des".split("_"),weekdays:"Kari_Nt\u025bn\u025bn_Tarata_Araba_Alamisa_Juma_Sibiri".split("_"),weekdaysShort:"Kar_Nt\u025b_Tar_Ara_Ala_Jum_Sib".split("_"),weekdaysMin:"Ka_Nt_Ta_Ar_Al_Ju_Si".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"MMMM [tile] D [san] YYYY",LLL:"MMMM [tile] D [san] YYYY [l\u025br\u025b] HH:mm",LLLL:"dddd MMMM [tile] D [san] YYYY [l\u025br\u025b] HH:mm"},calendar:{sameDay:"[Bi l\u025br\u025b] LT",nextDay:"[Sini l\u025br\u025b] LT",nextWeek:"dddd [don l\u025br\u025b] LT",lastDay:"[Kunu l\u025br\u025b] LT",lastWeek:"dddd [t\u025bm\u025bnen l\u025br\u025b] LT",sameElse:"L"},relativeTime:{future:"%s k\u0254n\u0254",past:"a b\u025b %s b\u0254",s:"sanga dama dama",ss:"sekondi %d",m:"miniti kelen",mm:"miniti %d",h:"l\u025br\u025b kelen",hh:"l\u025br\u025b %d",d:"tile kelen",dd:"tile %d",M:"kalo kelen",MM:"kalo %d",y:"san kelen",yy:"san %d"},week:{dow:1,doy:4}});var ss={1:"\u09e7",2:"\u09e8",3:"\u09e9",4:"\u09ea",5:"\u09eb",6:"\u09ec",7:"\u09ed",8:"\u09ee",9:"\u09ef",0:"\u09e6"},ns={"\u09e7":"1","\u09e8":"2","\u09e9":"3","\u09ea":"4","\u09eb":"5","\u09ec":"6","\u09ed":"7","\u09ee":"8","\u09ef":"9","\u09e6":"0"};l.defineLocale("bn",{months:"\u099c\u09be\u09a8\u09c1\u09df\u09be\u09b0\u09c0_\u09ab\u09c7\u09ac\u09cd\u09b0\u09c1\u09df\u09be\u09b0\u09bf_\u09ae\u09be\u09b0\u09cd\u099a_\u098f\u09aa\u09cd\u09b0\u09bf\u09b2_\u09ae\u09c7_\u099c\u09c1\u09a8_\u099c\u09c1\u09b2\u09be\u0987_\u0986\u0997\u09b8\u09cd\u099f_\u09b8\u09c7\u09aa\u09cd\u099f\u09c7\u09ae\u09cd\u09ac\u09b0_\u0985\u0995\u09cd\u099f\u09cb\u09ac\u09b0_\u09a8\u09ad\u09c7\u09ae\u09cd\u09ac\u09b0_\u09a1\u09bf\u09b8\u09c7\u09ae\u09cd\u09ac\u09b0".split("_"),monthsShort:"\u099c\u09be\u09a8\u09c1_\u09ab\u09c7\u09ac_\u09ae\u09be\u09b0\u09cd\u099a_\u098f\u09aa\u09cd\u09b0_\u09ae\u09c7_\u099c\u09c1\u09a8_\u099c\u09c1\u09b2_\u0986\u0997_\u09b8\u09c7\u09aa\u09cd\u099f_\u0985\u0995\u09cd\u099f\u09cb_\u09a8\u09ad\u09c7_\u09a1\u09bf\u09b8\u09c7".split("_"),weekdays:"\u09b0\u09ac\u09bf\u09ac\u09be\u09b0_\u09b8\u09cb\u09ae\u09ac\u09be\u09b0_\u09ae\u0999\u09cd\u0997\u09b2\u09ac\u09be\u09b0_\u09ac\u09c1\u09a7\u09ac\u09be\u09b0_\u09ac\u09c3\u09b9\u09b8\u09cd\u09aa\u09a4\u09bf\u09ac\u09be\u09b0_\u09b6\u09c1\u0995\u09cd\u09b0\u09ac\u09be\u09b0_\u09b6\u09a8\u09bf\u09ac\u09be\u09b0".split("_"),weekdaysShort:"\u09b0\u09ac\u09bf_\u09b8\u09cb\u09ae_\u09ae\u0999\u09cd\u0997\u09b2_\u09ac\u09c1\u09a7_\u09ac\u09c3\u09b9\u09b8\u09cd\u09aa\u09a4\u09bf_\u09b6\u09c1\u0995\u09cd\u09b0_\u09b6\u09a8\u09bf".split("_"),weekdaysMin:"\u09b0\u09ac\u09bf_\u09b8\u09cb\u09ae_\u09ae\u0999\u09cd\u0997_\u09ac\u09c1\u09a7_\u09ac\u09c3\u09b9\u0983_\u09b6\u09c1\u0995\u09cd\u09b0_\u09b6\u09a8\u09bf".split("_"),longDateFormat:{LT:"A h:mm \u09b8\u09ae\u09df",LTS:"A h:mm:ss \u09b8\u09ae\u09df",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm \u09b8\u09ae\u09df",LLLL:"dddd, D MMMM YYYY, A h:mm \u09b8\u09ae\u09df"},calendar:{sameDay:"[\u0986\u099c] LT",nextDay:"[\u0986\u0997\u09be\u09ae\u09c0\u0995\u09be\u09b2] LT",nextWeek:"dddd, LT",lastDay:"[\u0997\u09a4\u0995\u09be\u09b2] LT",lastWeek:"[\u0997\u09a4] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u09aa\u09b0\u09c7",past:"%s \u0986\u0997\u09c7",s:"\u0995\u09df\u09c7\u0995 \u09b8\u09c7\u0995\u09c7\u09a8\u09cd\u09a1",ss:"%d \u09b8\u09c7\u0995\u09c7\u09a8\u09cd\u09a1",m:"\u098f\u0995 \u09ae\u09bf\u09a8\u09bf\u099f",mm:"%d \u09ae\u09bf\u09a8\u09bf\u099f",h:"\u098f\u0995 \u0998\u09a8\u09cd\u099f\u09be",hh:"%d \u0998\u09a8\u09cd\u099f\u09be",d:"\u098f\u0995 \u09a6\u09bf\u09a8",dd:"%d \u09a6\u09bf\u09a8",M:"\u098f\u0995 \u09ae\u09be\u09b8",MM:"%d \u09ae\u09be\u09b8",y:"\u098f\u0995 \u09ac\u099b\u09b0",yy:"%d \u09ac\u099b\u09b0"},preparse:function(e){return e.replace(/[\u09e7\u09e8\u09e9\u09ea\u09eb\u09ec\u09ed\u09ee\u09ef\u09e6]/g,function(e){return ns[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return ss[e]})},meridiemParse:/\u09b0\u09be\u09a4|\u09b8\u0995\u09be\u09b2|\u09a6\u09c1\u09aa\u09c1\u09b0|\u09ac\u09bf\u0995\u09be\u09b2|\u09b0\u09be\u09a4/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u09b0\u09be\u09a4"===a&&4<=e||"\u09a6\u09c1\u09aa\u09c1\u09b0"===a&&e<5||"\u09ac\u09bf\u0995\u09be\u09b2"===a?e+12:e},meridiem:function(e,a,t){return e<4?"\u09b0\u09be\u09a4":e<10?"\u09b8\u0995\u09be\u09b2":e<17?"\u09a6\u09c1\u09aa\u09c1\u09b0":e<20?"\u09ac\u09bf\u0995\u09be\u09b2":"\u09b0\u09be\u09a4"},week:{dow:0,doy:6}});var ds={1:"\u0f21",2:"\u0f22",3:"\u0f23",4:"\u0f24",5:"\u0f25",6:"\u0f26",7:"\u0f27",8:"\u0f28",9:"\u0f29",0:"\u0f20"},rs={"\u0f21":"1","\u0f22":"2","\u0f23":"3","\u0f24":"4","\u0f25":"5","\u0f26":"6","\u0f27":"7","\u0f28":"8","\u0f29":"9","\u0f20":"0"};function _s(e,a,t){var s,n,d;return e+" "+(s={mm:"munutenn",MM:"miz",dd:"devezh"}[t],2!==e?s:void 0!==(d={m:"v",b:"v",d:"z"})[(n=s).charAt(0)]?d[n.charAt(0)]+n.substring(1):n)}function is(e,a,t){var s=e+" ";switch(t){case"ss":return s+=1===e?"sekunda":2===e||3===e||4===e?"sekunde":"sekundi";case"m":return a?"jedna minuta":"jedne minute";case"mm":return s+=1===e?"minuta":2===e||3===e||4===e?"minute":"minuta";case"h":return a?"jedan sat":"jednog sata";case"hh":return s+=1===e?"sat":2===e||3===e||4===e?"sata":"sati";case"dd":return s+=1===e?"dan":"dana";case"MM":return s+=1===e?"mjesec":2===e||3===e||4===e?"mjeseca":"mjeseci";case"yy":return s+=1===e?"godina":2===e||3===e||4===e?"godine":"godina"}}l.defineLocale("bo",{months:"\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0f44\u0f0b\u0f54\u0f7c_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f42\u0f49\u0f72\u0f66\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f42\u0f66\u0f74\u0f58\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f5e\u0f72\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f63\u0f94\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0fb2\u0f74\u0f42\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f51\u0f74\u0f53\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f62\u0f92\u0fb1\u0f51\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0f42\u0f74\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f42\u0f45\u0f72\u0f42\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f42\u0f49\u0f72\u0f66\u0f0b\u0f54".split("_"),monthsShort:"\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0f44\u0f0b\u0f54\u0f7c_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f42\u0f49\u0f72\u0f66\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f42\u0f66\u0f74\u0f58\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f5e\u0f72\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f63\u0f94\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0fb2\u0f74\u0f42\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f51\u0f74\u0f53\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f62\u0f92\u0fb1\u0f51\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f51\u0f42\u0f74\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f42\u0f45\u0f72\u0f42\u0f0b\u0f54_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f56\u0f45\u0f74\u0f0b\u0f42\u0f49\u0f72\u0f66\u0f0b\u0f54".split("_"),weekdays:"\u0f42\u0f5f\u0f60\u0f0b\u0f49\u0f72\u0f0b\u0f58\u0f0b_\u0f42\u0f5f\u0f60\u0f0b\u0f5f\u0fb3\u0f0b\u0f56\u0f0b_\u0f42\u0f5f\u0f60\u0f0b\u0f58\u0f72\u0f42\u0f0b\u0f51\u0f58\u0f62\u0f0b_\u0f42\u0f5f\u0f60\u0f0b\u0f63\u0fb7\u0f42\u0f0b\u0f54\u0f0b_\u0f42\u0f5f\u0f60\u0f0b\u0f55\u0f74\u0f62\u0f0b\u0f56\u0f74_\u0f42\u0f5f\u0f60\u0f0b\u0f54\u0f0b\u0f66\u0f44\u0f66\u0f0b_\u0f42\u0f5f\u0f60\u0f0b\u0f66\u0fa4\u0f7a\u0f53\u0f0b\u0f54\u0f0b".split("_"),weekdaysShort:"\u0f49\u0f72\u0f0b\u0f58\u0f0b_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b_\u0f58\u0f72\u0f42\u0f0b\u0f51\u0f58\u0f62\u0f0b_\u0f63\u0fb7\u0f42\u0f0b\u0f54\u0f0b_\u0f55\u0f74\u0f62\u0f0b\u0f56\u0f74_\u0f54\u0f0b\u0f66\u0f44\u0f66\u0f0b_\u0f66\u0fa4\u0f7a\u0f53\u0f0b\u0f54\u0f0b".split("_"),weekdaysMin:"\u0f49\u0f72\u0f0b\u0f58\u0f0b_\u0f5f\u0fb3\u0f0b\u0f56\u0f0b_\u0f58\u0f72\u0f42\u0f0b\u0f51\u0f58\u0f62\u0f0b_\u0f63\u0fb7\u0f42\u0f0b\u0f54\u0f0b_\u0f55\u0f74\u0f62\u0f0b\u0f56\u0f74_\u0f54\u0f0b\u0f66\u0f44\u0f66\u0f0b_\u0f66\u0fa4\u0f7a\u0f53\u0f0b\u0f54\u0f0b".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[\u0f51\u0f72\u0f0b\u0f62\u0f72\u0f44] LT",nextDay:"[\u0f66\u0f44\u0f0b\u0f49\u0f72\u0f53] LT",nextWeek:"[\u0f56\u0f51\u0f74\u0f53\u0f0b\u0f55\u0fb2\u0f42\u0f0b\u0f62\u0f97\u0f7a\u0f66\u0f0b\u0f58], LT",lastDay:"[\u0f41\u0f0b\u0f66\u0f44] LT",lastWeek:"[\u0f56\u0f51\u0f74\u0f53\u0f0b\u0f55\u0fb2\u0f42\u0f0b\u0f58\u0f50\u0f60\u0f0b\u0f58] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0f63\u0f0b",past:"%s \u0f66\u0f94\u0f53\u0f0b\u0f63",s:"\u0f63\u0f58\u0f0b\u0f66\u0f44",ss:"%d \u0f66\u0f90\u0f62\u0f0b\u0f46\u0f0d",m:"\u0f66\u0f90\u0f62\u0f0b\u0f58\u0f0b\u0f42\u0f45\u0f72\u0f42",mm:"%d \u0f66\u0f90\u0f62\u0f0b\u0f58",h:"\u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51\u0f0b\u0f42\u0f45\u0f72\u0f42",hh:"%d \u0f46\u0f74\u0f0b\u0f5a\u0f7c\u0f51",d:"\u0f49\u0f72\u0f53\u0f0b\u0f42\u0f45\u0f72\u0f42",dd:"%d \u0f49\u0f72\u0f53\u0f0b",M:"\u0f5f\u0fb3\u0f0b\u0f56\u0f0b\u0f42\u0f45\u0f72\u0f42",MM:"%d \u0f5f\u0fb3\u0f0b\u0f56",y:"\u0f63\u0f7c\u0f0b\u0f42\u0f45\u0f72\u0f42",yy:"%d \u0f63\u0f7c"},preparse:function(e){return e.replace(/[\u0f21\u0f22\u0f23\u0f24\u0f25\u0f26\u0f27\u0f28\u0f29\u0f20]/g,function(e){return rs[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return ds[e]})},meridiemParse:/\u0f58\u0f5a\u0f53\u0f0b\u0f58\u0f7c|\u0f5e\u0f7c\u0f42\u0f66\u0f0b\u0f40\u0f66|\u0f49\u0f72\u0f53\u0f0b\u0f42\u0f74\u0f44|\u0f51\u0f42\u0f7c\u0f44\u0f0b\u0f51\u0f42|\u0f58\u0f5a\u0f53\u0f0b\u0f58\u0f7c/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0f58\u0f5a\u0f53\u0f0b\u0f58\u0f7c"===a&&4<=e||"\u0f49\u0f72\u0f53\u0f0b\u0f42\u0f74\u0f44"===a&&e<5||"\u0f51\u0f42\u0f7c\u0f44\u0f0b\u0f51\u0f42"===a?e+12:e},meridiem:function(e,a,t){return e<4?"\u0f58\u0f5a\u0f53\u0f0b\u0f58\u0f7c":e<10?"\u0f5e\u0f7c\u0f42\u0f66\u0f0b\u0f40\u0f66":e<17?"\u0f49\u0f72\u0f53\u0f0b\u0f42\u0f74\u0f44":e<20?"\u0f51\u0f42\u0f7c\u0f44\u0f0b\u0f51\u0f42":"\u0f58\u0f5a\u0f53\u0f0b\u0f58\u0f7c"},week:{dow:0,doy:6}}),l.defineLocale("br",{months:"Genver_C'hwevrer_Meurzh_Ebrel_Mae_Mezheven_Gouere_Eost_Gwengolo_Here_Du_Kerzu".split("_"),monthsShort:"Gen_C'hwe_Meu_Ebr_Mae_Eve_Gou_Eos_Gwe_Her_Du_Ker".split("_"),weekdays:"Sul_Lun_Meurzh_Merc'her_Yaou_Gwener_Sadorn".split("_"),weekdaysShort:"Sul_Lun_Meu_Mer_Yao_Gwe_Sad".split("_"),weekdaysMin:"Su_Lu_Me_Mer_Ya_Gw_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h[e]mm A",LTS:"h[e]mm:ss A",L:"DD/MM/YYYY",LL:"D [a viz] MMMM YYYY",LLL:"D [a viz] MMMM YYYY h[e]mm A",LLLL:"dddd, D [a viz] MMMM YYYY h[e]mm A"},calendar:{sameDay:"[Hiziv da] LT",nextDay:"[Warc'hoazh da] LT",nextWeek:"dddd [da] LT",lastDay:"[Dec'h da] LT",lastWeek:"dddd [paset da] LT",sameElse:"L"},relativeTime:{future:"a-benn %s",past:"%s 'zo",s:"un nebeud segondenno\xf9",ss:"%d eilenn",m:"ur vunutenn",mm:_s,h:"un eur",hh:"%d eur",d:"un devezh",dd:_s,M:"ur miz",MM:_s,y:"ur bloaz",yy:function(e){switch(function e(a){return 9<a?e(a%10):a}(e)){case 1:case 3:case 4:case 5:case 9:return e+" bloaz";default:return e+" vloaz"}}},dayOfMonthOrdinalParse:/\d{1,2}(a\xf1|vet)/,ordinal:function(e){return e+(1===e?"a\xf1":"vet")},week:{dow:1,doy:4}}),l.defineLocale("bs",{months:"januar_februar_mart_april_maj_juni_juli_august_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._aug._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_\u010detvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._\u010det._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_\u010de_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[ju\u010der u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[pro\u0161lu] dddd [u] LT";case 6:return"[pro\u0161le] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[pro\u0161li] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"par sekundi",ss:is,m:is,mm:is,h:is,hh:is,d:"dan",dd:is,M:"mjesec",MM:is,y:"godinu",yy:is},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),l.defineLocale("ca",{months:{standalone:"gener_febrer_mar\xe7_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre".split("_"),format:"de gener_de febrer_de mar\xe7_d'abril_de maig_de juny_de juliol_d'agost_de setembre_d'octubre_de novembre_de desembre".split("_"),isFormat:/D[oD]?(\s)+MMMM/},monthsShort:"gen._febr._mar\xe7_abr._maig_juny_jul._ag._set._oct._nov._des.".split("_"),monthsParseExact:!0,weekdays:"diumenge_dilluns_dimarts_dimecres_dijous_divendres_dissabte".split("_"),weekdaysShort:"dg._dl._dt._dc._dj._dv._ds.".split("_"),weekdaysMin:"dg_dl_dt_dc_dj_dv_ds".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM [de] YYYY",ll:"D MMM YYYY",LLL:"D MMMM [de] YYYY [a les] H:mm",lll:"D MMM YYYY, H:mm",LLLL:"dddd D MMMM [de] YYYY [a les] H:mm",llll:"ddd D MMM YYYY, H:mm"},calendar:{sameDay:function(){return"[avui a "+(1!==this.hours()?"les":"la")+"] LT"},nextDay:function(){return"[dem\xe0 a "+(1!==this.hours()?"les":"la")+"] LT"},nextWeek:function(){return"dddd [a "+(1!==this.hours()?"les":"la")+"] LT"},lastDay:function(){return"[ahir a "+(1!==this.hours()?"les":"la")+"] LT"},lastWeek:function(){return"[el] dddd [passat a "+(1!==this.hours()?"les":"la")+"] LT"},sameElse:"L"},relativeTime:{future:"d'aqu\xed %s",past:"fa %s",s:"uns segons",ss:"%d segons",m:"un minut",mm:"%d minuts",h:"una hora",hh:"%d hores",d:"un dia",dd:"%d dies",M:"un mes",MM:"%d mesos",y:"un any",yy:"%d anys"},dayOfMonthOrdinalParse:/\d{1,2}(r|n|t|\xe8|a)/,ordinal:function(e,a){var t=1===e?"r":2===e?"n":3===e?"r":4===e?"t":"\xe8";return"w"!==a&&"W"!==a||(t="a"),e+t},week:{dow:1,doy:4}});var os="leden_\xfanor_b\u0159ezen_duben_kv\u011bten_\u010derven_\u010dervenec_srpen_z\xe1\u0159\xed_\u0159\xedjen_listopad_prosinec".split("_"),ms="led_\xfano_b\u0159e_dub_kv\u011b_\u010dvn_\u010dvc_srp_z\xe1\u0159_\u0159\xedj_lis_pro".split("_");function us(e){return 1<e&&e<5&&1!=~~(e/10)}function ls(e,a,t,s){var n=e+" ";switch(t){case"s":return a||s?"p\xe1r sekund":"p\xe1r sekundami";case"ss":return a||s?n+(us(e)?"sekundy":"sekund"):n+"sekundami";break;case"m":return a?"minuta":s?"minutu":"minutou";case"mm":return a||s?n+(us(e)?"minuty":"minut"):n+"minutami";break;case"h":return a?"hodina":s?"hodinu":"hodinou";case"hh":return a||s?n+(us(e)?"hodiny":"hodin"):n+"hodinami";break;case"d":return a||s?"den":"dnem";case"dd":return a||s?n+(us(e)?"dny":"dn\xed"):n+"dny";break;case"M":return a||s?"m\u011bs\xedc":"m\u011bs\xedcem";case"MM":return a||s?n+(us(e)?"m\u011bs\xedce":"m\u011bs\xedc\u016f"):n+"m\u011bs\xedci";break;case"y":return a||s?"rok":"rokem";case"yy":return a||s?n+(us(e)?"roky":"let"):n+"lety";break}}function Ms(e,a,t,s){var n={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[e+" Tage",e+" Tagen"],M:["ein Monat","einem Monat"],MM:[e+" Monate",e+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[e+" Jahre",e+" Jahren"]};return a?n[t][0]:n[t][1]}function hs(e,a,t,s){var n={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[e+" Tage",e+" Tagen"],M:["ein Monat","einem Monat"],MM:[e+" Monate",e+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[e+" Jahre",e+" Jahren"]};return a?n[t][0]:n[t][1]}function Ls(e,a,t,s){var n={m:["eine Minute","einer Minute"],h:["eine Stunde","einer Stunde"],d:["ein Tag","einem Tag"],dd:[e+" Tage",e+" Tagen"],M:["ein Monat","einem Monat"],MM:[e+" Monate",e+" Monaten"],y:["ein Jahr","einem Jahr"],yy:[e+" Jahre",e+" Jahren"]};return a?n[t][0]:n[t][1]}l.defineLocale("cs",{months:os,monthsShort:ms,monthsParse:function(e,a){var t,s=[];for(t=0;t<12;t++)s[t]=new RegExp("^"+e[t]+"$|^"+a[t]+"$","i");return s}(os,ms),shortMonthsParse:function(e){var a,t=[];for(a=0;a<12;a++)t[a]=new RegExp("^"+e[a]+"$","i");return t}(ms),longMonthsParse:function(e){var a,t=[];for(a=0;a<12;a++)t[a]=new RegExp("^"+e[a]+"$","i");return t}(os),weekdays:"ned\u011ble_pond\u011bl\xed_\xfater\xfd_st\u0159eda_\u010dtvrtek_p\xe1tek_sobota".split("_"),weekdaysShort:"ne_po_\xfat_st_\u010dt_p\xe1_so".split("_"),weekdaysMin:"ne_po_\xfat_st_\u010dt_p\xe1_so".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd D. MMMM YYYY H:mm",l:"D. M. YYYY"},calendar:{sameDay:"[dnes v] LT",nextDay:"[z\xedtra v] LT",nextWeek:function(){switch(this.day()){case 0:return"[v ned\u011bli v] LT";case 1:case 2:return"[v] dddd [v] LT";case 3:return"[ve st\u0159edu v] LT";case 4:return"[ve \u010dtvrtek v] LT";case 5:return"[v p\xe1tek v] LT";case 6:return"[v sobotu v] LT"}},lastDay:"[v\u010dera v] LT",lastWeek:function(){switch(this.day()){case 0:return"[minulou ned\u011bli v] LT";case 1:case 2:return"[minul\xe9] dddd [v] LT";case 3:return"[minulou st\u0159edu v] LT";case 4:case 5:return"[minul\xfd] dddd [v] LT";case 6:return"[minulou sobotu v] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"p\u0159ed %s",s:ls,ss:ls,m:ls,mm:ls,h:ls,hh:ls,d:ls,dd:ls,M:ls,MM:ls,y:ls,yy:ls},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("cv",{months:"\u043a\u04d1\u0440\u043b\u0430\u0447_\u043d\u0430\u0440\u04d1\u0441_\u043f\u0443\u0448_\u0430\u043a\u0430_\u043c\u0430\u0439_\u04ab\u04d7\u0440\u0442\u043c\u0435_\u0443\u0442\u04d1_\u04ab\u0443\u0440\u043b\u0430_\u0430\u0432\u04d1\u043d_\u044e\u043f\u0430_\u0447\u04f3\u043a_\u0440\u0430\u0448\u0442\u0430\u0432".split("_"),monthsShort:"\u043a\u04d1\u0440_\u043d\u0430\u0440_\u043f\u0443\u0448_\u0430\u043a\u0430_\u043c\u0430\u0439_\u04ab\u04d7\u0440_\u0443\u0442\u04d1_\u04ab\u0443\u0440_\u0430\u0432\u043d_\u044e\u043f\u0430_\u0447\u04f3\u043a_\u0440\u0430\u0448".split("_"),weekdays:"\u0432\u044b\u0440\u0441\u0430\u0440\u043d\u0438\u043a\u0443\u043d_\u0442\u0443\u043d\u0442\u0438\u043a\u0443\u043d_\u044b\u0442\u043b\u0430\u0440\u0438\u043a\u0443\u043d_\u044e\u043d\u043a\u0443\u043d_\u043a\u04d7\u04ab\u043d\u0435\u0440\u043d\u0438\u043a\u0443\u043d_\u044d\u0440\u043d\u0435\u043a\u0443\u043d_\u0448\u04d1\u043c\u0430\u0442\u043a\u0443\u043d".split("_"),weekdaysShort:"\u0432\u044b\u0440_\u0442\u0443\u043d_\u044b\u0442\u043b_\u044e\u043d_\u043a\u04d7\u04ab_\u044d\u0440\u043d_\u0448\u04d1\u043c".split("_"),weekdaysMin:"\u0432\u0440_\u0442\u043d_\u044b\u0442_\u044e\u043d_\u043a\u04ab_\u044d\u0440_\u0448\u043c".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"YYYY [\u04ab\u0443\u043b\u0445\u0438] MMMM [\u0443\u0439\u04d1\u0445\u04d7\u043d] D[-\u043c\u04d7\u0448\u04d7]",LLL:"YYYY [\u04ab\u0443\u043b\u0445\u0438] MMMM [\u0443\u0439\u04d1\u0445\u04d7\u043d] D[-\u043c\u04d7\u0448\u04d7], HH:mm",LLLL:"dddd, YYYY [\u04ab\u0443\u043b\u0445\u0438] MMMM [\u0443\u0439\u04d1\u0445\u04d7\u043d] D[-\u043c\u04d7\u0448\u04d7], HH:mm"},calendar:{sameDay:"[\u041f\u0430\u044f\u043d] LT [\u0441\u0435\u0445\u0435\u0442\u0440\u0435]",nextDay:"[\u042b\u0440\u0430\u043d] LT [\u0441\u0435\u0445\u0435\u0442\u0440\u0435]",lastDay:"[\u04d6\u043d\u0435\u0440] LT [\u0441\u0435\u0445\u0435\u0442\u0440\u0435]",nextWeek:"[\u04aa\u0438\u0442\u0435\u0441] dddd LT [\u0441\u0435\u0445\u0435\u0442\u0440\u0435]",lastWeek:"[\u0418\u0440\u0442\u043d\u04d7] dddd LT [\u0441\u0435\u0445\u0435\u0442\u0440\u0435]",sameElse:"L"},relativeTime:{future:function(e){return e+(/\u0441\u0435\u0445\u0435\u0442$/i.exec(e)?"\u0440\u0435\u043d":/\u04ab\u0443\u043b$/i.exec(e)?"\u0442\u0430\u043d":"\u0440\u0430\u043d")},past:"%s \u043a\u0430\u044f\u043b\u043b\u0430",s:"\u043f\u04d7\u0440-\u0438\u043a \u04ab\u0435\u043a\u043a\u0443\u043d\u0442",ss:"%d \u04ab\u0435\u043a\u043a\u0443\u043d\u0442",m:"\u043f\u04d7\u0440 \u043c\u0438\u043d\u0443\u0442",mm:"%d \u043c\u0438\u043d\u0443\u0442",h:"\u043f\u04d7\u0440 \u0441\u0435\u0445\u0435\u0442",hh:"%d \u0441\u0435\u0445\u0435\u0442",d:"\u043f\u04d7\u0440 \u043a\u0443\u043d",dd:"%d \u043a\u0443\u043d",M:"\u043f\u04d7\u0440 \u0443\u0439\u04d1\u0445",MM:"%d \u0443\u0439\u04d1\u0445",y:"\u043f\u04d7\u0440 \u04ab\u0443\u043b",yy:"%d \u04ab\u0443\u043b"},dayOfMonthOrdinalParse:/\d{1,2}-\u043c\u04d7\u0448/,ordinal:"%d-\u043c\u04d7\u0448",week:{dow:1,doy:7}}),l.defineLocale("cy",{months:"Ionawr_Chwefror_Mawrth_Ebrill_Mai_Mehefin_Gorffennaf_Awst_Medi_Hydref_Tachwedd_Rhagfyr".split("_"),monthsShort:"Ion_Chwe_Maw_Ebr_Mai_Meh_Gor_Aws_Med_Hyd_Tach_Rhag".split("_"),weekdays:"Dydd Sul_Dydd Llun_Dydd Mawrth_Dydd Mercher_Dydd Iau_Dydd Gwener_Dydd Sadwrn".split("_"),weekdaysShort:"Sul_Llun_Maw_Mer_Iau_Gwe_Sad".split("_"),weekdaysMin:"Su_Ll_Ma_Me_Ia_Gw_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Heddiw am] LT",nextDay:"[Yfory am] LT",nextWeek:"dddd [am] LT",lastDay:"[Ddoe am] LT",lastWeek:"dddd [diwethaf am] LT",sameElse:"L"},relativeTime:{future:"mewn %s",past:"%s yn \xf4l",s:"ychydig eiliadau",ss:"%d eiliad",m:"munud",mm:"%d munud",h:"awr",hh:"%d awr",d:"diwrnod",dd:"%d diwrnod",M:"mis",MM:"%d mis",y:"blwyddyn",yy:"%d flynedd"},dayOfMonthOrdinalParse:/\d{1,2}(fed|ain|af|il|ydd|ed|eg)/,ordinal:function(e){var a="";return 20<e?a=40===e||50===e||60===e||80===e||100===e?"fed":"ain":0<e&&(a=["","af","il","ydd","ydd","ed","ed","ed","fed","fed","fed","eg","fed","eg","eg","fed","eg","eg","fed","eg","fed"][e]),e+a},week:{dow:1,doy:4}}),l.defineLocale("da",{months:"januar_februar_marts_april_maj_juni_juli_august_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"s\xf8ndag_mandag_tirsdag_onsdag_torsdag_fredag_l\xf8rdag".split("_"),weekdaysShort:"s\xf8n_man_tir_ons_tor_fre_l\xf8r".split("_"),weekdaysMin:"s\xf8_ma_ti_on_to_fr_l\xf8".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd [d.] D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[i dag kl.] LT",nextDay:"[i morgen kl.] LT",nextWeek:"p\xe5 dddd [kl.] LT",lastDay:"[i g\xe5r kl.] LT",lastWeek:"[i] dddd[s kl.] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s siden",s:"f\xe5 sekunder",ss:"%d sekunder",m:"et minut",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dage",M:"en m\xe5ned",MM:"%d m\xe5neder",y:"et \xe5r",yy:"%d \xe5r"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("de-at",{months:"J\xe4nner_Februar_M\xe4rz_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"J\xe4n._Feb._M\xe4rz_Apr._Mai_Juni_Juli_Aug._Sep._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So._Mo._Di._Mi._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd, D. MMMM YYYY HH:mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",ss:"%d Sekunden",m:Ms,mm:"%d Minuten",h:Ms,hh:"%d Stunden",d:Ms,dd:Ms,M:Ms,MM:Ms,y:Ms,yy:Ms},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("de-ch",{months:"Januar_Februar_M\xe4rz_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Feb._M\xe4rz_Apr._Mai_Juni_Juli_Aug._Sep._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd, D. MMMM YYYY HH:mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",ss:"%d Sekunden",m:hs,mm:"%d Minuten",h:hs,hh:"%d Stunden",d:hs,dd:hs,M:hs,MM:hs,y:hs,yy:hs},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("de",{months:"Januar_Februar_M\xe4rz_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Feb._M\xe4rz_Apr._Mai_Juni_Juli_Aug._Sep._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),weekdaysShort:"So._Mo._Di._Mi._Do._Fr._Sa.".split("_"),weekdaysMin:"So_Mo_Di_Mi_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY HH:mm",LLLL:"dddd, D. MMMM YYYY HH:mm"},calendar:{sameDay:"[heute um] LT [Uhr]",sameElse:"L",nextDay:"[morgen um] LT [Uhr]",nextWeek:"dddd [um] LT [Uhr]",lastDay:"[gestern um] LT [Uhr]",lastWeek:"[letzten] dddd [um] LT [Uhr]"},relativeTime:{future:"in %s",past:"vor %s",s:"ein paar Sekunden",ss:"%d Sekunden",m:Ls,mm:"%d Minuten",h:Ls,hh:"%d Stunden",d:Ls,dd:Ls,M:Ls,MM:Ls,y:Ls,yy:Ls},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var cs=["\u0796\u07ac\u0782\u07aa\u0787\u07a6\u0783\u07a9","\u078a\u07ac\u0784\u07b0\u0783\u07aa\u0787\u07a6\u0783\u07a9","\u0789\u07a7\u0783\u07a8\u0797\u07aa","\u0787\u07ad\u0795\u07b0\u0783\u07a9\u078d\u07aa","\u0789\u07ad","\u0796\u07ab\u0782\u07b0","\u0796\u07aa\u078d\u07a6\u0787\u07a8","\u0787\u07af\u078e\u07a6\u0790\u07b0\u0793\u07aa","\u0790\u07ac\u0795\u07b0\u0793\u07ac\u0789\u07b0\u0784\u07a6\u0783\u07aa","\u0787\u07ae\u0786\u07b0\u0793\u07af\u0784\u07a6\u0783\u07aa","\u0782\u07ae\u0788\u07ac\u0789\u07b0\u0784\u07a6\u0783\u07aa","\u0791\u07a8\u0790\u07ac\u0789\u07b0\u0784\u07a6\u0783\u07aa"],Ys=["\u0787\u07a7\u078b\u07a8\u0787\u07b0\u078c\u07a6","\u0780\u07af\u0789\u07a6","\u0787\u07a6\u0782\u07b0\u078e\u07a7\u0783\u07a6","\u0784\u07aa\u078b\u07a6","\u0784\u07aa\u0783\u07a7\u0790\u07b0\u078a\u07a6\u078c\u07a8","\u0780\u07aa\u0786\u07aa\u0783\u07aa","\u0780\u07ae\u0782\u07a8\u0780\u07a8\u0783\u07aa"];l.defineLocale("dv",{months:cs,monthsShort:cs,weekdays:Ys,weekdaysShort:Ys,weekdaysMin:"\u0787\u07a7\u078b\u07a8_\u0780\u07af\u0789\u07a6_\u0787\u07a6\u0782\u07b0_\u0784\u07aa\u078b\u07a6_\u0784\u07aa\u0783\u07a7_\u0780\u07aa\u0786\u07aa_\u0780\u07ae\u0782\u07a8".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"D/M/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},meridiemParse:/\u0789\u0786|\u0789\u078a/,isPM:function(e){return"\u0789\u078a"===e},meridiem:function(e,a,t){return e<12?"\u0789\u0786":"\u0789\u078a"},calendar:{sameDay:"[\u0789\u07a8\u0787\u07a6\u078b\u07aa] LT",nextDay:"[\u0789\u07a7\u078b\u07a6\u0789\u07a7] LT",nextWeek:"dddd LT",lastDay:"[\u0787\u07a8\u0787\u07b0\u0794\u07ac] LT",lastWeek:"[\u078a\u07a7\u0787\u07a8\u078c\u07aa\u0788\u07a8] dddd LT",sameElse:"L"},relativeTime:{future:"\u078c\u07ac\u0783\u07ad\u078e\u07a6\u0787\u07a8 %s",past:"\u0786\u07aa\u0783\u07a8\u0782\u07b0 %s",s:"\u0790\u07a8\u0786\u07aa\u0782\u07b0\u078c\u07aa\u0786\u07ae\u0785\u07ac\u0787\u07b0",ss:"d% \u0790\u07a8\u0786\u07aa\u0782\u07b0\u078c\u07aa",m:"\u0789\u07a8\u0782\u07a8\u0793\u07ac\u0787\u07b0",mm:"\u0789\u07a8\u0782\u07a8\u0793\u07aa %d",h:"\u078e\u07a6\u0791\u07a8\u0787\u07a8\u0783\u07ac\u0787\u07b0",hh:"\u078e\u07a6\u0791\u07a8\u0787\u07a8\u0783\u07aa %d",d:"\u078b\u07aa\u0788\u07a6\u0780\u07ac\u0787\u07b0",dd:"\u078b\u07aa\u0788\u07a6\u0790\u07b0 %d",M:"\u0789\u07a6\u0780\u07ac\u0787\u07b0",MM:"\u0789\u07a6\u0790\u07b0 %d",y:"\u0787\u07a6\u0780\u07a6\u0783\u07ac\u0787\u07b0",yy:"\u0787\u07a6\u0780\u07a6\u0783\u07aa %d"},preparse:function(e){return e.replace(/\u060c/g,",")},postformat:function(e){return e.replace(/,/g,"\u060c")},week:{dow:7,doy:12}}),l.defineLocale("el",{monthsNominativeEl:"\u0399\u03b1\u03bd\u03bf\u03c5\u03ac\u03c1\u03b9\u03bf\u03c2_\u03a6\u03b5\u03b2\u03c1\u03bf\u03c5\u03ac\u03c1\u03b9\u03bf\u03c2_\u039c\u03ac\u03c1\u03c4\u03b9\u03bf\u03c2_\u0391\u03c0\u03c1\u03af\u03bb\u03b9\u03bf\u03c2_\u039c\u03ac\u03b9\u03bf\u03c2_\u0399\u03bf\u03cd\u03bd\u03b9\u03bf\u03c2_\u0399\u03bf\u03cd\u03bb\u03b9\u03bf\u03c2_\u0391\u03cd\u03b3\u03bf\u03c5\u03c3\u03c4\u03bf\u03c2_\u03a3\u03b5\u03c0\u03c4\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2_\u039f\u03ba\u03c4\u03ce\u03b2\u03c1\u03b9\u03bf\u03c2_\u039d\u03bf\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2_\u0394\u03b5\u03ba\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2".split("_"),monthsGenitiveEl:"\u0399\u03b1\u03bd\u03bf\u03c5\u03b1\u03c1\u03af\u03bf\u03c5_\u03a6\u03b5\u03b2\u03c1\u03bf\u03c5\u03b1\u03c1\u03af\u03bf\u03c5_\u039c\u03b1\u03c1\u03c4\u03af\u03bf\u03c5_\u0391\u03c0\u03c1\u03b9\u03bb\u03af\u03bf\u03c5_\u039c\u03b1\u0390\u03bf\u03c5_\u0399\u03bf\u03c5\u03bd\u03af\u03bf\u03c5_\u0399\u03bf\u03c5\u03bb\u03af\u03bf\u03c5_\u0391\u03c5\u03b3\u03bf\u03cd\u03c3\u03c4\u03bf\u03c5_\u03a3\u03b5\u03c0\u03c4\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5_\u039f\u03ba\u03c4\u03c9\u03b2\u03c1\u03af\u03bf\u03c5_\u039d\u03bf\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5_\u0394\u03b5\u03ba\u03b5\u03bc\u03b2\u03c1\u03af\u03bf\u03c5".split("_"),months:function(e,a){return e?"string"==typeof a&&/D/.test(a.substring(0,a.indexOf("MMMM")))?this._monthsGenitiveEl[e.month()]:this._monthsNominativeEl[e.month()]:this._monthsNominativeEl},monthsShort:"\u0399\u03b1\u03bd_\u03a6\u03b5\u03b2_\u039c\u03b1\u03c1_\u0391\u03c0\u03c1_\u039c\u03b1\u03ca_\u0399\u03bf\u03c5\u03bd_\u0399\u03bf\u03c5\u03bb_\u0391\u03c5\u03b3_\u03a3\u03b5\u03c0_\u039f\u03ba\u03c4_\u039d\u03bf\u03b5_\u0394\u03b5\u03ba".split("_"),weekdays:"\u039a\u03c5\u03c1\u03b9\u03b1\u03ba\u03ae_\u0394\u03b5\u03c5\u03c4\u03ad\u03c1\u03b1_\u03a4\u03c1\u03af\u03c4\u03b7_\u03a4\u03b5\u03c4\u03ac\u03c1\u03c4\u03b7_\u03a0\u03ad\u03bc\u03c0\u03c4\u03b7_\u03a0\u03b1\u03c1\u03b1\u03c3\u03ba\u03b5\u03c5\u03ae_\u03a3\u03ac\u03b2\u03b2\u03b1\u03c4\u03bf".split("_"),weekdaysShort:"\u039a\u03c5\u03c1_\u0394\u03b5\u03c5_\u03a4\u03c1\u03b9_\u03a4\u03b5\u03c4_\u03a0\u03b5\u03bc_\u03a0\u03b1\u03c1_\u03a3\u03b1\u03b2".split("_"),weekdaysMin:"\u039a\u03c5_\u0394\u03b5_\u03a4\u03c1_\u03a4\u03b5_\u03a0\u03b5_\u03a0\u03b1_\u03a3\u03b1".split("_"),meridiem:function(e,a,t){return 11<e?t?"\u03bc\u03bc":"\u039c\u039c":t?"\u03c0\u03bc":"\u03a0\u039c"},isPM:function(e){return"\u03bc"===(e+"").toLowerCase()[0]},meridiemParse:/[\u03a0\u039c]\.?\u039c?\.?/i,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendarEl:{sameDay:"[\u03a3\u03ae\u03bc\u03b5\u03c1\u03b1 {}] LT",nextDay:"[\u0391\u03cd\u03c1\u03b9\u03bf {}] LT",nextWeek:"dddd [{}] LT",lastDay:"[\u03a7\u03b8\u03b5\u03c2 {}] LT",lastWeek:function(){switch(this.day()){case 6:return"[\u03c4\u03bf \u03c0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03bf] dddd [{}] LT";default:return"[\u03c4\u03b7\u03bd \u03c0\u03c1\u03bf\u03b7\u03b3\u03bf\u03cd\u03bc\u03b5\u03bd\u03b7] dddd [{}] LT"}},sameElse:"L"},calendar:function(e,a){var t=this._calendarEl[e],s=a&&a.hours();return S(t)&&(t=t.apply(a)),t.replace("{}",s%12==1?"\u03c3\u03c4\u03b7":"\u03c3\u03c4\u03b9\u03c2")},relativeTime:{future:"\u03c3\u03b5 %s",past:"%s \u03c0\u03c1\u03b9\u03bd",s:"\u03bb\u03af\u03b3\u03b1 \u03b4\u03b5\u03c5\u03c4\u03b5\u03c1\u03cc\u03bb\u03b5\u03c0\u03c4\u03b1",ss:"%d \u03b4\u03b5\u03c5\u03c4\u03b5\u03c1\u03cc\u03bb\u03b5\u03c0\u03c4\u03b1",m:"\u03ad\u03bd\u03b1 \u03bb\u03b5\u03c0\u03c4\u03cc",mm:"%d \u03bb\u03b5\u03c0\u03c4\u03ac",h:"\u03bc\u03af\u03b1 \u03ce\u03c1\u03b1",hh:"%d \u03ce\u03c1\u03b5\u03c2",d:"\u03bc\u03af\u03b1 \u03bc\u03ad\u03c1\u03b1",dd:"%d \u03bc\u03ad\u03c1\u03b5\u03c2",M:"\u03ad\u03bd\u03b1\u03c2 \u03bc\u03ae\u03bd\u03b1\u03c2",MM:"%d \u03bc\u03ae\u03bd\u03b5\u03c2",y:"\u03ad\u03bd\u03b1\u03c2 \u03c7\u03c1\u03cc\u03bd\u03bf\u03c2",yy:"%d \u03c7\u03c1\u03cc\u03bd\u03b9\u03b1"},dayOfMonthOrdinalParse:/\d{1,2}\u03b7/,ordinal:"%d\u03b7",week:{dow:1,doy:4}}),l.defineLocale("en-au",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}}),l.defineLocale("en-ca",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"YYYY-MM-DD",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY h:mm A",LLLL:"dddd, MMMM D, YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")}}),l.defineLocale("en-gb",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}}),l.defineLocale("en-ie",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}}),l.defineLocale("en-il",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")}}),l.defineLocale("en-nz",{months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),monthsShort:"Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec".split("_"),weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),weekdaysShort:"Sun_Mon_Tue_Wed_Thu_Fri_Sat".split("_"),weekdaysMin:"Su_Mo_Tu_We_Th_Fr_Sa".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Today at] LT",nextDay:"[Tomorrow at] LT",nextWeek:"dddd [at] LT",lastDay:"[Yesterday at] LT",lastWeek:"[Last] dddd [at] LT",sameElse:"L"},relativeTime:{future:"in %s",past:"%s ago",s:"a few seconds",ss:"%d seconds",m:"a minute",mm:"%d minutes",h:"an hour",hh:"%d hours",d:"a day",dd:"%d days",M:"a month",MM:"%d months",y:"a year",yy:"%d years"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}}),l.defineLocale("eo",{months:"januaro_februaro_marto_aprilo_majo_junio_julio_a\u016dgusto_septembro_oktobro_novembro_decembro".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_a\u016dg_sep_okt_nov_dec".split("_"),weekdays:"diman\u0109o_lundo_mardo_merkredo_\u0135a\u016ddo_vendredo_sabato".split("_"),weekdaysShort:"dim_lun_mard_merk_\u0135a\u016d_ven_sab".split("_"),weekdaysMin:"di_lu_ma_me_\u0135a_ve_sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D[-a de] MMMM, YYYY",LLL:"D[-a de] MMMM, YYYY HH:mm",LLLL:"dddd, [la] D[-a de] MMMM, YYYY HH:mm"},meridiemParse:/[ap]\.t\.m/i,isPM:function(e){return"p"===e.charAt(0).toLowerCase()},meridiem:function(e,a,t){return 11<e?t?"p.t.m.":"P.T.M.":t?"a.t.m.":"A.T.M."},calendar:{sameDay:"[Hodia\u016d je] LT",nextDay:"[Morga\u016d je] LT",nextWeek:"dddd [je] LT",lastDay:"[Hiera\u016d je] LT",lastWeek:"[pasinta] dddd [je] LT",sameElse:"L"},relativeTime:{future:"post %s",past:"anta\u016d %s",s:"sekundoj",ss:"%d sekundoj",m:"minuto",mm:"%d minutoj",h:"horo",hh:"%d horoj",d:"tago",dd:"%d tagoj",M:"monato",MM:"%d monatoj",y:"jaro",yy:"%d jaroj"},dayOfMonthOrdinalParse:/\d{1,2}a/,ordinal:"%da",week:{dow:1,doy:7}});var ys="ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),fs="ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_"),ks=[/^ene/i,/^feb/i,/^mar/i,/^abr/i,/^may/i,/^jun/i,/^jul/i,/^ago/i,/^sep/i,/^oct/i,/^nov/i,/^dic/i],ps=/^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i;l.defineLocale("es-do",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?fs[e.month()]:ys[e.month()]:ys},monthsRegex:ps,monthsShortRegex:ps,monthsStrictRegex:/^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,monthsShortStrictRegex:/^(ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i,monthsParse:ks,longMonthsParse:ks,shortMonthsParse:ks,weekdays:"domingo_lunes_martes_mi\xe9rcoles_jueves_viernes_s\xe1bado".split("_"),weekdaysShort:"dom._lun._mar._mi\xe9._jue._vie._s\xe1b.".split("_"),weekdaysMin:"do_lu_ma_mi_ju_vi_s\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY h:mm A",LLLL:"dddd, D [de] MMMM [de] YYYY h:mm A"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[ma\xf1ana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",ss:"%d segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un d\xeda",dd:"%d d\xedas",M:"un mes",MM:"%d meses",y:"un a\xf1o",yy:"%d a\xf1os"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}});var Ds="ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),Ts="ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_");l.defineLocale("es-us",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?Ts[e.month()]:Ds[e.month()]:Ds},monthsParseExact:!0,weekdays:"domingo_lunes_martes_mi\xe9rcoles_jueves_viernes_s\xe1bado".split("_"),weekdaysShort:"dom._lun._mar._mi\xe9._jue._vie._s\xe1b.".split("_"),weekdaysMin:"do_lu_ma_mi_ju_vi_s\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"MM/DD/YYYY",LL:"MMMM [de] D [de] YYYY",LLL:"MMMM [de] D [de] YYYY h:mm A",LLLL:"dddd, MMMM [de] D [de] YYYY h:mm A"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[ma\xf1ana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",ss:"%d segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un d\xeda",dd:"%d d\xedas",M:"un mes",MM:"%d meses",y:"un a\xf1o",yy:"%d a\xf1os"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:0,doy:6}});var gs="ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.".split("_"),ws="ene_feb_mar_abr_may_jun_jul_ago_sep_oct_nov_dic".split("_"),vs=[/^ene/i,/^feb/i,/^mar/i,/^abr/i,/^may/i,/^jun/i,/^jul/i,/^ago/i,/^sep/i,/^oct/i,/^nov/i,/^dic/i],Hs=/^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i;function Ss(e,a,t,s){var n={s:["m\xf5ne sekundi","m\xf5ni sekund","paar sekundit"],ss:[e+"sekundi",e+"sekundit"],m:["\xfche minuti","\xfcks minut"],mm:[e+" minuti",e+" minutit"],h:["\xfche tunni","tund aega","\xfcks tund"],hh:[e+" tunni",e+" tundi"],d:["\xfche p\xe4eva","\xfcks p\xe4ev"],M:["kuu aja","kuu aega","\xfcks kuu"],MM:[e+" kuu",e+" kuud"],y:["\xfche aasta","aasta","\xfcks aasta"],yy:[e+" aasta",e+" aastat"]};return a?n[t][2]?n[t][2]:n[t][1]:s?n[t][0]:n[t][1]}l.defineLocale("es",{months:"enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?ws[e.month()]:gs[e.month()]:gs},monthsRegex:Hs,monthsShortRegex:Hs,monthsStrictRegex:/^(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/i,monthsShortStrictRegex:/^(ene\.?|feb\.?|mar\.?|abr\.?|may\.?|jun\.?|jul\.?|ago\.?|sep\.?|oct\.?|nov\.?|dic\.?)/i,monthsParse:vs,longMonthsParse:vs,shortMonthsParse:vs,weekdays:"domingo_lunes_martes_mi\xe9rcoles_jueves_viernes_s\xe1bado".split("_"),weekdaysShort:"dom._lun._mar._mi\xe9._jue._vie._s\xe1b.".split("_"),weekdaysMin:"do_lu_ma_mi_ju_vi_s\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY H:mm",LLLL:"dddd, D [de] MMMM [de] YYYY H:mm"},calendar:{sameDay:function(){return"[hoy a la"+(1!==this.hours()?"s":"")+"] LT"},nextDay:function(){return"[ma\xf1ana a la"+(1!==this.hours()?"s":"")+"] LT"},nextWeek:function(){return"dddd [a la"+(1!==this.hours()?"s":"")+"] LT"},lastDay:function(){return"[ayer a la"+(1!==this.hours()?"s":"")+"] LT"},lastWeek:function(){return"[el] dddd [pasado a la"+(1!==this.hours()?"s":"")+"] LT"},sameElse:"L"},relativeTime:{future:"en %s",past:"hace %s",s:"unos segundos",ss:"%d segundos",m:"un minuto",mm:"%d minutos",h:"una hora",hh:"%d horas",d:"un d\xeda",dd:"%d d\xedas",M:"un mes",MM:"%d meses",y:"un a\xf1o",yy:"%d a\xf1os"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}}),l.defineLocale("et",{months:"jaanuar_veebruar_m\xe4rts_aprill_mai_juuni_juuli_august_september_oktoober_november_detsember".split("_"),monthsShort:"jaan_veebr_m\xe4rts_apr_mai_juuni_juuli_aug_sept_okt_nov_dets".split("_"),weekdays:"p\xfchap\xe4ev_esmasp\xe4ev_teisip\xe4ev_kolmap\xe4ev_neljap\xe4ev_reede_laup\xe4ev".split("_"),weekdaysShort:"P_E_T_K_N_R_L".split("_"),weekdaysMin:"P_E_T_K_N_R_L".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[T\xe4na,] LT",nextDay:"[Homme,] LT",nextWeek:"[J\xe4rgmine] dddd LT",lastDay:"[Eile,] LT",lastWeek:"[Eelmine] dddd LT",sameElse:"L"},relativeTime:{future:"%s p\xe4rast",past:"%s tagasi",s:Ss,ss:Ss,m:Ss,mm:Ss,h:Ss,hh:Ss,d:Ss,dd:"%d p\xe4eva",M:Ss,MM:Ss,y:Ss,yy:Ss},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("eu",{months:"urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua".split("_"),monthsShort:"urt._ots._mar._api._mai._eka._uzt._abu._ira._urr._aza._abe.".split("_"),monthsParseExact:!0,weekdays:"igandea_astelehena_asteartea_asteazkena_osteguna_ostirala_larunbata".split("_"),weekdaysShort:"ig._al._ar._az._og._ol._lr.".split("_"),weekdaysMin:"ig_al_ar_az_og_ol_lr".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY[ko] MMMM[ren] D[a]",LLL:"YYYY[ko] MMMM[ren] D[a] HH:mm",LLLL:"dddd, YYYY[ko] MMMM[ren] D[a] HH:mm",l:"YYYY-M-D",ll:"YYYY[ko] MMM D[a]",lll:"YYYY[ko] MMM D[a] HH:mm",llll:"ddd, YYYY[ko] MMM D[a] HH:mm"},calendar:{sameDay:"[gaur] LT[etan]",nextDay:"[bihar] LT[etan]",nextWeek:"dddd LT[etan]",lastDay:"[atzo] LT[etan]",lastWeek:"[aurreko] dddd LT[etan]",sameElse:"L"},relativeTime:{future:"%s barru",past:"duela %s",s:"segundo batzuk",ss:"%d segundo",m:"minutu bat",mm:"%d minutu",h:"ordu bat",hh:"%d ordu",d:"egun bat",dd:"%d egun",M:"hilabete bat",MM:"%d hilabete",y:"urte bat",yy:"%d urte"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});var bs={1:"\u06f1",2:"\u06f2",3:"\u06f3",4:"\u06f4",5:"\u06f5",6:"\u06f6",7:"\u06f7",8:"\u06f8",9:"\u06f9",0:"\u06f0"},js={"\u06f1":"1","\u06f2":"2","\u06f3":"3","\u06f4":"4","\u06f5":"5","\u06f6":"6","\u06f7":"7","\u06f8":"8","\u06f9":"9","\u06f0":"0"};l.defineLocale("fa",{months:"\u0698\u0627\u0646\u0648\u06cc\u0647_\u0641\u0648\u0631\u06cc\u0647_\u0645\u0627\u0631\u0633_\u0622\u0648\u0631\u06cc\u0644_\u0645\u0647_\u0698\u0648\u0626\u0646_\u0698\u0648\u0626\u06cc\u0647_\u0627\u0648\u062a_\u0633\u067e\u062a\u0627\u0645\u0628\u0631_\u0627\u06a9\u062a\u0628\u0631_\u0646\u0648\u0627\u0645\u0628\u0631_\u062f\u0633\u0627\u0645\u0628\u0631".split("_"),monthsShort:"\u0698\u0627\u0646\u0648\u06cc\u0647_\u0641\u0648\u0631\u06cc\u0647_\u0645\u0627\u0631\u0633_\u0622\u0648\u0631\u06cc\u0644_\u0645\u0647_\u0698\u0648\u0626\u0646_\u0698\u0648\u0626\u06cc\u0647_\u0627\u0648\u062a_\u0633\u067e\u062a\u0627\u0645\u0628\u0631_\u0627\u06a9\u062a\u0628\u0631_\u0646\u0648\u0627\u0645\u0628\u0631_\u062f\u0633\u0627\u0645\u0628\u0631".split("_"),weekdays:"\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647_\u062f\u0648\u0634\u0646\u0628\u0647_\u0633\u0647\u200c\u0634\u0646\u0628\u0647_\u0686\u0647\u0627\u0631\u0634\u0646\u0628\u0647_\u067e\u0646\u062c\u200c\u0634\u0646\u0628\u0647_\u062c\u0645\u0639\u0647_\u0634\u0646\u0628\u0647".split("_"),weekdaysShort:"\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647_\u062f\u0648\u0634\u0646\u0628\u0647_\u0633\u0647\u200c\u0634\u0646\u0628\u0647_\u0686\u0647\u0627\u0631\u0634\u0646\u0628\u0647_\u067e\u0646\u062c\u200c\u0634\u0646\u0628\u0647_\u062c\u0645\u0639\u0647_\u0634\u0646\u0628\u0647".split("_"),weekdaysMin:"\u06cc_\u062f_\u0633_\u0686_\u067e_\u062c_\u0634".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},meridiemParse:/\u0642\u0628\u0644 \u0627\u0632 \u0638\u0647\u0631|\u0628\u0639\u062f \u0627\u0632 \u0638\u0647\u0631/,isPM:function(e){return/\u0628\u0639\u062f \u0627\u0632 \u0638\u0647\u0631/.test(e)},meridiem:function(e,a,t){return e<12?"\u0642\u0628\u0644 \u0627\u0632 \u0638\u0647\u0631":"\u0628\u0639\u062f \u0627\u0632 \u0638\u0647\u0631"},calendar:{sameDay:"[\u0627\u0645\u0631\u0648\u0632 \u0633\u0627\u0639\u062a] LT",nextDay:"[\u0641\u0631\u062f\u0627 \u0633\u0627\u0639\u062a] LT",nextWeek:"dddd [\u0633\u0627\u0639\u062a] LT",lastDay:"[\u062f\u06cc\u0631\u0648\u0632 \u0633\u0627\u0639\u062a] LT",lastWeek:"dddd [\u067e\u06cc\u0634] [\u0633\u0627\u0639\u062a] LT",sameElse:"L"},relativeTime:{future:"\u062f\u0631 %s",past:"%s \u067e\u06cc\u0634",s:"\u0686\u0646\u062f \u062b\u0627\u0646\u06cc\u0647",ss:"\u062b\u0627\u0646\u06cc\u0647 d%",m:"\u06cc\u06a9 \u062f\u0642\u06cc\u0642\u0647",mm:"%d \u062f\u0642\u06cc\u0642\u0647",h:"\u06cc\u06a9 \u0633\u0627\u0639\u062a",hh:"%d \u0633\u0627\u0639\u062a",d:"\u06cc\u06a9 \u0631\u0648\u0632",dd:"%d \u0631\u0648\u0632",M:"\u06cc\u06a9 \u0645\u0627\u0647",MM:"%d \u0645\u0627\u0647",y:"\u06cc\u06a9 \u0633\u0627\u0644",yy:"%d \u0633\u0627\u0644"},preparse:function(e){return e.replace(/[\u06f0-\u06f9]/g,function(e){return js[e]}).replace(/\u060c/g,",")},postformat:function(e){return e.replace(/\d/g,function(e){return bs[e]}).replace(/,/g,"\u060c")},dayOfMonthOrdinalParse:/\d{1,2}\u0645/,ordinal:"%d\u0645",week:{dow:6,doy:12}});var xs="nolla yksi kaksi kolme nelj\xe4 viisi kuusi seitsem\xe4n kahdeksan yhdeks\xe4n".split(" "),Ps=["nolla","yhden","kahden","kolmen","nelj\xe4n","viiden","kuuden",xs[7],xs[8],xs[9]];function Os(e,a,t,s){var n,d,r="";switch(t){case"s":return s?"muutaman sekunnin":"muutama sekunti";case"ss":return s?"sekunnin":"sekuntia";case"m":return s?"minuutin":"minuutti";case"mm":r=s?"minuutin":"minuuttia";break;case"h":return s?"tunnin":"tunti";case"hh":r=s?"tunnin":"tuntia";break;case"d":return s?"p\xe4iv\xe4n":"p\xe4iv\xe4";case"dd":r=s?"p\xe4iv\xe4n":"p\xe4iv\xe4\xe4";break;case"M":return s?"kuukauden":"kuukausi";case"MM":r=s?"kuukauden":"kuukautta";break;case"y":return s?"vuoden":"vuosi";case"yy":r=s?"vuoden":"vuotta";break}return d=s,r=((n=e)<10?d?Ps[n]:xs[n]:n)+" "+r}l.defineLocale("fi",{months:"tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kes\xe4kuu_hein\xe4kuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu".split("_"),monthsShort:"tammi_helmi_maalis_huhti_touko_kes\xe4_hein\xe4_elo_syys_loka_marras_joulu".split("_"),weekdays:"sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai".split("_"),weekdaysShort:"su_ma_ti_ke_to_pe_la".split("_"),weekdaysMin:"su_ma_ti_ke_to_pe_la".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD.MM.YYYY",LL:"Do MMMM[ta] YYYY",LLL:"Do MMMM[ta] YYYY, [klo] HH.mm",LLLL:"dddd, Do MMMM[ta] YYYY, [klo] HH.mm",l:"D.M.YYYY",ll:"Do MMM YYYY",lll:"Do MMM YYYY, [klo] HH.mm",llll:"ddd, Do MMM YYYY, [klo] HH.mm"},calendar:{sameDay:"[t\xe4n\xe4\xe4n] [klo] LT",nextDay:"[huomenna] [klo] LT",nextWeek:"dddd [klo] LT",lastDay:"[eilen] [klo] LT",lastWeek:"[viime] dddd[na] [klo] LT",sameElse:"L"},relativeTime:{future:"%s p\xe4\xe4st\xe4",past:"%s sitten",s:Os,ss:Os,m:Os,mm:Os,h:Os,hh:Os,d:Os,dd:Os,M:Os,MM:Os,y:Os,yy:Os},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("fo",{months:"januar_februar_mars_apr\xedl_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sunnudagur_m\xe1nadagur_t\xfdsdagur_mikudagur_h\xf3sdagur_fr\xedggjadagur_leygardagur".split("_"),weekdaysShort:"sun_m\xe1n_t\xfds_mik_h\xf3s_fr\xed_ley".split("_"),weekdaysMin:"su_m\xe1_t\xfd_mi_h\xf3_fr_le".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D. MMMM, YYYY HH:mm"},calendar:{sameDay:"[\xcd dag kl.] LT",nextDay:"[\xcd morgin kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[\xcd gj\xe1r kl.] LT",lastWeek:"[s\xed\xf0stu] dddd [kl] LT",sameElse:"L"},relativeTime:{future:"um %s",past:"%s s\xed\xf0ani",s:"f\xe1 sekund",ss:"%d sekundir",m:"ein minutt",mm:"%d minuttir",h:"ein t\xedmi",hh:"%d t\xedmar",d:"ein dagur",dd:"%d dagar",M:"ein m\xe1na\xf0i",MM:"%d m\xe1na\xf0ir",y:"eitt \xe1r",yy:"%d \xe1r"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("fr-ca",{months:"janvier_f\xe9vrier_mars_avril_mai_juin_juillet_ao\xfbt_septembre_octobre_novembre_d\xe9cembre".split("_"),monthsShort:"janv._f\xe9vr._mars_avr._mai_juin_juil._ao\xfbt_sept._oct._nov._d\xe9c.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"di_lu_ma_me_je_ve_sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd\u2019hui \xe0] LT",nextDay:"[Demain \xe0] LT",nextWeek:"dddd [\xe0] LT",lastDay:"[Hier \xe0] LT",lastWeek:"dddd [dernier \xe0] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",ss:"%d secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|e)/,ordinal:function(e,a){switch(a){default:case"M":case"Q":case"D":case"DDD":case"d":return e+(1===e?"er":"e");case"w":case"W":return e+(1===e?"re":"e")}}}),l.defineLocale("fr-ch",{months:"janvier_f\xe9vrier_mars_avril_mai_juin_juillet_ao\xfbt_septembre_octobre_novembre_d\xe9cembre".split("_"),monthsShort:"janv._f\xe9vr._mars_avr._mai_juin_juil._ao\xfbt_sept._oct._nov._d\xe9c.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"di_lu_ma_me_je_ve_sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd\u2019hui \xe0] LT",nextDay:"[Demain \xe0] LT",nextWeek:"dddd [\xe0] LT",lastDay:"[Hier \xe0] LT",lastWeek:"dddd [dernier \xe0] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",ss:"%d secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|e)/,ordinal:function(e,a){switch(a){default:case"M":case"Q":case"D":case"DDD":case"d":return e+(1===e?"er":"e");case"w":case"W":return e+(1===e?"re":"e")}},week:{dow:1,doy:4}}),l.defineLocale("fr",{months:"janvier_f\xe9vrier_mars_avril_mai_juin_juillet_ao\xfbt_septembre_octobre_novembre_d\xe9cembre".split("_"),monthsShort:"janv._f\xe9vr._mars_avr._mai_juin_juil._ao\xfbt_sept._oct._nov._d\xe9c.".split("_"),monthsParseExact:!0,weekdays:"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),weekdaysShort:"dim._lun._mar._mer._jeu._ven._sam.".split("_"),weekdaysMin:"di_lu_ma_me_je_ve_sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Aujourd\u2019hui \xe0] LT",nextDay:"[Demain \xe0] LT",nextWeek:"dddd [\xe0] LT",lastDay:"[Hier \xe0] LT",lastWeek:"dddd [dernier \xe0] LT",sameElse:"L"},relativeTime:{future:"dans %s",past:"il y a %s",s:"quelques secondes",ss:"%d secondes",m:"une minute",mm:"%d minutes",h:"une heure",hh:"%d heures",d:"un jour",dd:"%d jours",M:"un mois",MM:"%d mois",y:"un an",yy:"%d ans"},dayOfMonthOrdinalParse:/\d{1,2}(er|)/,ordinal:function(e,a){switch(a){case"D":return e+(1===e?"er":"");default:case"M":case"Q":case"DDD":case"d":return e+(1===e?"er":"e");case"w":case"W":return e+(1===e?"re":"e")}},week:{dow:1,doy:4}});var Ws="jan._feb._mrt._apr._mai_jun._jul._aug._sep._okt._nov._des.".split("_"),Es="jan_feb_mrt_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_");l.defineLocale("fy",{months:"jannewaris_febrewaris_maart_april_maaie_juny_july_augustus_septimber_oktober_novimber_desimber".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?Es[e.month()]:Ws[e.month()]:Ws},monthsParseExact:!0,weekdays:"snein_moandei_tiisdei_woansdei_tongersdei_freed_sneon".split("_"),weekdaysShort:"si._mo._ti._wo._to._fr._so.".split("_"),weekdaysMin:"Si_Mo_Ti_Wo_To_Fr_So".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[hjoed om] LT",nextDay:"[moarn om] LT",nextWeek:"dddd [om] LT",lastDay:"[juster om] LT",lastWeek:"[\xf4fr\xfbne] dddd [om] LT",sameElse:"L"},relativeTime:{future:"oer %s",past:"%s lyn",s:"in pear sekonden",ss:"%d sekonden",m:"ien min\xfat",mm:"%d minuten",h:"ien oere",hh:"%d oeren",d:"ien dei",dd:"%d dagen",M:"ien moanne",MM:"%d moannen",y:"ien jier",yy:"%d jierren"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(e){return e+(1===e||8===e||20<=e?"ste":"de")},week:{dow:1,doy:4}});function As(e,a,t,s){var n={s:["thodde secondanim","thodde second"],ss:[e+" secondanim",e+" second"],m:["eka mintan","ek minute"],mm:[e+" mintanim",e+" mintam"],h:["eka horan","ek hor"],hh:[e+" horanim",e+" horam"],d:["eka disan","ek dis"],dd:[e+" disanim",e+" dis"],M:["eka mhoinean","ek mhoino"],MM:[e+" mhoineanim",e+" mhoine"],y:["eka vorsan","ek voros"],yy:[e+" vorsanim",e+" vorsam"]};return a?n[t][0]:n[t][1]}l.defineLocale("gd",{months:["Am Faoilleach","An Gearran","Am M\xe0rt","An Giblean","An C\xe8itean","An t-\xd2gmhios","An t-Iuchar","An L\xf9nastal","An t-Sultain","An D\xe0mhair","An t-Samhain","An D\xf9bhlachd"],monthsShort:["Faoi","Gear","M\xe0rt","Gibl","C\xe8it","\xd2gmh","Iuch","L\xf9n","Sult","D\xe0mh","Samh","D\xf9bh"],monthsParseExact:!0,weekdays:["Did\xf2mhnaich","Diluain","Dim\xe0irt","Diciadain","Diardaoin","Dihaoine","Disathairne"],weekdaysShort:["Did","Dil","Dim","Dic","Dia","Dih","Dis"],weekdaysMin:["D\xf2","Lu","M\xe0","Ci","Ar","Ha","Sa"],longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[An-diugh aig] LT",nextDay:"[A-m\xe0ireach aig] LT",nextWeek:"dddd [aig] LT",lastDay:"[An-d\xe8 aig] LT",lastWeek:"dddd [seo chaidh] [aig] LT",sameElse:"L"},relativeTime:{future:"ann an %s",past:"bho chionn %s",s:"beagan diogan",ss:"%d diogan",m:"mionaid",mm:"%d mionaidean",h:"uair",hh:"%d uairean",d:"latha",dd:"%d latha",M:"m\xecos",MM:"%d m\xecosan",y:"bliadhna",yy:"%d bliadhna"},dayOfMonthOrdinalParse:/\d{1,2}(d|na|mh)/,ordinal:function(e){return e+(1===e?"d":e%10==2?"na":"mh")},week:{dow:1,doy:4}}),l.defineLocale("gl",{months:"xaneiro_febreiro_marzo_abril_maio_xu\xf1o_xullo_agosto_setembro_outubro_novembro_decembro".split("_"),monthsShort:"xan._feb._mar._abr._mai._xu\xf1._xul._ago._set._out._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"domingo_luns_martes_m\xe9rcores_xoves_venres_s\xe1bado".split("_"),weekdaysShort:"dom._lun._mar._m\xe9r._xov._ven._s\xe1b.".split("_"),weekdaysMin:"do_lu_ma_m\xe9_xo_ve_s\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY H:mm",LLLL:"dddd, D [de] MMMM [de] YYYY H:mm"},calendar:{sameDay:function(){return"[hoxe "+(1!==this.hours()?"\xe1s":"\xe1")+"] LT"},nextDay:function(){return"[ma\xf1\xe1 "+(1!==this.hours()?"\xe1s":"\xe1")+"] LT"},nextWeek:function(){return"dddd ["+(1!==this.hours()?"\xe1s":"a")+"] LT"},lastDay:function(){return"[onte "+(1!==this.hours()?"\xe1":"a")+"] LT"},lastWeek:function(){return"[o] dddd [pasado "+(1!==this.hours()?"\xe1s":"a")+"] LT"},sameElse:"L"},relativeTime:{future:function(e){return 0===e.indexOf("un")?"n"+e:"en "+e},past:"hai %s",s:"uns segundos",ss:"%d segundos",m:"un minuto",mm:"%d minutos",h:"unha hora",hh:"%d horas",d:"un d\xeda",dd:"%d d\xedas",M:"un mes",MM:"%d meses",y:"un ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}}),l.defineLocale("gom-latn",{months:"Janer_Febrer_Mars_Abril_Mai_Jun_Julai_Agost_Setembr_Otubr_Novembr_Dezembr".split("_"),monthsShort:"Jan._Feb._Mars_Abr._Mai_Jun_Jul._Ago._Set._Otu._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Aitar_Somar_Mongllar_Budvar_Brestar_Sukrar_Son'var".split("_"),weekdaysShort:"Ait._Som._Mon._Bud._Bre._Suk._Son.".split("_"),weekdaysMin:"Ai_Sm_Mo_Bu_Br_Su_Sn".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"A h:mm [vazta]",LTS:"A h:mm:ss [vazta]",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY A h:mm [vazta]",LLLL:"dddd, MMMM[achea] Do, YYYY, A h:mm [vazta]",llll:"ddd, D MMM YYYY, A h:mm [vazta]"},calendar:{sameDay:"[Aiz] LT",nextDay:"[Faleam] LT",nextWeek:"[Ieta to] dddd[,] LT",lastDay:"[Kal] LT",lastWeek:"[Fatlo] dddd[,] LT",sameElse:"L"},relativeTime:{future:"%s",past:"%s adim",s:As,ss:As,m:As,mm:As,h:As,hh:As,d:As,dd:As,M:As,MM:As,y:As,yy:As},dayOfMonthOrdinalParse:/\d{1,2}(er)/,ordinal:function(e,a){switch(a){case"D":return e+"er";default:case"M":case"Q":case"DDD":case"d":case"w":case"W":return e}},week:{dow:1,doy:4},meridiemParse:/rati|sokalli|donparam|sanje/,meridiemHour:function(e,a){return 12===e&&(e=0),"rati"===a?e<4?e:e+12:"sokalli"===a?e:"donparam"===a?12<e?e:e+12:"sanje"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"rati":e<12?"sokalli":e<16?"donparam":e<20?"sanje":"rati"}});var Fs={1:"\u0ae7",2:"\u0ae8",3:"\u0ae9",4:"\u0aea",5:"\u0aeb",6:"\u0aec",7:"\u0aed",8:"\u0aee",9:"\u0aef",0:"\u0ae6"},zs={"\u0ae7":"1","\u0ae8":"2","\u0ae9":"3","\u0aea":"4","\u0aeb":"5","\u0aec":"6","\u0aed":"7","\u0aee":"8","\u0aef":"9","\u0ae6":"0"};l.defineLocale("gu",{months:"\u0a9c\u0abe\u0aa8\u0acd\u0aaf\u0ac1\u0a86\u0ab0\u0ac0_\u0aab\u0ac7\u0aac\u0acd\u0ab0\u0ac1\u0a86\u0ab0\u0ac0_\u0aae\u0abe\u0ab0\u0acd\u0a9a_\u0a8f\u0aaa\u0acd\u0ab0\u0abf\u0ab2_\u0aae\u0ac7_\u0a9c\u0ac2\u0aa8_\u0a9c\u0ac1\u0ab2\u0abe\u0a88_\u0a91\u0a97\u0ab8\u0acd\u0a9f_\u0ab8\u0aaa\u0acd\u0a9f\u0ac7\u0aae\u0acd\u0aac\u0ab0_\u0a91\u0a95\u0acd\u0a9f\u0acd\u0aac\u0ab0_\u0aa8\u0ab5\u0ac7\u0aae\u0acd\u0aac\u0ab0_\u0aa1\u0abf\u0ab8\u0ac7\u0aae\u0acd\u0aac\u0ab0".split("_"),monthsShort:"\u0a9c\u0abe\u0aa8\u0acd\u0aaf\u0ac1._\u0aab\u0ac7\u0aac\u0acd\u0ab0\u0ac1._\u0aae\u0abe\u0ab0\u0acd\u0a9a_\u0a8f\u0aaa\u0acd\u0ab0\u0abf._\u0aae\u0ac7_\u0a9c\u0ac2\u0aa8_\u0a9c\u0ac1\u0ab2\u0abe._\u0a91\u0a97._\u0ab8\u0aaa\u0acd\u0a9f\u0ac7._\u0a91\u0a95\u0acd\u0a9f\u0acd._\u0aa8\u0ab5\u0ac7._\u0aa1\u0abf\u0ab8\u0ac7.".split("_"),monthsParseExact:!0,weekdays:"\u0ab0\u0ab5\u0abf\u0ab5\u0abe\u0ab0_\u0ab8\u0acb\u0aae\u0ab5\u0abe\u0ab0_\u0aae\u0a82\u0a97\u0ab3\u0ab5\u0abe\u0ab0_\u0aac\u0ac1\u0aa7\u0acd\u0ab5\u0abe\u0ab0_\u0a97\u0ac1\u0ab0\u0ac1\u0ab5\u0abe\u0ab0_\u0ab6\u0ac1\u0a95\u0acd\u0ab0\u0ab5\u0abe\u0ab0_\u0ab6\u0aa8\u0abf\u0ab5\u0abe\u0ab0".split("_"),weekdaysShort:"\u0ab0\u0ab5\u0abf_\u0ab8\u0acb\u0aae_\u0aae\u0a82\u0a97\u0ab3_\u0aac\u0ac1\u0aa7\u0acd_\u0a97\u0ac1\u0ab0\u0ac1_\u0ab6\u0ac1\u0a95\u0acd\u0ab0_\u0ab6\u0aa8\u0abf".split("_"),weekdaysMin:"\u0ab0_\u0ab8\u0acb_\u0aae\u0a82_\u0aac\u0ac1_\u0a97\u0ac1_\u0ab6\u0ac1_\u0ab6".split("_"),longDateFormat:{LT:"A h:mm \u0ab5\u0abe\u0a97\u0acd\u0aaf\u0ac7",LTS:"A h:mm:ss \u0ab5\u0abe\u0a97\u0acd\u0aaf\u0ac7",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm \u0ab5\u0abe\u0a97\u0acd\u0aaf\u0ac7",LLLL:"dddd, D MMMM YYYY, A h:mm \u0ab5\u0abe\u0a97\u0acd\u0aaf\u0ac7"},calendar:{sameDay:"[\u0a86\u0a9c] LT",nextDay:"[\u0a95\u0abe\u0ab2\u0ac7] LT",nextWeek:"dddd, LT",lastDay:"[\u0a97\u0a87\u0a95\u0abe\u0ab2\u0ac7] LT",lastWeek:"[\u0aaa\u0abe\u0a9b\u0ab2\u0abe] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0aae\u0abe",past:"%s \u0aaa\u0ac7\u0ab9\u0ab2\u0abe",s:"\u0a85\u0aae\u0ac1\u0a95 \u0aaa\u0ab3\u0acb",ss:"%d \u0ab8\u0ac7\u0a95\u0a82\u0aa1",m:"\u0a8f\u0a95 \u0aae\u0abf\u0aa8\u0abf\u0a9f",mm:"%d \u0aae\u0abf\u0aa8\u0abf\u0a9f",h:"\u0a8f\u0a95 \u0a95\u0ab2\u0abe\u0a95",hh:"%d \u0a95\u0ab2\u0abe\u0a95",d:"\u0a8f\u0a95 \u0aa6\u0abf\u0ab5\u0ab8",dd:"%d \u0aa6\u0abf\u0ab5\u0ab8",M:"\u0a8f\u0a95 \u0aae\u0ab9\u0abf\u0aa8\u0acb",MM:"%d \u0aae\u0ab9\u0abf\u0aa8\u0acb",y:"\u0a8f\u0a95 \u0ab5\u0ab0\u0acd\u0ab7",yy:"%d \u0ab5\u0ab0\u0acd\u0ab7"},preparse:function(e){return e.replace(/[\u0ae7\u0ae8\u0ae9\u0aea\u0aeb\u0aec\u0aed\u0aee\u0aef\u0ae6]/g,function(e){return zs[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return Fs[e]})},meridiemParse:/\u0ab0\u0abe\u0aa4|\u0aac\u0aaa\u0acb\u0ab0|\u0ab8\u0ab5\u0abe\u0ab0|\u0ab8\u0abe\u0a82\u0a9c/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0ab0\u0abe\u0aa4"===a?e<4?e:e+12:"\u0ab8\u0ab5\u0abe\u0ab0"===a?e:"\u0aac\u0aaa\u0acb\u0ab0"===a?10<=e?e:e+12:"\u0ab8\u0abe\u0a82\u0a9c"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0ab0\u0abe\u0aa4":e<10?"\u0ab8\u0ab5\u0abe\u0ab0":e<17?"\u0aac\u0aaa\u0acb\u0ab0":e<20?"\u0ab8\u0abe\u0a82\u0a9c":"\u0ab0\u0abe\u0aa4"},week:{dow:0,doy:6}}),l.defineLocale("he",{months:"\u05d9\u05e0\u05d5\u05d0\u05e8_\u05e4\u05d1\u05e8\u05d5\u05d0\u05e8_\u05de\u05e8\u05e5_\u05d0\u05e4\u05e8\u05d9\u05dc_\u05de\u05d0\u05d9_\u05d9\u05d5\u05e0\u05d9_\u05d9\u05d5\u05dc\u05d9_\u05d0\u05d5\u05d2\u05d5\u05e1\u05d8_\u05e1\u05e4\u05d8\u05de\u05d1\u05e8_\u05d0\u05d5\u05e7\u05d8\u05d5\u05d1\u05e8_\u05e0\u05d5\u05d1\u05de\u05d1\u05e8_\u05d3\u05e6\u05de\u05d1\u05e8".split("_"),monthsShort:"\u05d9\u05e0\u05d5\u05f3_\u05e4\u05d1\u05e8\u05f3_\u05de\u05e8\u05e5_\u05d0\u05e4\u05e8\u05f3_\u05de\u05d0\u05d9_\u05d9\u05d5\u05e0\u05d9_\u05d9\u05d5\u05dc\u05d9_\u05d0\u05d5\u05d2\u05f3_\u05e1\u05e4\u05d8\u05f3_\u05d0\u05d5\u05e7\u05f3_\u05e0\u05d5\u05d1\u05f3_\u05d3\u05e6\u05de\u05f3".split("_"),weekdays:"\u05e8\u05d0\u05e9\u05d5\u05df_\u05e9\u05e0\u05d9_\u05e9\u05dc\u05d9\u05e9\u05d9_\u05e8\u05d1\u05d9\u05e2\u05d9_\u05d7\u05de\u05d9\u05e9\u05d9_\u05e9\u05d9\u05e9\u05d9_\u05e9\u05d1\u05ea".split("_"),weekdaysShort:"\u05d0\u05f3_\u05d1\u05f3_\u05d2\u05f3_\u05d3\u05f3_\u05d4\u05f3_\u05d5\u05f3_\u05e9\u05f3".split("_"),weekdaysMin:"\u05d0_\u05d1_\u05d2_\u05d3_\u05d4_\u05d5_\u05e9".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [\u05d1]MMMM YYYY",LLL:"D [\u05d1]MMMM YYYY HH:mm",LLLL:"dddd, D [\u05d1]MMMM YYYY HH:mm",l:"D/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY HH:mm",llll:"ddd, D MMM YYYY HH:mm"},calendar:{sameDay:"[\u05d4\u05d9\u05d5\u05dd \u05d1\u05be]LT",nextDay:"[\u05de\u05d7\u05e8 \u05d1\u05be]LT",nextWeek:"dddd [\u05d1\u05e9\u05e2\u05d4] LT",lastDay:"[\u05d0\u05ea\u05de\u05d5\u05dc \u05d1\u05be]LT",lastWeek:"[\u05d1\u05d9\u05d5\u05dd] dddd [\u05d4\u05d0\u05d7\u05e8\u05d5\u05df \u05d1\u05e9\u05e2\u05d4] LT",sameElse:"L"},relativeTime:{future:"\u05d1\u05e2\u05d5\u05d3 %s",past:"\u05dc\u05e4\u05e0\u05d9 %s",s:"\u05de\u05e1\u05e4\u05e8 \u05e9\u05e0\u05d9\u05d5\u05ea",ss:"%d \u05e9\u05e0\u05d9\u05d5\u05ea",m:"\u05d3\u05e7\u05d4",mm:"%d \u05d3\u05e7\u05d5\u05ea",h:"\u05e9\u05e2\u05d4",hh:function(e){return 2===e?"\u05e9\u05e2\u05ea\u05d9\u05d9\u05dd":e+" \u05e9\u05e2\u05d5\u05ea"},d:"\u05d9\u05d5\u05dd",dd:function(e){return 2===e?"\u05d9\u05d5\u05de\u05d9\u05d9\u05dd":e+" \u05d9\u05de\u05d9\u05dd"},M:"\u05d7\u05d5\u05d3\u05e9",MM:function(e){return 2===e?"\u05d7\u05d5\u05d3\u05e9\u05d9\u05d9\u05dd":e+" \u05d7\u05d5\u05d3\u05e9\u05d9\u05dd"},y:"\u05e9\u05e0\u05d4",yy:function(e){return 2===e?"\u05e9\u05e0\u05ea\u05d9\u05d9\u05dd":e%10==0&&10!==e?e+" \u05e9\u05e0\u05d4":e+" \u05e9\u05e0\u05d9\u05dd"}},meridiemParse:/\u05d0\u05d7\u05d4"\u05e6|\u05dc\u05e4\u05e0\u05d4"\u05e6|\u05d0\u05d7\u05e8\u05d9 \u05d4\u05e6\u05d4\u05e8\u05d9\u05d9\u05dd|\u05dc\u05e4\u05e0\u05d9 \u05d4\u05e6\u05d4\u05e8\u05d9\u05d9\u05dd|\u05dc\u05e4\u05e0\u05d5\u05ea \u05d1\u05d5\u05e7\u05e8|\u05d1\u05d1\u05d5\u05e7\u05e8|\u05d1\u05e2\u05e8\u05d1/i,isPM:function(e){return/^(\u05d0\u05d7\u05d4"\u05e6|\u05d0\u05d7\u05e8\u05d9 \u05d4\u05e6\u05d4\u05e8\u05d9\u05d9\u05dd|\u05d1\u05e2\u05e8\u05d1)$/.test(e)},meridiem:function(e,a,t){return e<5?"\u05dc\u05e4\u05e0\u05d5\u05ea \u05d1\u05d5\u05e7\u05e8":e<10?"\u05d1\u05d1\u05d5\u05e7\u05e8":e<12?t?'\u05dc\u05e4\u05e0\u05d4"\u05e6':"\u05dc\u05e4\u05e0\u05d9 \u05d4\u05e6\u05d4\u05e8\u05d9\u05d9\u05dd":e<18?t?'\u05d0\u05d7\u05d4"\u05e6':"\u05d0\u05d7\u05e8\u05d9 \u05d4\u05e6\u05d4\u05e8\u05d9\u05d9\u05dd":"\u05d1\u05e2\u05e8\u05d1"}});var Js={1:"\u0967",2:"\u0968",3:"\u0969",4:"\u096a",5:"\u096b",6:"\u096c",7:"\u096d",8:"\u096e",9:"\u096f",0:"\u0966"},Ns={"\u0967":"1","\u0968":"2","\u0969":"3","\u096a":"4","\u096b":"5","\u096c":"6","\u096d":"7","\u096e":"8","\u096f":"9","\u0966":"0"};function Rs(e,a,t){var s=e+" ";switch(t){case"ss":return s+=1===e?"sekunda":2===e||3===e||4===e?"sekunde":"sekundi";case"m":return a?"jedna minuta":"jedne minute";case"mm":return s+=1===e?"minuta":2===e||3===e||4===e?"minute":"minuta";case"h":return a?"jedan sat":"jednog sata";case"hh":return s+=1===e?"sat":2===e||3===e||4===e?"sata":"sati";case"dd":return s+=1===e?"dan":"dana";case"MM":return s+=1===e?"mjesec":2===e||3===e||4===e?"mjeseca":"mjeseci";case"yy":return s+=1===e?"godina":2===e||3===e||4===e?"godine":"godina"}}l.defineLocale("hi",{months:"\u091c\u0928\u0935\u0930\u0940_\u092b\u093c\u0930\u0935\u0930\u0940_\u092e\u093e\u0930\u094d\u091a_\u0905\u092a\u094d\u0930\u0948\u0932_\u092e\u0908_\u091c\u0942\u0928_\u091c\u0941\u0932\u093e\u0908_\u0905\u0917\u0938\u094d\u0924_\u0938\u093f\u0924\u092e\u094d\u092c\u0930_\u0905\u0915\u094d\u091f\u0942\u092c\u0930_\u0928\u0935\u092e\u094d\u092c\u0930_\u0926\u093f\u0938\u092e\u094d\u092c\u0930".split("_"),monthsShort:"\u091c\u0928._\u092b\u093c\u0930._\u092e\u093e\u0930\u094d\u091a_\u0905\u092a\u094d\u0930\u0948._\u092e\u0908_\u091c\u0942\u0928_\u091c\u0941\u0932._\u0905\u0917._\u0938\u093f\u0924._\u0905\u0915\u094d\u091f\u0942._\u0928\u0935._\u0926\u093f\u0938.".split("_"),monthsParseExact:!0,weekdays:"\u0930\u0935\u093f\u0935\u093e\u0930_\u0938\u094b\u092e\u0935\u093e\u0930_\u092e\u0902\u0917\u0932\u0935\u093e\u0930_\u092c\u0941\u0927\u0935\u093e\u0930_\u0917\u0941\u0930\u0942\u0935\u093e\u0930_\u0936\u0941\u0915\u094d\u0930\u0935\u093e\u0930_\u0936\u0928\u093f\u0935\u093e\u0930".split("_"),weekdaysShort:"\u0930\u0935\u093f_\u0938\u094b\u092e_\u092e\u0902\u0917\u0932_\u092c\u0941\u0927_\u0917\u0941\u0930\u0942_\u0936\u0941\u0915\u094d\u0930_\u0936\u0928\u093f".split("_"),weekdaysMin:"\u0930_\u0938\u094b_\u092e\u0902_\u092c\u0941_\u0917\u0941_\u0936\u0941_\u0936".split("_"),longDateFormat:{LT:"A h:mm \u092c\u091c\u0947",LTS:"A h:mm:ss \u092c\u091c\u0947",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm \u092c\u091c\u0947",LLLL:"dddd, D MMMM YYYY, A h:mm \u092c\u091c\u0947"},calendar:{sameDay:"[\u0906\u091c] LT",nextDay:"[\u0915\u0932] LT",nextWeek:"dddd, LT",lastDay:"[\u0915\u0932] LT",lastWeek:"[\u092a\u093f\u091b\u0932\u0947] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u092e\u0947\u0902",past:"%s \u092a\u0939\u0932\u0947",s:"\u0915\u0941\u091b \u0939\u0940 \u0915\u094d\u0937\u0923",ss:"%d \u0938\u0947\u0915\u0902\u0921",m:"\u090f\u0915 \u092e\u093f\u0928\u091f",mm:"%d \u092e\u093f\u0928\u091f",h:"\u090f\u0915 \u0918\u0902\u091f\u093e",hh:"%d \u0918\u0902\u091f\u0947",d:"\u090f\u0915 \u0926\u093f\u0928",dd:"%d \u0926\u093f\u0928",M:"\u090f\u0915 \u092e\u0939\u0940\u0928\u0947",MM:"%d \u092e\u0939\u0940\u0928\u0947",y:"\u090f\u0915 \u0935\u0930\u094d\u0937",yy:"%d \u0935\u0930\u094d\u0937"},preparse:function(e){return e.replace(/[\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f\u0966]/g,function(e){return Ns[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return Js[e]})},meridiemParse:/\u0930\u093e\u0924|\u0938\u0941\u092c\u0939|\u0926\u094b\u092a\u0939\u0930|\u0936\u093e\u092e/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0930\u093e\u0924"===a?e<4?e:e+12:"\u0938\u0941\u092c\u0939"===a?e:"\u0926\u094b\u092a\u0939\u0930"===a?10<=e?e:e+12:"\u0936\u093e\u092e"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0930\u093e\u0924":e<10?"\u0938\u0941\u092c\u0939":e<17?"\u0926\u094b\u092a\u0939\u0930":e<20?"\u0936\u093e\u092e":"\u0930\u093e\u0924"},week:{dow:0,doy:6}}),l.defineLocale("hr",{months:{format:"sije\u010dnja_velja\u010de_o\u017eujka_travnja_svibnja_lipnja_srpnja_kolovoza_rujna_listopada_studenoga_prosinca".split("_"),standalone:"sije\u010danj_velja\u010da_o\u017eujak_travanj_svibanj_lipanj_srpanj_kolovoz_rujan_listopad_studeni_prosinac".split("_")},monthsShort:"sij._velj._o\u017eu._tra._svi._lip._srp._kol._ruj._lis._stu._pro.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_\u010detvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._\u010det._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_\u010de_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[ju\u010der u] LT",lastWeek:function(){switch(this.day()){case 0:case 3:return"[pro\u0161lu] dddd [u] LT";case 6:return"[pro\u0161le] [subote] [u] LT";case 1:case 2:case 4:case 5:return"[pro\u0161li] dddd [u] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"par sekundi",ss:Rs,m:Rs,mm:Rs,h:Rs,hh:Rs,d:"dan",dd:Rs,M:"mjesec",MM:Rs,y:"godinu",yy:Rs},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});var Is="vas\xe1rnap h\xe9tf\u0151n kedden szerd\xe1n cs\xfct\xf6rt\xf6k\xf6n p\xe9nteken szombaton".split(" ");function Cs(e,a,t,s){var n=e;switch(t){case"s":return s||a?"n\xe9h\xe1ny m\xe1sodperc":"n\xe9h\xe1ny m\xe1sodperce";case"ss":return n+(s||a)?" m\xe1sodperc":" m\xe1sodperce";case"m":return"egy"+(s||a?" perc":" perce");case"mm":return n+(s||a?" perc":" perce");case"h":return"egy"+(s||a?" \xf3ra":" \xf3r\xe1ja");case"hh":return n+(s||a?" \xf3ra":" \xf3r\xe1ja");case"d":return"egy"+(s||a?" nap":" napja");case"dd":return n+(s||a?" nap":" napja");case"M":return"egy"+(s||a?" h\xf3nap":" h\xf3napja");case"MM":return n+(s||a?" h\xf3nap":" h\xf3napja");case"y":return"egy"+(s||a?" \xe9v":" \xe9ve");case"yy":return n+(s||a?" \xe9v":" \xe9ve")}return""}function Gs(e){return(e?"":"[m\xfalt] ")+"["+Is[this.day()]+"] LT[-kor]"}function Us(e){return e%100==11||e%10!=1}function Vs(e,a,t,s){var n=e+" ";switch(t){case"s":return a||s?"nokkrar sek\xfandur":"nokkrum sek\xfandum";case"ss":return Us(e)?n+(a||s?"sek\xfandur":"sek\xfandum"):n+"sek\xfanda";case"m":return a?"m\xedn\xfata":"m\xedn\xfatu";case"mm":return Us(e)?n+(a||s?"m\xedn\xfatur":"m\xedn\xfatum"):a?n+"m\xedn\xfata":n+"m\xedn\xfatu";case"hh":return Us(e)?n+(a||s?"klukkustundir":"klukkustundum"):n+"klukkustund";case"d":return a?"dagur":s?"dag":"degi";case"dd":return Us(e)?a?n+"dagar":n+(s?"daga":"d\xf6gum"):a?n+"dagur":n+(s?"dag":"degi");case"M":return a?"m\xe1nu\xf0ur":s?"m\xe1nu\xf0":"m\xe1nu\xf0i";case"MM":return Us(e)?a?n+"m\xe1nu\xf0ir":n+(s?"m\xe1nu\xf0i":"m\xe1nu\xf0um"):a?n+"m\xe1nu\xf0ur":n+(s?"m\xe1nu\xf0":"m\xe1nu\xf0i");case"y":return a||s?"\xe1r":"\xe1ri";case"yy":return Us(e)?n+(a||s?"\xe1r":"\xe1rum"):n+(a||s?"\xe1r":"\xe1ri")}}l.defineLocale("hu",{months:"janu\xe1r_febru\xe1r_m\xe1rcius_\xe1prilis_m\xe1jus_j\xfanius_j\xfalius_augusztus_szeptember_okt\xf3ber_november_december".split("_"),monthsShort:"jan_feb_m\xe1rc_\xe1pr_m\xe1j_j\xfan_j\xfal_aug_szept_okt_nov_dec".split("_"),weekdays:"vas\xe1rnap_h\xe9tf\u0151_kedd_szerda_cs\xfct\xf6rt\xf6k_p\xe9ntek_szombat".split("_"),weekdaysShort:"vas_h\xe9t_kedd_sze_cs\xfct_p\xe9n_szo".split("_"),weekdaysMin:"v_h_k_sze_cs_p_szo".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"YYYY.MM.DD.",LL:"YYYY. MMMM D.",LLL:"YYYY. MMMM D. H:mm",LLLL:"YYYY. MMMM D., dddd H:mm"},meridiemParse:/de|du/i,isPM:function(e){return"u"===e.charAt(1).toLowerCase()},meridiem:function(e,a,t){return e<12?!0===t?"de":"DE":!0===t?"du":"DU"},calendar:{sameDay:"[ma] LT[-kor]",nextDay:"[holnap] LT[-kor]",nextWeek:function(){return Gs.call(this,!0)},lastDay:"[tegnap] LT[-kor]",lastWeek:function(){return Gs.call(this,!1)},sameElse:"L"},relativeTime:{future:"%s m\xfalva",past:"%s",s:Cs,ss:Cs,m:Cs,mm:Cs,h:Cs,hh:Cs,d:Cs,dd:Cs,M:Cs,MM:Cs,y:Cs,yy:Cs},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("hy-am",{months:{format:"\u0570\u0578\u0582\u0576\u057e\u0561\u0580\u056b_\u0583\u0565\u057f\u0580\u057e\u0561\u0580\u056b_\u0574\u0561\u0580\u057f\u056b_\u0561\u057a\u0580\u056b\u056c\u056b_\u0574\u0561\u0575\u056b\u057d\u056b_\u0570\u0578\u0582\u0576\u056b\u057d\u056b_\u0570\u0578\u0582\u056c\u056b\u057d\u056b_\u0585\u0563\u0578\u057d\u057f\u0578\u057d\u056b_\u057d\u0565\u057a\u057f\u0565\u0574\u0562\u0565\u0580\u056b_\u0570\u0578\u056f\u057f\u0565\u0574\u0562\u0565\u0580\u056b_\u0576\u0578\u0575\u0565\u0574\u0562\u0565\u0580\u056b_\u0564\u0565\u056f\u057f\u0565\u0574\u0562\u0565\u0580\u056b".split("_"),standalone:"\u0570\u0578\u0582\u0576\u057e\u0561\u0580_\u0583\u0565\u057f\u0580\u057e\u0561\u0580_\u0574\u0561\u0580\u057f_\u0561\u057a\u0580\u056b\u056c_\u0574\u0561\u0575\u056b\u057d_\u0570\u0578\u0582\u0576\u056b\u057d_\u0570\u0578\u0582\u056c\u056b\u057d_\u0585\u0563\u0578\u057d\u057f\u0578\u057d_\u057d\u0565\u057a\u057f\u0565\u0574\u0562\u0565\u0580_\u0570\u0578\u056f\u057f\u0565\u0574\u0562\u0565\u0580_\u0576\u0578\u0575\u0565\u0574\u0562\u0565\u0580_\u0564\u0565\u056f\u057f\u0565\u0574\u0562\u0565\u0580".split("_")},monthsShort:"\u0570\u0576\u057e_\u0583\u057f\u0580_\u0574\u0580\u057f_\u0561\u057a\u0580_\u0574\u0575\u057d_\u0570\u0576\u057d_\u0570\u056c\u057d_\u0585\u0563\u057d_\u057d\u057a\u057f_\u0570\u056f\u057f_\u0576\u0574\u0562_\u0564\u056f\u057f".split("_"),weekdays:"\u056f\u056b\u0580\u0561\u056f\u056b_\u0565\u0580\u056f\u0578\u0582\u0577\u0561\u0562\u0569\u056b_\u0565\u0580\u0565\u0584\u0577\u0561\u0562\u0569\u056b_\u0579\u0578\u0580\u0565\u0584\u0577\u0561\u0562\u0569\u056b_\u0570\u056b\u0576\u0563\u0577\u0561\u0562\u0569\u056b_\u0578\u0582\u0580\u0562\u0561\u0569_\u0577\u0561\u0562\u0561\u0569".split("_"),weekdaysShort:"\u056f\u0580\u056f_\u0565\u0580\u056f_\u0565\u0580\u0584_\u0579\u0580\u0584_\u0570\u0576\u0563_\u0578\u0582\u0580\u0562_\u0577\u0562\u0569".split("_"),weekdaysMin:"\u056f\u0580\u056f_\u0565\u0580\u056f_\u0565\u0580\u0584_\u0579\u0580\u0584_\u0570\u0576\u0563_\u0578\u0582\u0580\u0562_\u0577\u0562\u0569".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY \u0569.",LLL:"D MMMM YYYY \u0569., HH:mm",LLLL:"dddd, D MMMM YYYY \u0569., HH:mm"},calendar:{sameDay:"[\u0561\u0575\u057d\u0585\u0580] LT",nextDay:"[\u057e\u0561\u0572\u0568] LT",lastDay:"[\u0565\u0580\u0565\u056f] LT",nextWeek:function(){return"dddd [\u0585\u0580\u0568 \u056a\u0561\u0574\u0568] LT"},lastWeek:function(){return"[\u0561\u0576\u0581\u0561\u056e] dddd [\u0585\u0580\u0568 \u056a\u0561\u0574\u0568] LT"},sameElse:"L"},relativeTime:{future:"%s \u0570\u0565\u057f\u0578",past:"%s \u0561\u057c\u0561\u057b",s:"\u0574\u056b \u0584\u0561\u0576\u056b \u057e\u0561\u0575\u0580\u056f\u0575\u0561\u0576",ss:"%d \u057e\u0561\u0575\u0580\u056f\u0575\u0561\u0576",m:"\u0580\u0578\u057a\u0565",mm:"%d \u0580\u0578\u057a\u0565",h:"\u056a\u0561\u0574",hh:"%d \u056a\u0561\u0574",d:"\u0585\u0580",dd:"%d \u0585\u0580",M:"\u0561\u0574\u056b\u057d",MM:"%d \u0561\u0574\u056b\u057d",y:"\u057f\u0561\u0580\u056b",yy:"%d \u057f\u0561\u0580\u056b"},meridiemParse:/\u0563\u056b\u0577\u0565\u0580\u057e\u0561|\u0561\u057c\u0561\u057e\u0578\u057f\u057e\u0561|\u0581\u0565\u0580\u0565\u056f\u057e\u0561|\u0565\u0580\u0565\u056f\u0578\u0575\u0561\u0576/,isPM:function(e){return/^(\u0581\u0565\u0580\u0565\u056f\u057e\u0561|\u0565\u0580\u0565\u056f\u0578\u0575\u0561\u0576)$/.test(e)},meridiem:function(e){return e<4?"\u0563\u056b\u0577\u0565\u0580\u057e\u0561":e<12?"\u0561\u057c\u0561\u057e\u0578\u057f\u057e\u0561":e<17?"\u0581\u0565\u0580\u0565\u056f\u057e\u0561":"\u0565\u0580\u0565\u056f\u0578\u0575\u0561\u0576"},dayOfMonthOrdinalParse:/\d{1,2}|\d{1,2}-(\u056b\u0576|\u0580\u0564)/,ordinal:function(e,a){switch(a){case"DDD":case"w":case"W":case"DDDo":return 1===e?e+"-\u056b\u0576":e+"-\u0580\u0564";default:return e}},week:{dow:1,doy:7}}),l.defineLocale("id",{months:"Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_November_Desember".split("_"),monthsShort:"Jan_Feb_Mar_Apr_Mei_Jun_Jul_Agt_Sep_Okt_Nov_Des".split("_"),weekdays:"Minggu_Senin_Selasa_Rabu_Kamis_Jumat_Sabtu".split("_"),weekdaysShort:"Min_Sen_Sel_Rab_Kam_Jum_Sab".split("_"),weekdaysMin:"Mg_Sn_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|siang|sore|malam/,meridiemHour:function(e,a){return 12===e&&(e=0),"pagi"===a?e:"siang"===a?11<=e?e:e+12:"sore"===a||"malam"===a?e+12:void 0},meridiem:function(e,a,t){return e<11?"pagi":e<15?"siang":e<19?"sore":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Besok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kemarin pukul] LT",lastWeek:"dddd [lalu pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lalu",s:"beberapa detik",ss:"%d detik",m:"semenit",mm:"%d menit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}}),l.defineLocale("is",{months:"jan\xfaar_febr\xfaar_mars_apr\xedl_ma\xed_j\xfan\xed_j\xfal\xed_\xe1g\xfast_september_okt\xf3ber_n\xf3vember_desember".split("_"),monthsShort:"jan_feb_mar_apr_ma\xed_j\xfan_j\xfal_\xe1g\xfa_sep_okt_n\xf3v_des".split("_"),weekdays:"sunnudagur_m\xe1nudagur_\xferi\xf0judagur_mi\xf0vikudagur_fimmtudagur_f\xf6studagur_laugardagur".split("_"),weekdaysShort:"sun_m\xe1n_\xferi_mi\xf0_fim_f\xf6s_lau".split("_"),weekdaysMin:"Su_M\xe1_\xder_Mi_Fi_F\xf6_La".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] H:mm",LLLL:"dddd, D. MMMM YYYY [kl.] H:mm"},calendar:{sameDay:"[\xed dag kl.] LT",nextDay:"[\xe1 morgun kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[\xed g\xe6r kl.] LT",lastWeek:"[s\xed\xf0asta] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"eftir %s",past:"fyrir %s s\xed\xf0an",s:Vs,ss:Vs,m:Vs,mm:Vs,h:"klukkustund",hh:Vs,d:Vs,dd:Vs,M:Vs,MM:Vs,y:Vs,yy:Vs},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("it",{months:"gennaio_febbraio_marzo_aprile_maggio_giugno_luglio_agosto_settembre_ottobre_novembre_dicembre".split("_"),monthsShort:"gen_feb_mar_apr_mag_giu_lug_ago_set_ott_nov_dic".split("_"),weekdays:"domenica_luned\xec_marted\xec_mercoled\xec_gioved\xec_venerd\xec_sabato".split("_"),weekdaysShort:"dom_lun_mar_mer_gio_ven_sab".split("_"),weekdaysMin:"do_lu_ma_me_gi_ve_sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[Oggi alle] LT",nextDay:"[Domani alle] LT",nextWeek:"dddd [alle] LT",lastDay:"[Ieri alle] LT",lastWeek:function(){switch(this.day()){case 0:return"[la scorsa] dddd [alle] LT";default:return"[lo scorso] dddd [alle] LT"}},sameElse:"L"},relativeTime:{future:function(e){return(/^[0-9].+$/.test(e)?"tra":"in")+" "+e},past:"%s fa",s:"alcuni secondi",ss:"%d secondi",m:"un minuto",mm:"%d minuti",h:"un'ora",hh:"%d ore",d:"un giorno",dd:"%d giorni",M:"un mese",MM:"%d mesi",y:"un anno",yy:"%d anni"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}}),l.defineLocale("ja",{months:"1\u6708_2\u6708_3\u6708_4\u6708_5\u6708_6\u6708_7\u6708_8\u6708_9\u6708_10\u6708_11\u6708_12\u6708".split("_"),monthsShort:"1\u6708_2\u6708_3\u6708_4\u6708_5\u6708_6\u6708_7\u6708_8\u6708_9\u6708_10\u6708_11\u6708_12\u6708".split("_"),weekdays:"\u65e5\u66dc\u65e5_\u6708\u66dc\u65e5_\u706b\u66dc\u65e5_\u6c34\u66dc\u65e5_\u6728\u66dc\u65e5_\u91d1\u66dc\u65e5_\u571f\u66dc\u65e5".split("_"),weekdaysShort:"\u65e5_\u6708_\u706b_\u6c34_\u6728_\u91d1_\u571f".split("_"),weekdaysMin:"\u65e5_\u6708_\u706b_\u6c34_\u6728_\u91d1_\u571f".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY/MM/DD",LL:"YYYY\u5e74M\u6708D\u65e5",LLL:"YYYY\u5e74M\u6708D\u65e5 HH:mm",LLLL:"YYYY\u5e74M\u6708D\u65e5 dddd HH:mm",l:"YYYY/MM/DD",ll:"YYYY\u5e74M\u6708D\u65e5",lll:"YYYY\u5e74M\u6708D\u65e5 HH:mm",llll:"YYYY\u5e74M\u6708D\u65e5(ddd) HH:mm"},meridiemParse:/\u5348\u524d|\u5348\u5f8c/i,isPM:function(e){return"\u5348\u5f8c"===e},meridiem:function(e,a,t){return e<12?"\u5348\u524d":"\u5348\u5f8c"},calendar:{sameDay:"[\u4eca\u65e5] LT",nextDay:"[\u660e\u65e5] LT",nextWeek:function(e){return e.week()<this.week()?"[\u6765\u9031]dddd LT":"dddd LT"},lastDay:"[\u6628\u65e5] LT",lastWeek:function(e){return this.week()<e.week()?"[\u5148\u9031]dddd LT":"dddd LT"},sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}\u65e5/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"\u65e5";default:return e}},relativeTime:{future:"%s\u5f8c",past:"%s\u524d",s:"\u6570\u79d2",ss:"%d\u79d2",m:"1\u5206",mm:"%d\u5206",h:"1\u6642\u9593",hh:"%d\u6642\u9593",d:"1\u65e5",dd:"%d\u65e5",M:"1\u30f6\u6708",MM:"%d\u30f6\u6708",y:"1\u5e74",yy:"%d\u5e74"}}),l.defineLocale("jv",{months:"Januari_Februari_Maret_April_Mei_Juni_Juli_Agustus_September_Oktober_Nopember_Desember".split("_"),monthsShort:"Jan_Feb_Mar_Apr_Mei_Jun_Jul_Ags_Sep_Okt_Nop_Des".split("_"),weekdays:"Minggu_Senen_Seloso_Rebu_Kemis_Jemuwah_Septu".split("_"),weekdaysShort:"Min_Sen_Sel_Reb_Kem_Jem_Sep".split("_"),weekdaysMin:"Mg_Sn_Sl_Rb_Km_Jm_Sp".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/enjing|siyang|sonten|ndalu/,meridiemHour:function(e,a){return 12===e&&(e=0),"enjing"===a?e:"siyang"===a?11<=e?e:e+12:"sonten"===a||"ndalu"===a?e+12:void 0},meridiem:function(e,a,t){return e<11?"enjing":e<15?"siyang":e<19?"sonten":"ndalu"},calendar:{sameDay:"[Dinten puniko pukul] LT",nextDay:"[Mbenjang pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kala wingi pukul] LT",lastWeek:"dddd [kepengker pukul] LT",sameElse:"L"},relativeTime:{future:"wonten ing %s",past:"%s ingkang kepengker",s:"sawetawis detik",ss:"%d detik",m:"setunggal menit",mm:"%d menit",h:"setunggal jam",hh:"%d jam",d:"sedinten",dd:"%d dinten",M:"sewulan",MM:"%d wulan",y:"setaun",yy:"%d taun"},week:{dow:1,doy:7}}),l.defineLocale("ka",{months:{standalone:"\u10d8\u10d0\u10dc\u10d5\u10d0\u10e0\u10d8_\u10d7\u10d4\u10d1\u10d4\u10e0\u10d5\u10d0\u10da\u10d8_\u10db\u10d0\u10e0\u10e2\u10d8_\u10d0\u10de\u10e0\u10d8\u10da\u10d8_\u10db\u10d0\u10d8\u10e1\u10d8_\u10d8\u10d5\u10dc\u10d8\u10e1\u10d8_\u10d8\u10d5\u10da\u10d8\u10e1\u10d8_\u10d0\u10d2\u10d5\u10d8\u10e1\u10e2\u10dd_\u10e1\u10d4\u10e5\u10e2\u10d4\u10db\u10d1\u10d4\u10e0\u10d8_\u10dd\u10e5\u10e2\u10dd\u10db\u10d1\u10d4\u10e0\u10d8_\u10dc\u10dd\u10d4\u10db\u10d1\u10d4\u10e0\u10d8_\u10d3\u10d4\u10d9\u10d4\u10db\u10d1\u10d4\u10e0\u10d8".split("_"),format:"\u10d8\u10d0\u10dc\u10d5\u10d0\u10e0\u10e1_\u10d7\u10d4\u10d1\u10d4\u10e0\u10d5\u10d0\u10da\u10e1_\u10db\u10d0\u10e0\u10e2\u10e1_\u10d0\u10de\u10e0\u10d8\u10da\u10d8\u10e1_\u10db\u10d0\u10d8\u10e1\u10e1_\u10d8\u10d5\u10dc\u10d8\u10e1\u10e1_\u10d8\u10d5\u10da\u10d8\u10e1\u10e1_\u10d0\u10d2\u10d5\u10d8\u10e1\u10e2\u10e1_\u10e1\u10d4\u10e5\u10e2\u10d4\u10db\u10d1\u10d4\u10e0\u10e1_\u10dd\u10e5\u10e2\u10dd\u10db\u10d1\u10d4\u10e0\u10e1_\u10dc\u10dd\u10d4\u10db\u10d1\u10d4\u10e0\u10e1_\u10d3\u10d4\u10d9\u10d4\u10db\u10d1\u10d4\u10e0\u10e1".split("_")},monthsShort:"\u10d8\u10d0\u10dc_\u10d7\u10d4\u10d1_\u10db\u10d0\u10e0_\u10d0\u10de\u10e0_\u10db\u10d0\u10d8_\u10d8\u10d5\u10dc_\u10d8\u10d5\u10da_\u10d0\u10d2\u10d5_\u10e1\u10d4\u10e5_\u10dd\u10e5\u10e2_\u10dc\u10dd\u10d4_\u10d3\u10d4\u10d9".split("_"),weekdays:{standalone:"\u10d9\u10d5\u10d8\u10e0\u10d0_\u10dd\u10e0\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8_\u10e1\u10d0\u10db\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8_\u10dd\u10d7\u10ee\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8_\u10ee\u10e3\u10d7\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8_\u10de\u10d0\u10e0\u10d0\u10e1\u10d9\u10d4\u10d5\u10d8_\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8".split("_"),format:"\u10d9\u10d5\u10d8\u10e0\u10d0\u10e1_\u10dd\u10e0\u10e8\u10d0\u10d1\u10d0\u10d7\u10e1_\u10e1\u10d0\u10db\u10e8\u10d0\u10d1\u10d0\u10d7\u10e1_\u10dd\u10d7\u10ee\u10e8\u10d0\u10d1\u10d0\u10d7\u10e1_\u10ee\u10e3\u10d7\u10e8\u10d0\u10d1\u10d0\u10d7\u10e1_\u10de\u10d0\u10e0\u10d0\u10e1\u10d9\u10d4\u10d5\u10e1_\u10e8\u10d0\u10d1\u10d0\u10d7\u10e1".split("_"),isFormat:/(\u10ec\u10d8\u10dc\u10d0|\u10e8\u10d4\u10db\u10d3\u10d4\u10d2)/},weekdaysShort:"\u10d9\u10d5\u10d8_\u10dd\u10e0\u10e8_\u10e1\u10d0\u10db_\u10dd\u10d7\u10ee_\u10ee\u10e3\u10d7_\u10de\u10d0\u10e0_\u10e8\u10d0\u10d1".split("_"),weekdaysMin:"\u10d9\u10d5_\u10dd\u10e0_\u10e1\u10d0_\u10dd\u10d7_\u10ee\u10e3_\u10de\u10d0_\u10e8\u10d0".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[\u10d3\u10e6\u10d4\u10e1] LT[-\u10d6\u10d4]",nextDay:"[\u10ee\u10d5\u10d0\u10da] LT[-\u10d6\u10d4]",lastDay:"[\u10d2\u10e3\u10e8\u10d8\u10dc] LT[-\u10d6\u10d4]",nextWeek:"[\u10e8\u10d4\u10db\u10d3\u10d4\u10d2] dddd LT[-\u10d6\u10d4]",lastWeek:"[\u10ec\u10d8\u10dc\u10d0] dddd LT-\u10d6\u10d4",sameElse:"L"},relativeTime:{future:function(e){return/(\u10ec\u10d0\u10db\u10d8|\u10ec\u10e3\u10d7\u10d8|\u10e1\u10d0\u10d0\u10d7\u10d8|\u10ec\u10d4\u10da\u10d8)/.test(e)?e.replace(/\u10d8$/,"\u10e8\u10d8"):e+"\u10e8\u10d8"},past:function(e){return/(\u10ec\u10d0\u10db\u10d8|\u10ec\u10e3\u10d7\u10d8|\u10e1\u10d0\u10d0\u10d7\u10d8|\u10d3\u10e6\u10d4|\u10d7\u10d5\u10d4)/.test(e)?e.replace(/(\u10d8|\u10d4)$/,"\u10d8\u10e1 \u10ec\u10d8\u10dc"):/\u10ec\u10d4\u10da\u10d8/.test(e)?e.replace(/\u10ec\u10d4\u10da\u10d8$/,"\u10ec\u10da\u10d8\u10e1 \u10ec\u10d8\u10dc"):void 0},s:"\u10e0\u10d0\u10db\u10d3\u10d4\u10dc\u10d8\u10db\u10d4 \u10ec\u10d0\u10db\u10d8",ss:"%d \u10ec\u10d0\u10db\u10d8",m:"\u10ec\u10e3\u10d7\u10d8",mm:"%d \u10ec\u10e3\u10d7\u10d8",h:"\u10e1\u10d0\u10d0\u10d7\u10d8",hh:"%d \u10e1\u10d0\u10d0\u10d7\u10d8",d:"\u10d3\u10e6\u10d4",dd:"%d \u10d3\u10e6\u10d4",M:"\u10d7\u10d5\u10d4",MM:"%d \u10d7\u10d5\u10d4",y:"\u10ec\u10d4\u10da\u10d8",yy:"%d \u10ec\u10d4\u10da\u10d8"},dayOfMonthOrdinalParse:/0|1-\u10da\u10d8|\u10db\u10d4-\d{1,2}|\d{1,2}-\u10d4/,ordinal:function(e){return 0===e?e:1===e?e+"-\u10da\u10d8":e<20||e<=100&&e%20==0||e%100==0?"\u10db\u10d4-"+e:e+"-\u10d4"},week:{dow:1,doy:7}});var Ks={0:"-\u0448\u0456",1:"-\u0448\u0456",2:"-\u0448\u0456",3:"-\u0448\u0456",4:"-\u0448\u0456",5:"-\u0448\u0456",6:"-\u0448\u044b",7:"-\u0448\u0456",8:"-\u0448\u0456",9:"-\u0448\u044b",10:"-\u0448\u044b",20:"-\u0448\u044b",30:"-\u0448\u044b",40:"-\u0448\u044b",50:"-\u0448\u0456",60:"-\u0448\u044b",70:"-\u0448\u0456",80:"-\u0448\u0456",90:"-\u0448\u044b",100:"-\u0448\u0456"};l.defineLocale("kk",{months:"\u049b\u0430\u04a3\u0442\u0430\u0440_\u0430\u049b\u043f\u0430\u043d_\u043d\u0430\u0443\u0440\u044b\u0437_\u0441\u04d9\u0443\u0456\u0440_\u043c\u0430\u043c\u044b\u0440_\u043c\u0430\u0443\u0441\u044b\u043c_\u0448\u0456\u043b\u0434\u0435_\u0442\u0430\u043c\u044b\u0437_\u049b\u044b\u0440\u043a\u04af\u0439\u0435\u043a_\u049b\u0430\u0437\u0430\u043d_\u049b\u0430\u0440\u0430\u0448\u0430_\u0436\u0435\u043b\u0442\u043e\u049b\u0441\u0430\u043d".split("_"),monthsShort:"\u049b\u0430\u04a3_\u0430\u049b\u043f_\u043d\u0430\u0443_\u0441\u04d9\u0443_\u043c\u0430\u043c_\u043c\u0430\u0443_\u0448\u0456\u043b_\u0442\u0430\u043c_\u049b\u044b\u0440_\u049b\u0430\u0437_\u049b\u0430\u0440_\u0436\u0435\u043b".split("_"),weekdays:"\u0436\u0435\u043a\u0441\u0435\u043d\u0431\u0456_\u0434\u04af\u0439\u0441\u0435\u043d\u0431\u0456_\u0441\u0435\u0439\u0441\u0435\u043d\u0431\u0456_\u0441\u04d9\u0440\u0441\u0435\u043d\u0431\u0456_\u0431\u0435\u0439\u0441\u0435\u043d\u0431\u0456_\u0436\u04b1\u043c\u0430_\u0441\u0435\u043d\u0431\u0456".split("_"),weekdaysShort:"\u0436\u0435\u043a_\u0434\u04af\u0439_\u0441\u0435\u0439_\u0441\u04d9\u0440_\u0431\u0435\u0439_\u0436\u04b1\u043c_\u0441\u0435\u043d".split("_"),weekdaysMin:"\u0436\u043a_\u0434\u0439_\u0441\u0439_\u0441\u0440_\u0431\u0439_\u0436\u043c_\u0441\u043d".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0411\u04af\u0433\u0456\u043d \u0441\u0430\u0493\u0430\u0442] LT",nextDay:"[\u0415\u0440\u0442\u0435\u04a3 \u0441\u0430\u0493\u0430\u0442] LT",nextWeek:"dddd [\u0441\u0430\u0493\u0430\u0442] LT",lastDay:"[\u041a\u0435\u0448\u0435 \u0441\u0430\u0493\u0430\u0442] LT",lastWeek:"[\u04e8\u0442\u043a\u0435\u043d \u0430\u043f\u0442\u0430\u043d\u044b\u04a3] dddd [\u0441\u0430\u0493\u0430\u0442] LT",sameElse:"L"},relativeTime:{future:"%s \u0456\u0448\u0456\u043d\u0434\u0435",past:"%s \u0431\u04b1\u0440\u044b\u043d",s:"\u0431\u0456\u0440\u043d\u0435\u0448\u0435 \u0441\u0435\u043a\u0443\u043d\u0434",ss:"%d \u0441\u0435\u043a\u0443\u043d\u0434",m:"\u0431\u0456\u0440 \u043c\u0438\u043d\u0443\u0442",mm:"%d \u043c\u0438\u043d\u0443\u0442",h:"\u0431\u0456\u0440 \u0441\u0430\u0493\u0430\u0442",hh:"%d \u0441\u0430\u0493\u0430\u0442",d:"\u0431\u0456\u0440 \u043a\u04af\u043d",dd:"%d \u043a\u04af\u043d",M:"\u0431\u0456\u0440 \u0430\u0439",MM:"%d \u0430\u0439",y:"\u0431\u0456\u0440 \u0436\u044b\u043b",yy:"%d \u0436\u044b\u043b"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0448\u0456|\u0448\u044b)/,ordinal:function(e){return e+(Ks[e]||Ks[e%10]||Ks[100<=e?100:null])},week:{dow:1,doy:7}});var $s={1:"\u17e1",2:"\u17e2",3:"\u17e3",4:"\u17e4",5:"\u17e5",6:"\u17e6",7:"\u17e7",8:"\u17e8",9:"\u17e9",0:"\u17e0"},Zs={"\u17e1":"1","\u17e2":"2","\u17e3":"3","\u17e4":"4","\u17e5":"5","\u17e6":"6","\u17e7":"7","\u17e8":"8","\u17e9":"9","\u17e0":"0"};l.defineLocale("km",{months:"\u1798\u1780\u179a\u17b6_\u1780\u17bb\u1798\u17d2\u1797\u17c8_\u1798\u17b8\u1793\u17b6_\u1798\u17c1\u179f\u17b6_\u17a7\u179f\u1797\u17b6_\u1798\u17b7\u1790\u17bb\u1793\u17b6_\u1780\u1780\u17d2\u1780\u178a\u17b6_\u179f\u17b8\u17a0\u17b6_\u1780\u1789\u17d2\u1789\u17b6_\u178f\u17bb\u179b\u17b6_\u179c\u17b7\u1785\u17d2\u1786\u17b7\u1780\u17b6_\u1792\u17d2\u1793\u17bc".split("_"),monthsShort:"\u1798\u1780\u179a\u17b6_\u1780\u17bb\u1798\u17d2\u1797\u17c8_\u1798\u17b8\u1793\u17b6_\u1798\u17c1\u179f\u17b6_\u17a7\u179f\u1797\u17b6_\u1798\u17b7\u1790\u17bb\u1793\u17b6_\u1780\u1780\u17d2\u1780\u178a\u17b6_\u179f\u17b8\u17a0\u17b6_\u1780\u1789\u17d2\u1789\u17b6_\u178f\u17bb\u179b\u17b6_\u179c\u17b7\u1785\u17d2\u1786\u17b7\u1780\u17b6_\u1792\u17d2\u1793\u17bc".split("_"),weekdays:"\u17a2\u17b6\u1791\u17b7\u178f\u17d2\u1799_\u1785\u17d0\u1793\u17d2\u1791_\u17a2\u1784\u17d2\u1782\u17b6\u179a_\u1796\u17bb\u1792_\u1796\u17d2\u179a\u17a0\u179f\u17d2\u1794\u178f\u17b7\u17cd_\u179f\u17bb\u1780\u17d2\u179a_\u179f\u17c5\u179a\u17cd".split("_"),weekdaysShort:"\u17a2\u17b6_\u1785_\u17a2_\u1796_\u1796\u17d2\u179a_\u179f\u17bb_\u179f".split("_"),weekdaysMin:"\u17a2\u17b6_\u1785_\u17a2_\u1796_\u1796\u17d2\u179a_\u179f\u17bb_\u179f".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},meridiemParse:/\u1796\u17d2\u179a\u17b9\u1780|\u179b\u17d2\u1784\u17b6\u1785/,isPM:function(e){return"\u179b\u17d2\u1784\u17b6\u1785"===e},meridiem:function(e,a,t){return e<12?"\u1796\u17d2\u179a\u17b9\u1780":"\u179b\u17d2\u1784\u17b6\u1785"},calendar:{sameDay:"[\u1790\u17d2\u1784\u17c3\u1793\u17c1\u17c7 \u1798\u17c9\u17c4\u1784] LT",nextDay:"[\u179f\u17d2\u17a2\u17c2\u1780 \u1798\u17c9\u17c4\u1784] LT",nextWeek:"dddd [\u1798\u17c9\u17c4\u1784] LT",lastDay:"[\u1798\u17d2\u179f\u17b7\u179b\u1798\u17b7\u1789 \u1798\u17c9\u17c4\u1784] LT",lastWeek:"dddd [\u179f\u1794\u17d2\u178f\u17b6\u17a0\u17cd\u1798\u17bb\u1793] [\u1798\u17c9\u17c4\u1784] LT",sameElse:"L"},relativeTime:{future:"%s\u1791\u17c0\u178f",past:"%s\u1798\u17bb\u1793",s:"\u1794\u17c9\u17bb\u1793\u17d2\u1798\u17b6\u1793\u179c\u17b7\u1793\u17b6\u1791\u17b8",ss:"%d \u179c\u17b7\u1793\u17b6\u1791\u17b8",m:"\u1798\u17bd\u1799\u1793\u17b6\u1791\u17b8",mm:"%d \u1793\u17b6\u1791\u17b8",h:"\u1798\u17bd\u1799\u1798\u17c9\u17c4\u1784",hh:"%d \u1798\u17c9\u17c4\u1784",d:"\u1798\u17bd\u1799\u1790\u17d2\u1784\u17c3",dd:"%d \u1790\u17d2\u1784\u17c3",M:"\u1798\u17bd\u1799\u1781\u17c2",MM:"%d \u1781\u17c2",y:"\u1798\u17bd\u1799\u1786\u17d2\u1793\u17b6\u17c6",yy:"%d \u1786\u17d2\u1793\u17b6\u17c6"},dayOfMonthOrdinalParse:/\u1791\u17b8\d{1,2}/,ordinal:"\u1791\u17b8%d",preparse:function(e){return e.replace(/[\u17e1\u17e2\u17e3\u17e4\u17e5\u17e6\u17e7\u17e8\u17e9\u17e0]/g,function(e){return Zs[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return $s[e]})},week:{dow:1,doy:4}});var Bs={1:"\u0ce7",2:"\u0ce8",3:"\u0ce9",4:"\u0cea",5:"\u0ceb",6:"\u0cec",7:"\u0ced",8:"\u0cee",9:"\u0cef",0:"\u0ce6"},qs={"\u0ce7":"1","\u0ce8":"2","\u0ce9":"3","\u0cea":"4","\u0ceb":"5","\u0cec":"6","\u0ced":"7","\u0cee":"8","\u0cef":"9","\u0ce6":"0"};l.defineLocale("kn",{months:"\u0c9c\u0ca8\u0cb5\u0cb0\u0cbf_\u0cab\u0cc6\u0cac\u0ccd\u0cb0\u0cb5\u0cb0\u0cbf_\u0cae\u0cbe\u0cb0\u0ccd\u0c9a\u0ccd_\u0c8f\u0caa\u0ccd\u0cb0\u0cbf\u0cb2\u0ccd_\u0cae\u0cc6\u0cd5_\u0c9c\u0cc2\u0ca8\u0ccd_\u0c9c\u0cc1\u0cb2\u0cc6\u0cd6_\u0c86\u0c97\u0cb8\u0ccd\u0c9f\u0ccd_\u0cb8\u0cc6\u0caa\u0ccd\u0c9f\u0cc6\u0c82\u0cac\u0cb0\u0ccd_\u0c85\u0c95\u0ccd\u0c9f\u0cc6\u0cc2\u0cd5\u0cac\u0cb0\u0ccd_\u0ca8\u0cb5\u0cc6\u0c82\u0cac\u0cb0\u0ccd_\u0ca1\u0cbf\u0cb8\u0cc6\u0c82\u0cac\u0cb0\u0ccd".split("_"),monthsShort:"\u0c9c\u0ca8_\u0cab\u0cc6\u0cac\u0ccd\u0cb0_\u0cae\u0cbe\u0cb0\u0ccd\u0c9a\u0ccd_\u0c8f\u0caa\u0ccd\u0cb0\u0cbf\u0cb2\u0ccd_\u0cae\u0cc6\u0cd5_\u0c9c\u0cc2\u0ca8\u0ccd_\u0c9c\u0cc1\u0cb2\u0cc6\u0cd6_\u0c86\u0c97\u0cb8\u0ccd\u0c9f\u0ccd_\u0cb8\u0cc6\u0caa\u0ccd\u0c9f\u0cc6\u0c82_\u0c85\u0c95\u0ccd\u0c9f\u0cc6\u0cc2\u0cd5_\u0ca8\u0cb5\u0cc6\u0c82_\u0ca1\u0cbf\u0cb8\u0cc6\u0c82".split("_"),monthsParseExact:!0,weekdays:"\u0cad\u0cbe\u0ca8\u0cc1\u0cb5\u0cbe\u0cb0_\u0cb8\u0cc6\u0cc2\u0cd5\u0cae\u0cb5\u0cbe\u0cb0_\u0cae\u0c82\u0c97\u0cb3\u0cb5\u0cbe\u0cb0_\u0cac\u0cc1\u0ca7\u0cb5\u0cbe\u0cb0_\u0c97\u0cc1\u0cb0\u0cc1\u0cb5\u0cbe\u0cb0_\u0cb6\u0cc1\u0c95\u0ccd\u0cb0\u0cb5\u0cbe\u0cb0_\u0cb6\u0ca8\u0cbf\u0cb5\u0cbe\u0cb0".split("_"),weekdaysShort:"\u0cad\u0cbe\u0ca8\u0cc1_\u0cb8\u0cc6\u0cc2\u0cd5\u0cae_\u0cae\u0c82\u0c97\u0cb3_\u0cac\u0cc1\u0ca7_\u0c97\u0cc1\u0cb0\u0cc1_\u0cb6\u0cc1\u0c95\u0ccd\u0cb0_\u0cb6\u0ca8\u0cbf".split("_"),weekdaysMin:"\u0cad\u0cbe_\u0cb8\u0cc6\u0cc2\u0cd5_\u0cae\u0c82_\u0cac\u0cc1_\u0c97\u0cc1_\u0cb6\u0cc1_\u0cb6".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[\u0c87\u0c82\u0ca6\u0cc1] LT",nextDay:"[\u0ca8\u0cbe\u0cb3\u0cc6] LT",nextWeek:"dddd, LT",lastDay:"[\u0ca8\u0cbf\u0ca8\u0ccd\u0ca8\u0cc6] LT",lastWeek:"[\u0c95\u0cc6\u0cc2\u0ca8\u0cc6\u0caf] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0ca8\u0c82\u0ca4\u0cb0",past:"%s \u0cb9\u0cbf\u0c82\u0ca6\u0cc6",s:"\u0c95\u0cc6\u0cb2\u0cb5\u0cc1 \u0c95\u0ccd\u0cb7\u0ca3\u0c97\u0cb3\u0cc1",ss:"%d \u0cb8\u0cc6\u0c95\u0cc6\u0c82\u0ca1\u0cc1\u0c97\u0cb3\u0cc1",m:"\u0c92\u0c82\u0ca6\u0cc1 \u0ca8\u0cbf\u0cae\u0cbf\u0cb7",mm:"%d \u0ca8\u0cbf\u0cae\u0cbf\u0cb7",h:"\u0c92\u0c82\u0ca6\u0cc1 \u0c97\u0c82\u0c9f\u0cc6",hh:"%d \u0c97\u0c82\u0c9f\u0cc6",d:"\u0c92\u0c82\u0ca6\u0cc1 \u0ca6\u0cbf\u0ca8",dd:"%d \u0ca6\u0cbf\u0ca8",M:"\u0c92\u0c82\u0ca6\u0cc1 \u0ca4\u0cbf\u0c82\u0c97\u0cb3\u0cc1",MM:"%d \u0ca4\u0cbf\u0c82\u0c97\u0cb3\u0cc1",y:"\u0c92\u0c82\u0ca6\u0cc1 \u0cb5\u0cb0\u0ccd\u0cb7",yy:"%d \u0cb5\u0cb0\u0ccd\u0cb7"},preparse:function(e){return e.replace(/[\u0ce7\u0ce8\u0ce9\u0cea\u0ceb\u0cec\u0ced\u0cee\u0cef\u0ce6]/g,function(e){return qs[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return Bs[e]})},meridiemParse:/\u0cb0\u0cbe\u0ca4\u0ccd\u0cb0\u0cbf|\u0cac\u0cc6\u0cb3\u0cbf\u0c97\u0ccd\u0c97\u0cc6|\u0cae\u0ca7\u0ccd\u0caf\u0cbe\u0cb9\u0ccd\u0ca8|\u0cb8\u0c82\u0c9c\u0cc6/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0cb0\u0cbe\u0ca4\u0ccd\u0cb0\u0cbf"===a?e<4?e:e+12:"\u0cac\u0cc6\u0cb3\u0cbf\u0c97\u0ccd\u0c97\u0cc6"===a?e:"\u0cae\u0ca7\u0ccd\u0caf\u0cbe\u0cb9\u0ccd\u0ca8"===a?10<=e?e:e+12:"\u0cb8\u0c82\u0c9c\u0cc6"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0cb0\u0cbe\u0ca4\u0ccd\u0cb0\u0cbf":e<10?"\u0cac\u0cc6\u0cb3\u0cbf\u0c97\u0ccd\u0c97\u0cc6":e<17?"\u0cae\u0ca7\u0ccd\u0caf\u0cbe\u0cb9\u0ccd\u0ca8":e<20?"\u0cb8\u0c82\u0c9c\u0cc6":"\u0cb0\u0cbe\u0ca4\u0ccd\u0cb0\u0cbf"},dayOfMonthOrdinalParse:/\d{1,2}(\u0ca8\u0cc6\u0cd5)/,ordinal:function(e){return e+"\u0ca8\u0cc6\u0cd5"},week:{dow:0,doy:6}}),l.defineLocale("ko",{months:"1\uc6d4_2\uc6d4_3\uc6d4_4\uc6d4_5\uc6d4_6\uc6d4_7\uc6d4_8\uc6d4_9\uc6d4_10\uc6d4_11\uc6d4_12\uc6d4".split("_"),monthsShort:"1\uc6d4_2\uc6d4_3\uc6d4_4\uc6d4_5\uc6d4_6\uc6d4_7\uc6d4_8\uc6d4_9\uc6d4_10\uc6d4_11\uc6d4_12\uc6d4".split("_"),weekdays:"\uc77c\uc694\uc77c_\uc6d4\uc694\uc77c_\ud654\uc694\uc77c_\uc218\uc694\uc77c_\ubaa9\uc694\uc77c_\uae08\uc694\uc77c_\ud1a0\uc694\uc77c".split("_"),weekdaysShort:"\uc77c_\uc6d4_\ud654_\uc218_\ubaa9_\uae08_\ud1a0".split("_"),weekdaysMin:"\uc77c_\uc6d4_\ud654_\uc218_\ubaa9_\uae08_\ud1a0".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"YYYY.MM.DD.",LL:"YYYY\ub144 MMMM D\uc77c",LLL:"YYYY\ub144 MMMM D\uc77c A h:mm",LLLL:"YYYY\ub144 MMMM D\uc77c dddd A h:mm",l:"YYYY.MM.DD.",ll:"YYYY\ub144 MMMM D\uc77c",lll:"YYYY\ub144 MMMM D\uc77c A h:mm",llll:"YYYY\ub144 MMMM D\uc77c dddd A h:mm"},calendar:{sameDay:"\uc624\ub298 LT",nextDay:"\ub0b4\uc77c LT",nextWeek:"dddd LT",lastDay:"\uc5b4\uc81c LT",lastWeek:"\uc9c0\ub09c\uc8fc dddd LT",sameElse:"L"},relativeTime:{future:"%s \ud6c4",past:"%s \uc804",s:"\uba87 \ucd08",ss:"%d\ucd08",m:"1\ubd84",mm:"%d\ubd84",h:"\ud55c \uc2dc\uac04",hh:"%d\uc2dc\uac04",d:"\ud558\ub8e8",dd:"%d\uc77c",M:"\ud55c \ub2ec",MM:"%d\ub2ec",y:"\uc77c \ub144",yy:"%d\ub144"},dayOfMonthOrdinalParse:/\d{1,2}(\uc77c|\uc6d4|\uc8fc)/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"\uc77c";case"M":return e+"\uc6d4";case"w":case"W":return e+"\uc8fc";default:return e}},meridiemParse:/\uc624\uc804|\uc624\ud6c4/,isPM:function(e){return"\uc624\ud6c4"===e},meridiem:function(e,a,t){return e<12?"\uc624\uc804":"\uc624\ud6c4"}});var Qs={1:"\u0661",2:"\u0662",3:"\u0663",4:"\u0664",5:"\u0665",6:"\u0666",7:"\u0667",8:"\u0668",9:"\u0669",0:"\u0660"},Xs={"\u0661":"1","\u0662":"2","\u0663":"3","\u0664":"4","\u0665":"5","\u0666":"6","\u0667":"7","\u0668":"8","\u0669":"9","\u0660":"0"},en=["\u06a9\u0627\u0646\u0648\u0646\u06cc \u062f\u0648\u0648\u06d5\u0645","\u0634\u0648\u0628\u0627\u062a","\u0626\u0627\u0632\u0627\u0631","\u0646\u06cc\u0633\u0627\u0646","\u0626\u0627\u06cc\u0627\u0631","\u062d\u0648\u0632\u06d5\u06cc\u0631\u0627\u0646","\u062a\u06d5\u0645\u0645\u0648\u0632","\u0626\u0627\u0628","\u0626\u06d5\u06cc\u0644\u0648\u0648\u0644","\u062a\u0634\u0631\u06cc\u0646\u06cc \u06cc\u06d5\u0643\u06d5\u0645","\u062a\u0634\u0631\u06cc\u0646\u06cc \u062f\u0648\u0648\u06d5\u0645","\u0643\u0627\u0646\u0648\u0646\u06cc \u06cc\u06d5\u06a9\u06d5\u0645"];l.defineLocale("ku",{months:en,monthsShort:en,weekdays:"\u06cc\u0647\u200c\u0643\u0634\u0647\u200c\u0645\u0645\u0647\u200c_\u062f\u0648\u0648\u0634\u0647\u200c\u0645\u0645\u0647\u200c_\u0633\u06ce\u0634\u0647\u200c\u0645\u0645\u0647\u200c_\u0686\u0648\u0627\u0631\u0634\u0647\u200c\u0645\u0645\u0647\u200c_\u067e\u06ce\u0646\u062c\u0634\u0647\u200c\u0645\u0645\u0647\u200c_\u0647\u0647\u200c\u06cc\u0646\u06cc_\u0634\u0647\u200c\u0645\u0645\u0647\u200c".split("_"),weekdaysShort:"\u06cc\u0647\u200c\u0643\u0634\u0647\u200c\u0645_\u062f\u0648\u0648\u0634\u0647\u200c\u0645_\u0633\u06ce\u0634\u0647\u200c\u0645_\u0686\u0648\u0627\u0631\u0634\u0647\u200c\u0645_\u067e\u06ce\u0646\u062c\u0634\u0647\u200c\u0645_\u0647\u0647\u200c\u06cc\u0646\u06cc_\u0634\u0647\u200c\u0645\u0645\u0647\u200c".split("_"),weekdaysMin:"\u06cc_\u062f_\u0633_\u0686_\u067e_\u0647_\u0634".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},meridiemParse:/\u0626\u06ce\u0648\u0627\u0631\u0647\u200c|\u0628\u0647\u200c\u06cc\u0627\u0646\u06cc/,isPM:function(e){return/\u0626\u06ce\u0648\u0627\u0631\u0647\u200c/.test(e)},meridiem:function(e,a,t){return e<12?"\u0628\u0647\u200c\u06cc\u0627\u0646\u06cc":"\u0626\u06ce\u0648\u0627\u0631\u0647\u200c"},calendar:{sameDay:"[\u0626\u0647\u200c\u0645\u0631\u06c6 \u0643\u0627\u062a\u0698\u0645\u06ce\u0631] LT",nextDay:"[\u0628\u0647\u200c\u06cc\u0627\u0646\u06cc \u0643\u0627\u062a\u0698\u0645\u06ce\u0631] LT",nextWeek:"dddd [\u0643\u0627\u062a\u0698\u0645\u06ce\u0631] LT",lastDay:"[\u062f\u0648\u06ce\u0646\u06ce \u0643\u0627\u062a\u0698\u0645\u06ce\u0631] LT",lastWeek:"dddd [\u0643\u0627\u062a\u0698\u0645\u06ce\u0631] LT",sameElse:"L"},relativeTime:{future:"\u0644\u0647\u200c %s",past:"%s",s:"\u0686\u0647\u200c\u0646\u062f \u0686\u0631\u0643\u0647\u200c\u06cc\u0647\u200c\u0643",ss:"\u0686\u0631\u0643\u0647\u200c %d",m:"\u06cc\u0647\u200c\u0643 \u062e\u0648\u0644\u0647\u200c\u0643",mm:"%d \u062e\u0648\u0644\u0647\u200c\u0643",h:"\u06cc\u0647\u200c\u0643 \u0643\u0627\u062a\u0698\u0645\u06ce\u0631",hh:"%d \u0643\u0627\u062a\u0698\u0645\u06ce\u0631",d:"\u06cc\u0647\u200c\u0643 \u0695\u06c6\u0698",dd:"%d \u0695\u06c6\u0698",M:"\u06cc\u0647\u200c\u0643 \u0645\u0627\u0646\u06af",MM:"%d \u0645\u0627\u0646\u06af",y:"\u06cc\u0647\u200c\u0643 \u0633\u0627\u06b5",yy:"%d \u0633\u0627\u06b5"},preparse:function(e){return e.replace(/[\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669\u0660]/g,function(e){return Xs[e]}).replace(/\u060c/g,",")},postformat:function(e){return e.replace(/\d/g,function(e){return Qs[e]}).replace(/,/g,"\u060c")},week:{dow:6,doy:12}});var an={0:"-\u0447\u04af",1:"-\u0447\u0438",2:"-\u0447\u0438",3:"-\u0447\u04af",4:"-\u0447\u04af",5:"-\u0447\u0438",6:"-\u0447\u044b",7:"-\u0447\u0438",8:"-\u0447\u0438",9:"-\u0447\u0443",10:"-\u0447\u0443",20:"-\u0447\u044b",30:"-\u0447\u0443",40:"-\u0447\u044b",50:"-\u0447\u04af",60:"-\u0447\u044b",70:"-\u0447\u0438",80:"-\u0447\u0438",90:"-\u0447\u0443",100:"-\u0447\u04af"};function tn(e,a,t,s){var n={m:["eng Minutt","enger Minutt"],h:["eng Stonn","enger Stonn"],d:["een Dag","engem Dag"],M:["ee Mount","engem Mount"],y:["ee Joer","engem Joer"]};return a?n[t][0]:n[t][1]}function sn(e){if(e=parseInt(e,10),isNaN(e))return!1;if(e<0)return!0;if(e<10)return 4<=e&&e<=7;if(e<100){var a=e%10;return sn(0===a?e/10:a)}if(e<1e4){for(;10<=e;)e/=10;return sn(e)}return sn(e/=1e3)}l.defineLocale("ky",{months:"\u044f\u043d\u0432\u0430\u0440\u044c_\u0444\u0435\u0432\u0440\u0430\u043b\u044c_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0435\u043b\u044c_\u043c\u0430\u0439_\u0438\u044e\u043d\u044c_\u0438\u044e\u043b\u044c_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043d\u0442\u044f\u0431\u0440\u044c_\u043e\u043a\u0442\u044f\u0431\u0440\u044c_\u043d\u043e\u044f\u0431\u0440\u044c_\u0434\u0435\u043a\u0430\u0431\u0440\u044c".split("_"),monthsShort:"\u044f\u043d\u0432_\u0444\u0435\u0432_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440_\u043c\u0430\u0439_\u0438\u044e\u043d\u044c_\u0438\u044e\u043b\u044c_\u0430\u0432\u0433_\u0441\u0435\u043d_\u043e\u043a\u0442_\u043d\u043e\u044f_\u0434\u0435\u043a".split("_"),weekdays:"\u0416\u0435\u043a\u0448\u0435\u043c\u0431\u0438_\u0414\u04af\u0439\u0448\u04e9\u043c\u0431\u04af_\u0428\u0435\u0439\u0448\u0435\u043c\u0431\u0438_\u0428\u0430\u0440\u0448\u0435\u043c\u0431\u0438_\u0411\u0435\u0439\u0448\u0435\u043c\u0431\u0438_\u0416\u0443\u043c\u0430_\u0418\u0448\u0435\u043c\u0431\u0438".split("_"),weekdaysShort:"\u0416\u0435\u043a_\u0414\u04af\u0439_\u0428\u0435\u0439_\u0428\u0430\u0440_\u0411\u0435\u0439_\u0416\u0443\u043c_\u0418\u0448\u0435".split("_"),weekdaysMin:"\u0416\u043a_\u0414\u0439_\u0428\u0439_\u0428\u0440_\u0411\u0439_\u0416\u043c_\u0418\u0448".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0411\u04af\u0433\u04af\u043d \u0441\u0430\u0430\u0442] LT",nextDay:"[\u042d\u0440\u0442\u0435\u04a3 \u0441\u0430\u0430\u0442] LT",nextWeek:"dddd [\u0441\u0430\u0430\u0442] LT",lastDay:"[\u041a\u0435\u0447\u044d\u044d \u0441\u0430\u0430\u0442] LT",lastWeek:"[\u04e8\u0442\u043a\u04e9\u043d \u0430\u043f\u0442\u0430\u043d\u044b\u043d] dddd [\u043a\u04af\u043d\u04af] [\u0441\u0430\u0430\u0442] LT",sameElse:"L"},relativeTime:{future:"%s \u0438\u0447\u0438\u043d\u0434\u0435",past:"%s \u043c\u0443\u0440\u0443\u043d",s:"\u0431\u0438\u0440\u043d\u0435\u0447\u0435 \u0441\u0435\u043a\u0443\u043d\u0434",ss:"%d \u0441\u0435\u043a\u0443\u043d\u0434",m:"\u0431\u0438\u0440 \u043c\u04af\u043d\u04e9\u0442",mm:"%d \u043c\u04af\u043d\u04e9\u0442",h:"\u0431\u0438\u0440 \u0441\u0430\u0430\u0442",hh:"%d \u0441\u0430\u0430\u0442",d:"\u0431\u0438\u0440 \u043a\u04af\u043d",dd:"%d \u043a\u04af\u043d",M:"\u0431\u0438\u0440 \u0430\u0439",MM:"%d \u0430\u0439",y:"\u0431\u0438\u0440 \u0436\u044b\u043b",yy:"%d \u0436\u044b\u043b"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0447\u0438|\u0447\u044b|\u0447\u04af|\u0447\u0443)/,ordinal:function(e){return e+(an[e]||an[e%10]||an[100<=e?100:null])},week:{dow:1,doy:7}}),l.defineLocale("lb",{months:"Januar_Februar_M\xe4erz_Abr\xebll_Mee_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),monthsShort:"Jan._Febr._Mrz._Abr._Mee_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),monthsParseExact:!0,weekdays:"Sonndeg_M\xe9indeg_D\xebnschdeg_M\xebttwoch_Donneschdeg_Freideg_Samschdeg".split("_"),weekdaysShort:"So._M\xe9._D\xeb._M\xeb._Do._Fr._Sa.".split("_"),weekdaysMin:"So_M\xe9_D\xeb_M\xeb_Do_Fr_Sa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm [Auer]",LTS:"H:mm:ss [Auer]",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm [Auer]",LLLL:"dddd, D. MMMM YYYY H:mm [Auer]"},calendar:{sameDay:"[Haut um] LT",sameElse:"L",nextDay:"[Muer um] LT",nextWeek:"dddd [um] LT",lastDay:"[G\xebschter um] LT",lastWeek:function(){switch(this.day()){case 2:case 4:return"[Leschten] dddd [um] LT";default:return"[Leschte] dddd [um] LT"}}},relativeTime:{future:function(e){return sn(e.substr(0,e.indexOf(" ")))?"a "+e:"an "+e},past:function(e){return sn(e.substr(0,e.indexOf(" ")))?"viru "+e:"virun "+e},s:"e puer Sekonnen",ss:"%d Sekonnen",m:tn,mm:"%d Minutten",h:tn,hh:"%d Stonnen",d:tn,dd:"%d Deeg",M:tn,MM:"%d M\xe9int",y:tn,yy:"%d Joer"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("lo",{months:"\u0ea1\u0eb1\u0e87\u0e81\u0ead\u0e99_\u0e81\u0eb8\u0ea1\u0e9e\u0eb2_\u0ea1\u0eb5\u0e99\u0eb2_\u0ec0\u0ea1\u0eaa\u0eb2_\u0e9e\u0eb6\u0e94\u0eaa\u0eb0\u0e9e\u0eb2_\u0ea1\u0eb4\u0e96\u0eb8\u0e99\u0eb2_\u0e81\u0ecd\u0ea5\u0eb0\u0e81\u0ebb\u0e94_\u0eaa\u0eb4\u0e87\u0eab\u0eb2_\u0e81\u0eb1\u0e99\u0e8d\u0eb2_\u0e95\u0eb8\u0ea5\u0eb2_\u0e9e\u0eb0\u0e88\u0eb4\u0e81_\u0e97\u0eb1\u0e99\u0ea7\u0eb2".split("_"),monthsShort:"\u0ea1\u0eb1\u0e87\u0e81\u0ead\u0e99_\u0e81\u0eb8\u0ea1\u0e9e\u0eb2_\u0ea1\u0eb5\u0e99\u0eb2_\u0ec0\u0ea1\u0eaa\u0eb2_\u0e9e\u0eb6\u0e94\u0eaa\u0eb0\u0e9e\u0eb2_\u0ea1\u0eb4\u0e96\u0eb8\u0e99\u0eb2_\u0e81\u0ecd\u0ea5\u0eb0\u0e81\u0ebb\u0e94_\u0eaa\u0eb4\u0e87\u0eab\u0eb2_\u0e81\u0eb1\u0e99\u0e8d\u0eb2_\u0e95\u0eb8\u0ea5\u0eb2_\u0e9e\u0eb0\u0e88\u0eb4\u0e81_\u0e97\u0eb1\u0e99\u0ea7\u0eb2".split("_"),weekdays:"\u0ead\u0eb2\u0e97\u0eb4\u0e94_\u0e88\u0eb1\u0e99_\u0ead\u0eb1\u0e87\u0e84\u0eb2\u0e99_\u0e9e\u0eb8\u0e94_\u0e9e\u0eb0\u0eab\u0eb1\u0e94_\u0eaa\u0eb8\u0e81_\u0ec0\u0eaa\u0ebb\u0eb2".split("_"),weekdaysShort:"\u0e97\u0eb4\u0e94_\u0e88\u0eb1\u0e99_\u0ead\u0eb1\u0e87\u0e84\u0eb2\u0e99_\u0e9e\u0eb8\u0e94_\u0e9e\u0eb0\u0eab\u0eb1\u0e94_\u0eaa\u0eb8\u0e81_\u0ec0\u0eaa\u0ebb\u0eb2".split("_"),weekdaysMin:"\u0e97_\u0e88_\u0ead\u0e84_\u0e9e_\u0e9e\u0eab_\u0eaa\u0e81_\u0eaa".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"\u0ea7\u0eb1\u0e99dddd D MMMM YYYY HH:mm"},meridiemParse:/\u0e95\u0ead\u0e99\u0ec0\u0e8a\u0ebb\u0ec9\u0eb2|\u0e95\u0ead\u0e99\u0ec1\u0ea5\u0e87/,isPM:function(e){return"\u0e95\u0ead\u0e99\u0ec1\u0ea5\u0e87"===e},meridiem:function(e,a,t){return e<12?"\u0e95\u0ead\u0e99\u0ec0\u0e8a\u0ebb\u0ec9\u0eb2":"\u0e95\u0ead\u0e99\u0ec1\u0ea5\u0e87"},calendar:{sameDay:"[\u0ea1\u0eb7\u0ec9\u0e99\u0eb5\u0ec9\u0ec0\u0ea7\u0ea5\u0eb2] LT",nextDay:"[\u0ea1\u0eb7\u0ec9\u0ead\u0eb7\u0ec8\u0e99\u0ec0\u0ea7\u0ea5\u0eb2] LT",nextWeek:"[\u0ea7\u0eb1\u0e99]dddd[\u0edc\u0ec9\u0eb2\u0ec0\u0ea7\u0ea5\u0eb2] LT",lastDay:"[\u0ea1\u0eb7\u0ec9\u0ea7\u0eb2\u0e99\u0e99\u0eb5\u0ec9\u0ec0\u0ea7\u0ea5\u0eb2] LT",lastWeek:"[\u0ea7\u0eb1\u0e99]dddd[\u0ec1\u0ea5\u0ec9\u0ea7\u0e99\u0eb5\u0ec9\u0ec0\u0ea7\u0ea5\u0eb2] LT",sameElse:"L"},relativeTime:{future:"\u0ead\u0eb5\u0e81 %s",past:"%s\u0e9c\u0ec8\u0eb2\u0e99\u0ea1\u0eb2",s:"\u0e9a\u0ecd\u0ec8\u0ec0\u0e97\u0ebb\u0ec8\u0eb2\u0ec3\u0e94\u0ea7\u0eb4\u0e99\u0eb2\u0e97\u0eb5",ss:"%d \u0ea7\u0eb4\u0e99\u0eb2\u0e97\u0eb5",m:"1 \u0e99\u0eb2\u0e97\u0eb5",mm:"%d \u0e99\u0eb2\u0e97\u0eb5",h:"1 \u0e8a\u0ebb\u0ec8\u0ea7\u0ec2\u0ea1\u0e87",hh:"%d \u0e8a\u0ebb\u0ec8\u0ea7\u0ec2\u0ea1\u0e87",d:"1 \u0ea1\u0eb7\u0ec9",dd:"%d \u0ea1\u0eb7\u0ec9",M:"1 \u0ec0\u0e94\u0eb7\u0ead\u0e99",MM:"%d \u0ec0\u0e94\u0eb7\u0ead\u0e99",y:"1 \u0e9b\u0eb5",yy:"%d \u0e9b\u0eb5"},dayOfMonthOrdinalParse:/(\u0e97\u0eb5\u0ec8)\d{1,2}/,ordinal:function(e){return"\u0e97\u0eb5\u0ec8"+e}});var nn={ss:"sekund\u0117_sekund\u017ei\u0173_sekundes",m:"minut\u0117_minut\u0117s_minut\u0119",mm:"minut\u0117s_minu\u010di\u0173_minutes",h:"valanda_valandos_valand\u0105",hh:"valandos_valand\u0173_valandas",d:"diena_dienos_dien\u0105",dd:"dienos_dien\u0173_dienas",M:"m\u0117nuo_m\u0117nesio_m\u0117nes\u012f",MM:"m\u0117nesiai_m\u0117nesi\u0173_m\u0117nesius",y:"metai_met\u0173_metus",yy:"metai_met\u0173_metus"};function dn(e,a,t,s){return a?_n(t)[0]:s?_n(t)[1]:_n(t)[2]}function rn(e){return e%10==0||10<e&&e<20}function _n(e){return nn[e].split("_")}function on(e,a,t,s){var n=e+" ";return 1===e?n+dn(0,a,t[0],s):a?n+(rn(e)?_n(t)[1]:_n(t)[0]):s?n+_n(t)[1]:n+(rn(e)?_n(t)[1]:_n(t)[2])}l.defineLocale("lt",{months:{format:"sausio_vasario_kovo_baland\u017eio_gegu\u017e\u0117s_bir\u017eelio_liepos_rugpj\u016b\u010dio_rugs\u0117jo_spalio_lapkri\u010dio_gruod\u017eio".split("_"),standalone:"sausis_vasaris_kovas_balandis_gegu\u017e\u0117_bir\u017eelis_liepa_rugpj\u016btis_rugs\u0117jis_spalis_lapkritis_gruodis".split("_"),isFormat:/D[oD]?(\[[^\[\]]*\]|\s)+MMMM?|MMMM?(\[[^\[\]]*\]|\s)+D[oD]?/},monthsShort:"sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd".split("_"),weekdays:{format:"sekmadien\u012f_pirmadien\u012f_antradien\u012f_tre\u010diadien\u012f_ketvirtadien\u012f_penktadien\u012f_\u0161e\u0161tadien\u012f".split("_"),standalone:"sekmadienis_pirmadienis_antradienis_tre\u010diadienis_ketvirtadienis_penktadienis_\u0161e\u0161tadienis".split("_"),isFormat:/dddd HH:mm/},weekdaysShort:"Sek_Pir_Ant_Tre_Ket_Pen_\u0160e\u0161".split("_"),weekdaysMin:"S_P_A_T_K_Pn_\u0160".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY [m.] MMMM D [d.]",LLL:"YYYY [m.] MMMM D [d.], HH:mm [val.]",LLLL:"YYYY [m.] MMMM D [d.], dddd, HH:mm [val.]",l:"YYYY-MM-DD",ll:"YYYY [m.] MMMM D [d.]",lll:"YYYY [m.] MMMM D [d.], HH:mm [val.]",llll:"YYYY [m.] MMMM D [d.], ddd, HH:mm [val.]"},calendar:{sameDay:"[\u0160iandien] LT",nextDay:"[Rytoj] LT",nextWeek:"dddd LT",lastDay:"[Vakar] LT",lastWeek:"[Pra\u0117jus\u012f] dddd LT",sameElse:"L"},relativeTime:{future:"po %s",past:"prie\u0161 %s",s:function(e,a,t,s){return a?"kelios sekund\u0117s":s?"keli\u0173 sekund\u017ei\u0173":"kelias sekundes"},ss:on,m:dn,mm:on,h:dn,hh:on,d:dn,dd:on,M:dn,MM:on,y:dn,yy:on},dayOfMonthOrdinalParse:/\d{1,2}-oji/,ordinal:function(e){return e+"-oji"},week:{dow:1,doy:4}});var mn={ss:"sekundes_sekund\u0113m_sekunde_sekundes".split("_"),m:"min\u016btes_min\u016bt\u0113m_min\u016bte_min\u016btes".split("_"),mm:"min\u016btes_min\u016bt\u0113m_min\u016bte_min\u016btes".split("_"),h:"stundas_stund\u0101m_stunda_stundas".split("_"),hh:"stundas_stund\u0101m_stunda_stundas".split("_"),d:"dienas_dien\u0101m_diena_dienas".split("_"),dd:"dienas_dien\u0101m_diena_dienas".split("_"),M:"m\u0113ne\u0161a_m\u0113ne\u0161iem_m\u0113nesis_m\u0113ne\u0161i".split("_"),MM:"m\u0113ne\u0161a_m\u0113ne\u0161iem_m\u0113nesis_m\u0113ne\u0161i".split("_"),y:"gada_gadiem_gads_gadi".split("_"),yy:"gada_gadiem_gads_gadi".split("_")};function un(e,a,t){return t?a%10==1&&a%100!=11?e[2]:e[3]:a%10==1&&a%100!=11?e[0]:e[1]}function ln(e,a,t){return e+" "+un(mn[t],e,a)}function Mn(e,a,t){return un(mn[t],e,a)}l.defineLocale("lv",{months:"janv\u0101ris_febru\u0101ris_marts_apr\u012blis_maijs_j\u016bnijs_j\u016blijs_augusts_septembris_oktobris_novembris_decembris".split("_"),monthsShort:"jan_feb_mar_apr_mai_j\u016bn_j\u016bl_aug_sep_okt_nov_dec".split("_"),weekdays:"sv\u0113tdiena_pirmdiena_otrdiena_tre\u0161diena_ceturtdiena_piektdiena_sestdiena".split("_"),weekdaysShort:"Sv_P_O_T_C_Pk_S".split("_"),weekdaysMin:"Sv_P_O_T_C_Pk_S".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY.",LL:"YYYY. [gada] D. MMMM",LLL:"YYYY. [gada] D. MMMM, HH:mm",LLLL:"YYYY. [gada] D. MMMM, dddd, HH:mm"},calendar:{sameDay:"[\u0160odien pulksten] LT",nextDay:"[R\u012bt pulksten] LT",nextWeek:"dddd [pulksten] LT",lastDay:"[Vakar pulksten] LT",lastWeek:"[Pag\u0101ju\u0161\u0101] dddd [pulksten] LT",sameElse:"L"},relativeTime:{future:"p\u0113c %s",past:"pirms %s",s:function(e,a){return a?"da\u017eas sekundes":"da\u017e\u0101m sekund\u0113m"},ss:ln,m:Mn,mm:ln,h:Mn,hh:ln,d:Mn,dd:ln,M:Mn,MM:ln,y:Mn,yy:ln},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var hn={words:{ss:["sekund","sekunda","sekundi"],m:["jedan minut","jednog minuta"],mm:["minut","minuta","minuta"],h:["jedan sat","jednog sata"],hh:["sat","sata","sati"],dd:["dan","dana","dana"],MM:["mjesec","mjeseca","mjeseci"],yy:["godina","godine","godina"]},correctGrammaticalCase:function(e,a){return 1===e?a[0]:2<=e&&e<=4?a[1]:a[2]},translate:function(e,a,t){var s=hn.words[t];return 1===t.length?a?s[0]:s[1]:e+" "+hn.correctGrammaticalCase(e,s)}};function Ln(e,a,t,s){switch(t){case"s":return a?"\u0445\u044d\u0434\u0445\u044d\u043d \u0441\u0435\u043a\u0443\u043d\u0434":"\u0445\u044d\u0434\u0445\u044d\u043d \u0441\u0435\u043a\u0443\u043d\u0434\u044b\u043d";case"ss":return e+(a?" \u0441\u0435\u043a\u0443\u043d\u0434":" \u0441\u0435\u043a\u0443\u043d\u0434\u044b\u043d");case"m":case"mm":return e+(a?" \u043c\u0438\u043d\u0443\u0442":" \u043c\u0438\u043d\u0443\u0442\u044b\u043d");case"h":case"hh":return e+(a?" \u0446\u0430\u0433":" \u0446\u0430\u0433\u0438\u0439\u043d");case"d":case"dd":return e+(a?" \u04e9\u0434\u04e9\u0440":" \u04e9\u0434\u0440\u0438\u0439\u043d");case"M":case"MM":return e+(a?" \u0441\u0430\u0440":" \u0441\u0430\u0440\u044b\u043d");case"y":case"yy":return e+(a?" \u0436\u0438\u043b":" \u0436\u0438\u043b\u0438\u0439\u043d");default:return e}}l.defineLocale("me",{months:"januar_februar_mart_april_maj_jun_jul_avgust_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj_jun_jul_avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedjelja_ponedjeljak_utorak_srijeda_\u010detvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sri._\u010det._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_\u010de_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sjutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedjelju] [u] LT";case 3:return"[u] [srijedu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[ju\u010de u] LT",lastWeek:function(){return["[pro\u0161le] [nedjelje] [u] LT","[pro\u0161log] [ponedjeljka] [u] LT","[pro\u0161log] [utorka] [u] LT","[pro\u0161le] [srijede] [u] LT","[pro\u0161log] [\u010detvrtka] [u] LT","[pro\u0161log] [petka] [u] LT","[pro\u0161le] [subote] [u] LT"][this.day()]},sameElse:"L"},relativeTime:{future:"za %s",past:"prije %s",s:"nekoliko sekundi",ss:hn.translate,m:hn.translate,mm:hn.translate,h:hn.translate,hh:hn.translate,d:"dan",dd:hn.translate,M:"mjesec",MM:hn.translate,y:"godinu",yy:hn.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),l.defineLocale("mi",{months:"Kohi-t\u0101te_Hui-tanguru_Pout\u016b-te-rangi_Paenga-wh\u0101wh\u0101_Haratua_Pipiri_H\u014dngoingoi_Here-turi-k\u014dk\u0101_Mahuru_Whiringa-\u0101-nuku_Whiringa-\u0101-rangi_Hakihea".split("_"),monthsShort:"Kohi_Hui_Pou_Pae_Hara_Pipi_H\u014dngoi_Here_Mahu_Whi-nu_Whi-ra_Haki".split("_"),monthsRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsStrictRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsShortRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,3}/i,monthsShortStrictRegex:/(?:['a-z\u0101\u014D\u016B]+\-?){1,2}/i,weekdays:"R\u0101tapu_Mane_T\u016brei_Wenerei_T\u0101ite_Paraire_H\u0101tarei".split("_"),weekdaysShort:"Ta_Ma_T\u016b_We_T\u0101i_Pa_H\u0101".split("_"),weekdaysMin:"Ta_Ma_T\u016b_We_T\u0101i_Pa_H\u0101".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [i] HH:mm",LLLL:"dddd, D MMMM YYYY [i] HH:mm"},calendar:{sameDay:"[i teie mahana, i] LT",nextDay:"[apopo i] LT",nextWeek:"dddd [i] LT",lastDay:"[inanahi i] LT",lastWeek:"dddd [whakamutunga i] LT",sameElse:"L"},relativeTime:{future:"i roto i %s",past:"%s i mua",s:"te h\u0113kona ruarua",ss:"%d h\u0113kona",m:"he meneti",mm:"%d meneti",h:"te haora",hh:"%d haora",d:"he ra",dd:"%d ra",M:"he marama",MM:"%d marama",y:"he tau",yy:"%d tau"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}}),l.defineLocale("mk",{months:"\u0458\u0430\u043d\u0443\u0430\u0440\u0438_\u0444\u0435\u0432\u0440\u0443\u0430\u0440\u0438_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0438\u043b_\u043c\u0430\u0458_\u0458\u0443\u043d\u0438_\u0458\u0443\u043b\u0438_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043f\u0442\u0435\u043c\u0432\u0440\u0438_\u043e\u043a\u0442\u043e\u043c\u0432\u0440\u0438_\u043d\u043e\u0435\u043c\u0432\u0440\u0438_\u0434\u0435\u043a\u0435\u043c\u0432\u0440\u0438".split("_"),monthsShort:"\u0458\u0430\u043d_\u0444\u0435\u0432_\u043c\u0430\u0440_\u0430\u043f\u0440_\u043c\u0430\u0458_\u0458\u0443\u043d_\u0458\u0443\u043b_\u0430\u0432\u0433_\u0441\u0435\u043f_\u043e\u043a\u0442_\u043d\u043e\u0435_\u0434\u0435\u043a".split("_"),weekdays:"\u043d\u0435\u0434\u0435\u043b\u0430_\u043f\u043e\u043d\u0435\u0434\u0435\u043b\u043d\u0438\u043a_\u0432\u0442\u043e\u0440\u043d\u0438\u043a_\u0441\u0440\u0435\u0434\u0430_\u0447\u0435\u0442\u0432\u0440\u0442\u043e\u043a_\u043f\u0435\u0442\u043e\u043a_\u0441\u0430\u0431\u043e\u0442\u0430".split("_"),weekdaysShort:"\u043d\u0435\u0434_\u043f\u043e\u043d_\u0432\u0442\u043e_\u0441\u0440\u0435_\u0447\u0435\u0442_\u043f\u0435\u0442_\u0441\u0430\u0431".split("_"),weekdaysMin:"\u043de_\u043fo_\u0432\u0442_\u0441\u0440_\u0447\u0435_\u043f\u0435_\u0441a".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"D.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[\u0414\u0435\u043d\u0435\u0441 \u0432\u043e] LT",nextDay:"[\u0423\u0442\u0440\u0435 \u0432\u043e] LT",nextWeek:"[\u0412\u043e] dddd [\u0432\u043e] LT",lastDay:"[\u0412\u0447\u0435\u0440\u0430 \u0432\u043e] LT",lastWeek:function(){switch(this.day()){case 0:case 3:case 6:return"[\u0418\u0437\u043c\u0438\u043d\u0430\u0442\u0430\u0442\u0430] dddd [\u0432\u043e] LT";case 1:case 2:case 4:case 5:return"[\u0418\u0437\u043c\u0438\u043d\u0430\u0442\u0438\u043e\u0442] dddd [\u0432\u043e] LT"}},sameElse:"L"},relativeTime:{future:"\u043f\u043e\u0441\u043b\u0435 %s",past:"\u043f\u0440\u0435\u0434 %s",s:"\u043d\u0435\u043a\u043e\u043b\u043a\u0443 \u0441\u0435\u043a\u0443\u043d\u0434\u0438",ss:"%d \u0441\u0435\u043a\u0443\u043d\u0434\u0438",m:"\u043c\u0438\u043d\u0443\u0442\u0430",mm:"%d \u043c\u0438\u043d\u0443\u0442\u0438",h:"\u0447\u0430\u0441",hh:"%d \u0447\u0430\u0441\u0430",d:"\u0434\u0435\u043d",dd:"%d \u0434\u0435\u043d\u0430",M:"\u043c\u0435\u0441\u0435\u0446",MM:"%d \u043c\u0435\u0441\u0435\u0446\u0438",y:"\u0433\u043e\u0434\u0438\u043d\u0430",yy:"%d \u0433\u043e\u0434\u0438\u043d\u0438"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0435\u0432|\u0435\u043d|\u0442\u0438|\u0432\u0438|\u0440\u0438|\u043c\u0438)/,ordinal:function(e){var a=e%10,t=e%100;return 0===e?e+"-\u0435\u0432":0===t?e+"-\u0435\u043d":10<t&&t<20?e+"-\u0442\u0438":1===a?e+"-\u0432\u0438":2===a?e+"-\u0440\u0438":7===a||8===a?e+"-\u043c\u0438":e+"-\u0442\u0438"},week:{dow:1,doy:7}}),l.defineLocale("ml",{months:"\u0d1c\u0d28\u0d41\u0d35\u0d30\u0d3f_\u0d2b\u0d46\u0d2c\u0d4d\u0d30\u0d41\u0d35\u0d30\u0d3f_\u0d2e\u0d3e\u0d7c\u0d1a\u0d4d\u0d1a\u0d4d_\u0d0f\u0d2a\u0d4d\u0d30\u0d3f\u0d7d_\u0d2e\u0d47\u0d2f\u0d4d_\u0d1c\u0d42\u0d7a_\u0d1c\u0d42\u0d32\u0d48_\u0d13\u0d17\u0d38\u0d4d\u0d31\u0d4d\u0d31\u0d4d_\u0d38\u0d46\u0d2a\u0d4d\u0d31\u0d4d\u0d31\u0d02\u0d2c\u0d7c_\u0d12\u0d15\u0d4d\u0d1f\u0d4b\u0d2c\u0d7c_\u0d28\u0d35\u0d02\u0d2c\u0d7c_\u0d21\u0d3f\u0d38\u0d02\u0d2c\u0d7c".split("_"),monthsShort:"\u0d1c\u0d28\u0d41._\u0d2b\u0d46\u0d2c\u0d4d\u0d30\u0d41._\u0d2e\u0d3e\u0d7c._\u0d0f\u0d2a\u0d4d\u0d30\u0d3f._\u0d2e\u0d47\u0d2f\u0d4d_\u0d1c\u0d42\u0d7a_\u0d1c\u0d42\u0d32\u0d48._\u0d13\u0d17._\u0d38\u0d46\u0d2a\u0d4d\u0d31\u0d4d\u0d31._\u0d12\u0d15\u0d4d\u0d1f\u0d4b._\u0d28\u0d35\u0d02._\u0d21\u0d3f\u0d38\u0d02.".split("_"),monthsParseExact:!0,weekdays:"\u0d1e\u0d3e\u0d2f\u0d31\u0d3e\u0d34\u0d4d\u0d1a_\u0d24\u0d3f\u0d19\u0d4d\u0d15\u0d33\u0d3e\u0d34\u0d4d\u0d1a_\u0d1a\u0d4a\u0d35\u0d4d\u0d35\u0d3e\u0d34\u0d4d\u0d1a_\u0d2c\u0d41\u0d27\u0d28\u0d3e\u0d34\u0d4d\u0d1a_\u0d35\u0d4d\u0d2f\u0d3e\u0d34\u0d3e\u0d34\u0d4d\u0d1a_\u0d35\u0d46\u0d33\u0d4d\u0d33\u0d3f\u0d2f\u0d3e\u0d34\u0d4d\u0d1a_\u0d36\u0d28\u0d3f\u0d2f\u0d3e\u0d34\u0d4d\u0d1a".split("_"),weekdaysShort:"\u0d1e\u0d3e\u0d2f\u0d7c_\u0d24\u0d3f\u0d19\u0d4d\u0d15\u0d7e_\u0d1a\u0d4a\u0d35\u0d4d\u0d35_\u0d2c\u0d41\u0d27\u0d7b_\u0d35\u0d4d\u0d2f\u0d3e\u0d34\u0d02_\u0d35\u0d46\u0d33\u0d4d\u0d33\u0d3f_\u0d36\u0d28\u0d3f".split("_"),weekdaysMin:"\u0d1e\u0d3e_\u0d24\u0d3f_\u0d1a\u0d4a_\u0d2c\u0d41_\u0d35\u0d4d\u0d2f\u0d3e_\u0d35\u0d46_\u0d36".split("_"),longDateFormat:{LT:"A h:mm -\u0d28\u0d41",LTS:"A h:mm:ss -\u0d28\u0d41",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm -\u0d28\u0d41",LLLL:"dddd, D MMMM YYYY, A h:mm -\u0d28\u0d41"},calendar:{sameDay:"[\u0d07\u0d28\u0d4d\u0d28\u0d4d] LT",nextDay:"[\u0d28\u0d3e\u0d33\u0d46] LT",nextWeek:"dddd, LT",lastDay:"[\u0d07\u0d28\u0d4d\u0d28\u0d32\u0d46] LT",lastWeek:"[\u0d15\u0d34\u0d3f\u0d1e\u0d4d\u0d1e] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0d15\u0d34\u0d3f\u0d1e\u0d4d\u0d1e\u0d4d",past:"%s \u0d2e\u0d41\u0d7b\u0d2a\u0d4d",s:"\u0d05\u0d7d\u0d2a \u0d28\u0d3f\u0d2e\u0d3f\u0d37\u0d19\u0d4d\u0d19\u0d7e",ss:"%d \u0d38\u0d46\u0d15\u0d4d\u0d15\u0d7b\u0d21\u0d4d",m:"\u0d12\u0d30\u0d41 \u0d2e\u0d3f\u0d28\u0d3f\u0d31\u0d4d\u0d31\u0d4d",mm:"%d \u0d2e\u0d3f\u0d28\u0d3f\u0d31\u0d4d\u0d31\u0d4d",h:"\u0d12\u0d30\u0d41 \u0d2e\u0d23\u0d3f\u0d15\u0d4d\u0d15\u0d42\u0d7c",hh:"%d \u0d2e\u0d23\u0d3f\u0d15\u0d4d\u0d15\u0d42\u0d7c",d:"\u0d12\u0d30\u0d41 \u0d26\u0d3f\u0d35\u0d38\u0d02",dd:"%d \u0d26\u0d3f\u0d35\u0d38\u0d02",M:"\u0d12\u0d30\u0d41 \u0d2e\u0d3e\u0d38\u0d02",MM:"%d \u0d2e\u0d3e\u0d38\u0d02",y:"\u0d12\u0d30\u0d41 \u0d35\u0d7c\u0d37\u0d02",yy:"%d \u0d35\u0d7c\u0d37\u0d02"},meridiemParse:/\u0d30\u0d3e\u0d24\u0d4d\u0d30\u0d3f|\u0d30\u0d3e\u0d35\u0d3f\u0d32\u0d46|\u0d09\u0d1a\u0d4d\u0d1a \u0d15\u0d34\u0d3f\u0d1e\u0d4d\u0d1e\u0d4d|\u0d35\u0d48\u0d15\u0d41\u0d28\u0d4d\u0d28\u0d47\u0d30\u0d02|\u0d30\u0d3e\u0d24\u0d4d\u0d30\u0d3f/i,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0d30\u0d3e\u0d24\u0d4d\u0d30\u0d3f"===a&&4<=e||"\u0d09\u0d1a\u0d4d\u0d1a \u0d15\u0d34\u0d3f\u0d1e\u0d4d\u0d1e\u0d4d"===a||"\u0d35\u0d48\u0d15\u0d41\u0d28\u0d4d\u0d28\u0d47\u0d30\u0d02"===a?e+12:e},meridiem:function(e,a,t){return e<4?"\u0d30\u0d3e\u0d24\u0d4d\u0d30\u0d3f":e<12?"\u0d30\u0d3e\u0d35\u0d3f\u0d32\u0d46":e<17?"\u0d09\u0d1a\u0d4d\u0d1a \u0d15\u0d34\u0d3f\u0d1e\u0d4d\u0d1e\u0d4d":e<20?"\u0d35\u0d48\u0d15\u0d41\u0d28\u0d4d\u0d28\u0d47\u0d30\u0d02":"\u0d30\u0d3e\u0d24\u0d4d\u0d30\u0d3f"}}),l.defineLocale("mn",{months:"\u041d\u044d\u0433\u0434\u04af\u0433\u044d\u044d\u0440 \u0441\u0430\u0440_\u0425\u043e\u0451\u0440\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0413\u0443\u0440\u0430\u0432\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0414\u04e9\u0440\u04e9\u0432\u0434\u04af\u0433\u044d\u044d\u0440 \u0441\u0430\u0440_\u0422\u0430\u0432\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0417\u0443\u0440\u0433\u0430\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0414\u043e\u043b\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u041d\u0430\u0439\u043c\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0415\u0441\u0434\u04af\u0433\u044d\u044d\u0440 \u0441\u0430\u0440_\u0410\u0440\u0430\u0432\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440_\u0410\u0440\u0432\u0430\u043d \u043d\u044d\u0433\u0434\u04af\u0433\u044d\u044d\u0440 \u0441\u0430\u0440_\u0410\u0440\u0432\u0430\u043d \u0445\u043e\u0451\u0440\u0434\u0443\u0433\u0430\u0430\u0440 \u0441\u0430\u0440".split("_"),monthsShort:"1 \u0441\u0430\u0440_2 \u0441\u0430\u0440_3 \u0441\u0430\u0440_4 \u0441\u0430\u0440_5 \u0441\u0430\u0440_6 \u0441\u0430\u0440_7 \u0441\u0430\u0440_8 \u0441\u0430\u0440_9 \u0441\u0430\u0440_10 \u0441\u0430\u0440_11 \u0441\u0430\u0440_12 \u0441\u0430\u0440".split("_"),monthsParseExact:!0,weekdays:"\u041d\u044f\u043c_\u0414\u0430\u0432\u0430\u0430_\u041c\u044f\u0433\u043c\u0430\u0440_\u041b\u0445\u0430\u0433\u0432\u0430_\u041f\u04af\u0440\u044d\u0432_\u0411\u0430\u0430\u0441\u0430\u043d_\u0411\u044f\u043c\u0431\u0430".split("_"),weekdaysShort:"\u041d\u044f\u043c_\u0414\u0430\u0432_\u041c\u044f\u0433_\u041b\u0445\u0430_\u041f\u04af\u0440_\u0411\u0430\u0430_\u0411\u044f\u043c".split("_"),weekdaysMin:"\u041d\u044f_\u0414\u0430_\u041c\u044f_\u041b\u0445_\u041f\u04af_\u0411\u0430_\u0411\u044f".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY \u043e\u043d\u044b MMMM\u044b\u043d D",LLL:"YYYY \u043e\u043d\u044b MMMM\u044b\u043d D HH:mm",LLLL:"dddd, YYYY \u043e\u043d\u044b MMMM\u044b\u043d D HH:mm"},meridiemParse:/\u04ae\u04e8|\u04ae\u0425/i,isPM:function(e){return"\u04ae\u0425"===e},meridiem:function(e,a,t){return e<12?"\u04ae\u04e8":"\u04ae\u0425"},calendar:{sameDay:"[\u04e8\u043d\u04e9\u04e9\u0434\u04e9\u0440] LT",nextDay:"[\u041c\u0430\u0440\u0433\u0430\u0430\u0448] LT",nextWeek:"[\u0418\u0440\u044d\u0445] dddd LT",lastDay:"[\u04e8\u0447\u0438\u0433\u0434\u04e9\u0440] LT",lastWeek:"[\u04e8\u043d\u0433\u04e9\u0440\u0441\u04e9\u043d] dddd LT",sameElse:"L"},relativeTime:{future:"%s \u0434\u0430\u0440\u0430\u0430",past:"%s \u04e9\u043c\u043d\u04e9",s:Ln,ss:Ln,m:Ln,mm:Ln,h:Ln,hh:Ln,d:Ln,dd:Ln,M:Ln,MM:Ln,y:Ln,yy:Ln},dayOfMonthOrdinalParse:/\d{1,2} \u04e9\u0434\u04e9\u0440/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+" \u04e9\u0434\u04e9\u0440";default:return e}}});var cn={1:"\u0967",2:"\u0968",3:"\u0969",4:"\u096a",5:"\u096b",6:"\u096c",7:"\u096d",8:"\u096e",9:"\u096f",0:"\u0966"},Yn={"\u0967":"1","\u0968":"2","\u0969":"3","\u096a":"4","\u096b":"5","\u096c":"6","\u096d":"7","\u096e":"8","\u096f":"9","\u0966":"0"};function yn(e,a,t,s){var n="";if(a)switch(t){case"s":n="\u0915\u093e\u0939\u0940 \u0938\u0947\u0915\u0902\u0926";break;case"ss":n="%d \u0938\u0947\u0915\u0902\u0926";break;case"m":n="\u090f\u0915 \u092e\u093f\u0928\u093f\u091f";break;case"mm":n="%d \u092e\u093f\u0928\u093f\u091f\u0947";break;case"h":n="\u090f\u0915 \u0924\u093e\u0938";break;case"hh":n="%d \u0924\u093e\u0938";break;case"d":n="\u090f\u0915 \u0926\u093f\u0935\u0938";break;case"dd":n="%d \u0926\u093f\u0935\u0938";break;case"M":n="\u090f\u0915 \u092e\u0939\u093f\u0928\u093e";break;case"MM":n="%d \u092e\u0939\u093f\u0928\u0947";break;case"y":n="\u090f\u0915 \u0935\u0930\u094d\u0937";break;case"yy":n="%d \u0935\u0930\u094d\u0937\u0947";break}else switch(t){case"s":n="\u0915\u093e\u0939\u0940 \u0938\u0947\u0915\u0902\u0926\u093e\u0902";break;case"ss":n="%d \u0938\u0947\u0915\u0902\u0926\u093e\u0902";break;case"m":n="\u090f\u0915\u093e \u092e\u093f\u0928\u093f\u091f\u093e";break;case"mm":n="%d \u092e\u093f\u0928\u093f\u091f\u093e\u0902";break;case"h":n="\u090f\u0915\u093e \u0924\u093e\u0938\u093e";break;case"hh":n="%d \u0924\u093e\u0938\u093e\u0902";break;case"d":n="\u090f\u0915\u093e \u0926\u093f\u0935\u0938\u093e";break;case"dd":n="%d \u0926\u093f\u0935\u0938\u093e\u0902";break;case"M":n="\u090f\u0915\u093e \u092e\u0939\u093f\u0928\u094d\u092f\u093e";break;case"MM":n="%d \u092e\u0939\u093f\u0928\u094d\u092f\u093e\u0902";break;case"y":n="\u090f\u0915\u093e \u0935\u0930\u094d\u0937\u093e";break;case"yy":n="%d \u0935\u0930\u094d\u0937\u093e\u0902";break}return n.replace(/%d/i,e)}l.defineLocale("mr",{months:"\u091c\u093e\u0928\u0947\u0935\u093e\u0930\u0940_\u092b\u0947\u092c\u094d\u0930\u0941\u0935\u093e\u0930\u0940_\u092e\u093e\u0930\u094d\u091a_\u090f\u092a\u094d\u0930\u093f\u0932_\u092e\u0947_\u091c\u0942\u0928_\u091c\u0941\u0932\u0948_\u0911\u0917\u0938\u094d\u091f_\u0938\u092a\u094d\u091f\u0947\u0902\u092c\u0930_\u0911\u0915\u094d\u091f\u094b\u092c\u0930_\u0928\u094b\u0935\u094d\u0939\u0947\u0902\u092c\u0930_\u0921\u093f\u0938\u0947\u0902\u092c\u0930".split("_"),monthsShort:"\u091c\u093e\u0928\u0947._\u092b\u0947\u092c\u094d\u0930\u0941._\u092e\u093e\u0930\u094d\u091a._\u090f\u092a\u094d\u0930\u093f._\u092e\u0947._\u091c\u0942\u0928._\u091c\u0941\u0932\u0948._\u0911\u0917._\u0938\u092a\u094d\u091f\u0947\u0902._\u0911\u0915\u094d\u091f\u094b._\u0928\u094b\u0935\u094d\u0939\u0947\u0902._\u0921\u093f\u0938\u0947\u0902.".split("_"),monthsParseExact:!0,weekdays:"\u0930\u0935\u093f\u0935\u093e\u0930_\u0938\u094b\u092e\u0935\u093e\u0930_\u092e\u0902\u0917\u0933\u0935\u093e\u0930_\u092c\u0941\u0927\u0935\u093e\u0930_\u0917\u0941\u0930\u0942\u0935\u093e\u0930_\u0936\u0941\u0915\u094d\u0930\u0935\u093e\u0930_\u0936\u0928\u093f\u0935\u093e\u0930".split("_"),weekdaysShort:"\u0930\u0935\u093f_\u0938\u094b\u092e_\u092e\u0902\u0917\u0933_\u092c\u0941\u0927_\u0917\u0941\u0930\u0942_\u0936\u0941\u0915\u094d\u0930_\u0936\u0928\u093f".split("_"),weekdaysMin:"\u0930_\u0938\u094b_\u092e\u0902_\u092c\u0941_\u0917\u0941_\u0936\u0941_\u0936".split("_"),longDateFormat:{LT:"A h:mm \u0935\u093e\u091c\u0924\u093e",LTS:"A h:mm:ss \u0935\u093e\u091c\u0924\u093e",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm \u0935\u093e\u091c\u0924\u093e",LLLL:"dddd, D MMMM YYYY, A h:mm \u0935\u093e\u091c\u0924\u093e"},calendar:{sameDay:"[\u0906\u091c] LT",nextDay:"[\u0909\u0926\u094d\u092f\u093e] LT",nextWeek:"dddd, LT",lastDay:"[\u0915\u093e\u0932] LT",lastWeek:"[\u092e\u093e\u0917\u0940\u0932] dddd, LT",sameElse:"L"},relativeTime:{future:"%s\u092e\u0927\u094d\u092f\u0947",past:"%s\u092a\u0942\u0930\u094d\u0935\u0940",s:yn,ss:yn,m:yn,mm:yn,h:yn,hh:yn,d:yn,dd:yn,M:yn,MM:yn,y:yn,yy:yn},preparse:function(e){return e.replace(/[\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f\u0966]/g,function(e){return Yn[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return cn[e]})},meridiemParse:/\u0930\u093e\u0924\u094d\u0930\u0940|\u0938\u0915\u093e\u0933\u0940|\u0926\u0941\u092a\u093e\u0930\u0940|\u0938\u093e\u092f\u0902\u0915\u093e\u0933\u0940/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0930\u093e\u0924\u094d\u0930\u0940"===a?e<4?e:e+12:"\u0938\u0915\u093e\u0933\u0940"===a?e:"\u0926\u0941\u092a\u093e\u0930\u0940"===a?10<=e?e:e+12:"\u0938\u093e\u092f\u0902\u0915\u093e\u0933\u0940"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0930\u093e\u0924\u094d\u0930\u0940":e<10?"\u0938\u0915\u093e\u0933\u0940":e<17?"\u0926\u0941\u092a\u093e\u0930\u0940":e<20?"\u0938\u093e\u092f\u0902\u0915\u093e\u0933\u0940":"\u0930\u093e\u0924\u094d\u0930\u0940"},week:{dow:0,doy:6}}),l.defineLocale("ms-my",{months:"Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),weekdays:"Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),weekdaysShort:"Ahd_Isn_Sel_Rab_Kha_Jum_Sab".split("_"),weekdaysMin:"Ah_Is_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|tengahari|petang|malam/,meridiemHour:function(e,a){return 12===e&&(e=0),"pagi"===a?e:"tengahari"===a?11<=e?e:e+12:"petang"===a||"malam"===a?e+12:void 0},meridiem:function(e,a,t){return e<11?"pagi":e<15?"tengahari":e<19?"petang":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Esok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kelmarin pukul] LT",lastWeek:"dddd [lepas pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lepas",s:"beberapa saat",ss:"%d saat",m:"seminit",mm:"%d minit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}}),l.defineLocale("ms",{months:"Januari_Februari_Mac_April_Mei_Jun_Julai_Ogos_September_Oktober_November_Disember".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ogs_Sep_Okt_Nov_Dis".split("_"),weekdays:"Ahad_Isnin_Selasa_Rabu_Khamis_Jumaat_Sabtu".split("_"),weekdaysShort:"Ahd_Isn_Sel_Rab_Kha_Jum_Sab".split("_"),weekdaysMin:"Ah_Is_Sl_Rb_Km_Jm_Sb".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [pukul] HH.mm",LLLL:"dddd, D MMMM YYYY [pukul] HH.mm"},meridiemParse:/pagi|tengahari|petang|malam/,meridiemHour:function(e,a){return 12===e&&(e=0),"pagi"===a?e:"tengahari"===a?11<=e?e:e+12:"petang"===a||"malam"===a?e+12:void 0},meridiem:function(e,a,t){return e<11?"pagi":e<15?"tengahari":e<19?"petang":"malam"},calendar:{sameDay:"[Hari ini pukul] LT",nextDay:"[Esok pukul] LT",nextWeek:"dddd [pukul] LT",lastDay:"[Kelmarin pukul] LT",lastWeek:"dddd [lepas pukul] LT",sameElse:"L"},relativeTime:{future:"dalam %s",past:"%s yang lepas",s:"beberapa saat",ss:"%d saat",m:"seminit",mm:"%d minit",h:"sejam",hh:"%d jam",d:"sehari",dd:"%d hari",M:"sebulan",MM:"%d bulan",y:"setahun",yy:"%d tahun"},week:{dow:1,doy:7}}),l.defineLocale("mt",{months:"Jannar_Frar_Marzu_April_Mejju_\u0120unju_Lulju_Awwissu_Settembru_Ottubru_Novembru_Di\u010bembru".split("_"),monthsShort:"Jan_Fra_Mar_Apr_Mej_\u0120un_Lul_Aww_Set_Ott_Nov_Di\u010b".split("_"),weekdays:"Il-\u0126add_It-Tnejn_It-Tlieta_L-Erbg\u0127a_Il-\u0126amis_Il-\u0120img\u0127a_Is-Sibt".split("_"),weekdaysShort:"\u0126ad_Tne_Tli_Erb_\u0126am_\u0120im_Sib".split("_"),weekdaysMin:"\u0126a_Tn_Tl_Er_\u0126a_\u0120i_Si".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Illum fil-]LT",nextDay:"[G\u0127ada fil-]LT",nextWeek:"dddd [fil-]LT",lastDay:"[Il-biera\u0127 fil-]LT",lastWeek:"dddd [li g\u0127adda] [fil-]LT",sameElse:"L"},relativeTime:{future:"f\u2019 %s",past:"%s ilu",s:"ftit sekondi",ss:"%d sekondi",m:"minuta",mm:"%d minuti",h:"sieg\u0127a",hh:"%d sieg\u0127at",d:"\u0121urnata",dd:"%d \u0121ranet",M:"xahar",MM:"%d xhur",y:"sena",yy:"%d sni"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}});var fn={1:"\u1041",2:"\u1042",3:"\u1043",4:"\u1044",5:"\u1045",6:"\u1046",7:"\u1047",8:"\u1048",9:"\u1049",0:"\u1040"},kn={"\u1041":"1","\u1042":"2","\u1043":"3","\u1044":"4","\u1045":"5","\u1046":"6","\u1047":"7","\u1048":"8","\u1049":"9","\u1040":"0"};l.defineLocale("my",{months:"\u1007\u1014\u103a\u1014\u101d\u102b\u101b\u102e_\u1016\u1031\u1016\u1031\u102c\u103a\u101d\u102b\u101b\u102e_\u1019\u1010\u103a_\u1027\u1015\u103c\u102e_\u1019\u1031_\u1007\u103d\u1014\u103a_\u1007\u1030\u101c\u102d\u102f\u1004\u103a_\u101e\u103c\u1002\u102f\u1010\u103a_\u1005\u1000\u103a\u1010\u1004\u103a\u1018\u102c_\u1021\u1031\u102c\u1000\u103a\u1010\u102d\u102f\u1018\u102c_\u1014\u102d\u102f\u101d\u1004\u103a\u1018\u102c_\u1012\u102e\u1007\u1004\u103a\u1018\u102c".split("_"),monthsShort:"\u1007\u1014\u103a_\u1016\u1031_\u1019\u1010\u103a_\u1015\u103c\u102e_\u1019\u1031_\u1007\u103d\u1014\u103a_\u101c\u102d\u102f\u1004\u103a_\u101e\u103c_\u1005\u1000\u103a_\u1021\u1031\u102c\u1000\u103a_\u1014\u102d\u102f_\u1012\u102e".split("_"),weekdays:"\u1010\u1014\u1004\u103a\u1039\u1002\u1014\u103d\u1031_\u1010\u1014\u1004\u103a\u1039\u101c\u102c_\u1021\u1004\u103a\u1039\u1002\u102b_\u1017\u102f\u1012\u1039\u1013\u101f\u1030\u1038_\u1000\u103c\u102c\u101e\u1015\u1010\u1031\u1038_\u101e\u1031\u102c\u1000\u103c\u102c_\u1005\u1014\u1031".split("_"),weekdaysShort:"\u1014\u103d\u1031_\u101c\u102c_\u1002\u102b_\u101f\u1030\u1038_\u1000\u103c\u102c_\u101e\u1031\u102c_\u1014\u1031".split("_"),weekdaysMin:"\u1014\u103d\u1031_\u101c\u102c_\u1002\u102b_\u101f\u1030\u1038_\u1000\u103c\u102c_\u101e\u1031\u102c_\u1014\u1031".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u101a\u1014\u1031.] LT [\u1019\u103e\u102c]",nextDay:"[\u1019\u1014\u1000\u103a\u1016\u103c\u1014\u103a] LT [\u1019\u103e\u102c]",nextWeek:"dddd LT [\u1019\u103e\u102c]",lastDay:"[\u1019\u1014\u1031.\u1000] LT [\u1019\u103e\u102c]",lastWeek:"[\u1015\u103c\u102e\u1038\u1001\u1032\u1037\u101e\u1031\u102c] dddd LT [\u1019\u103e\u102c]",sameElse:"L"},relativeTime:{future:"\u101c\u102c\u1019\u100a\u103a\u1037 %s \u1019\u103e\u102c",past:"\u101c\u103d\u1014\u103a\u1001\u1032\u1037\u101e\u1031\u102c %s \u1000",s:"\u1005\u1000\u1039\u1000\u1014\u103a.\u1021\u1014\u100a\u103a\u1038\u1004\u101a\u103a",ss:"%d \u1005\u1000\u1039\u1000\u1014\u1037\u103a",m:"\u1010\u1005\u103a\u1019\u102d\u1014\u1005\u103a",mm:"%d \u1019\u102d\u1014\u1005\u103a",h:"\u1010\u1005\u103a\u1014\u102c\u101b\u102e",hh:"%d \u1014\u102c\u101b\u102e",d:"\u1010\u1005\u103a\u101b\u1000\u103a",dd:"%d \u101b\u1000\u103a",M:"\u1010\u1005\u103a\u101c",MM:"%d \u101c",y:"\u1010\u1005\u103a\u1014\u103e\u1005\u103a",yy:"%d \u1014\u103e\u1005\u103a"},preparse:function(e){return e.replace(/[\u1041\u1042\u1043\u1044\u1045\u1046\u1047\u1048\u1049\u1040]/g,function(e){return kn[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return fn[e]})},week:{dow:1,doy:4}}),l.defineLocale("nb",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.".split("_"),monthsParseExact:!0,weekdays:"s\xf8ndag_mandag_tirsdag_onsdag_torsdag_fredag_l\xf8rdag".split("_"),weekdaysShort:"s\xf8._ma._ti._on._to._fr._l\xf8.".split("_"),weekdaysMin:"s\xf8_ma_ti_on_to_fr_l\xf8".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] HH:mm",LLLL:"dddd D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[i dag kl.] LT",nextDay:"[i morgen kl.] LT",nextWeek:"dddd [kl.] LT",lastDay:"[i g\xe5r kl.] LT",lastWeek:"[forrige] dddd [kl.] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s siden",s:"noen sekunder",ss:"%d sekunder",m:"ett minutt",mm:"%d minutter",h:"en time",hh:"%d timer",d:"en dag",dd:"%d dager",M:"en m\xe5ned",MM:"%d m\xe5neder",y:"ett \xe5r",yy:"%d \xe5r"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var pn={1:"\u0967",2:"\u0968",3:"\u0969",4:"\u096a",5:"\u096b",6:"\u096c",7:"\u096d",8:"\u096e",9:"\u096f",0:"\u0966"},Dn={"\u0967":"1","\u0968":"2","\u0969":"3","\u096a":"4","\u096b":"5","\u096c":"6","\u096d":"7","\u096e":"8","\u096f":"9","\u0966":"0"};l.defineLocale("ne",{months:"\u091c\u0928\u0935\u0930\u0940_\u092b\u0947\u092c\u094d\u0930\u0941\u0935\u0930\u0940_\u092e\u093e\u0930\u094d\u091a_\u0905\u092a\u094d\u0930\u093f\u0932_\u092e\u0908_\u091c\u0941\u0928_\u091c\u0941\u0932\u093e\u0908_\u0905\u0917\u0937\u094d\u091f_\u0938\u0947\u092a\u094d\u091f\u0947\u092e\u094d\u092c\u0930_\u0905\u0915\u094d\u091f\u094b\u092c\u0930_\u0928\u094b\u092d\u0947\u092e\u094d\u092c\u0930_\u0921\u093f\u0938\u0947\u092e\u094d\u092c\u0930".split("_"),monthsShort:"\u091c\u0928._\u092b\u0947\u092c\u094d\u0930\u0941._\u092e\u093e\u0930\u094d\u091a_\u0905\u092a\u094d\u0930\u093f._\u092e\u0908_\u091c\u0941\u0928_\u091c\u0941\u0932\u093e\u0908._\u0905\u0917._\u0938\u0947\u092a\u094d\u091f._\u0905\u0915\u094d\u091f\u094b._\u0928\u094b\u092d\u0947._\u0921\u093f\u0938\u0947.".split("_"),monthsParseExact:!0,weekdays:"\u0906\u0907\u0924\u092c\u093e\u0930_\u0938\u094b\u092e\u092c\u093e\u0930_\u092e\u0919\u094d\u0917\u0932\u092c\u093e\u0930_\u092c\u0941\u0927\u092c\u093e\u0930_\u092c\u093f\u0939\u093f\u092c\u093e\u0930_\u0936\u0941\u0915\u094d\u0930\u092c\u093e\u0930_\u0936\u0928\u093f\u092c\u093e\u0930".split("_"),weekdaysShort:"\u0906\u0907\u0924._\u0938\u094b\u092e._\u092e\u0919\u094d\u0917\u0932._\u092c\u0941\u0927._\u092c\u093f\u0939\u093f._\u0936\u0941\u0915\u094d\u0930._\u0936\u0928\u093f.".split("_"),weekdaysMin:"\u0906._\u0938\u094b._\u092e\u0902._\u092c\u0941._\u092c\u093f._\u0936\u0941._\u0936.".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"A\u0915\u094b h:mm \u092c\u091c\u0947",LTS:"A\u0915\u094b h:mm:ss \u092c\u091c\u0947",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A\u0915\u094b h:mm \u092c\u091c\u0947",LLLL:"dddd, D MMMM YYYY, A\u0915\u094b h:mm \u092c\u091c\u0947"},preparse:function(e){return e.replace(/[\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f\u0966]/g,function(e){return Dn[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return pn[e]})},meridiemParse:/\u0930\u093e\u0924\u093f|\u092c\u093f\u0939\u093e\u0928|\u0926\u093f\u0909\u0901\u0938\u094b|\u0938\u093e\u0901\u091d/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0930\u093e\u0924\u093f"===a?e<4?e:e+12:"\u092c\u093f\u0939\u093e\u0928"===a?e:"\u0926\u093f\u0909\u0901\u0938\u094b"===a?10<=e?e:e+12:"\u0938\u093e\u0901\u091d"===a?e+12:void 0},meridiem:function(e,a,t){return e<3?"\u0930\u093e\u0924\u093f":e<12?"\u092c\u093f\u0939\u093e\u0928":e<16?"\u0926\u093f\u0909\u0901\u0938\u094b":e<20?"\u0938\u093e\u0901\u091d":"\u0930\u093e\u0924\u093f"},calendar:{sameDay:"[\u0906\u091c] LT",nextDay:"[\u092d\u094b\u0932\u093f] LT",nextWeek:"[\u0906\u0909\u0901\u0926\u094b] dddd[,] LT",lastDay:"[\u0939\u093f\u091c\u094b] LT",lastWeek:"[\u0917\u090f\u0915\u094b] dddd[,] LT",sameElse:"L"},relativeTime:{future:"%s\u092e\u093e",past:"%s \u0905\u0917\u093e\u0921\u093f",s:"\u0915\u0947\u0939\u0940 \u0915\u094d\u0937\u0923",ss:"%d \u0938\u0947\u0915\u0947\u0923\u094d\u0921",m:"\u090f\u0915 \u092e\u093f\u0928\u0947\u091f",mm:"%d \u092e\u093f\u0928\u0947\u091f",h:"\u090f\u0915 \u0918\u0923\u094d\u091f\u093e",hh:"%d \u0918\u0923\u094d\u091f\u093e",d:"\u090f\u0915 \u0926\u093f\u0928",dd:"%d \u0926\u093f\u0928",M:"\u090f\u0915 \u092e\u0939\u093f\u0928\u093e",MM:"%d \u092e\u0939\u093f\u0928\u093e",y:"\u090f\u0915 \u092c\u0930\u094d\u0937",yy:"%d \u092c\u0930\u094d\u0937"},week:{dow:0,doy:6}});var Tn="jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),gn="jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_"),wn=[/^jan/i,/^feb/i,/^maart|mrt.?$/i,/^apr/i,/^mei$/i,/^jun[i.]?$/i,/^jul[i.]?$/i,/^aug/i,/^sep/i,/^okt/i,/^nov/i,/^dec/i],vn=/^(januari|februari|maart|april|mei|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;l.defineLocale("nl-be",{months:"januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?gn[e.month()]:Tn[e.month()]:Tn},monthsRegex:vn,monthsShortRegex:vn,monthsStrictRegex:/^(januari|februari|maart|april|mei|ju[nl]i|augustus|september|oktober|november|december)/i,monthsShortStrictRegex:/^(jan\.?|feb\.?|mrt\.?|apr\.?|mei|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i,monthsParse:wn,longMonthsParse:wn,shortMonthsParse:wn,weekdays:"zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag".split("_"),weekdaysShort:"zo._ma._di._wo._do._vr._za.".split("_"),weekdaysMin:"zo_ma_di_wo_do_vr_za".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[vandaag om] LT",nextDay:"[morgen om] LT",nextWeek:"dddd [om] LT",lastDay:"[gisteren om] LT",lastWeek:"[afgelopen] dddd [om] LT",sameElse:"L"},relativeTime:{future:"over %s",past:"%s geleden",s:"een paar seconden",ss:"%d seconden",m:"\xe9\xe9n minuut",mm:"%d minuten",h:"\xe9\xe9n uur",hh:"%d uur",d:"\xe9\xe9n dag",dd:"%d dagen",M:"\xe9\xe9n maand",MM:"%d maanden",y:"\xe9\xe9n jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(e){return e+(1===e||8===e||20<=e?"ste":"de")},week:{dow:1,doy:4}});var Hn="jan._feb._mrt._apr._mei_jun._jul._aug._sep._okt._nov._dec.".split("_"),Sn="jan_feb_mrt_apr_mei_jun_jul_aug_sep_okt_nov_dec".split("_"),bn=[/^jan/i,/^feb/i,/^maart|mrt.?$/i,/^apr/i,/^mei$/i,/^jun[i.]?$/i,/^jul[i.]?$/i,/^aug/i,/^sep/i,/^okt/i,/^nov/i,/^dec/i],jn=/^(januari|februari|maart|april|mei|ju[nl]i|augustus|september|oktober|november|december|jan\.?|feb\.?|mrt\.?|apr\.?|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i;l.defineLocale("nl",{months:"januari_februari_maart_april_mei_juni_juli_augustus_september_oktober_november_december".split("_"),monthsShort:function(e,a){return e?/-MMM-/.test(a)?Sn[e.month()]:Hn[e.month()]:Hn},monthsRegex:jn,monthsShortRegex:jn,monthsStrictRegex:/^(januari|februari|maart|april|mei|ju[nl]i|augustus|september|oktober|november|december)/i,monthsShortStrictRegex:/^(jan\.?|feb\.?|mrt\.?|apr\.?|mei|ju[nl]\.?|aug\.?|sep\.?|okt\.?|nov\.?|dec\.?)/i,monthsParse:bn,longMonthsParse:bn,shortMonthsParse:bn,weekdays:"zondag_maandag_dinsdag_woensdag_donderdag_vrijdag_zaterdag".split("_"),weekdaysShort:"zo._ma._di._wo._do._vr._za.".split("_"),weekdaysMin:"zo_ma_di_wo_do_vr_za".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD-MM-YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[vandaag om] LT",nextDay:"[morgen om] LT",nextWeek:"dddd [om] LT",lastDay:"[gisteren om] LT",lastWeek:"[afgelopen] dddd [om] LT",sameElse:"L"},relativeTime:{future:"over %s",past:"%s geleden",s:"een paar seconden",ss:"%d seconden",m:"\xe9\xe9n minuut",mm:"%d minuten",h:"\xe9\xe9n uur",hh:"%d uur",d:"\xe9\xe9n dag",dd:"%d dagen",M:"\xe9\xe9n maand",MM:"%d maanden",y:"\xe9\xe9n jaar",yy:"%d jaar"},dayOfMonthOrdinalParse:/\d{1,2}(ste|de)/,ordinal:function(e){return e+(1===e||8===e||20<=e?"ste":"de")},week:{dow:1,doy:4}}),l.defineLocale("nn",{months:"januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember".split("_"),monthsShort:"jan_feb_mar_apr_mai_jun_jul_aug_sep_okt_nov_des".split("_"),weekdays:"sundag_m\xe5ndag_tysdag_onsdag_torsdag_fredag_laurdag".split("_"),weekdaysShort:"sun_m\xe5n_tys_ons_tor_fre_lau".split("_"),weekdaysMin:"su_m\xe5_ty_on_to_fr_l\xf8".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY [kl.] H:mm",LLLL:"dddd D. MMMM YYYY [kl.] HH:mm"},calendar:{sameDay:"[I dag klokka] LT",nextDay:"[I morgon klokka] LT",nextWeek:"dddd [klokka] LT",lastDay:"[I g\xe5r klokka] LT",lastWeek:"[F\xf8reg\xe5ande] dddd [klokka] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"%s sidan",s:"nokre sekund",ss:"%d sekund",m:"eit minutt",mm:"%d minutt",h:"ein time",hh:"%d timar",d:"ein dag",dd:"%d dagar",M:"ein m\xe5nad",MM:"%d m\xe5nader",y:"eit \xe5r",yy:"%d \xe5r"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var xn={1:"\u0a67",2:"\u0a68",3:"\u0a69",4:"\u0a6a",5:"\u0a6b",6:"\u0a6c",7:"\u0a6d",8:"\u0a6e",9:"\u0a6f",0:"\u0a66"},Pn={"\u0a67":"1","\u0a68":"2","\u0a69":"3","\u0a6a":"4","\u0a6b":"5","\u0a6c":"6","\u0a6d":"7","\u0a6e":"8","\u0a6f":"9","\u0a66":"0"};l.defineLocale("pa-in",{months:"\u0a1c\u0a28\u0a35\u0a30\u0a40_\u0a2b\u0a3c\u0a30\u0a35\u0a30\u0a40_\u0a2e\u0a3e\u0a30\u0a1a_\u0a05\u0a2a\u0a4d\u0a30\u0a48\u0a32_\u0a2e\u0a08_\u0a1c\u0a42\u0a28_\u0a1c\u0a41\u0a32\u0a3e\u0a08_\u0a05\u0a17\u0a38\u0a24_\u0a38\u0a24\u0a70\u0a2c\u0a30_\u0a05\u0a15\u0a24\u0a42\u0a2c\u0a30_\u0a28\u0a35\u0a70\u0a2c\u0a30_\u0a26\u0a38\u0a70\u0a2c\u0a30".split("_"),monthsShort:"\u0a1c\u0a28\u0a35\u0a30\u0a40_\u0a2b\u0a3c\u0a30\u0a35\u0a30\u0a40_\u0a2e\u0a3e\u0a30\u0a1a_\u0a05\u0a2a\u0a4d\u0a30\u0a48\u0a32_\u0a2e\u0a08_\u0a1c\u0a42\u0a28_\u0a1c\u0a41\u0a32\u0a3e\u0a08_\u0a05\u0a17\u0a38\u0a24_\u0a38\u0a24\u0a70\u0a2c\u0a30_\u0a05\u0a15\u0a24\u0a42\u0a2c\u0a30_\u0a28\u0a35\u0a70\u0a2c\u0a30_\u0a26\u0a38\u0a70\u0a2c\u0a30".split("_"),weekdays:"\u0a10\u0a24\u0a35\u0a3e\u0a30_\u0a38\u0a4b\u0a2e\u0a35\u0a3e\u0a30_\u0a2e\u0a70\u0a17\u0a32\u0a35\u0a3e\u0a30_\u0a2c\u0a41\u0a27\u0a35\u0a3e\u0a30_\u0a35\u0a40\u0a30\u0a35\u0a3e\u0a30_\u0a38\u0a3c\u0a41\u0a71\u0a15\u0a30\u0a35\u0a3e\u0a30_\u0a38\u0a3c\u0a28\u0a40\u0a1a\u0a30\u0a35\u0a3e\u0a30".split("_"),weekdaysShort:"\u0a10\u0a24_\u0a38\u0a4b\u0a2e_\u0a2e\u0a70\u0a17\u0a32_\u0a2c\u0a41\u0a27_\u0a35\u0a40\u0a30_\u0a38\u0a3c\u0a41\u0a15\u0a30_\u0a38\u0a3c\u0a28\u0a40".split("_"),weekdaysMin:"\u0a10\u0a24_\u0a38\u0a4b\u0a2e_\u0a2e\u0a70\u0a17\u0a32_\u0a2c\u0a41\u0a27_\u0a35\u0a40\u0a30_\u0a38\u0a3c\u0a41\u0a15\u0a30_\u0a38\u0a3c\u0a28\u0a40".split("_"),longDateFormat:{LT:"A h:mm \u0a35\u0a1c\u0a47",LTS:"A h:mm:ss \u0a35\u0a1c\u0a47",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm \u0a35\u0a1c\u0a47",LLLL:"dddd, D MMMM YYYY, A h:mm \u0a35\u0a1c\u0a47"},calendar:{sameDay:"[\u0a05\u0a1c] LT",nextDay:"[\u0a15\u0a32] LT",nextWeek:"[\u0a05\u0a17\u0a32\u0a3e] dddd, LT",lastDay:"[\u0a15\u0a32] LT",lastWeek:"[\u0a2a\u0a3f\u0a1b\u0a32\u0a47] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0a35\u0a3f\u0a71\u0a1a",past:"%s \u0a2a\u0a3f\u0a1b\u0a32\u0a47",s:"\u0a15\u0a41\u0a1d \u0a38\u0a15\u0a3f\u0a70\u0a1f",ss:"%d \u0a38\u0a15\u0a3f\u0a70\u0a1f",m:"\u0a07\u0a15 \u0a2e\u0a3f\u0a70\u0a1f",mm:"%d \u0a2e\u0a3f\u0a70\u0a1f",h:"\u0a07\u0a71\u0a15 \u0a18\u0a70\u0a1f\u0a3e",hh:"%d \u0a18\u0a70\u0a1f\u0a47",d:"\u0a07\u0a71\u0a15 \u0a26\u0a3f\u0a28",dd:"%d \u0a26\u0a3f\u0a28",M:"\u0a07\u0a71\u0a15 \u0a2e\u0a39\u0a40\u0a28\u0a3e",MM:"%d \u0a2e\u0a39\u0a40\u0a28\u0a47",y:"\u0a07\u0a71\u0a15 \u0a38\u0a3e\u0a32",yy:"%d \u0a38\u0a3e\u0a32"},preparse:function(e){return e.replace(/[\u0a67\u0a68\u0a69\u0a6a\u0a6b\u0a6c\u0a6d\u0a6e\u0a6f\u0a66]/g,function(e){return Pn[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return xn[e]})},meridiemParse:/\u0a30\u0a3e\u0a24|\u0a38\u0a35\u0a47\u0a30|\u0a26\u0a41\u0a2a\u0a39\u0a3f\u0a30|\u0a38\u0a3c\u0a3e\u0a2e/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0a30\u0a3e\u0a24"===a?e<4?e:e+12:"\u0a38\u0a35\u0a47\u0a30"===a?e:"\u0a26\u0a41\u0a2a\u0a39\u0a3f\u0a30"===a?10<=e?e:e+12:"\u0a38\u0a3c\u0a3e\u0a2e"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0a30\u0a3e\u0a24":e<10?"\u0a38\u0a35\u0a47\u0a30":e<17?"\u0a26\u0a41\u0a2a\u0a39\u0a3f\u0a30":e<20?"\u0a38\u0a3c\u0a3e\u0a2e":"\u0a30\u0a3e\u0a24"},week:{dow:0,doy:6}});var On="stycze\u0144_luty_marzec_kwiecie\u0144_maj_czerwiec_lipiec_sierpie\u0144_wrzesie\u0144_pa\u017adziernik_listopad_grudzie\u0144".split("_"),Wn="stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_wrze\u015bnia_pa\u017adziernika_listopada_grudnia".split("_");function En(e){return e%10<5&&1<e%10&&~~(e/10)%10!=1}function An(e,a,t){var s=e+" ";switch(t){case"ss":return s+(En(e)?"sekundy":"sekund");case"m":return a?"minuta":"minut\u0119";case"mm":return s+(En(e)?"minuty":"minut");case"h":return a?"godzina":"godzin\u0119";case"hh":return s+(En(e)?"godziny":"godzin");case"MM":return s+(En(e)?"miesi\u0105ce":"miesi\u0119cy");case"yy":return s+(En(e)?"lata":"lat")}}function Fn(e,a,t){var s=" ";return(20<=e%100||100<=e&&e%100==0)&&(s=" de "),e+s+{ss:"secunde",mm:"minute",hh:"ore",dd:"zile",MM:"luni",yy:"ani"}[t]}function zn(e,a,t){var s,n;return"m"===t?a?"\u043c\u0438\u043d\u0443\u0442\u0430":"\u043c\u0438\u043d\u0443\u0442\u0443":e+" "+(s=+e,n={ss:a?"\u0441\u0435\u043a\u0443\u043d\u0434\u0430_\u0441\u0435\u043a\u0443\u043d\u0434\u044b_\u0441\u0435\u043a\u0443\u043d\u0434":"\u0441\u0435\u043a\u0443\u043d\u0434\u0443_\u0441\u0435\u043a\u0443\u043d\u0434\u044b_\u0441\u0435\u043a\u0443\u043d\u0434",mm:a?"\u043c\u0438\u043d\u0443\u0442\u0430_\u043c\u0438\u043d\u0443\u0442\u044b_\u043c\u0438\u043d\u0443\u0442":"\u043c\u0438\u043d\u0443\u0442\u0443_\u043c\u0438\u043d\u0443\u0442\u044b_\u043c\u0438\u043d\u0443\u0442",hh:"\u0447\u0430\u0441_\u0447\u0430\u0441\u0430_\u0447\u0430\u0441\u043e\u0432",dd:"\u0434\u0435\u043d\u044c_\u0434\u043d\u044f_\u0434\u043d\u0435\u0439",MM:"\u043c\u0435\u0441\u044f\u0446_\u043c\u0435\u0441\u044f\u0446\u0430_\u043c\u0435\u0441\u044f\u0446\u0435\u0432",yy:"\u0433\u043e\u0434_\u0433\u043e\u0434\u0430_\u043b\u0435\u0442"}[t].split("_"),s%10==1&&s%100!=11?n[0]:2<=s%10&&s%10<=4&&(s%100<10||20<=s%100)?n[1]:n[2])}l.defineLocale("pl",{months:function(e,a){return e?""===a?"("+Wn[e.month()]+"|"+On[e.month()]+")":/D MMMM/.test(a)?Wn[e.month()]:On[e.month()]:On},monthsShort:"sty_lut_mar_kwi_maj_cze_lip_sie_wrz_pa\u017a_lis_gru".split("_"),weekdays:"niedziela_poniedzia\u0142ek_wtorek_\u015broda_czwartek_pi\u0105tek_sobota".split("_"),weekdaysShort:"ndz_pon_wt_\u015br_czw_pt_sob".split("_"),weekdaysMin:"Nd_Pn_Wt_\u015ar_Cz_Pt_So".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Dzi\u015b o] LT",nextDay:"[Jutro o] LT",nextWeek:function(){switch(this.day()){case 0:return"[W niedziel\u0119 o] LT";case 2:return"[We wtorek o] LT";case 3:return"[W \u015brod\u0119 o] LT";case 6:return"[W sobot\u0119 o] LT";default:return"[W] dddd [o] LT"}},lastDay:"[Wczoraj o] LT",lastWeek:function(){switch(this.day()){case 0:return"[W zesz\u0142\u0105 niedziel\u0119 o] LT";case 3:return"[W zesz\u0142\u0105 \u015brod\u0119 o] LT";case 6:return"[W zesz\u0142\u0105 sobot\u0119 o] LT";default:return"[W zesz\u0142y] dddd [o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"%s temu",s:"kilka sekund",ss:An,m:An,mm:An,h:An,hh:An,d:"1 dzie\u0144",dd:"%d dni",M:"miesi\u0105c",MM:An,y:"rok",yy:An},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("pt-br",{months:"janeiro_fevereiro_mar\xe7o_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),monthsShort:"jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),weekdays:"Domingo_Segunda-feira_Ter\xe7a-feira_Quarta-feira_Quinta-feira_Sexta-feira_S\xe1bado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_S\xe1b".split("_"),weekdaysMin:"Do_2\xaa_3\xaa_4\xaa_5\xaa_6\xaa_S\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY [\xe0s] HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY [\xe0s] HH:mm"},calendar:{sameDay:"[Hoje \xe0s] LT",nextDay:"[Amanh\xe3 \xe0s] LT",nextWeek:"dddd [\xe0s] LT",lastDay:"[Ontem \xe0s] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[\xdaltimo] dddd [\xe0s] LT":"[\xdaltima] dddd [\xe0s] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"h\xe1 %s",s:"poucos segundos",ss:"%d segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um m\xeas",MM:"%d meses",y:"um ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba"}),l.defineLocale("pt",{months:"janeiro_fevereiro_mar\xe7o_abril_maio_junho_julho_agosto_setembro_outubro_novembro_dezembro".split("_"),monthsShort:"jan_fev_mar_abr_mai_jun_jul_ago_set_out_nov_dez".split("_"),weekdays:"Domingo_Segunda-feira_Ter\xe7a-feira_Quarta-feira_Quinta-feira_Sexta-feira_S\xe1bado".split("_"),weekdaysShort:"Dom_Seg_Ter_Qua_Qui_Sex_S\xe1b".split("_"),weekdaysMin:"Do_2\xaa_3\xaa_4\xaa_5\xaa_6\xaa_S\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D [de] MMMM [de] YYYY",LLL:"D [de] MMMM [de] YYYY HH:mm",LLLL:"dddd, D [de] MMMM [de] YYYY HH:mm"},calendar:{sameDay:"[Hoje \xe0s] LT",nextDay:"[Amanh\xe3 \xe0s] LT",nextWeek:"dddd [\xe0s] LT",lastDay:"[Ontem \xe0s] LT",lastWeek:function(){return 0===this.day()||6===this.day()?"[\xdaltimo] dddd [\xe0s] LT":"[\xdaltima] dddd [\xe0s] LT"},sameElse:"L"},relativeTime:{future:"em %s",past:"h\xe1 %s",s:"segundos",ss:"%d segundos",m:"um minuto",mm:"%d minutos",h:"uma hora",hh:"%d horas",d:"um dia",dd:"%d dias",M:"um m\xeas",MM:"%d meses",y:"um ano",yy:"%d anos"},dayOfMonthOrdinalParse:/\d{1,2}\xba/,ordinal:"%d\xba",week:{dow:1,doy:4}}),l.defineLocale("ro",{months:"ianuarie_februarie_martie_aprilie_mai_iunie_iulie_august_septembrie_octombrie_noiembrie_decembrie".split("_"),monthsShort:"ian._febr._mart._apr._mai_iun._iul._aug._sept._oct._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"duminic\u0103_luni_mar\u021bi_miercuri_joi_vineri_s\xe2mb\u0103t\u0103".split("_"),weekdaysShort:"Dum_Lun_Mar_Mie_Joi_Vin_S\xe2m".split("_"),weekdaysMin:"Du_Lu_Ma_Mi_Jo_Vi_S\xe2".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY H:mm",LLLL:"dddd, D MMMM YYYY H:mm"},calendar:{sameDay:"[azi la] LT",nextDay:"[m\xe2ine la] LT",nextWeek:"dddd [la] LT",lastDay:"[ieri la] LT",lastWeek:"[fosta] dddd [la] LT",sameElse:"L"},relativeTime:{future:"peste %s",past:"%s \xeen urm\u0103",s:"c\xe2teva secunde",ss:Fn,m:"un minut",mm:Fn,h:"o or\u0103",hh:Fn,d:"o zi",dd:Fn,M:"o lun\u0103",MM:Fn,y:"un an",yy:Fn},week:{dow:1,doy:7}});var Jn=[/^\u044f\u043d\u0432/i,/^\u0444\u0435\u0432/i,/^\u043c\u0430\u0440/i,/^\u0430\u043f\u0440/i,/^\u043c\u0430[\u0439\u044f]/i,/^\u0438\u044e\u043d/i,/^\u0438\u044e\u043b/i,/^\u0430\u0432\u0433/i,/^\u0441\u0435\u043d/i,/^\u043e\u043a\u0442/i,/^\u043d\u043e\u044f/i,/^\u0434\u0435\u043a/i];l.defineLocale("ru",{months:{format:"\u044f\u043d\u0432\u0430\u0440\u044f_\u0444\u0435\u0432\u0440\u0430\u043b\u044f_\u043c\u0430\u0440\u0442\u0430_\u0430\u043f\u0440\u0435\u043b\u044f_\u043c\u0430\u044f_\u0438\u044e\u043d\u044f_\u0438\u044e\u043b\u044f_\u0430\u0432\u0433\u0443\u0441\u0442\u0430_\u0441\u0435\u043d\u0442\u044f\u0431\u0440\u044f_\u043e\u043a\u0442\u044f\u0431\u0440\u044f_\u043d\u043e\u044f\u0431\u0440\u044f_\u0434\u0435\u043a\u0430\u0431\u0440\u044f".split("_"),standalone:"\u044f\u043d\u0432\u0430\u0440\u044c_\u0444\u0435\u0432\u0440\u0430\u043b\u044c_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0435\u043b\u044c_\u043c\u0430\u0439_\u0438\u044e\u043d\u044c_\u0438\u044e\u043b\u044c_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043d\u0442\u044f\u0431\u0440\u044c_\u043e\u043a\u0442\u044f\u0431\u0440\u044c_\u043d\u043e\u044f\u0431\u0440\u044c_\u0434\u0435\u043a\u0430\u0431\u0440\u044c".split("_")},monthsShort:{format:"\u044f\u043d\u0432._\u0444\u0435\u0432\u0440._\u043c\u0430\u0440._\u0430\u043f\u0440._\u043c\u0430\u044f_\u0438\u044e\u043d\u044f_\u0438\u044e\u043b\u044f_\u0430\u0432\u0433._\u0441\u0435\u043d\u0442._\u043e\u043a\u0442._\u043d\u043e\u044f\u0431._\u0434\u0435\u043a.".split("_"),standalone:"\u044f\u043d\u0432._\u0444\u0435\u0432\u0440._\u043c\u0430\u0440\u0442_\u0430\u043f\u0440._\u043c\u0430\u0439_\u0438\u044e\u043d\u044c_\u0438\u044e\u043b\u044c_\u0430\u0432\u0433._\u0441\u0435\u043d\u0442._\u043e\u043a\u0442._\u043d\u043e\u044f\u0431._\u0434\u0435\u043a.".split("_")},weekdays:{standalone:"\u0432\u043e\u0441\u043a\u0440\u0435\u0441\u0435\u043d\u044c\u0435_\u043f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a_\u0432\u0442\u043e\u0440\u043d\u0438\u043a_\u0441\u0440\u0435\u0434\u0430_\u0447\u0435\u0442\u0432\u0435\u0440\u0433_\u043f\u044f\u0442\u043d\u0438\u0446\u0430_\u0441\u0443\u0431\u0431\u043e\u0442\u0430".split("_"),format:"\u0432\u043e\u0441\u043a\u0440\u0435\u0441\u0435\u043d\u044c\u0435_\u043f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a_\u0432\u0442\u043e\u0440\u043d\u0438\u043a_\u0441\u0440\u0435\u0434\u0443_\u0447\u0435\u0442\u0432\u0435\u0440\u0433_\u043f\u044f\u0442\u043d\u0438\u0446\u0443_\u0441\u0443\u0431\u0431\u043e\u0442\u0443".split("_"),isFormat:/\[ ?[\u0412\u0432] ?(?:\u043f\u0440\u043e\u0448\u043b\u0443\u044e|\u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0443\u044e|\u044d\u0442\u0443)? ?\] ?dddd/},weekdaysShort:"\u0432\u0441_\u043f\u043d_\u0432\u0442_\u0441\u0440_\u0447\u0442_\u043f\u0442_\u0441\u0431".split("_"),weekdaysMin:"\u0432\u0441_\u043f\u043d_\u0432\u0442_\u0441\u0440_\u0447\u0442_\u043f\u0442_\u0441\u0431".split("_"),monthsParse:Jn,longMonthsParse:Jn,shortMonthsParse:Jn,monthsRegex:/^(\u044f\u043d\u0432\u0430\u0440[\u044c\u044f]|\u044f\u043d\u0432\.?|\u0444\u0435\u0432\u0440\u0430\u043b[\u044c\u044f]|\u0444\u0435\u0432\u0440?\.?|\u043c\u0430\u0440\u0442\u0430?|\u043c\u0430\u0440\.?|\u0430\u043f\u0440\u0435\u043b[\u044c\u044f]|\u0430\u043f\u0440\.?|\u043c\u0430[\u0439\u044f]|\u0438\u044e\u043d[\u044c\u044f]|\u0438\u044e\u043d\.?|\u0438\u044e\u043b[\u044c\u044f]|\u0438\u044e\u043b\.?|\u0430\u0432\u0433\u0443\u0441\u0442\u0430?|\u0430\u0432\u0433\.?|\u0441\u0435\u043d\u0442\u044f\u0431\u0440[\u044c\u044f]|\u0441\u0435\u043d\u0442?\.?|\u043e\u043a\u0442\u044f\u0431\u0440[\u044c\u044f]|\u043e\u043a\u0442\.?|\u043d\u043e\u044f\u0431\u0440[\u044c\u044f]|\u043d\u043e\u044f\u0431?\.?|\u0434\u0435\u043a\u0430\u0431\u0440[\u044c\u044f]|\u0434\u0435\u043a\.?)/i,monthsShortRegex:/^(\u044f\u043d\u0432\u0430\u0440[\u044c\u044f]|\u044f\u043d\u0432\.?|\u0444\u0435\u0432\u0440\u0430\u043b[\u044c\u044f]|\u0444\u0435\u0432\u0440?\.?|\u043c\u0430\u0440\u0442\u0430?|\u043c\u0430\u0440\.?|\u0430\u043f\u0440\u0435\u043b[\u044c\u044f]|\u0430\u043f\u0440\.?|\u043c\u0430[\u0439\u044f]|\u0438\u044e\u043d[\u044c\u044f]|\u0438\u044e\u043d\.?|\u0438\u044e\u043b[\u044c\u044f]|\u0438\u044e\u043b\.?|\u0430\u0432\u0433\u0443\u0441\u0442\u0430?|\u0430\u0432\u0433\.?|\u0441\u0435\u043d\u0442\u044f\u0431\u0440[\u044c\u044f]|\u0441\u0435\u043d\u0442?\.?|\u043e\u043a\u0442\u044f\u0431\u0440[\u044c\u044f]|\u043e\u043a\u0442\.?|\u043d\u043e\u044f\u0431\u0440[\u044c\u044f]|\u043d\u043e\u044f\u0431?\.?|\u0434\u0435\u043a\u0430\u0431\u0440[\u044c\u044f]|\u0434\u0435\u043a\.?)/i,monthsStrictRegex:/^(\u044f\u043d\u0432\u0430\u0440[\u044f\u044c]|\u0444\u0435\u0432\u0440\u0430\u043b[\u044f\u044c]|\u043c\u0430\u0440\u0442\u0430?|\u0430\u043f\u0440\u0435\u043b[\u044f\u044c]|\u043c\u0430[\u044f\u0439]|\u0438\u044e\u043d[\u044f\u044c]|\u0438\u044e\u043b[\u044f\u044c]|\u0430\u0432\u0433\u0443\u0441\u0442\u0430?|\u0441\u0435\u043d\u0442\u044f\u0431\u0440[\u044f\u044c]|\u043e\u043a\u0442\u044f\u0431\u0440[\u044f\u044c]|\u043d\u043e\u044f\u0431\u0440[\u044f\u044c]|\u0434\u0435\u043a\u0430\u0431\u0440[\u044f\u044c])/i,monthsShortStrictRegex:/^(\u044f\u043d\u0432\.|\u0444\u0435\u0432\u0440?\.|\u043c\u0430\u0440[\u0442.]|\u0430\u043f\u0440\.|\u043c\u0430[\u044f\u0439]|\u0438\u044e\u043d[\u044c\u044f.]|\u0438\u044e\u043b[\u044c\u044f.]|\u0430\u0432\u0433\.|\u0441\u0435\u043d\u0442?\.|\u043e\u043a\u0442\.|\u043d\u043e\u044f\u0431?\.|\u0434\u0435\u043a\.)/i,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY \u0433.",LLL:"D MMMM YYYY \u0433., H:mm",LLLL:"dddd, D MMMM YYYY \u0433., H:mm"},calendar:{sameDay:"[\u0421\u0435\u0433\u043e\u0434\u043d\u044f, \u0432] LT",nextDay:"[\u0417\u0430\u0432\u0442\u0440\u0430, \u0432] LT",lastDay:"[\u0412\u0447\u0435\u0440\u0430, \u0432] LT",nextWeek:function(e){if(e.week()===this.week())return 2===this.day()?"[\u0412\u043e] dddd, [\u0432] LT":"[\u0412] dddd, [\u0432] LT";switch(this.day()){case 0:return"[\u0412 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0435\u0435] dddd, [\u0432] LT";case 1:case 2:case 4:return"[\u0412 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439] dddd, [\u0432] LT";case 3:case 5:case 6:return"[\u0412 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0443\u044e] dddd, [\u0432] LT"}},lastWeek:function(e){if(e.week()===this.week())return 2===this.day()?"[\u0412\u043e] dddd, [\u0432] LT":"[\u0412] dddd, [\u0432] LT";switch(this.day()){case 0:return"[\u0412 \u043f\u0440\u043e\u0448\u043b\u043e\u0435] dddd, [\u0432] LT";case 1:case 2:case 4:return"[\u0412 \u043f\u0440\u043e\u0448\u043b\u044b\u0439] dddd, [\u0432] LT";case 3:case 5:case 6:return"[\u0412 \u043f\u0440\u043e\u0448\u043b\u0443\u044e] dddd, [\u0432] LT"}},sameElse:"L"},relativeTime:{future:"\u0447\u0435\u0440\u0435\u0437 %s",past:"%s \u043d\u0430\u0437\u0430\u0434",s:"\u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0441\u0435\u043a\u0443\u043d\u0434",ss:zn,m:zn,mm:zn,h:"\u0447\u0430\u0441",hh:zn,d:"\u0434\u0435\u043d\u044c",dd:zn,M:"\u043c\u0435\u0441\u044f\u0446",MM:zn,y:"\u0433\u043e\u0434",yy:zn},meridiemParse:/\u043d\u043e\u0447\u0438|\u0443\u0442\u0440\u0430|\u0434\u043d\u044f|\u0432\u0435\u0447\u0435\u0440\u0430/i,isPM:function(e){return/^(\u0434\u043d\u044f|\u0432\u0435\u0447\u0435\u0440\u0430)$/.test(e)},meridiem:function(e,a,t){return e<4?"\u043d\u043e\u0447\u0438":e<12?"\u0443\u0442\u0440\u0430":e<17?"\u0434\u043d\u044f":"\u0432\u0435\u0447\u0435\u0440\u0430"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0439|\u0433\u043e|\u044f)/,ordinal:function(e,a){switch(a){case"M":case"d":case"DDD":return e+"-\u0439";case"D":return e+"-\u0433\u043e";case"w":case"W":return e+"-\u044f";default:return e}},week:{dow:1,doy:4}});var Nn=["\u062c\u0646\u0648\u0631\u064a","\u0641\u064a\u0628\u0631\u0648\u0631\u064a","\u0645\u0627\u0631\u0686","\u0627\u067e\u0631\u064a\u0644","\u0645\u0626\u064a","\u062c\u0648\u0646","\u062c\u0648\u0644\u0627\u0621\u0650","\u0622\u06af\u0633\u067d","\u0633\u064a\u067e\u067d\u0645\u0628\u0631","\u0622\u06aa\u067d\u0648\u0628\u0631","\u0646\u0648\u0645\u0628\u0631","\u068a\u0633\u0645\u0628\u0631"],Rn=["\u0622\u0686\u0631","\u0633\u0648\u0645\u0631","\u0627\u06b1\u0627\u0631\u0648","\u0627\u0631\u0628\u0639","\u062e\u0645\u064a\u0633","\u062c\u0645\u0639","\u0687\u0646\u0687\u0631"];l.defineLocale("sd",{months:Nn,monthsShort:Nn,weekdays:Rn,weekdaysShort:Rn,weekdaysMin:Rn,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd\u060c D MMMM YYYY HH:mm"},meridiemParse:/\u0635\u0628\u062d|\u0634\u0627\u0645/,isPM:function(e){return"\u0634\u0627\u0645"===e},meridiem:function(e,a,t){return e<12?"\u0635\u0628\u062d":"\u0634\u0627\u0645"},calendar:{sameDay:"[\u0627\u0684] LT",nextDay:"[\u0633\u0680\u0627\u06bb\u064a] LT",nextWeek:"dddd [\u0627\u06b3\u064a\u0646 \u0647\u0641\u062a\u064a \u062a\u064a] LT",lastDay:"[\u06aa\u0627\u0644\u0647\u0647] LT",lastWeek:"[\u06af\u0632\u0631\u064a\u0644 \u0647\u0641\u062a\u064a] dddd [\u062a\u064a] LT",sameElse:"L"},relativeTime:{future:"%s \u067e\u0648\u0621",past:"%s \u0627\u06b3",s:"\u0686\u0646\u062f \u0633\u064a\u06aa\u0646\u068a",ss:"%d \u0633\u064a\u06aa\u0646\u068a",m:"\u0647\u06aa \u0645\u0646\u067d",mm:"%d \u0645\u0646\u067d",h:"\u0647\u06aa \u06aa\u0644\u0627\u06aa",hh:"%d \u06aa\u0644\u0627\u06aa",d:"\u0647\u06aa \u068f\u064a\u0646\u0647\u0646",dd:"%d \u068f\u064a\u0646\u0647\u0646",M:"\u0647\u06aa \u0645\u0647\u064a\u0646\u0648",MM:"%d \u0645\u0647\u064a\u0646\u0627",y:"\u0647\u06aa \u0633\u0627\u0644",yy:"%d \u0633\u0627\u0644"},preparse:function(e){return e.replace(/\u060c/g,",")},postformat:function(e){return e.replace(/,/g,"\u060c")},week:{dow:1,doy:4}}),l.defineLocale("se",{months:"o\u0111\u0111ajagem\xe1nnu_guovvam\xe1nnu_njuk\u010dam\xe1nnu_cuo\u014bom\xe1nnu_miessem\xe1nnu_geassem\xe1nnu_suoidnem\xe1nnu_borgem\xe1nnu_\u010dak\u010dam\xe1nnu_golggotm\xe1nnu_sk\xe1bmam\xe1nnu_juovlam\xe1nnu".split("_"),monthsShort:"o\u0111\u0111j_guov_njuk_cuo_mies_geas_suoi_borg_\u010dak\u010d_golg_sk\xe1b_juov".split("_"),weekdays:"sotnabeaivi_vuoss\xe1rga_ma\u014b\u014beb\xe1rga_gaskavahkku_duorastat_bearjadat_l\xe1vvardat".split("_"),weekdaysShort:"sotn_vuos_ma\u014b_gask_duor_bear_l\xe1v".split("_"),weekdaysMin:"s_v_m_g_d_b_L".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"MMMM D. [b.] YYYY",LLL:"MMMM D. [b.] YYYY [ti.] HH:mm",LLLL:"dddd, MMMM D. [b.] YYYY [ti.] HH:mm"},calendar:{sameDay:"[otne ti] LT",nextDay:"[ihttin ti] LT",nextWeek:"dddd [ti] LT",lastDay:"[ikte ti] LT",lastWeek:"[ovddit] dddd [ti] LT",sameElse:"L"},relativeTime:{future:"%s gea\u017ees",past:"ma\u014bit %s",s:"moadde sekunddat",ss:"%d sekunddat",m:"okta minuhta",mm:"%d minuhtat",h:"okta diimmu",hh:"%d diimmut",d:"okta beaivi",dd:"%d beaivvit",M:"okta m\xe1nnu",MM:"%d m\xe1nut",y:"okta jahki",yy:"%d jagit"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("si",{months:"\u0da2\u0db1\u0dc0\u0dcf\u0dbb\u0dd2_\u0db4\u0dd9\u0db6\u0dbb\u0dc0\u0dcf\u0dbb\u0dd2_\u0db8\u0dcf\u0dbb\u0dca\u0dad\u0dd4_\u0d85\u0db4\u0dca\u200d\u0dbb\u0dda\u0dbd\u0dca_\u0db8\u0dd0\u0dba\u0dd2_\u0da2\u0dd6\u0db1\u0dd2_\u0da2\u0dd6\u0dbd\u0dd2_\u0d85\u0d9c\u0ddd\u0dc3\u0dca\u0dad\u0dd4_\u0dc3\u0dd0\u0db4\u0dca\u0dad\u0dd0\u0db8\u0dca\u0db6\u0dbb\u0dca_\u0d94\u0d9a\u0dca\u0dad\u0ddd\u0db6\u0dbb\u0dca_\u0db1\u0ddc\u0dc0\u0dd0\u0db8\u0dca\u0db6\u0dbb\u0dca_\u0daf\u0dd9\u0dc3\u0dd0\u0db8\u0dca\u0db6\u0dbb\u0dca".split("_"),monthsShort:"\u0da2\u0db1_\u0db4\u0dd9\u0db6_\u0db8\u0dcf\u0dbb\u0dca_\u0d85\u0db4\u0dca_\u0db8\u0dd0\u0dba\u0dd2_\u0da2\u0dd6\u0db1\u0dd2_\u0da2\u0dd6\u0dbd\u0dd2_\u0d85\u0d9c\u0ddd_\u0dc3\u0dd0\u0db4\u0dca_\u0d94\u0d9a\u0dca_\u0db1\u0ddc\u0dc0\u0dd0_\u0daf\u0dd9\u0dc3\u0dd0".split("_"),weekdays:"\u0d89\u0dbb\u0dd2\u0daf\u0dcf_\u0dc3\u0db3\u0dd4\u0daf\u0dcf_\u0d85\u0d9f\u0dc4\u0dbb\u0dd4\u0dc0\u0dcf\u0daf\u0dcf_\u0db6\u0daf\u0dcf\u0daf\u0dcf_\u0db6\u0dca\u200d\u0dbb\u0dc4\u0dc3\u0dca\u0db4\u0dad\u0dd2\u0db1\u0dca\u0daf\u0dcf_\u0dc3\u0dd2\u0d9a\u0dd4\u0dbb\u0dcf\u0daf\u0dcf_\u0dc3\u0dd9\u0db1\u0dc3\u0dd4\u0dbb\u0dcf\u0daf\u0dcf".split("_"),weekdaysShort:"\u0d89\u0dbb\u0dd2_\u0dc3\u0db3\u0dd4_\u0d85\u0d9f_\u0db6\u0daf\u0dcf_\u0db6\u0dca\u200d\u0dbb\u0dc4_\u0dc3\u0dd2\u0d9a\u0dd4_\u0dc3\u0dd9\u0db1".split("_"),weekdaysMin:"\u0d89_\u0dc3_\u0d85_\u0db6_\u0db6\u0dca\u200d\u0dbb_\u0dc3\u0dd2_\u0dc3\u0dd9".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"a h:mm",LTS:"a h:mm:ss",L:"YYYY/MM/DD",LL:"YYYY MMMM D",LLL:"YYYY MMMM D, a h:mm",LLLL:"YYYY MMMM D [\u0dc0\u0dd0\u0db1\u0dd2] dddd, a h:mm:ss"},calendar:{sameDay:"[\u0d85\u0daf] LT[\u0da7]",nextDay:"[\u0dc4\u0dd9\u0da7] LT[\u0da7]",nextWeek:"dddd LT[\u0da7]",lastDay:"[\u0d8a\u0dba\u0dda] LT[\u0da7]",lastWeek:"[\u0db4\u0dc3\u0dd4\u0d9c\u0dd2\u0dba] dddd LT[\u0da7]",sameElse:"L"},relativeTime:{future:"%s\u0d9a\u0dd2\u0db1\u0dca",past:"%s\u0d9a\u0da7 \u0db4\u0dd9\u0dbb",s:"\u0dad\u0dad\u0dca\u0db4\u0dbb \u0d9a\u0dd2\u0dc4\u0dd2\u0db4\u0dba",ss:"\u0dad\u0dad\u0dca\u0db4\u0dbb %d",m:"\u0db8\u0dd2\u0db1\u0dd2\u0dad\u0dca\u0dad\u0dd4\u0dc0",mm:"\u0db8\u0dd2\u0db1\u0dd2\u0dad\u0dca\u0dad\u0dd4 %d",h:"\u0db4\u0dd0\u0dba",hh:"\u0db4\u0dd0\u0dba %d",d:"\u0daf\u0dd2\u0db1\u0dba",dd:"\u0daf\u0dd2\u0db1 %d",M:"\u0db8\u0dcf\u0dc3\u0dba",MM:"\u0db8\u0dcf\u0dc3 %d",y:"\u0dc0\u0dc3\u0dbb",yy:"\u0dc0\u0dc3\u0dbb %d"},dayOfMonthOrdinalParse:/\d{1,2} \u0dc0\u0dd0\u0db1\u0dd2/,ordinal:function(e){return e+" \u0dc0\u0dd0\u0db1\u0dd2"},meridiemParse:/\u0db4\u0dd9\u0dbb \u0dc0\u0dbb\u0dd4|\u0db4\u0dc3\u0dca \u0dc0\u0dbb\u0dd4|\u0db4\u0dd9.\u0dc0|\u0db4.\u0dc0./,isPM:function(e){return"\u0db4.\u0dc0."===e||"\u0db4\u0dc3\u0dca \u0dc0\u0dbb\u0dd4"===e},meridiem:function(e,a,t){return 11<e?t?"\u0db4.\u0dc0.":"\u0db4\u0dc3\u0dca \u0dc0\u0dbb\u0dd4":t?"\u0db4\u0dd9.\u0dc0.":"\u0db4\u0dd9\u0dbb \u0dc0\u0dbb\u0dd4"}});var In="janu\xe1r_febru\xe1r_marec_apr\xedl_m\xe1j_j\xfan_j\xfal_august_september_okt\xf3ber_november_december".split("_"),Cn="jan_feb_mar_apr_m\xe1j_j\xfan_j\xfal_aug_sep_okt_nov_dec".split("_");function Gn(e){return 1<e&&e<5}function Un(e,a,t,s){var n=e+" ";switch(t){case"s":return a||s?"p\xe1r sek\xfand":"p\xe1r sekundami";case"ss":return a||s?n+(Gn(e)?"sekundy":"sek\xfand"):n+"sekundami";break;case"m":return a?"min\xfata":s?"min\xfatu":"min\xfatou";case"mm":return a||s?n+(Gn(e)?"min\xfaty":"min\xfat"):n+"min\xfatami";break;case"h":return a?"hodina":s?"hodinu":"hodinou";case"hh":return a||s?n+(Gn(e)?"hodiny":"hod\xedn"):n+"hodinami";break;case"d":return a||s?"de\u0148":"d\u0148om";case"dd":return a||s?n+(Gn(e)?"dni":"dn\xed"):n+"d\u0148ami";break;case"M":return a||s?"mesiac":"mesiacom";case"MM":return a||s?n+(Gn(e)?"mesiace":"mesiacov"):n+"mesiacmi";break;case"y":return a||s?"rok":"rokom";case"yy":return a||s?n+(Gn(e)?"roky":"rokov"):n+"rokmi";break}}function Vn(e,a,t,s){var n=e+" ";switch(t){case"s":return a||s?"nekaj sekund":"nekaj sekundami";case"ss":return n+=1===e?a?"sekundo":"sekundi":2===e?a||s?"sekundi":"sekundah":e<5?a||s?"sekunde":"sekundah":"sekund";case"m":return a?"ena minuta":"eno minuto";case"mm":return n+=1===e?a?"minuta":"minuto":2===e?a||s?"minuti":"minutama":e<5?a||s?"minute":"minutami":a||s?"minut":"minutami";case"h":return a?"ena ura":"eno uro";case"hh":return n+=1===e?a?"ura":"uro":2===e?a||s?"uri":"urama":e<5?a||s?"ure":"urami":a||s?"ur":"urami";case"d":return a||s?"en dan":"enim dnem";case"dd":return n+=1===e?a||s?"dan":"dnem":2===e?a||s?"dni":"dnevoma":a||s?"dni":"dnevi";case"M":return a||s?"en mesec":"enim mesecem";case"MM":return n+=1===e?a||s?"mesec":"mesecem":2===e?a||s?"meseca":"mesecema":e<5?a||s?"mesece":"meseci":a||s?"mesecev":"meseci";case"y":return a||s?"eno leto":"enim letom";case"yy":return n+=1===e?a||s?"leto":"letom":2===e?a||s?"leti":"letoma":e<5?a||s?"leta":"leti":a||s?"let":"leti"}}l.defineLocale("sk",{months:In,monthsShort:Cn,weekdays:"nede\u013ea_pondelok_utorok_streda_\u0161tvrtok_piatok_sobota".split("_"),weekdaysShort:"ne_po_ut_st_\u0161t_pi_so".split("_"),weekdaysMin:"ne_po_ut_st_\u0161t_pi_so".split("_"),longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd D. MMMM YYYY H:mm"},calendar:{sameDay:"[dnes o] LT",nextDay:"[zajtra o] LT",nextWeek:function(){switch(this.day()){case 0:return"[v nede\u013eu o] LT";case 1:case 2:return"[v] dddd [o] LT";case 3:return"[v stredu o] LT";case 4:return"[vo \u0161tvrtok o] LT";case 5:return"[v piatok o] LT";case 6:return"[v sobotu o] LT"}},lastDay:"[v\u010dera o] LT",lastWeek:function(){switch(this.day()){case 0:return"[minul\xfa nede\u013eu o] LT";case 1:case 2:return"[minul\xfd] dddd [o] LT";case 3:return"[minul\xfa stredu o] LT";case 4:case 5:return"[minul\xfd] dddd [o] LT";case 6:return"[minul\xfa sobotu o] LT"}},sameElse:"L"},relativeTime:{future:"za %s",past:"pred %s",s:Un,ss:Un,m:Un,mm:Un,h:Un,hh:Un,d:Un,dd:Un,M:Un,MM:Un,y:Un,yy:Un},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("sl",{months:"januar_februar_marec_april_maj_junij_julij_avgust_september_oktober_november_december".split("_"),monthsShort:"jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedelja_ponedeljek_torek_sreda_\u010detrtek_petek_sobota".split("_"),weekdaysShort:"ned._pon._tor._sre._\u010det._pet._sob.".split("_"),weekdaysMin:"ne_po_to_sr_\u010de_pe_so".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danes ob] LT",nextDay:"[jutri ob] LT",nextWeek:function(){switch(this.day()){case 0:return"[v] [nedeljo] [ob] LT";case 3:return"[v] [sredo] [ob] LT";case 6:return"[v] [soboto] [ob] LT";case 1:case 2:case 4:case 5:return"[v] dddd [ob] LT"}},lastDay:"[v\u010deraj ob] LT",lastWeek:function(){switch(this.day()){case 0:return"[prej\u0161njo] [nedeljo] [ob] LT";case 3:return"[prej\u0161njo] [sredo] [ob] LT";case 6:return"[prej\u0161njo] [soboto] [ob] LT";case 1:case 2:case 4:case 5:return"[prej\u0161nji] dddd [ob] LT"}},sameElse:"L"},relativeTime:{future:"\u010dez %s",past:"pred %s",s:Vn,ss:Vn,m:Vn,mm:Vn,h:Vn,hh:Vn,d:Vn,dd:Vn,M:Vn,MM:Vn,y:Vn,yy:Vn},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),l.defineLocale("sq",{months:"Janar_Shkurt_Mars_Prill_Maj_Qershor_Korrik_Gusht_Shtator_Tetor_N\xebntor_Dhjetor".split("_"),monthsShort:"Jan_Shk_Mar_Pri_Maj_Qer_Kor_Gus_Sht_Tet_N\xebn_Dhj".split("_"),weekdays:"E Diel_E H\xebn\xeb_E Mart\xeb_E M\xebrkur\xeb_E Enjte_E Premte_E Shtun\xeb".split("_"),weekdaysShort:"Die_H\xebn_Mar_M\xebr_Enj_Pre_Sht".split("_"),weekdaysMin:"D_H_Ma_M\xeb_E_P_Sh".split("_"),weekdaysParseExact:!0,meridiemParse:/PD|MD/,isPM:function(e){return"M"===e.charAt(0)},meridiem:function(e,a,t){return e<12?"PD":"MD"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Sot n\xeb] LT",nextDay:"[Nes\xebr n\xeb] LT",nextWeek:"dddd [n\xeb] LT",lastDay:"[Dje n\xeb] LT",lastWeek:"dddd [e kaluar n\xeb] LT",sameElse:"L"},relativeTime:{future:"n\xeb %s",past:"%s m\xeb par\xeb",s:"disa sekonda",ss:"%d sekonda",m:"nj\xeb minut\xeb",mm:"%d minuta",h:"nj\xeb or\xeb",hh:"%d or\xeb",d:"nj\xeb dit\xeb",dd:"%d dit\xeb",M:"nj\xeb muaj",MM:"%d muaj",y:"nj\xeb vit",yy:"%d vite"},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var Kn={words:{ss:["\u0441\u0435\u043a\u0443\u043d\u0434\u0430","\u0441\u0435\u043a\u0443\u043d\u0434\u0435","\u0441\u0435\u043a\u0443\u043d\u0434\u0438"],m:["\u0458\u0435\u0434\u0430\u043d \u043c\u0438\u043d\u0443\u0442","\u0458\u0435\u0434\u043d\u0435 \u043c\u0438\u043d\u0443\u0442\u0435"],mm:["\u043c\u0438\u043d\u0443\u0442","\u043c\u0438\u043d\u0443\u0442\u0435","\u043c\u0438\u043d\u0443\u0442\u0430"],h:["\u0458\u0435\u0434\u0430\u043d \u0441\u0430\u0442","\u0458\u0435\u0434\u043d\u043e\u0433 \u0441\u0430\u0442\u0430"],hh:["\u0441\u0430\u0442","\u0441\u0430\u0442\u0430","\u0441\u0430\u0442\u0438"],dd:["\u0434\u0430\u043d","\u0434\u0430\u043d\u0430","\u0434\u0430\u043d\u0430"],MM:["\u043c\u0435\u0441\u0435\u0446","\u043c\u0435\u0441\u0435\u0446\u0430","\u043c\u0435\u0441\u0435\u0446\u0438"],yy:["\u0433\u043e\u0434\u0438\u043d\u0430","\u0433\u043e\u0434\u0438\u043d\u0435","\u0433\u043e\u0434\u0438\u043d\u0430"]},correctGrammaticalCase:function(e,a){return 1===e?a[0]:2<=e&&e<=4?a[1]:a[2]},translate:function(e,a,t){var s=Kn.words[t];return 1===t.length?a?s[0]:s[1]:e+" "+Kn.correctGrammaticalCase(e,s)}};l.defineLocale("sr-cyrl",{months:"\u0458\u0430\u043d\u0443\u0430\u0440_\u0444\u0435\u0431\u0440\u0443\u0430\u0440_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0438\u043b_\u043c\u0430\u0458_\u0458\u0443\u043d_\u0458\u0443\u043b_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043f\u0442\u0435\u043c\u0431\u0430\u0440_\u043e\u043a\u0442\u043e\u0431\u0430\u0440_\u043d\u043e\u0432\u0435\u043c\u0431\u0430\u0440_\u0434\u0435\u0446\u0435\u043c\u0431\u0430\u0440".split("_"),monthsShort:"\u0458\u0430\u043d._\u0444\u0435\u0431._\u043c\u0430\u0440._\u0430\u043f\u0440._\u043c\u0430\u0458_\u0458\u0443\u043d_\u0458\u0443\u043b_\u0430\u0432\u0433._\u0441\u0435\u043f._\u043e\u043a\u0442._\u043d\u043e\u0432._\u0434\u0435\u0446.".split("_"),monthsParseExact:!0,weekdays:"\u043d\u0435\u0434\u0435\u0459\u0430_\u043f\u043e\u043d\u0435\u0434\u0435\u0459\u0430\u043a_\u0443\u0442\u043e\u0440\u0430\u043a_\u0441\u0440\u0435\u0434\u0430_\u0447\u0435\u0442\u0432\u0440\u0442\u0430\u043a_\u043f\u0435\u0442\u0430\u043a_\u0441\u0443\u0431\u043e\u0442\u0430".split("_"),weekdaysShort:"\u043d\u0435\u0434._\u043f\u043e\u043d._\u0443\u0442\u043e._\u0441\u0440\u0435._\u0447\u0435\u0442._\u043f\u0435\u0442._\u0441\u0443\u0431.".split("_"),weekdaysMin:"\u043d\u0435_\u043f\u043e_\u0443\u0442_\u0441\u0440_\u0447\u0435_\u043f\u0435_\u0441\u0443".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[\u0434\u0430\u043d\u0430\u0441 \u0443] LT",nextDay:"[\u0441\u0443\u0442\u0440\u0430 \u0443] LT",nextWeek:function(){switch(this.day()){case 0:return"[\u0443] [\u043d\u0435\u0434\u0435\u0459\u0443] [\u0443] LT";case 3:return"[\u0443] [\u0441\u0440\u0435\u0434\u0443] [\u0443] LT";case 6:return"[\u0443] [\u0441\u0443\u0431\u043e\u0442\u0443] [\u0443] LT";case 1:case 2:case 4:case 5:return"[\u0443] dddd [\u0443] LT"}},lastDay:"[\u0458\u0443\u0447\u0435 \u0443] LT",lastWeek:function(){return["[\u043f\u0440\u043e\u0448\u043b\u0435] [\u043d\u0435\u0434\u0435\u0459\u0435] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u043e\u0433] [\u043f\u043e\u043d\u0435\u0434\u0435\u0459\u043a\u0430] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u043e\u0433] [\u0443\u0442\u043e\u0440\u043a\u0430] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u0435] [\u0441\u0440\u0435\u0434\u0435] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u043e\u0433] [\u0447\u0435\u0442\u0432\u0440\u0442\u043a\u0430] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u043e\u0433] [\u043f\u0435\u0442\u043a\u0430] [\u0443] LT","[\u043f\u0440\u043e\u0448\u043b\u0435] [\u0441\u0443\u0431\u043e\u0442\u0435] [\u0443] LT"][this.day()]},sameElse:"L"},relativeTime:{future:"\u0437\u0430 %s",past:"\u043f\u0440\u0435 %s",s:"\u043d\u0435\u043a\u043e\u043b\u0438\u043a\u043e \u0441\u0435\u043a\u0443\u043d\u0434\u0438",ss:Kn.translate,m:Kn.translate,mm:Kn.translate,h:Kn.translate,hh:Kn.translate,d:"\u0434\u0430\u043d",dd:Kn.translate,M:"\u043c\u0435\u0441\u0435\u0446",MM:Kn.translate,y:"\u0433\u043e\u0434\u0438\u043d\u0443",yy:Kn.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}});var $n={words:{ss:["sekunda","sekunde","sekundi"],m:["jedan minut","jedne minute"],mm:["minut","minute","minuta"],h:["jedan sat","jednog sata"],hh:["sat","sata","sati"],dd:["dan","dana","dana"],MM:["mesec","meseca","meseci"],yy:["godina","godine","godina"]},correctGrammaticalCase:function(e,a){return 1===e?a[0]:2<=e&&e<=4?a[1]:a[2]},translate:function(e,a,t){var s=$n.words[t];return 1===t.length?a?s[0]:s[1]:e+" "+$n.correctGrammaticalCase(e,s)}};l.defineLocale("sr",{months:"januar_februar_mart_april_maj_jun_jul_avgust_septembar_oktobar_novembar_decembar".split("_"),monthsShort:"jan._feb._mar._apr._maj_jun_jul_avg._sep._okt._nov._dec.".split("_"),monthsParseExact:!0,weekdays:"nedelja_ponedeljak_utorak_sreda_\u010detvrtak_petak_subota".split("_"),weekdaysShort:"ned._pon._uto._sre._\u010det._pet._sub.".split("_"),weekdaysMin:"ne_po_ut_sr_\u010de_pe_su".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD.MM.YYYY",LL:"D. MMMM YYYY",LLL:"D. MMMM YYYY H:mm",LLLL:"dddd, D. MMMM YYYY H:mm"},calendar:{sameDay:"[danas u] LT",nextDay:"[sutra u] LT",nextWeek:function(){switch(this.day()){case 0:return"[u] [nedelju] [u] LT";case 3:return"[u] [sredu] [u] LT";case 6:return"[u] [subotu] [u] LT";case 1:case 2:case 4:case 5:return"[u] dddd [u] LT"}},lastDay:"[ju\u010de u] LT",lastWeek:function(){return["[pro\u0161le] [nedelje] [u] LT","[pro\u0161log] [ponedeljka] [u] LT","[pro\u0161log] [utorka] [u] LT","[pro\u0161le] [srede] [u] LT","[pro\u0161log] [\u010detvrtka] [u] LT","[pro\u0161log] [petka] [u] LT","[pro\u0161le] [subote] [u] LT"][this.day()]},sameElse:"L"},relativeTime:{future:"za %s",past:"pre %s",s:"nekoliko sekundi",ss:$n.translate,m:$n.translate,mm:$n.translate,h:$n.translate,hh:$n.translate,d:"dan",dd:$n.translate,M:"mesec",MM:$n.translate,y:"godinu",yy:$n.translate},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:7}}),l.defineLocale("ss",{months:"Bhimbidvwane_Indlovana_Indlov'lenkhulu_Mabasa_Inkhwekhweti_Inhlaba_Kholwane_Ingci_Inyoni_Imphala_Lweti_Ingongoni".split("_"),monthsShort:"Bhi_Ina_Inu_Mab_Ink_Inh_Kho_Igc_Iny_Imp_Lwe_Igo".split("_"),weekdays:"Lisontfo_Umsombuluko_Lesibili_Lesitsatfu_Lesine_Lesihlanu_Umgcibelo".split("_"),weekdaysShort:"Lis_Umb_Lsb_Les_Lsi_Lsh_Umg".split("_"),weekdaysMin:"Li_Us_Lb_Lt_Ls_Lh_Ug".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[Namuhla nga] LT",nextDay:"[Kusasa nga] LT",nextWeek:"dddd [nga] LT",lastDay:"[Itolo nga] LT",lastWeek:"dddd [leliphelile] [nga] LT",sameElse:"L"},relativeTime:{future:"nga %s",past:"wenteka nga %s",s:"emizuzwana lomcane",ss:"%d mzuzwana",m:"umzuzu",mm:"%d emizuzu",h:"lihora",hh:"%d emahora",d:"lilanga",dd:"%d emalanga",M:"inyanga",MM:"%d tinyanga",y:"umnyaka",yy:"%d iminyaka"},meridiemParse:/ekuseni|emini|entsambama|ebusuku/,meridiem:function(e,a,t){return e<11?"ekuseni":e<15?"emini":e<19?"entsambama":"ebusuku"},meridiemHour:function(e,a){return 12===e&&(e=0),"ekuseni"===a?e:"emini"===a?11<=e?e:e+12:"entsambama"===a||"ebusuku"===a?0===e?0:e+12:void 0},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:"%d",week:{dow:1,doy:4}}),l.defineLocale("sv",{months:"januari_februari_mars_april_maj_juni_juli_augusti_september_oktober_november_december".split("_"),monthsShort:"jan_feb_mar_apr_maj_jun_jul_aug_sep_okt_nov_dec".split("_"),weekdays:"s\xf6ndag_m\xe5ndag_tisdag_onsdag_torsdag_fredag_l\xf6rdag".split("_"),weekdaysShort:"s\xf6n_m\xe5n_tis_ons_tor_fre_l\xf6r".split("_"),weekdaysMin:"s\xf6_m\xe5_ti_on_to_fr_l\xf6".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"D MMMM YYYY",LLL:"D MMMM YYYY [kl.] HH:mm",LLLL:"dddd D MMMM YYYY [kl.] HH:mm",lll:"D MMM YYYY HH:mm",llll:"ddd D MMM YYYY HH:mm"},calendar:{sameDay:"[Idag] LT",nextDay:"[Imorgon] LT",lastDay:"[Ig\xe5r] LT",nextWeek:"[P\xe5] dddd LT",lastWeek:"[I] dddd[s] LT",sameElse:"L"},relativeTime:{future:"om %s",past:"f\xf6r %s sedan",s:"n\xe5gra sekunder",ss:"%d sekunder",m:"en minut",mm:"%d minuter",h:"en timme",hh:"%d timmar",d:"en dag",dd:"%d dagar",M:"en m\xe5nad",MM:"%d m\xe5nader",y:"ett \xe5r",yy:"%d \xe5r"},dayOfMonthOrdinalParse:/\d{1,2}(e|a)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"e":1===a?"a":2===a?"a":"e")},week:{dow:1,doy:4}}),l.defineLocale("sw",{months:"Januari_Februari_Machi_Aprili_Mei_Juni_Julai_Agosti_Septemba_Oktoba_Novemba_Desemba".split("_"),monthsShort:"Jan_Feb_Mac_Apr_Mei_Jun_Jul_Ago_Sep_Okt_Nov_Des".split("_"),weekdays:"Jumapili_Jumatatu_Jumanne_Jumatano_Alhamisi_Ijumaa_Jumamosi".split("_"),weekdaysShort:"Jpl_Jtat_Jnne_Jtan_Alh_Ijm_Jmos".split("_"),weekdaysMin:"J2_J3_J4_J5_Al_Ij_J1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[leo saa] LT",nextDay:"[kesho saa] LT",nextWeek:"[wiki ijayo] dddd [saat] LT",lastDay:"[jana] LT",lastWeek:"[wiki iliyopita] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s baadaye",past:"tokea %s",s:"hivi punde",ss:"sekunde %d",m:"dakika moja",mm:"dakika %d",h:"saa limoja",hh:"masaa %d",d:"siku moja",dd:"masiku %d",M:"mwezi mmoja",MM:"miezi %d",y:"mwaka mmoja",yy:"miaka %d"},week:{dow:1,doy:7}});var Zn={1:"\u0be7",2:"\u0be8",3:"\u0be9",4:"\u0bea",5:"\u0beb",6:"\u0bec",7:"\u0bed",8:"\u0bee",9:"\u0bef",0:"\u0be6"},Bn={"\u0be7":"1","\u0be8":"2","\u0be9":"3","\u0bea":"4","\u0beb":"5","\u0bec":"6","\u0bed":"7","\u0bee":"8","\u0bef":"9","\u0be6":"0"};l.defineLocale("ta",{months:"\u0b9c\u0ba9\u0bb5\u0bb0\u0bbf_\u0baa\u0bbf\u0baa\u0bcd\u0bb0\u0bb5\u0bb0\u0bbf_\u0bae\u0bbe\u0bb0\u0bcd\u0b9a\u0bcd_\u0b8f\u0baa\u0bcd\u0bb0\u0bb2\u0bcd_\u0bae\u0bc7_\u0b9c\u0bc2\u0ba9\u0bcd_\u0b9c\u0bc2\u0bb2\u0bc8_\u0b86\u0b95\u0bb8\u0bcd\u0b9f\u0bcd_\u0b9a\u0bc6\u0baa\u0bcd\u0b9f\u0bc6\u0bae\u0bcd\u0baa\u0bb0\u0bcd_\u0b85\u0b95\u0bcd\u0b9f\u0bc7\u0bbe\u0baa\u0bb0\u0bcd_\u0ba8\u0bb5\u0bae\u0bcd\u0baa\u0bb0\u0bcd_\u0b9f\u0bbf\u0b9a\u0bae\u0bcd\u0baa\u0bb0\u0bcd".split("_"),monthsShort:"\u0b9c\u0ba9\u0bb5\u0bb0\u0bbf_\u0baa\u0bbf\u0baa\u0bcd\u0bb0\u0bb5\u0bb0\u0bbf_\u0bae\u0bbe\u0bb0\u0bcd\u0b9a\u0bcd_\u0b8f\u0baa\u0bcd\u0bb0\u0bb2\u0bcd_\u0bae\u0bc7_\u0b9c\u0bc2\u0ba9\u0bcd_\u0b9c\u0bc2\u0bb2\u0bc8_\u0b86\u0b95\u0bb8\u0bcd\u0b9f\u0bcd_\u0b9a\u0bc6\u0baa\u0bcd\u0b9f\u0bc6\u0bae\u0bcd\u0baa\u0bb0\u0bcd_\u0b85\u0b95\u0bcd\u0b9f\u0bc7\u0bbe\u0baa\u0bb0\u0bcd_\u0ba8\u0bb5\u0bae\u0bcd\u0baa\u0bb0\u0bcd_\u0b9f\u0bbf\u0b9a\u0bae\u0bcd\u0baa\u0bb0\u0bcd".split("_"),weekdays:"\u0b9e\u0bbe\u0baf\u0bbf\u0bb1\u0bcd\u0bb1\u0bc1\u0b95\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0ba4\u0bbf\u0b99\u0bcd\u0b95\u0b9f\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0b9a\u0bc6\u0bb5\u0bcd\u0bb5\u0bbe\u0baf\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0baa\u0bc1\u0ba4\u0ba9\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0bb5\u0bbf\u0baf\u0bbe\u0bb4\u0b95\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0bb5\u0bc6\u0bb3\u0bcd\u0bb3\u0bbf\u0b95\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8_\u0b9a\u0ba9\u0bbf\u0b95\u0bcd\u0b95\u0bbf\u0bb4\u0bae\u0bc8".split("_"),weekdaysShort:"\u0b9e\u0bbe\u0baf\u0bbf\u0bb1\u0bc1_\u0ba4\u0bbf\u0b99\u0bcd\u0b95\u0bb3\u0bcd_\u0b9a\u0bc6\u0bb5\u0bcd\u0bb5\u0bbe\u0baf\u0bcd_\u0baa\u0bc1\u0ba4\u0ba9\u0bcd_\u0bb5\u0bbf\u0baf\u0bbe\u0bb4\u0ba9\u0bcd_\u0bb5\u0bc6\u0bb3\u0bcd\u0bb3\u0bbf_\u0b9a\u0ba9\u0bbf".split("_"),weekdaysMin:"\u0b9e\u0bbe_\u0ba4\u0bbf_\u0b9a\u0bc6_\u0baa\u0bc1_\u0bb5\u0bbf_\u0bb5\u0bc6_\u0b9a".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, HH:mm",LLLL:"dddd, D MMMM YYYY, HH:mm"},calendar:{sameDay:"[\u0b87\u0ba9\u0bcd\u0bb1\u0bc1] LT",nextDay:"[\u0ba8\u0bbe\u0bb3\u0bc8] LT",nextWeek:"dddd, LT",lastDay:"[\u0ba8\u0bc7\u0bb1\u0bcd\u0bb1\u0bc1] LT",lastWeek:"[\u0b95\u0b9f\u0ba8\u0bcd\u0ba4 \u0bb5\u0bbe\u0bb0\u0bae\u0bcd] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0b87\u0bb2\u0bcd",past:"%s \u0bae\u0bc1\u0ba9\u0bcd",s:"\u0b92\u0bb0\u0bc1 \u0b9a\u0bbf\u0bb2 \u0bb5\u0bbf\u0ba8\u0bbe\u0b9f\u0bbf\u0b95\u0bb3\u0bcd",ss:"%d \u0bb5\u0bbf\u0ba8\u0bbe\u0b9f\u0bbf\u0b95\u0bb3\u0bcd",m:"\u0b92\u0bb0\u0bc1 \u0ba8\u0bbf\u0bae\u0bbf\u0b9f\u0bae\u0bcd",mm:"%d \u0ba8\u0bbf\u0bae\u0bbf\u0b9f\u0b99\u0bcd\u0b95\u0bb3\u0bcd",h:"\u0b92\u0bb0\u0bc1 \u0bae\u0ba3\u0bbf \u0ba8\u0bc7\u0bb0\u0bae\u0bcd",hh:"%d \u0bae\u0ba3\u0bbf \u0ba8\u0bc7\u0bb0\u0bae\u0bcd",d:"\u0b92\u0bb0\u0bc1 \u0ba8\u0bbe\u0bb3\u0bcd",dd:"%d \u0ba8\u0bbe\u0b9f\u0bcd\u0b95\u0bb3\u0bcd",M:"\u0b92\u0bb0\u0bc1 \u0bae\u0bbe\u0ba4\u0bae\u0bcd",MM:"%d \u0bae\u0bbe\u0ba4\u0b99\u0bcd\u0b95\u0bb3\u0bcd",y:"\u0b92\u0bb0\u0bc1 \u0bb5\u0bb0\u0bc1\u0b9f\u0bae\u0bcd",yy:"%d \u0b86\u0ba3\u0bcd\u0b9f\u0bc1\u0b95\u0bb3\u0bcd"},dayOfMonthOrdinalParse:/\d{1,2}\u0bb5\u0ba4\u0bc1/,ordinal:function(e){return e+"\u0bb5\u0ba4\u0bc1"},preparse:function(e){return e.replace(/[\u0be7\u0be8\u0be9\u0bea\u0beb\u0bec\u0bed\u0bee\u0bef\u0be6]/g,function(e){return Bn[e]})},postformat:function(e){return e.replace(/\d/g,function(e){return Zn[e]})},meridiemParse:/\u0baf\u0bbe\u0bae\u0bae\u0bcd|\u0bb5\u0bc8\u0b95\u0bb1\u0bc8|\u0b95\u0bbe\u0bb2\u0bc8|\u0ba8\u0ba3\u0bcd\u0baa\u0b95\u0bb2\u0bcd|\u0b8e\u0bb1\u0bcd\u0baa\u0bbe\u0b9f\u0bc1|\u0bae\u0bbe\u0bb2\u0bc8/,meridiem:function(e,a,t){return e<2?" \u0baf\u0bbe\u0bae\u0bae\u0bcd":e<6?" \u0bb5\u0bc8\u0b95\u0bb1\u0bc8":e<10?" \u0b95\u0bbe\u0bb2\u0bc8":e<14?" \u0ba8\u0ba3\u0bcd\u0baa\u0b95\u0bb2\u0bcd":e<18?" \u0b8e\u0bb1\u0bcd\u0baa\u0bbe\u0b9f\u0bc1":e<22?" \u0bae\u0bbe\u0bb2\u0bc8":" \u0baf\u0bbe\u0bae\u0bae\u0bcd"},meridiemHour:function(e,a){return 12===e&&(e=0),"\u0baf\u0bbe\u0bae\u0bae\u0bcd"===a?e<2?e:e+12:"\u0bb5\u0bc8\u0b95\u0bb1\u0bc8"===a||"\u0b95\u0bbe\u0bb2\u0bc8"===a?e:"\u0ba8\u0ba3\u0bcd\u0baa\u0b95\u0bb2\u0bcd"===a&&10<=e?e:e+12},week:{dow:0,doy:6}}),l.defineLocale("te",{months:"\u0c1c\u0c28\u0c35\u0c30\u0c3f_\u0c2b\u0c3f\u0c2c\u0c4d\u0c30\u0c35\u0c30\u0c3f_\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c3f_\u0c0f\u0c2a\u0c4d\u0c30\u0c3f\u0c32\u0c4d_\u0c2e\u0c47_\u0c1c\u0c42\u0c28\u0c4d_\u0c1c\u0c42\u0c32\u0c46\u0c56_\u0c06\u0c17\u0c38\u0c4d\u0c1f\u0c41_\u0c38\u0c46\u0c2a\u0c4d\u0c1f\u0c46\u0c02\u0c2c\u0c30\u0c4d_\u0c05\u0c15\u0c4d\u0c1f\u0c4b\u0c2c\u0c30\u0c4d_\u0c28\u0c35\u0c02\u0c2c\u0c30\u0c4d_\u0c21\u0c3f\u0c38\u0c46\u0c02\u0c2c\u0c30\u0c4d".split("_"),monthsShort:"\u0c1c\u0c28._\u0c2b\u0c3f\u0c2c\u0c4d\u0c30._\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c3f_\u0c0f\u0c2a\u0c4d\u0c30\u0c3f._\u0c2e\u0c47_\u0c1c\u0c42\u0c28\u0c4d_\u0c1c\u0c42\u0c32\u0c46\u0c56_\u0c06\u0c17._\u0c38\u0c46\u0c2a\u0c4d._\u0c05\u0c15\u0c4d\u0c1f\u0c4b._\u0c28\u0c35._\u0c21\u0c3f\u0c38\u0c46.".split("_"),monthsParseExact:!0,weekdays:"\u0c06\u0c26\u0c3f\u0c35\u0c3e\u0c30\u0c02_\u0c38\u0c4b\u0c2e\u0c35\u0c3e\u0c30\u0c02_\u0c2e\u0c02\u0c17\u0c33\u0c35\u0c3e\u0c30\u0c02_\u0c2c\u0c41\u0c27\u0c35\u0c3e\u0c30\u0c02_\u0c17\u0c41\u0c30\u0c41\u0c35\u0c3e\u0c30\u0c02_\u0c36\u0c41\u0c15\u0c4d\u0c30\u0c35\u0c3e\u0c30\u0c02_\u0c36\u0c28\u0c3f\u0c35\u0c3e\u0c30\u0c02".split("_"),weekdaysShort:"\u0c06\u0c26\u0c3f_\u0c38\u0c4b\u0c2e_\u0c2e\u0c02\u0c17\u0c33_\u0c2c\u0c41\u0c27_\u0c17\u0c41\u0c30\u0c41_\u0c36\u0c41\u0c15\u0c4d\u0c30_\u0c36\u0c28\u0c3f".split("_"),weekdaysMin:"\u0c06_\u0c38\u0c4b_\u0c2e\u0c02_\u0c2c\u0c41_\u0c17\u0c41_\u0c36\u0c41_\u0c36".split("_"),longDateFormat:{LT:"A h:mm",LTS:"A h:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY, A h:mm",LLLL:"dddd, D MMMM YYYY, A h:mm"},calendar:{sameDay:"[\u0c28\u0c47\u0c21\u0c41] LT",nextDay:"[\u0c30\u0c47\u0c2a\u0c41] LT",nextWeek:"dddd, LT",lastDay:"[\u0c28\u0c3f\u0c28\u0c4d\u0c28] LT",lastWeek:"[\u0c17\u0c24] dddd, LT",sameElse:"L"},relativeTime:{future:"%s \u0c32\u0c4b",past:"%s \u0c15\u0c4d\u0c30\u0c3f\u0c24\u0c02",s:"\u0c15\u0c4a\u0c28\u0c4d\u0c28\u0c3f \u0c15\u0c4d\u0c37\u0c23\u0c3e\u0c32\u0c41",ss:"%d \u0c38\u0c46\u0c15\u0c28\u0c4d\u0c32\u0c41",m:"\u0c12\u0c15 \u0c28\u0c3f\u0c2e\u0c3f\u0c37\u0c02",mm:"%d \u0c28\u0c3f\u0c2e\u0c3f\u0c37\u0c3e\u0c32\u0c41",h:"\u0c12\u0c15 \u0c17\u0c02\u0c1f",hh:"%d \u0c17\u0c02\u0c1f\u0c32\u0c41",d:"\u0c12\u0c15 \u0c30\u0c4b\u0c1c\u0c41",dd:"%d \u0c30\u0c4b\u0c1c\u0c41\u0c32\u0c41",M:"\u0c12\u0c15 \u0c28\u0c46\u0c32",MM:"%d \u0c28\u0c46\u0c32\u0c32\u0c41",y:"\u0c12\u0c15 \u0c38\u0c02\u0c35\u0c24\u0c4d\u0c38\u0c30\u0c02",yy:"%d \u0c38\u0c02\u0c35\u0c24\u0c4d\u0c38\u0c30\u0c3e\u0c32\u0c41"},dayOfMonthOrdinalParse:/\d{1,2}\u0c35/,ordinal:"%d\u0c35",meridiemParse:/\u0c30\u0c3e\u0c24\u0c4d\u0c30\u0c3f|\u0c09\u0c26\u0c2f\u0c02|\u0c2e\u0c27\u0c4d\u0c2f\u0c3e\u0c39\u0c4d\u0c28\u0c02|\u0c38\u0c3e\u0c2f\u0c02\u0c24\u0c4d\u0c30\u0c02/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0c30\u0c3e\u0c24\u0c4d\u0c30\u0c3f"===a?e<4?e:e+12:"\u0c09\u0c26\u0c2f\u0c02"===a?e:"\u0c2e\u0c27\u0c4d\u0c2f\u0c3e\u0c39\u0c4d\u0c28\u0c02"===a?10<=e?e:e+12:"\u0c38\u0c3e\u0c2f\u0c02\u0c24\u0c4d\u0c30\u0c02"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0c30\u0c3e\u0c24\u0c4d\u0c30\u0c3f":e<10?"\u0c09\u0c26\u0c2f\u0c02":e<17?"\u0c2e\u0c27\u0c4d\u0c2f\u0c3e\u0c39\u0c4d\u0c28\u0c02":e<20?"\u0c38\u0c3e\u0c2f\u0c02\u0c24\u0c4d\u0c30\u0c02":"\u0c30\u0c3e\u0c24\u0c4d\u0c30\u0c3f"},week:{dow:0,doy:6}}),l.defineLocale("tet",{months:"Janeiru_Fevereiru_Marsu_Abril_Maiu_Ju\xf1u_Jullu_Agustu_Setembru_Outubru_Novembru_Dezembru".split("_"),monthsShort:"Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez".split("_"),weekdays:"Domingu_Segunda_Tersa_Kuarta_Kinta_Sesta_Sabadu".split("_"),weekdaysShort:"Dom_Seg_Ters_Kua_Kint_Sest_Sab".split("_"),weekdaysMin:"Do_Seg_Te_Ku_Ki_Ses_Sa".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[Ohin iha] LT",nextDay:"[Aban iha] LT",nextWeek:"dddd [iha] LT",lastDay:"[Horiseik iha] LT",lastWeek:"dddd [semana kotuk] [iha] LT",sameElse:"L"},relativeTime:{future:"iha %s",past:"%s liuba",s:"minutu balun",ss:"minutu %d",m:"minutu ida",mm:"minutu %d",h:"oras ida",hh:"oras %d",d:"loron ida",dd:"loron %d",M:"fulan ida",MM:"fulan %d",y:"tinan ida",yy:"tinan %d"},dayOfMonthOrdinalParse:/\d{1,2}(st|nd|rd|th)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}});var qn={0:"-\u0443\u043c",1:"-\u0443\u043c",2:"-\u044e\u043c",3:"-\u044e\u043c",4:"-\u0443\u043c",5:"-\u0443\u043c",6:"-\u0443\u043c",7:"-\u0443\u043c",8:"-\u0443\u043c",9:"-\u0443\u043c",10:"-\u0443\u043c",12:"-\u0443\u043c",13:"-\u0443\u043c",20:"-\u0443\u043c",30:"-\u044e\u043c",40:"-\u0443\u043c",50:"-\u0443\u043c",60:"-\u0443\u043c",70:"-\u0443\u043c",80:"-\u0443\u043c",90:"-\u0443\u043c",100:"-\u0443\u043c"};l.defineLocale("tg",{months:"\u044f\u043d\u0432\u0430\u0440_\u0444\u0435\u0432\u0440\u0430\u043b_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0435\u043b_\u043c\u0430\u0439_\u0438\u044e\u043d_\u0438\u044e\u043b_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043d\u0442\u044f\u0431\u0440_\u043e\u043a\u0442\u044f\u0431\u0440_\u043d\u043e\u044f\u0431\u0440_\u0434\u0435\u043a\u0430\u0431\u0440".split("_"),monthsShort:"\u044f\u043d\u0432_\u0444\u0435\u0432_\u043c\u0430\u0440_\u0430\u043f\u0440_\u043c\u0430\u0439_\u0438\u044e\u043d_\u0438\u044e\u043b_\u0430\u0432\u0433_\u0441\u0435\u043d_\u043e\u043a\u0442_\u043d\u043e\u044f_\u0434\u0435\u043a".split("_"),weekdays:"\u044f\u043a\u0448\u0430\u043d\u0431\u0435_\u0434\u0443\u0448\u0430\u043d\u0431\u0435_\u0441\u0435\u0448\u0430\u043d\u0431\u0435_\u0447\u043e\u0440\u0448\u0430\u043d\u0431\u0435_\u043f\u0430\u043d\u04b7\u0448\u0430\u043d\u0431\u0435_\u04b7\u0443\u043c\u044a\u0430_\u0448\u0430\u043d\u0431\u0435".split("_"),weekdaysShort:"\u044f\u0448\u0431_\u0434\u0448\u0431_\u0441\u0448\u0431_\u0447\u0448\u0431_\u043f\u0448\u0431_\u04b7\u0443\u043c_\u0448\u043d\u0431".split("_"),weekdaysMin:"\u044f\u0448_\u0434\u0448_\u0441\u0448_\u0447\u0448_\u043f\u0448_\u04b7\u043c_\u0448\u0431".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u0418\u043c\u0440\u04ef\u0437 \u0441\u043e\u0430\u0442\u0438] LT",nextDay:"[\u041f\u0430\u0433\u043e\u04b3 \u0441\u043e\u0430\u0442\u0438] LT",lastDay:"[\u0414\u0438\u0440\u04ef\u0437 \u0441\u043e\u0430\u0442\u0438] LT",nextWeek:"dddd[\u0438] [\u04b3\u0430\u0444\u0442\u0430\u0438 \u043e\u044f\u043d\u0434\u0430 \u0441\u043e\u0430\u0442\u0438] LT",lastWeek:"dddd[\u0438] [\u04b3\u0430\u0444\u0442\u0430\u0438 \u0433\u0443\u0437\u0430\u0448\u0442\u0430 \u0441\u043e\u0430\u0442\u0438] LT",sameElse:"L"},relativeTime:{future:"\u0431\u0430\u044a\u0434\u0438 %s",past:"%s \u043f\u0435\u0448",s:"\u044f\u043a\u0447\u0430\u043d\u0434 \u0441\u043e\u043d\u0438\u044f",m:"\u044f\u043a \u0434\u0430\u049b\u0438\u049b\u0430",mm:"%d \u0434\u0430\u049b\u0438\u049b\u0430",h:"\u044f\u043a \u0441\u043e\u0430\u0442",hh:"%d \u0441\u043e\u0430\u0442",d:"\u044f\u043a \u0440\u04ef\u0437",dd:"%d \u0440\u04ef\u0437",M:"\u044f\u043a \u043c\u043e\u04b3",MM:"%d \u043c\u043e\u04b3",y:"\u044f\u043a \u0441\u043e\u043b",yy:"%d \u0441\u043e\u043b"},meridiemParse:/\u0448\u0430\u0431|\u0441\u0443\u0431\u04b3|\u0440\u04ef\u0437|\u0431\u0435\u0433\u043e\u04b3/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u0448\u0430\u0431"===a?e<4?e:e+12:"\u0441\u0443\u0431\u04b3"===a?e:"\u0440\u04ef\u0437"===a?11<=e?e:e+12:"\u0431\u0435\u0433\u043e\u04b3"===a?e+12:void 0},meridiem:function(e,a,t){return e<4?"\u0448\u0430\u0431":e<11?"\u0441\u0443\u0431\u04b3":e<16?"\u0440\u04ef\u0437":e<19?"\u0431\u0435\u0433\u043e\u04b3":"\u0448\u0430\u0431"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0443\u043c|\u044e\u043c)/,ordinal:function(e){return e+(qn[e]||qn[e%10]||qn[100<=e?100:null])},week:{dow:1,doy:7}}),l.defineLocale("th",{months:"\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21_\u0e01\u0e38\u0e21\u0e20\u0e32\u0e1e\u0e31\u0e19\u0e18\u0e4c_\u0e21\u0e35\u0e19\u0e32\u0e04\u0e21_\u0e40\u0e21\u0e29\u0e32\u0e22\u0e19_\u0e1e\u0e24\u0e29\u0e20\u0e32\u0e04\u0e21_\u0e21\u0e34\u0e16\u0e38\u0e19\u0e32\u0e22\u0e19_\u0e01\u0e23\u0e01\u0e0e\u0e32\u0e04\u0e21_\u0e2a\u0e34\u0e07\u0e2b\u0e32\u0e04\u0e21_\u0e01\u0e31\u0e19\u0e22\u0e32\u0e22\u0e19_\u0e15\u0e38\u0e25\u0e32\u0e04\u0e21_\u0e1e\u0e24\u0e28\u0e08\u0e34\u0e01\u0e32\u0e22\u0e19_\u0e18\u0e31\u0e19\u0e27\u0e32\u0e04\u0e21".split("_"),monthsShort:"\u0e21.\u0e04._\u0e01.\u0e1e._\u0e21\u0e35.\u0e04._\u0e40\u0e21.\u0e22._\u0e1e.\u0e04._\u0e21\u0e34.\u0e22._\u0e01.\u0e04._\u0e2a.\u0e04._\u0e01.\u0e22._\u0e15.\u0e04._\u0e1e.\u0e22._\u0e18.\u0e04.".split("_"),monthsParseExact:!0,weekdays:"\u0e2d\u0e32\u0e17\u0e34\u0e15\u0e22\u0e4c_\u0e08\u0e31\u0e19\u0e17\u0e23\u0e4c_\u0e2d\u0e31\u0e07\u0e04\u0e32\u0e23_\u0e1e\u0e38\u0e18_\u0e1e\u0e24\u0e2b\u0e31\u0e2a\u0e1a\u0e14\u0e35_\u0e28\u0e38\u0e01\u0e23\u0e4c_\u0e40\u0e2a\u0e32\u0e23\u0e4c".split("_"),weekdaysShort:"\u0e2d\u0e32\u0e17\u0e34\u0e15\u0e22\u0e4c_\u0e08\u0e31\u0e19\u0e17\u0e23\u0e4c_\u0e2d\u0e31\u0e07\u0e04\u0e32\u0e23_\u0e1e\u0e38\u0e18_\u0e1e\u0e24\u0e2b\u0e31\u0e2a_\u0e28\u0e38\u0e01\u0e23\u0e4c_\u0e40\u0e2a\u0e32\u0e23\u0e4c".split("_"),weekdaysMin:"\u0e2d\u0e32._\u0e08._\u0e2d._\u0e1e._\u0e1e\u0e24._\u0e28._\u0e2a.".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"H:mm",LTS:"H:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY \u0e40\u0e27\u0e25\u0e32 H:mm",LLLL:"\u0e27\u0e31\u0e19dddd\u0e17\u0e35\u0e48 D MMMM YYYY \u0e40\u0e27\u0e25\u0e32 H:mm"},meridiemParse:/\u0e01\u0e48\u0e2d\u0e19\u0e40\u0e17\u0e35\u0e48\u0e22\u0e07|\u0e2b\u0e25\u0e31\u0e07\u0e40\u0e17\u0e35\u0e48\u0e22\u0e07/,isPM:function(e){return"\u0e2b\u0e25\u0e31\u0e07\u0e40\u0e17\u0e35\u0e48\u0e22\u0e07"===e},meridiem:function(e,a,t){return e<12?"\u0e01\u0e48\u0e2d\u0e19\u0e40\u0e17\u0e35\u0e48\u0e22\u0e07":"\u0e2b\u0e25\u0e31\u0e07\u0e40\u0e17\u0e35\u0e48\u0e22\u0e07"},calendar:{sameDay:"[\u0e27\u0e31\u0e19\u0e19\u0e35\u0e49 \u0e40\u0e27\u0e25\u0e32] LT",nextDay:"[\u0e1e\u0e23\u0e38\u0e48\u0e07\u0e19\u0e35\u0e49 \u0e40\u0e27\u0e25\u0e32] LT",nextWeek:"dddd[\u0e2b\u0e19\u0e49\u0e32 \u0e40\u0e27\u0e25\u0e32] LT",lastDay:"[\u0e40\u0e21\u0e37\u0e48\u0e2d\u0e27\u0e32\u0e19\u0e19\u0e35\u0e49 \u0e40\u0e27\u0e25\u0e32] LT",lastWeek:"[\u0e27\u0e31\u0e19]dddd[\u0e17\u0e35\u0e48\u0e41\u0e25\u0e49\u0e27 \u0e40\u0e27\u0e25\u0e32] LT",sameElse:"L"},relativeTime:{future:"\u0e2d\u0e35\u0e01 %s",past:"%s\u0e17\u0e35\u0e48\u0e41\u0e25\u0e49\u0e27",s:"\u0e44\u0e21\u0e48\u0e01\u0e35\u0e48\u0e27\u0e34\u0e19\u0e32\u0e17\u0e35",ss:"%d \u0e27\u0e34\u0e19\u0e32\u0e17\u0e35",m:"1 \u0e19\u0e32\u0e17\u0e35",mm:"%d \u0e19\u0e32\u0e17\u0e35",h:"1 \u0e0a\u0e31\u0e48\u0e27\u0e42\u0e21\u0e07",hh:"%d \u0e0a\u0e31\u0e48\u0e27\u0e42\u0e21\u0e07",d:"1 \u0e27\u0e31\u0e19",dd:"%d \u0e27\u0e31\u0e19",M:"1 \u0e40\u0e14\u0e37\u0e2d\u0e19",MM:"%d \u0e40\u0e14\u0e37\u0e2d\u0e19",y:"1 \u0e1b\u0e35",yy:"%d \u0e1b\u0e35"}}),l.defineLocale("tl-ph",{months:"Enero_Pebrero_Marso_Abril_Mayo_Hunyo_Hulyo_Agosto_Setyembre_Oktubre_Nobyembre_Disyembre".split("_"),monthsShort:"Ene_Peb_Mar_Abr_May_Hun_Hul_Ago_Set_Okt_Nob_Dis".split("_"),weekdays:"Linggo_Lunes_Martes_Miyerkules_Huwebes_Biyernes_Sabado".split("_"),weekdaysShort:"Lin_Lun_Mar_Miy_Huw_Biy_Sab".split("_"),weekdaysMin:"Li_Lu_Ma_Mi_Hu_Bi_Sab".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"MM/D/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY HH:mm",LLLL:"dddd, MMMM DD, YYYY HH:mm"},calendar:{sameDay:"LT [ngayong araw]",nextDay:"[Bukas ng] LT",nextWeek:"LT [sa susunod na] dddd",lastDay:"LT [kahapon]",lastWeek:"LT [noong nakaraang] dddd",sameElse:"L"},relativeTime:{future:"sa loob ng %s",past:"%s ang nakalipas",s:"ilang segundo",ss:"%d segundo",m:"isang minuto",mm:"%d minuto",h:"isang oras",hh:"%d oras",d:"isang araw",dd:"%d araw",M:"isang buwan",MM:"%d buwan",y:"isang taon",yy:"%d taon"},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:function(e){return e},week:{dow:1,doy:4}});var Qn="pagh_wa\u2019_cha\u2019_wej_loS_vagh_jav_Soch_chorgh_Hut".split("_");function Xn(e,a,t,s){var n=function(e){var a=Math.floor(e%1e3/100),t=Math.floor(e%100/10),s=e%10,n="";0<a&&(n+=Qn[a]+"vatlh");0<t&&(n+=(""!==n?" ":"")+Qn[t]+"maH");0<s&&(n+=(""!==n?" ":"")+Qn[s]);return""===n?"pagh":n}(e);switch(t){case"ss":return n+" lup";case"mm":return n+" tup";case"hh":return n+" rep";case"dd":return n+" jaj";case"MM":return n+" jar";case"yy":return n+" DIS"}}l.defineLocale("tlh",{months:"tera\u2019 jar wa\u2019_tera\u2019 jar cha\u2019_tera\u2019 jar wej_tera\u2019 jar loS_tera\u2019 jar vagh_tera\u2019 jar jav_tera\u2019 jar Soch_tera\u2019 jar chorgh_tera\u2019 jar Hut_tera\u2019 jar wa\u2019maH_tera\u2019 jar wa\u2019maH wa\u2019_tera\u2019 jar wa\u2019maH cha\u2019".split("_"),monthsShort:"jar wa\u2019_jar cha\u2019_jar wej_jar loS_jar vagh_jar jav_jar Soch_jar chorgh_jar Hut_jar wa\u2019maH_jar wa\u2019maH wa\u2019_jar wa\u2019maH cha\u2019".split("_"),monthsParseExact:!0,weekdays:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),weekdaysShort:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),weekdaysMin:"lojmItjaj_DaSjaj_povjaj_ghItlhjaj_loghjaj_buqjaj_ghInjaj".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[DaHjaj] LT",nextDay:"[wa\u2019leS] LT",nextWeek:"LLL",lastDay:"[wa\u2019Hu\u2019] LT",lastWeek:"LLL",sameElse:"L"},relativeTime:{future:function(e){var a=e;return a=-1!==e.indexOf("jaj")?a.slice(0,-3)+"leS":-1!==e.indexOf("jar")?a.slice(0,-3)+"waQ":-1!==e.indexOf("DIS")?a.slice(0,-3)+"nem":a+" pIq"},past:function(e){var a=e;return a=-1!==e.indexOf("jaj")?a.slice(0,-3)+"Hu\u2019":-1!==e.indexOf("jar")?a.slice(0,-3)+"wen":-1!==e.indexOf("DIS")?a.slice(0,-3)+"ben":a+" ret"},s:"puS lup",ss:Xn,m:"wa\u2019 tup",mm:Xn,h:"wa\u2019 rep",hh:Xn,d:"wa\u2019 jaj",dd:Xn,M:"wa\u2019 jar",MM:Xn,y:"wa\u2019 DIS",yy:Xn},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}});var ed={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7:"'nci",20:"'nci",50:"'nci",3:"'\xfcnc\xfc",4:"'\xfcnc\xfc",100:"'\xfcnc\xfc",6:"'nc\u0131",9:"'uncu",10:"'uncu",30:"'uncu",60:"'\u0131nc\u0131",90:"'\u0131nc\u0131"};function ad(e,a,t,s){var n={s:["viensas secunds","'iensas secunds"],ss:[e+" secunds",e+" secunds"],m:["'n m\xedut","'iens m\xedut"],mm:[e+" m\xeduts",e+" m\xeduts"],h:["'n \xfeora","'iensa \xfeora"],hh:[e+" \xfeoras",e+" \xfeoras"],d:["'n ziua","'iensa ziua"],dd:[e+" ziuas",e+" ziuas"],M:["'n mes","'iens mes"],MM:[e+" mesen",e+" mesen"],y:["'n ar","'iens ar"],yy:[e+" ars",e+" ars"]};return s?n[t][0]:a?n[t][0]:n[t][1]}function td(e,a,t){var s,n;return"m"===t?a?"\u0445\u0432\u0438\u043b\u0438\u043d\u0430":"\u0445\u0432\u0438\u043b\u0438\u043d\u0443":"h"===t?a?"\u0433\u043e\u0434\u0438\u043d\u0430":"\u0433\u043e\u0434\u0438\u043d\u0443":e+" "+(s=+e,n={ss:a?"\u0441\u0435\u043a\u0443\u043d\u0434\u0430_\u0441\u0435\u043a\u0443\u043d\u0434\u0438_\u0441\u0435\u043a\u0443\u043d\u0434":"\u0441\u0435\u043a\u0443\u043d\u0434\u0443_\u0441\u0435\u043a\u0443\u043d\u0434\u0438_\u0441\u0435\u043a\u0443\u043d\u0434",mm:a?"\u0445\u0432\u0438\u043b\u0438\u043d\u0430_\u0445\u0432\u0438\u043b\u0438\u043d\u0438_\u0445\u0432\u0438\u043b\u0438\u043d":"\u0445\u0432\u0438\u043b\u0438\u043d\u0443_\u0445\u0432\u0438\u043b\u0438\u043d\u0438_\u0445\u0432\u0438\u043b\u0438\u043d",hh:a?"\u0433\u043e\u0434\u0438\u043d\u0430_\u0433\u043e\u0434\u0438\u043d\u0438_\u0433\u043e\u0434\u0438\u043d":"\u0433\u043e\u0434\u0438\u043d\u0443_\u0433\u043e\u0434\u0438\u043d\u0438_\u0433\u043e\u0434\u0438\u043d",dd:"\u0434\u0435\u043d\u044c_\u0434\u043d\u0456_\u0434\u043d\u0456\u0432",MM:"\u043c\u0456\u0441\u044f\u0446\u044c_\u043c\u0456\u0441\u044f\u0446\u0456_\u043c\u0456\u0441\u044f\u0446\u0456\u0432",yy:"\u0440\u0456\u043a_\u0440\u043e\u043a\u0438_\u0440\u043e\u043a\u0456\u0432"}[t].split("_"),s%10==1&&s%100!=11?n[0]:2<=s%10&&s%10<=4&&(s%100<10||20<=s%100)?n[1]:n[2])}function sd(e){return function(){return e+"\u043e"+(11===this.hours()?"\u0431":"")+"] LT"}}l.defineLocale("tr",{months:"Ocak_\u015eubat_Mart_Nisan_May\u0131s_Haziran_Temmuz_A\u011fustos_Eyl\xfcl_Ekim_Kas\u0131m_Aral\u0131k".split("_"),monthsShort:"Oca_\u015eub_Mar_Nis_May_Haz_Tem_A\u011fu_Eyl_Eki_Kas_Ara".split("_"),weekdays:"Pazar_Pazartesi_Sal\u0131_\xc7ar\u015famba_Per\u015fembe_Cuma_Cumartesi".split("_"),weekdaysShort:"Paz_Pts_Sal_\xc7ar_Per_Cum_Cts".split("_"),weekdaysMin:"Pz_Pt_Sa_\xc7a_Pe_Cu_Ct".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[bug\xfcn saat] LT",nextDay:"[yar\u0131n saat] LT",nextWeek:"[gelecek] dddd [saat] LT",lastDay:"[d\xfcn] LT",lastWeek:"[ge\xe7en] dddd [saat] LT",sameElse:"L"},relativeTime:{future:"%s sonra",past:"%s \xf6nce",s:"birka\xe7 saniye",ss:"%d saniye",m:"bir dakika",mm:"%d dakika",h:"bir saat",hh:"%d saat",d:"bir g\xfcn",dd:"%d g\xfcn",M:"bir ay",MM:"%d ay",y:"bir y\u0131l",yy:"%d y\u0131l"},ordinal:function(e,a){switch(a){case"d":case"D":case"Do":case"DD":return e;default:if(0===e)return e+"'\u0131nc\u0131";var t=e%10;return e+(ed[t]||ed[e%100-t]||ed[100<=e?100:null])}},week:{dow:1,doy:7}}),l.defineLocale("tzl",{months:"Januar_Fevraglh_Mar\xe7_Avr\xefu_Mai_G\xfcn_Julia_Guscht_Setemvar_Listop\xe4ts_Noemvar_Zecemvar".split("_"),monthsShort:"Jan_Fev_Mar_Avr_Mai_G\xfcn_Jul_Gus_Set_Lis_Noe_Zec".split("_"),weekdays:"S\xfaladi_L\xfane\xe7i_Maitzi_M\xe1rcuri_Xh\xfaadi_Vi\xe9ner\xe7i_S\xe1turi".split("_"),weekdaysShort:"S\xfal_L\xfan_Mai_M\xe1r_Xh\xfa_Vi\xe9_S\xe1t".split("_"),weekdaysMin:"S\xfa_L\xfa_Ma_M\xe1_Xh_Vi_S\xe1".split("_"),longDateFormat:{LT:"HH.mm",LTS:"HH.mm.ss",L:"DD.MM.YYYY",LL:"D. MMMM [dallas] YYYY",LLL:"D. MMMM [dallas] YYYY HH.mm",LLLL:"dddd, [li] D. MMMM [dallas] YYYY HH.mm"},meridiemParse:/d\'o|d\'a/i,isPM:function(e){return"d'o"===e.toLowerCase()},meridiem:function(e,a,t){return 11<e?t?"d'o":"D'O":t?"d'a":"D'A"},calendar:{sameDay:"[oxhi \xe0] LT",nextDay:"[dem\xe0 \xe0] LT",nextWeek:"dddd [\xe0] LT",lastDay:"[ieiri \xe0] LT",lastWeek:"[s\xfcr el] dddd [lasteu \xe0] LT",sameElse:"L"},relativeTime:{future:"osprei %s",past:"ja%s",s:ad,ss:ad,m:ad,mm:ad,h:ad,hh:ad,d:ad,dd:ad,M:ad,MM:ad,y:ad,yy:ad},dayOfMonthOrdinalParse:/\d{1,2}\./,ordinal:"%d.",week:{dow:1,doy:4}}),l.defineLocale("tzm-latn",{months:"innayr_br\u02e4ayr\u02e4_mar\u02e4s\u02e4_ibrir_mayyw_ywnyw_ywlywz_\u0263w\u0161t_\u0161wtanbir_kt\u02e4wbr\u02e4_nwwanbir_dwjnbir".split("_"),monthsShort:"innayr_br\u02e4ayr\u02e4_mar\u02e4s\u02e4_ibrir_mayyw_ywnyw_ywlywz_\u0263w\u0161t_\u0161wtanbir_kt\u02e4wbr\u02e4_nwwanbir_dwjnbir".split("_"),weekdays:"asamas_aynas_asinas_akras_akwas_asimwas_asi\u1e0dyas".split("_"),weekdaysShort:"asamas_aynas_asinas_akras_akwas_asimwas_asi\u1e0dyas".split("_"),weekdaysMin:"asamas_aynas_asinas_akras_akwas_asimwas_asi\u1e0dyas".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[asdkh g] LT",nextDay:"[aska g] LT",nextWeek:"dddd [g] LT",lastDay:"[assant g] LT",lastWeek:"dddd [g] LT",sameElse:"L"},relativeTime:{future:"dadkh s yan %s",past:"yan %s",s:"imik",ss:"%d imik",m:"minu\u1e0d",mm:"%d minu\u1e0d",h:"sa\u025ba",hh:"%d tassa\u025bin",d:"ass",dd:"%d ossan",M:"ayowr",MM:"%d iyyirn",y:"asgas",yy:"%d isgasn"},week:{dow:6,doy:12}}),l.defineLocale("tzm",{months:"\u2d49\u2d4f\u2d4f\u2d30\u2d62\u2d54_\u2d31\u2d55\u2d30\u2d62\u2d55_\u2d4e\u2d30\u2d55\u2d5a_\u2d49\u2d31\u2d54\u2d49\u2d54_\u2d4e\u2d30\u2d62\u2d62\u2d53_\u2d62\u2d53\u2d4f\u2d62\u2d53_\u2d62\u2d53\u2d4d\u2d62\u2d53\u2d63_\u2d56\u2d53\u2d5b\u2d5c_\u2d5b\u2d53\u2d5c\u2d30\u2d4f\u2d31\u2d49\u2d54_\u2d3d\u2d5f\u2d53\u2d31\u2d55_\u2d4f\u2d53\u2d61\u2d30\u2d4f\u2d31\u2d49\u2d54_\u2d37\u2d53\u2d4a\u2d4f\u2d31\u2d49\u2d54".split("_"),monthsShort:"\u2d49\u2d4f\u2d4f\u2d30\u2d62\u2d54_\u2d31\u2d55\u2d30\u2d62\u2d55_\u2d4e\u2d30\u2d55\u2d5a_\u2d49\u2d31\u2d54\u2d49\u2d54_\u2d4e\u2d30\u2d62\u2d62\u2d53_\u2d62\u2d53\u2d4f\u2d62\u2d53_\u2d62\u2d53\u2d4d\u2d62\u2d53\u2d63_\u2d56\u2d53\u2d5b\u2d5c_\u2d5b\u2d53\u2d5c\u2d30\u2d4f\u2d31\u2d49\u2d54_\u2d3d\u2d5f\u2d53\u2d31\u2d55_\u2d4f\u2d53\u2d61\u2d30\u2d4f\u2d31\u2d49\u2d54_\u2d37\u2d53\u2d4a\u2d4f\u2d31\u2d49\u2d54".split("_"),weekdays:"\u2d30\u2d59\u2d30\u2d4e\u2d30\u2d59_\u2d30\u2d62\u2d4f\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4f\u2d30\u2d59_\u2d30\u2d3d\u2d54\u2d30\u2d59_\u2d30\u2d3d\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4e\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d39\u2d62\u2d30\u2d59".split("_"),weekdaysShort:"\u2d30\u2d59\u2d30\u2d4e\u2d30\u2d59_\u2d30\u2d62\u2d4f\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4f\u2d30\u2d59_\u2d30\u2d3d\u2d54\u2d30\u2d59_\u2d30\u2d3d\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4e\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d39\u2d62\u2d30\u2d59".split("_"),weekdaysMin:"\u2d30\u2d59\u2d30\u2d4e\u2d30\u2d59_\u2d30\u2d62\u2d4f\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4f\u2d30\u2d59_\u2d30\u2d3d\u2d54\u2d30\u2d59_\u2d30\u2d3d\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d4e\u2d61\u2d30\u2d59_\u2d30\u2d59\u2d49\u2d39\u2d62\u2d30\u2d59".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd D MMMM YYYY HH:mm"},calendar:{sameDay:"[\u2d30\u2d59\u2d37\u2d45 \u2d34] LT",nextDay:"[\u2d30\u2d59\u2d3d\u2d30 \u2d34] LT",nextWeek:"dddd [\u2d34] LT",lastDay:"[\u2d30\u2d5a\u2d30\u2d4f\u2d5c \u2d34] LT",lastWeek:"dddd [\u2d34] LT",sameElse:"L"},relativeTime:{future:"\u2d37\u2d30\u2d37\u2d45 \u2d59 \u2d62\u2d30\u2d4f %s",past:"\u2d62\u2d30\u2d4f %s",s:"\u2d49\u2d4e\u2d49\u2d3d",ss:"%d \u2d49\u2d4e\u2d49\u2d3d",m:"\u2d4e\u2d49\u2d4f\u2d53\u2d3a",mm:"%d \u2d4e\u2d49\u2d4f\u2d53\u2d3a",h:"\u2d59\u2d30\u2d44\u2d30",hh:"%d \u2d5c\u2d30\u2d59\u2d59\u2d30\u2d44\u2d49\u2d4f",d:"\u2d30\u2d59\u2d59",dd:"%d o\u2d59\u2d59\u2d30\u2d4f",M:"\u2d30\u2d62o\u2d53\u2d54",MM:"%d \u2d49\u2d62\u2d62\u2d49\u2d54\u2d4f",y:"\u2d30\u2d59\u2d33\u2d30\u2d59",yy:"%d \u2d49\u2d59\u2d33\u2d30\u2d59\u2d4f"},week:{dow:6,doy:12}}),l.defineLocale("ug-cn",{months:"\u064a\u0627\u0646\u06cb\u0627\u0631_\u0641\u06d0\u06cb\u0631\u0627\u0644_\u0645\u0627\u0631\u062a_\u0626\u0627\u067e\u0631\u06d0\u0644_\u0645\u0627\u064a_\u0626\u0649\u064a\u06c7\u0646_\u0626\u0649\u064a\u06c7\u0644_\u0626\u0627\u06cb\u063a\u06c7\u0633\u062a_\u0633\u06d0\u0646\u062a\u06d5\u0628\u0649\u0631_\u0626\u06c6\u0643\u062a\u06d5\u0628\u0649\u0631_\u0646\u0648\u064a\u0627\u0628\u0649\u0631_\u062f\u06d0\u0643\u0627\u0628\u0649\u0631".split("_"),monthsShort:"\u064a\u0627\u0646\u06cb\u0627\u0631_\u0641\u06d0\u06cb\u0631\u0627\u0644_\u0645\u0627\u0631\u062a_\u0626\u0627\u067e\u0631\u06d0\u0644_\u0645\u0627\u064a_\u0626\u0649\u064a\u06c7\u0646_\u0626\u0649\u064a\u06c7\u0644_\u0626\u0627\u06cb\u063a\u06c7\u0633\u062a_\u0633\u06d0\u0646\u062a\u06d5\u0628\u0649\u0631_\u0626\u06c6\u0643\u062a\u06d5\u0628\u0649\u0631_\u0646\u0648\u064a\u0627\u0628\u0649\u0631_\u062f\u06d0\u0643\u0627\u0628\u0649\u0631".split("_"),weekdays:"\u064a\u06d5\u0643\u0634\u06d5\u0646\u0628\u06d5_\u062f\u06c8\u0634\u06d5\u0646\u0628\u06d5_\u0633\u06d5\u064a\u0634\u06d5\u0646\u0628\u06d5_\u0686\u0627\u0631\u0634\u06d5\u0646\u0628\u06d5_\u067e\u06d5\u064a\u0634\u06d5\u0646\u0628\u06d5_\u062c\u06c8\u0645\u06d5_\u0634\u06d5\u0646\u0628\u06d5".split("_"),weekdaysShort:"\u064a\u06d5_\u062f\u06c8_\u0633\u06d5_\u0686\u0627_\u067e\u06d5_\u062c\u06c8_\u0634\u06d5".split("_"),weekdaysMin:"\u064a\u06d5_\u062f\u06c8_\u0633\u06d5_\u0686\u0627_\u067e\u06d5_\u062c\u06c8_\u0634\u06d5".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY-MM-DD",LL:"YYYY-\u064a\u0649\u0644\u0649M-\u0626\u0627\u064a\u0646\u0649\u06adD-\u0643\u06c8\u0646\u0649",LLL:"YYYY-\u064a\u0649\u0644\u0649M-\u0626\u0627\u064a\u0646\u0649\u06adD-\u0643\u06c8\u0646\u0649\u060c HH:mm",LLLL:"dddd\u060c YYYY-\u064a\u0649\u0644\u0649M-\u0626\u0627\u064a\u0646\u0649\u06adD-\u0643\u06c8\u0646\u0649\u060c HH:mm"},meridiemParse:/\u064a\u06d0\u0631\u0649\u0645 \u0643\u06d0\u0686\u06d5|\u0633\u06d5\u06be\u06d5\u0631|\u0686\u06c8\u0634\u062a\u0649\u0646 \u0628\u06c7\u0631\u06c7\u0646|\u0686\u06c8\u0634|\u0686\u06c8\u0634\u062a\u0649\u0646 \u0643\u06d0\u064a\u0649\u0646|\u0643\u06d5\u0686/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u064a\u06d0\u0631\u0649\u0645 \u0643\u06d0\u0686\u06d5"===a||"\u0633\u06d5\u06be\u06d5\u0631"===a||"\u0686\u06c8\u0634\u062a\u0649\u0646 \u0628\u06c7\u0631\u06c7\u0646"===a?e:"\u0686\u06c8\u0634\u062a\u0649\u0646 \u0643\u06d0\u064a\u0649\u0646"===a||"\u0643\u06d5\u0686"===a?e+12:11<=e?e:e+12},meridiem:function(e,a,t){var s=100*e+a;return s<600?"\u064a\u06d0\u0631\u0649\u0645 \u0643\u06d0\u0686\u06d5":s<900?"\u0633\u06d5\u06be\u06d5\u0631":s<1130?"\u0686\u06c8\u0634\u062a\u0649\u0646 \u0628\u06c7\u0631\u06c7\u0646":s<1230?"\u0686\u06c8\u0634":s<1800?"\u0686\u06c8\u0634\u062a\u0649\u0646 \u0643\u06d0\u064a\u0649\u0646":"\u0643\u06d5\u0686"},calendar:{sameDay:"[\u0628\u06c8\u06af\u06c8\u0646 \u0633\u0627\u0626\u06d5\u062a] LT",nextDay:"[\u0626\u06d5\u062a\u06d5 \u0633\u0627\u0626\u06d5\u062a] LT",nextWeek:"[\u0643\u06d0\u0644\u06d5\u0631\u0643\u0649] dddd [\u0633\u0627\u0626\u06d5\u062a] LT",lastDay:"[\u062a\u06c6\u0646\u06c8\u06af\u06c8\u0646] LT",lastWeek:"[\u0626\u0627\u0644\u062f\u0649\u0646\u0642\u0649] dddd [\u0633\u0627\u0626\u06d5\u062a] LT",sameElse:"L"},relativeTime:{future:"%s \u0643\u06d0\u064a\u0649\u0646",past:"%s \u0628\u06c7\u0631\u06c7\u0646",s:"\u0646\u06d5\u0686\u0686\u06d5 \u0633\u06d0\u0643\u0648\u0646\u062a",ss:"%d \u0633\u06d0\u0643\u0648\u0646\u062a",m:"\u0628\u0649\u0631 \u0645\u0649\u0646\u06c7\u062a",mm:"%d \u0645\u0649\u0646\u06c7\u062a",h:"\u0628\u0649\u0631 \u0633\u0627\u0626\u06d5\u062a",hh:"%d \u0633\u0627\u0626\u06d5\u062a",d:"\u0628\u0649\u0631 \u0643\u06c8\u0646",dd:"%d \u0643\u06c8\u0646",M:"\u0628\u0649\u0631 \u0626\u0627\u064a",MM:"%d \u0626\u0627\u064a",y:"\u0628\u0649\u0631 \u064a\u0649\u0644",yy:"%d \u064a\u0649\u0644"},dayOfMonthOrdinalParse:/\d{1,2}(-\u0643\u06c8\u0646\u0649|-\u0626\u0627\u064a|-\u06be\u06d5\u067e\u062a\u06d5)/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"-\u0643\u06c8\u0646\u0649";case"w":case"W":return e+"-\u06be\u06d5\u067e\u062a\u06d5";default:return e}},preparse:function(e){return e.replace(/\u060c/g,",")},postformat:function(e){return e.replace(/,/g,"\u060c")},week:{dow:1,doy:7}}),l.defineLocale("uk",{months:{format:"\u0441\u0456\u0447\u043d\u044f_\u043b\u044e\u0442\u043e\u0433\u043e_\u0431\u0435\u0440\u0435\u0437\u043d\u044f_\u043a\u0432\u0456\u0442\u043d\u044f_\u0442\u0440\u0430\u0432\u043d\u044f_\u0447\u0435\u0440\u0432\u043d\u044f_\u043b\u0438\u043f\u043d\u044f_\u0441\u0435\u0440\u043f\u043d\u044f_\u0432\u0435\u0440\u0435\u0441\u043d\u044f_\u0436\u043e\u0432\u0442\u043d\u044f_\u043b\u0438\u0441\u0442\u043e\u043f\u0430\u0434\u0430_\u0433\u0440\u0443\u0434\u043d\u044f".split("_"),standalone:"\u0441\u0456\u0447\u0435\u043d\u044c_\u043b\u044e\u0442\u0438\u0439_\u0431\u0435\u0440\u0435\u0437\u0435\u043d\u044c_\u043a\u0432\u0456\u0442\u0435\u043d\u044c_\u0442\u0440\u0430\u0432\u0435\u043d\u044c_\u0447\u0435\u0440\u0432\u0435\u043d\u044c_\u043b\u0438\u043f\u0435\u043d\u044c_\u0441\u0435\u0440\u043f\u0435\u043d\u044c_\u0432\u0435\u0440\u0435\u0441\u0435\u043d\u044c_\u0436\u043e\u0432\u0442\u0435\u043d\u044c_\u043b\u0438\u0441\u0442\u043e\u043f\u0430\u0434_\u0433\u0440\u0443\u0434\u0435\u043d\u044c".split("_")},monthsShort:"\u0441\u0456\u0447_\u043b\u044e\u0442_\u0431\u0435\u0440_\u043a\u0432\u0456\u0442_\u0442\u0440\u0430\u0432_\u0447\u0435\u0440\u0432_\u043b\u0438\u043f_\u0441\u0435\u0440\u043f_\u0432\u0435\u0440_\u0436\u043e\u0432\u0442_\u043b\u0438\u0441\u0442_\u0433\u0440\u0443\u0434".split("_"),weekdays:function(e,a){var t={nominative:"\u043d\u0435\u0434\u0456\u043b\u044f_\u043f\u043e\u043d\u0435\u0434\u0456\u043b\u043e\u043a_\u0432\u0456\u0432\u0442\u043e\u0440\u043e\u043a_\u0441\u0435\u0440\u0435\u0434\u0430_\u0447\u0435\u0442\u0432\u0435\u0440_\u043f\u2019\u044f\u0442\u043d\u0438\u0446\u044f_\u0441\u0443\u0431\u043e\u0442\u0430".split("_"),accusative:"\u043d\u0435\u0434\u0456\u043b\u044e_\u043f\u043e\u043d\u0435\u0434\u0456\u043b\u043e\u043a_\u0432\u0456\u0432\u0442\u043e\u0440\u043e\u043a_\u0441\u0435\u0440\u0435\u0434\u0443_\u0447\u0435\u0442\u0432\u0435\u0440_\u043f\u2019\u044f\u0442\u043d\u0438\u0446\u044e_\u0441\u0443\u0431\u043e\u0442\u0443".split("_"),genitive:"\u043d\u0435\u0434\u0456\u043b\u0456_\u043f\u043e\u043d\u0435\u0434\u0456\u043b\u043a\u0430_\u0432\u0456\u0432\u0442\u043e\u0440\u043a\u0430_\u0441\u0435\u0440\u0435\u0434\u0438_\u0447\u0435\u0442\u0432\u0435\u0440\u0433\u0430_\u043f\u2019\u044f\u0442\u043d\u0438\u0446\u0456_\u0441\u0443\u0431\u043e\u0442\u0438".split("_")};return e?t[/(\[[\u0412\u0432\u0423\u0443]\]) ?dddd/.test(a)?"accusative":/\[?(?:\u043c\u0438\u043d\u0443\u043b\u043e\u0457|\u043d\u0430\u0441\u0442\u0443\u043f\u043d\u043e\u0457)? ?\] ?dddd/.test(a)?"genitive":"nominative"][e.day()]:t.nominative},weekdaysShort:"\u043d\u0434_\u043f\u043d_\u0432\u0442_\u0441\u0440_\u0447\u0442_\u043f\u0442_\u0441\u0431".split("_"),weekdaysMin:"\u043d\u0434_\u043f\u043d_\u0432\u0442_\u0441\u0440_\u0447\u0442_\u043f\u0442_\u0441\u0431".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD.MM.YYYY",LL:"D MMMM YYYY \u0440.",LLL:"D MMMM YYYY \u0440., HH:mm",LLLL:"dddd, D MMMM YYYY \u0440., HH:mm"},calendar:{sameDay:sd("[\u0421\u044c\u043e\u0433\u043e\u0434\u043d\u0456 "),nextDay:sd("[\u0417\u0430\u0432\u0442\u0440\u0430 "),lastDay:sd("[\u0412\u0447\u043e\u0440\u0430 "),nextWeek:sd("[\u0423] dddd ["),lastWeek:function(){switch(this.day()){case 0:case 3:case 5:case 6:return sd("[\u041c\u0438\u043d\u0443\u043b\u043e\u0457] dddd [").call(this);case 1:case 2:case 4:return sd("[\u041c\u0438\u043d\u0443\u043b\u043e\u0433\u043e] dddd [").call(this)}},sameElse:"L"},relativeTime:{future:"\u0437\u0430 %s",past:"%s \u0442\u043e\u043c\u0443",s:"\u0434\u0435\u043a\u0456\u043b\u044c\u043a\u0430 \u0441\u0435\u043a\u0443\u043d\u0434",ss:td,m:td,mm:td,h:"\u0433\u043e\u0434\u0438\u043d\u0443",hh:td,d:"\u0434\u0435\u043d\u044c",dd:td,M:"\u043c\u0456\u0441\u044f\u0446\u044c",MM:td,y:"\u0440\u0456\u043a",yy:td},meridiemParse:/\u043d\u043e\u0447\u0456|\u0440\u0430\u043d\u043a\u0443|\u0434\u043d\u044f|\u0432\u0435\u0447\u043e\u0440\u0430/,isPM:function(e){return/^(\u0434\u043d\u044f|\u0432\u0435\u0447\u043e\u0440\u0430)$/.test(e)},meridiem:function(e,a,t){return e<4?"\u043d\u043e\u0447\u0456":e<12?"\u0440\u0430\u043d\u043a\u0443":e<17?"\u0434\u043d\u044f":"\u0432\u0435\u0447\u043e\u0440\u0430"},dayOfMonthOrdinalParse:/\d{1,2}-(\u0439|\u0433\u043e)/,ordinal:function(e,a){switch(a){case"M":case"d":case"DDD":case"w":case"W":return e+"-\u0439";case"D":return e+"-\u0433\u043e";default:return e}},week:{dow:1,doy:7}});var nd=["\u062c\u0646\u0648\u0631\u06cc","\u0641\u0631\u0648\u0631\u06cc","\u0645\u0627\u0631\u0686","\u0627\u067e\u0631\u06cc\u0644","\u0645\u0626\u06cc","\u062c\u0648\u0646","\u062c\u0648\u0644\u0627\u0626\u06cc","\u0627\u06af\u0633\u062a","\u0633\u062a\u0645\u0628\u0631","\u0627\u06a9\u062a\u0648\u0628\u0631","\u0646\u0648\u0645\u0628\u0631","\u062f\u0633\u0645\u0628\u0631"],dd=["\u0627\u062a\u0648\u0627\u0631","\u067e\u06cc\u0631","\u0645\u0646\u06af\u0644","\u0628\u062f\u06be","\u062c\u0645\u0639\u0631\u0627\u062a","\u062c\u0645\u0639\u06c1","\u06c1\u0641\u062a\u06c1"];return l.defineLocale("ur",{months:nd,monthsShort:nd,weekdays:dd,weekdaysShort:dd,weekdaysMin:dd,longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd\u060c D MMMM YYYY HH:mm"},meridiemParse:/\u0635\u0628\u062d|\u0634\u0627\u0645/,isPM:function(e){return"\u0634\u0627\u0645"===e},meridiem:function(e,a,t){return e<12?"\u0635\u0628\u062d":"\u0634\u0627\u0645"},calendar:{sameDay:"[\u0622\u062c \u0628\u0648\u0642\u062a] LT",nextDay:"[\u06a9\u0644 \u0628\u0648\u0642\u062a] LT",nextWeek:"dddd [\u0628\u0648\u0642\u062a] LT",lastDay:"[\u06af\u0630\u0634\u062a\u06c1 \u0631\u0648\u0632 \u0628\u0648\u0642\u062a] LT",lastWeek:"[\u06af\u0630\u0634\u062a\u06c1] dddd [\u0628\u0648\u0642\u062a] LT",sameElse:"L"},relativeTime:{future:"%s \u0628\u0639\u062f",past:"%s \u0642\u0628\u0644",s:"\u0686\u0646\u062f \u0633\u06cc\u06a9\u0646\u0688",ss:"%d \u0633\u06cc\u06a9\u0646\u0688",m:"\u0627\u06cc\u06a9 \u0645\u0646\u0679",mm:"%d \u0645\u0646\u0679",h:"\u0627\u06cc\u06a9 \u06af\u06be\u0646\u0679\u06c1",hh:"%d \u06af\u06be\u0646\u0679\u06d2",d:"\u0627\u06cc\u06a9 \u062f\u0646",dd:"%d \u062f\u0646",M:"\u0627\u06cc\u06a9 \u0645\u0627\u06c1",MM:"%d \u0645\u0627\u06c1",y:"\u0627\u06cc\u06a9 \u0633\u0627\u0644",yy:"%d \u0633\u0627\u0644"},preparse:function(e){return e.replace(/\u060c/g,",")},postformat:function(e){return e.replace(/,/g,"\u060c")},week:{dow:1,doy:4}}),l.defineLocale("uz-latn",{months:"Yanvar_Fevral_Mart_Aprel_May_Iyun_Iyul_Avgust_Sentabr_Oktabr_Noyabr_Dekabr".split("_"),monthsShort:"Yan_Fev_Mar_Apr_May_Iyun_Iyul_Avg_Sen_Okt_Noy_Dek".split("_"),weekdays:"Yakshanba_Dushanba_Seshanba_Chorshanba_Payshanba_Juma_Shanba".split("_"),weekdaysShort:"Yak_Dush_Sesh_Chor_Pay_Jum_Shan".split("_"),weekdaysMin:"Ya_Du_Se_Cho_Pa_Ju_Sha".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"D MMMM YYYY, dddd HH:mm"},calendar:{sameDay:"[Bugun soat] LT [da]",nextDay:"[Ertaga] LT [da]",nextWeek:"dddd [kuni soat] LT [da]",lastDay:"[Kecha soat] LT [da]",lastWeek:"[O'tgan] dddd [kuni soat] LT [da]",sameElse:"L"},relativeTime:{future:"Yaqin %s ichida",past:"Bir necha %s oldin",s:"soniya",ss:"%d soniya",m:"bir daqiqa",mm:"%d daqiqa",h:"bir soat",hh:"%d soat",d:"bir kun",dd:"%d kun",M:"bir oy",MM:"%d oy",y:"bir yil",yy:"%d yil"},week:{dow:1,doy:7}}),l.defineLocale("uz",{months:"\u044f\u043d\u0432\u0430\u0440_\u0444\u0435\u0432\u0440\u0430\u043b_\u043c\u0430\u0440\u0442_\u0430\u043f\u0440\u0435\u043b_\u043c\u0430\u0439_\u0438\u044e\u043d_\u0438\u044e\u043b_\u0430\u0432\u0433\u0443\u0441\u0442_\u0441\u0435\u043d\u0442\u044f\u0431\u0440_\u043e\u043a\u0442\u044f\u0431\u0440_\u043d\u043e\u044f\u0431\u0440_\u0434\u0435\u043a\u0430\u0431\u0440".split("_"),monthsShort:"\u044f\u043d\u0432_\u0444\u0435\u0432_\u043c\u0430\u0440_\u0430\u043f\u0440_\u043c\u0430\u0439_\u0438\u044e\u043d_\u0438\u044e\u043b_\u0430\u0432\u0433_\u0441\u0435\u043d_\u043e\u043a\u0442_\u043d\u043e\u044f_\u0434\u0435\u043a".split("_"),weekdays:"\u042f\u043a\u0448\u0430\u043d\u0431\u0430_\u0414\u0443\u0448\u0430\u043d\u0431\u0430_\u0421\u0435\u0448\u0430\u043d\u0431\u0430_\u0427\u043e\u0440\u0448\u0430\u043d\u0431\u0430_\u041f\u0430\u0439\u0448\u0430\u043d\u0431\u0430_\u0416\u0443\u043c\u0430_\u0428\u0430\u043d\u0431\u0430".split("_"),weekdaysShort:"\u042f\u043a\u0448_\u0414\u0443\u0448_\u0421\u0435\u0448_\u0427\u043e\u0440_\u041f\u0430\u0439_\u0416\u0443\u043c_\u0428\u0430\u043d".split("_"),weekdaysMin:"\u042f\u043a_\u0414\u0443_\u0421\u0435_\u0427\u043e_\u041f\u0430_\u0416\u0443_\u0428\u0430".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"D MMMM YYYY, dddd HH:mm"},calendar:{sameDay:"[\u0411\u0443\u0433\u0443\u043d \u0441\u043e\u0430\u0442] LT [\u0434\u0430]",nextDay:"[\u042d\u0440\u0442\u0430\u0433\u0430] LT [\u0434\u0430]",nextWeek:"dddd [\u043a\u0443\u043d\u0438 \u0441\u043e\u0430\u0442] LT [\u0434\u0430]",lastDay:"[\u041a\u0435\u0447\u0430 \u0441\u043e\u0430\u0442] LT [\u0434\u0430]",lastWeek:"[\u0423\u0442\u0433\u0430\u043d] dddd [\u043a\u0443\u043d\u0438 \u0441\u043e\u0430\u0442] LT [\u0434\u0430]",sameElse:"L"},relativeTime:{future:"\u042f\u043a\u0438\u043d %s \u0438\u0447\u0438\u0434\u0430",past:"\u0411\u0438\u0440 \u043d\u0435\u0447\u0430 %s \u043e\u043b\u0434\u0438\u043d",s:"\u0444\u0443\u0440\u0441\u0430\u0442",ss:"%d \u0444\u0443\u0440\u0441\u0430\u0442",m:"\u0431\u0438\u0440 \u0434\u0430\u043a\u0438\u043a\u0430",mm:"%d \u0434\u0430\u043a\u0438\u043a\u0430",h:"\u0431\u0438\u0440 \u0441\u043e\u0430\u0442",hh:"%d \u0441\u043e\u0430\u0442",d:"\u0431\u0438\u0440 \u043a\u0443\u043d",dd:"%d \u043a\u0443\u043d",M:"\u0431\u0438\u0440 \u043e\u0439",MM:"%d \u043e\u0439",y:"\u0431\u0438\u0440 \u0439\u0438\u043b",yy:"%d \u0439\u0438\u043b"},week:{dow:1,doy:7}}),l.defineLocale("vi",{months:"th\xe1ng 1_th\xe1ng 2_th\xe1ng 3_th\xe1ng 4_th\xe1ng 5_th\xe1ng 6_th\xe1ng 7_th\xe1ng 8_th\xe1ng 9_th\xe1ng 10_th\xe1ng 11_th\xe1ng 12".split("_"),monthsShort:"Th01_Th02_Th03_Th04_Th05_Th06_Th07_Th08_Th09_Th10_Th11_Th12".split("_"),monthsParseExact:!0,weekdays:"ch\u1ee7 nh\u1eadt_th\u1ee9 hai_th\u1ee9 ba_th\u1ee9 t\u01b0_th\u1ee9 n\u0103m_th\u1ee9 s\xe1u_th\u1ee9 b\u1ea3y".split("_"),weekdaysShort:"CN_T2_T3_T4_T5_T6_T7".split("_"),weekdaysMin:"CN_T2_T3_T4_T5_T6_T7".split("_"),weekdaysParseExact:!0,meridiemParse:/sa|ch/i,isPM:function(e){return/^ch$/i.test(e)},meridiem:function(e,a,t){return e<12?t?"sa":"SA":t?"ch":"CH"},longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"DD/MM/YYYY",LL:"D MMMM [n\u0103m] YYYY",LLL:"D MMMM [n\u0103m] YYYY HH:mm",LLLL:"dddd, D MMMM [n\u0103m] YYYY HH:mm",l:"DD/M/YYYY",ll:"D MMM YYYY",lll:"D MMM YYYY HH:mm",llll:"ddd, D MMM YYYY HH:mm"},calendar:{sameDay:"[H\xf4m nay l\xfac] LT",nextDay:"[Ng\xe0y mai l\xfac] LT",nextWeek:"dddd [tu\u1ea7n t\u1edbi l\xfac] LT",lastDay:"[H\xf4m qua l\xfac] LT",lastWeek:"dddd [tu\u1ea7n r\u1ed3i l\xfac] LT",sameElse:"L"},relativeTime:{future:"%s t\u1edbi",past:"%s tr\u01b0\u1edbc",s:"v\xe0i gi\xe2y",ss:"%d gi\xe2y",m:"m\u1ed9t ph\xfat",mm:"%d ph\xfat",h:"m\u1ed9t gi\u1edd",hh:"%d gi\u1edd",d:"m\u1ed9t ng\xe0y",dd:"%d ng\xe0y",M:"m\u1ed9t th\xe1ng",MM:"%d th\xe1ng",y:"m\u1ed9t n\u0103m",yy:"%d n\u0103m"},dayOfMonthOrdinalParse:/\d{1,2}/,ordinal:function(e){return e},week:{dow:1,doy:4}}),l.defineLocale("x-pseudo",{months:"J~\xe1\xf1\xfa\xe1~r\xfd_F~\xe9br\xfa~\xe1r\xfd_~M\xe1rc~h_\xc1p~r\xedl_~M\xe1\xfd_~J\xfa\xf1\xe9~_J\xfal~\xfd_\xc1\xfa~g\xfast~_S\xe9p~t\xe9mb~\xe9r_\xd3~ct\xf3b~\xe9r_\xd1~\xf3v\xe9m~b\xe9r_~D\xe9c\xe9~mb\xe9r".split("_"),monthsShort:"J~\xe1\xf1_~F\xe9b_~M\xe1r_~\xc1pr_~M\xe1\xfd_~J\xfa\xf1_~J\xfal_~\xc1\xfag_~S\xe9p_~\xd3ct_~\xd1\xf3v_~D\xe9c".split("_"),monthsParseExact:!0,weekdays:"S~\xfa\xf1d\xe1~\xfd_M\xf3~\xf1d\xe1\xfd~_T\xfa\xe9~sd\xe1\xfd~_W\xe9d~\xf1\xe9sd~\xe1\xfd_T~h\xfars~d\xe1\xfd_~Fr\xedd~\xe1\xfd_S~\xe1t\xfar~d\xe1\xfd".split("_"),weekdaysShort:"S~\xfa\xf1_~M\xf3\xf1_~T\xfa\xe9_~W\xe9d_~Th\xfa_~Fr\xed_~S\xe1t".split("_"),weekdaysMin:"S~\xfa_M\xf3~_T\xfa_~W\xe9_T~h_Fr~_S\xe1".split("_"),weekdaysParseExact:!0,longDateFormat:{LT:"HH:mm",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY HH:mm",LLLL:"dddd, D MMMM YYYY HH:mm"},calendar:{sameDay:"[T~\xf3d\xe1~\xfd \xe1t] LT",nextDay:"[T~\xf3m\xf3~rr\xf3~w \xe1t] LT",nextWeek:"dddd [\xe1t] LT",lastDay:"[\xdd~\xe9st~\xe9rd\xe1~\xfd \xe1t] LT",lastWeek:"[L~\xe1st] dddd [\xe1t] LT",sameElse:"L"},relativeTime:{future:"\xed~\xf1 %s",past:"%s \xe1~g\xf3",s:"\xe1 ~f\xe9w ~s\xe9c\xf3~\xf1ds",ss:"%d s~\xe9c\xf3\xf1~ds",m:"\xe1 ~m\xed\xf1~\xfat\xe9",mm:"%d m~\xed\xf1\xfa~t\xe9s",h:"\xe1~\xf1 h\xf3~\xfar",hh:"%d h~\xf3\xfars",d:"\xe1 ~d\xe1\xfd",dd:"%d d~\xe1\xfds",M:"\xe1 ~m\xf3\xf1~th",MM:"%d m~\xf3\xf1t~hs",y:"\xe1 ~\xfd\xe9\xe1r",yy:"%d \xfd~\xe9\xe1rs"},dayOfMonthOrdinalParse:/\d{1,2}(th|st|nd|rd)/,ordinal:function(e){var a=e%10;return e+(1==~~(e%100/10)?"th":1===a?"st":2===a?"nd":3===a?"rd":"th")},week:{dow:1,doy:4}}),l.defineLocale("yo",{months:"S\u1eb9\u0301r\u1eb9\u0301_E\u0300re\u0300le\u0300_\u1eb8r\u1eb9\u0300na\u0300_I\u0300gbe\u0301_E\u0300bibi_O\u0300ku\u0300du_Ag\u1eb9mo_O\u0300gu\u0301n_Owewe_\u1ecc\u0300wa\u0300ra\u0300_Be\u0301lu\u0301_\u1ecc\u0300p\u1eb9\u0300\u0300".split("_"),monthsShort:"S\u1eb9\u0301r_E\u0300rl_\u1eb8rn_I\u0300gb_E\u0300bi_O\u0300ku\u0300_Ag\u1eb9_O\u0300gu\u0301_Owe_\u1ecc\u0300wa\u0300_Be\u0301l_\u1ecc\u0300p\u1eb9\u0300\u0300".split("_"),weekdays:"A\u0300i\u0300ku\u0301_Aje\u0301_I\u0300s\u1eb9\u0301gun_\u1eccj\u1ecd\u0301ru\u0301_\u1eccj\u1ecd\u0301b\u1ecd_\u1eb8ti\u0300_A\u0300ba\u0301m\u1eb9\u0301ta".split("_"),weekdaysShort:"A\u0300i\u0300k_Aje\u0301_I\u0300s\u1eb9\u0301_\u1eccjr_\u1eccjb_\u1eb8ti\u0300_A\u0300ba\u0301".split("_"),weekdaysMin:"A\u0300i\u0300_Aj_I\u0300s_\u1eccr_\u1eccb_\u1eb8t_A\u0300b".split("_"),longDateFormat:{LT:"h:mm A",LTS:"h:mm:ss A",L:"DD/MM/YYYY",LL:"D MMMM YYYY",LLL:"D MMMM YYYY h:mm A",LLLL:"dddd, D MMMM YYYY h:mm A"},calendar:{sameDay:"[O\u0300ni\u0300 ni] LT",nextDay:"[\u1ecc\u0300la ni] LT",nextWeek:"dddd [\u1eccs\u1eb9\u0300 to\u0301n'b\u1ecd] [ni] LT",lastDay:"[A\u0300na ni] LT",lastWeek:"dddd [\u1eccs\u1eb9\u0300 to\u0301l\u1ecd\u0301] [ni] LT",sameElse:"L"},relativeTime:{future:"ni\u0301 %s",past:"%s k\u1ecdja\u0301",s:"i\u0300s\u1eb9ju\u0301 aaya\u0301 die",ss:"aaya\u0301 %d",m:"i\u0300s\u1eb9ju\u0301 kan",mm:"i\u0300s\u1eb9ju\u0301 %d",h:"wa\u0301kati kan",hh:"wa\u0301kati %d",d:"\u1ecdj\u1ecd\u0301 kan",dd:"\u1ecdj\u1ecd\u0301 %d",M:"osu\u0300 kan",MM:"osu\u0300 %d",y:"\u1ecddu\u0301n kan",yy:"\u1ecddu\u0301n %d"},dayOfMonthOrdinalParse:/\u1ecdj\u1ecd\u0301\s\d{1,2}/,ordinal:"\u1ecdj\u1ecd\u0301 %d",week:{dow:1,doy:4}}),l.defineLocale("zh-cn",{months:"\u4e00\u6708_\u4e8c\u6708_\u4e09\u6708_\u56db\u6708_\u4e94\u6708_\u516d\u6708_\u4e03\u6708_\u516b\u6708_\u4e5d\u6708_\u5341\u6708_\u5341\u4e00\u6708_\u5341\u4e8c\u6708".split("_"),monthsShort:"1\u6708_2\u6708_3\u6708_4\u6708_5\u6708_6\u6708_7\u6708_8\u6708_9\u6708_10\u6708_11\u6708_12\u6708".split("_"),weekdays:"\u661f\u671f\u65e5_\u661f\u671f\u4e00_\u661f\u671f\u4e8c_\u661f\u671f\u4e09_\u661f\u671f\u56db_\u661f\u671f\u4e94_\u661f\u671f\u516d".split("_"),weekdaysShort:"\u5468\u65e5_\u5468\u4e00_\u5468\u4e8c_\u5468\u4e09_\u5468\u56db_\u5468\u4e94_\u5468\u516d".split("_"),weekdaysMin:"\u65e5_\u4e00_\u4e8c_\u4e09_\u56db_\u4e94_\u516d".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY/MM/DD",LL:"YYYY\u5e74M\u6708D\u65e5",LLL:"YYYY\u5e74M\u6708D\u65e5Ah\u70b9mm\u5206",LLLL:"YYYY\u5e74M\u6708D\u65e5ddddAh\u70b9mm\u5206",l:"YYYY/M/D",ll:"YYYY\u5e74M\u6708D\u65e5",lll:"YYYY\u5e74M\u6708D\u65e5 HH:mm",llll:"YYYY\u5e74M\u6708D\u65e5dddd HH:mm"},meridiemParse:/\u51cc\u6668|\u65e9\u4e0a|\u4e0a\u5348|\u4e2d\u5348|\u4e0b\u5348|\u665a\u4e0a/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u51cc\u6668"===a||"\u65e9\u4e0a"===a||"\u4e0a\u5348"===a?e:"\u4e0b\u5348"===a||"\u665a\u4e0a"===a?e+12:11<=e?e:e+12},meridiem:function(e,a,t){var s=100*e+a;return s<600?"\u51cc\u6668":s<900?"\u65e9\u4e0a":s<1130?"\u4e0a\u5348":s<1230?"\u4e2d\u5348":s<1800?"\u4e0b\u5348":"\u665a\u4e0a"},calendar:{sameDay:"[\u4eca\u5929]LT",nextDay:"[\u660e\u5929]LT",nextWeek:"[\u4e0b]ddddLT",lastDay:"[\u6628\u5929]LT",lastWeek:"[\u4e0a]ddddLT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(\u65e5|\u6708|\u5468)/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"\u65e5";case"M":return e+"\u6708";case"w":case"W":return e+"\u5468";default:return e}},relativeTime:{future:"%s\u5185",past:"%s\u524d",s:"\u51e0\u79d2",ss:"%d \u79d2",m:"1 \u5206\u949f",mm:"%d \u5206\u949f",h:"1 \u5c0f\u65f6",hh:"%d \u5c0f\u65f6",d:"1 \u5929",dd:"%d \u5929",M:"1 \u4e2a\u6708",MM:"%d \u4e2a\u6708",y:"1 \u5e74",yy:"%d \u5e74"},week:{dow:1,doy:4}}),l.defineLocale("zh-hk",{months:"\u4e00\u6708_\u4e8c\u6708_\u4e09\u6708_\u56db\u6708_\u4e94\u6708_\u516d\u6708_\u4e03\u6708_\u516b\u6708_\u4e5d\u6708_\u5341\u6708_\u5341\u4e00\u6708_\u5341\u4e8c\u6708".split("_"),monthsShort:"1\u6708_2\u6708_3\u6708_4\u6708_5\u6708_6\u6708_7\u6708_8\u6708_9\u6708_10\u6708_11\u6708_12\u6708".split("_"),weekdays:"\u661f\u671f\u65e5_\u661f\u671f\u4e00_\u661f\u671f\u4e8c_\u661f\u671f\u4e09_\u661f\u671f\u56db_\u661f\u671f\u4e94_\u661f\u671f\u516d".split("_"),weekdaysShort:"\u9031\u65e5_\u9031\u4e00_\u9031\u4e8c_\u9031\u4e09_\u9031\u56db_\u9031\u4e94_\u9031\u516d".split("_"),weekdaysMin:"\u65e5_\u4e00_\u4e8c_\u4e09_\u56db_\u4e94_\u516d".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY/MM/DD",LL:"YYYY\u5e74M\u6708D\u65e5",LLL:"YYYY\u5e74M\u6708D\u65e5 HH:mm",LLLL:"YYYY\u5e74M\u6708D\u65e5dddd HH:mm",l:"YYYY/M/D",ll:"YYYY\u5e74M\u6708D\u65e5",lll:"YYYY\u5e74M\u6708D\u65e5 HH:mm",llll:"YYYY\u5e74M\u6708D\u65e5dddd HH:mm"},meridiemParse:/\u51cc\u6668|\u65e9\u4e0a|\u4e0a\u5348|\u4e2d\u5348|\u4e0b\u5348|\u665a\u4e0a/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u51cc\u6668"===a||"\u65e9\u4e0a"===a||"\u4e0a\u5348"===a?e:"\u4e2d\u5348"===a?11<=e?e:e+12:"\u4e0b\u5348"===a||"\u665a\u4e0a"===a?e+12:void 0},meridiem:function(e,a,t){var s=100*e+a;return s<600?"\u51cc\u6668":s<900?"\u65e9\u4e0a":s<1130?"\u4e0a\u5348":s<1230?"\u4e2d\u5348":s<1800?"\u4e0b\u5348":"\u665a\u4e0a"},calendar:{sameDay:"[\u4eca\u5929]LT",nextDay:"[\u660e\u5929]LT",nextWeek:"[\u4e0b]ddddLT",lastDay:"[\u6628\u5929]LT",lastWeek:"[\u4e0a]ddddLT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(\u65e5|\u6708|\u9031)/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"\u65e5";case"M":return e+"\u6708";case"w":case"W":return e+"\u9031";default:return e}},relativeTime:{future:"%s\u5167",past:"%s\u524d",s:"\u5e7e\u79d2",ss:"%d \u79d2",m:"1 \u5206\u9418",mm:"%d \u5206\u9418",h:"1 \u5c0f\u6642",hh:"%d \u5c0f\u6642",d:"1 \u5929",dd:"%d \u5929",M:"1 \u500b\u6708",MM:"%d \u500b\u6708",y:"1 \u5e74",yy:"%d \u5e74"}}),l.defineLocale("zh-tw",{months:"\u4e00\u6708_\u4e8c\u6708_\u4e09\u6708_\u56db\u6708_\u4e94\u6708_\u516d\u6708_\u4e03\u6708_\u516b\u6708_\u4e5d\u6708_\u5341\u6708_\u5341\u4e00\u6708_\u5341\u4e8c\u6708".split("_"),monthsShort:"1\u6708_2\u6708_3\u6708_4\u6708_5\u6708_6\u6708_7\u6708_8\u6708_9\u6708_10\u6708_11\u6708_12\u6708".split("_"),weekdays:"\u661f\u671f\u65e5_\u661f\u671f\u4e00_\u661f\u671f\u4e8c_\u661f\u671f\u4e09_\u661f\u671f\u56db_\u661f\u671f\u4e94_\u661f\u671f\u516d".split("_"),weekdaysShort:"\u9031\u65e5_\u9031\u4e00_\u9031\u4e8c_\u9031\u4e09_\u9031\u56db_\u9031\u4e94_\u9031\u516d".split("_"),weekdaysMin:"\u65e5_\u4e00_\u4e8c_\u4e09_\u56db_\u4e94_\u516d".split("_"),longDateFormat:{LT:"HH:mm",LTS:"HH:mm:ss",L:"YYYY/MM/DD",LL:"YYYY\u5e74M\u6708D\u65e5",LLL:"YYYY\u5e74M\u6708D\u65e5 HH:mm",LLLL:"YYYY\u5e74M\u6708D\u65e5dddd HH:mm",l:"YYYY/M/D",ll:"YYYY\u5e74M\u6708D\u65e5",lll:"YYYY\u5e74M\u6708D\u65e5 HH:mm",llll:"YYYY\u5e74M\u6708D\u65e5dddd HH:mm"},meridiemParse:/\u51cc\u6668|\u65e9\u4e0a|\u4e0a\u5348|\u4e2d\u5348|\u4e0b\u5348|\u665a\u4e0a/,meridiemHour:function(e,a){return 12===e&&(e=0),"\u51cc\u6668"===a||"\u65e9\u4e0a"===a||"\u4e0a\u5348"===a?e:"\u4e2d\u5348"===a?11<=e?e:e+12:"\u4e0b\u5348"===a||"\u665a\u4e0a"===a?e+12:void 0},meridiem:function(e,a,t){var s=100*e+a;return s<600?"\u51cc\u6668":s<900?"\u65e9\u4e0a":s<1130?"\u4e0a\u5348":s<1230?"\u4e2d\u5348":s<1800?"\u4e0b\u5348":"\u665a\u4e0a"},calendar:{sameDay:"[\u4eca\u5929] LT",nextDay:"[\u660e\u5929] LT",nextWeek:"[\u4e0b]dddd LT",lastDay:"[\u6628\u5929] LT",lastWeek:"[\u4e0a]dddd LT",sameElse:"L"},dayOfMonthOrdinalParse:/\d{1,2}(\u65e5|\u6708|\u9031)/,ordinal:function(e,a){switch(a){case"d":case"D":case"DDD":return e+"\u65e5";case"M":return e+"\u6708";case"w":case"W":return e+"\u9031";default:return e}},relativeTime:{future:"%s\u5167",past:"%s\u524d",s:"\u5e7e\u79d2",ss:"%d \u79d2",m:"1 \u5206\u9418",mm:"%d \u5206\u9418",h:"1 \u5c0f\u6642",hh:"%d \u5c0f\u6642",d:"1 \u5929",dd:"%d \u5929",M:"1 \u500b\u6708",MM:"%d \u500b\u6708",y:"1 \u5e74",yy:"%d \u5e74"}}),l.locale("en"),l});
 /**
  * @license
  * Lodash <https://lodash.com/>
@@ -19959,7 +19597,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.4';
+  var VERSION = '4.17.11';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -20090,7 +19728,6 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
   /** Used to match property names within property paths. */
   var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
       reIsPlainProp = /^\w*$/,
-      reLeadingDot = /^\./,
       rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
 
   /**
@@ -20190,8 +19827,8 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
       reOptMod = rsModifier + '?',
       rsOptVar = '[' + rsVarRange + ']?',
       rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-      rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',
-      rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',
+      rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])',
+      rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])',
       rsSeq = rsOptVar + reOptMod + rsOptJoin,
       rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
       rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
@@ -20224,7 +19861,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
   var reHasUnicode = RegExp('[' + rsZWJ + rsAstralRange  + rsComboRange + rsVarRange + ']');
 
   /** Used to detect strings that need a more robust regexp to match words. */
-  var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2,}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
+  var reHasUnicodeWord = /[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;
 
   /** Used to assign default `context` object properties. */
   var contextProps = [
@@ -20384,6 +20021,14 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -20397,34 +20042,6 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
       nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
   /*--------------------------------------------------------------------------*/
-
-  /**
-   * Adds the key-value `pair` to `map`.
-   *
-   * @private
-   * @param {Object} map The map to modify.
-   * @param {Array} pair The key-value pair to add.
-   * @returns {Object} Returns `map`.
-   */
-  function addMapEntry(map, pair) {
-    // Don't return `map.set` because it's not chainable in IE 11.
-    map.set(pair[0], pair[1]);
-    return map;
-  }
-
-  /**
-   * Adds `value` to `set`.
-   *
-   * @private
-   * @param {Object} set The set to modify.
-   * @param {*} value The value to add.
-   * @returns {Object} Returns `set`.
-   */
-  function addSetEntry(set, value) {
-    // Don't return `set.add` because it's not chainable in IE 11.
-    set.add(value);
-    return set;
-  }
 
   /**
    * A faster alternative to `Function#apply`, this function invokes `func`
@@ -22624,7 +22241,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
           if (!cloneableTags[tag]) {
             return object ? value : {};
           }
-          result = initCloneByTag(value, tag, baseClone, isDeep);
+          result = initCloneByTag(value, tag, isDeep);
         }
       }
       // Check for circular references and return its corresponding clone.
@@ -22634,6 +22251,22 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
         return stacked;
       }
       stack.set(value, result);
+
+      if (isSet(value)) {
+        value.forEach(function(subValue) {
+          result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
+        });
+
+        return result;
+      }
+
+      if (isMap(value)) {
+        value.forEach(function(subValue, key) {
+          result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
+        });
+
+        return result;
+      }
 
       var keysFunc = isFull
         ? (isFlat ? getAllKeysIn : getAllKeys)
@@ -23562,7 +23195,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
         }
         else {
           var newValue = customizer
-            ? customizer(object[key], srcValue, (key + ''), object, source, stack)
+            ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
             : undefined;
 
           if (newValue === undefined) {
@@ -23589,8 +23222,8 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      *  counterparts.
      */
     function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
-      var objValue = object[key],
-          srcValue = source[key],
+      var objValue = safeGet(object, key),
+          srcValue = safeGet(source, key),
           stacked = stack.get(srcValue);
 
       if (stacked) {
@@ -23633,7 +23266,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
           if (isArguments(objValue)) {
             newValue = toPlainObject(objValue);
           }
-          else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+          else if (!isObject(objValue) || isFunction(objValue)) {
             newValue = initCloneObject(srcValue);
           }
         }
@@ -24499,20 +24132,6 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
     }
 
     /**
-     * Creates a clone of `map`.
-     *
-     * @private
-     * @param {Object} map The map to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned map.
-     */
-    function cloneMap(map, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(mapToArray(map), CLONE_DEEP_FLAG) : mapToArray(map);
-      return arrayReduce(array, addMapEntry, new map.constructor);
-    }
-
-    /**
      * Creates a clone of `regexp`.
      *
      * @private
@@ -24523,20 +24142,6 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
       var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
       result.lastIndex = regexp.lastIndex;
       return result;
-    }
-
-    /**
-     * Creates a clone of `set`.
-     *
-     * @private
-     * @param {Object} set The set to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned set.
-     */
-    function cloneSet(set, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(setToArray(set), CLONE_DEEP_FLAG) : setToArray(set);
-      return arrayReduce(array, addSetEntry, new set.constructor);
     }
 
     /**
@@ -26133,7 +25738,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      */
     function initCloneArray(array) {
       var length = array.length,
-          result = array.constructor(length);
+          result = new array.constructor(length);
 
       // Add properties assigned by `RegExp#exec`.
       if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
@@ -26160,16 +25765,15 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      * Initializes an object clone based on its `toStringTag`.
      *
      * **Note:** This function only supports cloning values with tags of
-     * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+     * `Boolean`, `Date`, `Error`, `Map`, `Number`, `RegExp`, `Set`, or `String`.
      *
      * @private
      * @param {Object} object The object to clone.
      * @param {string} tag The `toStringTag` of the object to clone.
-     * @param {Function} cloneFunc The function to clone values.
      * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the initialized clone.
      */
-    function initCloneByTag(object, tag, cloneFunc, isDeep) {
+    function initCloneByTag(object, tag, isDeep) {
       var Ctor = object.constructor;
       switch (tag) {
         case arrayBufferTag:
@@ -26188,7 +25792,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
           return cloneTypedArray(object, isDeep);
 
         case mapTag:
-          return cloneMap(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case numberTag:
         case stringTag:
@@ -26198,7 +25802,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
           return cloneRegExp(object);
 
         case setTag:
-          return cloneSet(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case symbolTag:
           return cloneSymbol(object);
@@ -26245,10 +25849,13 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
      */
     function isIndex(value, length) {
+      var type = typeof value;
       length = length == null ? MAX_SAFE_INTEGER : length;
+
       return !!length &&
-        (typeof value == 'number' || reIsUint.test(value)) &&
-        (value > -1 && value % 1 == 0 && value < length);
+        (type == 'number' ||
+          (type != 'symbol' && reIsUint.test(value))) &&
+            (value > -1 && value % 1 == 0 && value < length);
     }
 
     /**
@@ -26583,6 +26190,22 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
     }
 
     /**
+     * Gets the value at `key`, unless `key` is "__proto__".
+     *
+     * @private
+     * @param {Object} object The object to query.
+     * @param {string} key The key of the property to get.
+     * @returns {*} Returns the property value.
+     */
+    function safeGet(object, key) {
+      if (key == '__proto__') {
+        return;
+      }
+
+      return object[key];
+    }
+
+    /**
      * Sets metadata for `func`.
      *
      * **Note:** If this function becomes hot, i.e. is invoked a lot in a short
@@ -26698,11 +26321,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      */
     var stringToPath = memoizeCapped(function(string) {
       var result = [];
-      if (reLeadingDot.test(string)) {
+      if (string.charCodeAt(0) === 46 /* . */) {
         result.push('');
       }
-      string.replace(rePropName, function(match, number, quote, string) {
-        result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
+      string.replace(rePropName, function(match, number, quote, subString) {
+        result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
       });
       return result;
     });
@@ -30310,9 +29933,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
       function remainingWait(time) {
         var timeSinceLastCall = time - lastCallTime,
             timeSinceLastInvoke = time - lastInvokeTime,
-            result = wait - timeSinceLastCall;
+            timeWaiting = wait - timeSinceLastCall;
 
-        return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+        return maxing
+          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+          : timeWaiting;
       }
 
       function shouldInvoke(time) {
@@ -32744,9 +32369,35 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      * _.defaults({ 'a': 1 }, { 'b': 2 }, { 'a': 3 });
      * // => { 'a': 1, 'b': 2 }
      */
-    var defaults = baseRest(function(args) {
-      args.push(undefined, customDefaultsAssignIn);
-      return apply(assignInWith, undefined, args);
+    var defaults = baseRest(function(object, sources) {
+      object = Object(object);
+
+      var index = -1;
+      var length = sources.length;
+      var guard = length > 2 ? sources[2] : undefined;
+
+      if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+        length = 1;
+      }
+
+      while (++index < length) {
+        var source = sources[index];
+        var props = keysIn(source);
+        var propsIndex = -1;
+        var propsLength = props.length;
+
+        while (++propsIndex < propsLength) {
+          var key = props[propsIndex];
+          var value = object[key];
+
+          if (value === undefined ||
+              (eq(value, objectProto[key]) && !hasOwnProperty.call(object, key))) {
+            object[key] = source[key];
+          }
+        }
+      }
+
+      return object;
     });
 
     /**
@@ -33143,6 +32794,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      * // => { '1': 'c', '2': 'b' }
      */
     var invert = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       result[value] = key;
     }, constant(identity));
 
@@ -33173,6 +32829,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
      * // => { 'group1': ['a', 'c'], 'group2': ['b'] }
      */
     var invertBy = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       if (hasOwnProperty.call(result, value)) {
         result[value].push(key);
       } else {
@@ -37030,18 +36691,18 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
   }
 }.call(this));
 
-/*! DataTables 1.10.16
- * ©2008-2017 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.10.19
+ * ©2008-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.16
+ * @version     1.10.19
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
- * @copyright   Copyright 2008-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -37941,8 +37602,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 				var s = allSettings[i];
 			
 				/* Base check on table node */
-				if ( s.nTable == this || s.nTHead.parentNode == this || (s.nTFoot && s.nTFoot.parentNode == this) )
-				{
+				if (
+					s.nTable == this ||
+					(s.nTHead && s.nTHead.parentNode == this) ||
+					(s.nTFoot && s.nTFoot.parentNode == this)
+				) {
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
 					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
@@ -37999,11 +37663,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 			
 			// Backwards compatibility, before we apply all the defaults
 			_fnCompatOpts( oInit );
-			
-			if ( oInit.oLanguage )
-			{
-				_fnLanguageCompat( oInit.oLanguage );
-			}
+			_fnLanguageCompat( oInit.oLanguage );
 			
 			// If the length menu is given, but the init display length is not, use the length menu
 			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
@@ -38386,8 +38046,10 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	// - fr - Swiss Franc
 	// - kr - Swedish krona, Norwegian krone and Danish krone
 	// - \u2009 is thin space and \u202F is narrow no-break space, both used in many
+	// - Ƀ - Bitcoin
+	// - Ξ - Ethereum
 	//   standards as thousands separators.
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfkɃΞ]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -38762,33 +38424,43 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	 */
 	function _fnLanguageCompat( lang )
 	{
+		// Note the use of the Hungarian notation for the parameters in this method as
+		// this is called after the mapping of camelCase to Hungarian
 		var defaults = DataTable.defaults.oLanguage;
-		var zeroRecords = lang.sZeroRecords;
 	
-		/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-		 * sZeroRecords - assuming that is given.
-		 */
-		if ( ! lang.sEmptyTable && zeroRecords &&
-			defaults.sEmptyTable === "No data available in table" )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+		// Default mapping
+		var defaultDecimal = defaults.sDecimal;
+		if ( defaultDecimal ) {
+			_addNumericSort( defaultDecimal );
 		}
 	
-		/* Likewise with loading records */
-		if ( ! lang.sLoadingRecords && zeroRecords &&
-			defaults.sLoadingRecords === "Loading..." )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
-		}
+		if ( lang ) {
+			var zeroRecords = lang.sZeroRecords;
 	
-		// Old parameter name of the thousands separator mapped onto the new
-		if ( lang.sInfoThousands ) {
-			lang.sThousands = lang.sInfoThousands;
-		}
+			// Backwards compatibility - if there is no sEmptyTable given, then use the same as
+			// sZeroRecords - assuming that is given.
+			if ( ! lang.sEmptyTable && zeroRecords &&
+				defaults.sEmptyTable === "No data available in table" )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+			}
 	
-		var decimal = lang.sDecimal;
-		if ( decimal ) {
-			_addNumericSort( decimal );
+			// Likewise with loading records
+			if ( ! lang.sLoadingRecords && zeroRecords &&
+				defaults.sLoadingRecords === "Loading..." )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
+			}
+	
+			// Old parameter name of the thousands separator mapped onto the new
+			if ( lang.sInfoThousands ) {
+				lang.sThousands = lang.sInfoThousands;
+			}
+	
+			var decimal = lang.sDecimal;
+			if ( decimal && defaultDecimal !== decimal ) {
+				_addNumericSort( decimal );
+			}
 		}
 	}
 	
@@ -40160,7 +39832,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 				}
 			}
 	
-			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
+			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow, cells] );
 		}
 	
 		// Remove once webkit bug 131819 and Chromium bug 365619 have been resolved
@@ -40485,7 +40157,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 				// iRowCount and j are not currently documented. Are they at all
 				// useful?
 				_fnCallbackFire( oSettings, 'aoRowCallback', null,
-					[nRow, aoData._aData, iRowCount, j] );
+					[nRow, aoData._aData, iRowCount, j, iDataIndex] );
 	
 				anRows.push( nRow );
 				iRowCount++;
@@ -40889,12 +40561,12 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		{
 			ajaxData = ajax.data;
 	
-			var newData = $.isFunction( ajaxData ) ?
+			var newData = typeof ajaxData === 'function' ?
 				ajaxData( data, oSettings ) :  // fn can manipulate data or return
 				ajaxData;                      // an object object or array to merge
 	
 			// If the function returned something, use that alone
-			data = $.isFunction( ajaxData ) && newData ?
+			data = typeof ajaxData === 'function' && newData ?
 				newData :
 				$.extend( true, data, newData );
 	
@@ -40958,7 +40630,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 				url: ajax || oSettings.sAjaxSource
 			} ) );
 		}
-		else if ( $.isFunction( ajax ) )
+		else if ( typeof ajax === 'function' )
 		{
 			// Is a function - let the caller define what needs to be done
 			oSettings.jqXHR = ajax.call( instance, data, callback, oSettings );
@@ -42392,14 +42064,18 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		// both match, but we want to hide it completely. We want to also fix their
 		// width to what they currently are
 		_fnApplyToChildren( function(nSizer, i) {
-			nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+headerContent[i]+'</div>';
+			nSizer.innerHTML = '<div class="dataTables_sizing">'+headerContent[i]+'</div>';
+			nSizer.childNodes[0].style.height = "0";
+			nSizer.childNodes[0].style.overflow = "hidden";
 			nSizer.style.width = headerWidths[i];
 		}, headerSrcEls );
 	
 		if ( footer )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
-				nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+footerContent[i]+'</div>';
+				nSizer.innerHTML = '<div class="dataTables_sizing">'+footerContent[i]+'</div>';
+				nSizer.childNodes[0].style.height = "0";
+				nSizer.childNodes[0].style.overflow = "hidden";
 				nSizer.style.width = footerWidths[i];
 			}, footerSrcEls );
 		}
@@ -43593,7 +43269,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	{
 		$(n)
 			.on( 'click.DT', oData, function (e) {
-					n.blur(); // Remove focus outline for mouse users
+					$(n).blur(); // Remove focus outline for mouse users
 					fn(e);
 				} )
 			.on( 'keypress.DT', oData, function (e){
@@ -44833,13 +44509,26 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			a = search == 'none' ?
-				displayMaster.slice() :                      // no search
-				search == 'applied' ?
-					displayFiltered.slice() :                // applied search
-					$.map( displayMaster, function (el, i) { // removed search
-						return $.inArray( el, displayFiltered ) === -1 ? el : null;
-					} );
+			if ( search == 'none') {
+				a = displayMaster.slice();
+			}
+			else if ( search == 'applied' ) {
+				a = displayFiltered.slice();
+			}
+			else if ( search == 'removed' ) {
+				// O(n+m) solution by creating a hash map
+				var displayFilteredMap = {};
+	
+				for ( var i=0, ien=displayFiltered.length ; i<ien ; i++ ) {
+					displayFilteredMap[displayFiltered[i]] = null;
+				}
+	
+				a = $.map( displayMaster, function (el) {
+					return ! displayFilteredMap.hasOwnProperty(el) ?
+						el :
+						null;
+				} );
+			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
 			for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
@@ -44872,14 +44561,13 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
 	 *
 	 */
-	
-	
 	var __row_selector = function ( settings, selector, opts )
 	{
 		var rows;
 		var run = function ( sel ) {
 			var selInt = _intVal( sel );
 			var i, ien;
+			var aoData = settings.aoData;
 	
 			// Short cut - selector is a number and no options provided (default is
 			// all records, so no need to check if the index is in there, since it
@@ -44904,23 +44592,26 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 			// Selector - function
 			if ( typeof sel === 'function' ) {
 				return $.map( rows, function (idx) {
-					var row = settings.aoData[ idx ];
+					var row = aoData[ idx ];
 					return sel( idx, row._aData, row.nTr ) ? idx : null;
 				} );
 			}
 	
-			// Get nodes in the order from the `rows` array with null values removed
-			var nodes = _removeEmpty(
-				_pluck_order( settings.aoData, rows, 'nTr' )
-			);
-	
 			// Selector - node
 			if ( sel.nodeName ) {
-				if ( sel._DT_RowIndex !== undefined ) {
-					return [ sel._DT_RowIndex ]; // Property added by DT for fast lookup
+				var rowIdx = sel._DT_RowIndex;  // Property added by DT for fast lookup
+				var cellIdx = sel._DT_CellIndex;
+	
+				if ( rowIdx !== undefined ) {
+					// Make sure that the row is actually still present in the table
+					return aoData[ rowIdx ] && aoData[ rowIdx ].nTr === sel ?
+						[ rowIdx ] :
+						[];
 				}
-				else if ( sel._DT_CellIndex ) {
-					return [ sel._DT_CellIndex.row ];
+				else if ( cellIdx ) {
+					return aoData[ cellIdx.row ] && aoData[ cellIdx.row ].nTr === sel ?
+						[ cellIdx.row ] :
+						[];
 				}
 				else {
 					var host = $(sel).closest('*[data-dt-row]');
@@ -44949,6 +44640,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 				// need to fall through to jQuery in case there is DOM id that
 				// matches
 			}
+			
+			// Get nodes in the order from the `rows` array with null values removed
+			var nodes = _removeEmpty(
+				_pluck_order( settings.aoData, rows, 'nTr' )
+			);
 	
 			// Selector - jQuery selector string, array of nodes or jQuery object/
 			// As jQuery's .filter() allows jQuery objects to be passed in filter,
@@ -45143,7 +44839,13 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		}
 	
 		// Set
-		ctx[0].aoData[ this[0] ]._aData = data;
+		var row = ctx[0].aoData[ this[0] ];
+		row._aData = data;
+	
+		// If the DOM has an id, and the data source is an array
+		if ( $.isArray( data ) && row.nTr.id ) {
+			_fnSetObjectDataFn( ctx[0].rowId )( data, row.nTr.id );
+		}
 	
 		// Automatically invalidate
 		_fnInvalidate( ctx[0], this[0], 'data' );
@@ -45569,6 +45271,12 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 	
+		// Update colspan for no records display. Child rows and extensions will use their own
+		// listeners to do this - only need to update the empty table item here
+		if ( ! settings.aiDisplay.length ) {
+			$(settings.nTBody).find('td[colspan]').attr('colspan', _fnVisbleColumns(settings));
+		}
+	
 		_fnSaveState( settings );
 	};
 	
@@ -45734,7 +45442,10 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 			
 			// Selector - index
 			if ( $.isPlainObject( s ) ) {
-				return [s];
+				// Valid cell index and its in the array of selectable rows
+				return s.column !== undefined && s.row !== undefined && $.inArray( s.row, rows ) !== -1 ?
+					[s] :
+					[];
 			}
 	
 			// Selector - jQuery filtered cells
@@ -45798,11 +45509,11 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		}
 	
 		// Row + column selector
-		var columns = this.columns( columnSelector, opts );
-		var rows = this.rows( rowSelector, opts );
+		var columns = this.columns( columnSelector );
+		var rows = this.rows( rowSelector );
 		var a, i, ien, j, jen;
 	
-		var cells = this.iterator( 'table', function ( settings, idx ) {
+		this.iterator( 'table', function ( settings, idx ) {
 			a = [];
 	
 			for ( i=0, ien=rows[idx].length ; i<ien ; i++ ) {
@@ -45813,9 +45524,10 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 					} );
 				}
 			}
-	
-			return a;
 		}, 1 );
+	
+	    // Now pass through the cell selector for options
+	    var cells = this.cells( a, opts );
 	
 		$.extend( cells.selector, {
 			cols: columnSelector,
@@ -46444,7 +46156,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.16";
+	DataTable.version = "1.10.19";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -49382,8 +49094,8 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
 		 *          { "data": "platform.inner" },
-		 *          { "data": "platform.details.0" },
-		 *          { "data": "platform.details.1" }
+		 *          { "data": "details.0" },
+		 *          { "data": "details.1" }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -51180,7 +50892,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 			 *    $.fn.dataTable.ext.type.detect.push(
 			 *      function ( data, settings ) {
 			 *        // Check the numeric part
-			 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+			 *        if ( ! data.substring(1).match(/[0-9]/) ) {
 			 *          return null;
 			 *        }
 			 *
@@ -51763,7 +51475,8 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	$.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
-			return Date.parse( d ) || -Infinity;
+			var ts = Date.parse( d );
+			return isNaN(ts) ? -Infinity : ts;
 		},
 	
 		// html
@@ -51954,7 +51667,8 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	
 		text: function () {
 			return {
-				display: __htmlEscapeEntities
+				display: __htmlEscapeEntities,
+				filter: __htmlEscapeEntities
 			};
 		}
 	};
@@ -52079,6 +51793,7 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 		_fnRenderer: _fnRenderer,
 		_fnDataSource: _fnDataSource,
 		_fnRowAttributes: _fnRowAttributes,
+		_fnExtend: _fnExtend,
 		_fnCalculateEnd: function () {} // Used by a lot of plug-ins, but redundant
 		                                // in 1.10, so this dead-end function is
 		                                // added to prevent errors
@@ -52273,19 +51988,19 @@ return a.defineLocale("ur",{months:Th,monthsShort:Th,weekdays:Uh,weekdaysShort:U
 	return $.fn.dataTable;
 }));
 
-/*! Select for DataTables 1.2.3
- * 2015-2017 SpryMedia Ltd - datatables.net/license/mit
+/*! Select for DataTables 1.2.7
+ * 2015-2018 SpryMedia Ltd - datatables.net/license/mit
  */
 
 /**
  * @summary     Select for DataTables
  * @description A collection of API methods, events and buttons for DataTables
  *   that provides selection options of the items in a DataTable
- * @version     1.2.3
+ * @version     1.2.7
  * @file        dataTables.select.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     datatables.net/forums
- * @copyright   Copyright 2015-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2015-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -52329,7 +52044,7 @@ var DataTable = $.fn.dataTable;
 // Version information for debugger
 DataTable.select = {};
 
-DataTable.select.version = '1.2.3';
+DataTable.select.version = '1.2.7';
 
 DataTable.select.init = function ( dt ) {
 	var ctx = dt.settings()[0];
@@ -52599,6 +52314,7 @@ function enableMouseSelection ( dt )
 	var container = $( dt.table().container() );
 	var ctx = dt.settings()[0];
 	var selector = ctx._select.selector;
+	var matchSelection;
 
 	container
 		.on( 'mousedown.dtSelect', selector, function(e) {
@@ -52610,6 +52326,10 @@ function enableMouseSelection ( dt )
 					.one('selectstart.dtSelect', selector, function () {
 						return false;
 					} );
+			}
+
+			if ( window.getSelection ) {
+				matchSelection = window.getSelection();
 			}
 		} )
 		.on( 'mouseup.dtSelect', selector, function() {
@@ -52623,14 +52343,23 @@ function enableMouseSelection ( dt )
 
 			// If text was selected (click and drag), then we shouldn't change
 			// the row's selected state
-			if ( window.getSelection && $.trim( window.getSelection().toString() ) ) {
-				return;
+			if ( window.getSelection ) {
+				var selection = window.getSelection();
+
+				// If the element that contains the selection is not in the table, we can ignore it
+				// This can happen if the developer selects text from the click event
+				if ( ! selection.anchorNode || $(selection.anchorNode).closest('table')[0] === dt.table().node() ) {
+					if ( selection !== matchSelection ) {
+						return;
+					}
+				}
 			}
 
 			var ctx = dt.settings()[0];
+			var wrapperClass = dt.settings()[0].oClasses.sWrapper.replace(/ /g, '.');
 
 			// Ignore clicks inside a sub-table
-			if ( $(e.target).closest('div.dataTables_wrapper')[0] != dt.table().container() ) {
+			if ( $(e.target).closest('div.'+wrapperClass)[0] != dt.table().container() ) {
 				return;
 			}
 
@@ -52997,7 +52726,7 @@ $.each( [
 		var data;
 		var out = [];
 
-		if ( selected === undefined ) {
+		if ( selected !== true && selected !== false ) {
 			return indexes;
 		}
 
@@ -53300,12 +53029,29 @@ function namespacedEvents ( config ) {
 	return 'draw.dt.DT'+unique+' select.dt.DT'+unique+' deselect.dt.DT'+unique;
 }
 
+function enabled ( dt, config ) {
+	if ( $.inArray( 'rows', config.limitTo ) !== -1 && dt.rows( { selected: true } ).any() ) {
+		return true;
+	}
+
+	if ( $.inArray( 'columns', config.limitTo ) !== -1 && dt.columns( { selected: true } ).any() ) {
+		return true;
+	}
+
+	if ( $.inArray( 'cells', config.limitTo ) !== -1 && dt.cells( { selected: true } ).any() ) {
+		return true;
+	}
+
+	return false;
+}
+
 var _buttonNamespace = 0;
 
 $.extend( DataTable.ext.buttons, {
 	selected: {
 		text: i18n( 'selected', 'Selected' ),
 		className: 'buttons-selected',
+		limitTo: [ 'rows', 'columns', 'cells' ],
 		init: function ( dt, node, config ) {
 			var that = this;
 			config._eventNamespace = '.select'+(_buttonNamespace++);
@@ -53313,11 +53059,7 @@ $.extend( DataTable.ext.buttons, {
 			// .DT namespace listeners are removed by DataTables automatically
 			// on table destroy
 			dt.on( namespacedEvents(config), function () {
-				var enable = that.rows( { selected: true } ).any() ||
-				             that.columns( { selected: true } ).any() ||
-				             that.cells( { selected: true } ).any();
-
-				that.enable( enable );
+				that.enable( enabled(dt, config) );
 			} );
 
 			this.disable();
@@ -53454,13 +53196,14 @@ license Apache-2.0
 !function(o,e){"function"==typeof define&&define.amd?define("pnotify.nonblock",["jquery","pnotify"],e):"object"==typeof exports&&"undefined"!=typeof module?module.exports=e(require("jquery"),require("./pnotify")):e(o.jQuery,o.PNotify)}("undefined"!=typeof window?window:this,function(o,e){var n,t=/^on/,i=/^(dbl)?click$|^mouse(move|down|up|over|out|enter|leave)$|^contextmenu$/,c=/^(focus|blur|select|change|reset)$|^key(press|down|up)$/,l=/^(scroll|resize|(un)?load|abort|error)$/,s=function(e,n){var s;if(e=e.toLowerCase(),document.createEvent&&this.dispatchEvent){if(e=e.replace(t,""),e.match(i)?(o(this).offset(),s=document.createEvent("MouseEvents"),s.initMouseEvent(e,n.bubbles,n.cancelable,n.view,n.detail,n.screenX,n.screenY,n.clientX,n.clientY,n.ctrlKey,n.altKey,n.shiftKey,n.metaKey,n.button,n.relatedTarget)):e.match(c)?(s=document.createEvent("UIEvents"),s.initUIEvent(e,n.bubbles,n.cancelable,n.view,n.detail)):e.match(l)&&(s=document.createEvent("HTMLEvents"),s.initEvent(e,n.bubbles,n.cancelable)),!s)return;this.dispatchEvent(s)}else e.match(t)||(e="on"+e),s=document.createEventObject(n),this.fireEvent(e,s)},a=function(e,t,i){e.elem.addClass("ui-pnotify-nonblock-hide");var c=document.elementFromPoint(t.clientX,t.clientY);e.elem.removeClass("ui-pnotify-nonblock-hide");var l=o(c),a=l.css("cursor");"auto"===a&&"A"===c.tagName&&(a="pointer"),e.elem.css("cursor","auto"!==a?a:"default"),n&&n.get(0)==c||(n&&(s.call(n.get(0),"mouseleave",t.originalEvent),s.call(n.get(0),"mouseout",t.originalEvent)),s.call(c,"mouseenter",t.originalEvent),s.call(c,"mouseover",t.originalEvent)),s.call(c,i,t.originalEvent),n=l};return e.prototype.options.nonblock={nonblock:!1},e.prototype.modules.nonblock={init:function(o,e){var t=this;o.elem.on({mouseenter:function(e){t.options.nonblock&&e.stopPropagation(),t.options.nonblock&&o.elem.addClass("ui-pnotify-nonblock-fade")},mouseleave:function(e){t.options.nonblock&&e.stopPropagation(),n=null,o.elem.css("cursor","auto"),t.options.nonblock&&"out"!==o.animating&&o.elem.removeClass("ui-pnotify-nonblock-fade")},mouseover:function(o){t.options.nonblock&&o.stopPropagation()},mouseout:function(o){t.options.nonblock&&o.stopPropagation()},mousemove:function(e){t.options.nonblock&&(e.stopPropagation(),a(o,e,"onmousemove"))},mousedown:function(e){t.options.nonblock&&(e.stopPropagation(),e.preventDefault(),a(o,e,"onmousedown"))},mouseup:function(e){t.options.nonblock&&(e.stopPropagation(),e.preventDefault(),a(o,e,"onmouseup"))},click:function(e){t.options.nonblock&&(e.stopPropagation(),a(o,e,"onclick"))},dblclick:function(e){t.options.nonblock&&(e.stopPropagation(),a(o,e,"ondblclick"))}})}},e});
 //# sourceMappingURL=pnotify.nonblock.js.map
 /*!
- * Bootstrap-select v1.12.4 (http://silviomoreto.github.io/bootstrap-select)
+ * Bootstrap-select v1.13.5 (https://developer.snapappointments.com/bootstrap-select)
  *
- * Copyright 2013-2017 bootstrap-select
- * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
+ * Copyright 2012-2018 SnapAppointments, LLC
+ * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */
 
 (function (root, factory) {
+  if (root === undefined && window !== undefined) root = window;
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
     define(["jquery"], function (a0) {
@@ -53479,58 +53222,85 @@ license Apache-2.0
 (function ($) {
   'use strict';
 
-  //<editor-fold desc="Shims">
-  if (!String.prototype.includes) {
-    (function () {
-      'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
-      var toString = {}.toString;
-      var defineProperty = (function () {
-        // IE 8 only supports `Object.defineProperty` on DOM elements
+  // Polyfill for browsers with no classList support
+  // Remove in v2
+  if (!('classList' in document.createElement('_'))) {
+    (function (view) {
+      if (!('Element' in view)) return;
+
+      var classListProp = 'classList',
+          protoProp = 'prototype',
+          elemCtrProto = view.Element[protoProp],
+          objCtr = Object,
+          classListGetter = function () {
+            var $elem = $(this);
+
+            return {
+              add: function (classes) {
+                return $elem.addClass(classes);
+              },
+              remove: function (classes) {
+                return $elem.removeClass(classes);
+              },
+              toggle: function (classes, force) {
+                return $elem.toggleClass(classes, force);
+              },
+              contains: function (classes) {
+                return $elem.hasClass(classes);
+              }
+            }
+          };
+
+      if (objCtr.defineProperty) {
+        var classListPropDesc = {
+          get: classListGetter,
+          enumerable: true,
+          configurable: true
+        };
         try {
-          var object = {};
-          var $defineProperty = Object.defineProperty;
-          var result = $defineProperty(object, object, object) && $defineProperty;
-        } catch (error) {
+          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+        } catch (ex) { // IE 8 doesn't support enumerable:true
+          // adding undefined to fight this issue https://github.com/eligrey/classList.js/issues/36
+          // modernie IE8-MSW7 machine has IE8 8.0.6001.18702 and is affected
+          if (ex.number === undefined || ex.number === -0x7FF5EC54) {
+            classListPropDesc.enumerable = false;
+            objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+          }
         }
-        return result;
-      }());
-      var indexOf = ''.indexOf;
-      var includes = function (search) {
-        if (this == null) {
-          throw new TypeError();
-        }
-        var string = String(this);
-        if (search && toString.call(search) == '[object RegExp]') {
-          throw new TypeError();
-        }
-        var stringLength = string.length;
-        var searchString = String(search);
-        var searchLength = searchString.length;
-        var position = arguments.length > 1 ? arguments[1] : undefined;
-        // `ToInteger`
-        var pos = position ? Number(position) : 0;
-        if (pos != pos) { // better `isNaN`
-          pos = 0;
-        }
-        var start = Math.min(Math.max(pos, 0), stringLength);
-        // Avoid the `indexOf` call if no match is possible
-        if (searchLength + start > stringLength) {
-          return false;
-        }
-        return indexOf.call(string, searchString, pos) != -1;
-      };
-      if (defineProperty) {
-        defineProperty(String.prototype, 'includes', {
-          'value': includes,
-          'configurable': true,
-          'writable': true
-        });
-      } else {
-        String.prototype.includes = includes;
+      } else if (objCtr[protoProp].__defineGetter__) {
+        elemCtrProto.__defineGetter__(classListProp, classListGetter);
       }
-    }());
+    }(window));
   }
 
+  var testElement = document.createElement('_');
+
+  testElement.classList.toggle('c3', false);
+
+  // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+  // support the second argument.
+  if (testElement.classList.contains('c3')) {
+    var _toggle = DOMTokenList.prototype.toggle;
+
+    DOMTokenList.prototype.toggle = function (token, force) {
+      if (1 in arguments && !this.contains(token) === !force) {
+        return force;
+      } else {
+        return _toggle.call(this, token);
+      }
+    };
+  }
+
+  testElement = null;
+
+  // shallow array comparison
+  function isEqual (array1, array2) {
+    return array1.length === array2.length && array1.every(function (element, index) {
+      return element === array2[index];
+    });
+  };
+
+  // <editor-fold desc="Shims">
   if (!String.prototype.startsWith) {
     (function () {
       'use strict'; // needed to support `apply`/`call` with `undefined`/`null`
@@ -53592,16 +53362,38 @@ license Apache-2.0
       o, // object
       k, // key
       r  // result array
-      ){
+    ) {
       // initialize object and result
-      r=[];
+      r = [];
       // iterate over object keys
-      for (k in o)
-          // fill result array with non-prototypical keys
+      for (k in o) {
+        // fill result array with non-prototypical keys
         r.hasOwnProperty.call(o, k) && r.push(k);
+      }
       // return result
       return r;
     };
+  }
+
+  // much faster than $.val()
+  function getSelectValues (select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+
+    if (select.multiple) {
+      for (var i = 0, len = options.length; i < len; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+          result.push(opt.value || opt.text);
+        }
+      }
+    } else {
+      result = select.value;
+    }
+
+    return result;
   }
 
   // set data-selected on select element if the value has been programmatically selected
@@ -53612,15 +53404,15 @@ license Apache-2.0
     _set: $.valHooks.select.set
   };
 
-  $.valHooks.select.set = function(elem, value) {
+  $.valHooks.select.set = function (elem, value) {
     if (value && !valHooks.useDefault) $(elem).data('selected', true);
 
     return valHooks._set.apply(this, arguments);
   };
 
-  var changed_arguments = null;
+  var changedArguments = null;
 
-  var EventIsSupported = (function() {
+  var EventIsSupported = (function () {
     try {
       new Event('change');
       return true;
@@ -53655,64 +53447,135 @@ license Apache-2.0
       this.trigger(eventName);
     }
   };
-  //</editor-fold>
+  // </editor-fold>
 
-  // Case insensitive contains search
-  $.expr.pseudos.icontains = function (obj, index, meta) {
-    var $obj = $(obj).find('a');
-    var haystack = ($obj.data('tokens') || $obj.text()).toString().toUpperCase();
-    return haystack.includes(meta[3].toUpperCase());
-  };
+  function stringSearch (li, searchString, method, normalize) {
+    var stringTypes = [
+          'content',
+          'subtext',
+          'tokens'
+        ],
+        searchSuccess = false;
 
-  // Case insensitive begins search
-  $.expr.pseudos.ibegins = function (obj, index, meta) {
-    var $obj = $(obj).find('a');
-    var haystack = ($obj.data('tokens') || $obj.text()).toString().toUpperCase();
-    return haystack.startsWith(meta[3].toUpperCase());
-  };
+    for (var i = 0; i < stringTypes.length; i++) {
+      var stringType = stringTypes[i],
+          string = li[stringType];
 
-  // Case and accent insensitive contains search
-  $.expr.pseudos.aicontains = function (obj, index, meta) {
-    var $obj = $(obj).find('a');
-    var haystack = ($obj.data('tokens') || $obj.data('normalizedText') || $obj.text()).toString().toUpperCase();
-    return haystack.includes(meta[3].toUpperCase());
-  };
+      if (string) {
+        string = string.toString();
 
-  // Case and accent insensitive begins search
-  $.expr.pseudos.aibegins = function (obj, index, meta) {
-    var $obj = $(obj).find('a');
-    var haystack = ($obj.data('tokens') || $obj.data('normalizedText') || $obj.text()).toString().toUpperCase();
-    return haystack.startsWith(meta[3].toUpperCase());
-  };
+        // Strip HTML tags. This isn't perfect, but it's much faster than any other method
+        if (stringType === 'content') {
+          string = string.replace(/<[^>]+>/g, '');
+        }
 
-  /**
-   * Remove all diatrics from the given text.
-   * @access private
-   * @param {String} text
-   * @returns {String}
-   */
-  function normalizeToBase(text) {
-    var rExps = [
-      {re: /[\xC0-\xC6]/g, ch: "A"},
-      {re: /[\xE0-\xE6]/g, ch: "a"},
-      {re: /[\xC8-\xCB]/g, ch: "E"},
-      {re: /[\xE8-\xEB]/g, ch: "e"},
-      {re: /[\xCC-\xCF]/g, ch: "I"},
-      {re: /[\xEC-\xEF]/g, ch: "i"},
-      {re: /[\xD2-\xD6]/g, ch: "O"},
-      {re: /[\xF2-\xF6]/g, ch: "o"},
-      {re: /[\xD9-\xDC]/g, ch: "U"},
-      {re: /[\xF9-\xFC]/g, ch: "u"},
-      {re: /[\xC7-\xE7]/g, ch: "c"},
-      {re: /[\xD1]/g, ch: "N"},
-      {re: /[\xF1]/g, ch: "n"}
-    ];
-    $.each(rExps, function () {
-      text = text ? text.replace(this.re, this.ch) : '';
-    });
-    return text;
+        if (normalize) string = normalizeToBase(string);
+        string = string.toUpperCase();
+
+        if (method === 'contains') {
+          searchSuccess = string.indexOf(searchString) >= 0;
+        } else {
+          searchSuccess = string.startsWith(searchString);
+        }
+
+        if (searchSuccess) break;
+      }
+    }
+
+    return searchSuccess;
   }
 
+  function toInteger (value) {
+    return parseInt(value, 10) || 0;
+  }
+
+  // Borrowed from Lodash (_.deburr)
+  /** Used to map Latin Unicode letters to basic Latin letters. */
+  var deburredLetters = {
+    // Latin-1 Supplement block.
+    '\xc0': 'A',  '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',
+    '\xe0': 'a',  '\xe1': 'a', '\xe2': 'a', '\xe3': 'a', '\xe4': 'a', '\xe5': 'a',
+    '\xc7': 'C',  '\xe7': 'c',
+    '\xd0': 'D',  '\xf0': 'd',
+    '\xc8': 'E',  '\xc9': 'E', '\xca': 'E', '\xcb': 'E',
+    '\xe8': 'e',  '\xe9': 'e', '\xea': 'e', '\xeb': 'e',
+    '\xcc': 'I',  '\xcd': 'I', '\xce': 'I', '\xcf': 'I',
+    '\xec': 'i',  '\xed': 'i', '\xee': 'i', '\xef': 'i',
+    '\xd1': 'N',  '\xf1': 'n',
+    '\xd2': 'O',  '\xd3': 'O', '\xd4': 'O', '\xd5': 'O', '\xd6': 'O', '\xd8': 'O',
+    '\xf2': 'o',  '\xf3': 'o', '\xf4': 'o', '\xf5': 'o', '\xf6': 'o', '\xf8': 'o',
+    '\xd9': 'U',  '\xda': 'U', '\xdb': 'U', '\xdc': 'U',
+    '\xf9': 'u',  '\xfa': 'u', '\xfb': 'u', '\xfc': 'u',
+    '\xdd': 'Y',  '\xfd': 'y', '\xff': 'y',
+    '\xc6': 'Ae', '\xe6': 'ae',
+    '\xde': 'Th', '\xfe': 'th',
+    '\xdf': 'ss',
+    // Latin Extended-A block.
+    '\u0100': 'A',  '\u0102': 'A', '\u0104': 'A',
+    '\u0101': 'a',  '\u0103': 'a', '\u0105': 'a',
+    '\u0106': 'C',  '\u0108': 'C', '\u010a': 'C', '\u010c': 'C',
+    '\u0107': 'c',  '\u0109': 'c', '\u010b': 'c', '\u010d': 'c',
+    '\u010e': 'D',  '\u0110': 'D', '\u010f': 'd', '\u0111': 'd',
+    '\u0112': 'E',  '\u0114': 'E', '\u0116': 'E', '\u0118': 'E', '\u011a': 'E',
+    '\u0113': 'e',  '\u0115': 'e', '\u0117': 'e', '\u0119': 'e', '\u011b': 'e',
+    '\u011c': 'G',  '\u011e': 'G', '\u0120': 'G', '\u0122': 'G',
+    '\u011d': 'g',  '\u011f': 'g', '\u0121': 'g', '\u0123': 'g',
+    '\u0124': 'H',  '\u0126': 'H', '\u0125': 'h', '\u0127': 'h',
+    '\u0128': 'I',  '\u012a': 'I', '\u012c': 'I', '\u012e': 'I', '\u0130': 'I',
+    '\u0129': 'i',  '\u012b': 'i', '\u012d': 'i', '\u012f': 'i', '\u0131': 'i',
+    '\u0134': 'J',  '\u0135': 'j',
+    '\u0136': 'K',  '\u0137': 'k', '\u0138': 'k',
+    '\u0139': 'L',  '\u013b': 'L', '\u013d': 'L', '\u013f': 'L', '\u0141': 'L',
+    '\u013a': 'l',  '\u013c': 'l', '\u013e': 'l', '\u0140': 'l', '\u0142': 'l',
+    '\u0143': 'N',  '\u0145': 'N', '\u0147': 'N', '\u014a': 'N',
+    '\u0144': 'n',  '\u0146': 'n', '\u0148': 'n', '\u014b': 'n',
+    '\u014c': 'O',  '\u014e': 'O', '\u0150': 'O',
+    '\u014d': 'o',  '\u014f': 'o', '\u0151': 'o',
+    '\u0154': 'R',  '\u0156': 'R', '\u0158': 'R',
+    '\u0155': 'r',  '\u0157': 'r', '\u0159': 'r',
+    '\u015a': 'S',  '\u015c': 'S', '\u015e': 'S', '\u0160': 'S',
+    '\u015b': 's',  '\u015d': 's', '\u015f': 's', '\u0161': 's',
+    '\u0162': 'T',  '\u0164': 'T', '\u0166': 'T',
+    '\u0163': 't',  '\u0165': 't', '\u0167': 't',
+    '\u0168': 'U',  '\u016a': 'U', '\u016c': 'U', '\u016e': 'U', '\u0170': 'U', '\u0172': 'U',
+    '\u0169': 'u',  '\u016b': 'u', '\u016d': 'u', '\u016f': 'u', '\u0171': 'u', '\u0173': 'u',
+    '\u0174': 'W',  '\u0175': 'w',
+    '\u0176': 'Y',  '\u0177': 'y', '\u0178': 'Y',
+    '\u0179': 'Z',  '\u017b': 'Z', '\u017d': 'Z',
+    '\u017a': 'z',  '\u017c': 'z', '\u017e': 'z',
+    '\u0132': 'IJ', '\u0133': 'ij',
+    '\u0152': 'Oe', '\u0153': 'oe',
+    '\u0149': "'n", '\u017f': 's'
+  };
+
+  /** Used to match Latin Unicode letters (excluding mathematical operators). */
+  var reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g;
+
+  /** Used to compose unicode character classes. */
+  var rsComboMarksRange = '\\u0300-\\u036f',
+      reComboHalfMarksRange = '\\ufe20-\\ufe2f',
+      rsComboSymbolsRange = '\\u20d0-\\u20ff',
+      rsComboMarksExtendedRange = '\\u1ab0-\\u1aff',
+      rsComboMarksSupplementRange = '\\u1dc0-\\u1dff',
+      rsComboRange = rsComboMarksRange + reComboHalfMarksRange + rsComboSymbolsRange + rsComboMarksExtendedRange + rsComboMarksSupplementRange;
+
+  /** Used to compose unicode capture groups. */
+  var rsCombo = '[' + rsComboRange + ']';
+
+  /**
+   * Used to match [combining diacritical marks](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks) and
+   * [combining diacritical marks for symbols](https://en.wikipedia.org/wiki/Combining_Diacritical_Marks_for_Symbols).
+   */
+  var reComboMark = RegExp(rsCombo, 'g');
+
+  function deburrLetter (key) {
+    return deburredLetters[key];
+  };
+
+  function normalizeToBase (string) {
+    string = string.toString();
+    return string && string.replace(reLatin, deburrLetter).replace(reComboMark, '');
+  }
 
   // List of HTML entities for escaping.
   var escapeMap = {
@@ -53723,7 +53586,7 @@ license Apache-2.0
     "'": '&#x27;',
     '`': '&#x60;'
   };
-  
+
   var unescapeMap = {
     '&amp;': '&',
     '&lt;': '<',
@@ -53734,15 +53597,15 @@ license Apache-2.0
   };
 
   // Functions for escaping and unescaping strings to/from HTML interpolation.
-  var createEscaper = function(map) {
-    var escaper = function(match) {
+  var createEscaper = function (map) {
+    var escaper = function (match) {
       return map[match];
     };
     // Regexes for identifying a key that needs to be escaped.
     var source = '(?:' + Object.keys(map).join('|') + ')';
     var testRegexp = RegExp(source);
     var replaceRegexp = RegExp(source, 'g');
-    return function(string) {
+    return function (string) {
       string = string == null ? '' : '' + string;
       return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
     };
@@ -53751,7 +53614,124 @@ license Apache-2.0
   var htmlEscape = createEscaper(escapeMap);
   var htmlUnescape = createEscaper(unescapeMap);
 
+  /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+
+  var keyCodeMap = {
+    32: ' ',
+    48: '0',
+    49: '1',
+    50: '2',
+    51: '3',
+    52: '4',
+    53: '5',
+    54: '6',
+    55: '7',
+    56: '8',
+    57: '9',
+    59: ';',
+    65: 'A',
+    66: 'B',
+    67: 'C',
+    68: 'D',
+    69: 'E',
+    70: 'F',
+    71: 'G',
+    72: 'H',
+    73: 'I',
+    74: 'J',
+    75: 'K',
+    76: 'L',
+    77: 'M',
+    78: 'N',
+    79: 'O',
+    80: 'P',
+    81: 'Q',
+    82: 'R',
+    83: 'S',
+    84: 'T',
+    85: 'U',
+    86: 'V',
+    87: 'W',
+    88: 'X',
+    89: 'Y',
+    90: 'Z',
+    96: '0',
+    97: '1',
+    98: '2',
+    99: '3',
+    100: '4',
+    101: '5',
+    102: '6',
+    103: '7',
+    104: '8',
+    105: '9'
+  };
+
+  var keyCodes = {
+    ESCAPE: 27, // KeyboardEvent.which value for Escape (Esc) key
+    ENTER: 13, // KeyboardEvent.which value for Enter key
+    SPACE: 32, // KeyboardEvent.which value for space key
+    TAB: 9, // KeyboardEvent.which value for tab key
+    ARROW_UP: 38, // KeyboardEvent.which value for up arrow key
+    ARROW_DOWN: 40 // KeyboardEvent.which value for down arrow key
+  }
+
+  var version = {
+    success: false,
+    major: '3'
+  };
+
+  try {
+    version.full = ($.fn.dropdown.Constructor.VERSION || '').split(' ')[0].split('.');
+    version.major = version.full[0];
+    version.success = true;
+  } catch (err) {
+    console.warn(
+      'There was an issue retrieving Bootstrap\'s version. ' +
+      'Ensure Bootstrap is being loaded before bootstrap-select and there is no namespace collision. ' +
+      'If loading Bootstrap asynchronously, the version may need to be manually specified via $.fn.selectpicker.Constructor.BootstrapVersion.',
+      err
+    );
+  }
+
+  var selectId = 0;
+
+  var EVENT_KEY = '.bs.select';
+
+  var classNames = {
+    DISABLED: 'disabled',
+    DIVIDER: 'divider',
+    SHOW: 'open',
+    DROPUP: 'dropup',
+    MENU: 'dropdown-menu',
+    MENURIGHT: 'dropdown-menu-right',
+    MENULEFT: 'dropdown-menu-left',
+    // to-do: replace with more advanced template/customization options
+    BUTTONCLASS: 'btn-default',
+    POPOVERHEADER: 'popover-title'
+  }
+
+  var Selector = {
+    MENU: '.' + classNames.MENU
+  }
+
+  if (version.major === '4') {
+    classNames.DIVIDER = 'dropdown-divider';
+    classNames.SHOW = 'show';
+    classNames.BUTTONCLASS = 'btn-light';
+    classNames.POPOVERHEADER = 'popover-header';
+  }
+
+  var REGEXP_ARROW = new RegExp(keyCodes.ARROW_UP + '|' + keyCodes.ARROW_DOWN);
+  var REGEXP_TAB_OR_ESCAPE = new RegExp('^' + keyCodes.TAB + '$|' + keyCodes.ESCAPE);
+
   var Selectpicker = function (element, options) {
+    var that = this;
+
     // bootstrap-select has been initialized - revert valHooks.select.set back to its original function
     if (!valHooks.useDefault) {
       $.valHooks.select.set = valHooks._set;
@@ -53762,9 +53742,34 @@ license Apache-2.0
     this.$newElement = null;
     this.$button = null;
     this.$menu = null;
-    this.$lis = null;
     this.options = options;
-
+    this.selectpicker = {
+      main: {
+        // store originalIndex (key) and newIndex (value) in this.selectpicker.main.map.newIndex for fast accessibility
+        // allows us to do this.main.elements[this.selectpicker.main.map.newIndex[index]] to select an element based on the originalIndex
+        map: {
+          newIndex: {},
+          originalIndex: {}
+        }
+      },
+      current: {
+        map: {}
+      }, // current changes if a search is in progress
+      search: {
+        map: {}
+      },
+      view: {},
+      keydown: {
+        keyHistory: '',
+        resetKeyHistory: {
+          start: function () {
+            return setTimeout(function () {
+              that.selectpicker.keydown.keyHistory = '';
+            }, 800);
+          }
+        }
+      }
+    };
     // If we have no title yet, try to pull it from the html title attribute (jQuery doesnt' pick it up as it's not a
     // data-attribute)
     if (this.options.title === null) {
@@ -53777,7 +53782,7 @@ license Apache-2.0
       this.options.windowPadding = [winPad, winPad, winPad, winPad];
     }
 
-    //Expose public methods
+    // Expose public methods
     this.val = Selectpicker.prototype.val;
     this.render = Selectpicker.prototype.render;
     this.refresh = Selectpicker.prototype.refresh;
@@ -53792,14 +53797,16 @@ license Apache-2.0
     this.init();
   };
 
-  Selectpicker.VERSION = '1.12.4';
+  Selectpicker.VERSION = '1.13.5';
+
+  Selectpicker.BootstrapVersion = version.major;
 
   // part of this is duplicated in i18n/defaults-en_US.js. Make sure to update both.
   Selectpicker.DEFAULTS = {
     noneSelectedText: 'Nothing selected',
     noneResultsText: 'No results matched {0}',
     countSelectedText: function (numSelected, numTotal) {
-      return (numSelected == 1) ? "{0} item selected" : "{0} items selected";
+      return (numSelected == 1) ? '{0} item selected' : '{0} items selected';
     },
     maxOptionsText: function (numAll, numGroup) {
       return [
@@ -53813,7 +53820,7 @@ license Apache-2.0
     doneButtonText: 'Close',
     multipleSeparator: ', ',
     styleBase: 'btn',
-    style: 'btn-default',
+    style: classNames.BUTTONCLASS,
     size: 'auto',
     title: null,
     selectedTextFormat: 'values',
@@ -53840,8 +53847,16 @@ license Apache-2.0
     mobile: false,
     selectOnTab: false,
     dropdownAlignRight: false,
-    windowPadding: 0
+    windowPadding: 0,
+    virtualScroll: 600,
+    display: false
   };
+
+  if (version.major === '4') {
+    Selectpicker.DEFAULTS.style = 'btn-light';
+    Selectpicker.DEFAULTS.iconBase = '';
+    Selectpicker.DEFAULTS.tickIcon = 'bs-ok-default';
+  }
 
   Selectpicker.prototype = {
 
@@ -53851,32 +53866,28 @@ license Apache-2.0
       var that = this,
           id = this.$element.attr('id');
 
+      this.selectId = selectId++;
+
       this.$element.addClass('bs-select-hidden');
 
-      // store originalIndex (key) and newIndex (value) in this.liObj for fast accessibility
-      // allows us to do this.$lis.eq(that.liObj[index]) instead of this.$lis.filter('[data-original-index="' + index + '"]')
-      this.liObj = {};
       this.multiple = this.$element.prop('multiple');
       this.autofocus = this.$element.prop('autofocus');
-      this.$newElement = this.createView();
+      this.$newElement = this.createDropdown();
+      this.createLi();
       this.$element
         .after(this.$newElement)
-        .appendTo(this.$newElement);
+        .prependTo(this.$newElement);
       this.$button = this.$newElement.children('button');
-      this.$menu = this.$newElement.children('.dropdown-menu');
+      this.$menu = this.$newElement.children(Selector.MENU);
       this.$menuInner = this.$menu.children('.inner');
       this.$searchbox = this.$menu.find('input');
 
       this.$element.removeClass('bs-select-hidden');
 
-      if (this.options.dropdownAlignRight === true) this.$menu.addClass('dropdown-menu-right');
+      if (this.options.dropdownAlignRight === true) this.$menu.addClass(classNames.MENURIGHT);
 
       if (typeof id !== 'undefined') {
         this.$button.attr('data-id', id);
-        $('label[for="' + id + '"]').click(function (e) {
-          e.preventDefault();
-          that.$button.focus();
-        });
       }
 
       this.checkDisabled();
@@ -53885,7 +53896,21 @@ license Apache-2.0
       this.render();
       this.setStyle();
       this.setWidth();
-      if (this.options.container) this.selectPosition();
+      if (this.options.container) {
+        this.selectPosition();
+      } else {
+        this.$element.on('hide' + EVENT_KEY, function () {
+          if (that.isVirtual()) {
+            // empty menu on close
+            var menuInner = that.$menuInner[0],
+                emptyMenu = menuInner.firstChild.cloneNode(false);
+
+            // replace the existing UL with an empty one - this is faster than $.empty() or innerHTML = ''
+            menuInner.replaceChild(emptyMenu, menuInner.firstChild);
+            menuInner.scrollTop = 0;
+          }
+        });
+      }
       this.$menu.data('this', this);
       this.$newElement.data('this', this);
       if (this.options.mobile) this.mobile();
@@ -53893,17 +53918,17 @@ license Apache-2.0
       this.$newElement.on({
         'hide.bs.dropdown': function (e) {
           that.$menuInner.attr('aria-expanded', false);
-          that.$element.trigger('hide.bs.select', e);
+          that.$element.trigger('hide' + EVENT_KEY, e);
         },
         'hidden.bs.dropdown': function (e) {
-          that.$element.trigger('hidden.bs.select', e);
+          that.$element.trigger('hidden' + EVENT_KEY, e);
         },
         'show.bs.dropdown': function (e) {
           that.$menuInner.attr('aria-expanded', true);
-          that.$element.trigger('show.bs.select', e);
+          that.$element.trigger('show' + EVENT_KEY, e);
         },
         'shown.bs.dropdown': function (e) {
-          that.$element.trigger('shown.bs.select', e);
+          that.$element.trigger('shown' + EVENT_KEY, e);
         }
       });
 
@@ -53911,32 +53936,27 @@ license Apache-2.0
         this.$element.on('invalid', function () {
           that.$button.addClass('bs-invalid');
 
-          that.$element.on({
-            'focus.bs.select': function () {
-              that.$button.focus();
-              that.$element.off('focus.bs.select');
-            },
-            'shown.bs.select': function () {
+          that.$element
+            .on('shown' + EVENT_KEY + '.invalid', function () {
               that.$element
                 .val(that.$element.val()) // set the value to hide the validation message in Chrome when menu is opened
-                .off('shown.bs.select');
-            },
-            'rendered.bs.select': function () {
+                .off('shown' + EVENT_KEY + '.invalid');
+            })
+            .on('rendered' + EVENT_KEY, function () {
               // if select is no longer invalid, remove the bs-invalid class
               if (this.validity.valid) that.$button.removeClass('bs-invalid');
-              that.$element.off('rendered.bs.select');
-            }
-          });
+              that.$element.off('rendered' + EVENT_KEY);
+            });
 
-          that.$button.on('blur.bs.select', function() {
+          that.$button.on('blur' + EVENT_KEY, function () {
             that.$element.focus().blur();
-            that.$button.off('blur.bs.select');
+            that.$button.off('blur' + EVENT_KEY);
           });
         });
       }
 
       setTimeout(function () {
-        that.$element.trigger('loaded.bs.select');
+        that.$element.trigger('loaded' + EVENT_KEY);
       });
     },
 
@@ -53944,133 +53964,476 @@ license Apache-2.0
       // Options
       // If we are multiple or showTick option is set, then add the show-tick class
       var showTick = (this.multiple || this.options.showTick) ? ' show-tick' : '',
-          inputGroup = this.$element.parent().hasClass('input-group') ? ' input-group-btn' : '',
           autofocus = this.autofocus ? ' autofocus' : '';
+
       // Elements
-      var header = this.options.header ? '<div class="popover-title"><button type="button" class="close" aria-hidden="true">&times;</button>' + this.options.header + '</div>' : '';
-      var searchbox = this.options.liveSearch ?
-      '<div class="bs-searchbox">' +
-      '<input type="text" class="form-control" autocomplete="off"' +
-      (null === this.options.liveSearchPlaceholder ? '' : ' placeholder="' + htmlEscape(this.options.liveSearchPlaceholder) + '"') + ' role="textbox" aria-label="Search">' +
-      '</div>'
-          : '';
-      var actionsbox = this.multiple && this.options.actionsBox ?
-      '<div class="bs-actionsbox">' +
-      '<div class="btn-group btn-group-sm btn-block">' +
-      '<button type="button" class="actions-btn bs-select-all btn btn-default">' +
-      this.options.selectAllText +
-      '</button>' +
-      '<button type="button" class="actions-btn bs-deselect-all btn btn-default">' +
-      this.options.deselectAllText +
-      '</button>' +
-      '</div>' +
-      '</div>'
-          : '';
-      var donebutton = this.multiple && this.options.doneButton ?
-      '<div class="bs-donebutton">' +
-      '<div class="btn-group btn-block">' +
-      '<button type="button" class="btn btn-sm btn-default">' +
-      this.options.doneButtonText +
-      '</button>' +
-      '</div>' +
-      '</div>'
-          : '';
-      var drop =
-          '<div class="btn-group bootstrap-select' + showTick + inputGroup + '">' +
-          '<button type="button" class="' + this.options.styleBase + ' dropdown-toggle" data-toggle="dropdown"' + autofocus + ' role="button">' +
-          '<span class="filter-option pull-left"></span>&nbsp;' +
-          '<span class="bs-caret">' +
-          this.options.template.caret +
-          '</span>' +
-          '</button>' +
-          '<div class="dropdown-menu open" role="combobox">' +
-          header +
-          searchbox +
-          actionsbox +
-          '<ul class="dropdown-menu inner" role="listbox" aria-expanded="false">' +
-          '</ul>' +
-          donebutton +
-          '</div>' +
+      var drop,
+          header = '',
+          searchbox = '',
+          actionsbox = '',
+          donebutton = '';
+
+      if (this.options.header) {
+        header =
+          '<div class="' + classNames.POPOVERHEADER + '">' +
+            '<button type="button" class="close" aria-hidden="true">&times;</button>' +
+              this.options.header +
           '</div>';
+      }
+
+      if (this.options.liveSearch) {
+        searchbox =
+          '<div class="bs-searchbox">' +
+            '<input type="text" class="form-control" autocomplete="off"' +
+              (
+                this.options.liveSearchPlaceholder === null ? ''
+                :
+                ' placeholder="' + htmlEscape(this.options.liveSearchPlaceholder) + '"'
+              ) +
+              ' role="textbox" aria-label="Search">' +
+          '</div>';
+      }
+
+      if (this.multiple && this.options.actionsBox) {
+        actionsbox =
+          '<div class="bs-actionsbox">' +
+            '<div class="btn-group btn-group-sm btn-block">' +
+              '<button type="button" class="actions-btn bs-select-all btn ' + classNames.BUTTONCLASS + '">' +
+                this.options.selectAllText +
+              '</button>' +
+              '<button type="button" class="actions-btn bs-deselect-all btn ' + classNames.BUTTONCLASS + '">' +
+                this.options.deselectAllText +
+              '</button>' +
+            '</div>' +
+          '</div>';
+      }
+
+      if (this.multiple && this.options.doneButton) {
+        donebutton =
+          '<div class="bs-donebutton">' +
+            '<div class="btn-group btn-block">' +
+              '<button type="button" class="btn btn-sm ' + classNames.BUTTONCLASS + '">' +
+                this.options.doneButtonText +
+              '</button>' +
+            '</div>' +
+          '</div>';
+      }
+
+      drop =
+        '<div class="dropdown bootstrap-select' + showTick + '">' +
+          '<button type="button" class="' + this.options.styleBase + ' dropdown-toggle" ' + (this.options.display === 'static' ? 'data-display="static"' : '') + 'data-toggle="dropdown"' + autofocus + ' role="button">' +
+            '<div class="filter-option">' +
+              '<div class="filter-option-inner">' +
+                '<div class="filter-option-inner-inner"></div>' +
+              '</div> ' +
+            '</div>' +
+            (
+              version.major === '4' ? ''
+              :
+              '<span class="bs-caret">' +
+                this.options.template.caret +
+              '</span>'
+            ) +
+          '</button>' +
+          '<div class="' + classNames.MENU + ' ' + (version.major === '4' ? '' : classNames.SHOW) + '" role="combobox">' +
+            header +
+            searchbox +
+            actionsbox +
+            '<div class="inner ' + classNames.SHOW + '" role="listbox" aria-expanded="false" tabindex="-1">' +
+                '<ul class="' + classNames.MENU + ' inner ' + (version.major === '4' ? classNames.SHOW : '') + '">' +
+                '</ul>' +
+            '</div>' +
+            donebutton +
+          '</div>' +
+        '</div>';
 
       return $(drop);
     },
 
-    createView: function () {
-      var $drop = this.createDropdown(),
-          li = this.createLi();
+    setPositionData: function () {
+      this.selectpicker.view.canHighlight = [];
 
-      $drop.find('ul')[0].innerHTML = li;
-      return $drop;
+      for (var i = 0; i < this.selectpicker.current.data.length; i++) {
+        var li = this.selectpicker.current.data[i],
+            canHighlight = true;
+
+        if (li.type === 'divider') {
+          canHighlight = false;
+          li.height = this.sizeInfo.dividerHeight;
+        } else if (li.type === 'optgroup-label') {
+          canHighlight = false;
+          li.height = this.sizeInfo.dropdownHeaderHeight;
+        } else {
+          li.height = this.sizeInfo.liHeight;
+        }
+
+        if (li.disabled) canHighlight = false;
+
+        this.selectpicker.view.canHighlight.push(canHighlight);
+
+        li.position = (i === 0 ? 0 : this.selectpicker.current.data[i - 1].position) + li.height;
+      }
     },
 
-    reloadLi: function () {
-      // rebuild
-      var li = this.createLi();
-      this.$menuInner[0].innerHTML = li;
+    isVirtual: function () {
+      return (this.options.virtualScroll !== false) && (this.selectpicker.main.elements.length >= this.options.virtualScroll) || this.options.virtualScroll === true;
+    },
+
+    createView: function (isSearching, scrollTop) {
+      scrollTop = scrollTop || 0;
+
+      var that = this;
+
+      this.selectpicker.current = isSearching ? this.selectpicker.search : this.selectpicker.main;
+
+      var active = [];
+      var selected;
+      var prevActive;
+
+      this.setPositionData();
+
+      scroll(scrollTop, true);
+
+      this.$menuInner.off('scroll.createView').on('scroll.createView', function (e, updateValue) {
+        if (!that.noScroll) scroll(this.scrollTop, updateValue);
+        that.noScroll = false;
+      });
+
+      function scroll (scrollTop, init) {
+        var size = that.selectpicker.current.elements.length,
+            chunks = [],
+            chunkSize,
+            chunkCount,
+            firstChunk,
+            lastChunk,
+            currentChunk,
+            prevPositions,
+            positionIsDifferent,
+            previousElements,
+            menuIsDifferent = true,
+            isVirtual = that.isVirtual();
+
+        that.selectpicker.view.scrollTop = scrollTop;
+
+        if (isVirtual === true) {
+          // if an option that is encountered that is wider than the current menu width, update the menu width accordingly
+          if (that.sizeInfo.hasScrollBar && that.$menu[0].offsetWidth > that.sizeInfo.totalMenuWidth) {
+            that.sizeInfo.menuWidth = that.$menu[0].offsetWidth;
+            that.sizeInfo.totalMenuWidth = that.sizeInfo.menuWidth + that.sizeInfo.scrollBarWidth;
+            that.$menu.css('min-width', that.sizeInfo.menuWidth);
+          }
+        }
+
+        chunkSize = Math.ceil(that.sizeInfo.menuInnerHeight / that.sizeInfo.liHeight * 1.5); // number of options in a chunk
+        chunkCount = Math.round(size / chunkSize) || 1; // number of chunks
+
+        for (var i = 0; i < chunkCount; i++) {
+          var endOfChunk = (i + 1) * chunkSize;
+
+          if (i === chunkCount - 1) {
+            endOfChunk = size;
+          }
+
+          chunks[i] = [
+            (i) * chunkSize + (!i ? 0 : 1),
+            endOfChunk
+          ];
+
+          if (!size) break;
+
+          if (currentChunk === undefined && scrollTop <= that.selectpicker.current.data[endOfChunk - 1].position - that.sizeInfo.menuInnerHeight) {
+            currentChunk = i;
+          }
+        }
+
+        if (currentChunk === undefined) currentChunk = 0;
+
+        prevPositions = [that.selectpicker.view.position0, that.selectpicker.view.position1];
+
+        // always display previous, current, and next chunks
+        firstChunk = Math.max(0, currentChunk - 1);
+        lastChunk = Math.min(chunkCount - 1, currentChunk + 1);
+
+        that.selectpicker.view.position0 = Math.max(0, chunks[firstChunk][0]) || 0;
+        that.selectpicker.view.position1 = Math.min(size, chunks[lastChunk][1]) || 0;
+
+        positionIsDifferent = prevPositions[0] !== that.selectpicker.view.position0 || prevPositions[1] !== that.selectpicker.view.position1;
+
+        if (that.activeIndex !== undefined) {
+          prevActive = that.selectpicker.current.elements[that.selectpicker.current.map.newIndex[that.prevActiveIndex]];
+          active = that.selectpicker.current.elements[that.selectpicker.current.map.newIndex[that.activeIndex]];
+          selected = that.selectpicker.current.elements[that.selectpicker.current.map.newIndex[that.selectedIndex]];
+
+          if (init) {
+            if (that.activeIndex !== that.selectedIndex) {
+              active.classList.remove('active');
+              if (active.firstChild) active.firstChild.classList.remove('active');
+            }
+            that.activeIndex = undefined;
+          }
+
+          if (that.activeIndex && that.activeIndex !== that.selectedIndex && selected && selected.length) {
+            selected.classList.remove('active');
+            if (selected.firstChild) selected.firstChild.classList.remove('active');
+          }
+        }
+
+        if (that.prevActiveIndex !== undefined && that.prevActiveIndex !== that.activeIndex && that.prevActiveIndex !== that.selectedIndex && prevActive && prevActive.length) {
+          prevActive.classList.remove('active');
+          if (prevActive.firstChild) prevActive.firstChild.classList.remove('active');
+        }
+
+        if (init || positionIsDifferent) {
+          previousElements = that.selectpicker.view.visibleElements ? that.selectpicker.view.visibleElements.slice() : [];
+
+          that.selectpicker.view.visibleElements = that.selectpicker.current.elements.slice(that.selectpicker.view.position0, that.selectpicker.view.position1);
+
+          that.setOptionStatus();
+
+          // if searching, check to make sure the list has actually been updated before updating DOM
+          // this prevents unnecessary repaints
+          if (isSearching || (isVirtual === false && init)) menuIsDifferent = !isEqual(previousElements, that.selectpicker.view.visibleElements);
+
+          // if virtual scroll is disabled and not searching,
+          // menu should never need to be updated more than once
+          if ((init || isVirtual === true) && menuIsDifferent) {
+            var menuInner = that.$menuInner[0],
+                menuFragment = document.createDocumentFragment(),
+                emptyMenu = menuInner.firstChild.cloneNode(false),
+                marginTop,
+                marginBottom,
+                elements = isVirtual === true ? that.selectpicker.view.visibleElements : that.selectpicker.current.elements;
+
+            // replace the existing UL with an empty one - this is faster than $.empty()
+            menuInner.replaceChild(emptyMenu, menuInner.firstChild);
+
+            for (var i = 0, visibleElementsLen = elements.length; i < visibleElementsLen; i++) {
+              menuFragment.appendChild(elements[i]);
+            }
+
+            if (isVirtual === true) {
+              marginTop = (that.selectpicker.view.position0 === 0 ? 0 : that.selectpicker.current.data[that.selectpicker.view.position0 - 1].position);
+              marginBottom = (that.selectpicker.view.position1 > size - 1 ? 0 : that.selectpicker.current.data[size - 1].position - that.selectpicker.current.data[that.selectpicker.view.position1 - 1].position);
+
+              menuInner.firstChild.style.marginTop = marginTop + 'px';
+              menuInner.firstChild.style.marginBottom = marginBottom + 'px';
+            }
+
+            menuInner.firstChild.appendChild(menuFragment);
+          }
+        }
+
+        that.prevActiveIndex = that.activeIndex;
+
+        if (!that.options.liveSearch) {
+          that.$menuInner.focus();
+        } else if (isSearching && init) {
+          var index = 0,
+              newActive;
+
+          if (!that.selectpicker.view.canHighlight[index]) {
+            index = 1 + that.selectpicker.view.canHighlight.slice(1).indexOf(true);
+          }
+
+          newActive = that.selectpicker.view.visibleElements[index];
+
+          if (that.selectpicker.view.currentActive) {
+            that.selectpicker.view.currentActive.classList.remove('active');
+            if (that.selectpicker.view.currentActive.firstChild) that.selectpicker.view.currentActive.firstChild.classList.remove('active');
+          }
+
+          if (newActive) {
+            newActive.classList.add('active');
+            if (newActive.firstChild) newActive.firstChild.classList.add('active');
+          }
+
+          that.activeIndex = that.selectpicker.current.map.originalIndex[index];
+        }
+      }
+
+      $(window)
+        .off('resize' + EVENT_KEY + '.' + this.selectId + '.createView')
+        .on('resize' + EVENT_KEY + '.' + this.selectId + '.createView', function () {
+          var isActive = that.$newElement.hasClass(classNames.SHOW);
+
+          if (isActive) scroll(that.$menuInner[0].scrollTop);
+        });
     },
 
     createLi: function () {
       var that = this,
-          _li = [],
+          mainElements = [],
+          hiddenOptions = {},
+          widestOption,
+          availableOptionsCount = 0,
+          widestOptionLength = 0,
+          mainData = [],
           optID = 0,
-          titleOption = document.createElement('option'),
-          liIndex = -1; // increment liIndex whenever a new <li> element is created to ensure liObj is correct
+          headerIndex = 0,
+          liIndex = -1; // increment liIndex whenever a new <li> element is created to ensure newIndex is correct
+
+      if (!this.selectpicker.view.titleOption) this.selectpicker.view.titleOption = document.createElement('option');
+
+      var elementTemplates = {
+            span: document.createElement('span'),
+            subtext: document.createElement('small'),
+            a: document.createElement('a'),
+            li: document.createElement('li'),
+            whitespace: document.createTextNode('\u00A0')
+          },
+          checkMark,
+          fragment = document.createDocumentFragment();
+
+      if (that.options.showTick || that.multiple) {
+        checkMark = elementTemplates.span.cloneNode(false);
+        checkMark.className = that.options.iconBase + ' ' + that.options.tickIcon + ' check-mark';
+        elementTemplates.a.appendChild(checkMark);
+      }
+
+      elementTemplates.a.setAttribute('role', 'option');
+
+      elementTemplates.subtext.className = 'text-muted';
+
+      elementTemplates.text = elementTemplates.span.cloneNode(false);
+      elementTemplates.text.className = 'text';
 
       // Helper functions
       /**
        * @param content
-       * @param [index]
        * @param [classes]
        * @param [optgroup]
-       * @returns {string}
+       * @returns {HTMLElement}
        */
-      var generateLI = function (content, index, classes, optgroup) {
-        return '<li' +
-            ((typeof classes !== 'undefined' && '' !== classes) ? ' class="' + classes + '"' : '') +
-            ((typeof index !== 'undefined' && null !== index) ? ' data-original-index="' + index + '"' : '') +
-            ((typeof optgroup !== 'undefined' && null !== optgroup) ? 'data-optgroup="' + optgroup + '"' : '') +
-            '>' + content + '</li>';
+      var generateLI = function (content, classes, optgroup) {
+        var li = elementTemplates.li.cloneNode(false);
+
+        if (content) {
+          if (content.nodeType === 1 || content.nodeType === 11) {
+            li.appendChild(content);
+          } else {
+            li.innerHTML = content;
+          }
+        }
+
+        if (typeof classes !== 'undefined' && classes !== '') li.className = classes;
+        if (typeof optgroup !== 'undefined' && optgroup !== null) li.classList.add('optgroup-' + optgroup);
+
+        return li;
       };
 
       /**
        * @param text
        * @param [classes]
        * @param [inline]
-       * @param [tokens]
        * @returns {string}
        */
-      var generateA = function (text, classes, inline, tokens) {
-        return '<a tabindex="0"' +
-            (typeof classes !== 'undefined' ? ' class="' + classes + '"' : '') +
-            (inline ? ' style="' + inline + '"' : '') +
-            (that.options.liveSearchNormalize ? ' data-normalized-text="' + normalizeToBase(htmlEscape($(text).html())) + '"' : '') +
-            (typeof tokens !== 'undefined' || tokens !== null ? ' data-tokens="' + tokens + '"' : '') +
-            ' role="option">' + text +
-            '<span class="' + that.options.iconBase + ' ' + that.options.tickIcon + ' check-mark"></span>' +
-            '</a>';
+      var generateA = function (text, classes, inline) {
+        var a = elementTemplates.a.cloneNode(true);
+
+        if (text) {
+          if (text.nodeType === 11) {
+            a.appendChild(text);
+          } else {
+            a.insertAdjacentHTML('beforeend', text);
+          }
+        }
+
+        if (typeof classes !== 'undefined' && classes !== '') a.className = classes;
+        if (version.major === '4') a.classList.add('dropdown-item');
+        if (inline) a.setAttribute('style', inline);
+
+        return a;
       };
+
+      var generateText = function (options) {
+        var textElement = elementTemplates.text.cloneNode(false),
+            optionSubtextElement,
+            optionIconElement;
+
+        if (options.optionContent) {
+          textElement.innerHTML = options.optionContent;
+        } else {
+          textElement.textContent = options.text;
+
+          if (options.optionIcon) {
+            var whitespace = elementTemplates.whitespace.cloneNode(false);
+
+            optionIconElement = elementTemplates.span.cloneNode(false);
+            optionIconElement.className = that.options.iconBase + ' ' + options.optionIcon;
+
+            fragment.appendChild(optionIconElement);
+            fragment.appendChild(whitespace);
+          }
+
+          if (options.optionSubtext) {
+            optionSubtextElement = elementTemplates.subtext.cloneNode(false);
+            optionSubtextElement.innerHTML = options.optionSubtext;
+            textElement.appendChild(optionSubtextElement);
+          }
+        }
+
+        fragment.appendChild(textElement);
+
+        return fragment;
+      };
+
+      var generateLabel = function (options) {
+        var labelTextElement = elementTemplates.text.cloneNode(false),
+            labelSubtextElement,
+            labelIconElement;
+
+        labelTextElement.innerHTML = options.labelEscaped;
+
+        if (options.labelIcon) {
+          var whitespace = elementTemplates.whitespace.cloneNode(false);
+
+          labelIconElement = elementTemplates.span.cloneNode(false);
+          labelIconElement.className = that.options.iconBase + ' ' + options.labelIcon;
+
+          fragment.appendChild(labelIconElement);
+          fragment.appendChild(whitespace);
+        }
+
+        if (options.labelSubtext) {
+          labelSubtextElement = elementTemplates.subtext.cloneNode(false);
+          labelSubtextElement.textContent = options.labelSubtext;
+          labelTextElement.appendChild(labelSubtextElement);
+        }
+
+        fragment.appendChild(labelTextElement);
+
+        return fragment;
+      }
 
       if (this.options.title && !this.multiple) {
         // this option doesn't create a new <li> element, but does add a new option, so liIndex is decreased
-        // since liObj is recalculated on every refresh, liIndex needs to be decreased even if the titleOption is already appended
+        // since newIndex is recalculated on every refresh, liIndex needs to be decreased even if the titleOption is already appended
         liIndex--;
 
-        if (!this.$element.find('.bs-title-option').length) {
+        var element = this.$element[0],
+            isSelected = false,
+            titleNotAppended = !this.selectpicker.view.titleOption.parentNode;
+
+        if (titleNotAppended) {
           // Use native JS to prepend option (faster)
-          var element = this.$element[0];
-          titleOption.className = 'bs-title-option';
-          titleOption.innerHTML = this.options.title;
-          titleOption.value = '';
-          element.insertBefore(titleOption, element.firstChild);
+          this.selectpicker.view.titleOption.className = 'bs-title-option';
+          this.selectpicker.view.titleOption.value = '';
+
           // Check if selected or data-selected attribute is already set on an option. If not, select the titleOption option.
           // the selected item may have been changed by user or programmatically before the bootstrap select plugin runs,
           // if so, the select will have the data-selected attribute
           var $opt = $(element.options[element.selectedIndex]);
-          if ($opt.attr('selected') === undefined && this.$element.data('selected') === undefined) {
-            titleOption.selected = true;
-          }
+          isSelected = $opt.attr('selected') === undefined && this.$element.data('selected') === undefined;
         }
+
+        if (titleNotAppended || this.selectpicker.view.titleOption.index !== 0) {
+          element.insertBefore(this.selectpicker.view.titleOption, element.firstChild);
+        }
+
+        // Set selected *after* appending to select,
+        // otherwise the option doesn't get selected in IE
+        // set using selectedIndex, as setting the selected attr to true here doesn't work in IE11
+        if (isSelected) element.selectedIndex = 0;
       }
 
       var $selectOptions = this.$element.find('option');
@@ -54082,42 +54445,76 @@ license Apache-2.0
 
         if ($this.hasClass('bs-title-option')) return;
 
+        var thisData = $this.data();
+
         // Get the class and text for the option
         var optionClass = this.className || '',
             inline = htmlEscape(this.style.cssText),
-            text = $this.data('content') ? $this.data('content') : $this.html(),
-            tokens = $this.data('tokens') ? $this.data('tokens') : null,
-            subtext = typeof $this.data('subtext') !== 'undefined' ? '<small class="text-muted">' + $this.data('subtext') + '</small>' : '',
-            icon = typeof $this.data('icon') !== 'undefined' ? '<span class="' + that.options.iconBase + ' ' + $this.data('icon') + '"></span> ' : '',
+            optionContent = thisData.content,
+            text = this.textContent,
+            tokens = thisData.tokens,
+            subtext = thisData.subtext,
+            icon = thisData.icon,
             $parent = $this.parent(),
-            isOptgroup = $parent[0].tagName === 'OPTGROUP',
-            isOptgroupDisabled = isOptgroup && $parent[0].disabled,
+            parent = $parent[0],
+            isOptgroup = parent.tagName === 'OPTGROUP',
+            isOptgroupDisabled = isOptgroup && parent.disabled,
             isDisabled = this.disabled || isOptgroupDisabled,
-            prevHiddenIndex;
+            prevHiddenIndex,
+            showDivider = this.previousElementSibling && this.previousElementSibling.tagName === 'OPTGROUP',
+            textElement,
+            labelElement,
+            prevHidden;
 
-        if (icon !== '' && isDisabled) {
-          icon = '<span>' + icon + '</span>';
-        }
+        var parentData = $parent.data();
 
-        if (that.options.hideDisabled && (isDisabled && !isOptgroup || isOptgroupDisabled)) {
+        if ((thisData.hidden === true || this.hidden) || (that.options.hideDisabled && (isDisabled || isOptgroupDisabled))) {
           // set prevHiddenIndex - the index of the first hidden option in a group of hidden options
           // used to determine whether or not a divider should be placed after an optgroup if there are
           // hidden options between the optgroup and the first visible option
-          prevHiddenIndex = $this.data('prevHiddenIndex');
+          prevHiddenIndex = thisData.prevHiddenIndex;
           $this.next().data('prevHiddenIndex', (prevHiddenIndex !== undefined ? prevHiddenIndex : index));
 
           liIndex--;
+
+          hiddenOptions[index] = {
+            type: 'hidden',
+            data: thisData
+          }
+
+          // if previous element is not an optgroup
+          if (!showDivider) {
+            if (prevHiddenIndex !== undefined) {
+              // select the element **before** the first hidden element in the group
+              prevHidden = $selectOptions[prevHiddenIndex].previousElementSibling;
+
+              if (prevHidden && prevHidden.tagName === 'OPTGROUP' && !prevHidden.disabled) {
+                showDivider = true;
+              }
+            }
+          }
+
+          if (showDivider && mainData[mainData.length - 1].type !== 'divider') {
+            liIndex++;
+            mainElements.push(
+              generateLI(
+                false,
+                classNames.DIVIDER,
+                optID + 'div'
+              )
+            );
+            mainData.push({
+              type: 'divider',
+              optID: optID
+            });
+          }
+
           return;
         }
 
-        if (!$this.data('content')) {
-          // Prepend any icon and append any subtext to the main text.
-          text = icon + '<span class="text">' + text + subtext + '</span>';
-        }
-
-        if (isOptgroup && $this.data('divider') !== true) {
+        if (isOptgroup && thisData.divider !== true) {
           if (that.options.hideDisabled && isDisabled) {
-            if ($parent.data('allOptionsDisabled') === undefined) {
+            if (parentData.allOptionsDisabled === undefined) {
               var $options = $parent.children();
               $parent.data('allOptionsDisabled', $options.filter(':disabled').length === $options.length);
             }
@@ -54128,143 +54525,239 @@ license Apache-2.0
             }
           }
 
-          var optGroupClass = ' ' + $parent[0].className || '';
+          var optGroupClass = ' ' + parent.className || '',
+              previousOption = this.previousElementSibling;
 
-          if ($this.index() === 0) { // Is it the first option of the optgroup?
+          prevHiddenIndex = thisData.prevHiddenIndex;
+
+          if (prevHiddenIndex !== undefined) {
+            previousOption = $selectOptions[prevHiddenIndex].previousElementSibling;
+          }
+
+          if (!previousOption) { // Is it the first option of the optgroup?
             optID += 1;
 
             // Get the opt group label
-            var label = $parent[0].label,
-                labelSubtext = typeof $parent.data('subtext') !== 'undefined' ? '<small class="text-muted">' + $parent.data('subtext') + '</small>' : '',
-                labelIcon = $parent.data('icon') ? '<span class="' + that.options.iconBase + ' ' + $parent.data('icon') + '"></span> ' : '';
+            var label = parent.label,
+                labelEscaped = htmlEscape(label),
+                labelSubtext = parentData.subtext,
+                labelIcon = parentData.icon;
 
-            label = labelIcon + '<span class="text">' + htmlEscape(label) + labelSubtext + '</span>';
-
-            if (index !== 0 && _li.length > 0) { // Is it NOT the first option of the select && are there elements in the dropdown?
+            if (index !== 0 && mainElements.length > 0) { // Is it NOT the first option of the select && are there elements in the dropdown?
               liIndex++;
-              _li.push(generateLI('', null, 'divider', optID + 'div'));
+              mainElements.push(
+                generateLI(
+                  false,
+                  classNames.DIVIDER,
+                  optID + 'div'
+                )
+              );
+              mainData.push({
+                type: 'divider',
+                optID: optID
+              });
             }
             liIndex++;
-            _li.push(generateLI(label, null, 'dropdown-header' + optGroupClass, optID));
+
+            labelElement = generateLabel({
+              labelEscaped: labelEscaped,
+              labelSubtext: labelSubtext,
+              labelIcon: labelIcon
+            });
+
+            mainElements.push(generateLI(labelElement, 'dropdown-header' + optGroupClass, optID));
+            mainData.push({
+              content: labelEscaped,
+              subtext: labelSubtext,
+              type: 'optgroup-label',
+              optID: optID
+            });
+
+            headerIndex = liIndex - 1;
           }
 
-          if (that.options.hideDisabled && isDisabled) {
-            liIndex--;
-            return;
-          }
+          textElement = generateText({
+            text: text,
+            optionContent: optionContent,
+            optionSubtext: subtext,
+            optionIcon: icon
+          });
 
-          _li.push(generateLI(generateA(text, 'opt ' + optionClass + optGroupClass, inline, tokens), index, '', optID));
-        } else if ($this.data('divider') === true) {
-          _li.push(generateLI('', index, 'divider'));
-        } else if ($this.data('hidden') === true) {
-          // set prevHiddenIndex - the index of the first hidden option in a group of hidden options
-          // used to determine whether or not a divider should be placed after an optgroup if there are
-          // hidden options between the optgroup and the first visible option
-          prevHiddenIndex = $this.data('prevHiddenIndex');
-          $this.next().data('prevHiddenIndex', (prevHiddenIndex !== undefined ? prevHiddenIndex : index));
+          mainElements.push(generateLI(generateA(textElement, 'opt ' + optionClass + optGroupClass, inline), '', optID));
+          mainData.push({
+            content: optionContent || text,
+            subtext: subtext,
+            tokens: tokens,
+            type: 'option',
+            optID: optID,
+            headerIndex: headerIndex,
+            lastIndex: headerIndex + parent.childElementCount,
+            originalIndex: index,
+            data: thisData
+          });
 
-          _li.push(generateLI(generateA(text, optionClass, inline, tokens), index, 'hidden is-hidden'));
+          availableOptionsCount++;
+        } else if (thisData.divider === true) {
+          mainElements.push(generateLI(false, classNames.DIVIDER));
+          mainData.push({
+            type: 'divider',
+            originalIndex: index,
+            data: thisData
+          });
         } else {
-          var showDivider = this.previousElementSibling && this.previousElementSibling.tagName === 'OPTGROUP';
-
           // if previous element is not an optgroup and hideDisabled is true
           if (!showDivider && that.options.hideDisabled) {
-            prevHiddenIndex = $this.data('prevHiddenIndex');
+            prevHiddenIndex = thisData.prevHiddenIndex;
 
             if (prevHiddenIndex !== undefined) {
               // select the element **before** the first hidden element in the group
-              var prevHidden = $selectOptions.eq(prevHiddenIndex)[0].previousElementSibling;
-              
+              prevHidden = $selectOptions[prevHiddenIndex].previousElementSibling;
+
               if (prevHidden && prevHidden.tagName === 'OPTGROUP' && !prevHidden.disabled) {
                 showDivider = true;
               }
             }
           }
 
-          if (showDivider) {
+          if (showDivider && mainData[mainData.length - 1].type !== 'divider') {
             liIndex++;
-            _li.push(generateLI('', null, 'divider', optID + 'div'));
+            mainElements.push(
+              generateLI(
+                false,
+                classNames.DIVIDER,
+                optID + 'div'
+              )
+            );
+            mainData.push({
+              type: 'divider',
+              optID: optID
+            });
           }
-          _li.push(generateLI(generateA(text, optionClass, inline, tokens), index));
+
+          textElement = generateText({
+            text: text,
+            optionContent: optionContent,
+            optionSubtext: subtext,
+            optionIcon: icon
+          });
+
+          mainElements.push(generateLI(generateA(textElement, optionClass, inline)));
+          mainData.push({
+            content: optionContent || text,
+            subtext: subtext,
+            tokens: tokens,
+            type: 'option',
+            originalIndex: index,
+            data: thisData
+          });
+
+          availableOptionsCount++;
         }
 
-        that.liObj[index] = liIndex;
+        that.selectpicker.main.map.newIndex[index] = liIndex;
+        that.selectpicker.main.map.originalIndex[liIndex] = index;
+
+        // get the most recent option info added to mainData
+        var _mainDataLast = mainData[mainData.length - 1];
+
+        _mainDataLast.disabled = isDisabled;
+
+        var combinedLength = 0;
+
+        // count the number of characters in the option - not perfect, but should work in most cases
+        if (_mainDataLast.content) combinedLength += _mainDataLast.content.length;
+        if (_mainDataLast.subtext) combinedLength += _mainDataLast.subtext.length;
+        // if there is an icon, ensure this option's width is checked
+        if (icon) combinedLength += 1;
+
+        if (combinedLength > widestOptionLength) {
+          widestOptionLength = combinedLength;
+
+          // guess which option is the widest
+          // use this when calculating menu width
+          // not perfect, but it's fast, and the width will be updating accordingly when scrolling
+          widestOption = mainElements[mainElements.length - 1];
+        }
       });
 
-      //If we are not multiple, we don't have a selected item, and we don't have a title, select the first element so something is set in the button
-      if (!this.multiple && this.$element.find('option:selected').length === 0 && !this.options.title) {
-        this.$element.find('option').eq(0).prop('selected', true).attr('selected', 'selected');
-      }
+      this.selectpicker.main.elements = mainElements;
+      this.selectpicker.main.data = mainData;
+      this.selectpicker.main.hidden = hiddenOptions;
 
-      return _li.join('');
+      this.selectpicker.current = this.selectpicker.main;
+
+      this.selectpicker.view.widestOption = widestOption;
+      this.selectpicker.view.availableOptionsCount = availableOptionsCount; // faster way to get # of available options without filter
     },
 
     findLis: function () {
-      if (this.$lis == null) this.$lis = this.$menu.find('li');
-      return this.$lis;
+      return this.$menuInner.find('.inner > li');
     },
 
-    /**
-     * @param [updateLi] defaults to true
-     */
-    render: function (updateLi) {
+    render: function () {
       var that = this,
-          notDisabled,
-          $selectOptions = this.$element.find('option');
-
-      //Update the LI to match the SELECT
-      if (updateLi !== false) {
-        $selectOptions.each(function (index) {
-          var $lis = that.findLis().eq(that.liObj[index]);
-
-          that.setDisabled(index, this.disabled || this.parentNode.tagName === 'OPTGROUP' && this.parentNode.disabled, $lis);
-          that.setSelected(index, this.selected, $lis);
-        });
-      }
+          $selectOptions = this.$element.find('option'),
+          selectedItems = [],
+          selectedItemsInTitle = [];
 
       this.togglePlaceholder();
 
       this.tabIndex();
 
-      var selectedItems = $selectOptions.map(function () {
-        if (this.selected) {
-          if (that.options.hideDisabled && (this.disabled || this.parentNode.tagName === 'OPTGROUP' && this.parentNode.disabled)) return;
+      for (var index = 0, len = $selectOptions.length; index < len; index++) {
+        var i = that.selectpicker.main.map.newIndex[index],
+            option = $selectOptions[index],
+            optionData = that.selectpicker.main.data[i] || that.selectpicker.main.hidden[index];
 
-          var $this = $(this),
-              icon = $this.data('icon') && that.options.showIcon ? '<i class="' + that.options.iconBase + ' ' + $this.data('icon') + '"></i> ' : '',
-              subtext;
+        if (option && option.selected && optionData) {
+          selectedItems.push(option);
 
-          if (that.options.showSubtext && $this.data('subtext') && !that.multiple) {
-            subtext = ' <small class="text-muted">' + $this.data('subtext') + '</small>';
-          } else {
-            subtext = '';
-          }
-          if (typeof $this.attr('title') !== 'undefined') {
-            return $this.attr('title');
-          } else if ($this.data('content') && that.options.showContent) {
-            return $this.data('content').toString();
-          } else {
-            return icon + $this.html() + subtext;
+          if ((selectedItemsInTitle.length < 100 && that.options.selectedTextFormat !== 'count') || selectedItems.length === 1) {
+            var thisData = optionData.data,
+                icon = thisData.icon && that.options.showIcon ? '<i class="' + that.options.iconBase + ' ' + thisData.icon + '"></i> ' : '',
+                subtext,
+                titleItem;
+
+            if (that.options.showSubtext && thisData.subtext && !that.multiple) {
+              subtext = ' <small class="text-muted">' + thisData.subtext + '</small>';
+            } else {
+              subtext = '';
+            }
+
+            if (option.title) {
+              titleItem = option.title;
+            } else if (thisData.content && that.options.showContent) {
+              titleItem = thisData.content.toString();
+            } else {
+              titleItem = icon + option.innerHTML.trim() + subtext;
+            }
+
+            selectedItemsInTitle.push(titleItem);
           }
         }
-      }).toArray();
+      }
 
-      //Fixes issue in IE10 occurring when no default option is selected and at least one option is disabled
-      //Convert all the values into a comma delimited string
-      var title = !this.multiple ? selectedItems[0] : selectedItems.join(this.options.multipleSeparator);
+      // Fixes issue in IE10 occurring when no default option is selected and at least one option is disabled
+      // Convert all the values into a comma delimited string
+      var title = !this.multiple ? selectedItemsInTitle[0] : selectedItemsInTitle.join(this.options.multipleSeparator);
 
-      //If this is multi select, and the selectText type is count, the show 1 of 2 selected etc..
-      if (this.multiple && this.options.selectedTextFormat.indexOf('count') > -1) {
+      // add ellipsis
+      if (selectedItems.length > 50) title += '...';
+
+      // If this is a multiselect, and selectedTextFormat is count, then show 1 of 2 selected etc..
+      if (this.multiple && this.options.selectedTextFormat.indexOf('count') !== -1) {
         var max = this.options.selectedTextFormat.split('>');
-        if ((max.length > 1 && selectedItems.length > max[1]) || (max.length == 1 && selectedItems.length >= 2)) {
-          notDisabled = this.options.hideDisabled ? ', [disabled]' : '';
-          var totalCount = $selectOptions.not('[data-divider="true"], [data-hidden="true"]' + notDisabled).length,
+
+        if ((max.length > 1 && selectedItems.length > max[1]) || (max.length === 1 && selectedItems.length >= 2)) {
+          var totalCount = this.selectpicker.view.availableOptionsCount,
               tr8nText = (typeof this.options.countSelectedText === 'function') ? this.options.countSelectedText(selectedItems.length, totalCount) : this.options.countSelectedText;
+
           title = tr8nText.replace('{0}', selectedItems.length.toString()).replace('{1}', totalCount.toString());
         }
       }
 
       if (this.options.title == undefined) {
+        // use .attr to ensure undefined is returned if title attribute is not set
         this.options.title = this.$element.attr('title');
       }
 
@@ -54272,16 +54765,16 @@ license Apache-2.0
         title = this.options.title;
       }
 
-      //If we dont have a title, then use the default, or if nothing is set at all, use the not selected text
+      // If the select doesn't have a title, then use the default, or if nothing is set at all, use noneSelectedText
       if (!title) {
         title = typeof this.options.title !== 'undefined' ? this.options.title : this.options.noneSelectedText;
       }
 
-      //strip all HTML tags and trim the result, then unescape any escaped tags
-      this.$button.attr('title', htmlUnescape($.trim(title.replace(/<[^>]*>?/g, ''))));
-      this.$button.children('.filter-option').html(title);
+      // strip all HTML tags and trim the result, then unescape any escaped tags
+      this.$button[0].title = htmlUnescape(title.replace(/<[^>]*>?/g, '').trim());
+      this.$button.find('.filter-option-inner-inner')[0].innerHTML = title;
 
-      this.$element.trigger('rendered.bs.select');
+      this.$element.trigger('rendered' + EVENT_KEY);
     },
 
     /**
@@ -54293,7 +54786,7 @@ license Apache-2.0
         this.$newElement.addClass(this.$element.attr('class').replace(/selectpicker|mobile-device|bs-select-hidden|validate\[.*\]/gi, ''));
       }
 
-      var buttonClass = style ? style : this.options.style;
+      var buttonClass = style || this.options.style;
 
       if (status == 'add') {
         this.$button.addClass(buttonClass);
@@ -54308,29 +54801,48 @@ license Apache-2.0
     liHeight: function (refresh) {
       if (!refresh && (this.options.size === false || this.sizeInfo)) return;
 
+      if (!this.sizeInfo) this.sizeInfo = {};
+
       var newElement = document.createElement('div'),
           menu = document.createElement('div'),
-          menuInner = document.createElement('ul'),
+          menuInner = document.createElement('div'),
+          menuInnerInner = document.createElement('ul'),
           divider = document.createElement('li'),
+          dropdownHeader = document.createElement('li'),
           li = document.createElement('li'),
           a = document.createElement('a'),
           text = document.createElement('span'),
-          header = this.options.header && this.$menu.find('.popover-title').length > 0 ? this.$menu.find('.popover-title')[0].cloneNode(true) : null,
+          header = this.options.header && this.$menu.find('.' + classNames.POPOVERHEADER).length > 0 ? this.$menu.find('.' + classNames.POPOVERHEADER)[0].cloneNode(true) : null,
           search = this.options.liveSearch ? document.createElement('div') : null,
           actions = this.options.actionsBox && this.multiple && this.$menu.find('.bs-actionsbox').length > 0 ? this.$menu.find('.bs-actionsbox')[0].cloneNode(true) : null,
-          doneButton = this.options.doneButton && this.multiple && this.$menu.find('.bs-donebutton').length > 0 ? this.$menu.find('.bs-donebutton')[0].cloneNode(true) : null;
+          doneButton = this.options.doneButton && this.multiple && this.$menu.find('.bs-donebutton').length > 0 ? this.$menu.find('.bs-donebutton')[0].cloneNode(true) : null,
+          firstOption = this.$element.find('option')[0];
+
+      this.sizeInfo.selectWidth = this.$newElement[0].offsetWidth;
 
       text.className = 'text';
-      newElement.className = this.$menu[0].parentNode.className + ' open';
-      menu.className = 'dropdown-menu open';
-      menuInner.className = 'dropdown-menu inner';
-      divider.className = 'divider';
+      a.className = 'dropdown-item ' + (firstOption ? firstOption.className : '');
+      newElement.className = this.$menu[0].parentNode.className + ' ' + classNames.SHOW;
+      newElement.style.width = this.sizeInfo.selectWidth + 'px';
+      if (this.options.width === 'auto') menu.style.minWidth = 0;
+      menu.className = classNames.MENU + ' ' + classNames.SHOW;
+      menuInner.className = 'inner ' + classNames.SHOW;
+      menuInnerInner.className = classNames.MENU + ' inner ' + (version.major === '4' ? classNames.SHOW : '');
+      divider.className = classNames.DIVIDER;
+      dropdownHeader.className = 'dropdown-header';
 
-      text.appendChild(document.createTextNode('Inner text'));
+      text.appendChild(document.createTextNode('\u200b'));
       a.appendChild(text);
       li.appendChild(a);
-      menuInner.appendChild(li);
-      menuInner.appendChild(divider);
+      dropdownHeader.appendChild(text.cloneNode(true));
+
+      if (this.selectpicker.view.widestOption) {
+        menuInnerInner.appendChild(this.selectpicker.view.widestOption.cloneNode(true));
+      }
+
+      menuInnerInner.appendChild(li);
+      menuInnerInner.appendChild(divider);
+      menuInnerInner.appendChild(dropdownHeader);
       if (header) menu.appendChild(header);
       if (search) {
         var input = document.createElement('input');
@@ -54340,6 +54852,7 @@ license Apache-2.0
         menu.appendChild(search);
       }
       if (actions) menu.appendChild(actions);
+      menuInner.appendChild(menuInnerInner);
       menu.appendChild(menuInner);
       if (doneButton) menu.appendChild(doneButton);
       newElement.appendChild(menu);
@@ -54347,208 +54860,227 @@ license Apache-2.0
       document.body.appendChild(newElement);
 
       var liHeight = a.offsetHeight,
+          dropdownHeaderHeight = dropdownHeader ? dropdownHeader.offsetHeight : 0,
           headerHeight = header ? header.offsetHeight : 0,
           searchHeight = search ? search.offsetHeight : 0,
           actionsHeight = actions ? actions.offsetHeight : 0,
           doneButtonHeight = doneButton ? doneButton.offsetHeight : 0,
           dividerHeight = $(divider).outerHeight(true),
           // fall back to jQuery if getComputedStyle is not supported
-          menuStyle = typeof getComputedStyle === 'function' ? getComputedStyle(menu) : false,
+          menuStyle = window.getComputedStyle ? window.getComputedStyle(menu) : false,
+          menuWidth = menu.offsetWidth,
           $menu = menuStyle ? null : $(menu),
           menuPadding = {
-            vert: parseInt(menuStyle ? menuStyle.paddingTop : $menu.css('paddingTop')) +
-                  parseInt(menuStyle ? menuStyle.paddingBottom : $menu.css('paddingBottom')) +
-                  parseInt(menuStyle ? menuStyle.borderTopWidth : $menu.css('borderTopWidth')) +
-                  parseInt(menuStyle ? menuStyle.borderBottomWidth : $menu.css('borderBottomWidth')),
-            horiz: parseInt(menuStyle ? menuStyle.paddingLeft : $menu.css('paddingLeft')) +
-                  parseInt(menuStyle ? menuStyle.paddingRight : $menu.css('paddingRight')) +
-                  parseInt(menuStyle ? menuStyle.borderLeftWidth : $menu.css('borderLeftWidth')) +
-                  parseInt(menuStyle ? menuStyle.borderRightWidth : $menu.css('borderRightWidth'))
+            vert: toInteger(menuStyle ? menuStyle.paddingTop : $menu.css('paddingTop')) +
+                  toInteger(menuStyle ? menuStyle.paddingBottom : $menu.css('paddingBottom')) +
+                  toInteger(menuStyle ? menuStyle.borderTopWidth : $menu.css('borderTopWidth')) +
+                  toInteger(menuStyle ? menuStyle.borderBottomWidth : $menu.css('borderBottomWidth')),
+            horiz: toInteger(menuStyle ? menuStyle.paddingLeft : $menu.css('paddingLeft')) +
+                  toInteger(menuStyle ? menuStyle.paddingRight : $menu.css('paddingRight')) +
+                  toInteger(menuStyle ? menuStyle.borderLeftWidth : $menu.css('borderLeftWidth')) +
+                  toInteger(menuStyle ? menuStyle.borderRightWidth : $menu.css('borderRightWidth'))
           },
-          menuExtras =  {
+          menuExtras = {
             vert: menuPadding.vert +
-                  parseInt(menuStyle ? menuStyle.marginTop : $menu.css('marginTop')) +
-                  parseInt(menuStyle ? menuStyle.marginBottom : $menu.css('marginBottom')) + 2,
+                  toInteger(menuStyle ? menuStyle.marginTop : $menu.css('marginTop')) +
+                  toInteger(menuStyle ? menuStyle.marginBottom : $menu.css('marginBottom')) + 2,
             horiz: menuPadding.horiz +
-                  parseInt(menuStyle ? menuStyle.marginLeft : $menu.css('marginLeft')) +
-                  parseInt(menuStyle ? menuStyle.marginRight : $menu.css('marginRight')) + 2
-          }
+                  toInteger(menuStyle ? menuStyle.marginLeft : $menu.css('marginLeft')) +
+                  toInteger(menuStyle ? menuStyle.marginRight : $menu.css('marginRight')) + 2
+          },
+          scrollBarWidth;
+
+      menuInner.style.overflowY = 'scroll';
+
+      scrollBarWidth = menu.offsetWidth - menuWidth;
 
       document.body.removeChild(newElement);
 
-      this.sizeInfo = {
-        liHeight: liHeight,
-        headerHeight: headerHeight,
-        searchHeight: searchHeight,
-        actionsHeight: actionsHeight,
-        doneButtonHeight: doneButtonHeight,
-        dividerHeight: dividerHeight,
-        menuPadding: menuPadding,
-        menuExtras: menuExtras
-      };
+      this.sizeInfo.liHeight = liHeight;
+      this.sizeInfo.dropdownHeaderHeight = dropdownHeaderHeight;
+      this.sizeInfo.headerHeight = headerHeight;
+      this.sizeInfo.searchHeight = searchHeight;
+      this.sizeInfo.actionsHeight = actionsHeight;
+      this.sizeInfo.doneButtonHeight = doneButtonHeight;
+      this.sizeInfo.dividerHeight = dividerHeight;
+      this.sizeInfo.menuPadding = menuPadding;
+      this.sizeInfo.menuExtras = menuExtras;
+      this.sizeInfo.menuWidth = menuWidth;
+      this.sizeInfo.totalMenuWidth = this.sizeInfo.menuWidth;
+      this.sizeInfo.scrollBarWidth = scrollBarWidth;
+      this.sizeInfo.selectHeight = this.$newElement[0].offsetHeight;
+
+      this.setPositionData();
     },
 
-    setSize: function () {
-      this.findLis();
-      this.liHeight();
+    getSelectPosition: function () {
+      var that = this,
+          $window = $(window),
+          pos = that.$newElement.offset(),
+          $container = $(that.options.container),
+          containerPos;
+
+      if (that.options.container && !$container.is('body')) {
+        containerPos = $container.offset();
+        containerPos.top += parseInt($container.css('borderTopWidth'));
+        containerPos.left += parseInt($container.css('borderLeftWidth'));
+      } else {
+        containerPos = { top: 0, left: 0 };
+      }
+
+      var winPad = that.options.windowPadding;
+
+      this.sizeInfo.selectOffsetTop = pos.top - containerPos.top - $window.scrollTop();
+      this.sizeInfo.selectOffsetBot = $window.height() - this.sizeInfo.selectOffsetTop - this.sizeInfo.selectHeight - containerPos.top - winPad[2];
+      this.sizeInfo.selectOffsetLeft = pos.left - containerPos.left - $window.scrollLeft();
+      this.sizeInfo.selectOffsetRight = $window.width() - this.sizeInfo.selectOffsetLeft - this.sizeInfo.selectWidth - containerPos.left - winPad[1];
+      this.sizeInfo.selectOffsetTop -= winPad[0];
+      this.sizeInfo.selectOffsetLeft -= winPad[3];
+    },
+
+    setMenuSize: function (isAuto) {
+      this.getSelectPosition();
+
+      var selectWidth = this.sizeInfo.selectWidth,
+          liHeight = this.sizeInfo.liHeight,
+          headerHeight = this.sizeInfo.headerHeight,
+          searchHeight = this.sizeInfo.searchHeight,
+          actionsHeight = this.sizeInfo.actionsHeight,
+          doneButtonHeight = this.sizeInfo.doneButtonHeight,
+          divHeight = this.sizeInfo.dividerHeight,
+          menuPadding = this.sizeInfo.menuPadding,
+          menuInnerHeight,
+          menuHeight,
+          divLength = 0,
+          minHeight,
+          _minHeight,
+          maxHeight,
+          menuInnerMinHeight,
+          estimate;
+
+      if (this.options.dropupAuto) {
+        // Get the estimated height of the menu without scrollbars.
+        // This is useful for smaller menus, where there might be plenty of room
+        // below the button without setting dropup, but we can't know
+        // the exact height of the menu until createView is called later
+        estimate = liHeight * this.selectpicker.current.elements.length + menuPadding.vert;
+        this.$newElement.toggleClass(classNames.DROPUP, this.sizeInfo.selectOffsetTop - this.sizeInfo.selectOffsetBot > this.sizeInfo.menuExtras.vert && estimate + this.sizeInfo.menuExtras.vert + 50 > this.sizeInfo.selectOffsetBot);
+      }
+
+      if (this.options.size === 'auto') {
+        _minHeight = this.selectpicker.current.elements.length > 3 ? this.sizeInfo.liHeight * 3 + this.sizeInfo.menuExtras.vert - 2 : 0;
+        menuHeight = this.sizeInfo.selectOffsetBot - this.sizeInfo.menuExtras.vert;
+        minHeight = _minHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight;
+        menuInnerMinHeight = Math.max(_minHeight - menuPadding.vert, 0);
+
+        if (this.$newElement.hasClass(classNames.DROPUP)) {
+          menuHeight = this.sizeInfo.selectOffsetTop - this.sizeInfo.menuExtras.vert;
+        }
+
+        maxHeight = menuHeight;
+        menuInnerHeight = menuHeight - headerHeight - searchHeight - actionsHeight - doneButtonHeight - menuPadding.vert;
+      } else if (this.options.size && this.options.size != 'auto' && this.selectpicker.current.elements.length > this.options.size) {
+        for (var i = 0; i < this.options.size; i++) {
+          if (this.selectpicker.current.data[i].type === 'divider') divLength++;
+        }
+
+        menuHeight = liHeight * this.options.size + divLength * divHeight + menuPadding.vert;
+        menuInnerHeight = menuHeight - menuPadding.vert;
+        maxHeight = menuHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight;
+        minHeight = menuInnerMinHeight = '';
+      }
+
+      if (this.options.dropdownAlignRight === 'auto') {
+        this.$menu.toggleClass(classNames.MENURIGHT, this.sizeInfo.selectOffsetLeft > this.sizeInfo.selectOffsetRight && this.sizeInfo.selectOffsetRight < (this.sizeInfo.totalMenuWidth - selectWidth));
+      }
+
+      this.$menu.css({
+        'max-height': maxHeight + 'px',
+        'overflow': 'hidden',
+        'min-height': minHeight + 'px'
+      });
+
+      this.$menuInner.css({
+        'max-height': menuInnerHeight + 'px',
+        'overflow-y': 'auto',
+        'min-height': menuInnerMinHeight + 'px'
+      });
+
+      this.sizeInfo.menuInnerHeight = menuInnerHeight;
+
+      if (this.selectpicker.current.data.length && this.selectpicker.current.data[this.selectpicker.current.data.length - 1].position > this.sizeInfo.menuInnerHeight) {
+        this.sizeInfo.hasScrollBar = true;
+        this.sizeInfo.totalMenuWidth = this.sizeInfo.menuWidth + this.sizeInfo.scrollBarWidth;
+
+        this.$menu.css('min-width', this.sizeInfo.totalMenuWidth);
+      }
+
+      if (this.dropdown && this.dropdown._popper) this.dropdown._popper.update();
+    },
+
+    setSize: function (refresh) {
+      this.liHeight(refresh);
 
       if (this.options.header) this.$menu.css('padding-top', 0);
       if (this.options.size === false) return;
 
       var that = this,
-          $menu = this.$menu,
-          $menuInner = this.$menuInner,
           $window = $(window),
-          selectHeight = this.$newElement[0].offsetHeight,
-          selectWidth = this.$newElement[0].offsetWidth,
-          liHeight = this.sizeInfo['liHeight'],
-          headerHeight = this.sizeInfo['headerHeight'],
-          searchHeight = this.sizeInfo['searchHeight'],
-          actionsHeight = this.sizeInfo['actionsHeight'],
-          doneButtonHeight = this.sizeInfo['doneButtonHeight'],
-          divHeight = this.sizeInfo['dividerHeight'],
-          menuPadding = this.sizeInfo['menuPadding'],
-          menuExtras = this.sizeInfo['menuExtras'],
-          notDisabled = this.options.hideDisabled ? '.disabled' : '',
-          menuHeight,
-          menuWidth,
-          getHeight,
-          getWidth,
-          selectOffsetTop,
-          selectOffsetBot,
-          selectOffsetLeft,
-          selectOffsetRight,
-          getPos = function() {
-            var pos = that.$newElement.offset(),
-                $container = $(that.options.container),
-                containerPos;
+          selectedIndex,
+          offset = 0;
 
-            if (that.options.container && !$container.is('body')) {
-              containerPos = $container.offset();
-              containerPos.top += parseInt($container.css('borderTopWidth'));
-              containerPos.left += parseInt($container.css('borderLeftWidth'));
-            } else {
-              containerPos = { top: 0, left: 0 };
-            }
-
-            var winPad = that.options.windowPadding;
-            selectOffsetTop = pos.top - containerPos.top - $window.scrollTop();
-            selectOffsetBot = $window.height() - selectOffsetTop - selectHeight - containerPos.top - winPad[2];
-            selectOffsetLeft = pos.left - containerPos.left - $window.scrollLeft();
-            selectOffsetRight = $window.width() - selectOffsetLeft - selectWidth - containerPos.left - winPad[1];
-            selectOffsetTop -= winPad[0];
-            selectOffsetLeft -= winPad[3];
-          };
-
-      getPos();
+      this.setMenuSize();
 
       if (this.options.size === 'auto') {
-        var getSize = function () {
-          var minHeight,
-              hasClass = function (className, include) {
-                return function (element) {
-                    if (include) {
-                        return (element.classList ? element.classList.contains(className) : $(element).hasClass(className));
-                    } else {
-                        return !(element.classList ? element.classList.contains(className) : $(element).hasClass(className));
-                    }
-                };
-              },
-              lis = that.$menuInner[0].getElementsByTagName('li'),
-              lisVisible = Array.prototype.filter ? Array.prototype.filter.call(lis, hasClass('hidden', false)) : that.$lis.not('.hidden'),
-              optGroup = Array.prototype.filter ? Array.prototype.filter.call(lisVisible, hasClass('dropdown-header', true)) : lisVisible.filter('.dropdown-header');
-
-          getPos();
-          menuHeight = selectOffsetBot - menuExtras.vert;
-          menuWidth = selectOffsetRight - menuExtras.horiz;
-
-          if (that.options.container) {
-            if (!$menu.data('height')) $menu.data('height', $menu.height());
-            getHeight = $menu.data('height');
-
-            if (!$menu.data('width')) $menu.data('width', $menu.width());
-            getWidth = $menu.data('width');
-          } else {
-            getHeight = $menu.height();
-            getWidth = $menu.width();
-          }
-
-          if (that.options.dropupAuto) {
-            that.$newElement.toggleClass('dropup', selectOffsetTop > selectOffsetBot && (menuHeight - menuExtras.vert) < getHeight);
-          }
-
-          if (that.$newElement.hasClass('dropup')) {
-            menuHeight = selectOffsetTop - menuExtras.vert;
-          }
-
-          if (that.options.dropdownAlignRight === 'auto') {
-            $menu.toggleClass('dropdown-menu-right', selectOffsetLeft > selectOffsetRight && (menuWidth - menuExtras.horiz) < (getWidth - selectWidth));
-          }
-
-          if ((lisVisible.length + optGroup.length) > 3) {
-            minHeight = liHeight * 3 + menuExtras.vert - 2;
-          } else {
-            minHeight = 0;
-          }
-
-          $menu.css({
-            'max-height': menuHeight + 'px',
-            'overflow': 'hidden',
-            'min-height': minHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight + 'px'
+        this.$searchbox
+          .off('input.setMenuSize propertychange.setMenuSize')
+          .on('input.setMenuSize propertychange.setMenuSize', function () {
+            return that.setMenuSize();
           });
-          $menuInner.css({
-            'max-height': menuHeight - headerHeight - searchHeight - actionsHeight - doneButtonHeight - menuPadding.vert + 'px',
-            'overflow-y': 'auto',
-            'min-height': Math.max(minHeight - menuPadding.vert, 0) + 'px'
+
+        $window
+          .off('resize' + EVENT_KEY + '.' + this.selectId + '.setMenuSize' + ' scroll' + EVENT_KEY + '.' + this.selectId + '.setMenuSize')
+          .on('resize' + EVENT_KEY + '.' + this.selectId + '.setMenuSize' + ' scroll' + EVENT_KEY + '.' + this.selectId + '.setMenuSize', function () {
+            return that.setMenuSize();
           });
-        };
-        getSize();
-        this.$searchbox.off('input.getSize propertychange.getSize').on('input.getSize propertychange.getSize', getSize);
-        $window.off('resize.getSize scroll.getSize').on('resize.getSize scroll.getSize', getSize);
-      } else if (this.options.size && this.options.size != 'auto' && this.$lis.not(notDisabled).length > this.options.size) {
-        var optIndex = this.$lis.not('.divider').not(notDisabled).children().slice(0, this.options.size).last().parent().index(),
-            divLength = this.$lis.slice(0, optIndex + 1).filter('.divider').length;
-        menuHeight = liHeight * this.options.size + divLength * divHeight + menuPadding.vert;
-
-        if (that.options.container) {
-          if (!$menu.data('height')) $menu.data('height', $menu.height());
-          getHeight = $menu.data('height');
-        } else {
-          getHeight = $menu.height();
-        }
-
-        if (that.options.dropupAuto) {
-          //noinspection JSUnusedAssignment
-          this.$newElement.toggleClass('dropup', selectOffsetTop > selectOffsetBot && (menuHeight - menuExtras.vert) < getHeight);
-        }
-        $menu.css({
-          'max-height': menuHeight + headerHeight + searchHeight + actionsHeight + doneButtonHeight + 'px',
-          'overflow': 'hidden',
-          'min-height': ''
-        });
-        $menuInner.css({
-          'max-height': menuHeight - menuPadding.vert + 'px',
-          'overflow-y': 'auto',
-          'min-height': ''
-        });
+      } else if (this.options.size && this.options.size != 'auto' && this.selectpicker.current.elements.length > this.options.size) {
+        this.$searchbox.off('input.setMenuSize propertychange.setMenuSize');
+        $window.off('resize' + EVENT_KEY + '.' + this.selectId + '.setMenuSize' + ' scroll' + EVENT_KEY + '.' + this.selectId + '.setMenuSize');
       }
+
+      if (refresh) {
+        offset = this.$menuInner[0].scrollTop;
+      } else if (!that.multiple) {
+        selectedIndex = that.selectpicker.main.map.newIndex[that.$element[0].selectedIndex];
+
+        if (typeof selectedIndex === 'number' && that.options.size !== false) {
+          offset = that.sizeInfo.liHeight * selectedIndex;
+          offset = offset - (that.sizeInfo.menuInnerHeight / 2) + (that.sizeInfo.liHeight / 2);
+        }
+      }
+
+      that.createView(false, offset);
     },
 
     setWidth: function () {
+      var that = this;
+
       if (this.options.width === 'auto') {
-        this.$menu.css('min-width', '0');
+        requestAnimationFrame(function () {
+          that.$menu.css('min-width', '0');
+          that.liHeight();
+          that.setMenuSize();
 
-        // Get correct width if element is hidden
-        var $selectClone = this.$menu.parent().clone().appendTo('body'),
-            $selectClone2 = this.options.container ? this.$newElement.clone().appendTo('body') : $selectClone,
-            ulWidth = $selectClone.children('.dropdown-menu').outerWidth(),
-            btnWidth = $selectClone2.css('width', 'auto').children('button').outerWidth();
+          // Get correct width if element is hidden
+          var $selectClone = that.$newElement.clone().appendTo('body'),
+              btnWidth = $selectClone.css('width', 'auto').children('button').outerWidth();
 
-        $selectClone.remove();
-        $selectClone2.remove();
+          $selectClone.remove();
 
-        // Set width to whatever's larger, button title or longest option
-        this.$newElement.css('width', Math.max(ulWidth, btnWidth) + 'px');
+          // Set width to whatever's larger, button title or longest option
+          that.sizeInfo.selectWidth = Math.max(that.sizeInfo.totalMenuWidth, btnWidth);
+          that.$newElement.css('width', that.sizeInfo.selectWidth + 'px');
+        });
       } else if (this.options.width === 'fit') {
         // Remove inline min-width so width can be changed from 'auto'
         this.$menu.css('min-width', '');
@@ -54577,7 +55109,15 @@ license Apache-2.0
           containerPos,
           actualHeight,
           getPlacement = function ($element) {
-            that.$bsContainer.addClass($element.attr('class').replace(/form-control|fit-width/gi, '')).toggleClass('dropup', $element.hasClass('dropup'));
+            var containerPosition = {},
+                // fall back to dropdown's default display setting if display is not manually set
+                display = that.options.display || (
+                  // Bootstrap 3 doesn't have $.fn.dropdown.Constructor.Default
+                  $.fn.dropdown.Constructor.Default ? $.fn.dropdown.Constructor.Default.display
+                  : false
+                );
+
+            that.$bsContainer.addClass($element.attr('class').replace(/form-control|fit-width/gi, '')).toggleClass(classNames.DROPUP, $element.hasClass(classNames.DROPUP));
             pos = $element.offset();
 
             if (!$container.is('body')) {
@@ -54588,18 +55128,20 @@ license Apache-2.0
               containerPos = { top: 0, left: 0 };
             }
 
-            actualHeight = $element.hasClass('dropup') ? 0 : $element[0].offsetHeight;
+            actualHeight = $element.hasClass(classNames.DROPUP) ? 0 : $element[0].offsetHeight;
 
-            that.$bsContainer.css({
-              'top': pos.top - containerPos.top + actualHeight,
-              'left': pos.left - containerPos.left,
-              'width': $element[0].offsetWidth
-            });
+            // Bootstrap 4+ uses Popper for menu positioning
+            if (version.major < 4 || display === 'static') {
+              containerPosition.top = pos.top - containerPos.top + actualHeight;
+              containerPosition.left = pos.left - containerPos.left;
+            }
+
+            containerPosition.width = $element[0].offsetWidth;
+
+            that.$bsContainer.css(containerPosition);
           };
 
-      this.$button.on('click', function () {
-        var $this = $(this);
-
+      this.$button.on('click.bs.dropdown.data-api', function () {
         if (that.isDisabled()) {
           return;
         }
@@ -54608,48 +55150,136 @@ license Apache-2.0
 
         that.$bsContainer
           .appendTo(that.options.container)
-          .toggleClass('open', !$this.hasClass('open'))
+          .toggleClass(classNames.SHOW, !that.$button.hasClass(classNames.SHOW))
           .append(that.$menu);
       });
 
-      $(window).on('resize scroll', function () {
-        getPlacement(that.$newElement);
-      });
+      $(window)
+        .off('resize' + EVENT_KEY + '.' + this.selectId + ' scroll' + EVENT_KEY + '.' + this.selectId)
+        .on('resize' + EVENT_KEY + '.' + this.selectId + ' scroll' + EVENT_KEY + '.' + this.selectId, function () {
+          var isActive = that.$newElement.hasClass(classNames.SHOW);
 
-      this.$element.on('hide.bs.select', function () {
+          if (isActive) getPlacement(that.$newElement);
+        });
+
+      this.$element.on('hide' + EVENT_KEY, function () {
         that.$menu.data('height', that.$menu.height());
         that.$bsContainer.detach();
       });
     },
 
+    setOptionStatus: function () {
+      var that = this,
+          $selectOptions = this.$element.find('option');
+
+      that.noScroll = false;
+
+      if (that.selectpicker.view.visibleElements && that.selectpicker.view.visibleElements.length) {
+        for (var i = 0; i < that.selectpicker.view.visibleElements.length; i++) {
+          var index = that.selectpicker.current.map.originalIndex[i + that.selectpicker.view.position0], // faster than $(li).data('originalIndex')
+              option = $selectOptions[index];
+
+          if (option) {
+            var liIndex = this.selectpicker.main.map.newIndex[index],
+                li = this.selectpicker.main.elements[liIndex];
+
+            that.setDisabled(
+              index,
+              option.disabled || (option.parentNode.tagName === 'OPTGROUP' && option.parentNode.disabled),
+              liIndex,
+              li
+            );
+
+            that.setSelected(
+              index,
+              option.selected,
+              liIndex,
+              li
+            );
+          }
+        }
+      }
+    },
+
     /**
      * @param {number} index - the index of the option that is being changed
      * @param {boolean} selected - true if the option is being selected, false if being deselected
-     * @param {JQuery} $lis - the 'li' element that is being modified
      */
-    setSelected: function (index, selected, $lis) {
-      if (!$lis) {
-        this.togglePlaceholder(); // check if setSelected is being called by changing the value of the select
-        $lis = this.findLis().eq(this.liObj[index]);
+    setSelected: function (index, selected, liIndex, li) {
+      var activeIndexIsSet = this.activeIndex !== undefined,
+          thisIsActive = this.activeIndex === index,
+          prevActiveIndex,
+          prevActive,
+          a,
+          // if current option is already active
+          // OR
+          // if the current option is being selected, it's NOT multiple, and
+          // activeIndex is undefined:
+          //  - when the menu is first being opened, OR
+          //  - after a search has been performed, OR
+          //  - when retainActive is false when selecting a new option (i.e. index of the newly selected option is not the same as the current activeIndex)
+          keepActive = thisIsActive || (selected && !this.multiple && !activeIndexIsSet);
+
+      if (!liIndex) liIndex = this.selectpicker.main.map.newIndex[index];
+      if (!li) li = this.selectpicker.main.elements[liIndex];
+
+      a = li.firstChild;
+
+      if (selected) {
+        this.selectedIndex = index;
       }
 
-      $lis.toggleClass('selected', selected).find('a').attr('aria-selected', selected);
+      li.classList.toggle('selected', selected);
+      li.classList.toggle('active', keepActive);
+
+      if (keepActive) {
+        this.selectpicker.view.currentActive = li;
+        this.activeIndex = index;
+      }
+
+      if (a) {
+        a.classList.toggle('selected', selected);
+        a.classList.toggle('active', keepActive);
+        a.setAttribute('aria-selected', selected);
+      }
+
+      if (!keepActive) {
+        if (!activeIndexIsSet && selected && this.prevActiveIndex !== undefined) {
+          prevActiveIndex = this.selectpicker.main.map.newIndex[this.prevActiveIndex];
+          prevActive = this.selectpicker.main.elements[prevActiveIndex];
+
+          prevActive.classList.remove('active');
+          if (prevActive.firstChild) {
+            prevActive.firstChild.classList.remove('active');
+          }
+        }
+      }
     },
 
     /**
      * @param {number} index - the index of the option that is being disabled
      * @param {boolean} disabled - true if the option is being disabled, false if being enabled
-     * @param {JQuery} $lis - the 'li' element that is being modified
      */
-    setDisabled: function (index, disabled, $lis) {
-      if (!$lis) {
-        $lis = this.findLis().eq(this.liObj[index]);
-      }
+    setDisabled: function (index, disabled, liIndex, li) {
+      var a;
 
-      if (disabled) {
-        $lis.addClass('disabled').children('a').attr('href', '#').attr('tabindex', -1).attr('aria-disabled', true);
-      } else {
-        $lis.removeClass('disabled').children('a').removeAttr('href').attr('tabindex', 0).attr('aria-disabled', false);
+      if (!liIndex) liIndex = this.selectpicker.main.map.newIndex[index];
+      if (!li) li = this.selectpicker.main.elements[liIndex];
+
+      a = li.firstChild;
+
+      li.classList.toggle(classNames.DISABLED, disabled);
+
+      if (a) {
+        if (version.major === '4') a.classList.toggle(classNames.DISABLED, disabled);
+
+        a.setAttribute('aria-disabled', disabled);
+
+        if (disabled) {
+          a.setAttribute('tabindex', -1);
+        } else {
+          a.setAttribute('tabindex', 0);
+        }
       }
     },
 
@@ -54661,12 +55291,12 @@ license Apache-2.0
       var that = this;
 
       if (this.isDisabled()) {
-        this.$newElement.addClass('disabled');
-        this.$button.addClass('disabled').attr('tabindex', -1).attr('aria-disabled', true);
+        this.$newElement.addClass(classNames.DISABLED);
+        this.$button.addClass(classNames.DISABLED).attr('tabindex', -1).attr('aria-disabled', true);
       } else {
-        if (this.$button.hasClass('disabled')) {
-          this.$newElement.removeClass('disabled');
-          this.$button.removeClass('disabled').attr('aria-disabled', false);
+        if (this.$button.hasClass(classNames.DISABLED)) {
+          this.$newElement.removeClass(classNames.DISABLED);
+          this.$button.removeClass(classNames.DISABLED).attr('aria-disabled', false);
         }
 
         if (this.$button.attr('tabindex') == -1 && !this.$element.data('tabindex')) {
@@ -54680,12 +55310,18 @@ license Apache-2.0
     },
 
     togglePlaceholder: function () {
-      var value = this.$element.val();
-      this.$button.toggleClass('bs-placeholder', value === null || value === '' || (value.constructor === Array && value.length === 0));
+      // much faster than calling $.val()
+      var element = this.$element[0],
+          selectedIndex = element.selectedIndex,
+          nothingSelected = selectedIndex === -1;
+
+      if (!nothingSelected && !element.options[selectedIndex].value) nothingSelected = true;
+
+      this.$button.toggleClass('bs-placeholder', nothingSelected);
     },
 
     tabIndex: function () {
-      if (this.$element.data('tabindex') !== this.$element.attr('tabindex') && 
+      if (this.$element.data('tabindex') !== this.$element.attr('tabindex') &&
         (this.$element.attr('tabindex') !== -98 && this.$element.attr('tabindex') !== '-98')) {
         this.$element.data('tabindex', this.$element.attr('tabindex'));
         this.$button.attr('tabindex', this.$element.data('tabindex'));
@@ -54702,34 +55338,57 @@ license Apache-2.0
 
       this.$button.on('keyup', function (e) {
         if (/(32)/.test(e.keyCode.toString(10)) && $document.data('spaceSelect')) {
-            e.preventDefault();
-            $document.data('spaceSelect', false);
+          e.preventDefault();
+          $document.data('spaceSelect', false);
         }
       });
 
-      this.$button.on('click', function () {
-        that.setSize();
-      });
-
-      this.$element.on('shown.bs.select', function () {
-        if (!that.options.liveSearch && !that.multiple) {
-          that.$menuInner.find('.selected a').focus();
-        } else if (!that.multiple) {
-          var selectedIndex = that.liObj[that.$element[0].selectedIndex];
-
-          if (typeof selectedIndex !== 'number' || that.options.size === false) return;
-
-          // scroll to selected option
-          var offset = that.$lis.eq(selectedIndex)[0].offsetTop - that.$menuInner[0].offsetTop;
-          offset = offset - that.$menuInner[0].offsetHeight/2 + that.sizeInfo.liHeight/2;
-          that.$menuInner[0].scrollTop = offset;
+      this.$newElement.on('show.bs.dropdown', function () {
+        if (version.major > 3 && !that.dropdown) {
+          that.dropdown = that.$button.data('bs.dropdown');
+          that.dropdown._menu = that.$menu[0];
         }
       });
 
-      this.$menuInner.on('click', 'li a', function (e) {
+      this.$button.on('click.bs.dropdown.data-api', function () {
+        if (!that.$newElement.hasClass(classNames.SHOW)) {
+          that.setSize();
+        }
+      });
+
+      function setFocus () {
+        if (that.options.liveSearch) {
+          that.$searchbox.focus();
+        } else {
+          that.$menuInner.focus();
+        }
+      }
+
+      function checkPopperExists () {
+        if (that.dropdown && that.dropdown._popper && that.dropdown._popper.state.isCreated) {
+          setFocus();
+        } else {
+          requestAnimationFrame(checkPopperExists);
+        }
+      }
+
+      this.$element.on('shown' + EVENT_KEY, function () {
+        if (that.$menuInner[0].scrollTop !== that.selectpicker.view.scrollTop) {
+          that.$menuInner[0].scrollTop = that.selectpicker.view.scrollTop;
+        }
+
+        if (version.major > 3) {
+          requestAnimationFrame(checkPopperExists);
+        } else {
+          setFocus();
+        }
+      });
+
+      this.$menuInner.on('click', 'li a', function (e, retainActive) {
         var $this = $(this),
-            clickedIndex = $this.parent().data('originalIndex'),
-            prevValue = that.$element.val(),
+            position0 = that.isVirtual() ? that.selectpicker.view.position0 : 0,
+            clickedIndex = that.selectpicker.current.map.originalIndex[$this.parent().index() + position0],
+            prevValue = getSelectValues(that.$element[0]),
             prevIndex = that.$element.prop('selectedIndex'),
             triggerChange = true;
 
@@ -54740,22 +55399,30 @@ license Apache-2.0
 
         e.preventDefault();
 
-        //Don't run if we have been disabled
-        if (!that.isDisabled() && !$this.parent().hasClass('disabled')) {
+        // Don't run if the select is disabled
+        if (!that.isDisabled() && !$this.parent().hasClass(classNames.DISABLED)) {
           var $options = that.$element.find('option'),
               $option = $options.eq(clickedIndex),
               state = $option.prop('selected'),
               $optgroup = $option.parent('optgroup'),
+              $optgroupOptions = $optgroup.find('option'),
               maxOptions = that.options.maxOptions,
               maxOptionsGrp = $optgroup.data('maxOptions') || false;
+
+          if (clickedIndex === that.activeIndex) retainActive = true;
+
+          if (!retainActive) {
+            that.prevActiveIndex = that.activeIndex;
+            that.activeIndex = undefined;
+          }
 
           if (!that.multiple) { // Deselect all others if not multi select box
             $options.prop('selected', false);
             $option.prop('selected', true);
-            that.$menuInner.find('.selected').removeClass('selected').find('a').attr('aria-selected', false);
             that.setSelected(clickedIndex, true);
           } else { // Toggle the one we have chosen if we are multi select.
             $option.prop('selected', !state);
+
             that.setSelected(clickedIndex, !state);
             $this.blur();
 
@@ -54767,13 +55434,21 @@ license Apache-2.0
                 if (maxOptions && maxOptions == 1) {
                   $options.prop('selected', false);
                   $option.prop('selected', true);
-                  that.$menuInner.find('.selected').removeClass('selected');
+
+                  for (var i = 0; i < $options.length; i++) {
+                    that.setSelected(i, false);
+                  }
+
                   that.setSelected(clickedIndex, true);
                 } else if (maxOptionsGrp && maxOptionsGrp == 1) {
                   $optgroup.find('option:selected').prop('selected', false);
                   $option.prop('selected', true);
-                  var optgroupID = $this.parent().data('optgroup');
-                  that.$menuInner.find('[data-optgroup="' + optgroupID + '"]').removeClass('selected');
+
+                  for (var i = 0; i < $optgroupOptions.length; i++) {
+                    var option = $optgroupOptions[i];
+                    that.setSelected($options.index(option), false);
+                  }
+
                   that.setSelected(clickedIndex, true);
                 } else {
                   var maxOptionsText = typeof that.options.maxOptionsText === 'string' ? [that.options.maxOptionsText, that.options.maxOptionsText] : that.options.maxOptionsText,
@@ -54795,13 +55470,13 @@ license Apache-2.0
                   if (maxOptions && maxReached) {
                     $notify.append($('<div>' + maxTxt + '</div>'));
                     triggerChange = false;
-                    that.$element.trigger('maxReached.bs.select');
+                    that.$element.trigger('maxReached' + EVENT_KEY);
                   }
 
                   if (maxOptionsGrp && maxReachedGrp) {
                     $notify.append($('<div>' + maxTxtGrp + '</div>'));
                     triggerChange = false;
-                    that.$element.trigger('maxReachedGrp.bs.select');
+                    that.$element.trigger('maxReachedGrp' + EVENT_KEY);
                   }
 
                   setTimeout(function () {
@@ -54824,9 +55499,9 @@ license Apache-2.0
 
           // Trigger select 'change'
           if (triggerChange) {
-            if ((prevValue != that.$element.val() && that.multiple) || (prevIndex != that.$element.prop('selectedIndex') && !that.multiple)) {
-              // $option.prop('selected') is current option state (selected/unselected). state is previous option state.
-              changed_arguments = [clickedIndex, $option.prop('selected'), state];
+            if ((prevValue != getSelectValues(that.$element[0]) && that.multiple) || (prevIndex != that.$element.prop('selectedIndex') && !that.multiple)) {
+              // $option.prop('selected') is current option state (selected/unselected). prevValue is the value of the select prior to being changed.
+              changedArguments = [clickedIndex, $option.prop('selected'), prevValue];
               that.$element
                 .triggerNative('change');
             }
@@ -54834,7 +55509,7 @@ license Apache-2.0
         }
       });
 
-      this.$menu.on('click', 'li.disabled a, .popover-title, .popover-title :not(.close)', function (e) {
+      this.$menu.on('click', 'li.' + classNames.DISABLED + ' a, .' + classNames.POPOVERHEADER + ', .' + classNames.POPOVERHEADER + ' :not(.close)', function (e) {
         if (e.currentTarget == this) {
           e.preventDefault();
           e.stopPropagation();
@@ -54856,7 +55531,7 @@ license Apache-2.0
         }
       });
 
-      this.$menu.on('click', '.popover-title .close', function () {
+      this.$menu.on('click', '.' + classNames.POPOVERHEADER + ' .close', function () {
         that.$button.click();
       });
 
@@ -54881,97 +55556,119 @@ license Apache-2.0
         }
       });
 
-      this.$element.change(function () {
-        that.render(false);
-        that.$element.trigger('changed.bs.select', changed_arguments);
-        changed_arguments = null;
+      this.$element.on({
+        'change': function () {
+          that.render();
+          that.$element.trigger('changed' + EVENT_KEY, changedArguments);
+          changedArguments = null;
+        },
+        'focus': function () {
+          if (!that.options.mobile) that.$button.focus();
+        }
       });
     },
 
     liveSearchListener: function () {
       var that = this,
-          $no_results = $('<li class="no-results"></li>');
+          noResults = document.createElement('li');
 
-      this.$button.on('click.dropdown.data-api', function () {
-        that.$menuInner.find('.active').removeClass('active');
+      this.$button.on('click.bs.dropdown.data-api', function () {
         if (!!that.$searchbox.val()) {
           that.$searchbox.val('');
-          that.$lis.not('.is-hidden').removeClass('hidden');
-          if (!!$no_results.parent().length) $no_results.remove();
         }
-        if (!that.multiple) that.$menuInner.find('.selected').addClass('active');
-        setTimeout(function () {
-          that.$searchbox.focus();
-        }, 10);
       });
 
-      this.$searchbox.on('click.dropdown.data-api focus.dropdown.data-api touchend.dropdown.data-api', function (e) {
+      this.$searchbox.on('click.bs.dropdown.data-api focus.bs.dropdown.data-api touchend.bs.dropdown.data-api', function (e) {
         e.stopPropagation();
       });
 
       this.$searchbox.on('input propertychange', function () {
-        that.$lis.not('.is-hidden').removeClass('hidden');
-        that.$lis.filter('.active').removeClass('active');
-        $no_results.remove();
+        var searchValue = that.$searchbox.val();
 
-        if (that.$searchbox.val()) {
-          var $searchBase = that.$lis.not('.is-hidden, .divider, .dropdown-header'),
-              $hideItems;
-          if (that.options.liveSearchNormalize) {
-            $hideItems = $searchBase.not(':a' + that._searchStyle() + '("' + normalizeToBase(that.$searchbox.val()) + '")');
-          } else {
-            $hideItems = $searchBase.not(':' + that._searchStyle() + '("' + that.$searchbox.val() + '")');
-          }
+        that.selectpicker.search.map.newIndex = {};
+        that.selectpicker.search.map.originalIndex = {};
+        that.selectpicker.search.elements = [];
+        that.selectpicker.search.data = [];
 
-          if ($hideItems.length === $searchBase.length) {
-            $no_results.html(that.options.noneResultsText.replace('{0}', '"' + htmlEscape(that.$searchbox.val()) + '"'));
-            that.$menuInner.append($no_results);
-            that.$lis.addClass('hidden');
-          } else {
-            $hideItems.addClass('hidden');
+        if (searchValue) {
+          var i,
+              searchMatch = [],
+              q = searchValue.toUpperCase(),
+              cache = {},
+              cacheArr = [],
+              searchStyle = that._searchStyle(),
+              normalizeSearch = that.options.liveSearchNormalize;
 
-            var $lisVisible = that.$lis.not('.hidden'),
-                $foundDiv;
+          if (normalizeSearch) q = normalizeToBase(q);
 
-            // hide divider if first or last visible, or if followed by another divider
-            $lisVisible.each(function (index) {
-              var $this = $(this);
+          that._$lisSelected = that.$menuInner.find('.selected');
 
-              if ($this.hasClass('divider')) {
-                if ($foundDiv === undefined) {
-                  $this.addClass('hidden');
-                } else {
-                  if ($foundDiv) $foundDiv.addClass('hidden');
-                  $foundDiv = $this;
-                }
-              } else if ($this.hasClass('dropdown-header') && $lisVisible.eq(index + 1).data('optgroup') !== $this.data('optgroup')) {
-                $this.addClass('hidden');
-              } else {
-                $foundDiv = null;
+          for (var i = 0; i < that.selectpicker.main.data.length; i++) {
+            var li = that.selectpicker.main.data[i];
+
+            if (!cache[i]) {
+              cache[i] = stringSearch(li, q, searchStyle, normalizeSearch);
+            }
+
+            if (cache[i] && li.headerIndex !== undefined && cacheArr.indexOf(li.headerIndex) === -1) {
+              if (li.headerIndex > 0) {
+                cache[li.headerIndex - 1] = true;
+                cacheArr.push(li.headerIndex - 1);
               }
-            });
-            if ($foundDiv) $foundDiv.addClass('hidden');
 
-            $searchBase.not('.hidden').first().addClass('active');
-            that.$menuInner.scrollTop(0);
+              cache[li.headerIndex] = true;
+              cacheArr.push(li.headerIndex);
+
+              cache[li.lastIndex + 1] = true;
+            }
+
+            if (cache[i] && li.type !== 'optgroup-label') cacheArr.push(i);
           }
+
+          for (var i = 0, cacheLen = cacheArr.length; i < cacheLen; i++) {
+            var index = cacheArr[i],
+                prevIndex = cacheArr[i - 1],
+                li = that.selectpicker.main.data[index],
+                liPrev = that.selectpicker.main.data[prevIndex];
+
+            if (li.type !== 'divider' || (li.type === 'divider' && liPrev && liPrev.type !== 'divider' && cacheLen - 1 !== i)) {
+              that.selectpicker.search.data.push(li);
+              searchMatch.push(that.selectpicker.main.elements[index]);
+
+              if (li.hasOwnProperty('originalIndex')) {
+                that.selectpicker.search.map.newIndex[li.originalIndex] = searchMatch.length - 1;
+                that.selectpicker.search.map.originalIndex[searchMatch.length - 1] = li.originalIndex;
+              }
+            }
+          }
+
+          that.activeIndex = undefined;
+          that.noScroll = true;
+          that.$menuInner.scrollTop(0);
+          that.selectpicker.search.elements = searchMatch;
+          that.createView(true);
+
+          if (!searchMatch.length) {
+            noResults.className = 'no-results';
+            noResults.innerHTML = that.options.noneResultsText.replace('{0}', '"' + htmlEscape(searchValue) + '"');
+            that.$menuInner[0].firstChild.appendChild(noResults);
+          }
+        } else {
+          that.$menuInner.scrollTop(0);
+          that.createView(false);
         }
       });
     },
 
     _searchStyle: function () {
-      var styles = {
-        begins: 'ibegins',
-        startsWith: 'ibegins'
-      };
-
-      return styles[this.options.liveSearchStyle] || 'icontains';
+      return this.options.liveSearchStyle || 'contains';
     },
 
     val: function (value) {
       if (typeof value !== 'undefined') {
-        this.$element.val(value);
-        this.render();
+        this.$element
+          .val(value)
+          .triggerNative('change');
 
         return this.$element;
       } else {
@@ -54983,31 +55680,34 @@ license Apache-2.0
       if (!this.multiple) return;
       if (typeof status === 'undefined') status = true;
 
-      this.findLis();
+      var $selectOptions = this.$element.find('option'),
+          previousSelected = 0,
+          currentSelected = 0,
+          prevValue = getSelectValues(this.$element[0]);
 
-      var $options = this.$element.find('option'),
-          $lisVisible = this.$lis.not('.divider, .dropdown-header, .disabled, .hidden'),
-          lisVisLen = $lisVisible.length,
-          selectedOptions = [];
-          
-      if (status) {
-        if ($lisVisible.filter('.selected').length === $lisVisible.length) return;
-      } else {
-        if ($lisVisible.filter('.selected').length === 0) return;
+      this.$element.addClass('bs-select-hidden');
+
+      for (var i = 0; i < this.selectpicker.current.elements.length; i++) {
+        var liData = this.selectpicker.current.data[i],
+            index = this.selectpicker.current.map.originalIndex[i], // faster than $(li).data('originalIndex')
+            option = $selectOptions[index];
+
+        if (option && !option.disabled && liData.type !== 'divider') {
+          if (option.selected) previousSelected++;
+          option.selected = status;
+          if (option.selected) currentSelected++;
+        }
       }
-          
-      $lisVisible.toggleClass('selected', status);
 
-      for (var i = 0; i < lisVisLen; i++) {
-        var origIndex = $lisVisible[i].getAttribute('data-original-index');
-        selectedOptions[selectedOptions.length] = $options.eq(origIndex)[0];
-      }
+      this.$element.removeClass('bs-select-hidden');
 
-      $(selectedOptions).prop('selected', status);
+      if (previousSelected === currentSelected) return;
 
-      this.render(false);
+      this.setOptionStatus();
 
       this.togglePlaceholder();
+
+      changedArguments = [null, null, prevValue];
 
       this.$element
         .triggerNative('change');
@@ -55026,177 +55726,224 @@ license Apache-2.0
 
       if (e) e.stopPropagation();
 
-      this.$button.trigger('click');
+      this.$button.trigger('click.bs.dropdown.data-api');
     },
 
     keydown: function (e) {
       var $this = $(this),
-          $parent = $this.is('input') ? $this.parent().parent() : $this.parent(),
-          $items,
+          isToggle = $this.hasClass('dropdown-toggle'),
+          $parent = isToggle ? $this.closest('.dropdown') : $this.closest(Selector.MENU),
           that = $parent.data('this'),
+          $items = that.findLis(),
           index,
-          prevIndex,
           isActive,
-          selector = ':not(.disabled, .hidden, .dropdown-header, .divider)',
-          keyCodeMap = {
-            32: ' ',
-            48: '0',
-            49: '1',
-            50: '2',
-            51: '3',
-            52: '4',
-            53: '5',
-            54: '6',
-            55: '7',
-            56: '8',
-            57: '9',
-            59: ';',
-            65: 'a',
-            66: 'b',
-            67: 'c',
-            68: 'd',
-            69: 'e',
-            70: 'f',
-            71: 'g',
-            72: 'h',
-            73: 'i',
-            74: 'j',
-            75: 'k',
-            76: 'l',
-            77: 'm',
-            78: 'n',
-            79: 'o',
-            80: 'p',
-            81: 'q',
-            82: 'r',
-            83: 's',
-            84: 't',
-            85: 'u',
-            86: 'v',
-            87: 'w',
-            88: 'x',
-            89: 'y',
-            90: 'z',
-            96: '0',
-            97: '1',
-            98: '2',
-            99: '3',
-            100: '4',
-            101: '5',
-            102: '6',
-            103: '7',
-            104: '8',
-            105: '9'
-          };
+          liActive,
+          activeLi,
+          offset,
+          updateScroll = false,
+          downOnTab = e.which === keyCodes.TAB && !isToggle && !that.options.selectOnTab,
+          isArrowKey = REGEXP_ARROW.test(e.which) || downOnTab,
+          scrollTop = that.$menuInner[0].scrollTop,
+          isVirtual = that.isVirtual(),
+          position0 = isVirtual === true ? that.selectpicker.view.position0 : 0;
 
+      isActive = that.$newElement.hasClass(classNames.SHOW);
 
-      isActive = that.$newElement.hasClass('open');
-
-      if (!isActive && (e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode >= 96 && e.keyCode <= 105 || e.keyCode >= 65 && e.keyCode <= 90)) {
-        if (!that.options.container) {
-          that.setSize();
-          that.$menu.parent().addClass('open');
-          isActive = true;
-        } else {
-          that.$button.trigger('click');
-        }
-        that.$searchbox.focus();
-        return;
+      if (
+        !isActive &&
+        (
+          isArrowKey ||
+          (e.which >= 48 && e.which <= 57) ||
+          (e.which >= 96 && e.which <= 105) ||
+          (e.which >= 65 && e.which <= 90)
+        )
+      ) {
+        that.$button.trigger('click.bs.dropdown.data-api');
       }
 
-      if (that.options.liveSearch) {
-        if (/(^9$|27)/.test(e.keyCode.toString(10)) && isActive) {
-          e.preventDefault();
-          e.stopPropagation();
-          that.$menuInner.click();
-          that.$button.focus();
-        }
+      if (e.which === keyCodes.ESCAPE && isActive) {
+        e.preventDefault();
+        that.$button.trigger('click.bs.dropdown.data-api').focus();
       }
 
-      if (/(38|40)/.test(e.keyCode.toString(10))) {
-        $items = that.$lis.filter(selector);
+      if (isArrowKey) { // if up or down
         if (!$items.length) return;
 
-        if (!that.options.liveSearch) {
-          index = $items.index($items.find('a').filter(':focus').parent());
-	    } else {
-          index = $items.index($items.filter('.active'));
+        // $items.index/.filter is too slow with a large list and no virtual scroll
+        index = isVirtual === true ? $items.index($items.filter('.active')) : that.selectpicker.current.map.newIndex[that.activeIndex];
+
+        if (index === undefined) index = -1;
+
+        if (index !== -1) {
+          liActive = that.selectpicker.current.elements[index + position0];
+          liActive.classList.remove('active');
+          if (liActive.firstChild) liActive.firstChild.classList.remove('active');
         }
 
-        prevIndex = that.$menuInner.data('prevIndex');
+        if (e.which === keyCodes.ARROW_UP) { // up
+          if (index !== -1) index--;
+          if (index + position0 < 0) index += $items.length;
 
-        if (e.keyCode == 38) {
-          if ((that.options.liveSearch || index == prevIndex) && index != -1) index--;
-          if (index < 0) index += $items.length;
-        } else if (e.keyCode == 40) {
-          if (that.options.liveSearch || index == prevIndex) index++;
-          index = index % $items.length;
+          if (!that.selectpicker.view.canHighlight[index + position0]) {
+            index = that.selectpicker.view.canHighlight.slice(0, index + position0).lastIndexOf(true) - position0;
+            if (index === -1) index = $items.length - 1;
+          }
+        } else if (e.which === keyCodes.ARROW_DOWN || downOnTab) { // down
+          index++;
+          if (index + position0 >= that.selectpicker.view.canHighlight.length) index = 0;
+
+          if (!that.selectpicker.view.canHighlight[index + position0]) {
+            index = index + 1 + that.selectpicker.view.canHighlight.slice(index + position0 + 1).indexOf(true);
+          }
         }
 
-        that.$menuInner.data('prevIndex', index);
+        e.preventDefault();
 
-        if (!that.options.liveSearch) {
-          $items.eq(index).children('a').focus();
+        var liActiveIndex = position0 + index;
+
+        if (e.which === keyCodes.ARROW_UP) { // up
+          // scroll to bottom and highlight last option
+          if (position0 === 0 && index === $items.length - 1) {
+            that.$menuInner[0].scrollTop = that.$menuInner[0].scrollHeight;
+
+            liActiveIndex = that.selectpicker.current.elements.length - 1;
+          } else {
+            activeLi = that.selectpicker.current.data[liActiveIndex];
+            offset = activeLi.position - activeLi.height;
+
+            updateScroll = offset < scrollTop;
+          }
+        } else if (e.which === keyCodes.ARROW_DOWN || downOnTab) { // down
+          // scroll to top and highlight first option
+          if (index === 0) {
+            that.$menuInner[0].scrollTop = 0;
+
+            liActiveIndex = 0;
+          } else {
+            activeLi = that.selectpicker.current.data[liActiveIndex];
+            offset = activeLi.position - that.sizeInfo.menuInnerHeight;
+
+            updateScroll = offset > scrollTop;
+          }
+        }
+
+        liActive = that.selectpicker.current.elements[liActiveIndex];
+
+        if (liActive) {
+          liActive.classList.add('active');
+          if (liActive.firstChild) liActive.firstChild.classList.add('active');
+        }
+
+        that.activeIndex = that.selectpicker.current.map.originalIndex[liActiveIndex];
+
+        that.selectpicker.view.currentActive = liActive;
+
+        if (updateScroll) that.$menuInner[0].scrollTop = offset;
+
+        if (that.options.liveSearch) {
+          that.$searchbox.focus();
         } else {
-          e.preventDefault();
-          if (!$this.hasClass('dropdown-toggle')) {
-            $items.removeClass('active').eq(index).addClass('active').children('a').focus();
-            $this.focus();
+          $this.focus();
+        }
+      } else if (
+        (!$this.is('input') && !REGEXP_TAB_OR_ESCAPE.test(e.which)) ||
+        (e.which === keyCodes.SPACE && that.selectpicker.keydown.keyHistory)
+      ) {
+        var searchMatch,
+            matches = [],
+            keyHistory;
+
+        e.preventDefault();
+
+        that.selectpicker.keydown.keyHistory += keyCodeMap[e.which];
+
+        if (that.selectpicker.keydown.resetKeyHistory.cancel) clearTimeout(that.selectpicker.keydown.resetKeyHistory.cancel);
+        that.selectpicker.keydown.resetKeyHistory.cancel = that.selectpicker.keydown.resetKeyHistory.start();
+
+        keyHistory = that.selectpicker.keydown.keyHistory;
+
+        // if all letters are the same, set keyHistory to just the first character when searching
+        if (/^(.)\1+$/.test(keyHistory)) {
+          keyHistory = keyHistory.charAt(0);
+        }
+
+        // find matches
+        for (var i = 0; i < that.selectpicker.current.data.length; i++) {
+          var li = that.selectpicker.current.data[i],
+              hasMatch;
+
+          hasMatch = stringSearch(li, keyHistory, 'startsWith', true);
+
+          if (hasMatch && that.selectpicker.view.canHighlight[i]) {
+            li.index = i;
+            matches.push(li.originalIndex);
           }
         }
 
-      } else if (!$this.is('input')) {
-        var keyIndex = [],
-            count,
-            prevKey;
+        if (matches.length) {
+          var matchIndex = 0;
 
-        $items = that.$lis.filter(selector);
-        $items.each(function (i) {
-          if ($.trim($(this).children('a').text().toLowerCase()).substring(0, 1) == keyCodeMap[e.keyCode]) {
-            keyIndex.push(i);
+          $items.removeClass('active').find('a').removeClass('active');
+
+          // either only one key has been pressed or they are all the same key
+          if (keyHistory.length === 1) {
+            matchIndex = matches.indexOf(that.activeIndex);
+
+            if (matchIndex === -1 || matchIndex === matches.length - 1) {
+              matchIndex = 0;
+            } else {
+              matchIndex++;
+            }
           }
-        });
 
-        count = $(document).data('keycount');
-        count++;
-        $(document).data('keycount', count);
+          searchMatch = that.selectpicker.current.map.newIndex[matches[matchIndex]];
 
-        prevKey = $.trim($(':focus').text().toLowerCase()).substring(0, 1);
+          activeLi = that.selectpicker.current.data[searchMatch];
 
-        if (prevKey != keyCodeMap[e.keyCode]) {
-          count = 1;
-          $(document).data('keycount', count);
-        } else if (count >= keyIndex.length) {
-          $(document).data('keycount', 0);
-          if (count > keyIndex.length) count = 1;
+          if (scrollTop - activeLi.position > 0) {
+            offset = activeLi.position - activeLi.height;
+            updateScroll = true;
+          } else {
+            offset = activeLi.position - that.sizeInfo.menuInnerHeight;
+            // if the option is already visible at the current scroll position, just keep it the same
+            updateScroll = activeLi.position > scrollTop + that.sizeInfo.menuInnerHeight;
+          }
+
+          liActive = that.selectpicker.current.elements[searchMatch];
+          liActive.classList.add('active');
+          if (liActive.firstChild) liActive.firstChild.classList.add('active');
+          that.activeIndex = matches[matchIndex];
+
+          liActive.firstChild.focus();
+
+          if (updateScroll) that.$menuInner[0].scrollTop = offset;
+
+          $this.focus();
         }
-
-        $items.eq(keyIndex[count - 1]).children('a').focus();
       }
 
       // Select focused option if "Enter", "Spacebar" or "Tab" (when selectOnTab is true) are pressed inside the menu.
-      if ((/(13|32)/.test(e.keyCode.toString(10)) || (/(^9$)/.test(e.keyCode.toString(10)) && that.options.selectOnTab)) && isActive) {
-        if (!/(32)/.test(e.keyCode.toString(10))) e.preventDefault();
-        if (!that.options.liveSearch) {
-          var elem = $(':focus');
-          elem.click();
-          // Bring back focus for multiselects
-          elem.focus();
-          // Prevent screen from scrolling if the user hit the spacebar
-          e.preventDefault();
-          // Fixes spacebar selection of dropdown items in FF & IE
-          $(document).data('spaceSelect', true);
-        } else if (!/(32)/.test(e.keyCode.toString(10))) {
-          that.$menuInner.find('.active a').click();
-          $this.focus();
-        }
-        $(document).data('keycount', 0);
-      }
+      if (
+        isActive &&
+        (
+          (e.which === keyCodes.SPACE && !that.selectpicker.keydown.keyHistory) ||
+          e.which === keyCodes.ENTER ||
+          (e.which === keyCodes.TAB && that.options.selectOnTab)
+        )
+      ) {
+        if (e.which !== keyCodes.SPACE) e.preventDefault();
 
-      if ((/(^9$|27)/.test(e.keyCode.toString(10)) && isActive && (that.multiple || that.options.liveSearch)) || (/(27)/.test(e.keyCode.toString(10)) && !isActive)) {
-        that.$menu.parent().removeClass('open');
-        if (that.options.container) that.$newElement.removeClass('open');
-        that.$button.focus();
+        if (!that.options.liveSearch || e.which !== keyCodes.SPACE) {
+          that.$menuInner.find('.active a').trigger('click', true); // retain active class
+          $this.focus();
+
+          if (!that.options.liveSearch) {
+            // Prevent screen from scrolling if the user hits the spacebar
+            e.preventDefault();
+            // Fixes spacebar selection of dropdown items in FF & IE
+            $(document).data('spaceSelect', true);
+          }
+        }
       }
     },
 
@@ -55205,17 +55952,21 @@ license Apache-2.0
     },
 
     refresh: function () {
-      this.$lis = null;
-      this.liObj = {};
-      this.reloadLi();
-      this.render();
+      // update options if data attributes have been changed
+      var config = $.extend({}, this.options, this.$element.data());
+      this.options = config;
+
+      this.selectpicker.main.map.newIndex = {};
+      this.selectpicker.main.map.originalIndex = {};
+      this.createLi();
       this.checkDisabled();
-      this.liHeight(true);
+      this.render();
       this.setStyle();
       this.setWidth();
-      if (this.$lis) this.$searchbox.trigger('propertychange');
 
-      this.$element.trigger('refreshed.bs.select');
+      this.setSize(true);
+
+      this.$element.trigger('refreshed' + EVENT_KEY);
     },
 
     hide: function () {
@@ -55241,15 +55992,17 @@ license Apache-2.0
       }
 
       this.$element
-        .off('.bs.select')
+        .off(EVENT_KEY)
         .removeData('selectpicker')
         .removeClass('bs-select-hidden selectpicker');
+
+      $(window).off(EVENT_KEY + '.' + this.selectId);
     }
   };
 
   // SELECTPICKER PLUGIN DEFINITION
   // ==============================
-  function Plugin(option) {
+  function Plugin (option) {
     // get the args of the outer function..
     var args = arguments;
     // The arguments of the function are explicitly re-defined from the argument list, because the shift causes them
@@ -55257,6 +56010,28 @@ license Apache-2.0
     var _option = option;
 
     [].shift.apply(args);
+
+    // if the version was not set successfully
+    if (!version.success) {
+      // try to retreive it again
+      try {
+        version.full = ($.fn.dropdown.Constructor.VERSION || '').split(' ')[0].split('.');
+      } catch (err) {
+        // fall back to use BootstrapVersion
+        version.full = Selectpicker.BootstrapVersion.split(' ')[0].split('.');
+      }
+
+      version.major = version.full[0];
+      version.success = true;
+
+      if (version.major === '4') {
+        classNames.DIVIDER = 'dropdown-divider';
+        classNames.SHOW = 'show';
+        classNames.BUTTONCLASS = 'btn-light';
+        Selectpicker.DEFAULTS.style = classNames.BUTTONCLASS = 'btn-light';
+        classNames.POPOVERHEADER = 'popover-header';
+      }
+    }
 
     var value;
     var chain = this.each(function () {
@@ -55288,7 +56063,7 @@ license Apache-2.0
     });
 
     if (typeof value !== 'undefined') {
-      //noinspection JSUnusedAssignment
+      // noinspection JSUnusedAssignment
       return value;
     } else {
       return chain;
@@ -55307,15 +56082,15 @@ license Apache-2.0
   };
 
   $(document)
-      .data('keycount', 0)
-      .on('keydown.bs.select', '.bootstrap-select [data-toggle=dropdown], .bootstrap-select [role="listbox"], .bs-searchbox input', Selectpicker.prototype.keydown)
-      .on('focusin.modal', '.bootstrap-select [data-toggle=dropdown], .bootstrap-select [role="listbox"], .bs-searchbox input', function (e) {
-        e.stopPropagation();
-      });
+    .off('keydown.bs.dropdown.data-api')
+    .on('keydown' + EVENT_KEY, '.bootstrap-select [data-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', Selectpicker.prototype.keydown)
+    .on('focusin.modal', '.bootstrap-select [data-toggle="dropdown"], .bootstrap-select [role="listbox"], .bootstrap-select .bs-searchbox input', function (e) {
+      e.stopPropagation();
+    });
 
   // SELECTPICKER DATA-API
   // =====================
-  $(window).on('load.bs.select.data-api', function () {
+  $(window).on('load' + EVENT_KEY + '.data-api', function () {
     $('.selectpicker').each(function () {
       var $selectpicker = $(this);
       Plugin.call($selectpicker, $selectpicker.data());
@@ -55327,19 +56102,19 @@ license Apache-2.0
 }));
 
 /**
- * jQuery contextMenu v2.5.0 - Plugin for simple contextMenu handling
+ * jQuery contextMenu v2.7.0 - Plugin for simple contextMenu handling
  *
- * Version: v2.5.0
+ * Version: v2.7.0
  *
  * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
  * Web: http://swisnl.github.io/jQuery-contextMenu/
  *
- * Copyright (c) 2011-2017 SWIS BV and contributors
+ * Copyright (c) 2011-2018 SWIS BV and contributors
  *
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2017-08-30T12:41:32.950Z
+ * Date: 2018-10-02T14:29:27.777Z
  */
 
 // jscs:disable
@@ -55444,6 +56219,10 @@ license Apache-2.0
             // flag denoting if a second trigger should simply move (true) or rebuild (false) an open menu
             // as long as the trigger happened on one of the trigger-element's child nodes
             reposition: true,
+            // Flag denoting if a second trigger should close the menu, as long as
+            // the trigger happened on one of the trigger-element's child nodes.
+            // This overrides the reposition option.
+            hideOnSecondTrigger: false,
 
             //ability to select submenu
             selectableSubMenu: false,
@@ -55564,7 +56343,8 @@ license Apache-2.0
             // events
             events: {
                 show: $.noop,
-                hide: $.noop
+                hide: $.noop,
+                activated: $.noop
             },
             // default callback
             callback: null,
@@ -55658,26 +56438,7 @@ license Apache-2.0
 
                         op.create(e.data);
                     }
-                    var showMenu = false;
-                    for (var item in e.data.items) {
-                        if (e.data.items.hasOwnProperty(item)) {
-                            var visible;
-                            if ($.isFunction(e.data.items[item].visible)) {
-                                visible = e.data.items[item].visible.call($(e.currentTarget), item, e.data);
-                            } else if (typeof e.data.items[item] !== 'undefined' && e.data.items[item].visible) {
-                                visible = e.data.items[item].visible === true;
-                            } else {
-                                visible = true;
-                            }
-                            if (visible) {
-                                showMenu = true;
-                            }
-                        }
-                    }
-                    if (showMenu) {
-                        // show menu
-                        op.show.call($this, e.data, e.pageX, e.pageY);
-                    }
+                    op.show.call($this, e.data, e.pageX, e.pageY);
                 }
             },
             // contextMenu left-click trigger
@@ -55772,12 +56533,21 @@ license Apache-2.0
                     button = e.button,
                     x = e.pageX,
                     y = e.pageY,
+                    fakeClick = x === undefined,
                     target,
                     offset;
 
                 e.preventDefault();
 
                 setTimeout(function () {
+                    // If the click is not real, things break: https://github.com/swisnl/jQuery-contextMenu/issues/132
+                    if(fakeClick){
+                        if (root !== null && typeof root !== 'undefined' && root.$menu !== null  && typeof root.$menu !== 'undefined') {
+                            root.$menu.trigger('contextmenu:hide');
+                        }
+                        return;
+                    }
+
                     var $window;
                     var triggerAction = ((root.trigger === 'left' && button === 0) || (root.trigger === 'right' && button === 2));
 
@@ -55798,6 +56568,11 @@ license Apache-2.0
                         }
                         $(target).trigger(e);
                         root.$layer.show();
+                    }
+
+                    if (root.hideOnSecondTrigger && triggerAction && root.$menu !== null && typeof root.$menu !== 'undefined') {
+                      root.$menu.trigger('contextmenu:hide');
+                      return;
                     }
 
                     if (root.reposition && triggerAction) {
@@ -56301,7 +57076,11 @@ license Apache-2.0
                 }
 
                 // create or update context menu
-                op.update.call($trigger, opt);
+                var hasVisibleItems = op.update.call($trigger, opt);
+                if (hasVisibleItems === false) {
+                    $currentTrigger = null;
+                    return;
+                }
 
                 // position menu
                 opt.position.call($trigger, opt, x, y);
@@ -56325,6 +57104,9 @@ license Apache-2.0
                 // position and show context menu
                 opt.$menu.css(css)[opt.animation.show](opt.animation.duration, function () {
                     $trigger.trigger('contextmenu:visible');
+
+                    op.activated(opt);
+                    opt.events.activated(opt);
                 });
                 // make options available and set state
                 $trigger
@@ -56534,9 +57316,7 @@ license Apache-2.0
                             $t.addClass('context-menu-separator ' + root.classNames.notSelectable);
                         } else if (item.type === 'html') {
                             $t.addClass('context-menu-html ' + root.classNames.notSelectable);
-                        } else if (item.type === 'sub') {
-                            // We don't want to execute the next else-if if it is a sub.
-                        } else if (item.type) {
+                        } else if (item.type !== 'sub' && item.type) {
                             $label = $('<label></label>').appendTo($t);
                             createNameNode(item).appendTo($label);
 
@@ -56651,14 +57431,27 @@ license Apache-2.0
                             if ($.isFunction(item.icon)) {
                                 item._icon = item.icon.call(this, this, $t, key, item);
                             } else {
-                                if (typeof(item.icon) === 'string' && item.icon.substring(0, 3) === 'fa-') {
+                                if (typeof(item.icon) === 'string' && (
+                                    item.icon.substring(0, 4) === 'fab '
+                                    || item.icon.substring(0, 4) === 'fas '
+                                    || item.icon.substring(0, 4) === 'far '
+                                    || item.icon.substring(0, 4) === 'fal ')
+                                ) {
                                     // to enable font awesome
+                                    $t.addClass(root.classNames.icon + ' ' + root.classNames.icon + '--fa5');
+                                    item._icon = $('<i class="' + item.icon + '"></i>');
+                                } else if (typeof(item.icon) === 'string' && item.icon.substring(0, 3) === 'fa-') {
                                     item._icon = root.classNames.icon + ' ' + root.classNames.icon + '--fa fa ' + item.icon;
                                 } else {
                                     item._icon = root.classNames.icon + ' ' + root.classNames.icon + '-' + item.icon;
                                 }
                             }
-                            $t.addClass(item._icon);
+
+                            if(typeof(item._icon) === "string"){
+                                $t.addClass(item._icon);
+                            } else {
+                                $t.prepend(item._icon);
+                            }
                         }
                     }
 
@@ -56725,6 +57518,9 @@ license Apache-2.0
                     root = opt;
                     op.resize(opt.$menu);
                 }
+
+                var hasVisibleItems = false;
+
                 // re-check disabled for each item
                 opt.$menu.children().each(function () {
                     var $item = $(this),
@@ -56739,6 +57535,11 @@ license Apache-2.0
                     } else {
                         visible = true;
                     }
+
+                    if (visible) {
+                        hasVisibleItems = true;
+                    }
+
                     $item[visible ? 'show' : 'hide']();
 
                     // dis- / enable item
@@ -56746,8 +57547,12 @@ license Apache-2.0
 
                     if ($.isFunction(item.icon)) {
                         $item.removeClass(item._icon);
-                        item._icon = item.icon.call(this, $trigger, $item, key, item);
-                        $item.addClass(item._icon);
+                        var iconResult = item.icon.call(this, $trigger, $item, key, item);
+                        if(typeof(iconResult) === "string"){
+                            $item.addClass(iconResult);
+                        } else {
+                            $item.prepend(iconResult);
+                        }
                     }
 
                     if (item.type) {
@@ -56774,9 +57579,13 @@ license Apache-2.0
 
                     if (item.$menu) {
                         // update sub-menu
-                        op.update.call($trigger, item, root);
+                        var subMenuHasVisibleItems = op.update.call($trigger, item, root);
+                        if (subMenuHasVisibleItems) {
+                            hasVisibleItems = true;
+                        }
                     }
                 });
+                return hasVisibleItems;
             },
             layer: function (opt, zIndex) {
                 // add transparent layer for click area
@@ -56855,6 +57664,26 @@ license Apache-2.0
                 // Wait for promise completion. .then(success, error, notify) (we don't track notify). Bind the opt
                 // and root to avoid scope problems
                 promise.then(completedPromise.bind(this, opt, root), errorPromise.bind(this, opt, root));
+            },
+            // operation that will run after contextMenu showed on screen
+            activated: function(opt){
+                var $menu = opt.$menu;
+                var $menuOffset = $menu.offset();
+                var winHeight = $(window).height();
+                var winScrollTop = $(window).scrollTop();
+                var menuHeight = $menu.height();
+                if(menuHeight > winHeight){
+                    $menu.css({
+                        'height' : winHeight + 'px',
+                        'overflow-x': 'hidden',
+                        'overflow-y': 'auto',
+                        'top': winScrollTop + 'px'
+                    });
+                } else if(($menuOffset.top < winScrollTop) || ($menuOffset.top + menuHeight > winScrollTop + winHeight)){
+                    $menu.css({
+                        'top': winScrollTop + 'px'
+                    });
+                }
             }
         };
 
@@ -56944,6 +57773,20 @@ license Apache-2.0
         }
 
         switch (operation) {
+
+            case 'update':
+                // Updates visibility and such
+                if(_hasContext){
+                    op.update($context);
+                } else {
+                    for(var menu in menus){
+                        if(menus.hasOwnProperty(menu)){
+                            op.update(menus[menu]);
+                        }
+                    }
+                }
+                break;
+
             case 'create':
                 // no selector no joy
                 if (!o.selector) {
@@ -57233,7 +58076,7 @@ license Apache-2.0
                         disabled: !!$node.attr('disabled'),
                         callback: (function () {
                             return function () {
-                                $node.get(0).click()
+                                $node.get(0).click();
                             };
                         })()
                     };
@@ -57252,7 +58095,7 @@ license Apache-2.0
                                 icon: $node.attr('icon'),
                                 callback: (function () {
                                     return function () {
-                                        $node.get(0).click()
+                                        $node.get(0).click();
                                     };
                                 })()
                             };
@@ -57537,2369 +58380,2193 @@ license Apache-2.0
     };
 }));
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*! flatpickr v3.0.6, @license MIT */
-function FlatpickrInstance(element, config) {
-	var self = this;
-
-	self._ = {};
-	self._.afterDayAnim = afterDayAnim;
-	self._bind = bind;
-	self._compareDates = compareDates;
-	self._setHoursFromDate = setHoursFromDate;
-	self.changeMonth = changeMonth;
-	self.changeYear = changeYear;
-	self.clear = clear;
-	self.close = close;
-	self._createElement = createElement;
-	self.destroy = destroy;
-	self.isEnabled = isEnabled;
-	self.jumpToDate = jumpToDate;
-	self.open = open;
-	self.redraw = redraw;
-	self.set = set;
-	self.setDate = setDate;
-	self.toggle = toggle;
-
-	function init() {
-		self.element = self.input = element;
-		self.instanceConfig = config || {};
-		self.parseDate = FlatpickrInstance.prototype.parseDate.bind(self);
-		self.formatDate = FlatpickrInstance.prototype.formatDate.bind(self);
-
-		setupFormats();
-		parseConfig();
-		setupLocale();
-		setupInputs();
-		setupDates();
-		setupHelperFunctions();
-
-		self.isOpen = false;
-
-		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-		if (!self.isMobile) build();
-
-		bindEvents();
-
-		if (self.selectedDates.length || self.config.noCalendar) {
-			if (self.config.enableTime) {
-				setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : null);
-			}
-			updateValue(false);
-		}
-
-		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
-
-		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
-		}
-
-		if (!self.isMobile) positionCalendar();
-
-		triggerEvent("Ready");
-	}
-
-	/**
-  * Binds a function to the current flatpickr instance
-  * @param {Function} fn the function
-  * @return {Function} the function bound to the instance
-  */
-	function bindToInstance(fn) {
-		return fn.bind(self);
-	}
-
-	/**
-  * The handler for all events targeting the time inputs
-  * @param {Event} e the event - "input", "wheel", "increment", etc
-  */
-	function updateTime(e) {
-		if (self.config.noCalendar && !self.selectedDates.length)
-			// picking time only
-			self.selectedDates = [self.now];
-
-		timeWrapper(e);
-
-		if (!self.selectedDates.length) return;
-
-		if (!self.minDateHasTime || e.type !== "input" || e.target.value.length >= 2) {
-			setHoursFromInputs();
-			updateValue();
-		} else {
-			setTimeout(function () {
-				setHoursFromInputs();
-				updateValue();
-			}, 1000);
-		}
-	}
-
-	/**
-  * Syncs the selected date object time with user's time input
-  */
-	function setHoursFromInputs() {
-		if (!self.config.enableTime) return;
-
-		var hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
-		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-		    seconds = self.config.enableSeconds ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
-
-		if (self.amPM !== undefined) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
-
-		if (self.minDateHasTime && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
-
-			hours = Math.max(hours, self.config.minDate.getHours());
-			if (hours === self.config.minDate.getHours()) minutes = Math.max(minutes, self.config.minDate.getMinutes());
-		}
-
-		if (self.maxDateHasTime && compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0) {
-			hours = Math.min(hours, self.config.maxDate.getHours());
-			if (hours === self.config.maxDate.getHours()) minutes = Math.min(minutes, self.config.maxDate.getMinutes());
-		}
-
-		setHours(hours, minutes, seconds);
-	}
-
-	/**
-  * Syncs time input values with a date
-  * @param {Date} dateObj the date to sync with
-  */
-	function setHoursFromDate(dateObj) {
-		var date = dateObj || self.latestSelectedDateObj;
-
-		if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
-	}
-
-	/**
-  * Sets the hours, minutes, and optionally seconds
-  * of the latest selected date object and the
-  * corresponding time inputs
-  * @param {Number} hours the hour. whether its military
-  *                 or am-pm gets inferred from config
-  * @param {Number} minutes the minutes
-  * @param {Number} seconds the seconds (optional)
-  */
-	function setHours(hours, minutes, seconds) {
-		if (self.selectedDates.length) {
-			self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
-		}
-
-		if (!self.config.enableTime || self.isMobile) return;
-
-		self.hourElement.value = self.pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
-
-		self.minuteElement.value = self.pad(minutes);
-
-		if (!self.config.time_24hr) self.amPM.textContent = hours >= 12 ? "PM" : "AM";
-
-		if (self.config.enableSeconds === true) self.secondElement.value = self.pad(seconds);
-	}
-
-	/**
-  * Handles the year input and incrementing events
-  * @param {Event} event the keyup or increment event
-  */
-	function onYearInput(event) {
-		var year = event.target.value;
-		if (event.delta) year = (parseInt(year) + event.delta).toString();
-
-		if (year.length === 4 || event.key === "Enter") {
-			self.currentYearElement.blur();
-			if (!/[^\d]/.test(year)) changeYear(year);
-		}
-	}
-
-	/**
-  * Essentially addEventListener + tracking
-  * @param {Element} element the element to addEventListener to
-  * @param {String} event the event name
-  * @param {Function} handler the event handler
-  */
-	function bind(element, event, handler) {
-		if (event instanceof Array) return event.forEach(function (ev) {
-			return bind(element, ev, handler);
-		});
-
-		if (element instanceof Array) return element.forEach(function (el) {
-			return bind(el, event, handler);
-		});
-
-		element.addEventListener(event, handler);
-		self._handlers.push({ element: element, event: event, handler: handler });
-	}
-
-	/**
-  * A mousedown handler which mimics click.
-  * Minimizes latency, since we don't need to wait for mouseup in most cases.
-  * Also, avoids handling right clicks.
-  *
-  * @param {Function} handler the event handler
-  */
-	function onClick(handler) {
-		return function (evt) {
-			return evt.which === 1 && handler(evt);
-		};
-	}
-
-	/**
-  * Adds all the necessary event listeners
-  */
-	function bindEvents() {
-		self._handlers = [];
-		self._animationLoop = [];
-		if (self.config.wrap) {
-			["open", "close", "toggle", "clear"].forEach(function (evt) {
-				Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
-					return bind(el, "mousedown", onClick(self[evt]));
-				});
-			});
-		}
-
-		if (self.isMobile) return setupMobile();
-
-		self.debouncedResize = debounce(onResize, 50);
-		self.triggerChange = function () {
-			triggerEvent("Change");
-		};
-		self.debouncedChange = debounce(self.triggerChange, 300);
-
-		if (self.config.mode === "range" && self.daysContainer) bind(self.daysContainer, "mouseover", function (e) {
-			return onMouseOver(e.target);
-		});
-
-		bind(window.document.body, "keydown", onKeyDown);
-
-		if (!self.config.static) bind(self._input, "keydown", onKeyDown);
-
-		if (!self.config.inline && !self.config.static) bind(window, "resize", self.debouncedResize);
-
-		if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);
-
-		bind(window.document, "mousedown", onClick(documentClick));
-		bind(self._input, "blur", documentClick);
-
-		if (self.config.clickOpens === true) {
-			bind(self._input, "focus", self.open);
-			bind(self._input, "mousedown", onClick(self.open));
-		}
-
-		if (!self.config.noCalendar) {
-			self.monthNav.addEventListener("wheel", function (e) {
-				return e.preventDefault();
-			});
-			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
-			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
-
-			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-			bind(self.daysContainer, "mousedown", onClick(selectDate));
-
-			if (self.config.animate) {
-				bind(self.daysContainer, ["webkitAnimationEnd", "animationend"], animateDays);
-				bind(self.monthNav, ["webkitAnimationEnd", "animationend"], animateMonths);
-			}
-		}
-
-		if (self.config.enableTime) {
-			var selText = function selText(e) {
-				return e.target.select();
-			};
-			bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
-			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
-
-			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
-			bind(self.timeContainer, "input", self.triggerChange);
-
-			bind([self.hourElement, self.minuteElement], "focus", selText);
-
-			if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
-				return self.secondElement.select();
-			});
-
-			if (self.amPM !== undefined) {
-				bind(self.amPM, "mousedown", onClick(function (e) {
-					updateTime(e);
-					self.triggerChange(e);
-				}));
-			}
-		}
-	}
-
-	function processPostDayAnimation() {
-		for (var i = self._animationLoop.length; i--;) {
-			self._animationLoop[i]();
-			self._animationLoop.splice(i, 1);
-		}
-	}
-
-	/**
-  * Removes the day container that slided out of view
-  * @param {Event} e the animation event
-  */
-	function animateDays(e) {
-		if (self.daysContainer.childNodes.length > 1) {
-			switch (e.animationName) {
-				case "fpSlideLeft":
-					self.daysContainer.lastChild.classList.remove("slideLeftNew");
-					self.daysContainer.removeChild(self.daysContainer.firstChild);
-					self.days = self.daysContainer.firstChild;
-					processPostDayAnimation();
-
-					break;
-
-				case "fpSlideRight":
-					self.daysContainer.firstChild.classList.remove("slideRightNew");
-					self.daysContainer.removeChild(self.daysContainer.lastChild);
-					self.days = self.daysContainer.firstChild;
-					processPostDayAnimation();
-
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-
-	/**
-  * Removes the month element that animated out of view
-  * @param {Event} e the animation event
-  */
-	function animateMonths(e) {
-		switch (e.animationName) {
-			case "fpSlideLeftNew":
-			case "fpSlideRightNew":
-				self.navigationCurrentMonth.classList.remove("slideLeftNew");
-				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				var nav = self.navigationCurrentMonth;
-
-				while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
-					self.monthNav.removeChild(nav.nextSibling);
-				}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
-					self.monthNav.removeChild(nav.previousSibling);
-				}self.oldCurMonth = null;
-				break;
-		}
-	}
-
-	/**
-  * Set the calendar view to a particular date.
-  * @param {Date} jumpDate the date to set the view to
-  */
-	function jumpToDate(jumpDate) {
-		jumpDate = jumpDate ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
-
-		try {
-			self.currentYear = jumpDate.getFullYear();
-			self.currentMonth = jumpDate.getMonth();
-		} catch (e) {
-			/* istanbul ignore next */
-			console.error(e.stack);
-			/* istanbul ignore next */
-			console.warn("Invalid date supplied: " + jumpDate);
-		}
-
-		self.redraw();
-	}
-
-	/**
-  * The up/down arrow handler for time inputs
-  * @param {Event} e the click event
-  */
-	function timeIncrement(e) {
-		if (~e.target.className.indexOf("arrow")) incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
-	}
-
-	/**
-  * Increments/decrements the value of input associ-
-  * ated with the up/down arrow by dispatching an
-  * "increment" event on the input.
-  *
-  * @param {Event} e the click event
-  * @param {Number} delta the diff (usually 1 or -1)
-  * @param {Element} inputElem the input element
-  */
-	function incrementNumInput(e, delta, inputElem) {
-		var input = inputElem || e.target.parentNode.childNodes[0];
-		var event = createEvent("increment");
-		event.delta = delta;
-		input.dispatchEvent(event);
-	}
-
-	function createNumberInput(inputClassName) {
-		var wrapper = createElement("div", "numInputWrapper"),
-		    numInput = createElement("input", "numInput " + inputClassName),
-		    arrowUp = createElement("span", "arrowUp"),
-		    arrowDown = createElement("span", "arrowDown");
-
-		numInput.type = "text";
-		numInput.pattern = "\\d*";
-
-		wrapper.appendChild(numInput);
-		wrapper.appendChild(arrowUp);
-		wrapper.appendChild(arrowDown);
-
-		return wrapper;
-	}
-
-	function build() {
-		var fragment = window.document.createDocumentFragment();
-		self.calendarContainer = createElement("div", "flatpickr-calendar");
-		self.calendarContainer.tabIndex = -1;
-
-		if (!self.config.noCalendar) {
-			fragment.appendChild(buildMonthNav());
-			self.innerContainer = createElement("div", "flatpickr-innerContainer");
-
-			if (self.config.weekNumbers) self.innerContainer.appendChild(buildWeeks());
-
-			self.rContainer = createElement("div", "flatpickr-rContainer");
-			self.rContainer.appendChild(buildWeekdays());
-
-			if (!self.daysContainer) {
-				self.daysContainer = createElement("div", "flatpickr-days");
-				self.daysContainer.tabIndex = -1;
-			}
-
-			buildDays();
-			self.rContainer.appendChild(self.daysContainer);
-
-			self.innerContainer.appendChild(self.rContainer);
-			fragment.appendChild(self.innerContainer);
-		}
-
-		if (self.config.enableTime) fragment.appendChild(buildTime());
-
-		toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
-		toggleClass(self.calendarContainer, "animate", self.config.animate);
-
-		self.calendarContainer.appendChild(fragment);
-
-		var customAppend = self.config.appendTo && self.config.appendTo.nodeType;
-
-		if (self.config.inline || self.config.static) {
-			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-
-			if (self.config.inline && !customAppend) {
-				return self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);
-			}
-
-			if (self.config.static) {
-				var wrapper = createElement("div", "flatpickr-wrapper");
-				self.element.parentNode.insertBefore(wrapper, self.element);
-				wrapper.appendChild(self.element);
-
-				if (self.altInput) wrapper.appendChild(self.altInput);
-
-				wrapper.appendChild(self.calendarContainer);
-				return;
-			}
-		}
-
-		(customAppend ? self.config.appendTo : window.document.body).appendChild(self.calendarContainer);
-	}
-
-	function createDay(className, date, dayNumber, i) {
-		var dateIsEnabled = isEnabled(date, true),
-		    dayElement = createElement("span", "flatpickr-day " + className, date.getDate());
-
-		dayElement.dateObj = date;
-		dayElement.$i = i;
-		dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
-
-		if (compareDates(date, self.now) === 0) {
-			self.todayDateElem = dayElement;
-			dayElement.classList.add("today");
-		}
-
-		if (dateIsEnabled) {
-			dayElement.tabIndex = -1;
-			if (isDateSelected(date)) {
-				dayElement.classList.add("selected");
-				self.selectedDateElem = dayElement;
-				if (self.config.mode === "range") {
-					toggleClass(dayElement, "startRange", compareDates(date, self.selectedDates[0]) === 0);
-
-					toggleClass(dayElement, "endRange", compareDates(date, self.selectedDates[1]) === 0);
-				}
-			}
-		} else {
-			dayElement.classList.add("disabled");
-			if (self.selectedDates[0] && date > self.minRangeDate && date < self.selectedDates[0]) self.minRangeDate = date;else if (self.selectedDates[0] && date < self.maxRangeDate && date > self.selectedDates[0]) self.maxRangeDate = date;
-		}
-
-		if (self.config.mode === "range") {
-			if (isDateInRange(date) && !isDateSelected(date)) dayElement.classList.add("inRange");
-
-			if (self.selectedDates.length === 1 && (date < self.minRangeDate || date > self.maxRangeDate)) dayElement.classList.add("notAllowed");
-		}
-
-		if (self.config.weekNumbers && className !== "prevMonthDay" && dayNumber % 7 === 1) {
-			self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(date) + "</span>");
-		}
-
-		triggerEvent("DayCreate", dayElement);
-
-		return dayElement;
-	}
-
-	function focusOnDay(currentIndex, offset) {
-		var newIndex = currentIndex + offset || 0,
-		    targetNode = currentIndex !== undefined ? self.days.childNodes[newIndex] : self.selectedDateElem || self.todayDateElem || self.days.childNodes[0],
-		    focus = function focus() {
-			targetNode = targetNode || self.days.childNodes[newIndex];
-			targetNode.focus();
-
-			if (self.config.mode === "range") onMouseOver(targetNode);
-		};
-
-		if (targetNode === undefined && offset !== 0) {
-			if (offset > 0) {
-				self.changeMonth(1);
-				newIndex = newIndex % 42;
-			} else if (offset < 0) {
-				self.changeMonth(-1);
-				newIndex += 42;
-			}
-
-			return afterDayAnim(focus);
-		}
-
-		focus();
-	}
-
-	function afterDayAnim(fn) {
-		if (self.config.animate === true) return self._animationLoop.push(fn);
-		fn();
-	}
-
-	function buildDays(delta) {
-		var firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7,
-		    isRangeMode = self.config.mode === "range";
-
-		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
-		self.selectedDateElem = undefined;
-		self.todayDateElem = undefined;
-
-		var daysInMonth = self.utils.getDaysinMonth(),
-		    days = window.document.createDocumentFragment();
-
-		var dayNumber = self.prevMonthDays + 1 - firstOfMonth,
-		    dayIndex = 0;
-
-		if (self.config.weekNumbers && self.weekNumbers.firstChild) self.weekNumbers.textContent = "";
-
-		if (isRangeMode) {
-			// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-			self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
-			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - firstOfMonth) % daysInMonth);
-		}
-
-		// prepend days from the ending of previous month
-		for (; dayNumber <= self.prevMonthDays; dayNumber++, dayIndex++) {
-			days.appendChild(createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber, dayIndex));
-		}
-
-		// Start at 1 since there is no 0th day
-		for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
-			days.appendChild(createDay("", new Date(self.currentYear, self.currentMonth, dayNumber), dayNumber, dayIndex));
-		}
-
-		// append days from the next month
-		for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++, dayIndex++) {
-			days.appendChild(createDay("nextMonthDay", new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth), dayNum, dayIndex));
-		}
-
-		if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
-			self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > days.childNodes[0].dateObj;
-
-			self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-		} else updateNavigationCurrentMonth();
-
-		var dayContainer = createElement("div", "dayContainer");
-		dayContainer.appendChild(days);
-
-		if (!self.config.animate || delta === undefined) clearNode(self.daysContainer);else {
-			while (self.daysContainer.childNodes.length > 1) {
-				self.daysContainer.removeChild(self.daysContainer.firstChild);
-			}
-		}
-
-		if (delta >= 0) self.daysContainer.appendChild(dayContainer);else self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
-
-		self.days = self.daysContainer.firstChild;
-		return self.daysContainer;
-	}
-
-	function clearNode(node) {
-		while (node.firstChild) {
-			node.removeChild(node.firstChild);
-		}
-	}
-
-	function buildMonthNav() {
-		var monthNavFragment = window.document.createDocumentFragment();
-		self.monthNav = createElement("div", "flatpickr-month");
-
-		self.prevMonthNav = createElement("span", "flatpickr-prev-month");
-		self.prevMonthNav.innerHTML = self.config.prevArrow;
-
-		self.currentMonthElement = createElement("span", "cur-month");
-		self.currentMonthElement.title = self.l10n.scrollTitle;
-
-		var yearInput = createNumberInput("cur-year");
-		self.currentYearElement = yearInput.childNodes[0];
-		self.currentYearElement.title = self.l10n.scrollTitle;
-
-		if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();
-
-		if (self.config.maxDate) {
-			self.currentYearElement.max = self.config.maxDate.getFullYear();
-
-			self.currentYearElement.disabled = self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
-		}
-
-		self.nextMonthNav = createElement("span", "flatpickr-next-month");
-		self.nextMonthNav.innerHTML = self.config.nextArrow;
-
-		self.navigationCurrentMonth = createElement("span", "flatpickr-current-month");
-		self.navigationCurrentMonth.appendChild(self.currentMonthElement);
-		self.navigationCurrentMonth.appendChild(yearInput);
-
-		monthNavFragment.appendChild(self.prevMonthNav);
-		monthNavFragment.appendChild(self.navigationCurrentMonth);
-		monthNavFragment.appendChild(self.nextMonthNav);
-		self.monthNav.appendChild(monthNavFragment);
-
-		Object.defineProperty(self, "_hidePrevMonthArrow", {
-			get: function get() {
-				return this.__hidePrevMonthArrow;
-			},
-			set: function set(bool) {
-				if (this.__hidePrevMonthArrow !== bool) self.prevMonthNav.style.display = bool ? "none" : "block";
-				this.__hidePrevMonthArrow = bool;
-			}
-		});
-
-		Object.defineProperty(self, "_hideNextMonthArrow", {
-			get: function get() {
-				return this.__hideNextMonthArrow;
-			},
-			set: function set(bool) {
-				if (this.__hideNextMonthArrow !== bool) self.nextMonthNav.style.display = bool ? "none" : "block";
-				this.__hideNextMonthArrow = bool;
-			}
-		});
-
-		updateNavigationCurrentMonth();
-
-		return self.monthNav;
-	}
-
-	function buildTime() {
-		self.calendarContainer.classList.add("hasTime");
-		if (self.config.noCalendar) self.calendarContainer.classList.add("noCalendar");
-		self.timeContainer = createElement("div", "flatpickr-time");
-		self.timeContainer.tabIndex = -1;
-		var separator = createElement("span", "flatpickr-time-separator", ":");
-
-		var hourInput = createNumberInput("flatpickr-hour");
-		self.hourElement = hourInput.childNodes[0];
-
-		var minuteInput = createNumberInput("flatpickr-minute");
-		self.minuteElement = minuteInput.childNodes[0];
-
-		self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
-
-		self.hourElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.defaultHour % (self.time_24hr ? 24 : 12));
-
-		self.minuteElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : self.config.defaultMinute);
-
-		self.hourElement.step = self.config.hourIncrement;
-		self.minuteElement.step = self.config.minuteIncrement;
-
-		self.hourElement.min = self.config.time_24hr ? 0 : 1;
-		self.hourElement.max = self.config.time_24hr ? 23 : 12;
-
-		self.minuteElement.min = 0;
-		self.minuteElement.max = 59;
-
-		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
-
-		self.timeContainer.appendChild(hourInput);
-		self.timeContainer.appendChild(separator);
-		self.timeContainer.appendChild(minuteInput);
-
-		if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
-
-		if (self.config.enableSeconds) {
-			self.timeContainer.classList.add("hasSeconds");
-
-			var secondInput = createNumberInput("flatpickr-second");
-			self.secondElement = secondInput.childNodes[0];
-
-			self.secondElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getSeconds() : self.config.defaultSeconds);
-
-			self.secondElement.step = self.minuteElement.step;
-			self.secondElement.min = self.minuteElement.min;
-			self.secondElement.max = self.minuteElement.max;
-
-			self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
-			self.timeContainer.appendChild(secondInput);
-		}
-
-		if (!self.config.time_24hr) {
-			// add self.amPM if appropriate
-			self.amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][(self.latestSelectedDateObj ? self.hourElement.value : self.config.defaultHour) > 11 | 0]);
-			self.amPM.title = self.l10n.toggleTitle;
-			self.amPM.tabIndex = -1;
-			self.timeContainer.appendChild(self.amPM);
-		}
-
-		return self.timeContainer;
-	}
-
-	function buildWeekdays() {
-		if (!self.weekdayContainer) self.weekdayContainer = createElement("div", "flatpickr-weekdays");
-
-		var firstDayOfWeek = self.l10n.firstDayOfWeek;
-		var weekdays = self.l10n.weekdays.shorthand.slice();
-
-		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
-			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
-		}
-
-		self.weekdayContainer.innerHTML = "\n\t\t<span class=flatpickr-weekday>\n\t\t\t" + weekdays.join("</span><span class=flatpickr-weekday>") + "\n\t\t</span>\n\t\t";
-
-		return self.weekdayContainer;
-	}
-
-	/* istanbul ignore next */
-	function buildWeeks() {
-		self.calendarContainer.classList.add("hasWeeks");
-		self.weekWrapper = createElement("div", "flatpickr-weekwrapper");
-		self.weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
-		self.weekNumbers = createElement("div", "flatpickr-weeks");
-		self.weekWrapper.appendChild(self.weekNumbers);
-
-		return self.weekWrapper;
-	}
-
-	function changeMonth(value, is_offset, animate) {
-		is_offset = is_offset === undefined || is_offset;
-		var delta = is_offset ? value : value - self.currentMonth;
-		var skipAnimations = !self.config.animate || animate === false;
-
-		if (delta < 0 && self._hidePrevMonthArrow || delta > 0 && self._hideNextMonthArrow) return;
-
-		self.currentMonth += delta;
-
-		if (self.currentMonth < 0 || self.currentMonth > 11) {
-			self.currentYear += self.currentMonth > 11 ? 1 : -1;
-			self.currentMonth = (self.currentMonth + 12) % 12;
-
-			triggerEvent("YearChange");
-		}
-
-		buildDays(!skipAnimations ? delta : undefined);
-
-		if (skipAnimations) {
-			triggerEvent("MonthChange");
-			return updateNavigationCurrentMonth();
-		}
-
-		// remove possible remnants from clicking too fast
-		var nav = self.navigationCurrentMonth;
-		if (delta < 0) {
-			while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
-				self.monthNav.removeChild(nav.nextSibling);
-			}
-		} else if (delta > 0) {
-			while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
-				self.monthNav.removeChild(nav.previousSibling);
-			}
-		}
-
-		self.oldCurMonth = self.navigationCurrentMonth;
-
-		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
-
-		if (delta > 0) {
-			self.daysContainer.firstChild.classList.add("slideLeft");
-			self.daysContainer.lastChild.classList.add("slideLeftNew");
-
-			self.oldCurMonth.classList.add("slideLeft");
-			self.navigationCurrentMonth.classList.add("slideLeftNew");
-		} else if (delta < 0) {
-			self.daysContainer.firstChild.classList.add("slideRightNew");
-			self.daysContainer.lastChild.classList.add("slideRight");
-
-			self.oldCurMonth.classList.add("slideRight");
-			self.navigationCurrentMonth.classList.add("slideRightNew");
-		}
-
-		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
-		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
-
-		updateNavigationCurrentMonth();
-		self.oldCurMonth.firstChild.textContent = self.utils.monthToStr(self.currentMonth - delta);
-
-		triggerEvent("MonthChange");
-
-		if (document.activeElement && document.activeElement.$i) {
-			var index = document.activeElement.$i;
-			afterDayAnim(function () {
-				focusOnDay(index, 0);
-			});
-		}
-	}
-
-	function clear(triggerChangeEvent) {
-		self.input.value = "";
-
-		if (self.altInput) self.altInput.value = "";
-
-		if (self.mobileInput) self.mobileInput.value = "";
-
-		self.selectedDates = [];
-		self.latestSelectedDateObj = undefined;
-		self.showTimeInput = false;
-
-		self.redraw();
-
-		if (triggerChangeEvent !== false)
-			// triggerChangeEvent is true (default) or an Event
-			triggerEvent("Change");
-	}
-
-	function close() {
-		self.isOpen = false;
-
-		if (!self.isMobile) {
-			self.calendarContainer.classList.remove("open");
-			self._input.classList.remove("active");
-		}
-
-		triggerEvent("Close");
-	}
-
-	function destroy() {
-		if (self.config !== undefined) triggerEvent("Destroy");
-
-		for (var i = self._handlers.length; i--;) {
-			var h = self._handlers[i];
-			h.element.removeEventListener(h.event, h.handler);
-		}
-
-		self._handlers = [];
-
-		if (self.mobileInput) {
-			if (self.mobileInput.parentNode) self.mobileInput.parentNode.removeChild(self.mobileInput);
-			self.mobileInput = null;
-		} else if (self.calendarContainer && self.calendarContainer.parentNode) self.calendarContainer.parentNode.removeChild(self.calendarContainer);
-
-		if (self.altInput) {
-			self.input.type = "text";
-			if (self.altInput.parentNode) self.altInput.parentNode.removeChild(self.altInput);
-			delete self.altInput;
-		}
-
-		if (self.input) {
-			self.input.type = self.input._type;
-			self.input.classList.remove("flatpickr-input");
-			self.input.removeAttribute("readonly");
-			self.input.value = "";
-		}
-
-		["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
-			try {
-				delete self[k];
-			} catch (e) {}
-		});
-	}
-
-	function isCalendarElem(elem) {
-		if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
-
-		return self.calendarContainer.contains(elem);
-	}
-
-	function documentClick(e) {
-		if (self.isOpen && !self.config.inline) {
-			var isCalendarElement = isCalendarElem(e.target);
-			var isInput = e.target === self.input || e.target === self.altInput || self.element.contains(e.target) ||
-			// web components
-			e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
-
-			var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
-
-			if (lostFocus && self.config.ignoredFocusElements.indexOf(e.target) === -1) {
-				self.close();
-
-				if (self.config.mode === "range" && self.selectedDates.length === 1) {
-					self.clear(false);
-					self.redraw();
-				}
-			}
-		}
-	}
-
-	function changeYear(newYear) {
-		if (!newYear || self.currentYearElement.min && newYear < self.currentYearElement.min || self.currentYearElement.max && newYear > self.currentYearElement.max) return;
-
-		var newYearNum = parseInt(newYear, 10),
-		    isNewYear = self.currentYear !== newYearNum;
-
-		self.currentYear = newYearNum || self.currentYear;
-
-		if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
-			self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
-		} else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
-			self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
-		}
-
-		if (isNewYear) {
-			self.redraw();
-			triggerEvent("YearChange");
-		}
-	}
-
-	function isEnabled(date, timeless) {
-		if (self.config.minDate && compareDates(date, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0 || self.config.maxDate && compareDates(date, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0) return false;
-
-		if (!self.config.enable.length && !self.config.disable.length) return true;
-
-		var dateToCheck = self.parseDate(date, null, true); // timeless
-
-		var bool = self.config.enable.length > 0,
-		    array = bool ? self.config.enable : self.config.disable;
-
-		for (var i = 0, d; i < array.length; i++) {
-			d = array[i];
-
-			if (d instanceof Function && d(dateToCheck)) // disabled by function
-				return bool;else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
-				// disabled by date
-				return bool;else if (typeof d === "string" && self.parseDate(d, null, true).getTime() === dateToCheck.getTime())
-				// disabled by date string
-				return bool;else if ( // disabled by range
-			(typeof d === "undefined" ? "undefined" : _typeof(d)) === "object" && d.from && d.to && dateToCheck >= d.from && dateToCheck <= d.to) return bool;
-		}
-
-		return !bool;
-	}
-
-	function onKeyDown(e) {
-		var isInput = e.target === self._input;
-		var calendarElem = isCalendarElem(e.target);
-		var allowInput = self.config.allowInput;
-		var allowKeydown = self.isOpen && (!allowInput || !isInput);
-		var allowInlineKeydown = self.config.inline && isInput && !allowInput;
-
-		if (e.key === "Enter" && allowInput && isInput) {
-			self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
-			return e.target.blur();
-		} else if (calendarElem || allowKeydown || allowInlineKeydown) {
-			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
-			switch (e.key) {
-				case "Enter":
-					if (isTimeObj) updateValue();else selectDate(e);
-
-					break;
-
-				case "Escape":
-					// escape
-					e.preventDefault();
-					self.close();
-					break;
-
-				case "Backspace":
-				case "Delete":
-					if (!self.config.allowInput) self.clear();
-					break;
-
-				case "ArrowLeft":
-				case "ArrowRight":
-					if (!isTimeObj) {
-						e.preventDefault();
-
-						if (self.daysContainer) {
-							var _delta = e.key === "ArrowRight" ? 1 : -1;
-
-							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else changeMonth(_delta, true);
-						} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
-					}
-
-					break;
-
-				case "ArrowUp":
-				case "ArrowDown":
-					e.preventDefault();
-					var delta = e.key === "ArrowDown" ? 1 : -1;
-
-					if (self.daysContainer) {
-						if (e.ctrlKey) {
-							changeYear(self.currentYear - delta);
-							focusOnDay(e.target.$i, 0);
-						} else if (!isTimeObj) focusOnDay(e.target.$i, delta * 7);
-					} else if (self.config.enableTime) {
-						if (!isTimeObj) self.hourElement.focus();
-						updateTime(e);
-						self.debouncedChange();
-					}
-
-					break;
-
-				case "Tab":
-					if (e.target === self.hourElement) {
-						e.preventDefault();
-						self.minuteElement.select();
-					} else if (e.target === self.minuteElement && (self.secondElement || self.amPM)) {
-						e.preventDefault();
-						(self.secondElement || self.amPM).focus();
-					} else if (e.target === self.secondElement) {
-						e.preventDefault();
-						self.amPM.focus();
-					}
-
-					break;
-
-				case "a":
-					if (e.target === self.amPM) {
-						self.amPM.textContent = "AM";
-						setHoursFromInputs();
-						updateValue();
-					}
-					break;
-
-				case "p":
-					if (e.target === self.amPM) {
-						self.amPM.textContent = "PM";
-						setHoursFromInputs();
-						updateValue();
-					}
-					break;
-
-				default:
-					break;
-
-			}
-
-			triggerEvent("KeyDown", e);
-		}
-	}
-
-	function onMouseOver(elem) {
-		if (self.selectedDates.length !== 1 || !elem.classList.contains("flatpickr-day")) return;
-
-		var hoverDate = elem.dateObj,
-		    initialDate = self.parseDate(self.selectedDates[0], null, true),
-		    rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
-		    rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
-		    containsDisabled = false;
-
-		for (var t = rangeStartDate; t < rangeEndDate; t += self.utils.duration.DAY) {
-			if (!isEnabled(new Date(t))) {
-				containsDisabled = true;
-				break;
-			}
-		}
-
-		var _loop = function _loop(timestamp, i) {
-			var outOfRange = timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime(),
-			    dayElem = self.days.childNodes[i];
-
-			if (outOfRange) {
-				self.days.childNodes[i].classList.add("notAllowed");
-				["inRange", "startRange", "endRange"].forEach(function (c) {
-					dayElem.classList.remove(c);
-				});
-				return "continue";
-			} else if (containsDisabled && !outOfRange) return "continue";
-
-			["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
-				dayElem.classList.remove(c);
-			});
-
-			var minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
-			    maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
-
-			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
-
-			if (initialDate < hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("endRange");
-
-			if (timestamp >= minRangeDate && timestamp <= maxRangeDate) dayElem.classList.add("inRange");
-		};
-
-		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
-			var _ret = _loop(timestamp, i);
-
-			if (_ret === "continue") continue;
-		}
-	}
-
-	function onResize() {
-		if (self.isOpen && !self.config.static && !self.config.inline) positionCalendar();
-	}
-
-	function open(e, positionElement) {
-		if (self.isMobile) {
-			if (e) {
-				e.preventDefault();
-				e.target.blur();
-			}
-
-			setTimeout(function () {
-				self.mobileInput.click();
-			}, 0);
-
-			triggerEvent("Open");
-			return;
-		}
-
-		if (self.isOpen || self._input.disabled || self.config.inline) return;
-
-		self.isOpen = true;
-		self.calendarContainer.classList.add("open");
-		positionCalendar(positionElement);
-		self._input.classList.add("active");
-
-		triggerEvent("Open");
-	}
-
-	function minMaxDateSetter(type) {
-		return function (date) {
-			var dateObj = self.config["_" + type + "Date"] = self.parseDate(date);
-
-			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
-			var isValidDate = date && dateObj instanceof Date;
-
-			if (isValidDate) {
-				self[type + "DateHasTime"] = dateObj.getHours() || dateObj.getMinutes() || dateObj.getSeconds();
-			}
-
-			if (self.selectedDates) {
-				self.selectedDates = self.selectedDates.filter(function (d) {
-					return isEnabled(d);
-				});
-				if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
-				updateValue();
-			}
-
-			if (self.daysContainer) {
-				redraw();
-
-				if (isValidDate) self.currentYearElement[type] = dateObj.getFullYear();else self.currentYearElement.removeAttribute(type);
-
-				self.currentYearElement.disabled = inverseDateObj && dateObj && inverseDateObj.getFullYear() === dateObj.getFullYear();
-			}
-		};
-	}
-
-	function parseConfig() {
-		var boolOpts = ["wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
-
-		var hooks = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
-
-		self.config = Object.create(flatpickr.defaultConfig);
-
-		var userConfig = _extends({}, self.instanceConfig, JSON.parse(JSON.stringify(self.element.dataset || {})));
-
-		self.config.parseDate = userConfig.parseDate;
-		self.config.formatDate = userConfig.formatDate;
-
-		Object.defineProperty(self.config, "enable", {
-			get: function get() {
-				return self.config._enable || [];
-			},
-			set: function set(dates) {
-				return self.config._enable = parseDateRules(dates);
-			}
-		});
-
-		Object.defineProperty(self.config, "disable", {
-			get: function get() {
-				return self.config._disable || [];
-			},
-			set: function set(dates) {
-				return self.config._disable = parseDateRules(dates);
-			}
-		});
-
-		_extends(self.config, userConfig);
-
-		if (!userConfig.dateFormat && userConfig.enableTime) {
-			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
-		}
-
-		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
-		}
-
-		Object.defineProperty(self.config, "minDate", {
-			get: function get() {
-				return this._minDate;
-			},
-			set: minMaxDateSetter("min")
-		});
-
-		Object.defineProperty(self.config, "maxDate", {
-			get: function get() {
-				return this._maxDate;
-			},
-			set: minMaxDateSetter("max")
-		});
-
-		self.config.minDate = userConfig.minDate;
-		self.config.maxDate = userConfig.maxDate;
-
-		for (var i = 0; i < boolOpts.length; i++) {
-			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
-		}for (var _i = hooks.length; _i--;) {
-			if (self.config[hooks[_i]] !== undefined) {
-				self.config[hooks[_i]] = arrayify(self.config[hooks[_i]] || []).map(bindToInstance);
-			}
-		}
-
-		for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
-			var pluginConf = self.config.plugins[_i2](self) || {};
-			for (var key in pluginConf) {
-
-				if (self.config[key] instanceof Array || ~hooks.indexOf(key)) {
-					self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
-				} else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
-			}
-		}
-
-		triggerEvent("ParseConfig");
-	}
-
-	function setupLocale() {
-		if (_typeof(self.config.locale) !== "object" && typeof flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
-
-		self.l10n = _extends(Object.create(flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? flatpickr.l10ns[self.config.locale] || {} : {});
-	}
-
-	function positionCalendar() {
-		var positionElement = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : self._positionElement;
-
-		if (self.calendarContainer === undefined) return;
-
-		var calendarHeight = self.calendarContainer.offsetHeight,
-		    calendarWidth = self.calendarContainer.offsetWidth,
-		    configPos = self.config.position,
-		    inputBounds = positionElement.getBoundingClientRect(),
-		    distanceFromBottom = window.innerHeight - inputBounds.bottom,
-		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
-
-		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
-
-		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
-		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
-
-		if (self.config.inline) return;
-
-		var left = window.pageXOffset + inputBounds.left;
-		var right = window.document.body.offsetWidth - inputBounds.right;
-		var rightMost = left + calendarWidth > window.document.body.offsetWidth;
-
-		toggleClass(self.calendarContainer, "rightMost", rightMost);
-
-		if (self.config.static) return;
-
-		self.calendarContainer.style.top = top + "px";
-
-		if (!rightMost) {
-			self.calendarContainer.style.left = left + "px";
-			self.calendarContainer.style.right = "auto";
-		} else {
-			self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = right + "px";
-		}
-	}
-
-	function redraw() {
-		if (self.config.noCalendar || self.isMobile) return;
-
-		buildWeekdays();
-		updateNavigationCurrentMonth();
-		buildDays();
-	}
-
-	function selectDate(e) {
-		e.preventDefault();
-		e.stopPropagation();
-
-		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
-
-		var selectedDate = self.latestSelectedDateObj = new Date(e.target.dateObj.getTime());
-
-		var shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range";
-
-		self.selectedDateElem = e.target;
-
-		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
-			var selectedIndex = isDateSelected(selectedDate);
-			if (selectedIndex) self.selectedDates.splice(selectedIndex, 1);else self.selectedDates.push(selectedDate);
-		} else if (self.config.mode === "range") {
-			if (self.selectedDates.length === 2) self.clear();
-
-			self.selectedDates.push(selectedDate);
-
-			// unless selecting same date twice, sort ascendingly
-			if (compareDates(selectedDate, self.selectedDates[0], true) !== 0) self.selectedDates.sort(function (a, b) {
-				return a.getTime() - b.getTime();
-			});
-		}
-
-		setHoursFromInputs();
-
-		if (shouldChangeMonth) {
-			var isNewYear = self.currentYear !== selectedDate.getFullYear();
-			self.currentYear = selectedDate.getFullYear();
-			self.currentMonth = selectedDate.getMonth();
-
-			if (isNewYear) triggerEvent("YearChange");
-
-			triggerEvent("MonthChange");
-		}
-
-		buildDays();
-
-		if (self.minDateHasTime && self.config.enableTime && compareDates(selectedDate, self.config.minDate) === 0) setHoursFromDate(self.config.minDate);
-
-		updateValue();
-
-		if (self.config.enableTime) setTimeout(function () {
-			return self.showTimeInput = true;
-		}, 50);
-
-		if (self.config.mode === "range") {
-			if (self.selectedDates.length === 1) {
-				onMouseOver(e.target);
-
-				self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > self.days.childNodes[0].dateObj;
-
-				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-			} else updateNavigationCurrentMonth();
-		}
-
-		triggerEvent("Change");
-
-		// maintain focus
-		if (!shouldChangeMonth) focusOnDay(e.target.$i, 0);else afterDayAnim(function () {
-			return self.selectedDateElem && self.selectedDateElem.focus();
-		});
-
-		if (self.config.enableTime) setTimeout(function () {
-			return self.hourElement.select();
-		}, 451);
-
-		if (self.config.closeOnSelect) {
-			var single = self.config.mode === "single" && !self.config.enableTime;
-			var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
-
-			if (single || range) self.close();
-		}
-	}
-
-	function set(option, value) {
-		if (option !== null && (typeof option === "undefined" ? "undefined" : _typeof(option)) === "object") _extends(self.config, option);else self.config[option] = value;
-
-		self.redraw();
-		jumpToDate();
-	}
-
-	function setSelectedDate(inputDate, format) {
-		if (inputDate instanceof Array) self.selectedDates = inputDate.map(function (d) {
-			return self.parseDate(d, format);
-		});else if (inputDate instanceof Date || !isNaN(inputDate)) self.selectedDates = [self.parseDate(inputDate, format)];else if (inputDate && inputDate.substring) {
-			switch (self.config.mode) {
-				case "single":
-					self.selectedDates = [self.parseDate(inputDate, format)];
-					break;
-
-				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(function (date) {
-						return self.parseDate(date, format);
-					});
-					break;
-
-				case "range":
-					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
-						return self.parseDate(date, format);
-					});
-
-					break;
-
-				default:
-					break;
-			}
-		}
-
-		self.selectedDates = self.selectedDates.filter(function (d) {
-			return d instanceof Date && isEnabled(d, false);
-		});
-
-		self.selectedDates.sort(function (a, b) {
-			return a.getTime() - b.getTime();
-		});
-	}
-
-	function setDate(date, triggerChange, format) {
-		if (date !== 0 && !date) return self.clear(triggerChange);
-
-		setSelectedDate(date, format);
-
-		self.showTimeInput = self.selectedDates.length > 0;
-		self.latestSelectedDateObj = self.selectedDates[0];
-
-		self.redraw();
-		jumpToDate();
-
-		setHoursFromDate();
-		updateValue(triggerChange);
-
-		if (triggerChange) triggerEvent("Change");
-	}
-
-	function parseDateRules(arr) {
-		for (var i = arr.length; i--;) {
-			if (typeof arr[i] === "string" || +arr[i]) arr[i] = self.parseDate(arr[i], null, true);else if (arr[i] && arr[i].from && arr[i].to) {
-				arr[i].from = self.parseDate(arr[i].from);
-				arr[i].to = self.parseDate(arr[i].to);
-			}
-		}
-
-		return arr.filter(function (x) {
-			return x;
-		}); // remove falsy values
-	}
-
-	function setupDates() {
-		self.selectedDates = [];
-		self.now = new Date();
-
-		var preloadedDate = self.config.defaultDate || self.input.value;
-		if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
-
-		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now ? self.config.maxDate : self.now;
-
-		self.currentYear = initialDate.getFullYear();
-		self.currentMonth = initialDate.getMonth();
-
-		if (self.selectedDates.length) self.latestSelectedDateObj = self.selectedDates[0];
-
-		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours() || self.config.minDate.getMinutes() || self.config.minDate.getSeconds());
-
-		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours() || self.config.maxDate.getMinutes() || self.config.maxDate.getSeconds());
-
-		Object.defineProperty(self, "latestSelectedDateObj", {
-			get: function get() {
-				return self._selectedDateObj || self.selectedDates[self.selectedDates.length - 1];
-			},
-			set: function set(date) {
-				self._selectedDateObj = date;
-			}
-		});
-
-		if (!self.isMobile) {
-			Object.defineProperty(self, "showTimeInput", {
-				get: function get() {
-					return self._showTimeInput;
-				},
-				set: function set(bool) {
-					self._showTimeInput = bool;
-					if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
-					positionCalendar();
-				}
-			});
-		}
-	}
-
-	function setupHelperFunctions() {
-		self.utils = {
-			duration: {
-				DAY: 86400000
-			},
-			getDaysinMonth: function getDaysinMonth(month, yr) {
-				month = typeof month === "undefined" ? self.currentMonth : month;
-
-				yr = typeof yr === "undefined" ? self.currentYear : yr;
-
-				if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
-
-				return self.l10n.daysInMonth[month];
-			},
-			monthToStr: function monthToStr(monthNumber, shorthand) {
-				shorthand = typeof shorthand === "undefined" ? self.config.shorthandCurrentMonth : shorthand;
-
-				return self.l10n.months[(shorthand ? "short" : "long") + "hand"][monthNumber];
-			}
-		};
-	}
-
-	/* istanbul ignore next */
-	function setupFormats() {
-		self.formats = Object.create(FlatpickrInstance.prototype.formats);
-		["D", "F", "J", "M", "W", "l"].forEach(function (f) {
-			self.formats[f] = FlatpickrInstance.prototype.formats[f].bind(self);
-		});
-
-		self.revFormat.F = FlatpickrInstance.prototype.revFormat.F.bind(self);
-		self.revFormat.M = FlatpickrInstance.prototype.revFormat.M.bind(self);
-	}
-
-	function setupInputs() {
-		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
-
-		/* istanbul ignore next */
-		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
-
-		self.input._type = self.input.type;
-		self.input.type = "text";
-
-		self.input.classList.add("flatpickr-input");
-		self._input = self.input;
-
-		if (self.config.altInput) {
-			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
-			self._input = self.altInput;
-			self.altInput.placeholder = self.input.placeholder;
-			self.altInput.disabled = self.input.disabled;
-			self.altInput.required = self.input.required;
-			self.altInput.type = "text";
-			self.input.type = "hidden";
-
-			if (!self.config.static && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
-		}
-
-		if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
-
-		self._positionElement = self.config.positionElement || self._input;
-	}
-
-	function setupMobile() {
-		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
-
-		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
-		self.mobileInput.step = self.input.getAttribute("step") || "any";
-		self.mobileInput.tabIndex = 1;
-		self.mobileInput.type = inputType;
-		self.mobileInput.disabled = self.input.disabled;
-		self.mobileInput.placeholder = self.input.placeholder;
-
-		self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
-
-		if (self.selectedDates.length) {
-			self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
-		}
-
-		if (self.config.minDate) self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
-
-		if (self.config.maxDate) self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
-
-		self.input.type = "hidden";
-		if (self.config.altInput) self.altInput.type = "hidden";
-
-		try {
-			self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
-		} catch (e) {
-			//
-		}
-
-		self.mobileInput.addEventListener("change", function (e) {
-			self.setDate(e.target.value, false, self.mobileFormatStr);
-			triggerEvent("Change");
-			triggerEvent("Close");
-		});
-	}
-
-	function toggle() {
-		if (self.isOpen) return self.close();
-		self.open();
-	}
-
-	function triggerEvent(event, data) {
-		var hooks = self.config["on" + event];
-
-		if (hooks !== undefined && hooks.length > 0) {
-			for (var i = 0; hooks[i] && i < hooks.length; i++) {
-				hooks[i](self.selectedDates, self.input.value, self, data);
-			}
-		}
-
-		if (event === "Change") {
-			self.input.dispatchEvent(createEvent("change"));
-
-			// many front-end frameworks bind to the input event
-			self.input.dispatchEvent(createEvent("input"));
-		}
-	}
-
-	/**
-  * Creates an Event, normalized across browsers
-  * @param {String} name the event name, e.g. "click"
-  * @return {Event} the created event
-  */
-	function createEvent(name) {
-		if (self._supportsEvents) return new Event(name, { bubbles: true });
-
-		self._[name + "Event"] = document.createEvent("Event");
-		self._[name + "Event"].initEvent(name, true, true);
-		return self._[name + "Event"];
-	}
-
-	function isDateSelected(date) {
-		for (var i = 0; i < self.selectedDates.length; i++) {
-			if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
-		}
-
-		return false;
-	}
-
-	function isDateInRange(date) {
-		if (self.config.mode !== "range" || self.selectedDates.length < 2) return false;
-		return compareDates(date, self.selectedDates[0]) >= 0 && compareDates(date, self.selectedDates[1]) <= 0;
-	}
-
-	function updateNavigationCurrentMonth() {
-		if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
-
-		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
-		self.currentYearElement.value = self.currentYear;
-
-		self._hidePrevMonthArrow = self.config.minDate && (self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear());
-
-		self._hideNextMonthArrow = self.config.maxDate && (self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear());
-	}
-
-	/**
-  * Updates the values of inputs associated with the calendar
-  * @return {void}
-  */
-	function updateValue(triggerChange) {
-		if (!self.selectedDates.length) return self.clear(triggerChange);
-
-		if (self.isMobile) {
-			self.mobileInput.value = self.selectedDates.length ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
-		}
-
-		var joinChar = self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
-
-		self.input.value = self.selectedDates.map(function (dObj) {
-			return self.formatDate(dObj, self.config.dateFormat);
-		}).join(joinChar);
-
-		if (self.config.altInput) {
-			self.altInput.value = self.selectedDates.map(function (dObj) {
-				return self.formatDate(dObj, self.config.altFormat);
-			}).join(joinChar);
-		}
-
-		if (triggerChange !== false) triggerEvent("ValueUpdate");
-	}
-
-	function mouseDelta(e) {
-		return Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
-	}
-
-	function onMonthNavScroll(e) {
-		e.preventDefault();
-		var isYear = self.currentYearElement.parentNode.contains(e.target);
-
-		if (e.target === self.currentMonthElement || isYear) {
-
-			var delta = mouseDelta(e);
-
-			if (isYear) {
-				changeYear(self.currentYear + delta);
-				e.target.value = self.currentYear;
-			} else self.changeMonth(delta, true, false);
-		}
-	}
-
-	function onMonthNavClick(e) {
-		var isPrevMonth = self.prevMonthNav.contains(e.target);
-		var isNextMonth = self.nextMonthNav.contains(e.target);
-
-		if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);else if (e.target === self.currentYearElement) {
-			e.preventDefault();
-			self.currentYearElement.select();
-		} else if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
-	}
-
-	/**
-  * Creates an HTMLElement with given tag, class, and textual content
-  * @param {String} tag the HTML tag
-  * @param {String} className the new element's class name
-  * @param {String} content The new element's text content
-  * @return {HTMLElement} the created HTML element
-  */
-	function createElement(tag, className, content) {
-		var e = window.document.createElement(tag);
-		className = className || "";
-		content = content || "";
-
-		e.className = className;
-
-		if (content !== undefined) e.textContent = content;
-
-		return e;
-	}
-
-	function arrayify(obj) {
-		if (obj instanceof Array) return obj;
-		return [obj];
-	}
-
-	function toggleClass(elem, className, bool) {
-		if (bool) return elem.classList.add(className);
-		elem.classList.remove(className);
-	}
-
-	/* istanbul ignore next */
-	function debounce(func, wait, immediate) {
-		var timeout = void 0;
-		return function () {
-			var context = this,
-			    args = arguments;
-			clearTimeout(timeout);
-			timeout = setTimeout(function () {
-				timeout = null;
-				if (!immediate) func.apply(context, args);
-			}, wait);
-			if (immediate && !timeout) func.apply(context, args);
-		};
-	}
-
-	/**
-  * Compute the difference in dates, measured in ms
-  * @param {Date} date1
-  * @param {Date} date2
-  * @param {Boolean} timeless whether to reset times of both dates to 00:00
-  * @return {Number} the difference in ms
-  */
-	function compareDates(date1, date2, timeless) {
-		if (!(date1 instanceof Date) || !(date2 instanceof Date)) return false;
-
-		if (timeless !== false) {
-			return new Date(date1.getTime()).setHours(0, 0, 0, 0) - new Date(date2.getTime()).setHours(0, 0, 0, 0);
-		}
-
-		return date1.getTime() - date2.getTime();
-	}
-
-	function timeWrapper(e) {
-		e.preventDefault();
-
-		var isKeyDown = e.type === "keydown",
-		    isWheel = e.type === "wheel",
-		    isIncrement = e.type === "increment",
-		    input = e.target;
-
-		if (self.amPM && e.target === self.amPM) return e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
-
-		var min = Number(input.min),
-		    max = Number(input.max),
-		    step = Number(input.step),
-		    curValue = parseInt(input.value, 10),
-		    delta = e.delta || (!isKeyDown ? Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)) || 0 : e.which === 38 ? 1 : -1);
-
-		var newValue = curValue + step * delta;
-
-		if (typeof input.value !== "undefined" && input.value.length === 2) {
-			var isHourElem = input === self.hourElement,
-			    isMinuteElem = input === self.minuteElement;
-
-			if (newValue < min) {
-				newValue = max + newValue + !isHourElem + (isHourElem && !self.amPM);
-
-				if (isMinuteElem) incrementNumInput(null, -1, self.hourElement);
-			} else if (newValue > max) {
-				newValue = input === self.hourElement ? newValue - max - !self.amPM : min;
-
-				if (isMinuteElem) incrementNumInput(null, 1, self.hourElement);
-			}
-
-			if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
-
-			input.value = self.pad(newValue);
-		}
-	}
-
-	init();
-	return self;
-}
-
-FlatpickrInstance.prototype = {
-	formats: {
-		// get the date in UTC
-		Z: function Z(date) {
-			return date.toISOString();
-		},
-
-		// weekday name, short, e.g. Thu
-		D: function D(date) {
-			return this.l10n.weekdays.shorthand[this.formats.w(date)];
-		},
-
-		// full month name e.g. January
-		F: function F(date) {
-			return this.utils.monthToStr(this.formats.n(date) - 1, false);
-		},
-
-		// padded hour 1-12
-		G: function G(date) {
-			return FlatpickrInstance.prototype.pad(FlatpickrInstance.prototype.formats.h(date));
-		},
-
-		// hours with leading zero e.g. 03
-		H: function H(date) {
-			return FlatpickrInstance.prototype.pad(date.getHours());
-		},
-
-		// day (1-30) with ordinal suffix e.g. 1st, 2nd
-		J: function J(date) {
-			return date.getDate() + this.l10n.ordinal(date.getDate());
-		},
-
-		// AM/PM
-		K: function K(date) {
-			return date.getHours() > 11 ? "PM" : "AM";
-		},
-
-		// shorthand month e.g. Jan, Sep, Oct, etc
-		M: function M(date) {
-			return this.utils.monthToStr(date.getMonth(), true);
-		},
-
-		// seconds 00-59
-		S: function S(date) {
-			return FlatpickrInstance.prototype.pad(date.getSeconds());
-		},
-
-		// unix timestamp
-		U: function U(date) {
-			return date.getTime() / 1000;
-		},
-
-		W: function W(date) {
-			return this.config.getWeek(date);
-		},
-
-		// full year e.g. 2016
-		Y: function Y(date) {
-			return date.getFullYear();
-		},
-
-		// day in month, padded (01-30)
-		d: function d(date) {
-			return FlatpickrInstance.prototype.pad(date.getDate());
-		},
-
-		// hour from 1-12 (am/pm)
-		h: function h(date) {
-			return date.getHours() % 12 ? date.getHours() % 12 : 12;
-		},
-
-		// minutes, padded with leading zero e.g. 09
-		i: function i(date) {
-			return FlatpickrInstance.prototype.pad(date.getMinutes());
-		},
-
-		// day in month (1-30)
-		j: function j(date) {
-			return date.getDate();
-		},
-
-		// weekday name, full, e.g. Thursday
-		l: function l(date) {
-			return this.l10n.weekdays.longhand[date.getDay()];
-		},
-
-		// padded month number (01-12)
-		m: function m(date) {
-			return FlatpickrInstance.prototype.pad(date.getMonth() + 1);
-		},
-
-		// the month number (1-12)
-		n: function n(date) {
-			return date.getMonth() + 1;
-		},
-
-		// seconds 0-59
-		s: function s(date) {
-			return date.getSeconds();
-		},
-
-		// number of the day of the week
-		w: function w(date) {
-			return date.getDay();
-		},
-
-		// last two digits of year e.g. 16 for 2016
-		y: function y(date) {
-			return String(date.getFullYear()).substring(2);
-		}
-	},
-
-	/**
-  * Formats a given Date object into a string based on supplied format
-  * @param {Date} dateObj the date object
-  * @param {String} frmt a string composed of formatting tokens e.g. "Y-m-d"
-  * @return {String} The textual representation of the date e.g. 2017-02-03
-  */
-	formatDate: function formatDate(dateObj, frmt) {
-		var _this = this;
-
-		if (this.config !== undefined && this.config.formatDate !== undefined) return this.config.formatDate(dateObj, frmt);
-
-		return frmt.split("").map(function (c, i, arr) {
-			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
-		}).join("");
-	},
-
-
-	revFormat: {
-		D: function D() {},
-		F: function F(dateObj, monthName) {
-			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
-		},
-		G: function G(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		H: function H(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		J: function J(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		K: function K(dateObj, amPM) {
-			var hours = dateObj.getHours();
-
-			if (hours !== 12) dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
-		},
-		M: function M(dateObj, shortMonth) {
-			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
-		},
-		S: function S(dateObj, seconds) {
-			dateObj.setSeconds(seconds);
-		},
-		U: function U(dateObj, unixSeconds) {
-			return new Date(parseFloat(unixSeconds) * 1000);
-		},
-
-		W: function W(dateObj, weekNumber) {
-			weekNumber = parseInt(weekNumber);
-			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
-		},
-		Y: function Y(dateObj, year) {
-			dateObj.setFullYear(year);
-		},
-		Z: function Z(dateObj, ISODate) {
-			return new Date(ISODate);
-		},
-
-		d: function d(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		h: function h(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		i: function i(dateObj, minutes) {
-			dateObj.setMinutes(parseFloat(minutes));
-		},
-		j: function j(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		l: function l() {},
-		m: function m(dateObj, month) {
-			dateObj.setMonth(parseFloat(month) - 1);
-		},
-		n: function n(dateObj, month) {
-			dateObj.setMonth(parseFloat(month) - 1);
-		},
-		s: function s(dateObj, seconds) {
-			dateObj.setSeconds(parseFloat(seconds));
-		},
-		w: function w() {},
-		y: function y(dateObj, year) {
-			dateObj.setFullYear(2000 + parseFloat(year));
-		}
-	},
-
-	tokenRegex: {
-		D: "(\\w+)",
-		F: "(\\w+)",
-		G: "(\\d\\d|\\d)",
-		H: "(\\d\\d|\\d)",
-		J: "(\\d\\d|\\d)\\w+",
-		K: "(am|AM|Am|aM|pm|PM|Pm|pM)",
-		M: "(\\w+)",
-		S: "(\\d\\d|\\d)",
-		U: "(.+)",
-		W: "(\\d\\d|\\d)",
-		Y: "(\\d{4})",
-		Z: "(.+)",
-		d: "(\\d\\d|\\d)",
-		h: "(\\d\\d|\\d)",
-		i: "(\\d\\d|\\d)",
-		j: "(\\d\\d|\\d)",
-		l: "(\\w+)",
-		m: "(\\d\\d|\\d)",
-		n: "(\\d\\d|\\d)",
-		s: "(\\d\\d|\\d)",
-		w: "(\\d\\d|\\d)",
-		y: "(\\d{2})"
-	},
-
-	pad: function pad(number) {
-		return ("0" + number).slice(-2);
-	},
-
-	/**
-  * Parses a date(+time) string into a Date object
-  * @param {String} date the date string, e.g. 2017-02-03 14:45
-  * @param {String} givenFormat the date format, e.g. Y-m-d H:i
-  * @param {Boolean} timeless whether to reset the time of Date object
-  * @return {Date} the parsed Date object
-  */
-	parseDate: function parseDate(date, givenFormat, timeless) {
-		var _this2 = this;
-
-		if (date !== 0 && !date) return null;
-
-		var date_orig = date;
-
-		if (date instanceof Date) date = new Date(date.getTime()); // create a copy
-
-		else if (date.toFixed !== undefined) // timestamp
-				date = new Date(date);else {
-				// date string
-				var format = givenFormat || (this.config || flatpickr.defaultConfig).dateFormat;
-				date = String(date).trim();
-
-				if (date === "today") {
-					date = new Date();
-					timeless = true;
-				} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-					date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-					(function () {
-						var parsedDate = !_this2.config || !_this2.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
-
-						var matched = void 0,
-						    ops = [];
-
-						for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-							var token = format[i];
-							var isBackSlash = token === "\\";
-							var escaped = format[i - 1] === "\\" || isBackSlash;
-
-							if (_this2.tokenRegex[token] && !escaped) {
-								regexStr += _this2.tokenRegex[token];
-								var match = new RegExp(regexStr).exec(date);
-								if (match && (matched = true)) {
-									ops[token !== "Y" ? "push" : "unshift"]({
-										fn: _this2.revFormat[token],
-										val: match[++matchIndex]
-									});
-								}
-							} else if (!isBackSlash) regexStr += "."; // don't really care
-
-							ops.forEach(function (_ref) {
-								var fn = _ref.fn,
-								    val = _ref.val;
-								return parsedDate = fn(parsedDate, val) || parsedDate;
-							});
-						}
-
-						date = matched ? parsedDate : null;
-					})();
-				}
-			}
-
-		/* istanbul ignore next */
-		if (!(date instanceof Date)) {
-			console.warn("flatpickr: invalid date " + date_orig);
-			console.info(this.element);
-			return null;
-		}
-
-		if (timeless === true) date.setHours(0, 0, 0, 0);
-
-		return date;
-	}
-};
-
-/* istanbul ignore next */
-function _flatpickr(nodeList, config) {
-	var nodes = Array.prototype.slice.call(nodeList); // static list
-	var instances = [];
-	for (var i = 0; i < nodes.length; i++) {
-		try {
-			if (nodes[i].getAttribute("data-fp-omit") !== null) continue;
-
-			if (nodes[i]._flatpickr) {
-				nodes[i]._flatpickr.destroy();
-				nodes[i]._flatpickr = null;
-			}
-
-			nodes[i]._flatpickr = new FlatpickrInstance(nodes[i], config || {});
-			instances.push(nodes[i]._flatpickr);
-		} catch (e) {
-			console.warn(e, e.stack);
-		}
-	}
-
-	return instances.length === 1 ? instances[0] : instances;
-}
-
-/* istanbul ignore next */
-if (typeof HTMLElement !== "undefined") {
-	// browser env
-	HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-		return _flatpickr(this, config);
-	};
-
-	HTMLElement.prototype.flatpickr = function (config) {
-		return _flatpickr([this], config);
-	};
-}
-
-/* istanbul ignore next */
-function flatpickr(selector, config) {
-	if (selector instanceof NodeList) return _flatpickr(selector, config);else if (!(selector instanceof HTMLElement)) return _flatpickr(window.document.querySelectorAll(selector), config);
-
-	return _flatpickr([selector], config);
-}
-
-/* istanbul ignore next */
-flatpickr.defaultConfig = FlatpickrInstance.defaultConfig = {
-	mode: "single",
-
-	position: "auto",
-
-	animate: typeof window !== "undefined" && window.navigator.userAgent.indexOf("MSIE") === -1,
-
-	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
-	wrap: false,
-
-	// enables week numbers
-	weekNumbers: false,
-
-	// allow manual datetime input
-	allowInput: false,
-
-	/*
- 	clicking on input opens the date(time)picker.
- 	disable if you wish to open the calendar manually with .open()
- */
-	clickOpens: true,
-
-	/*
- 	closes calendar after date selection,
- 	unless 'mode' is 'multiple' or enableTime is true
- */
-	closeOnSelect: true,
-
-	// display time picker in 24 hour mode
-	time_24hr: false,
-
-	// enables the time picker functionality
-	enableTime: false,
-
-	// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
-	noCalendar: false,
-
-	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
-	dateFormat: "Y-m-d",
-
-	// date format used in aria-label for days
-	ariaDateFormat: "F j, Y",
-
-	// altInput - see https://chmln.github.io/flatpickr/#altinput
-	altInput: false,
-
-	// the created altInput element will have this class.
-	altInputClass: "form-control input",
-
-	// same as dateFormat, but for altInput
-	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
-
-	// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
-	defaultDate: null,
-
-	// the minimum date that user can pick (inclusive)
-	minDate: null,
-
-	// the maximum date that user can pick (inclusive)
-	maxDate: null,
-
-	// dateparser that transforms a given string to a date object
-	parseDate: null,
-
-	// dateformatter that transforms a given date object to a string, according to passed format
-	formatDate: null,
-
-	getWeek: function getWeek(givenDate) {
-		var date = new Date(givenDate.getTime());
-		var onejan = new Date(date.getFullYear(), 0, 1);
-		return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
-	},
-
-
-	// see https://chmln.github.io/flatpickr/#disable
-	enable: [],
-
-	// see https://chmln.github.io/flatpickr/#disable
-	disable: [],
-
-	// display the short version of month names - e.g. Sep instead of September
-	shorthandCurrentMonth: false,
-
-	// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
-	inline: false,
-
-	// position calendar inside wrapper and next to the input element
-	// leave at false unless you know what you"re doing
-	"static": false,
-
-	// DOM node to append the calendar to in *static* mode
-	appendTo: null,
-
-	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
-	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
-
-	// enables seconds in the time picker
-	enableSeconds: false,
-
-	// step size used when scrolling/incrementing the hour element
-	hourIncrement: 1,
-
-	// step size used when scrolling/incrementing the minute element
-	minuteIncrement: 5,
-
-	// initial value in the hour element
-	defaultHour: 12,
-
-	// initial value in the minute element
-	defaultMinute: 0,
-
-	// initial value in the seconds element
-	defaultSeconds: 0,
-
-	// disable native mobile datetime input support
-	disableMobile: false,
-
-	// default locale
-	locale: "default",
-
-	plugins: [],
-
-	ignoredFocusElements: [],
-
-	// called every time calendar is closed
-	onClose: undefined, // function (dateObj, dateStr) {}
-
-	// onChange callback when user selects a date or time
-	onChange: undefined, // function (dateObj, dateStr) {}
-
-	// called for every day element
-	onDayCreate: undefined,
-
-	// called every time the month is changed
-	onMonthChange: undefined,
-
-	// called every time calendar is opened
-	onOpen: undefined, // function (dateObj, dateStr) {}
-
-	// called after the configuration has been parsed
-	onParseConfig: undefined,
-
-	// called after calendar is ready
-	onReady: undefined, // function (dateObj, dateStr) {}
-
-	// called after input value updated
-	onValueUpdate: undefined,
-
-	// called every time the year is changed
-	onYearChange: undefined,
-
-	onKeyDown: undefined,
-
-	onDestroy: undefined
-};
-
-/* istanbul ignore next */
-flatpickr.l10ns = {
-	en: {
-		weekdays: {
-			shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-			longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-		},
-		months: {
-			shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-		},
-		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		firstDayOfWeek: 0,
-		ordinal: function ordinal(nth) {
-			var s = nth % 100;
-			if (s > 3 && s < 21) return "th";
-			switch (s % 10) {
-				case 1:
-					return "st";
-				case 2:
-					return "nd";
-				case 3:
-					return "rd";
-				default:
-					return "th";
-			}
-		},
-		rangeSeparator: " to ",
-		weekAbbreviation: "Wk",
-		scrollTitle: "Scroll to increment",
-		toggleTitle: "Click to toggle"
-	}
-};
-
-flatpickr.l10ns.default = Object.create(flatpickr.l10ns.en);
-flatpickr.localize = function (l10n) {
-	return _extends(flatpickr.l10ns.default, l10n || {});
-};
-flatpickr.setDefaults = function (config) {
-	return _extends(flatpickr.defaultConfig, config || {});
-};
-
-/* istanbul ignore next */
-if (typeof jQuery !== "undefined") {
-	jQuery.fn.flatpickr = function (config) {
-		return _flatpickr(this, config);
-	};
-}
-
-Date.prototype.fp_incr = function (days) {
-	return new Date(this.getFullYear(), this.getMonth(), this.getDate() + parseInt(days, 10));
-};
-
-if (typeof module !== "undefined") module.exports = flatpickr;
-/*! Responsive 2.2.0
- * 2014-2017 SpryMedia Ltd - datatables.net/license
+/* flatpickr v4.5.2, @license MIT */
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.flatpickr = factory());
+}(this, (function () { 'use strict';
+
+    var pad = function pad(number) {
+      return ("0" + number).slice(-2);
+    };
+    var int = function int(bool) {
+      return bool === true ? 1 : 0;
+    };
+    function debounce(func, wait, immediate) {
+      if (immediate === void 0) {
+        immediate = false;
+      }
+
+      var timeout;
+      return function () {
+        var context = this,
+            args = arguments;
+        timeout !== null && clearTimeout(timeout);
+        timeout = window.setTimeout(function () {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        }, wait);
+        if (immediate && !timeout) func.apply(context, args);
+      };
+    }
+    var arrayify = function arrayify(obj) {
+      return obj instanceof Array ? obj : [obj];
+    };
+
+    var do_nothing = function do_nothing() {
+      return undefined;
+    };
+
+    var monthToStr = function monthToStr(monthNumber, shorthand, locale) {
+      return locale.months[shorthand ? "shorthand" : "longhand"][monthNumber];
+    };
+    var revFormat = {
+      D: do_nothing,
+      F: function F(dateObj, monthName, locale) {
+        dateObj.setMonth(locale.months.longhand.indexOf(monthName));
+      },
+      G: function G(dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+      },
+      H: function H(dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+      },
+      J: function J(dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+      },
+      K: function K(dateObj, amPM, locale) {
+        dateObj.setHours(dateObj.getHours() % 12 + 12 * int(new RegExp(locale.amPM[1], "i").test(amPM)));
+      },
+      M: function M(dateObj, shortMonth, locale) {
+        dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
+      },
+      S: function S(dateObj, seconds) {
+        dateObj.setSeconds(parseFloat(seconds));
+      },
+      U: function U(_, unixSeconds) {
+        return new Date(parseFloat(unixSeconds) * 1000);
+      },
+      W: function W(dateObj, weekNum) {
+        var weekNumber = parseInt(weekNum);
+        return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0);
+      },
+      Y: function Y(dateObj, year) {
+        dateObj.setFullYear(parseFloat(year));
+      },
+      Z: function Z(_, ISODate) {
+        return new Date(ISODate);
+      },
+      d: function d(dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+      },
+      h: function h(dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+      },
+      i: function i(dateObj, minutes) {
+        dateObj.setMinutes(parseFloat(minutes));
+      },
+      j: function j(dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+      },
+      l: do_nothing,
+      m: function m(dateObj, month) {
+        dateObj.setMonth(parseFloat(month) - 1);
+      },
+      n: function n(dateObj, month) {
+        dateObj.setMonth(parseFloat(month) - 1);
+      },
+      s: function s(dateObj, seconds) {
+        dateObj.setSeconds(parseFloat(seconds));
+      },
+      w: do_nothing,
+      y: function y(dateObj, year) {
+        dateObj.setFullYear(2000 + parseFloat(year));
+      }
+    };
+    var tokenRegex = {
+      D: "(\\w+)",
+      F: "(\\w+)",
+      G: "(\\d\\d|\\d)",
+      H: "(\\d\\d|\\d)",
+      J: "(\\d\\d|\\d)\\w+",
+      K: "",
+      M: "(\\w+)",
+      S: "(\\d\\d|\\d)",
+      U: "(.+)",
+      W: "(\\d\\d|\\d)",
+      Y: "(\\d{4})",
+      Z: "(.+)",
+      d: "(\\d\\d|\\d)",
+      h: "(\\d\\d|\\d)",
+      i: "(\\d\\d|\\d)",
+      j: "(\\d\\d|\\d)",
+      l: "(\\w+)",
+      m: "(\\d\\d|\\d)",
+      n: "(\\d\\d|\\d)",
+      s: "(\\d\\d|\\d)",
+      w: "(\\d\\d|\\d)",
+      y: "(\\d{2})"
+    };
+    var formats = {
+      Z: function Z(date) {
+        return date.toISOString();
+      },
+      D: function D(date, locale, options) {
+        return locale.weekdays.shorthand[formats.w(date, locale, options)];
+      },
+      F: function F(date, locale, options) {
+        return monthToStr(formats.n(date, locale, options) - 1, false, locale);
+      },
+      G: function G(date, locale, options) {
+        return pad(formats.h(date, locale, options));
+      },
+      H: function H(date) {
+        return pad(date.getHours());
+      },
+      J: function J(date, locale) {
+        return locale.ordinal !== undefined ? date.getDate() + locale.ordinal(date.getDate()) : date.getDate();
+      },
+      K: function K(date, locale) {
+        return locale.amPM[int(date.getHours() > 11)];
+      },
+      M: function M(date, locale) {
+        return monthToStr(date.getMonth(), true, locale);
+      },
+      S: function S(date) {
+        return pad(date.getSeconds());
+      },
+      U: function U(date) {
+        return date.getTime() / 1000;
+      },
+      W: function W(date, _, options) {
+        return options.getWeek(date);
+      },
+      Y: function Y(date) {
+        return date.getFullYear();
+      },
+      d: function d(date) {
+        return pad(date.getDate());
+      },
+      h: function h(date) {
+        return date.getHours() % 12 ? date.getHours() % 12 : 12;
+      },
+      i: function i(date) {
+        return pad(date.getMinutes());
+      },
+      j: function j(date) {
+        return date.getDate();
+      },
+      l: function l(date, locale) {
+        return locale.weekdays.longhand[date.getDay()];
+      },
+      m: function m(date) {
+        return pad(date.getMonth() + 1);
+      },
+      n: function n(date) {
+        return date.getMonth() + 1;
+      },
+      s: function s(date) {
+        return date.getSeconds();
+      },
+      w: function w(date) {
+        return date.getDay();
+      },
+      y: function y(date) {
+        return String(date.getFullYear()).substring(2);
+      }
+    };
+
+    var english = {
+      weekdays: {
+        shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+      },
+      months: {
+        shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      },
+      daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+      firstDayOfWeek: 0,
+      ordinal: function ordinal(nth) {
+        var s = nth % 100;
+        if (s > 3 && s < 21) return "th";
+
+        switch (s % 10) {
+          case 1:
+            return "st";
+
+          case 2:
+            return "nd";
+
+          case 3:
+            return "rd";
+
+          default:
+            return "th";
+        }
+      },
+      rangeSeparator: " to ",
+      weekAbbreviation: "Wk",
+      scrollTitle: "Scroll to increment",
+      toggleTitle: "Click to toggle",
+      amPM: ["AM", "PM"],
+      yearAriaLabel: "Year"
+    };
+
+    var createDateFormatter = function createDateFormatter(_ref) {
+      var _ref$config = _ref.config,
+          config = _ref$config === void 0 ? defaults : _ref$config,
+          _ref$l10n = _ref.l10n,
+          l10n = _ref$l10n === void 0 ? english : _ref$l10n;
+      return function (dateObj, frmt, overrideLocale) {
+        var locale = overrideLocale || l10n;
+
+        if (config.formatDate !== undefined) {
+          return config.formatDate(dateObj, frmt, locale);
+        }
+
+        return frmt.split("").map(function (c, i, arr) {
+          return formats[c] && arr[i - 1] !== "\\" ? formats[c](dateObj, locale, config) : c !== "\\" ? c : "";
+        }).join("");
+      };
+    };
+    var createDateParser = function createDateParser(_ref2) {
+      var _ref2$config = _ref2.config,
+          config = _ref2$config === void 0 ? defaults : _ref2$config,
+          _ref2$l10n = _ref2.l10n,
+          l10n = _ref2$l10n === void 0 ? english : _ref2$l10n;
+      return function (date, givenFormat, timeless, customLocale) {
+        if (date !== 0 && !date) return undefined;
+        var locale = customLocale || l10n;
+        var parsedDate;
+        var date_orig = date;
+        if (date instanceof Date) parsedDate = new Date(date.getTime());else if (typeof date !== "string" && date.toFixed !== undefined) parsedDate = new Date(date);else if (typeof date === "string") {
+          var format = givenFormat || (config || defaults).dateFormat;
+          var datestr = String(date).trim();
+
+          if (datestr === "today") {
+            parsedDate = new Date();
+            timeless = true;
+          } else if (/Z$/.test(datestr) || /GMT$/.test(datestr)) parsedDate = new Date(date);else if (config && config.parseDate) parsedDate = config.parseDate(date, format);else {
+            parsedDate = !config || !config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
+            var matched,
+                ops = [];
+
+            for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+              var token = format[i];
+              var isBackSlash = token === "\\";
+              var escaped = format[i - 1] === "\\" || isBackSlash;
+
+              if (tokenRegex[token] && !escaped) {
+                regexStr += tokenRegex[token];
+                var match = new RegExp(regexStr).exec(date);
+
+                if (match && (matched = true)) {
+                  ops[token !== "Y" ? "push" : "unshift"]({
+                    fn: revFormat[token],
+                    val: match[++matchIndex]
+                  });
+                }
+              } else if (!isBackSlash) regexStr += ".";
+
+              ops.forEach(function (_ref3) {
+                var fn = _ref3.fn,
+                    val = _ref3.val;
+                return parsedDate = fn(parsedDate, val, locale) || parsedDate;
+              });
+            }
+
+            parsedDate = matched ? parsedDate : undefined;
+          }
+        }
+
+        if (!(parsedDate instanceof Date && !isNaN(parsedDate.getTime()))) {
+          config.errorHandler(new Error("Invalid date provided: " + date_orig));
+          return undefined;
+        }
+
+        if (timeless === true) parsedDate.setHours(0, 0, 0, 0);
+        return parsedDate;
+      };
+    };
+    function compareDates(date1, date2, timeless) {
+      if (timeless === void 0) {
+        timeless = true;
+      }
+
+      if (timeless !== false) {
+        return new Date(date1.getTime()).setHours(0, 0, 0, 0) - new Date(date2.getTime()).setHours(0, 0, 0, 0);
+      }
+
+      return date1.getTime() - date2.getTime();
+    }
+    var getWeek = function getWeek(givenDate) {
+      var date = new Date(givenDate.getTime());
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+      var week1 = new Date(date.getFullYear(), 0, 4);
+      return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+    };
+    var isBetween = function isBetween(ts, ts1, ts2) {
+      return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
+    };
+    var duration = {
+      DAY: 86400000
+    };
+
+    var HOOKS = ["onChange", "onClose", "onDayCreate", "onDestroy", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange", "onPreCalendarPosition"];
+    var defaults = {
+      _disable: [],
+      _enable: [],
+      allowInput: false,
+      altFormat: "F j, Y",
+      altInput: false,
+      altInputClass: "form-control input",
+      animate: typeof window === "object" && window.navigator.userAgent.indexOf("MSIE") === -1,
+      ariaDateFormat: "F j, Y",
+      clickOpens: true,
+      closeOnSelect: true,
+      conjunction: ", ",
+      dateFormat: "Y-m-d",
+      defaultHour: 12,
+      defaultMinute: 0,
+      defaultSeconds: 0,
+      disable: [],
+      disableMobile: false,
+      enable: [],
+      enableSeconds: false,
+      enableTime: false,
+      errorHandler: function errorHandler(err) {
+        return typeof console !== "undefined" && console.warn(err);
+      },
+      getWeek: getWeek,
+      hourIncrement: 1,
+      ignoredFocusElements: [],
+      inline: false,
+      locale: "default",
+      minuteIncrement: 5,
+      mode: "single",
+      nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+      noCalendar: false,
+      now: new Date(),
+      onChange: [],
+      onClose: [],
+      onDayCreate: [],
+      onDestroy: [],
+      onKeyDown: [],
+      onMonthChange: [],
+      onOpen: [],
+      onParseConfig: [],
+      onReady: [],
+      onValueUpdate: [],
+      onYearChange: [],
+      onPreCalendarPosition: [],
+      plugins: [],
+      position: "auto",
+      positionElement: undefined,
+      prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+      shorthandCurrentMonth: false,
+      showMonths: 1,
+      static: false,
+      time_24hr: false,
+      weekNumbers: false,
+      wrap: false
+    };
+
+    function toggleClass(elem, className, bool) {
+      if (bool === true) return elem.classList.add(className);
+      elem.classList.remove(className);
+    }
+    function createElement(tag, className, content) {
+      var e = window.document.createElement(tag);
+      className = className || "";
+      content = content || "";
+      e.className = className;
+      if (content !== undefined) e.textContent = content;
+      return e;
+    }
+    function clearNode(node) {
+      while (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+    }
+    function findParent(node, condition) {
+      if (condition(node)) return node;else if (node.parentNode) return findParent(node.parentNode, condition);
+      return undefined;
+    }
+    function createNumberInput(inputClassName, opts) {
+      var wrapper = createElement("div", "numInputWrapper"),
+          numInput = createElement("input", "numInput " + inputClassName),
+          arrowUp = createElement("span", "arrowUp"),
+          arrowDown = createElement("span", "arrowDown");
+      numInput.type = "text";
+      numInput.pattern = "\\d*";
+      if (opts !== undefined) for (var key in opts) {
+        numInput.setAttribute(key, opts[key]);
+      }
+      wrapper.appendChild(numInput);
+      wrapper.appendChild(arrowUp);
+      wrapper.appendChild(arrowDown);
+      return wrapper;
+    }
+
+    if (typeof Object.assign !== "function") {
+      Object.assign = function (target) {
+        if (!target) {
+          throw TypeError("Cannot convert undefined or null to object");
+        }
+
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        var _loop = function _loop() {
+          var source = args[_i];
+
+          if (source) {
+            Object.keys(source).forEach(function (key) {
+              return target[key] = source[key];
+            });
+          }
+        };
+
+        for (var _i = 0; _i < args.length; _i++) {
+          _loop();
+        }
+
+        return target;
+      };
+    }
+
+    var DEBOUNCED_CHANGE_MS = 300;
+
+    function FlatpickrInstance(element, instanceConfig) {
+      var self = {
+        config: Object.assign({}, flatpickr.defaultConfig),
+        l10n: english
+      };
+      self.parseDate = createDateParser({
+        config: self.config,
+        l10n: self.l10n
+      });
+      self._handlers = [];
+      self._bind = bind;
+      self._setHoursFromDate = setHoursFromDate;
+      self._positionCalendar = positionCalendar;
+      self.changeMonth = changeMonth;
+      self.changeYear = changeYear;
+      self.clear = clear;
+      self.close = close;
+      self._createElement = createElement;
+      self.destroy = destroy;
+      self.isEnabled = isEnabled;
+      self.jumpToDate = jumpToDate;
+      self.open = open;
+      self.redraw = redraw;
+      self.set = set;
+      self.setDate = setDate;
+      self.toggle = toggle;
+
+      function setupHelperFunctions() {
+        self.utils = {
+          getDaysInMonth: function getDaysInMonth(month, yr) {
+            if (month === void 0) {
+              month = self.currentMonth;
+            }
+
+            if (yr === void 0) {
+              yr = self.currentYear;
+            }
+
+            if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
+            return self.l10n.daysInMonth[month];
+          }
+        };
+      }
+
+      function init() {
+        self.element = self.input = element;
+        self.isOpen = false;
+        parseConfig();
+        setupLocale();
+        setupInputs();
+        setupDates();
+        setupHelperFunctions();
+        if (!self.isMobile) build();
+        bindEvents();
+
+        if (self.selectedDates.length || self.config.noCalendar) {
+          if (self.config.enableTime) {
+            setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : undefined);
+          }
+
+          updateValue(false);
+        }
+
+        setCalendarWidth();
+        self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
+        var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        if (!self.isMobile && isSafari) {
+          positionCalendar();
+        }
+
+        triggerEvent("onReady");
+      }
+
+      function bindToInstance(fn) {
+        return fn.bind(self);
+      }
+
+      function setCalendarWidth() {
+        var config = self.config;
+        if (config.weekNumbers === false && config.showMonths === 1) return;else if (config.noCalendar !== true) {
+          window.requestAnimationFrame(function () {
+            self.calendarContainer.style.visibility = "hidden";
+            self.calendarContainer.style.display = "block";
+
+            if (self.daysContainer !== undefined) {
+              var daysWidth = (self.days.offsetWidth + 1) * config.showMonths;
+              self.daysContainer.style.width = daysWidth + "px";
+              self.calendarContainer.style.width = daysWidth + (self.weekWrapper !== undefined ? self.weekWrapper.offsetWidth : 0) + "px";
+              self.calendarContainer.style.removeProperty("visibility");
+              self.calendarContainer.style.removeProperty("display");
+            }
+          });
+        }
+      }
+
+      function updateTime(e) {
+        if (self.selectedDates.length === 0) return;
+
+        if (e !== undefined && e.type !== "blur") {
+          timeWrapper(e);
+        }
+
+        var prevValue = self._input.value;
+        setHoursFromInputs();
+        updateValue();
+
+        if (self._input.value !== prevValue) {
+          self._debouncedChange();
+        }
+      }
+
+      function ampm2military(hour, amPM) {
+        return hour % 12 + 12 * int(amPM === self.l10n.amPM[1]);
+      }
+
+      function military2ampm(hour) {
+        switch (hour % 24) {
+          case 0:
+          case 12:
+            return 12;
+
+          default:
+            return hour % 12;
+        }
+      }
+
+      function setHoursFromInputs() {
+        if (self.hourElement === undefined || self.minuteElement === undefined) return;
+        var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24,
+            minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
+            seconds = self.secondElement !== undefined ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
+
+        if (self.amPM !== undefined) {
+          hours = ampm2military(hours, self.amPM.textContent);
+        }
+
+        var limitMinHours = self.config.minTime !== undefined || self.config.minDate && self.minDateHasTime && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.minDate, true) === 0;
+        var limitMaxHours = self.config.maxTime !== undefined || self.config.maxDate && self.maxDateHasTime && self.latestSelectedDateObj && compareDates(self.latestSelectedDateObj, self.config.maxDate, true) === 0;
+
+        if (limitMaxHours) {
+          var maxTime = self.config.maxTime !== undefined ? self.config.maxTime : self.config.maxDate;
+          hours = Math.min(hours, maxTime.getHours());
+          if (hours === maxTime.getHours()) minutes = Math.min(minutes, maxTime.getMinutes());
+          if (minutes === maxTime.getMinutes()) seconds = Math.min(seconds, maxTime.getSeconds());
+        }
+
+        if (limitMinHours) {
+          var minTime = self.config.minTime !== undefined ? self.config.minTime : self.config.minDate;
+          hours = Math.max(hours, minTime.getHours());
+          if (hours === minTime.getHours()) minutes = Math.max(minutes, minTime.getMinutes());
+          if (minutes === minTime.getMinutes()) seconds = Math.max(seconds, minTime.getSeconds());
+        }
+
+        setHours(hours, minutes, seconds);
+      }
+
+      function setHoursFromDate(dateObj) {
+        var date = dateObj || self.latestSelectedDateObj;
+        if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+      }
+
+      function setDefaultHours() {
+        var hours = self.config.defaultHour;
+        var minutes = self.config.defaultMinute;
+        var seconds = self.config.defaultSeconds;
+
+        if (self.config.minDate !== undefined) {
+          var min_hr = self.config.minDate.getHours();
+          var min_minutes = self.config.minDate.getMinutes();
+          hours = Math.max(hours, min_hr);
+          if (hours === min_hr) minutes = Math.max(min_minutes, minutes);
+          if (hours === min_hr && minutes === min_minutes) seconds = self.config.minDate.getSeconds();
+        }
+
+        if (self.config.maxDate !== undefined) {
+          var max_hr = self.config.maxDate.getHours();
+          var max_minutes = self.config.maxDate.getMinutes();
+          hours = Math.min(hours, max_hr);
+          if (hours === max_hr) minutes = Math.min(max_minutes, minutes);
+          if (hours === max_hr && minutes === max_minutes) seconds = self.config.maxDate.getSeconds();
+        }
+
+        setHours(hours, minutes, seconds);
+      }
+
+      function setHours(hours, minutes, seconds) {
+        if (self.latestSelectedDateObj !== undefined) {
+          self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
+        }
+
+        if (!self.hourElement || !self.minuteElement || self.isMobile) return;
+        self.hourElement.value = pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * int(hours % 12 === 0) : hours);
+        self.minuteElement.value = pad(minutes);
+        if (self.amPM !== undefined) self.amPM.textContent = self.l10n.amPM[int(hours >= 12)];
+        if (self.secondElement !== undefined) self.secondElement.value = pad(seconds);
+      }
+
+      function onYearInput(event) {
+        var year = parseInt(event.target.value) + (event.delta || 0);
+
+        if (year / 1000 > 1 || event.key === "Enter" && !/[^\d]/.test(year.toString())) {
+          changeYear(year);
+        }
+      }
+
+      function bind(element, event, handler, options) {
+        if (event instanceof Array) return event.forEach(function (ev) {
+          return bind(element, ev, handler, options);
+        });
+        if (element instanceof Array) return element.forEach(function (el) {
+          return bind(el, event, handler, options);
+        });
+        element.addEventListener(event, handler, options);
+
+        self._handlers.push({
+          element: element,
+          event: event,
+          handler: handler,
+          options: options
+        });
+      }
+
+      function onClick(handler) {
+        return function (evt) {
+          evt.which === 1 && handler(evt);
+        };
+      }
+
+      function triggerChange() {
+        triggerEvent("onChange");
+      }
+
+      function bindEvents() {
+        if (self.config.wrap) {
+          ["open", "close", "toggle", "clear"].forEach(function (evt) {
+            Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
+              return bind(el, "click", self[evt]);
+            });
+          });
+        }
+
+        if (self.isMobile) {
+          setupMobile();
+          return;
+        }
+
+        var debouncedResize = debounce(onResize, 50);
+        self._debouncedChange = debounce(triggerChange, DEBOUNCED_CHANGE_MS);
+        if (self.daysContainer && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) bind(self.daysContainer, "mouseover", function (e) {
+          if (self.config.mode === "range") onMouseOver(e.target);
+        });
+        bind(window.document.body, "keydown", onKeyDown);
+        if (!self.config.static) bind(self._input, "keydown", onKeyDown);
+        if (!self.config.inline && !self.config.static) bind(window, "resize", debouncedResize);
+        if (window.ontouchstart !== undefined) bind(window.document, "click", documentClick);else bind(window.document, "mousedown", onClick(documentClick));
+        bind(window.document, "focus", documentClick, {
+          capture: true
+        });
+
+        if (self.config.clickOpens === true) {
+          bind(self._input, "focus", self.open);
+          bind(self._input, "mousedown", onClick(self.open));
+        }
+
+        if (self.daysContainer !== undefined) {
+          bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+          bind(self.monthNav, ["keyup", "increment"], onYearInput);
+          bind(self.daysContainer, "mousedown", onClick(selectDate));
+        }
+
+        if (self.timeContainer !== undefined && self.minuteElement !== undefined && self.hourElement !== undefined) {
+          var selText = function selText(e) {
+            return e.target.select();
+          };
+
+          bind(self.timeContainer, ["increment"], updateTime);
+          bind(self.timeContainer, "blur", updateTime, {
+            capture: true
+          });
+          bind(self.timeContainer, "mousedown", onClick(timeIncrement));
+          bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
+          if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
+            return self.secondElement && self.secondElement.select();
+          });
+
+          if (self.amPM !== undefined) {
+            bind(self.amPM, "mousedown", onClick(function (e) {
+              updateTime(e);
+              triggerChange();
+            }));
+          }
+        }
+      }
+
+      function jumpToDate(jumpDate) {
+        var jumpTo = jumpDate !== undefined ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate && self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
+
+        try {
+          if (jumpTo !== undefined) {
+            self.currentYear = jumpTo.getFullYear();
+            self.currentMonth = jumpTo.getMonth();
+          }
+        } catch (e) {
+          e.message = "Invalid date supplied: " + jumpTo;
+          self.config.errorHandler(e);
+        }
+
+        self.redraw();
+      }
+
+      function timeIncrement(e) {
+        if (~e.target.className.indexOf("arrow")) incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
+      }
+
+      function incrementNumInput(e, delta, inputElem) {
+        var target = e && e.target;
+        var input = inputElem || target && target.parentNode && target.parentNode.firstChild;
+        var event = createEvent("increment");
+        event.delta = delta;
+        input && input.dispatchEvent(event);
+      }
+
+      function build() {
+        var fragment = window.document.createDocumentFragment();
+        self.calendarContainer = createElement("div", "flatpickr-calendar");
+        self.calendarContainer.tabIndex = -1;
+
+        if (!self.config.noCalendar) {
+          fragment.appendChild(buildMonthNav());
+          self.innerContainer = createElement("div", "flatpickr-innerContainer");
+
+          if (self.config.weekNumbers) {
+            var _buildWeeks = buildWeeks(),
+                weekWrapper = _buildWeeks.weekWrapper,
+                weekNumbers = _buildWeeks.weekNumbers;
+
+            self.innerContainer.appendChild(weekWrapper);
+            self.weekNumbers = weekNumbers;
+            self.weekWrapper = weekWrapper;
+          }
+
+          self.rContainer = createElement("div", "flatpickr-rContainer");
+          self.rContainer.appendChild(buildWeekdays());
+
+          if (!self.daysContainer) {
+            self.daysContainer = createElement("div", "flatpickr-days");
+            self.daysContainer.tabIndex = -1;
+          }
+
+          buildDays();
+          self.rContainer.appendChild(self.daysContainer);
+          self.innerContainer.appendChild(self.rContainer);
+          fragment.appendChild(self.innerContainer);
+        }
+
+        if (self.config.enableTime) {
+          fragment.appendChild(buildTime());
+        }
+
+        toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
+        toggleClass(self.calendarContainer, "animate", self.config.animate === true);
+        toggleClass(self.calendarContainer, "multiMonth", self.config.showMonths > 1);
+        self.calendarContainer.appendChild(fragment);
+        var customAppend = self.config.appendTo !== undefined && self.config.appendTo.nodeType !== undefined;
+
+        if (self.config.inline || self.config.static) {
+          self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
+
+          if (self.config.inline) {
+            if (!customAppend && self.element.parentNode) self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);else if (self.config.appendTo !== undefined) self.config.appendTo.appendChild(self.calendarContainer);
+          }
+
+          if (self.config.static) {
+            var wrapper = createElement("div", "flatpickr-wrapper");
+            if (self.element.parentNode) self.element.parentNode.insertBefore(wrapper, self.element);
+            wrapper.appendChild(self.element);
+            if (self.altInput) wrapper.appendChild(self.altInput);
+            wrapper.appendChild(self.calendarContainer);
+          }
+        }
+
+        if (!self.config.static && !self.config.inline) (self.config.appendTo !== undefined ? self.config.appendTo : window.document.body).appendChild(self.calendarContainer);
+      }
+
+      function createDay(className, date, dayNumber, i) {
+        var dateIsEnabled = isEnabled(date, true),
+            dayElement = createElement("span", "flatpickr-day " + className, date.getDate().toString());
+        dayElement.dateObj = date;
+        dayElement.$i = i;
+        dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
+
+        if (className.indexOf("hidden") === -1 && compareDates(date, self.now) === 0) {
+          self.todayDateElem = dayElement;
+          dayElement.classList.add("today");
+          dayElement.setAttribute("aria-current", "date");
+        }
+
+        if (dateIsEnabled) {
+          dayElement.tabIndex = -1;
+
+          if (isDateSelected(date)) {
+            dayElement.classList.add("selected");
+            self.selectedDateElem = dayElement;
+
+            if (self.config.mode === "range") {
+              toggleClass(dayElement, "startRange", self.selectedDates[0] && compareDates(date, self.selectedDates[0], true) === 0);
+              toggleClass(dayElement, "endRange", self.selectedDates[1] && compareDates(date, self.selectedDates[1], true) === 0);
+              if (className === "nextMonthDay") dayElement.classList.add("inRange");
+            }
+          }
+        } else {
+          dayElement.classList.add("disabled");
+        }
+
+        if (self.config.mode === "range") {
+          if (isDateInRange(date) && !isDateSelected(date)) dayElement.classList.add("inRange");
+        }
+
+        if (self.weekNumbers && self.config.showMonths === 1 && className !== "prevMonthDay" && dayNumber % 7 === 1) {
+          self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='flatpickr-day'>" + self.config.getWeek(date) + "</span>");
+        }
+
+        triggerEvent("onDayCreate", dayElement);
+        return dayElement;
+      }
+
+      function focusOnDayElem(targetNode) {
+        targetNode.focus();
+        if (self.config.mode === "range") onMouseOver(targetNode);
+      }
+
+      function getFirstAvailableDay(delta) {
+        var startMonth = delta > 0 ? 0 : self.config.showMonths - 1;
+        var endMonth = delta > 0 ? self.config.showMonths : -1;
+
+        for (var m = startMonth; m != endMonth; m += delta) {
+          var month = self.daysContainer.children[m];
+          var startIndex = delta > 0 ? 0 : month.children.length - 1;
+          var endIndex = delta > 0 ? month.children.length : -1;
+
+          for (var i = startIndex; i != endIndex; i += delta) {
+            var c = month.children[i];
+            if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj)) return c;
+          }
+        }
+
+        return undefined;
+      }
+
+      function getNextAvailableDay(current, delta) {
+        var givenMonth = current.className.indexOf("Month") === -1 ? current.dateObj.getMonth() : self.currentMonth;
+        var endMonth = delta > 0 ? self.config.showMonths : -1;
+        var loopDelta = delta > 0 ? 1 : -1;
+
+        for (var m = givenMonth - self.currentMonth; m != endMonth; m += loopDelta) {
+          var month = self.daysContainer.children[m];
+          var startIndex = givenMonth - self.currentMonth === m ? current.$i + delta : delta < 0 ? month.children.length - 1 : 0;
+          var numMonthDays = month.children.length;
+
+          for (var i = startIndex; i >= 0 && i < numMonthDays && i != (delta > 0 ? numMonthDays : -1); i += loopDelta) {
+            var c = month.children[i];
+            if (c.className.indexOf("hidden") === -1 && isEnabled(c.dateObj) && Math.abs(current.$i - i) >= Math.abs(delta)) return focusOnDayElem(c);
+          }
+        }
+
+        self.changeMonth(loopDelta);
+        focusOnDay(getFirstAvailableDay(loopDelta), 0);
+        return undefined;
+      }
+
+      function focusOnDay(current, offset) {
+        var dayFocused = isInView(document.activeElement || document.body);
+        var startElem = current !== undefined ? current : dayFocused ? document.activeElement : self.selectedDateElem !== undefined && isInView(self.selectedDateElem) ? self.selectedDateElem : self.todayDateElem !== undefined && isInView(self.todayDateElem) ? self.todayDateElem : getFirstAvailableDay(offset > 0 ? 1 : -1);
+        if (startElem === undefined) return self._input.focus();
+        if (!dayFocused) return focusOnDayElem(startElem);
+        getNextAvailableDay(startElem, offset);
+      }
+
+      function buildMonthDays(year, month) {
+        var firstOfMonth = (new Date(year, month, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7;
+        var prevMonthDays = self.utils.getDaysInMonth((month - 1 + 12) % 12);
+        var daysInMonth = self.utils.getDaysInMonth(month),
+            days = window.document.createDocumentFragment(),
+            isMultiMonth = self.config.showMonths > 1,
+            prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
+            nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
+        var dayNumber = prevMonthDays + 1 - firstOfMonth,
+            dayIndex = 0;
+
+        for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
+          days.appendChild(createDay(prevMonthDayClass, new Date(year, month - 1, dayNumber), dayNumber, dayIndex));
+        }
+
+        for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
+          days.appendChild(createDay("", new Date(year, month, dayNumber), dayNumber, dayIndex));
+        }
+
+        for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth && (self.config.showMonths === 1 || dayIndex % 7 !== 0); dayNum++, dayIndex++) {
+          days.appendChild(createDay(nextMonthDayClass, new Date(year, month + 1, dayNum % daysInMonth), dayNum, dayIndex));
+        }
+
+        var dayContainer = createElement("div", "dayContainer");
+        dayContainer.appendChild(days);
+        return dayContainer;
+      }
+
+      function buildDays() {
+        if (self.daysContainer === undefined) {
+          return;
+        }
+
+        clearNode(self.daysContainer);
+        if (self.weekNumbers) clearNode(self.weekNumbers);
+        var frag = document.createDocumentFragment();
+
+        for (var i = 0; i < self.config.showMonths; i++) {
+          var d = new Date(self.currentYear, self.currentMonth, 1);
+          d.setMonth(self.currentMonth + i);
+          frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
+        }
+
+        self.daysContainer.appendChild(frag);
+        self.days = self.daysContainer.firstChild;
+
+        if (self.config.mode === "range" && self.selectedDates.length === 1) {
+          onMouseOver();
+        }
+      }
+
+      function buildMonth() {
+        var container = createElement("div", "flatpickr-month");
+        var monthNavFragment = window.document.createDocumentFragment();
+        var monthElement = createElement("span", "cur-month");
+        var yearInput = createNumberInput("cur-year", {
+          tabindex: "-1"
+        });
+        var yearElement = yearInput.getElementsByTagName("input")[0];
+        yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+        if (self.config.minDate) yearElement.setAttribute("data-min", self.config.minDate.getFullYear().toString());
+
+        if (self.config.maxDate) {
+          yearElement.setAttribute("data-max", self.config.maxDate.getFullYear().toString());
+          yearElement.disabled = !!self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+        }
+
+        var currentMonth = createElement("div", "flatpickr-current-month");
+        currentMonth.appendChild(monthElement);
+        currentMonth.appendChild(yearInput);
+        monthNavFragment.appendChild(currentMonth);
+        container.appendChild(monthNavFragment);
+        return {
+          container: container,
+          yearElement: yearElement,
+          monthElement: monthElement
+        };
+      }
+
+      function buildMonths() {
+        clearNode(self.monthNav);
+        self.monthNav.appendChild(self.prevMonthNav);
+
+        for (var m = self.config.showMonths; m--;) {
+          var month = buildMonth();
+          self.yearElements.push(month.yearElement);
+          self.monthElements.push(month.monthElement);
+          self.monthNav.appendChild(month.container);
+        }
+
+        self.monthNav.appendChild(self.nextMonthNav);
+      }
+
+      function buildMonthNav() {
+        self.monthNav = createElement("div", "flatpickr-months");
+        self.yearElements = [];
+        self.monthElements = [];
+        self.prevMonthNav = createElement("span", "flatpickr-prev-month");
+        self.prevMonthNav.innerHTML = self.config.prevArrow;
+        self.nextMonthNav = createElement("span", "flatpickr-next-month");
+        self.nextMonthNav.innerHTML = self.config.nextArrow;
+        buildMonths();
+        Object.defineProperty(self, "_hidePrevMonthArrow", {
+          get: function get() {
+            return self.__hidePrevMonthArrow;
+          },
+          set: function set(bool) {
+            if (self.__hidePrevMonthArrow !== bool) {
+              toggleClass(self.prevMonthNav, "disabled", bool);
+              self.__hidePrevMonthArrow = bool;
+            }
+          }
+        });
+        Object.defineProperty(self, "_hideNextMonthArrow", {
+          get: function get() {
+            return self.__hideNextMonthArrow;
+          },
+          set: function set(bool) {
+            if (self.__hideNextMonthArrow !== bool) {
+              toggleClass(self.nextMonthNav, "disabled", bool);
+              self.__hideNextMonthArrow = bool;
+            }
+          }
+        });
+        self.currentYearElement = self.yearElements[0];
+        updateNavigationCurrentMonth();
+        return self.monthNav;
+      }
+
+      function buildTime() {
+        self.calendarContainer.classList.add("hasTime");
+        if (self.config.noCalendar) self.calendarContainer.classList.add("noCalendar");
+        self.timeContainer = createElement("div", "flatpickr-time");
+        self.timeContainer.tabIndex = -1;
+        var separator = createElement("span", "flatpickr-time-separator", ":");
+        var hourInput = createNumberInput("flatpickr-hour");
+        self.hourElement = hourInput.getElementsByTagName("input")[0];
+        var minuteInput = createNumberInput("flatpickr-minute");
+        self.minuteElement = minuteInput.getElementsByTagName("input")[0];
+        self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
+        self.hourElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.time_24hr ? self.config.defaultHour : military2ampm(self.config.defaultHour));
+        self.minuteElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : self.config.defaultMinute);
+        self.hourElement.setAttribute("data-step", self.config.hourIncrement.toString());
+        self.minuteElement.setAttribute("data-step", self.config.minuteIncrement.toString());
+        self.hourElement.setAttribute("data-min", self.config.time_24hr ? "0" : "1");
+        self.hourElement.setAttribute("data-max", self.config.time_24hr ? "23" : "12");
+        self.minuteElement.setAttribute("data-min", "0");
+        self.minuteElement.setAttribute("data-max", "59");
+        self.timeContainer.appendChild(hourInput);
+        self.timeContainer.appendChild(separator);
+        self.timeContainer.appendChild(minuteInput);
+        if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
+
+        if (self.config.enableSeconds) {
+          self.timeContainer.classList.add("hasSeconds");
+          var secondInput = createNumberInput("flatpickr-second");
+          self.secondElement = secondInput.getElementsByTagName("input")[0];
+          self.secondElement.value = pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getSeconds() : self.config.defaultSeconds);
+          self.secondElement.setAttribute("data-step", self.minuteElement.getAttribute("data-step"));
+          self.secondElement.setAttribute("data-min", self.minuteElement.getAttribute("data-min"));
+          self.secondElement.setAttribute("data-max", self.minuteElement.getAttribute("data-max"));
+          self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
+          self.timeContainer.appendChild(secondInput);
+        }
+
+        if (!self.config.time_24hr) {
+          self.amPM = createElement("span", "flatpickr-am-pm", self.l10n.amPM[int((self.latestSelectedDateObj ? self.hourElement.value : self.config.defaultHour) > 11)]);
+          self.amPM.title = self.l10n.toggleTitle;
+          self.amPM.tabIndex = -1;
+          self.timeContainer.appendChild(self.amPM);
+        }
+
+        return self.timeContainer;
+      }
+
+      function buildWeekdays() {
+        if (!self.weekdayContainer) self.weekdayContainer = createElement("div", "flatpickr-weekdays");else clearNode(self.weekdayContainer);
+
+        for (var i = self.config.showMonths; i--;) {
+          var container = createElement("div", "flatpickr-weekdaycontainer");
+          self.weekdayContainer.appendChild(container);
+        }
+
+        updateWeekdays();
+        return self.weekdayContainer;
+      }
+
+      function updateWeekdays() {
+        var firstDayOfWeek = self.l10n.firstDayOfWeek;
+        var weekdays = self.l10n.weekdays.shorthand.concat();
+
+        if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
+          weekdays = weekdays.splice(firstDayOfWeek, weekdays.length).concat(weekdays.splice(0, firstDayOfWeek));
+        }
+
+        for (var i = self.config.showMonths; i--;) {
+          self.weekdayContainer.children[i].innerHTML = "\n      <span class=flatpickr-weekday>\n        " + weekdays.join("</span><span class=flatpickr-weekday>") + "\n      </span>\n      ";
+        }
+      }
+
+      function buildWeeks() {
+        self.calendarContainer.classList.add("hasWeeks");
+        var weekWrapper = createElement("div", "flatpickr-weekwrapper");
+        weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
+        var weekNumbers = createElement("div", "flatpickr-weeks");
+        weekWrapper.appendChild(weekNumbers);
+        return {
+          weekWrapper: weekWrapper,
+          weekNumbers: weekNumbers
+        };
+      }
+
+      function changeMonth(value, is_offset) {
+        if (is_offset === void 0) {
+          is_offset = true;
+        }
+
+        var delta = is_offset ? value : value - self.currentMonth;
+        if (delta < 0 && self._hidePrevMonthArrow === true || delta > 0 && self._hideNextMonthArrow === true) return;
+        self.currentMonth += delta;
+
+        if (self.currentMonth < 0 || self.currentMonth > 11) {
+          self.currentYear += self.currentMonth > 11 ? 1 : -1;
+          self.currentMonth = (self.currentMonth + 12) % 12;
+          triggerEvent("onYearChange");
+        }
+
+        buildDays();
+        triggerEvent("onMonthChange");
+        updateNavigationCurrentMonth();
+      }
+
+      function clear(triggerChangeEvent) {
+        if (triggerChangeEvent === void 0) {
+          triggerChangeEvent = true;
+        }
+
+        self.input.value = "";
+        if (self.altInput !== undefined) self.altInput.value = "";
+        if (self.mobileInput !== undefined) self.mobileInput.value = "";
+        self.selectedDates = [];
+        self.latestSelectedDateObj = undefined;
+        self.showTimeInput = false;
+
+        if (self.config.enableTime === true) {
+          setDefaultHours();
+        }
+
+        self.redraw();
+        if (triggerChangeEvent) triggerEvent("onChange");
+      }
+
+      function close() {
+        self.isOpen = false;
+
+        if (!self.isMobile) {
+          self.calendarContainer.classList.remove("open");
+
+          self._input.classList.remove("active");
+        }
+
+        triggerEvent("onClose");
+      }
+
+      function destroy() {
+        if (self.config !== undefined) triggerEvent("onDestroy");
+
+        for (var i = self._handlers.length; i--;) {
+          var h = self._handlers[i];
+          h.element.removeEventListener(h.event, h.handler, h.options);
+        }
+
+        self._handlers = [];
+
+        if (self.mobileInput) {
+          if (self.mobileInput.parentNode) self.mobileInput.parentNode.removeChild(self.mobileInput);
+          self.mobileInput = undefined;
+        } else if (self.calendarContainer && self.calendarContainer.parentNode) {
+          if (self.config.static && self.calendarContainer.parentNode) {
+            var wrapper = self.calendarContainer.parentNode;
+            wrapper.lastChild && wrapper.removeChild(wrapper.lastChild);
+
+            if (wrapper.parentNode) {
+              while (wrapper.firstChild) {
+                wrapper.parentNode.insertBefore(wrapper.firstChild, wrapper);
+              }
+
+              wrapper.parentNode.removeChild(wrapper);
+            }
+          } else self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+        }
+
+        if (self.altInput) {
+          self.input.type = "text";
+          if (self.altInput.parentNode) self.altInput.parentNode.removeChild(self.altInput);
+          delete self.altInput;
+        }
+
+        if (self.input) {
+          self.input.type = self.input._type;
+          self.input.classList.remove("flatpickr-input");
+          self.input.removeAttribute("readonly");
+          self.input.value = "";
+        }
+
+        ["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
+          try {
+            delete self[k];
+          } catch (_) {}
+        });
+      }
+
+      function isCalendarElem(elem) {
+        if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
+        return self.calendarContainer.contains(elem);
+      }
+
+      function documentClick(e) {
+        if (self.isOpen && !self.config.inline) {
+          var isCalendarElement = isCalendarElem(e.target);
+          var isInput = e.target === self.input || e.target === self.altInput || self.element.contains(e.target) || e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
+          var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
+          var isIgnored = !self.config.ignoredFocusElements.some(function (elem) {
+            return elem.contains(e.target);
+          });
+
+          if (lostFocus && isIgnored) {
+            self.close();
+
+            if (self.config.mode === "range" && self.selectedDates.length === 1) {
+              self.clear(false);
+              self.redraw();
+            }
+          }
+        }
+      }
+
+      function changeYear(newYear) {
+        if (!newYear || self.config.minDate && newYear < self.config.minDate.getFullYear() || self.config.maxDate && newYear > self.config.maxDate.getFullYear()) return;
+        var newYearNum = newYear,
+            isNewYear = self.currentYear !== newYearNum;
+        self.currentYear = newYearNum || self.currentYear;
+
+        if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
+          self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
+        } else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
+          self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
+        }
+
+        if (isNewYear) {
+          self.redraw();
+          triggerEvent("onYearChange");
+        }
+      }
+
+      function isEnabled(date, timeless) {
+        if (timeless === void 0) {
+          timeless = true;
+        }
+
+        var dateToCheck = self.parseDate(date, undefined, timeless);
+        if (self.config.minDate && dateToCheck && compareDates(dateToCheck, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0 || self.config.maxDate && dateToCheck && compareDates(dateToCheck, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0) return false;
+        if (self.config.enable.length === 0 && self.config.disable.length === 0) return true;
+        if (dateToCheck === undefined) return false;
+        var bool = self.config.enable.length > 0,
+            array = bool ? self.config.enable : self.config.disable;
+
+        for (var i = 0, d; i < array.length; i++) {
+          d = array[i];
+          if (typeof d === "function" && d(dateToCheck)) return bool;else if (d instanceof Date && dateToCheck !== undefined && d.getTime() === dateToCheck.getTime()) return bool;else if (typeof d === "string" && dateToCheck !== undefined) {
+            var parsed = self.parseDate(d, undefined, true);
+            return parsed && parsed.getTime() === dateToCheck.getTime() ? bool : !bool;
+          } else if (typeof d === "object" && dateToCheck !== undefined && d.from && d.to && dateToCheck.getTime() >= d.from.getTime() && dateToCheck.getTime() <= d.to.getTime()) return bool;
+        }
+
+        return !bool;
+      }
+
+      function isInView(elem) {
+        if (self.daysContainer !== undefined) return elem.className.indexOf("hidden") === -1 && self.daysContainer.contains(elem);
+        return false;
+      }
+
+      function onKeyDown(e) {
+        var isInput = e.target === self._input;
+        var allowInput = self.config.allowInput;
+        var allowKeydown = self.isOpen && (!allowInput || !isInput);
+        var allowInlineKeydown = self.config.inline && isInput && !allowInput;
+
+        if (e.keyCode === 13 && isInput) {
+          if (allowInput) {
+            self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
+            return e.target.blur();
+          } else self.open();
+        } else if (isCalendarElem(e.target) || allowKeydown || allowInlineKeydown) {
+          var isTimeObj = !!self.timeContainer && self.timeContainer.contains(e.target);
+
+          switch (e.keyCode) {
+            case 13:
+              if (isTimeObj) updateTime();else selectDate(e);
+              break;
+
+            case 27:
+              e.preventDefault();
+              focusAndClose();
+              break;
+
+            case 8:
+            case 46:
+              if (isInput && !self.config.allowInput) {
+                e.preventDefault();
+                self.clear();
+              }
+
+              break;
+
+            case 37:
+            case 39:
+              if (!isTimeObj) {
+                e.preventDefault();
+
+                if (self.daysContainer !== undefined && (allowInput === false || isInView(document.activeElement))) {
+                  var _delta = e.keyCode === 39 ? 1 : -1;
+
+                  if (!e.ctrlKey) focusOnDay(undefined, _delta);else {
+                    changeMonth(_delta);
+                    focusOnDay(getFirstAvailableDay(1), 0);
+                  }
+                }
+              } else if (self.hourElement) self.hourElement.focus();
+
+              break;
+
+            case 38:
+            case 40:
+              e.preventDefault();
+              var delta = e.keyCode === 40 ? 1 : -1;
+
+              if (self.daysContainer && e.target.$i !== undefined) {
+                if (e.ctrlKey) {
+                  changeYear(self.currentYear - delta);
+                  focusOnDay(getFirstAvailableDay(1), 0);
+                } else if (!isTimeObj) focusOnDay(undefined, delta * 7);
+              } else if (self.config.enableTime) {
+                if (!isTimeObj && self.hourElement) self.hourElement.focus();
+                updateTime(e);
+
+                self._debouncedChange();
+              }
+
+              break;
+
+            case 9:
+              if (!isTimeObj) {
+                self.element.focus();
+                break;
+              }
+
+              var elems = [self.hourElement, self.minuteElement, self.secondElement, self.amPM].filter(function (x) {
+                return x;
+              });
+              var i = elems.indexOf(e.target);
+
+              if (i !== -1) {
+                var target = elems[i + (e.shiftKey ? -1 : 1)];
+
+                if (target !== undefined) {
+                  e.preventDefault();
+                  target.focus();
+                } else {
+                  self.element.focus();
+                }
+              }
+
+              break;
+
+            default:
+              break;
+          }
+        }
+
+        if (self.amPM !== undefined && e.target === self.amPM) {
+          switch (e.key) {
+            case self.l10n.amPM[0].charAt(0):
+            case self.l10n.amPM[0].charAt(0).toLowerCase():
+              self.amPM.textContent = self.l10n.amPM[0];
+              setHoursFromInputs();
+              updateValue();
+              break;
+
+            case self.l10n.amPM[1].charAt(0):
+            case self.l10n.amPM[1].charAt(0).toLowerCase():
+              self.amPM.textContent = self.l10n.amPM[1];
+              setHoursFromInputs();
+              updateValue();
+              break;
+          }
+        }
+
+        triggerEvent("onKeyDown", e);
+      }
+
+      function onMouseOver(elem) {
+        if (self.selectedDates.length !== 1 || elem && (!elem.classList.contains("flatpickr-day") || elem.classList.contains("disabled"))) return;
+        var hoverDate = elem ? elem.dateObj.getTime() : self.days.firstElementChild.dateObj.getTime(),
+            initialDate = self.parseDate(self.selectedDates[0], undefined, true).getTime(),
+            rangeStartDate = Math.min(hoverDate, self.selectedDates[0].getTime()),
+            rangeEndDate = Math.max(hoverDate, self.selectedDates[0].getTime()),
+            lastDate = self.daysContainer.lastChild.lastChild.dateObj.getTime();
+        var containsDisabled = false;
+        var minRange = 0,
+            maxRange = 0;
+
+        for (var t = rangeStartDate; t < lastDate; t += duration.DAY) {
+          if (!isEnabled(new Date(t), true)) {
+            containsDisabled = containsDisabled || t > rangeStartDate && t < rangeEndDate;
+            if (t < initialDate && (!minRange || t > minRange)) minRange = t;else if (t > initialDate && (!maxRange || t < maxRange)) maxRange = t;
+          }
+        }
+
+        for (var m = 0; m < self.config.showMonths; m++) {
+          var month = self.daysContainer.children[m];
+          var prevMonth = self.daysContainer.children[m - 1];
+
+          var _loop = function _loop(i, l) {
+            var dayElem = month.children[i],
+                date = dayElem.dateObj;
+            var timestamp = date.getTime();
+            var outOfRange = minRange > 0 && timestamp < minRange || maxRange > 0 && timestamp > maxRange;
+
+            if (outOfRange) {
+              dayElem.classList.add("notAllowed");
+              ["inRange", "startRange", "endRange"].forEach(function (c) {
+                dayElem.classList.remove(c);
+              });
+              return "continue";
+            } else if (containsDisabled && !outOfRange) return "continue";
+
+            ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+              dayElem.classList.remove(c);
+            });
+
+            if (elem !== undefined) {
+              elem.classList.add(hoverDate < self.selectedDates[0].getTime() ? "startRange" : "endRange");
+
+              if (month.contains(elem) || !(m > 0 && prevMonth && prevMonth.lastChild.dateObj.getTime() >= timestamp)) {
+                if (initialDate < hoverDate && timestamp === initialDate) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate) dayElem.classList.add("endRange");
+                if (timestamp >= minRange && (maxRange === 0 || timestamp <= maxRange) && isBetween(timestamp, initialDate, hoverDate)) dayElem.classList.add("inRange");
+              }
+            }
+          };
+
+          for (var i = 0, l = month.children.length; i < l; i++) {
+            var _ret = _loop(i, l);
+
+            if (_ret === "continue") continue;
+          }
+        }
+      }
+
+      function onResize() {
+        if (self.isOpen && !self.config.static && !self.config.inline) positionCalendar();
+      }
+
+      function open(e, positionElement) {
+        if (positionElement === void 0) {
+          positionElement = self._positionElement;
+        }
+
+        if (self.isMobile === true) {
+          if (e) {
+            e.preventDefault();
+            e.target && e.target.blur();
+          }
+
+          if (self.mobileInput !== undefined) {
+            self.mobileInput.focus();
+            self.mobileInput.click();
+          }
+
+          triggerEvent("onOpen");
+          return;
+        }
+
+        if (self._input.disabled || self.config.inline) return;
+        var wasOpen = self.isOpen;
+        self.isOpen = true;
+
+        if (!wasOpen) {
+          self.calendarContainer.classList.add("open");
+
+          self._input.classList.add("active");
+
+          triggerEvent("onOpen");
+          positionCalendar(positionElement);
+        }
+
+        if (self.config.enableTime === true && self.config.noCalendar === true) {
+          if (self.selectedDates.length === 0) {
+            self.setDate(self.config.minDate !== undefined ? new Date(self.config.minDate.getTime()) : new Date(), false);
+            setDefaultHours();
+            updateValue();
+          }
+
+          if (self.config.allowInput === false && (e === undefined || !self.timeContainer.contains(e.relatedTarget))) {
+            setTimeout(function () {
+              return self.hourElement.select();
+            }, 50);
+          }
+        }
+      }
+
+      function minMaxDateSetter(type) {
+        return function (date) {
+          var dateObj = self.config["_" + type + "Date"] = self.parseDate(date, self.config.dateFormat);
+          var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
+
+          if (dateObj !== undefined) {
+            self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] = dateObj.getHours() > 0 || dateObj.getMinutes() > 0 || dateObj.getSeconds() > 0;
+          }
+
+          if (self.selectedDates) {
+            self.selectedDates = self.selectedDates.filter(function (d) {
+              return isEnabled(d);
+            });
+            if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
+            updateValue();
+          }
+
+          if (self.daysContainer) {
+            redraw();
+            if (dateObj !== undefined) self.currentYearElement[type] = dateObj.getFullYear().toString();else self.currentYearElement.removeAttribute(type);
+            self.currentYearElement.disabled = !!inverseDateObj && dateObj !== undefined && inverseDateObj.getFullYear() === dateObj.getFullYear();
+          }
+        };
+      }
+
+      function parseConfig() {
+        var boolOpts = ["wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
+        var userConfig = Object.assign({}, instanceConfig, JSON.parse(JSON.stringify(element.dataset || {})));
+        var formats$$1 = {};
+        self.config.parseDate = userConfig.parseDate;
+        self.config.formatDate = userConfig.formatDate;
+        Object.defineProperty(self.config, "enable", {
+          get: function get() {
+            return self.config._enable;
+          },
+          set: function set(dates) {
+            self.config._enable = parseDateRules(dates);
+          }
+        });
+        Object.defineProperty(self.config, "disable", {
+          get: function get() {
+            return self.config._disable;
+          },
+          set: function set(dates) {
+            self.config._disable = parseDateRules(dates);
+          }
+        });
+        var timeMode = userConfig.mode === "time";
+
+        if (!userConfig.dateFormat && (userConfig.enableTime || timeMode)) {
+          formats$$1.dateFormat = userConfig.noCalendar || timeMode ? "H:i" + (userConfig.enableSeconds ? ":S" : "") : flatpickr.defaultConfig.dateFormat + " H:i" + (userConfig.enableSeconds ? ":S" : "");
+        }
+
+        if (userConfig.altInput && (userConfig.enableTime || timeMode) && !userConfig.altFormat) {
+          formats$$1.altFormat = userConfig.noCalendar || timeMode ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K") : flatpickr.defaultConfig.altFormat + (" h:i" + (userConfig.enableSeconds ? ":S" : "") + " K");
+        }
+
+        Object.defineProperty(self.config, "minDate", {
+          get: function get() {
+            return self.config._minDate;
+          },
+          set: minMaxDateSetter("min")
+        });
+        Object.defineProperty(self.config, "maxDate", {
+          get: function get() {
+            return self.config._maxDate;
+          },
+          set: minMaxDateSetter("max")
+        });
+
+        var minMaxTimeSetter = function minMaxTimeSetter(type) {
+          return function (val) {
+            self.config[type === "min" ? "_minTime" : "_maxTime"] = self.parseDate(val, "H:i");
+          };
+        };
+
+        Object.defineProperty(self.config, "minTime", {
+          get: function get() {
+            return self.config._minTime;
+          },
+          set: minMaxTimeSetter("min")
+        });
+        Object.defineProperty(self.config, "maxTime", {
+          get: function get() {
+            return self.config._maxTime;
+          },
+          set: minMaxTimeSetter("max")
+        });
+
+        if (userConfig.mode === "time") {
+          self.config.noCalendar = true;
+          self.config.enableTime = true;
+        }
+
+        Object.assign(self.config, formats$$1, userConfig);
+
+        for (var i = 0; i < boolOpts.length; i++) {
+          self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
+        }
+
+        HOOKS.filter(function (hook) {
+          return self.config[hook] !== undefined;
+        }).forEach(function (hook) {
+          self.config[hook] = arrayify(self.config[hook] || []).map(bindToInstance);
+        });
+        self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        for (var _i = 0; _i < self.config.plugins.length; _i++) {
+          var pluginConf = self.config.plugins[_i](self) || {};
+
+          for (var key in pluginConf) {
+            if (HOOKS.indexOf(key) > -1) {
+              self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
+            } else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
+          }
+        }
+
+        triggerEvent("onParseConfig");
+      }
+
+      function setupLocale() {
+        if (typeof self.config.locale !== "object" && typeof flatpickr.l10ns[self.config.locale] === "undefined") self.config.errorHandler(new Error("flatpickr: invalid locale " + self.config.locale));
+        self.l10n = Object.assign({}, flatpickr.l10ns.default, typeof self.config.locale === "object" ? self.config.locale : self.config.locale !== "default" ? flatpickr.l10ns[self.config.locale] : undefined);
+        tokenRegex.K = "(" + self.l10n.amPM[0] + "|" + self.l10n.amPM[1] + "|" + self.l10n.amPM[0].toLowerCase() + "|" + self.l10n.amPM[1].toLowerCase() + ")";
+        self.formatDate = createDateFormatter(self);
+        self.parseDate = createDateParser({
+          config: self.config,
+          l10n: self.l10n
+        });
+      }
+
+      function positionCalendar(customPositionElement) {
+        if (self.calendarContainer === undefined) return;
+        triggerEvent("onPreCalendarPosition");
+        var positionElement = customPositionElement || self._positionElement;
+        var calendarHeight = Array.prototype.reduce.call(self.calendarContainer.children, function (acc, child) {
+          return acc + child.offsetHeight;
+        }, 0),
+            calendarWidth = self.calendarContainer.offsetWidth,
+            configPos = self.config.position.split(" "),
+            configPosVertical = configPos[0],
+            configPosHorizontal = configPos.length > 1 ? configPos[1] : null,
+            inputBounds = positionElement.getBoundingClientRect(),
+            distanceFromBottom = window.innerHeight - inputBounds.bottom,
+            showOnTop = configPosVertical === "above" || configPosVertical !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
+        var top = window.pageYOffset + inputBounds.top + (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
+        toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+        toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
+        if (self.config.inline) return;
+        var left = window.pageXOffset + inputBounds.left - (configPosHorizontal != null && configPosHorizontal === "center" ? (calendarWidth - inputBounds.width) / 2 : 0);
+        var right = window.document.body.offsetWidth - inputBounds.right;
+        var rightMost = left + calendarWidth > window.document.body.offsetWidth;
+        toggleClass(self.calendarContainer, "rightMost", rightMost);
+        if (self.config.static) return;
+        self.calendarContainer.style.top = top + "px";
+
+        if (!rightMost) {
+          self.calendarContainer.style.left = left + "px";
+          self.calendarContainer.style.right = "auto";
+        } else {
+          self.calendarContainer.style.left = "auto";
+          self.calendarContainer.style.right = right + "px";
+        }
+      }
+
+      function redraw() {
+        if (self.config.noCalendar || self.isMobile) return;
+        updateNavigationCurrentMonth();
+        buildDays();
+      }
+
+      function focusAndClose() {
+        self._input.focus();
+
+        if (window.navigator.userAgent.indexOf("MSIE") !== -1 || navigator.msMaxTouchPoints !== undefined) {
+          setTimeout(self.close, 0);
+        } else {
+          self.close();
+        }
+      }
+
+      function selectDate(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var isSelectable = function isSelectable(day) {
+          return day.classList && day.classList.contains("flatpickr-day") && !day.classList.contains("disabled") && !day.classList.contains("notAllowed");
+        };
+
+        var t = findParent(e.target, isSelectable);
+        if (t === undefined) return;
+        var target = t;
+        var selectedDate = self.latestSelectedDateObj = new Date(target.dateObj.getTime());
+        var shouldChangeMonth = (selectedDate.getMonth() < self.currentMonth || selectedDate.getMonth() > self.currentMonth + self.config.showMonths - 1) && self.config.mode !== "range";
+        self.selectedDateElem = target;
+        if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
+          var selectedIndex = isDateSelected(selectedDate);
+          if (selectedIndex) self.selectedDates.splice(parseInt(selectedIndex), 1);else self.selectedDates.push(selectedDate);
+        } else if (self.config.mode === "range") {
+          if (self.selectedDates.length === 2) self.clear(false);
+          self.selectedDates.push(selectedDate);
+          if (compareDates(selectedDate, self.selectedDates[0], true) !== 0) self.selectedDates.sort(function (a, b) {
+            return a.getTime() - b.getTime();
+          });
+        }
+        setHoursFromInputs();
+
+        if (shouldChangeMonth) {
+          var isNewYear = self.currentYear !== selectedDate.getFullYear();
+          self.currentYear = selectedDate.getFullYear();
+          self.currentMonth = selectedDate.getMonth();
+          if (isNewYear) triggerEvent("onYearChange");
+          triggerEvent("onMonthChange");
+        }
+
+        updateNavigationCurrentMonth();
+        buildDays();
+        updateValue();
+        if (self.config.enableTime) setTimeout(function () {
+          return self.showTimeInput = true;
+        }, 50);
+        if (!shouldChangeMonth && self.config.mode !== "range" && self.config.showMonths === 1) focusOnDayElem(target);else self.selectedDateElem && self.selectedDateElem.focus();
+        if (self.hourElement !== undefined) setTimeout(function () {
+          return self.hourElement !== undefined && self.hourElement.select();
+        }, 451);
+
+        if (self.config.closeOnSelect) {
+          var single = self.config.mode === "single" && !self.config.enableTime;
+          var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
+
+          if (single || range) {
+            focusAndClose();
+          }
+        }
+
+        triggerChange();
+      }
+
+      var CALLBACKS = {
+        locale: [setupLocale, updateWeekdays],
+        showMonths: [buildMonths, setCalendarWidth, buildWeekdays]
+      };
+
+      function set(option, value) {
+        if (option !== null && typeof option === "object") Object.assign(self.config, option);else {
+          self.config[option] = value;
+          if (CALLBACKS[option] !== undefined) CALLBACKS[option].forEach(function (x) {
+            return x();
+          });else if (HOOKS.indexOf(option) > -1) self.config[option] = arrayify(value);
+        }
+        self.redraw();
+        jumpToDate();
+        updateValue(false);
+      }
+
+      function setSelectedDate(inputDate, format) {
+        var dates = [];
+        if (inputDate instanceof Array) dates = inputDate.map(function (d) {
+          return self.parseDate(d, format);
+        });else if (inputDate instanceof Date || typeof inputDate === "number") dates = [self.parseDate(inputDate, format)];else if (typeof inputDate === "string") {
+          switch (self.config.mode) {
+            case "single":
+            case "time":
+              dates = [self.parseDate(inputDate, format)];
+              break;
+
+            case "multiple":
+              dates = inputDate.split(self.config.conjunction).map(function (date) {
+                return self.parseDate(date, format);
+              });
+              break;
+
+            case "range":
+              dates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
+                return self.parseDate(date, format);
+              });
+              break;
+
+            default:
+              break;
+          }
+        } else self.config.errorHandler(new Error("Invalid date supplied: " + JSON.stringify(inputDate)));
+        self.selectedDates = dates.filter(function (d) {
+          return d instanceof Date && isEnabled(d, false);
+        });
+        if (self.config.mode === "range") self.selectedDates.sort(function (a, b) {
+          return a.getTime() - b.getTime();
+        });
+      }
+
+      function setDate(date, triggerChange, format) {
+        if (triggerChange === void 0) {
+          triggerChange = false;
+        }
+
+        if (format === void 0) {
+          format = self.config.dateFormat;
+        }
+
+        if (date !== 0 && !date || date instanceof Array && date.length === 0) return self.clear(triggerChange);
+        setSelectedDate(date, format);
+        self.showTimeInput = self.selectedDates.length > 0;
+        self.latestSelectedDateObj = self.selectedDates[0];
+        self.redraw();
+        jumpToDate();
+        setHoursFromDate();
+        updateValue(triggerChange);
+        if (triggerChange) triggerEvent("onChange");
+      }
+
+      function parseDateRules(arr) {
+        return arr.slice().map(function (rule) {
+          if (typeof rule === "string" || typeof rule === "number" || rule instanceof Date) {
+            return self.parseDate(rule, undefined, true);
+          } else if (rule && typeof rule === "object" && rule.from && rule.to) return {
+            from: self.parseDate(rule.from, undefined),
+            to: self.parseDate(rule.to, undefined)
+          };
+
+          return rule;
+        }).filter(function (x) {
+          return x;
+        });
+      }
+
+      function setupDates() {
+        self.selectedDates = [];
+        self.now = self.parseDate(self.config.now) || new Date();
+        var preloadedDate = self.config.defaultDate || ((self.input.nodeName === "INPUT" || self.input.nodeName === "TEXTAREA") && self.input.placeholder && self.input.value === self.input.placeholder ? null : self.input.value);
+        if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
+        var initialDate = self.selectedDates.length > 0 ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now.getTime() ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now.getTime() ? self.config.maxDate : self.now;
+        self.currentYear = initialDate.getFullYear();
+        self.currentMonth = initialDate.getMonth();
+        if (self.selectedDates.length > 0) self.latestSelectedDateObj = self.selectedDates[0];
+        if (self.config.minTime !== undefined) self.config.minTime = self.parseDate(self.config.minTime, "H:i");
+        if (self.config.maxTime !== undefined) self.config.maxTime = self.parseDate(self.config.maxTime, "H:i");
+        self.minDateHasTime = !!self.config.minDate && (self.config.minDate.getHours() > 0 || self.config.minDate.getMinutes() > 0 || self.config.minDate.getSeconds() > 0);
+        self.maxDateHasTime = !!self.config.maxDate && (self.config.maxDate.getHours() > 0 || self.config.maxDate.getMinutes() > 0 || self.config.maxDate.getSeconds() > 0);
+        Object.defineProperty(self, "showTimeInput", {
+          get: function get() {
+            return self._showTimeInput;
+          },
+          set: function set(bool) {
+            self._showTimeInput = bool;
+            if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
+            self.isOpen && positionCalendar();
+          }
+        });
+      }
+
+      function setupInputs() {
+        self.input = self.config.wrap ? element.querySelector("[data-input]") : element;
+
+        if (!self.input) {
+          self.config.errorHandler(new Error("Invalid input element specified"));
+          return;
+        }
+
+        self.input._type = self.input.type;
+        self.input.type = "text";
+        self.input.classList.add("flatpickr-input");
+        self._input = self.input;
+
+        if (self.config.altInput) {
+          self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
+          self._input = self.altInput;
+          self.altInput.placeholder = self.input.placeholder;
+          self.altInput.disabled = self.input.disabled;
+          self.altInput.required = self.input.required;
+          self.altInput.tabIndex = self.input.tabIndex;
+          self.altInput.type = "text";
+          self.input.setAttribute("type", "hidden");
+          if (!self.config.static && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+        }
+
+        if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
+        self._positionElement = self.config.positionElement || self._input;
+      }
+
+      function setupMobile() {
+        var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
+        self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
+        self.mobileInput.step = self.input.getAttribute("step") || "any";
+        self.mobileInput.tabIndex = 1;
+        self.mobileInput.type = inputType;
+        self.mobileInput.disabled = self.input.disabled;
+        self.mobileInput.required = self.input.required;
+        self.mobileInput.placeholder = self.input.placeholder;
+        self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
+
+        if (self.selectedDates.length > 0) {
+          self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
+        }
+
+        if (self.config.minDate) self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
+        if (self.config.maxDate) self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
+        self.input.type = "hidden";
+        if (self.altInput !== undefined) self.altInput.type = "hidden";
+
+        try {
+          if (self.input.parentNode) self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
+        } catch (_a) {}
+
+        bind(self.mobileInput, "change", function (e) {
+          self.setDate(e.target.value, false, self.mobileFormatStr);
+          triggerEvent("onChange");
+          triggerEvent("onClose");
+        });
+      }
+
+      function toggle(e) {
+        if (self.isOpen === true) return self.close();
+        self.open(e);
+      }
+
+      function triggerEvent(event, data) {
+        if (self.config === undefined) return;
+        var hooks = self.config[event];
+
+        if (hooks !== undefined && hooks.length > 0) {
+          for (var i = 0; hooks[i] && i < hooks.length; i++) {
+            hooks[i](self.selectedDates, self.input.value, self, data);
+          }
+        }
+
+        if (event === "onChange") {
+          self.input.dispatchEvent(createEvent("change"));
+          self.input.dispatchEvent(createEvent("input"));
+        }
+      }
+
+      function createEvent(name) {
+        var e = document.createEvent("Event");
+        e.initEvent(name, true, true);
+        return e;
+      }
+
+      function isDateSelected(date) {
+        for (var i = 0; i < self.selectedDates.length; i++) {
+          if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
+        }
+
+        return false;
+      }
+
+      function isDateInRange(date) {
+        if (self.config.mode !== "range" || self.selectedDates.length < 2) return false;
+        return compareDates(date, self.selectedDates[0]) >= 0 && compareDates(date, self.selectedDates[1]) <= 0;
+      }
+
+      function updateNavigationCurrentMonth() {
+        if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
+        self.yearElements.forEach(function (yearElement, i) {
+          var d = new Date(self.currentYear, self.currentMonth, 1);
+          d.setMonth(self.currentMonth + i);
+          self.monthElements[i].textContent = monthToStr(d.getMonth(), self.config.shorthandCurrentMonth, self.l10n) + " ";
+          yearElement.value = d.getFullYear().toString();
+        });
+        self._hidePrevMonthArrow = self.config.minDate !== undefined && (self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear());
+        self._hideNextMonthArrow = self.config.maxDate !== undefined && (self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear());
+      }
+
+      function getDateStr(format) {
+        return self.selectedDates.map(function (dObj) {
+          return self.formatDate(dObj, format);
+        }).filter(function (d, i, arr) {
+          return self.config.mode !== "range" || self.config.enableTime || arr.indexOf(d) === i;
+        }).join(self.config.mode !== "range" ? self.config.conjunction : self.l10n.rangeSeparator);
+      }
+
+      function updateValue(triggerChange) {
+        if (triggerChange === void 0) {
+          triggerChange = true;
+        }
+
+        if (self.selectedDates.length === 0) return self.clear(triggerChange);
+
+        if (self.mobileInput !== undefined && self.mobileFormatStr) {
+          self.mobileInput.value = self.latestSelectedDateObj !== undefined ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
+        }
+
+        self.input.value = getDateStr(self.config.dateFormat);
+
+        if (self.altInput !== undefined) {
+          self.altInput.value = getDateStr(self.config.altFormat);
+        }
+
+        if (triggerChange !== false) triggerEvent("onValueUpdate");
+      }
+
+      function onMonthNavClick(e) {
+        e.preventDefault();
+        var isPrevMonth = self.prevMonthNav.contains(e.target);
+        var isNextMonth = self.nextMonthNav.contains(e.target);
+
+        if (isPrevMonth || isNextMonth) {
+          changeMonth(isPrevMonth ? -1 : 1);
+        } else if (self.yearElements.indexOf(e.target) >= 0) {
+          e.target.select();
+        } else if (e.target.classList.contains("arrowUp")) {
+          self.changeYear(self.currentYear + 1);
+        } else if (e.target.classList.contains("arrowDown")) {
+          self.changeYear(self.currentYear - 1);
+        }
+      }
+
+      function timeWrapper(e) {
+        e.preventDefault();
+        var isKeyDown = e.type === "keydown",
+            input = e.target;
+
+        if (self.amPM !== undefined && e.target === self.amPM) {
+          self.amPM.textContent = self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
+        }
+
+        var min = parseFloat(input.getAttribute("data-min")),
+            max = parseFloat(input.getAttribute("data-max")),
+            step = parseFloat(input.getAttribute("data-step")),
+            curValue = parseInt(input.value, 10),
+            delta = e.delta || (isKeyDown ? e.which === 38 ? 1 : -1 : 0);
+        var newValue = curValue + step * delta;
+
+        if (typeof input.value !== "undefined" && input.value.length === 2) {
+          var isHourElem = input === self.hourElement,
+              isMinuteElem = input === self.minuteElement;
+
+          if (newValue < min) {
+            newValue = max + newValue + int(!isHourElem) + (int(isHourElem) && int(!self.amPM));
+            if (isMinuteElem) incrementNumInput(undefined, -1, self.hourElement);
+          } else if (newValue > max) {
+            newValue = input === self.hourElement ? newValue - max - int(!self.amPM) : min;
+            if (isMinuteElem) incrementNumInput(undefined, 1, self.hourElement);
+          }
+
+          if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) {
+            self.amPM.textContent = self.l10n.amPM[int(self.amPM.textContent === self.l10n.amPM[0])];
+          }
+
+          input.value = pad(newValue);
+        }
+      }
+
+      init();
+      return self;
+    }
+
+    function _flatpickr(nodeList, config) {
+      var nodes = Array.prototype.slice.call(nodeList);
+      var instances = [];
+
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+
+        try {
+          if (node.getAttribute("data-fp-omit") !== null) continue;
+
+          if (node._flatpickr !== undefined) {
+            node._flatpickr.destroy();
+
+            node._flatpickr = undefined;
+          }
+
+          node._flatpickr = FlatpickrInstance(node, config || {});
+          instances.push(node._flatpickr);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      return instances.length === 1 ? instances[0] : instances;
+    }
+
+    if (typeof HTMLElement !== "undefined") {
+      HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
+        return _flatpickr(this, config);
+      };
+
+      HTMLElement.prototype.flatpickr = function (config) {
+        return _flatpickr([this], config);
+      };
+    }
+
+    var flatpickr = function flatpickr(selector, config) {
+      if (selector instanceof NodeList) return _flatpickr(selector, config);else if (typeof selector === "string") return _flatpickr(window.document.querySelectorAll(selector), config);
+      return _flatpickr([selector], config);
+    };
+
+    flatpickr.defaultConfig = defaults;
+    flatpickr.l10ns = {
+      en: Object.assign({}, english),
+      default: Object.assign({}, english)
+    };
+
+    flatpickr.localize = function (l10n) {
+      flatpickr.l10ns.default = Object.assign({}, flatpickr.l10ns.default, l10n);
+    };
+
+    flatpickr.setDefaults = function (config) {
+      flatpickr.defaultConfig = Object.assign({}, flatpickr.defaultConfig, config);
+    };
+
+    flatpickr.parseDate = createDateParser({});
+    flatpickr.formatDate = createDateFormatter({});
+    flatpickr.compareDates = compareDates;
+
+    if (typeof jQuery !== "undefined") {
+      jQuery.fn.flatpickr = function (config) {
+        return _flatpickr(this, config);
+      };
+    }
+
+    Date.prototype.fp_incr = function (days) {
+      return new Date(this.getFullYear(), this.getMonth(), this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days));
+    };
+
+    if (typeof window !== "undefined") {
+      window.flatpickr = flatpickr;
+    }
+
+    return flatpickr;
+
+})));
+
+/*! Responsive 2.2.3
+ * 2014-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     Responsive
  * @description Responsive tables plug-in for DataTables
- * @version     2.2.0
+ * @version     2.2.3
  * @file        dataTables.responsive.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2014-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2014-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -59987,8 +60654,8 @@ var DataTable = $.fn.dataTable;
  */
 var Responsive = function ( settings, opts ) {
 	// Sanity check that we are using DataTables 1.10 or newer
-	if ( ! DataTable.versionCheck || ! DataTable.versionCheck( '1.10.3' ) ) {
-		throw 'DataTables Responsive requires DataTables 1.10.3 or newer';
+	if ( ! DataTable.versionCheck || ! DataTable.versionCheck( '1.10.10' ) ) {
+		throw 'DataTables Responsive requires DataTables 1.10.10 or newer';
 	}
 
 	this.s = {
@@ -60098,10 +60765,21 @@ $.extend( Responsive.prototype, {
 
 			// DataTables will trigger this event on every column it shows and
 			// hides individually
-			dt.on( 'column-visibility.dtr', function (e, ctx, col, vis) {
-				that._classLogic();
-				that._resizeAuto();
-				that._resize();
+			dt.on( 'column-visibility.dtr', function () {
+				// Use a small debounce to allow multiple columns to be set together
+				if ( that._timer ) {
+					clearTimeout( that._timer );
+				}
+
+				that._timer = setTimeout( function () {
+					that._timer = null;
+
+					that._classLogic();
+					that._resizeAuto();
+					that._resize();
+
+					that._redrawChildren();
+				}, 100 );
 			} );
 
 			// Redraw the details box on each draw which will happen if the data
@@ -60137,6 +60815,9 @@ $.extend( Responsive.prototype, {
 			} );
 
 			dt.one( 'draw.dtr', function () {
+				that._resizeAuto();
+				that._resize();
+
 				dt.rows( rowIds ).every( function () {
 					that._detailsDisplay( this, false );
 				} );
@@ -60201,7 +60882,10 @@ $.extend( Responsive.prototype, {
 		// Class logic - determine which columns are in this breakpoint based
 		// on the classes. If no class control (i.e. `auto`) then `-` is used
 		// to indicate this to the rest of the function
-		var display = $.map( columns, function ( col ) {
+		var display = $.map( columns, function ( col, i ) {
+			if ( dt.column(i).visible() === false ) {
+				return 'not-visible';
+			}
 			return col.auto && col.minWidth === null ?
 				false :
 				col.auto === true ?
@@ -60269,7 +60953,7 @@ $.extend( Responsive.prototype, {
 		var showControl = false;
 
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
-			if ( ! columns[i].control && ! columns[i].never && ! display[i] ) {
+			if ( ! columns[i].control && ! columns[i].never && display[i] === false ) {
 				showControl = true;
 				break;
 			}
@@ -60278,6 +60962,11 @@ $.extend( Responsive.prototype, {
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
 			if ( columns[i].control ) {
 				display[i] = showControl;
+			}
+
+			// Replace not visible string with false from the control column detection above
+			if ( display[i] === 'not-visible' ) {
+				display[i] = false;
 			}
 		}
 
@@ -60643,7 +61332,7 @@ $.extend( Responsive.prototype, {
 		// any columns that are not visible but can be shown
 		var collapsedClass = false;
 		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
-			if ( columnsVis[i] === false && ! columns[i].never && ! columns[i].control ) {
+			if ( columnsVis[i] === false && ! columns[i].never && ! columns[i].control && ! dt.column(i).visible() === false ) {
 				collapsedClass = true;
 				break;
 			}
@@ -60652,8 +61341,13 @@ $.extend( Responsive.prototype, {
 		$( dt.table().node() ).toggleClass( 'collapsed', collapsedClass );
 
 		var changed = false;
+		var visible = 0;
 
 		dt.columns().eq(0).each( function ( colIdx, i ) {
+			if ( columnsVis[i] === true ) {
+				visible++;
+			}
+
 			if ( columnsVis[i] !== oldVis[i] ) {
 				changed = true;
 				that._setColumnVis( colIdx, columnsVis[i] );
@@ -60668,7 +61362,7 @@ $.extend( Responsive.prototype, {
 
 			// If no records, update the "No records" display element
 			if ( dt.page.info().recordsDisplay === 0 ) {
-				dt.draw();
+				$('td', dt.table().body()).eq(0).attr('colspan', visible);
 			}
 		}
 	},
@@ -60722,7 +61416,8 @@ $.extend( Responsive.prototype, {
 			} )
 			.to$()
 			.clone( false )
-			.css( 'display', 'table-cell' );
+			.css( 'display', 'table-cell' )
+			.css( 'min-width', 0 );
 
 		// Body rows - we don't need to take account of DataTables' column
 		// visibility since we implement our own here (hence the `display` set)
@@ -60763,6 +61458,10 @@ $.extend( Responsive.prototype, {
 		// multiple times. For example, cloning and inserting a checked radio
 		// clears the chcecked state of the original radio.
 		$( clonedTable ).find( '[name]' ).removeAttr( 'name' );
+
+		// A position absolute table would take the table out of the flow of
+		// our container element, bypassing the height and width (Scroller)
+		$( clonedTable ).css( 'position', 'relative' )
 		
 		var inserted = $('<div/>')
 			.css( {
@@ -60832,19 +61531,22 @@ $.extend( Responsive.prototype, {
 
 		cells.filter( '[data-dtr-keyboard]' ).removeData( '[data-dtr-keyboard]' );
 
-		var selector = typeof target === 'number' ?
-			':eq('+target+')' :
-			target;
-
-		// This is a bit of a hack - we need to limit the selected nodes to just
-		// those of this table
-		if ( selector === 'td:first-child, th:first-child' ) {
-			selector = '>td:first-child, >th:first-child';
+		if ( typeof target === 'number' ) {
+			dt.cells( null, target, { page: 'current' } ).nodes().to$()
+				.attr( 'tabIndex', ctx.iTabIndex )
+				.data( 'dtr-keyboard', 1 );
 		}
+		else {
+			// This is a bit of a hack - we need to limit the selected nodes to just
+			// those of this table
+			if ( target === 'td:first-child, th:first-child' ) {
+				target = '>td:first-child, >th:first-child';
+			}
 
-		$( selector, dt.rows( { page: 'current' } ).nodes() )
-			.attr( 'tabIndex', ctx.iTabIndex )
-			.data( 'dtr-keyboard', 1 );
+			$( target, dt.rows( { page: 'current' } ).nodes() )
+				.attr( 'tabIndex', ctx.iTabIndex )
+				.data( 'dtr-keyboard', 1 );
+		}
 	}
 } );
 
@@ -61202,6 +61904,14 @@ Api.register( 'responsive.hasHidden()', function () {
 		false;
 } );
 
+Api.registerPlural( 'columns().responsiveHidden()', 'column().responsiveHidden()', function () {
+	return this.iterator( 'column', function ( settings, column ) {
+		return settings._responsive ?
+			settings._responsive.s.current[ column ] :
+			false;
+	}, 1 );
+} );
+
 
 /**
  * Version information
@@ -61209,7 +61919,7 @@ Api.register( 'responsive.hasHidden()', function () {
  * @name Responsive.version
  * @static
  */
-Responsive.version = '2.2.0';
+Responsive.version = '2.2.3';
 
 
 $.fn.dataTable.Responsive = Responsive;

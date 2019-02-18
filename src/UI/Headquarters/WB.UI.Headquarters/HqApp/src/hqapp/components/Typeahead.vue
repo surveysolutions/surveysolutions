@@ -27,14 +27,16 @@
                 <li v-if="forceLoadingState">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
-                <li v-if="!forceLoadingState" v-for="option in options" :key="option">
-                    <a 
-                       :class="[option.item.iconClass]"
-                       href="javascript:void(0);"
-                        @click="selectOption(option.item)" 
-                       v-html="highlight(option, searchTerm)"
-                       @keydown.up="onOptionUpKey"></a>
-                </li>
+                <template v-if="!forceLoadingState" >
+                    <li v-for="option in options" :key="keyFunc(option.item)">
+                        <a 
+                        :class="[option.item.iconClass]"
+                        href="javascript:void(0);"
+                            @click="selectOption(option.item)" 
+                        v-html="highlight(option, searchTerm)"
+                        @keydown.up="onOptionUpKey"></a>
+                    </li>
+                </template>
                 <li v-if="isLoading">
                     <a>{{ $t("Common.Loading") }}</a>
                 </li>
@@ -59,7 +61,10 @@ export default {
 
     props: {
         fetchUrl: String,
-        controlId: String,
+        controlId: {
+            type: String,
+            required: true
+        },
         value: Object,
         placeholder: String,
         ajaxParams: Object,
@@ -163,15 +168,17 @@ export default {
             }
 
             this.isLoading = true;
-            const requestParams = Object.assign(
+            const requestParams = _.assign(
                 { query: filter, cache: false },
                 this.ajaxParams
             );
 
-            this.$http
+            return this.$http
                 .get(this.fetchUrl, { params: requestParams })
                 .then(response => {
-                    this.options = this.setOptions(response.data.options || []);
+                    if(response != null && response.data != null) {
+                        this.options = this.setOptions(response.data.options || []);
+                    }
                     this.isLoading = false;
                 })
                 .catch(() => (this.isLoading = false));
@@ -180,12 +187,12 @@ export default {
         setOptions(values, wrap = true) {
             if (wrap == false) return values;
 
-            return _.map(values, v => {
+            return _.chain(values).filter(v => v != null).map(v => {
                 return {
                     item: v,
                     matches: null
                 };
-            });
+            }).value();
         },
 
         clear() {
@@ -218,6 +225,9 @@ export default {
                     option.matches[0].indices
                 );
             }
+        },
+        keyFunc(item) {
+            return item == null ? 'null' : item.key + "$" + item.value 
         }
     }
 };

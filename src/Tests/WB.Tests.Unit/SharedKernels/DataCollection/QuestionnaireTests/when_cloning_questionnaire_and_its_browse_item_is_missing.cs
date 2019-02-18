@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     internal class when_cloning_questionnaire_and_its_browse_item_is_missing
     {
         [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_questionnaire_version () {
-            var questionnaireBrowseItemStorage = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+            var questionnaireBrowseItemStorage = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                 id: questionnaireIdentity.ToString(), entity: null);
 
             questionnaire = Create.AggregateRoot.Questionnaire(

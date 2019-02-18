@@ -25,12 +25,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.Group(groupId: groupId)
                 });
 
-            statefulInterview = Setup.StatefulInterview(questionnaire);
+            statefulInterview = SetUp.StatefulInterview(questionnaire);
             BecauseOf();
         }
 
         private void BecauseOf() =>
-            enabledSubgroupsIds = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
+            enabledSubgroupsIds = statefulInterview.GetEnabledSubgroupsAndRosters(selectedGroupIdentity).ToArray();
 
         [NUnit.Framework.Test] public void should_contains_3_identities () =>
             enabledSubgroupsIds.Should().BeEquivalentTo(

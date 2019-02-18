@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class GroupViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesTitleChanged>,
+        ILiteEventHandler<RosterInstancesAdded>,
+        ILiteEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
         IDisposable
     {
@@ -102,15 +104,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
 
             this.Enablement.Init(interviewId, entityIdentity);
-            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
 
             this.GroupTitle.Init(interviewId, entityIdentity);
             this.RosterInstanceTitle = statefulInterview.GetRosterTitle(entityIdentity);
             
             if (groupWithAnswersToMonitor != null)
             {
-                IEnumerable<Identity> questionsToListen = statefulInterview.GetChildQuestions(groupWithAnswersToMonitor);
-                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+                //subscribe to all interview answer events
+                //plain rosters could be created with children
+                //only visible questions could produce answer events so no harm
+                this.answerNotifier.Init(this.interviewId); 
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
         }
@@ -118,7 +122,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private void QuestionAnswered(object sender, EventArgs e)
         {
             var statefulInterview = this.interviewRepository.Get(interviewId);
-            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
+            this.Status = this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, statefulInterview, questionnaire);
         }
 
         private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
@@ -132,6 +137,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             if (changedInstance != null)
                 this.RosterInstanceTitle = changedInstance.Title;
+        }
+
+        public void Handle(RosterInstancesAdded @event)
+        {
+            
+        }
+
+        public void Handle(RosterInstancesRemoved @event)
+        {
+
         }
 
         public virtual void Dispose()

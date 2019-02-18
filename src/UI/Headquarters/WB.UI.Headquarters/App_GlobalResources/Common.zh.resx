@@ -297,4 +297,20 @@
   <data name="AllGpsQuestions" xml:space="preserve">
     <value>全部GPS问题</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>选择问卷</value>
+      <comment>选择问卷</comment>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>所有版本</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>下载督导员app</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>未选中任何目标</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>问卷版本</value>
+  </data>
 </root>

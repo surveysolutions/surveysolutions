@@ -13,6 +13,6 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         byte[] GetContent(string attachmentContentId);
         string GetFileCacheLocation(string attachmentContentId);
         void Remove(string attachmentContentId);
-        IEnumerable<string> EnumerateCache();
+        Task<IEnumerable<string>> EnumerateCacheAsync();
     }
 }

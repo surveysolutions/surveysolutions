@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
     {
         MapReportView Load(MapReportInputModel input);
 
-        List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints();
+        List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithGpsQuestions();
         List<string> GetGpsQuestionsByQuestionnaire(Guid questionnaireId, long? version);
     }
 }

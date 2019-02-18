@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -22,7 +19,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IPlainAggregateRootRepository plainRepository;
         private readonly IAggregateLock aggregateLock;
         private readonly ILiteEventBus eventBus;
-        private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
         private readonly EventBusSettings eventBusSettings;
@@ -34,7 +30,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         public CommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus,
-            IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock, 
@@ -42,7 +37,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
-            this.snapshooter = snapshooter;
             this.serviceLocator = serviceLocator;
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
@@ -237,10 +231,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 aggregateRootCacheCleaner.Evict(aggregateId);
                 throw;
-            }
-            finally
-            {
-                this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
         }
 

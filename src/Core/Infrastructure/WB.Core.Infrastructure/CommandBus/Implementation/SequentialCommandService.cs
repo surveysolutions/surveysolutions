@@ -33,12 +33,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         public SequentialCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository, 
             ILiteEventBus eventBus, 
-            IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator, 
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
             IAggregateRootCacheCleaner aggregateRootCacheCleaner)
-            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, 
+            : base(eventSourcedRepository, eventBus, serviceLocator, plainRepository, 
                 aggregateLock, aggregateRootCacheCleaner) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g5, Create.RosterVector(1, 3))));
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Id.Identity1));
@@ -142,7 +142,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
             await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g6, Create.RosterVector(1, 3, 5))));
@@ -199,7 +199,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var eventRegistry = Create.Service.LiteEventRegistry();
 
-            var interview = Abc.Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
             interview.Apply(Create.Event.GroupsDisabled(disabledSectionId, RosterVector.Empty));
 
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry);

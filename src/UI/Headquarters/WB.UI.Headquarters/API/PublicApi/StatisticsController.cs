@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// <summary>
     /// Provides a methods for managing report related actions
     /// </summary>
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Headquarter, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     [RoutePrefix(@"api/v1/statistics")]
     public class StatisticsController : ApiController
     {
@@ -234,6 +234,9 @@ namespace WB.UI.Headquarters.API.PublicApi
                     ? questionnaire.Find<IQuestion>(entityId)
                     : questionnaire.Find<IQuestion>(q => q.StataExportCaption == inputVar).FirstOrDefault();
             }
+
+            if (string.IsNullOrWhiteSpace(query.Question))
+                return ReturnEmptyResult(query);
 
             var question = GetQuestionByGuidOrStataCaption(query.Question);
 

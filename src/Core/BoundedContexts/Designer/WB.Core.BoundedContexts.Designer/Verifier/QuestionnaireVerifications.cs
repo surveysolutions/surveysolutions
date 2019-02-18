@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CommonMark;
+using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -14,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -21,7 +25,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w, \-\(\)\\/]*$");
+        public const string QuestionnaireTitleRegularExpression = @"^[\w, \-\(\)\/\\]*$";
+        private static readonly Regex QuestionnaireNameRegex = new Regex(QuestionnaireTitleRegularExpression);
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
@@ -35,8 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0097", QuestionnaireTitleHasInvalidCharacters, VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
-            Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
+            Error("WB0281", QuestionnaireExceededEntitiesLimit, limit => string.Format(VerificationMessages.WB0281_QuestionnaireExceededEntitiesLimit, limit, QuestionnaireTotalEntitiesLimit)),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
@@ -47,9 +52,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
+            ErrorsByMarkdownText,
             ErrorsByInvalidQuestionnaireVariable,
             Critical_EntitiesWithDuplicateVariableName_WB0026,
-            Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
+
+            Warning("WB0261", QuestionnaireHasRostersPropagationsExededLimit,  VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Warning("WB0227", NotShared, VerificationMessages.WB0227_NotShared),
         };
 
         private static readonly IEnumerable<QuestionType> QuestionTypesValidToBeSubstitutionReferences = new[]
@@ -78,6 +86,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     Name = r.VariableName,
                     Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
                 })
+                .Union(questionnaire
+                    .Find<IGroup>(g => !g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                    .Select(r => new
+                    {
+                        Name = r.VariableName,
+                        Reference = QuestionnaireEntityReference.CreateForGroup(r.PublicKey)
+                    }))
                 .Union(questionnaire.Find<IQuestion>(q => true)
                     .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
                     .Select(r => new
@@ -195,6 +210,51 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return Char.IsDigit(variable[0]) || variable[0] == '_';
         }
 
+        private static Tuple<bool, int> QuestionnaireExceededEntitiesLimit(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var questionnaireDocument = questionnaire.Questionnaire.Questionnaire;
+            var entitiesCount = GetMaxElementsCount(questionnaireDocument, questionnaire);
+            return new Tuple<bool, int>(entitiesCount > QuestionnaireTotalEntitiesLimit, entitiesCount);
+        }
+
+        private static int GetMaxElementsCount(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            int count = 0;
+
+            foreach (var child in entity.Children)
+            {
+                if (child is IGroup group)
+                {
+                    int rosterMaxSize = 1; // group: 1
+                    
+                    int countOfChildrenOnNestedLevel = GetMaxElementsCount(group, questionnaire);
+                    if (group.IsRoster)
+                    {
+                        if (group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
+                        {
+                            // fixed roster: length of titles
+                            rosterMaxSize = group.FixedRosterTitles.Length;
+                        }
+
+                        if (group.RosterSizeSource == RosterSizeSourceType.Question)
+                        {
+                            // any other roster type: rosterMaxSize = 1
+                            rosterMaxSize = 1;
+                        }
+                    }
+
+                    count +=  rosterMaxSize + countOfChildrenOnNestedLevel * rosterMaxSize;
+                }
+                else
+                {
+                    // Questions, Static texts, Variables
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         private static bool VariableNameEndWithUnderscore(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(entity.VariableName))
@@ -240,7 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
                 
-                if (translatedEntity.Entity is IValidatable entityAsValidatable)
+                if (translatedEntity.Entity is Main.Core.Entities.SubEntities.IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
 
@@ -263,6 +323,65 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByMarkdownText(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var allAllowedVariableNames = questionnaire
+                .Find<IComposite>(x => x is IQuestion || x is IGroup group)
+                .Select(x => x.VariableName?.ToLower())
+                .Union(questionnaire.Attachments.Select(x => x.Name?.ToLower()))
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToArray();
+
+            foreach (var staticTextOrQuestion in questionnaire.Find<IComposite>(x => x is IStaticText || x is IQuestion))
+            {
+                if (staticTextOrQuestion is IStaticText staticText && TextHasMarkdownLinkWithUnknownVariable(staticText.Text, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IQuestion question && TextHasMarkdownLinkWithUnknownVariable(question.QuestionText, allAllowedVariableNames))
+                    foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion));
+
+                if (staticTextOrQuestion is IValidatable entityWithValidation)
+                {
+                    for (int validationConditionIndex = 0; validationConditionIndex < entityWithValidation.ValidationConditions.Count; validationConditionIndex++)
+                    {
+                        var validationCondition = entityWithValidation.ValidationConditions[validationConditionIndex];
+
+                        if (TextHasMarkdownLinkWithUnknownVariable(validationCondition.Message, allAllowedVariableNames))
+                            foundErrors.Add(GetErrorMessageByMarkdownLink(staticTextOrQuestion, validationConditionIndex));
+                    }
+                }
+            }
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private static QuestionnaireVerificationMessage GetErrorMessageByMarkdownLink(IComposite entity, int? validationConditionIndex = null) 
+            => QuestionnaireVerificationMessage.Error("WB0280", VerificationMessages.WB0280_TextContainsLinkToUnknownQuestionOrGroup, CreateReference(entity, validationConditionIndex));
+
+        private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+
+            var markdownDocument = CommonMarkConverter.Parse(text);
+
+            foreach (var node in markdownDocument.AsEnumerable())
+            {
+                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
+
+                var url = node.Inline.TargetUrl.ToLower();
+
+                if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) continue;
+                if (allAllowedVariableNames.Contains(url)) continue;
+                if(new []{ "cover", "complete", "overview" }.Contains(url)) continue;
+
+                return true;
+            }
+
+            return false;
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInVariableLabel(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string variableLabel, MultiLanguageQuestionnaireDocument questionnaire)
@@ -444,7 +563,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 CalculateRosterInstancesCountAndUpdateCache(roster, rosterPropagationCounts, questionnaire);
             }
 
-            return rosterPropagationCounts.Values.Sum(x => x) > MaxTotalRosterPropagationLimit;
+            return rosterPropagationCounts.Values.Sum(x => x) > QuestionnaireTotalEntitiesLimit;
         }
 
         private static Tuple<bool, decimal> QuestionnaireHasSizeMoreThan5Mb(MultiLanguageQuestionnaireDocument questionnaire)
@@ -515,7 +634,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
-            Func<MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
+string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string message)
         {
             return questionnaire =>
                 hasError(questionnaire)

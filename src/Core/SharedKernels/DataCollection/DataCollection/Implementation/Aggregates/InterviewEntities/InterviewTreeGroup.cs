@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var clonedInterviewTreeGroup = (InterviewTreeGroup) this.MemberwiseClone();
             clonedInterviewTreeGroup.Tree = null;
             clonedInterviewTreeGroup.children = new List<IInterviewTreeNode>();
-            var clonedChildren = this.Children.Select(n => n.Clone()).ToList();
+            var clonedChildren = this.Children.Select(n => n.Clone());
             clonedInterviewTreeGroup.AddChildren(clonedChildren);
             clonedInterviewTreeGroup.Title = this.Title?.Clone();
             return clonedInterviewTreeGroup;

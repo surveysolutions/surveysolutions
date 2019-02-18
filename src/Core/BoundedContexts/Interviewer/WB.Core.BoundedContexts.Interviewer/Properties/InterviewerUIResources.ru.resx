@@ -457,13 +457,7 @@
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Назначено {0}</value>
   </data>
-    <data name="Diagnostics_Support_Package_Description" xml:space="preserve">
-    <value>Сохранить нужную информацию в файл на устройстве.</value>
-  </data>
-    <data name="Diagnostics_Support_Package_Title" xml:space="preserve">
-    <value>Сгенерировать пакет для службы поддержки</value>
-  </data>
-  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>Мы проверим наличие новой версии на сервере</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">

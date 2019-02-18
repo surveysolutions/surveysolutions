@@ -26,6 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
 
+        public bool IsAudioRecordingEnabled { get; set; }
+
         public int? CreatedInterviewsCount { get; set; }
 
         [Ignore]

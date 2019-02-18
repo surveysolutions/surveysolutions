@@ -266,7 +266,8 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId, 
                 interviewerId, 
                 interviewKey, 
-                assignmentId);
+                assignmentId,
+                false);
         }
 
         public CreateInterview CreateInterview(Guid? questionnaireId = null,

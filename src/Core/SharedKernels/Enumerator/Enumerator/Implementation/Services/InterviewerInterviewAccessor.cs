@@ -33,7 +33,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IPrincipal principal;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
-        private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
         private readonly ILiteEventRegistry eventRegistry;
@@ -49,7 +48,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IPrincipal principal,
             IEnumeratorEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
-            ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
             ILiteEventRegistry eventRegistry, 
@@ -64,7 +62,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.principal = principal;
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
-            this.snapshotStoreWithCache = snapshotStoreWithCache;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
             this.eventRegistry = eventRegistry;
@@ -74,7 +71,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public void RemoveInterview(Guid interviewId)
         {
             this.aggregateRootRepositoryWithCache.CleanCache();
-            this.snapshotStoreWithCache.CleanCache();
 
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
             this.interviewSequenceViewRepository.Remove(interviewId);
