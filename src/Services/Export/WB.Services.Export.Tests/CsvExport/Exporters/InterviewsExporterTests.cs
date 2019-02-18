@@ -555,6 +555,44 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
         }
 
+        [Test]
+        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_1()
+        {
+            // arrange
+            var singleOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
+            var rosterSizeQuestionId = Guid.Parse("AE111111111111111111111111111111");
+            var linkedSourceQuestionId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Roster(rosterId: Guid.NewGuid(),
+                    variable: "row",
+                    obsoleteFixedTitles: new[] { "1", "2" },
+                    children: new IQuestionnaireEntity[] {
+                        Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                        Create.Roster(rosterSizeQuestionId: rosterSizeQuestionId, children: new []
+                        {
+                            Create.TextQuestion(id: linkedSourceQuestionId, variable: "varTxt")
+                        })
+                    }),
+                Create.SingleOptionQuestion(id: singleOptionLinkedQuestionId,
+                    variable: "single",
+                    linkedToQuestionId: linkedSourceQuestionId));
+
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaireDocument);
+
+            var exporter = Create.InterviewsExporter();
+
+            var interviewData = CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(singleOptionLinkedQuestionId),
+                asIntArray: new[] { 5, 0 }));
+            // act
+            var result = exporter.CreateInterviewDataExportView(exportStructure, interviewData, questionnaireDocument);
+
+            // assert
+            InterviewDataExportLevelView first = result.Levels.First();
+            var exportedQuestion = first.Records.First().GetPlainAnswers().First();
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
+        }
+
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)
         {
             return interviewDataExportView.Levels.FirstOrDefault(l => l.LevelVector.SequenceEqual(levelVector));

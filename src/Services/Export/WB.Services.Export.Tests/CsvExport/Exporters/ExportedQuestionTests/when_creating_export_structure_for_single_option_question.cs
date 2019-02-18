@@ -13,7 +13,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
         public void BecauseOf() 
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.SingleOption, "4");
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.SingleOption, 4);
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.SingleOption);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.SingleOption);
         }
