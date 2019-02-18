@@ -92,9 +92,40 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return new string[] { this.ConvertAnswerToStringValue(question.AsObject(), header) };
 
                 case QuestionType.MultyOption:
+                {
+                    if (!header.QuestionSubType.HasValue)
+                        return GetCategoricalMultiAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
+
+                    switch (header.QuestionSubType)
+                    {
+                        case QuestionSubtype.MultyOption_Ordered:
+                            return GetCategoricalMultiOrderedAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
+                        case QuestionSubtype.MultyOption_YesNo:
+                            return GetYesNoAnswers(question.AsYesNo, header, header.ColumnHeaders.Count, false).ToArray();
+                        case QuestionSubtype.MultyOption_YesNoOrdered:
+                            return GetYesNoAnswers(question.AsYesNo, header, header.ColumnHeaders.Count, true).ToArray();
+                        case QuestionSubtype.MultyOption_Linked:
+                        {
+                            if (question.AsIntMatrix != null)
+                                return GetMultiLinkedToRosterAnswers(question.AsIntMatrix, header, header.ColumnHeaders.Count, questionnaire).ToArray();
+                            if (question.AsIntArray != null)
+                                return GetMultiLinkedToListAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
+                        }
+                            break;
+                    }
+
+                    return BuildAnswerListForQuestionByHeader(question.AsObject(), header);
+
+                }
+                    break;
                 case QuestionType.SingleOption:
+                {
+                    return header.QuestionSubType == QuestionSubtype.SingleOption_Linked && question.AsIntArray != null
+                        ? GetSingleLinkedToRosterAnswer(question.AsIntArray, header, questionnaire).ToArray()
+                        : new[] {this.ConvertAnswerToStringValue(question.AsInt, header)};
+                }
                 case QuestionType.TextList:
-                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header, questionnaire);
+                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
                 default:
                     return Array.Empty<string>();
             }
@@ -166,8 +197,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return this.ConvertAnswerToString(answer, header.QuestionType, header.QuestionSubType);
         }
 
-        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header,
-            QuestionnaireDocument questionnaire)
+        private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header)
         {
             if (header.ColumnHeaders.Count == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header) };
@@ -177,37 +207,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             var answersAsEnumerable = this.TryCastToEnumerable(answer);
             var answers = answersAsEnumerable?.ToArray() ?? new object[] { answer };
 
-            if (header.QuestionType == QuestionType.MultyOption)
-            {
-                if (!header.QuestionSubType.HasValue)
-                {
-                    FillMultioptionAnswers(answers, header, result);
-                }
-                else
-                {
-                    if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNo)
-                    {
-                        FillYesNoAnswers(answers, header, result, false);
-                    }
-                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_YesNoOrdered)
-                    {
-                        FillYesNoAnswers(answers, header, result, true);
-                    }
-                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Ordered)
-                    {
-                        FillMultioptionOrderedAnswers(answers, header, result);
-                    }
-                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Linked)
-                    {
-                        return GetMultiLinkedAnswers(answer, header, header.ColumnHeaders.Count, questionnaire).ToArray();
-                    }
-                    else
-                    {
-                        this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
-                    }
-                }
-            }
-            else
+            if (header.QuestionType != QuestionType.MultyOption)
             {
                 this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
             }
@@ -216,13 +216,37 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private IEnumerable<string> GetMultiLinkedAnswers(object answerObj, ExportedQuestionHeaderItem header, int expectedColumnCount,
+        private IEnumerable<string> GetSingleLinkedToRosterAnswer(int[] answer, ExportedQuestionHeaderItem header, QuestionnaireDocument questionnaire)
+        {
+            if (answer == null) yield return ExportFormatSettings.MissingNumericQuestionValue;
+
+            var linkedTo = questionnaire.Find<Question>(header.PublicKey);
+            var isNumericRosterSource = questionnaire.GetRosterSizeSourcesForEntity(
+                    linkedTo.LinkedToQuestionId ?? linkedTo.LinkedToRosterId.Value)
+                .Select(questionnaire.IsIntegerQuestion)
+                .ToArray();
+
+            var answerWithFixedNumericRosterCodes = answer.Select((value, index) => isNumericRosterSource[index] ? value + 1 : value).ToArray();
+
+            yield return ConvertAnswerToStringValue(answerWithFixedNumericRosterCodes, header);
+        }
+
+        private IEnumerable<string> GetMultiLinkedToListAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
+        {
+            if (answers != null)
+            {
+                foreach (var answer in answers)
+                    yield return this.ConvertAnswerToStringValue(answer, header);
+            }
+
+            for (int i = 0; i < expectedColumnCount - (answers?.Length ?? 0); i++)
+                yield return ExportFormatSettings.MissingNumericQuestionValue;
+        }
+
+        private IEnumerable<string> GetMultiLinkedToRosterAnswers(int[][] answers, ExportedQuestionHeaderItem header, int expectedColumnCount,
             QuestionnaireDocument questionnaire)
         {
-            var linkedToQuestionOrRosterAnswers = answerObj as int[][];
-            var linkedToListAnswers = answerObj as int[];
-
-            if (linkedToQuestionOrRosterAnswers != null)
+            if (answers != null)
             {
                 var linkedTo = questionnaire.Find<Question>(header.PublicKey);
                 var isNumericRosterSource = questionnaire.GetRosterSizeSourcesForEntity(
@@ -230,51 +254,46 @@ namespace WB.Services.Export.CsvExport.Exporters
                     .Select(questionnaire.IsIntegerQuestion)
                     .ToArray();
 
-                foreach (var answer in linkedToQuestionOrRosterAnswers)
+                foreach (var answer in answers)
                     yield return this.ConvertAnswerToStringValue(answer.Select((value, index) => isNumericRosterSource[index] ? value + 1 : value).ToArray(), header);
             }
-            else if (linkedToListAnswers != null)
-            {
-                foreach (var answer in linkedToListAnswers)
-                    yield return this.ConvertAnswerToStringValue(answer, header);
-            }
 
-            for (int i = 0; i < expectedColumnCount - (linkedToQuestionOrRosterAnswers?.Length ?? 0) - (linkedToListAnswers?.Length ?? 0); i++)
+            for (int i = 0; i < expectedColumnCount - (answers?.Length ?? 0); i++)
                 yield return ExportFormatSettings.MissingNumericQuestionValue;
         }
 
-        private static void FillMultioptionAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)
+        private static IEnumerable<string> GetCategoricalMultiAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
             bool isMissingQuestion = answers.Length == 0;
 
-            for (int i = 0; i < result.Length; i++)
+            for (int i = 0; i < expectedColumnCount; i++)
             {
                 if (isMissingQuestion)
                 {
-                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
+                    yield return ExportFormatSettings.MissingNumericQuestionValue;
                 }
                 else
                 {
                     int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                    result[i] = checkedOptionIndex > -1 ? "1" : "0";
+                    yield return checkedOptionIndex > -1 ? "1" : "0";
                 }
             }
         }
 
-        private static void FillMultioptionOrderedAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)
+        private static IEnumerable<string> GetCategoricalMultiOrderedAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
             bool isMissingQuestion = answers.Length == 0;
 
-            for (int i = 0; i < result.Length; i++)
+            for (int i = 0; i < expectedColumnCount; i++)
             {
                 if (isMissingQuestion)
                 {
-                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
+                    yield return ExportFormatSettings.MissingNumericQuestionValue;
                 }
                 else
                 {
                     int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                    result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(ExportCulture) : "0";
+                    yield return checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(ExportCulture) : "0";
                 }
             }
         }
@@ -287,14 +306,13 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private static void FillYesNoAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result, bool ordered)
+        private static IEnumerable<string> GetYesNoAnswers(AnsweredYesNoOption[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount, bool ordered)
         {
-            AnsweredYesNoOption[] typedAnswers = answers.Cast<AnsweredYesNoOption>().ToArray();
-            for (int i = 0; i < result.Length; i++)
+            for (int i = 0; i < expectedColumnCount; i++)
             {
                 decimal columnValue = header.ColumnValues[i];
 
-                var selectedOption = typedAnswers.FirstOrDefault(x => x.OptionValue == columnValue);
+                var selectedOption = answers.FirstOrDefault(x => x.OptionValue == columnValue);
 
                 if (selectedOption != null)
                 {
@@ -302,25 +320,25 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         if (ordered)
                         {
-                            var selectedItemIndex = typedAnswers
+                            var selectedItemIndex = answers
                                 .Where(x => x.Yes)
                                 .Select((item, index) => new { item, index })
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
-                            result[i] = (selectedItemIndex.index + 1).ToString(ExportCulture);
+                            yield return (selectedItemIndex.index + 1).ToString(ExportCulture);
                         }
                         else
                         {
-                            result[i] = "1";
+                            yield return "1";
                         }
                     }
                     else
                     {
-                        result[i] = "0";
+                        yield return "0";
                     }
                 }
                 else
                 {
-                    result[i] = ExportFormatSettings.MissingNumericQuestionValue;
+                    yield return ExportFormatSettings.MissingNumericQuestionValue;
                 }
             }
         }

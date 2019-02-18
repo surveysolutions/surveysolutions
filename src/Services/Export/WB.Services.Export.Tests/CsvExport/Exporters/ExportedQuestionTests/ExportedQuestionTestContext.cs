@@ -53,7 +53,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                     interviewQuestion.AsString = (string) value;
                     break;
                 case QuestionType.SingleOption:
-                    interviewQuestion.AsString = (string) value;
+                    interviewQuestion.AsInt = (int?) value;
                     break;
                 case QuestionType.GpsCoordinates:
                     interviewQuestion.AsGps = (GeoPosition) value;
