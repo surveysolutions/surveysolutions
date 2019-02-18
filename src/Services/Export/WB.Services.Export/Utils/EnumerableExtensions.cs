@@ -95,7 +95,7 @@ namespace WB.Services.Export
                 {
                     var interviewsLeft = source.Count - index;
 
-                    var take = Math.Min(batchSize, (int) interviewsLeft);
+                    var take = Math.Min(batchSize, (int)interviewsLeft);
 
                     if (sw != null)
                     {
@@ -106,23 +106,23 @@ namespace WB.Services.Export
                         // delta need just to make batch size to end up in some stable position, and don't change every iteration
                         if (elapsed - options.TargetSeconds > options.TargetSeconds * options.TargetDelta)
                         {
-                            batchSize = batchSize - (int) (batchSize * options.TargetStep);
+                            batchSize = batchSize - (int)(batchSize * options.TargetStep);
                             if (batchSize == oldBatchSize) batchSize -= 1;
                             batchSize = Math.Max(options.Min, batchSize);
 
-                            logger?.LogTrace("Changed batch size to {batchSize}. Too slow execution ({diff:F}s)", 
+                            logger?.LogTrace("Changed batch size to {batchSize}. Too slow execution ({diff:F}s)",
                                 batchSize, elapsed - options.TargetSeconds);
                         }
                         else if (elapsed - options.TargetSeconds < -options.TargetSeconds * options.TargetDelta)
                         {
-                            batchSize = batchSize + (int) (batchSize * options.TargetStep);
+                            batchSize = batchSize + (int)(batchSize * options.TargetStep);
                             if (batchSize == oldBatchSize) batchSize += 1;
                             batchSize = Math.Min(batchSize, options.Max);
 
-                            logger?.LogTrace("Changed batch size to {batchSize}. Can go faster ({diff:F}s)", 
+                            logger?.LogTrace("Changed batch size to {batchSize}. Can go faster ({diff:F}s)",
                                 batchSize, elapsed - options.TargetSeconds);
                         }
-                        
+
                         sw.Restart();
                     }
                     else
@@ -141,7 +141,7 @@ namespace WB.Services.Export
 
                     yield return result;
                 }
-                
+
             }
         }
     }
