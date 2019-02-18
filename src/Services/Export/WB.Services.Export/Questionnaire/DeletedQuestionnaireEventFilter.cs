@@ -33,14 +33,14 @@ namespace WB.Services.Export.Questionnaire
 
                 InterviewReference reference;
                 bool forceUpdateQuestionnaire = false;
-                
+
                 switch (@event.Payload)
                 {
                     case InterviewCreated interviewCreated:
-                        AddInterviewReference(@event.EventSourceId, interviewCreated.QuestionnaireIdentity);
+                        reference = AddInterviewReference(@event.EventSourceId, interviewCreated.QuestionnaireIdentity, @event);
                         break;
                     case InterviewOnClientCreated interviewOnClientCreated:
-                        AddInterviewReference(@event.EventSourceId, interviewOnClientCreated.QuestionnaireIdentity);
+                        reference = AddInterviewReference(@event.EventSourceId, interviewOnClientCreated.QuestionnaireIdentity, @event);
                         break;
                     case InterviewDeleted _:
                     case InterviewHardDeleted _:
@@ -51,24 +51,6 @@ namespace WB.Services.Export.Questionnaire
                     default:
                         reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
                         break;
-                }
-
-                void AddInterviewReference(Guid interviewId, string questionnaireIdentity)
-                {
-                    reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
-                    if (reference == null)
-                    {
-                        reference = new InterviewReference
-                        {
-                            QuestionnaireId = questionnaireIdentity,
-                            InterviewId = interviewId
-                        };
-
-                        this.tenantContext.DbContext.Add(reference);
-                    }
-
-                    reference.QuestionnaireId = questionnaireIdentity;
-                    reference.InterviewId = @event.EventSourceId;
                 }
 
                 var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant,
@@ -95,6 +77,21 @@ namespace WB.Services.Export.Questionnaire
             this.tenantContext.DbContext.SaveChanges();
 
             return result;
+        }
+
+        private InterviewReference AddInterviewReference(Guid interviewId, string questionnaireIdentity, Event @event)
+        {
+            InterviewReference reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
+            if (reference == null)
+            {
+                reference = new InterviewReference {QuestionnaireId = questionnaireIdentity, InterviewId = interviewId};
+
+                this.tenantContext.DbContext.Add(reference);
+            }
+
+            reference.QuestionnaireId = questionnaireIdentity;
+            reference.InterviewId = @event.EventSourceId;
+            return reference;
         }
     }
 }

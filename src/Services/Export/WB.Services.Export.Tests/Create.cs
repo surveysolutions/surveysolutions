@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -530,6 +531,17 @@ namespace WB.Services.Export.Tests
                 Key = key,
                 UpdateDateUtc = updateDateUtc
             };
+        }
+
+        public static IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
+        {
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(It.IsAny<TenantInfo>(),
+                    new QuestionnaireId(questionnaire.Id), 
+                    It.IsAny<bool>(),
+                    CancellationToken.None))
+                .ReturnsAsync(questionnaire);
+            return questionnaireStorage.Object;
         }
     }
 }
