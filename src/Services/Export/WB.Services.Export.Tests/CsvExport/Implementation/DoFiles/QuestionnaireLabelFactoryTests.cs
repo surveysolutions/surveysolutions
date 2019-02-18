@@ -138,5 +138,36 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
             Assert.That(labels[1].LabeledVariable.Where(x=>x.VariableValueLabels.Length > 0).Count, Is.EqualTo(1));
             
         }
+
+        [Test(Description = "KP-12537")]
+        public void should_be_able_to_generate_variable_labels_for_different_title_same_value_different_parent()
+        {
+            var questionnaire = Create.QuestionnaireDocument(
+                children: Create.SingleOptionQuestion(
+                    variable:"singleOption",
+                    options: new List<Answer>
+                    {
+                        new Answer
+                        {
+                            AnswerValue = "1",
+                            AnswerText = "1"
+                        },
+                        new Answer
+                        {
+                            AnswerValue = "1",
+                            AnswerText = "1"
+                        }
+                    }));
+
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaire);
+            var labelFactory = new QuestionnaireLabelFactory();
+            
+            // act
+            QuestionnaireLevelLabels[] structure = labelFactory.CreateLabelsForQuestionnaire(exportStructure);
+
+            // assert
+            DataExportVariable questionnaireLevelLabels = structure[0]["singleOption"];
+            Assert.That(questionnaireLevelLabels.VariableValueLabels, Is.Empty);
+        }   
     }
 }

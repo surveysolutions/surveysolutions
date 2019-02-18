@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,9 @@ namespace WB.Services.Export.Host
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
+            logger.LogInformation("Export service started. version {version}", 
+                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
+
             this.logger = logger;
             Configuration = configuration;
         }
