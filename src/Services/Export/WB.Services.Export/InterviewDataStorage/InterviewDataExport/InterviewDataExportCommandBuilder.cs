@@ -67,7 +67,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             }
 
             sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
-            sql.Append(';');
+            sql.Append(" ON CONFLICT DO NOTHING;");
 
             insertCommand.CommandText = sql.ToString();
             return insertCommand;
