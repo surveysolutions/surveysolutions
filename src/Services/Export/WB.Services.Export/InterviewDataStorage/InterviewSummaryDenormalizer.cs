@@ -13,6 +13,9 @@ namespace WB.Services.Export.InterviewDataStorage
     public class InterviewSummaryDenormalizer:
         IFunctionalHandler,
         IEventHandler<InterviewCreated>,
+        IEventHandler<InterviewOnClientCreated>,
+        IEventHandler<InterviewFromPreloadedDataCreated>,
+        IEventHandler<InterviewDeleted>,
         IEventHandler<InterviewHardDeleted>,
         IEventHandler<InterviewStatusChanged>,
         IEventHandler<InterviewKeyAssigned>,
@@ -45,6 +48,21 @@ namespace WB.Services.Export.InterviewDataStorage
         public void Handle(PublishedEvent<InterviewCreated> @event)
         {
             EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s=> s.Status = InterviewStatus.Created);
+        }
+
+        public void Handle(PublishedEvent<InterviewOnClientCreated> @event)
+        {
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s => s.Status = InterviewStatus.Created);
+        }
+
+        public void Handle(PublishedEvent<InterviewFromPreloadedDataCreated> @event)
+        {
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, s => s.Status = InterviewStatus.Created);
+        }
+
+        public void Handle(PublishedEvent<InterviewDeleted> @event)
+        {
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, summary => summary.Status = InterviewStatus.Deleted);
         }
 
         public void Handle(PublishedEvent<InterviewHardDeleted> @event)
