@@ -1,13 +1,13 @@
 <template>
-  <HqLayout :title="$t('Reports.TeamsAndStatuses')" :hasFilter="true">
+  <HqLayout :title="$config.model.reportName" :subtitle="$config.model.subtitle" :hasFilter="true">
     <Filters slot="filters">
       <FilterBlock
         :title="$t('Common.Questionnaire')">
-        <Typeahead
+        <Typeahead control-id="questionnaireId"
+          ref="questionnaireIdControl" 
           data-vv-name="questionnaireId"
           data-vv-as="questionnaire"
           :placeholder="$t('Common.AllQuestionnaires')"
-          control-id="questionnaireId"
           :value="questionnaireId"
           v-on:selected="questionnaireSelected"
           :fetch-url="$config.model.questionnairesUrl"
@@ -16,11 +16,11 @@
 
       <FilterBlock
         :title="$t('Common.QuestionnaireVersion')">
-        <Typeahead
+        <Typeahead control-id="questionnaireVersion"
+          ref="questionnaireVersionControl" 
           data-vv-name="questionnaireVersion"
           data-vv-as="questionnaireVersion"
           :placeholder="$t('Common.AllVersions')"
-          control-id="questionnaireVersion"
           :value="questionnaireVersion"
           v-on:selected="questionnaireVersionSelected"
           :fetch-url="questionnaireVersionFetchUrl"
@@ -28,11 +28,17 @@
         />
       </FilterBlock>
     </Filters>
+    <div class="clearfix">
+      <div class="col-sm-8">
+        <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}} </h4>        
+      </div>
+    </div>
     <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true" exportable hasTotalRow></DataTables>
   </HqLayout>
 </template>
 <script>
 import { formatNumber } from "./helpers"
+import { ok } from 'assert';
 
 export default {
     data() {
@@ -42,27 +48,38 @@ export default {
         }
 
     },
-    mounted() {
+    async mounted() {
         const self = this
 
-        self.loadQuestionnaireId((questionnaireId, questionnaireTitle, version) => {
-            if (questionnaireId != undefined) {
-                self.questionnaireId = {
-                    key: questionnaireId,
-                    value: questionnaireTitle
-                }
-                self.questionnaireVersion = {
-                    key: version,
-                    value: version
-                }
-            }
+        var questionnaireInfo = await self.loadQuestionnaireId();
 
-            self.reloadTable()
-            self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.reloadTable.bind(self))
-        });
+        if (questionnaireInfo.questionnaireId)
+        {
+            this.$refs.questionnaireIdControl.fetchOptions().then(q => {
+                self.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle };
+
+                if (self.$route.query.questionnaireVersion)
+                {
+                    this.$refs.questionnaireVersionControl.fetchOptions().then(v => {
+                        self.questionnaireVersion = { key: questionnaireInfo.version, value: "ver. " + questionnaireInfo.version };
+                        self.reloadTable();
+                    });
+                }
+                else{
+                    self.reloadTable();
+                }
+            });
+        }
+          
+        self.startWatchers(['questionnaireId', 'questionnaireVersion'], self.onWatcherChange.bind(self))
     },
     methods: {
-        
+        onWatcherChange()
+        {
+            const self = this
+            self.reloadTable();
+        },
+
         questionnaireSelected(newValue) {
             this.questionnaireId = newValue
         },
@@ -73,7 +90,7 @@ export default {
         reloadTable(){
             this.isLoading = true
             
-            this.$refs.table.reload(self.reloadTable)
+            this.$refs.table.reload(this.reloadTable)
 
             this.addParamsToQueryString()
         },
@@ -117,22 +134,23 @@ export default {
             }
         },
 
-        async loadQuestionnaireId(onDone) {
+        async loadQuestionnaireId() {
             let requestParams = null;
 
-            const questionnaireId = this.$route.query.questionnaireId
-            const version = this.$route.query.questionnaireVersion
+            const questionnaireId = this.$route.query.questionnaireId;
+            let version = this.$route.query.questionnaireVersion || "";
+            version = (version === "" ? "0" : version);
 
-            if (questionnaireId != undefined && version != undefined) {
-                requestParams = Object.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false },
-                             this.ajaxParams);
+            if (questionnaireId && version) {
+                requestParams = _.assign({ questionnaireIdentity: questionnaireId + '$' + version, cache: false }, this.ajaxParams);
                 const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
-                    onDone(response.data.id, response.data.title, response.data.version);
+                    return { questionnaireId: questionnaireId, questionnaireTitle: response.data.title, version: response.data.version};
                 }
 
-            } else onDone();
+            } else 
+                return {};
         },
         
 
@@ -148,9 +166,11 @@ export default {
             const templateId = (this.questionnaireId || {}).key; 
             const templateVersion = (this.questionnaireVersion || {}).key;
 
-            if (!_.isUndefined(templateId) && !_.isUndefined(templateVersion)) {
-                queryObject.templateId = templateId
+            if (!_.isUndefined(templateVersion)) {
                 queryObject.templateVersion = templateVersion
+            }
+            if(!_.isUndefined(templateId)) {
+                queryObject.templateId = templateId
             }
 
             if (row.responsible) {

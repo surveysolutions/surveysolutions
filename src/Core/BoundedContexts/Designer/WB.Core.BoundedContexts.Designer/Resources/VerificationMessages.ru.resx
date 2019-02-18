@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -178,7 +178,7 @@
     <value>Макрос с таким же именем уже существует.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Максимальное количество ответов больше, чем количество опций.</value>
+    <value>Максимальное количество ответов превышает количество категорий.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Вопрос данного типа не может быть отмечен как идентифицирующий.</value>
@@ -202,7 +202,7 @@
     <value>Выражение для фильтрации опций содержит более {0} символов.</value>
   </data>
   <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Вопрос с фильтром опций не может быть помечен как идентифицирующий.</value>
+    <value>Вопрос с фильтром категорий не может быть помечен как идентифицирующий.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Идентифицирующий вопрос не может быть внутри ростера.</value>
@@ -284,6 +284,9 @@
   </data>
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Циклические ссылки не разрешены.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Ссылки запрещены на элементах навигации: секциях, подсекциях, ростерах.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Имя переменной или ID ростера не может быть зарезервированным словом.</value>
@@ -487,7 +490,7 @@
     <value>Имя переменной или ID ростера должны быть уникальными в рамках опросника.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список опций не должен содержать дубликатов такого типа.</value>
+    <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список не должен содержать дубликатов.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
     <value>Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}.</value>
@@ -667,7 +670,7 @@
     <value>Название секции слишком длинное. Оно не должно содержать более {0} символов. </value>
   </data>
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
-    <value>Опросник содержит ростеры с общим количеством экземпляров ростера превышающим системные ограничения.</value>
+    <value>Опросник содержит слишком большое количество экземпляров ростера.</value>
   </data>
   <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
     <value>Ростер достиг максимального размера. Уменьшите размер ростера или уровень вложенности.</value>
@@ -716,5 +719,19 @@
   </data>
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
     <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</value>
+    <comment>Плоский режим разрешен для ростеров с не больше чем {0} элементами.</comment>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Плоский режим запрещает использовать внутри ростеры.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Текст содержит ссылку на неизвестный вопрос, подсекцию, ростер или pdf вложение.
+</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Общее количество элементов ({0}) превышает системные лимиты ({1}). Рассмотрите возможность уменьшения количества вопросов, статических текстов, переменных или элементов фиксированных ростеров.</value>
   </data>
 </root>

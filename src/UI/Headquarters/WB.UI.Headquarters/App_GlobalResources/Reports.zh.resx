@@ -255,4 +255,88 @@
   <data name="LastUpdatedDate" xml:space="preserve">
     <value>更新于</value>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>平均值</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>由数值进行过滤</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>条件问题</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>计数</value>
+  </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>显示热力图</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>热力半径</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>地图数据正在导入</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>最大值</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>中位数</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>最小值</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>百分位 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>百分位 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>百分位 95</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>透视表</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>问题</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>问题标签</value>
+  </data>
+  <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+    <value>在问卷的版本间存在兼容性问题。老版本问卷的一些答案，不再存在于最新版本的问卷中。此类答案已被忽略</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>问题题目</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>选择条件型问题</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>选择问题</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>加总</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>督导员</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>根据队伍</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>更新 {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>马上更新</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>正在更新</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>查看选项</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>基于团队成员</value>
+  </data>
 </root>

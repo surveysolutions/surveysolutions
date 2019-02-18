@@ -489,9 +489,6 @@
   <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
     <value>النوع :{0}</value>
   </data>
-  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
-    <value>قاعدة البيانات</value>
-  </data>
   <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
     <value>{0} تم تحميلة {1} تم تنزيلة</value>
   </data>

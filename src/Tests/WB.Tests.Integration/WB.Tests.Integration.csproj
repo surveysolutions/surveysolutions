@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj" />
     <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
     <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj" />
@@ -30,6 +31,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
+    <PackageReference Include="AutoFixture" Version="4.6.0" />
     <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
@@ -72,9 +74,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AutoFixture">
-      <HintPath>..\..\..\..\..\Users\Victo\.nuget\packages\autofixture\4.0.1\lib\net452\AutoFixture.dll</HintPath>
-    </Reference>
     <Reference Include="MvvmCross.Tests">
       <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
     </Reference>

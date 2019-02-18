@@ -467,10 +467,10 @@
     <value>Назначено {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Все собранные данные будут сохранены как резервная копия на этом устройстве.</value>
+    <value>Сохранить нужную информацию в файл на устройстве.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Создать резервную копию собранной информации</value>
+    <value>Создать пакет для службы поддержки</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
     <value>Мы проверим наличие новой версии на сервере</value>
@@ -796,13 +796,13 @@
     <value>Назначить</value>
   </data>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
-    <value>Синхронизация интервьюверов</value>
+    <value>Синхронизация интервьюеров</value>
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
     <value>Синхронизация деталей супервизора</value>
   </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
-    <value>Синхронизация интервьюверов: {0} из {1}</value>
+    <value>Синхронизация интервьюеров: {0} из {1}</value>
   </data>
   <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
     <value>Синхронизировать карты</value>

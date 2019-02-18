@@ -493,6 +493,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        internal static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Responsible.
         /// </summary>
         internal static string Responsible {
@@ -525,6 +534,15 @@ namespace Resources {
         internal static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire.
+        /// </summary>
+        internal static string SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
             }
         }
         

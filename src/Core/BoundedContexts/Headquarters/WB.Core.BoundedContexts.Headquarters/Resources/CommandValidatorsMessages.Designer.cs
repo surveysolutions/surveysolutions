@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have already imported another questionnaire with title &apos;{0}&apos; from Designer. If you still want to import this particular one, please give it a different name in the Designer..
+        ///   Looks up a localized string similar to Questionnaire &apos;{0}&apos; already exists. Please choose another name..
         /// </summary>
         public static string QuestionnaireNameUniqueFormat {
             get {

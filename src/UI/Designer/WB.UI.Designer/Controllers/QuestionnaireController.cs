@@ -10,6 +10,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CsvHelper.TypeConversion;
+using System.Web.Routing;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -74,6 +75,23 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
             this.publicFoldersStorage = publicFoldersStorage;
             this.categoricalOptionsImportService = categoricalOptionsImportService;
+        }
+
+        
+        [NoCache]
+        public ActionResult DetailsNoSection(Guid id, Guid? chapterId, string entityType, Guid? entityid)
+        {
+            if (UserHelper.WebUser.IsAdmin || this.UserHasAccessToEditOrViewQuestionnaire(id))
+            {
+                // get section id and redirect
+                var sectionId = questionnaireInfoFactory.GetSectionIdForItem(id.FormatGuid(), entityid);
+                return RedirectToActionPermanent("Details", new RouteValueDictionary
+                {
+                    { "id", id.FormatGuid() }, {"chapterId", sectionId.FormatGuid()},{ "entityType", entityType},{ "entityid", entityid.FormatGuid()}
+                });
+            }
+
+            return this.LackOfPermits();
         }
 
         [NoCache]

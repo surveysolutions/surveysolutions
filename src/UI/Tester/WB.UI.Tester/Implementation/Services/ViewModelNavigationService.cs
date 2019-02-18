@@ -33,9 +33,9 @@ namespace WB.UI.Tester.Implementation.Services
             this.navigationService = navigationService;
         }
 
-        public override Task NavigateToDashboardAsync(string interviewId = null)
+        public override async Task<bool> NavigateToDashboardAsync(string interviewId = null)
         {
-            return this.navigationService.Navigate<DashboardViewModel>();
+            return await this.navigationService.Navigate<DashboardViewModel>();
         }
 
         public override void NavigateToSplashScreen()

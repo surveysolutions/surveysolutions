@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int MaxQuestionsCountInSubSection = 200;
         protected const int MinCountOfDecimalPlaces = 1;
         protected const int MaxCountOfDecimalPlaces = 15;
-        protected const int MaxTitleLength = 500;
+        public const int MaxTitleLength = 500;
         protected const int MaxValidationMessageLength = 250;
         public const int MaxOptionLength = 250;
         protected const int MaxNestedSubsectionsCount = 10;
@@ -42,15 +42,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected const int MaxOptionsCountInCategoricalOptionQuestion = 200;
 
-        protected const int DefaultVariableLengthLimit = 32;
+        public const int DefaultVariableLengthLimit = 32;
         protected const int DefaultRestrictedVariableLengthLimit = 20;
         protected const int RosterVariableNameLimit = 28;
 
         protected const int MaxRosterPropagationLimit = 10000;
-        protected const int MaxTotalRosterPropagationLimit = 80000;
+        protected const int QuestionnaireTotalEntitiesLimit = Constants.MaxTotalRosterPropagationLimit;
         protected const int MaxQuestionsCountInSection = 400;
+        protected const int MaxEntitiesInPlainModeGroup = 10;
 
-        protected static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
+        public const string VariableRegularExpression = "^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$";
+        public static readonly Regex VariableNameRegex = new Regex(VariableRegularExpression);
 
         protected static QuestionnaireEntityReference CreateReference(IQuestionnaireEntity entity)
         {
@@ -122,19 +124,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(x => x.PublicKey == roster.RosterSizeQuestionId);
             int questionMaxAnswersCount = Constants.MaxRosterRowCount;
 
-            var multioptionQuestion = question as MultyOptionsQuestion;
-            if (multioptionQuestion != null)
+            switch (question)
             {
-                questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers?.Count ?? 0;
-            }
-            var textListTrigger = question as TextListQuestion;
-            if (textListTrigger?.MaxAnswerCount != null)
-            {
-                questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                case MultyOptionsQuestion multyOptionsQuestion:
+                    questionMaxAnswersCount = multyOptionsQuestion.MaxAllowedAnswers ?? multyOptionsQuestion.Answers?.Count ?? 0;
+                    break;
+                case TextListQuestion textListTrigger when textListTrigger.MaxAnswerCount != null:
+                    questionMaxAnswersCount = textListTrigger.MaxAnswerCount.Value;
+                    break;
             }
 
             return questionMaxAnswersCount;
-
         }
 
         protected static bool IsSection(IQuestionnaireEntity entity) => entity.GetParent().GetParent() == null;

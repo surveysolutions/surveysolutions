@@ -130,13 +130,13 @@
     <value>添加静态文本</value>
   </data>
   <data name="AddSubsection" xml:space="preserve">
-    <value>添加子部分</value>
+    <value>添加问卷子块</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
     <value>添加新的验证规则</value>
   </data>
   <data name="AddVariable" xml:space="preserve">
-    <value>添加变量</value>
+    <value>添加计算变量</value>
   </data>
   <data name="AttachmentPreview" xml:space="preserve">
     <value>预览附件</value>
@@ -155,6 +155,12 @@
   </data>
   <data name="Close" xml:space="preserve">
     <value>关闭</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>协作者</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>处理</value>
   </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>发现{{count}}个错误</value>
@@ -178,7 +184,7 @@
     <value>条件或级联关系所依赖的项目可能被打断</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>粘贴</value>
+    <value>复制</value>
   </data>
   <data name="DefaultNewRoster" xml:space="preserve">
     <value>新名单</value>
@@ -190,16 +196,25 @@
     <value>新静态文本</value>
   </data>
   <data name="DefaultNewSubsection" xml:space="preserve">
-    <value>新子模块</value>
+    <value>新问卷子块</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
+  </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+    <value>您确定要删除评论？</value>
   </data>
   <data name="DeleteConfirmQuestion" xml:space="preserve">
     <value>您确认删除“{{trimmedTitle}}”吗？</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>下载</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>添加注释</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>隐藏注释</value>
   </data>
   <data name="EmptySectionLine1" xml:space="preserve">
     <value>本部分为空。</value>
@@ -221,6 +236,9 @@
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>您输入了超过最大被允许的范围{{max}}。</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>新注释</value>
   </data>
   <data name="EntryWasNotFound" xml:space="preserve">
     <value>在问卷中没有发现此条目，请选择其它的。</value>
@@ -297,6 +315,9 @@
   <data name="FindReplaceСonfirm" xml:space="preserve">
     <value>请确认操作。</value>
   </data>
+  <data name="GeometryType" xml:space="preserve">
+    <value>几何图形类型</value>
+  </data>
   <data name="GroupTitle" xml:space="preserve">
     <value>标题</value>
   </data>
@@ -306,8 +327,14 @@
   <data name="Help" xml:space="preserve">
     <value>帮助</value>
   </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value> 一个组合框是一个下拉列表和一个单横可编辑的文本框的组合。选项可手动输入，也可以在列表中选定某个值</value>
+  </data>
   <data name="HelpConditionExpression" xml:space="preserve">
     <value>一个激活（冻结）最近项目的逻辑表达式，基于其它问题的答案。</value>
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
+    <value>次日起将在平板电脑上被展示为默认的日期</value>
   </data>
   <data name="HelpExpression" xml:space="preserve">
     <value>一个被计算的逻辑表达式，基于其它问题的答案。</value>
@@ -330,6 +357,12 @@
   <data name="HelpMask" xml:space="preserve">
     <value>α-数字型值的格式化条目：电话号码、ID编码等等。举例：“~”-代表α型字符（A-Z，a-z），“#” -代表代表一个数字型字符（0-9）字符，“*”-代表一个</value>
   </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>添加注释</value>
+  </data>
+  <data name="HelpQuestionnaireVarible" xml:space="preserve">
+    <value>问卷变量被当成导出数据问卷名字的前缀。变量名称和二维表ID的长度为 {{minLength}} - {{maxLength}} 个字符，且只能包含如下字符： a-z，A-Z， _， 或者 0-9。第一个字符不能是 0-9 或 _ 且最后一个字符不能是_。</value>
+  </data>
   <data name="HelpSourceQuestion" xml:space="preserve">
     <value>源问题（答案产生行数）</value>
   </data>
@@ -346,13 +379,22 @@
     <value>当验证性条件取值为“False”或当表达式运算出现错误时，错误信息会被显示，</value>
   </data>
   <data name="HelpVariableDescription" xml:space="preserve">
-    <value>文本将被显示在变量旁边用于测试母的</value>
+    <value>文本将被显示在变量旁边用于测试目的</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
     <value>一段长度最长为{{maxLength}}的字符将被附加至被导出的变量。</value>
   </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>变量名和名单ID的长度为{{minLength}}至{{maxLength}}个字符，并且只能包含以下字符：a-z，A-Z，_或0-9。 第一个字符不能是0-9或_，最后一个字符不能是_。</value>
+  </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>如果不启用则隐藏</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>由问卷进行嵌套</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>添加已处理的注释</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>历史</value>
@@ -362,6 +404,9 @@
   </data>
   <data name="HotkeysCloseMacros" xml:space="preserve">
     <value>关闭宏面板</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>关闭元数据面板</value>
   </data>
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>关闭翻译面板</value>
@@ -394,7 +439,7 @@
     <value>打印</value>
   </data>
   <data name="HotkeysSearch" xml:space="preserve">
-    <value>在这个问卷模块查找子模块或问题</value>
+    <value>在这个问卷模块查找问卷子块或问题</value>
   </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>键盘快捷键</value>
@@ -405,20 +450,32 @@
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>错误的二维表标题问题</value>
   </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>使用签名板</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>是否为</value>
+  </data>
   <data name="LogOut" xml:space="preserve">
     <value>注销</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
     <value>设置为默认语言</value>
   </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>注释不能包含超过{1}个字符</value>
+  </data>
   <data name="ModalConfirm" xml:space="preserve">
     <value>确认</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>信息</value>
   </data>
   <data name="MoveTo" xml:space="preserve">
     <value>移动到</value>
   </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
-    <value>移动到另外一个子模块。</value>
+    <value>移动到另外一个问卷子块。</value>
   </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>一个或多个问题/子问卷模块基于</value>
@@ -431,6 +488,9 @@
   </data>
   <data name="NothingFound" xml:space="preserve">
     <value>空空如也</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>选中的问卷不是被支持的附件类型</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -468,11 +528,17 @@
   <data name="PleaseWait" xml:space="preserve">
     <value>请耐心等待……</value>
   </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>公共访问</value>
+  </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
     <value>增加调查员说明</value>
   </data>
   <data name="QuestionAddOption" xml:space="preserve">
-    <value>添加类别</value>
+    <value>添加选项</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>添加特殊值</value>
   </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>级联复选框</value>
@@ -488,6 +554,9 @@
   </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>十进制的数字位数</value>
+  </data>
+  <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>默认日期</value>
   </data>
   <data name="QuestionFilter" xml:space="preserve">
     <value>筛选器</value>
@@ -518,6 +587,9 @@
   </data>
   <data name="QuestionMustBeBound" xml:space="preserve">
     <value>您必须捆绑这个问题</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>问卷设置</value>
   </data>
   <data name="QuestionnaireSummary" xml:space="preserve">
     <value>({{questionsCount}}Q,{{groupsCount}}S,{{rostersCount}}R)</value>
@@ -615,11 +687,20 @@
   <data name="Search" xml:space="preserve">
     <value>查找</value>
   </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>选择国家</value>
+  </data>
   <data name="SelectedInvalidItem" xml:space="preserve">
     <value>选中了无效的项目。请修正。</value>
   </data>
   <data name="SelectItemFromTheList" xml:space="preserve">
     <value>为列表选择项目。</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>选择数据种类</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>选择数据收集的模式</value>
   </data>
   <data name="SelectParentQuestion" xml:space="preserve">
     <value>选择上级问题。</value>
@@ -630,11 +711,17 @@
   <data name="SelectQuestion" xml:space="preserve">
     <value>选择问题</value>
   </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>选择研究类型</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
     <value>可以</value>
+  </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>隐藏那些不启用的元素</value>
   </data>
   <data name="SettingsInvite" xml:space="preserve">
     <value>邀请</value>
@@ -662,6 +749,9 @@
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>生成此问卷</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>问卷变量</value>
   </data>
   <data name="SettingsRevokeAccess" xml:space="preserve">
     <value>拒绝访问</value>
@@ -717,6 +807,9 @@
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
     <value>为了避免同步速度较慢，我们推荐小于2M的文件。对于被支持文件的类型、格式和大小</value>
   </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>可以用来用一个附件来增加静态文本，并用附件属性 {{-name}} 来明确静态文本的名称</value>
+  </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>东部标准时间：导入时间：{{timeString}}速度为{{downloadSpeed}}Kb/s (EDGE)</value>
   </data>
@@ -728,6 +821,18 @@
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
     <value>最近上传：{{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}}个评论：</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}}个评论：</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>注释</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>您将在这里看到注释</value>
   </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>用这个 tab 去定义查询表。</value>
@@ -783,6 +888,9 @@
   <data name="SideBarMacroEmptyLine1" xml:space="preserve">
     <value>用这个tab去定义宏的替换。</value>
   </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>宏是一个命名表达式，可用于启用条件和验证表达式。宏由名称和内容组成。</value>
+  </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
     <value>可以用于表达式，可以由宏引用。</value>
   </data>
@@ -800,222 +908,6 @@
   </data>
   <data name="SideBarMacroTitle" xml:space="preserve">
     <value>宏</value>
-  </data>
-  <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}}个问卷模块：</value>
-  </data>
-  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}}个问卷模块：</value>
-  </data>
-  <data name="SideBarSectionsTitle" xml:space="preserve">
-    <value>问卷模块</value>
-  </data>
-  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
-    <value>下载 xlsx</value>
-  </data>
-  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
-    <value>找一个模版用于</value>
-  </data>
-  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
-    <value>Excel (xlsx)</value>
-  </data>
-  <data name="SideBarTranslationName" xml:space="preserve">
-    <value>翻译的名称</value>
-  </data>
-  <data name="SideBarTranslationNoName" xml:space="preserve">
-    <value>没有名称的翻译</value>
-  </data>
-  <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}}个翻译</value>
-  </data>
-  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}}个翻译</value>
-  </data>
-  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
-    <value>用这个tab 去管理问卷翻译。</value>
-  </data>
-  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
-    <value>您可以下载或更新不同语言的翻译。</value>
-  </data>
-  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
-    <value>翻译将应用于初始文本和被覆盖的值。您可以使用缺省的初始翻译将某些文本留空。</value>
-  </data>
-  <data name="SideBarTranslationsTitle" xml:space="preserve">
-    <value>翻译</value>
-  </data>
-  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
-    <value>上传新的翻译</value>
-  </data>
-  <data name="StaticText" xml:space="preserve">
-    <value>静态文本</value>
-  </data>
-  <data name="StaticTextAttachmentName" xml:space="preserve">
-    <value>附件名称</value>
-  </data>
-  <data name="ToggleDropdown" xml:space="preserve">
-    <value>切换下拉</value>
-  </data>
-  <data name="ToggleSearch" xml:space="preserve">
-    <value>切换查找</value>
-  </data>
-  <data name="TranslationsObtained" xml:space="preserve">
-    <value>由翻译文件获取{0}行</value>
-  </data>
-  <data name="TranslationsObtained_plural" xml:space="preserve">
-    <value>由翻译文件获取{0}行</value>
-  </data>
-  <data name="TreeAddQuestion" xml:space="preserve">
-    <value>添加问题</value>
-  </data>
-  <data name="TreeAddQuestionAfter" xml:space="preserve">
-    <value>在后面添加问题</value>
-  </data>
-  <data name="TreeAddRoster" xml:space="preserve">
-    <value>添加二维表</value>
-  </data>
-  <data name="TreeAddRosterAfter" xml:space="preserve">
-    <value>在后面添加二维表</value>
-  </data>
-  <data name="TreeAddSection" xml:space="preserve">
-    <value>添加问卷子模块</value>
-  </data>
-  <data name="TreeAddSectionAfter" xml:space="preserve">
-    <value>在后面添加问卷子模块</value>
-  </data>
-  <data name="TreeAddStaticText" xml:space="preserve">
-    <value>添加静态文本</value>
-  </data>
-  <data name="TreeAddStaticTextAfter" xml:space="preserve">
-    <value>在后面添加静态文本</value>
-  </data>
-  <data name="TreeAddVariable" xml:space="preserve">
-    <value>添加变量</value>
-  </data>
-  <data name="TreeAddVariableAfter" xml:space="preserve">
-    <value>在后面添加变量</value>
-  </data>
-  <data name="TreeRoster" xml:space="preserve">
-    <value>二维表：</value>
-  </data>
-  <data name="UnMarkAsDefault" xml:space="preserve">
-    <value>请不要用作缺省设置</value>
-  </data>
-  <data name="UnsavedChangesLeave" xml:space="preserve">
-    <value>如果您离开此页面，那么所做的修改将不被保存</value>
-  </data>
-  <data name="UnsavedChangesReload" xml:space="preserve">
-    <value>如果您离开此页面，那么所做的修改将不被保存</value>
-  </data>
-  <data name="UntitledGroupOrRoster" xml:space="preserve">
-    <value>未命名的问卷子模块或二维表</value>
-  </data>
-  <data name="UntitledQuestion" xml:space="preserve">
-    <value>未命名的题目</value>
-  </data>
-  <data name="UntitledRoster" xml:space="preserve">
-    <value>未命名的二维表</value>
-  </data>
-  <data name="UntitledSection" xml:space="preserve">
-    <value>未命名的问卷模块</value>
-  </data>
-  <data name="UntitledStaticText" xml:space="preserve">
-    <value>未命名的静态文本</value>
-  </data>
-  <data name="UntitledVariable" xml:space="preserve">
-    <value>未命名的变量</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>更新</value>
-  </data>
-  <data name="Upload" xml:space="preserve">
-    <value>上传</value>
-  </data>
-  <data name="ValidationCondition" xml:space="preserve">
-    <value>验证性条件</value>
-  </data>
-  <data name="VariableExpression" xml:space="preserve">
-    <value>表达式</value>
-  </data>
-  <data name="VariableLabel" xml:space="preserve">
-    <value>变量标签</value>
-  </data>
-  <data name="VariableName" xml:space="preserve">
-    <value>名字</value>
-  </data>
-  <data name="VariableType" xml:space="preserve">
-    <value>变量类型</value>
-  </data>
-  <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}}个警告</value>
-  </data>
-  <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}}个警告</value>
-  </data>
-  <data name="CommentEditorResolve" xml:space="preserve">
-    <value>处理</value>
-  </data>
-  <data name="EditorAddComment" xml:space="preserve">
-    <value>添加注释</value>
-  </data>
-  <data name="EditorHideComment" xml:space="preserve">
-    <value>隐藏注释</value>
-  </data>
-  <data name="EntityComment" xml:space="preserve">
-    <value>新注释</value>
-  </data>
-  <data name="HelpNewComment" xml:space="preserve">
-    <value>添加注释</value>
-  </data>
-  <data name="HelpVariableName" xml:space="preserve">
-    <value>变量名和名单ID的长度为{{minLength}}至{{maxLength}}个字符，并且只能包含以下字符：a-z，A-Z，_或0-9。 第一个字符不能是0-9或_，最后一个字符不能是_。</value>
-  </data>
-  <data name="HideResolvedComments" xml:space="preserve">
-    <value>添加已处理的注释</value>
-  </data>
-  <data name="HotkeysCloseMetadata" xml:space="preserve">
-    <value>关闭元数据面板</value>
-  </data>
-  <data name="IsSignature" xml:space="preserve">
-    <value>使用签名板</value>
-  </data>
-  <data name="IsWarning" xml:space="preserve">
-    <value>是否为</value>
-  </data>
-  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
-    <value>注释不能包含超过{1}个字符</value>
-  </data>
-  <data name="ModalInfo" xml:space="preserve">
-    <value>信息</value>
-  </data>
-  <data name="QuestionAddSpecialValues" xml:space="preserve">
-    <value>添加特殊值</value>
-  </data>
-  <data name="SelectCountry" xml:space="preserve">
-    <value>选择国家</value>
-  </data>
-  <data name="SelectKindOfData" xml:space="preserve">
-    <value>选择数据种类</value>
-  </data>
-  <data name="SelectModeOfDataCollection" xml:space="preserve">
-    <value>选择数据收集的模式</value>
-  </data>
-  <data name="SelectStudyType" xml:space="preserve">
-    <value>选择研究类型</value>
-  </data>
-  <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{{count}}个评论：</value>
-  </data>
-  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{count}}个评论：</value>
-  </data>
-  <data name="SideBarCommentsTitle" xml:space="preserve">
-    <value>注释</value>
-  </data>
-  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
-    <value>您将在这里看到注释</value>
-  </data>
-  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
-    <value>宏是一个命名表达式，可用于启用条件和验证表达式。宏由名称和内容组成。</value>
   </data>
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
     <value>额外的信息</value>
@@ -1092,8 +984,152 @@
   <data name="SideBarMetadataYear" xml:space="preserve">
     <value>年：</value>
   </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}}个问卷模块：</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}}个问卷模块：</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>问卷模块</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>下载 xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>找一个模版用于</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>翻译的名称</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>没有名称的翻译</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}}个翻译</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}}个翻译</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>用这个tab 去管理问卷翻译。</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>您可以下载或更新不同语言的翻译。</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>翻译将应用于初始文本和被覆盖的值。您可以使用缺省的初始翻译将某些文本留空。</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>翻译</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>上传新的翻译</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>静态文本</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>附件名称</value>
+  </data>
   <data name="Test" xml:space="preserve">
     <value>测试</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>切换下拉</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>切换查找</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>由翻译文件获取{0}行</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>由翻译文件获取{0}行</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>添加问题</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>在后面添加问题</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>添加二维表</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>在后面添加二维表</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>添加问卷问卷子块</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>在后面添加问卷问卷子块</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>添加静态文本</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>在后面添加静态文本</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>添加计算变量</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>在后面添加计算变量</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>二维表：</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>请不要用作缺省设置</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>如果您离开此页面，那么所做的修改将不被保存</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>如果您离开此页面，那么所做的修改将不被保存</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>未命名的问卷问卷子块或二维表</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>未命名的题目</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>未命名的二维表</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>未命名的问卷模块</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>未命名的静态文本</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>未命名的计算变量</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>上传</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>验证性条件</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>表达式</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>变量标签</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>名字</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>变量类型</value>
   </data>
   <data name="VariableVariableName" xml:space="preserve">
     <value>变量名称</value>
@@ -1103,5 +1139,11 @@
   </data>
   <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
     <value>查看{{count}}已处理的注释</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}}个警告</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}}个警告</value>
   </data>
 </root>

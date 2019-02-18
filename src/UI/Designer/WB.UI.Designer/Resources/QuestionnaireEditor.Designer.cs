@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new section.
         /// </summary>
         public static string AddNewSection {
@@ -124,6 +133,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All classifications.
+        /// </summary>
+        public static string AllClassifications {
+            get {
+                return ResourceManager.GetString("AllClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All folders.
+        /// </summary>
+        public static string AllFolders {
+            get {
+                return ResourceManager.GetString("AllFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment preview.
         /// </summary>
         public static string AttachmentPreview {
@@ -151,11 +178,101 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit cascading categories.
+        /// </summary>
+        public static string CascadingOptionsWindowTitle {
+            get {
+                return ResourceManager.GetString("CascadingOptionsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         public static string ChangePassword {
             get {
                 return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add classification.
+        /// </summary>
+        public static string ClassificationAdd {
+            get {
+                return ResourceManager.GetString("ClassificationAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add group.
+        /// </summary>
+        public static string ClassificationAddGroup {
+            get {
+                return ResourceManager.GetString("ClassificationAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups.
+        /// </summary>
+        public static string ClassificationGroupBreadcrumbs {
+            get {
+                return ResourceManager.GetString("ClassificationGroupBreadcrumbs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group title.
+        /// </summary>
+        public static string ClassificationGroupTitle {
+            get {
+                return ResourceManager.GetString("ClassificationGroupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show categories.
+        /// </summary>
+        public static string ClassificationShowCategories {
+            get {
+                return ResourceManager.GetString("ClassificationShowCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to classifications.
+        /// </summary>
+        public static string ClassificationsSearchEntities {
+            get {
+                return ResourceManager.GetString("ClassificationsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter categories.
+        /// </summary>
+        public static string ClassificationsStringOptionsEditorPlaceholder {
+            get {
+                return ResourceManager.GetString("ClassificationsStringOptionsEditorPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank. Classifications.
+        /// </summary>
+        public static string ClassificationsTitle {
+            get {
+                return ResourceManager.GetString("ClassificationsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classification title.
+        /// </summary>
+        public static string ClassificationTitle {
+            get {
+                return ResourceManager.GetString("ClassificationTitle", resourceCulture);
             }
         }
         
@@ -691,7 +808,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list.
+        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable text box. Categories could be selected either by typing a value or its part or selecting a value from the list.
         /// </summary>
         public static string HelpCombobox {
             get {
@@ -786,6 +903,15 @@ namespace WB.UI.Designer.Resources {
         public static string HelpNewComment {
             get {
                 return ResourceManager.GetString("HelpNewComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If unchecked, the questions of the roster are shown behind the buttons corresponding to roster instances. If checked, the questions of the roster are shown in the same level separated by headers corresponding to roster instances..
+        /// </summary>
+        public static string HelpPlainRoster {
+            get {
+                return ResourceManager.GetString("HelpPlainRoster", resourceCulture);
             }
         }
         
@@ -1150,6 +1276,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to My classifications.
+        /// </summary>
+        public static string MyClassifications {
+            get {
+                return ResourceManager.GetString("MyClassifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
         /// </summary>
         public static string NoPermissions {
@@ -1195,6 +1330,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only the first {{count}} categories will be taken for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string OnlyFirstOptionsWillBeTakenConfirmation {
+            get {
+                return ResourceManager.GetString("OnlyFirstOptionsWillBeTakenConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
@@ -1231,7 +1375,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No options. Choose tab separated file. The file can contain up to {0} options..
+        ///   Looks up a localized string similar to No categories. Choose tab separated file. The file can contain up to {0} categories..
         /// </summary>
         public static string OptionsUploadLimit {
             get {
@@ -1267,6 +1411,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit categories.
+        /// </summary>
+        public static string OptionsWindowTitle {
+            get {
+                return ResourceManager.GetString("OptionsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste.
         /// </summary>
         public static string Paste {
@@ -1285,6 +1438,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plain mode.
+        /// </summary>
+        public static string PlainRoster {
+            get {
+                return ResourceManager.GetString("PlainRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait....
         /// </summary>
         public static string PleaseWait {
@@ -1299,6 +1461,15 @@ namespace WB.UI.Designer.Resources {
         public static string PublicAccessSettings {
             get {
                 return ResourceManager.GetString("PublicAccessSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for classification.
+        /// </summary>
+        public static string QuestionAddClassification {
+            get {
+                return ResourceManager.GetString("QuestionAddClassification", resourceCulture);
             }
         }
         
@@ -1501,7 +1672,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To open options editor all unsaved changes must be saved. Should we save them now?.
+        ///   Looks up a localized string similar to To open editor all unsaved changes must be saved. Should we save them now?.
         /// </summary>
         public static string QuestionOpenEditorConfirm {
             get {
@@ -1519,7 +1690,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to As the question was marked as &quot;Combo box&quot; or &quot;Cascading combo box&quot; while uploading question&apos;s details and contained many options, it&apos;s value was reduced up to {{count}}.
+        ///   Looks up a localized string similar to Question was marked as &quot;Combo box&quot; or &quot;Cascading combo box&quot; while uploading question&apos;s details and contained too many categories, their number was reduced up to {{count}}.
         /// </summary>
         public static string QuestionOptionsCut {
             get {
@@ -1573,6 +1744,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to search results.
+        /// </summary>
+        public static string QuestionsSearchEntities {
+            get {
+                return ResourceManager.GetString("QuestionsSearchEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Bank.
+        /// </summary>
+        public static string QuestionsSearchTitle {
+            get {
+                return ResourceManager.GetString("QuestionsSearchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question text.
         /// </summary>
         public static string QuestionText {
@@ -1582,7 +1771,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To update options.
+        ///   Looks up a localized string similar to To update categories.
         /// </summary>
         public static string QuestionToUpdateOptions {
             get {
@@ -1591,7 +1780,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload new options.
+        ///   Looks up a localized string similar to Upload new categories.
         /// </summary>
         public static string QuestionUploadOptions {
             get {
@@ -1650,6 +1839,15 @@ namespace WB.UI.Designer.Resources {
         public static string Recompile {
             get {
                 return ResourceManager.GetString("Recompile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to replace existing categories for question &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        public static string ReplaceOptionsConfirmation {
+            get {
+                return ResourceManager.GetString("ReplaceOptionsConfirmation", resourceCulture);
             }
         }
         
@@ -1767,6 +1965,42 @@ namespace WB.UI.Designer.Resources {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search classification.
+        /// </summary>
+        public static string SearchClassification {
+            get {
+                return ResourceManager.GetString("SearchClassification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for question.
+        /// </summary>
+        public static string SearchForQuestion {
+            get {
+                return ResourceManager.GetString("SearchForQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for a question.
+        /// </summary>
+        public static string SearchQuestionPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchQuestionPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        public static string SectionVariableName {
+            get {
+                return ResourceManager.GetString("SectionVariableName", resourceCulture);
             }
         }
         

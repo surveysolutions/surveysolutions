@@ -456,10 +456,10 @@
     <value>Обсяг:</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Всі зібрані дані будуть збережені як резервна копія на цьому пристрої.</value>
+    <value>Зберегти потрібну інформацію у файл на цьому пристрої</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Створити резервну копію зібраної інформації</value>
+    <value>Створити пакет для служби підтримки</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
     <value>&lt;font color="red"&gt;З'єднання з інтернетом відсутнє&lt;/font&gt;</value>

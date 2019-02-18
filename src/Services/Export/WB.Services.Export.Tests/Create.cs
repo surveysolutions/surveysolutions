@@ -132,22 +132,25 @@ namespace WB.Services.Export.Tests
             return QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
         }
 
-        public static InterviewSummary InterviewSummary( InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
+        public static InterviewSummary InterviewSummary(InterviewExportedAction exportedAction = InterviewExportedAction.ApprovedBySupervisor,
             string originatorName = "inter",
             UserRoles originatorRole = UserRoles.Interviewer,
             Guid? interviewId = null,
             DateTime? timestamp = null,
-            string key = null)
+            string key = null,
+            string interviewerName = "inter",
+            string supervisorName = "supervisor")
             => new InterviewSummary
             {
-                Status = status,
+                Status = exportedAction,
                 InterviewId = interviewId ?? Guid.NewGuid(),
                 Timestamp = timestamp ?? DateTime.Now,
                 Key = key,
                 StatusChangeOriginatorRole = originatorRole,
                 StatusChangeOriginatorName = originatorName,
-                InterviewerName = "inter",
-                SupervisorName = "supervisor",
+                InterviewerName = interviewerName,
+                SupervisorName = supervisorName,
+                
             };
 
         public static InterviewActionsExporter InterviewActionsExporter(ITenantApi<IHeadquartersApi> tenantApi,

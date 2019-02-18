@@ -90,7 +90,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             catch(Exception e)
             {
                 status.Error(Modules.ErrorDuringSiteInitialization);
-                container.Resolve<ILogger>().Error("Exception during site inizialization", e);
+                container.Resolve<ILogger>().Error("Exception during site initialization", e);
             }
         }
     }

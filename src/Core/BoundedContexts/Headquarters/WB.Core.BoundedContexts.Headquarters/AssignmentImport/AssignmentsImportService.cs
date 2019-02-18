@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
+        private readonly IAssignmentFactory assignmentFactory;
 
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
@@ -44,7 +45,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
-            IAssignmentsImportFileConverter assignmentsImportFileConverter)
+            IAssignmentsImportFileConverter assignmentsImportFileConverter,
+            IAssignmentFactory assignmentFactory)
         {
             this.userViewFactory = userViewFactory;
             this.verifier = verifier;
@@ -55,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.assignmentsStorage = assignmentsStorage;
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
+            this.assignmentFactory = assignmentFactory;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
@@ -224,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var assignment = new Assignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity);
             var identifyingAnswers = assignmentToImport.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
                     IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))

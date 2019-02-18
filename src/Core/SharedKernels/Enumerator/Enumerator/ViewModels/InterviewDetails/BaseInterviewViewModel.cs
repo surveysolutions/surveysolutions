@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 };
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Any();
+            this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
 
             var prefilledQuestions = questionnaire
                 .GetPrefilledQuestions();
@@ -141,7 +141,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.IsVariablesShowed = this.EnumeratorSettings.ShowVariables;
             this.IsSuccessfullyLoaded = true;
+
+            this.IsAudioRecordingEnabled = interview.GetIsAudioRecordingEnabled();
         }
+
+        public bool? IsAudioRecordingEnabled { get; set; }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
@@ -191,9 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     break;
                 case ScreenType.Group:
                     this.vibrationViewModel.Enable();
-                    var interview = this.interviewRepository.Get(this.InterviewId);
-                    IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
-                    this.answerNotifier.Init(this.InterviewId, questionsToListen.ToArray());
+                    this.answerNotifier.Init(this.InterviewId);
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                 break;
             }
@@ -276,10 +278,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
                     overviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return overviewViewModel;
-                case ScreenType.PdfView:
+                case ScreenType.PdfViewByStaticText:
                     var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
                     pdfViewModel.Configure(this.InterviewId, eventArgs.AnchoredElementIdentity);
                     return pdfViewModel;
+                case ScreenType.PdfView:
+                    var pdfView = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>();
+                    pdfView.ConfigureByAttachmentId(this.InterviewId, eventArgs.AnchoredElementIdentity.Id);
+                    return pdfView;
                 default:
                     return null;
             }

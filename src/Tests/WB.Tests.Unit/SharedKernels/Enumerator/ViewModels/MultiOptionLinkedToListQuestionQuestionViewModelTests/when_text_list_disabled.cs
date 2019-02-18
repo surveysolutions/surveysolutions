@@ -6,7 +6,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToListQuestionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionLinkedToListQuestionQuestionViewModel))]
+    [TestOf(typeof(CategoricalMultiLinkedToListViewModel))]
     public class when_text_list_disabled
     {
         [Test]
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
                 Create.Entity.TextListQuestion(textListQuestionId),
                 Create.Entity.MultyOptionsQuestion(multiOptionQuestionId, linkedToQuestionId: textListQuestionId, areAnswersOrdered: true));
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
             interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
             {
                 new Tuple<decimal, string>(1, "option 1"),
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedToL
             });
 
             var viewModel = Create.ViewModel.MultiOptionLinkedToListQuestionQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(null, Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            viewModel.Init(interview.Id.ToString(), Identity.Create(multiOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), multiOptionQuestionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3, 1 });
 

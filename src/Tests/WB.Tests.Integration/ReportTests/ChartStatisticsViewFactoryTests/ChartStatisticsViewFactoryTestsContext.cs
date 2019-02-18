@@ -9,13 +9,14 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -27,6 +28,7 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
     {
         private string connectionString;
         private ISessionFactory sessionFactory;
+        protected IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -42,16 +44,19 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
                 UnitOfWork, 
                 Mock.Of<ILogger>(), 
                 Mock.Of<IServiceLocator>());
+            
+            var mock = new Mock<IAllUsersAndQuestionnairesFactory>();
+            
+            mock.Setup(s => s.GetQuestionnaires(It.IsAny<Guid?>(), It.IsAny<long?>()))
+                .Returns<Guid?, long?>((id, ver) 
+                    => this.questionnaireRepository
+                        .Query(_ => _.Where(q => q.IsDeleted == false)
+                            .Select(q => QuestionnaireIdentity.Parse(q.Id)).ToList()));
+            this.questionnaires = mock;
 
-            this.questionnaires = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
+            this.questionnaireRepository = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
         }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-          //  DatabaseTestInitializer.DropDb(this.connectionString);
-        }
-
+        
         protected IUnitOfWork NewUnitOfWork() => IntegrationCreate.UnitOfWork(sessionFactory);
 
         protected IUnitOfWork UnitOfWork { get; set; }
@@ -61,7 +66,9 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
         protected ChartStatisticsViewFactory CreateChartStatisticsViewFactory()
         {
-            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires);
+            return new ChartStatisticsViewFactory(UnitOfWork, questionnaires.Object, 
+                cumulativeReportStatusChangeStorage, 
+                questionnaireRepository);
         }
 
         protected void CreateQuestionnaireStatisticsForChartWithSameCountForAllStatuses(QuestionnaireIdentity questionnaireId, DateTime date, int count)
@@ -90,23 +97,23 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
 
         protected void MarkQuestionnaireDeleted(QuestionnaireIdentity questionnaireId)
         {
-            EnsureQuestionnaireExists(questionnaireId);
-            var existing = questionnaires.GetById(questionnaireId.ToString());
-            existing.IsDeleted = true;
-            questionnaires.Store(existing, existing.Id);
+            var q = this.questionnaireRepository.GetById(questionnaireId.Id);
+            q.IsDeleted = true;
+            this.questionnaireRepository.Store(q ,q.Id);
         }
 
         protected void EnsureQuestionnaireExists(QuestionnaireIdentity questionnaireId)
         {
-            var existing = questionnaires.GetById(questionnaireId.ToString());
-            if (existing == null)
+            var q = this.questionnaireRepository.GetById(questionnaireId.Id);
+            if (q == null)
             {
-                var doc = Create.Entity.QuestionnaireDocumentWithOneQuestion();
-                doc.PublicKey = questionnaireId.QuestionnaireId;
-                questionnaires.Store(
-                    new QuestionnaireBrowseItem(doc, questionnaireId.Version, 
-                        false, 1, true, true),
-                    questionnaireId.ToString());
+                this.questionnaireRepository.Store(new QuestionnaireBrowseItem
+                {
+                    Id = questionnaireId.Id,
+                    Title = questionnaireId.Id,
+                    Version = questionnaireId.Version,
+                    QuestionnaireId = questionnaireId.QuestionnaireId
+                }, questionnaireId.Id);
             }
         }
 
@@ -144,8 +151,8 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             }
         }
 
-        private IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private PostgreReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        protected Mock<IAllUsersAndQuestionnairesFactory> questionnaires;
 
         protected void AddStatusChangeLine(Guid entryId, QuestionnaireIdentity questionnaireId, Guid interviewId, DateTime date, InterviewStatus status, int changeValue)
         {
@@ -154,6 +161,14 @@ namespace WB.Tests.Integration.ReportTests.ChartStatisticsViewFactoryTests
             cumulativeReportStatusChangeStorage.Store(new CumulativeReportStatusChange(
                 entry, questionnaireId.QuestionnaireId, questionnaireId.Version, date, status, changeValue, interviewId, NextSequence)
                 , entryId);
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            UnitOfWork.AcceptChanges();
+            UnitOfWork.Dispose();
+            DatabaseTestInitializer.DropDb(connectionString);
         }
     }
     

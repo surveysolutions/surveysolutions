@@ -14,10 +14,10 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
-    [TestOf(typeof(MultiOptionQuestionViewModel))]
-    internal class MultiOptionQuestionViewModelTestsContext
+    [TestOf(typeof(CategoricalMultiViewModel))]
+    internal class MultiOptionQuestionViewModelTestsContext : BaseMvvmCrossTest
     {
-        protected static MultiOptionQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
+        protected static CategoricalMultiViewModel CreateViewModel(IUserInteractionService userInteractionService = null, 
             IQuestionnaireStorage questionnaireStorage = null, 
             ILiteEventRegistry eventRegistry = null, 
             IStatefulInterviewRepository interviewRepository = null, 
@@ -28,17 +28,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             QuestionInstructionViewModel instructionViewModel = null,
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
-            return new MultiOptionQuestionViewModel(
-                questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+            var questionnaireRepository = questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>();
+            var statefulInterviewRepository = interviewRepository ?? Mock.Of<IStatefulInterviewRepository>();
+
+            var liteEventRegistry = eventRegistry ?? Mock.Of<ILiteEventRegistry>();
+
+            return new CategoricalMultiViewModel(
+                questionStateViewmodel ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(liteEventRegistry, statefulInterviewRepository, questionnaireStorage),
+                questionnaireRepository,
+                liteEventRegistry,
+                statefulInterviewRepository,
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 instructionViewModel ?? Mock.Of<QuestionInstructionViewModel>(),
-                mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.ThrottlingViewModel());
         }
     }

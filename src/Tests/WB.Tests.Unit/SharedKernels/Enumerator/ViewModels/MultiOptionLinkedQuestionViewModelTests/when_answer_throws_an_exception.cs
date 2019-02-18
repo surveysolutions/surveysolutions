@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 })
             });
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = Abc.SetUp.StatefulInterview(questionnaire);
 
 
             var interviews = Create.Fake.StatefulInterviewRepositoryWith(interview);
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel.Init("interviewId", questionId, Create.Other.NavigationState());
 
             questionViewModel.Options.Last().Checked = true;
-            questionViewModel.ToggleAnswerAsync(questionViewModel.Options.Last()).WaitAndUnwrapException();
+            questionViewModel.Options.Last().CheckAnswerCommand.Execute();
         }
 
         [Test] 
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         public void should_not_select_the_last_option () =>
             Assert.That(questionViewModel.Options.Last().Checked, Is.False);
 
-        static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
+        static CategoricalMultiLinkedToQuestionViewModel questionViewModel;
         static Identity questionId;
         static Mock<AnsweringViewModel> answering;
     }

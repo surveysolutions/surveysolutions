@@ -25,8 +25,9 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
                 ""title"": ""{2}"",
                 ""propagationKind"": ""{3}"",
                 ""rosterSizeSource"":""FixedTitles"",
-                ""fixedRosterTitles"": {4}
-            }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles);
+                ""fixedRosterTitles"": {4},
+                ""isPlainMode"": ""{5}""
+            }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles, true);
 
             deserializer = CreateCommandDeserializer();
             BecauseOf();
@@ -61,6 +62,9 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 
         [NUnit.Framework.Test] public void should_return_second_fixed_roster_title_value_2_0 () =>
             ((UpdateGroup)result).FixedRosterTitles[1].Value.Should().Be("2.0");
+
+        [NUnit.Framework.Test] public void should_return_IsPlainMode_value_true() =>
+            ((UpdateGroup)result).IsPlainMode.Should().Be(true);
 
 
         private static ICommand result;

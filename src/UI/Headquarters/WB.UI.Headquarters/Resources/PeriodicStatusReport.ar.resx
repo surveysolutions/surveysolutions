@@ -180,7 +180,7 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>عدد المقابلات المكتملة</value>
   </data>
-  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
     <value>عدد المقابلات المكتملة من قبل الفريق. </value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>عدد معاملات المقابلات من قبل المشرف</value>
   </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>عدد الموافقات والرفض من قبل المشرف على المقابلات التي تم جمعها من قبل {0}.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">

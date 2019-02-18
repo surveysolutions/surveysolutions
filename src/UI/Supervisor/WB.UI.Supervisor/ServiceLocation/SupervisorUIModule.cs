@@ -5,13 +5,11 @@ using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -44,8 +42,6 @@ namespace WB.UI.Supervisor.ServiceLocation
             
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
-            registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();
-            registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
@@ -107,7 +103,7 @@ namespace WB.UI.Supervisor.ServiceLocation
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
-            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
+            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicense();
 #endif
             CommandRegistry
                 .Setup<StatefulInterview>()

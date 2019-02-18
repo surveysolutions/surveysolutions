@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.SingleOptionQuestion(singleLinkedId, "single", linkedToQuestionId: textListId),
             });
 
-            interview = Setup.StatefulInterview(questionnaireDocument);
+            interview = SetUp.StatefulInterview(questionnaireDocument);
             interview.Apply(Create.Event.InterviewSynchronized(
                 Create.Entity.InterviewSynchronizationDto(answers: new AnsweredQuestionSynchronizationDto[]
                 {

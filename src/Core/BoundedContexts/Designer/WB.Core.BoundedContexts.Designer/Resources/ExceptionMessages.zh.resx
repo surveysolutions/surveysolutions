@@ -127,7 +127,7 @@
     <value>所上传的文件不是图片</value>
   </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
-    <value>您不可以移动子模块{0}因为位置{1}不接受。</value>
+    <value>您不可以移动问卷子块{0}因为位置{1}不接受。</value>
   </data>
   <data name="CantPasteQuestion" xml:space="preserve">
     <value>问题不能粘贴到这里。</value>
@@ -154,7 +154,7 @@
     <value>尝试添加组{0}进组{1}失败。但组{1}在文件{2}中不存在。</value>
   </data>
   <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
-    <value>尝试导入已经被删除的问卷模版</value>
+    <value>尝试导入已经被删除的问卷</value>
   </data>
   <data name="InvalidFixedTitle" xml:space="preserve">
     <value>无效的名称列表</value>
@@ -299,5 +299,8 @@
   </data>
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>id为{0}的变量无法在问卷{1}中找到</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>在excel文件中无法找到表头 {0} </value>
   </data>
 </root>

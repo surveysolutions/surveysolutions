@@ -42,7 +42,8 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingletonWithConstructorArguments<IBackupRestoreService, BackupRestoreService>(
                 new ConstructorArgument("privateStorage", context => pathToLocalDirectory),
                 new ConstructorArgument("encryptionService",
-                    context => new RsaEncryptionService(context.Get<ISecureStorage>())));
+                    context => new RsaEncryptionService(context.Get<ISecureStorage>())),
+                new ConstructorArgument("sendTabletInfoRelativeUrl", context => "api/supervisor/v1/tabletInfo"));
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -56,12 +57,9 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
-            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
             registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
             registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
             

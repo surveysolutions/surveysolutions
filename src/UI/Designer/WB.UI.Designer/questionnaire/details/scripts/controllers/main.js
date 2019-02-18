@@ -212,7 +212,7 @@ angular.module('designerApp')
                 hotkeys.toggleCheatSheet();
             };
 
-            $scope.answerTypeClass = {
+            $rootScope.answerTypeClass = {
                 YesNo: 'icon-singleoption',
                 DropDownList: 'icon-singleoption',
                 MultyOption: 'icon-multyoption',

@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                         query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
                     }
 
-                    if (input.Version.HasValue)
+                    if ((input.Version ?? 0) > 0)
                     {
                         query = query.Where(x => x.Version == input.Version.Value);
                     }

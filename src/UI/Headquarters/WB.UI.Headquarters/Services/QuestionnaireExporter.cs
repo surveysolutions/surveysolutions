@@ -103,6 +103,8 @@ namespace WB.UI.Headquarters.Services
                 foreach (var lookup in questionnaire.LookupTables)
                 {
                     var lookupContent = this.lookupTablesStorage.Get(questionnaireIdentity, lookup.Key);
+                    if(lookupContent == null) continue;
+                    
                     var lookupBytes = Convert.FromBase64String(lookupContent.Content);
                     PutEntry($"Lookup Tables/{lookup.Key.FormatGuid()}.txt", lookupBytes);
                 }
@@ -110,6 +112,9 @@ namespace WB.UI.Headquarters.Services
                 foreach (var translation in questionnaire.Translations)
                 {
                     var translations = this.translationManagementService.GetAll(questionnaireIdentity, translation.Id);
+
+                    if(translations == null) continue;
+                    
                     var translationFile = this.translationsExportService.GenerateTranslationFile(questionnaire,
                         translation.Id,
                         new QuestionnaireTranslation(translations));

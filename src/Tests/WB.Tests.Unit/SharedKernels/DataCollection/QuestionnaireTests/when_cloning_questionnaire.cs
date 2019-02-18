@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             questionnaireDocumentFromRepository.Title = originalTitle;
 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
-                = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
+                = SetUp.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(questionnaireIdentity: questionnaireIdentity));
 
             plainQuestionnaireRepositoryMock = Mock.Get(Mock.Of<IQuestionnaireStorage>(_

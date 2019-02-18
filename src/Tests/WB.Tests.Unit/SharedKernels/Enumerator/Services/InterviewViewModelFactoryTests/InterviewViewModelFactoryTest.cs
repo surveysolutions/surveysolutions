@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == plainQuestionnaire);
 
-            var statefulInterview = Setup.StatefulInterview(questionnaire);
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(statefulInterview);
+            var statefulInterview = SetUp.StatefulInterview(questionnaire);
+            var statefulInterviewRepository = SetUp.StatefulInterviewRepository(statefulInterview);
 
             var settings = Mock.Of<IInterviewerSettings>(s => s.ShowVariables == false);
             var navigationState = Mock.Of<NavigationState>();
@@ -46,12 +46,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewViewModelFact
                 .Returns(Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
                     questionnaireStorage: questionnaireStorage));
 
-            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, settings, serviceLocator.Object);
+            var factory = Create.Service.InterviewViewModelFactory(questionnaireStorage, statefulInterviewRepository, serviceLocator.Object, settings);
             
             
             //act
             var entities = factory.GetEntities(interviewId.ToString(), chapterIdentity, navigationState).ToList();
-            
             
             //assert
             Assert.That(entities.Count, Is.EqualTo(1));

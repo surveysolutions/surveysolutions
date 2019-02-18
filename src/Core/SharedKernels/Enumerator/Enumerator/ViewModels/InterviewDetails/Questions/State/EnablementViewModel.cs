@@ -50,8 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.entityIdentity = entityIdentity;
 
             var interview = this.interviewRepository.Get(this.interviewId);
-            this.HideIfDisabled = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language)
-                    .ShouldBeHiddenIfDisabled(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            this.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(entityIdentity.Id);
 
             this.UpdateSelfFromModel();
             this.eventRegistry.Subscribe(this, interviewId);

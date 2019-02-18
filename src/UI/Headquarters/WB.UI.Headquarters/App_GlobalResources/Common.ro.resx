@@ -303,4 +303,8 @@
   <data name="НasErrors" xml:space="preserve">
     <value>Cu erori</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+      <value>Selectează chestionarul</value>
+      <comment>Selectează chestionarul</comment>
+  </data>
 </root>

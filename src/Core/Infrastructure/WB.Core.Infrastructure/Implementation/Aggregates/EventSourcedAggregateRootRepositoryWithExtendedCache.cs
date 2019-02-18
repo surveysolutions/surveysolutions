@@ -17,8 +17,8 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
         private ImmutableList<IEventSourcedAggregateRoot> cache = ImmutableList<IEventSourcedAggregateRoot>.Empty;
 
-        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository, int cacheSize = 100)
-            : base(eventStore, snapshotStore, repository)
+        public EventSourcedAggregateRootRepositoryWithExtendedCache(IEventStore eventStore, IDomainRepository repository, int cacheSize = 100)
+            : base(eventStore, repository)
         {
             this.cacheSize = cacheSize;
         }

@@ -10,7 +10,7 @@ namespace WB.UI.Supervisor.Activities
         ScreenOrientation = ScreenOrientation.Portrait, 
         Theme = "@style/AppTheme")]
     [MvxActivityPresentation]
-    public class SplashActivity : EnumeratorSplashScreenAppCompatActivity<SupervisorSetup, SupervisorMvxApplication>
+    public class SplashActivity : EnumeratorSplashScreenAppCompatActivity<Setup, SupervisorMvxApplication>
     {
         public SplashActivity() : base(Resource.Layout.splash)
         {

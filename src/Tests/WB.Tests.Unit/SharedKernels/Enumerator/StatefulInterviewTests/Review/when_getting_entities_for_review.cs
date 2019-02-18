@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.Review
                 }
             );
 
-            var interview = Setup.StatefulInterview(questionnaire);
+            var interview = SetUp.StatefulInterview(questionnaire);
 
             // Act
             var entities = interview.GetUnderlyingEntitiesForReview(Create.Identity(chapterId)).ToList();

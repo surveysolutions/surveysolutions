@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     internal class when_switching_translation_language_to_existing_language : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
                 => questionnaire.GetTranslationLanguages() == new [] { language });
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -147,6 +148,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string GetRosterTitle(Identity rosterIdentity)
         {
             return this.tree.GetRoster(rosterIdentity).RosterTitle;
+        }
+
+        public Section GetSection(Guid sectionId, IEnumerable<int> rosterVector)
+        {
+            var group = this.tree.GetGroup(new Identity(sectionId, rosterVector is RosterVector rv ? rv : new RosterVector(rosterVector)));
+            
+            return new Section(group.IsDisabled, group.CountEnabledQuestions, group.CountEnabledAnsweredQuestions);
         }
     }
 }

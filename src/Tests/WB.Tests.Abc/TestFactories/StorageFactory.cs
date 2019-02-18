@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Amazon.S3;
 using Amazon.S3.Transfer;
+using Main.Core.Documents;
 using Microsoft.AspNet.Identity;
 using Moq;
 using SQLite;
@@ -16,6 +17,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
@@ -109,6 +112,24 @@ namespace WB.Tests.Abc.TestFactories
                 );
 
             return optionsRepository;
+        }
+
+        public IStatefulInterviewRepository InterviewRepository(StatefulInterview interview)
+        {
+            var result = new Mock<IStatefulInterviewRepository>();
+            result.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+            return result.Object;
+        }
+
+        public IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
+        {
+            var result = new Mock<IQuestionnaireStorage>();
+            result.Setup(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
+                .Returns(Create.Entity.PlainQuestionnaire(questionnaire));
+
+            return result.Object;
         }
     }
 }

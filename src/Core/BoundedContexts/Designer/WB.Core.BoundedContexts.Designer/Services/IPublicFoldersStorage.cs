@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 
 namespace WB.Core.BoundedContexts.Designer.Services
@@ -19,5 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId);
 
         IEnumerable<QuestionnaireListViewFolder> GetFoldersPath(Guid? folderId);
+
+        Task<List<QuestionnaireListViewFolder>> GetAllFoldersAsync();
     }
 }

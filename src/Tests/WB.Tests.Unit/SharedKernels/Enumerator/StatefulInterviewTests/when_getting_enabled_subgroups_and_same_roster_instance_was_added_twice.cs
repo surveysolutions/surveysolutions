@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Create.Entity.Roster(rosterId, rosterSizeQuestionId: questionId),
                 });
             
-            statefulInterview = Setup.StatefulInterview(questionnaire);
+            statefulInterview = SetUp.StatefulInterview(questionnaire);
             statefulInterview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, 1);
             BecauseOf();
         }
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
-            enabledSubgroupsIdentities = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
+            enabledSubgroupsIdentities = statefulInterview.GetEnabledSubgroupsAndRosters(selectedGroupIdentity).ToArray();
         }
 
         [NUnit.Framework.Test] public void should_contain_1_identity () =>

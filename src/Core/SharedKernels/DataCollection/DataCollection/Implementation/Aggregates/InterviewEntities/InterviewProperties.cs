@@ -40,5 +40,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsValid { get; set; }
+
+        public bool? IsAudioRecordingEnabled { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                        && _.IsRosterSizeQuestion(questionId.Id) == false
             );
 
-            var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
+            var filteredOptionsViewModel = SetUp.FilteredOptionsViewModel(new List<CategoricalOption>
             {
                 Create.Entity.CategoricalQuestionOption(1, "item1"),
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
@@ -64,14 +64,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
         public void BecauseOf() 
         {
             viewModel.Options.First().Checked = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
+            viewModel.Options.First().CheckAnswerCommand.Execute();
         }
 
         [NUnit.Framework.Test] public void should_execute_command_with_checked_values_2_and_1 () =>
             ((AnswerMultipleOptionsQuestionCommand) executedCommand)
                 .SelectedValues.Should().BeEquivalentTo(new[] { 2, 1 });
 
-        static MultiOptionQuestionViewModel viewModel;
+        static CategoricalMultiViewModel viewModel;
         static Identity questionId;
         static Guid questionGuid;
         static Mock<AnsweringViewModel> answeringMock;

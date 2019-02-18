@@ -254,12 +254,6 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0}（版本{1}）</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>收集到的所有数据将以备份文件的形式保存在这台设备上。</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>备份收集到的所有信息</value>
-  </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>保存时间：</value>
   </data>
@@ -734,5 +728,121 @@
   </data>
   <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>以{2}收到{1}中的{0}({3}%)</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>正在同步任务</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>分配</value>
+  </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>正在搜索……</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>被督导员批准于 {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>被总部驳回于 {0}</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>负责 {0}</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>收集到的所有数据将以备份文件的形式保存在这台设备上。</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>备份收集到的所有信息</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>面访处于无效状态且无法打开。请联系技术支持或者尝试同步至正确状态。</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>扫描的时候差错</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>正在创建面访</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>需要耗时数分钟，
+请勿退出此程序。</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>面访将很快开始</value>
+  </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>调查员属于另外一个团队。请与总部网站同步</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>离线同步必须得到定位许可</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>地图同步</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>允许和总部同步</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>如果你希望只和移动端的督导员app同步，请关闭此设置。当初次和督导员app同步之后，将无法再启用此设置。</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>一旦与督导员app至少有一个成功的同步之后，就再无法与总部进行同步</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>重新分配</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>重新分配</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>为面访选定新的负责人。
+它将在下次同步之后显示在访员app</value>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>检查废弃的面访</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>调查员的同步</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>正在同步 {1} 的{0} 个调查员</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>督导员细节信息的同步</value>
+  </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>正在接收 {0}</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>正在接收审计信息</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>已发送  {2} ({3}%)  {1} 的 {0} </value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>督导员通常拥有总部的最新更新，故在离线同步可用之前应该在团队内部最后同步。</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>督导员的app需要被同步。</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>上传审计信息</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>正发送app更新</value>
+  </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>正在上传logo</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>该用户不再属于督导员团队。详情请联系您的总部。</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>正在传送任务</value>
+  </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>正在更新问卷</value>
   </data>
 </root>

@@ -134,7 +134,7 @@ function hubStarter(options) {
             queryString.interviewId = options.interviewId;
         }
     
-        $.connection.hub.qs = Object.assign(options, queryString);
+        $.connection.hub.qs = _.assign(options, queryString);
     
         // { transport: supportedTransports }
         wrap($.signalR.hub.start({ transport: config.supportedTransports })).then(() => {

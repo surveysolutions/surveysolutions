@@ -6,6 +6,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
     {
         public const bool AutoUpdateEnabledDefault = true;
 
-        public bool AutoUpdateEnabled { get; set; } = AutoUpdateEnabledDefault;
+        public bool AutoUpdateEnabled { get; set; }
+    }
+
+    public static class InterviewerSettingsExtensions
+    {
+        public static bool IsAutoUpdateEnabled(this InterviewerSettings settings)
+        {
+            if (settings == null) return InterviewerSettings.AutoUpdateEnabledDefault;
+
+            return settings.AutoUpdateEnabled;
+        }
     }
 }

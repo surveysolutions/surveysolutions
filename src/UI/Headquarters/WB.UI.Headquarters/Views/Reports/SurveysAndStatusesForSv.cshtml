@@ -146,6 +146,14 @@
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
                     <h1>@Pages.SurveysAndStatuses_Overview</h1>
+                    <i>@Pages.SurveysAndStatuses_SupervisorDescription</i>
+
+                    <p>
+                        @if (Model.QuestionnaireId.HasValue)
+                        {
+                            @Html.ActionLink(Reports.ToAllQuestionnaires, "SurveysAndStatusesForSv")
+                        }
+                    </p>
                 </div>
                 <div class="dataTables_wrapper no-footer">
                     <table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-mobile-devices dataTable no-footer"

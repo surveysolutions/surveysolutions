@@ -48,6 +48,9 @@
       <HintPath>..\..\..\..\packages\Autofac.4.8.1\lib\netstandard1.1\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CommonMark.NET.0.15.1\lib\portable-net45+wp80+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\CommonMark.dll</HintPath>
+    </Reference>
     <Reference Include="Autofac.Extras.MvvmCross, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.Extras.MvvmCross.5.0.0\lib\netstandard2.0\Autofac.Extras.MvvmCross.dll</HintPath>
     </Reference>
@@ -190,7 +193,6 @@
     <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Reactive.Linq.3.1.1\lib\netstandard1.3\System.Reactive.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Android.Arch.Core.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -292,6 +294,7 @@
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
     <Compile Include="CustomBindings\ExoPlayerBinding.cs" />
+    <Compile Include="CustomBindings\TextViewHtmlWithLinksBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateModeBinding.cs" />
     <Compile Include="CustomBindings\WebViewPdfFilePathBinding.cs" />
     <Compile Include="CustomControls\PdfViewFragment.cs" />
@@ -446,6 +449,7 @@
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutOptionBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
+    <Compile Include="ValueCombiners\MakeMarkdownLinksExecutableValueCombiner.cs" />
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2400,6 +2404,11 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\progress_bar_loading_indeterminate.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_group_plain_roster_title.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

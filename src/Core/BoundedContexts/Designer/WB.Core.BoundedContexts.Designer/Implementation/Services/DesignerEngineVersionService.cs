@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                Version = 24, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -147,7 +147,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         Description = "New types of attachments added"
                     }
                 }
-            }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IGroup>(q => !q.IsRoster && !String.IsNullOrWhiteSpace(q.VariableName)).Any(),
+                        Description = "Contains section with not empty variable name"
+                    }
+                }
+            },
         };
 
         private bool IsNonImageAttachment(string contentId) =>

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.Roster(rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: questionId),
             });
 
-            interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
+            interview = SetUp.InterviewForQuestionnaireDocument(questionnaireDocument);
             interview.Apply(Create.Event.YesNoQuestionAnswered(questionId: questionId, answeredOptions: new []
             {
                 Create.Entity.AnsweredYesNoOption(value: option_NotChanged_FromNo______ToNo_____, answer: false),
