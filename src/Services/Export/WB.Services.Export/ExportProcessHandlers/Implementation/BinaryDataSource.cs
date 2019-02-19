@@ -21,10 +21,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger logger;
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
 
         public BinaryDataSource(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IInterviewFactory interviewFactory,
             IQuestionnaireStorage questionnaireStorage,
             ITenantApi<IHeadquartersApi> tenantApi,

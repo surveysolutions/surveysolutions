@@ -52,7 +52,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             ICsvWriter csvWriter = null)
         {
             return new CommentsExporter(
-                Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings()),
+                Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 tenantApi ?? Create.HeadquartersApi(),

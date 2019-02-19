@@ -14,7 +14,7 @@ namespace WB.Services.Export.ExportProcessHandlers
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IFileBasedExportedDataAccessor FileBasedExportedDataAccessor;
-        protected readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        protected readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         protected readonly IDataExportProcessesService dataExportProcessesService;
 
         protected string ExportTempDirectoryPath;
@@ -22,7 +22,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected BaseAbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;

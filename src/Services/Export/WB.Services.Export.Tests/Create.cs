@@ -59,7 +59,7 @@ namespace WB.Services.Export.Tests
             IFileSystemAccessor fileSystemAccessor = null,
             ITenantApi<IHeadquartersApi> headquartersApi = null)
         {
-            return new DiagnosticsExporter(Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings()),
+            return new DiagnosticsExporter(Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 headquartersApi ?? HeadquartersApi());
@@ -163,9 +163,9 @@ namespace WB.Services.Export.Tests
                 tenantApi ?? HeadquartersApi());
         }
 
-        public static IOptions<InterviewDataExportSettings> InterviewDataExportSettings()
+        public static IOptions<ExportServiceSettings> InterviewDataExportSettings()
         {
-            return Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings());
+            return Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings());
         }
 
         public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
@@ -281,7 +281,7 @@ namespace WB.Services.Export.Tests
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 Create.InterviewErrorsExporter(),
                 csvWriter ?? Mock.Of<ICsvWriter>(), 
-                Mock.Of<IOptions<Interview.InterviewDataExportSettings>>(s => s.Value == new InterviewDataExportSettings()),
+                Mock.Of<IOptions<ExportServiceSettings>>(s => s.Value == new ExportServiceSettings()),
                 Mock.Of<ILogger<InterviewsExporter>>());
         }
 

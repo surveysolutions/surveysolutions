@@ -20,7 +20,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             ITabularFormatExportService tabularFormatExportService,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
