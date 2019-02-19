@@ -17,7 +17,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected AbstractExternalStorageDataExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService, 
             IDataExportFileAccessor dataExportFileAccessor,
             IBinaryDataSource binaryDataSource) :

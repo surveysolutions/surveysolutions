@@ -18,7 +18,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor, IBinaryDataSource binaryDataSource)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,

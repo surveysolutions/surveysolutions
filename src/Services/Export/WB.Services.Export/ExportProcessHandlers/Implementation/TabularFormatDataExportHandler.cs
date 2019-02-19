@@ -21,7 +21,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,

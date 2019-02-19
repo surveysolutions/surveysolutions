@@ -19,7 +19,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,

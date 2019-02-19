@@ -18,7 +18,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor, 
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
+            IOptions<ExportServiceSettings> interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService, 
             ITabularFormatExportService tabularFormatExportService,
             IDataExportFileAccessor dataExportFileAccessor)

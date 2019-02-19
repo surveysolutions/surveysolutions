@@ -1,10 +1,10 @@
-﻿namespace WB.Services.Export.Interview
+﻿namespace WB.Services.Export
 {
-    public class InterviewDataExportSettings
+    public class ExportServiceSettings
     {
         public int MaxRecordsCountPerOneExportQuery { get; set; } = 160;
         public string DirectoryPath { get; set; } = ".export";
         public string AudioAuditFolderName { get; set; } = "AudioAudit";
-        public int ParadataQueryLimit { get; set; } = 4;
+        public int DefaultEventQueryPageSize { get; set; } = 10_000;
     }
 }

@@ -19,7 +19,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public class CommentsExporter : ICommentsExporter
     {
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
@@ -46,7 +46,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         };
 
         public CommentsExporter(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi,

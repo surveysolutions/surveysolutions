@@ -91,7 +91,7 @@ namespace WB.Services.Export
             FileStorageModule.Register(services, configuration);
 
             // options
-            services.Configure<InterviewDataExportSettings>(configuration.GetSection("ExportSettings"));
+            services.Configure<ExportServiceSettings>(configuration.GetSection("ExportSettings"));
         }
 
         public static void RegisterFunctionalHandlers(this IServiceCollection services, params Type[] implementingTypes)

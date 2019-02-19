@@ -16,7 +16,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
