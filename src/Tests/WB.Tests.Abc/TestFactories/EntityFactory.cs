@@ -2071,6 +2071,8 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
             AssignmentInterviewId interviewId = null,
             string questionnaireOrRosterName = null,
+            AssignmentEmail assignmentEmail = null,
+            AssignmentPassword assignmentPassword = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2079,7 +2081,9 @@ namespace WB.Tests.Abc.TestFactories
             Quantity = quantity,
             RosterInstanceCodes = rosterInstanceCodes,
             InterviewIdValue = interviewId,
-            Answers = answers
+            Answers = answers,
+            Email = assignmentEmail,
+            Password = assignmentPassword
         };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
@@ -2087,6 +2091,17 @@ namespace WB.Tests.Abc.TestFactories
             Value = responsibleName,
             Column = ServiceColumns.ResponsibleColumnName,
             Responsible = userInfo
+        };
+
+        public AssignmentEmail AssignmentEmail(string email) => new AssignmentEmail
+        {
+            Value = email,
+            Column = ServiceColumns.EmailColumnName
+        };
+        public AssignmentPassword AssignmentPassword(string password) => new AssignmentPassword
+        {
+            Value = password,
+            Column = ServiceColumns.PasswordColumnName
         };
 
         public AssignmentQuantity AssignmentQuantity(string quantity = null, int? parsedQuantity = null) => new AssignmentQuantity
