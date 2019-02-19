@@ -12,7 +12,7 @@ namespace WB.Services.Infrastructure.EventSourcing
     {
         static readonly ConcurrentDictionary<Type, Dictionary<Type, MethodInfo>> eventsMapCache = new ConcurrentDictionary<Type, Dictionary<Type, MethodInfo>>();
 
-        public static Dictionary<Type, MethodInfo> GetEventHandlersMap(this IStatefulDenormalizer handler)
+        private static Dictionary<Type, MethodInfo> GetEventHandlersMap(this IStatefulDenormalizer handler)
         {
             return eventsMapCache.GetOrAdd(handler.GetType(), h =>
             {
@@ -51,9 +51,9 @@ namespace WB.Services.Infrastructure.EventSourcing
             });
         }
 
-        public static async Task Handle(this IStatefulDenormalizer denormalizer, Event ev, CancellationToken token = default)
+        public static async Task Handle(this IStatefulDenormalizer eventsHandler, Event ev, CancellationToken token = default)
         {
-            var handler = denormalizer.GetEventHandlersMap();
+            var handler = eventsHandler.GetEventHandlersMap();
 
             if (handler.TryGetValue(ev.Payload.GetType(), out var method))
             {
@@ -61,21 +61,24 @@ namespace WB.Services.Infrastructure.EventSourcing
                 {
                     if (method.ReturnType == typeof(Task))
                     {
-                        await (Task) method.Invoke(denormalizer, new[]
+                        await (Task) method.Invoke(eventsHandler, new[]
                         {
                             ev.AsPublishedEvent(), token
                         });
                     }
                     else
                     {
-                        method.Invoke(denormalizer, new[] {ev.AsPublishedEvent()});
+                        method.Invoke(eventsHandler, new[] {ev.AsPublishedEvent()});
                     }
                 }
-                catch (Exception e)
+                catch (TargetInvocationException tie)
                 {
-                    e.Data.Add("handlerMethod", 
-                        $"{denormalizer.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
-                    throw;
+                    var exception = tie.InnerException ?? tie;
+
+                    exception.Data.Add("handlerMethod",
+                            $"{eventsHandler.GetType().Name}.{method.Name}<{ev.Payload.GetType().Name}>(...)");
+                    
+                    throw exception;
                 }
             }
         }

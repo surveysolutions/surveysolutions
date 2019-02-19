@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Events;
+using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -16,6 +21,8 @@ using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tests.EventsProcessorTests;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
@@ -540,6 +547,58 @@ namespace WB.Services.Export.Tests
                     CancellationToken.None))
                 .ReturnsAsync(questionnaire);
             return questionnaireStorage.Object;
+        }
+
+        public static EventsFactory Event = new EventsFactory();
+
+        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api)
+        {
+            services.AddMock<ITenantApi<IHeadquartersApi>>(c => c.For(It.IsAny<TenantInfo>()) == api);
+            services.AddScoped<ITenantContext, TenantContext>();
+
+            services.AddDbContext<TenantDbContext>(c =>
+            {
+                c.UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
+                c.ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            }, ServiceLifetime.Singleton);
+
+       //     services.AddLogging();
+            services.AddMock<IDataExportProcessesService>();
+            services.AddTransient<EventsProcessor>();
+
+            var provider = services.BuildServiceProvider();
+            provider.SetTenant(new TenantInfo("http://localhost", TenantId.None, "test"));
+            return provider;
+        }
+
+    }
+
+    public class EventsFactory
+    {
+        private int globalSeq = 0;
+        private int eventSeq = 0;
+
+        public Event Event(IEvent payload, Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return new Event()
+            {
+                EventSourceId = interviewId ?? Guid.NewGuid(),
+                Payload = payload,
+                GlobalSequence = globalSeq ?? ++this.globalSeq,
+                Sequence = eventSeq ?? ++this.eventSeq,
+                EventTypeName = payload.GetType().Name,
+                EventTimeStamp = DateTime.UtcNow
+            };
+        }
+
+        public Event CreatedInterview(Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return Event(new InterviewCreated(), interviewId, globalSeq, eventSeq);
+        }
+
+        public Event InterviewOnClientCreated(Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return Event(new InterviewOnClientCreated(), interviewId, globalSeq, eventSeq);
         }
     }
 }
