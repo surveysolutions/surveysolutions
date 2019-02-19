@@ -151,7 +151,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload archive with identifying tab file and collected data..
+        ///   Looks up a localized string similar to Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
+        ///All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
+        ///&lt;br/&gt;
+        ///Optionally can specify the following columns in the main interview level file:&lt;br/&gt;
+        ///_responsible - username of [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string BatchDescription {
             get {
@@ -1114,7 +1118,13 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column, in _quantity column you can specify capacity of assignment..
+        ///   Looks up a localized string similar to Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
+        ///&lt;br/&gt;
+        ///Optionally can specify the following columns:&lt;br/&gt;
+        ///_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+        ///_quantity - capacity of the assignment;&lt;br/&gt;
+        ///_email - email of the respondent (for web-interviews only);&lt;br/&gt;
+        ///_passwo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SimpleDescription {
             get {
