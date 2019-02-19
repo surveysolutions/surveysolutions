@@ -172,12 +172,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             foreach (var serviceValue in (assignmentRow.RosterInstanceCodes ?? Array.Empty<AssignmentValue>()).Union(
-                new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity, assignmentRow.Email, assignmentRow.Password}))
+                new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity,
+                    assignmentRow.Email, assignmentRow.Password}))
             {
                 if (serviceValue == null) continue;
 
                 foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
+            }
+
+            foreach (var error in InconsistentAssignmentSettings(assignmentRow))
+            {
+                yield return error;
             }
         }
 
@@ -284,16 +290,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
             Error<AssignmentQuantity>(Quantity_ExceedsMaxInterviewsCount, "PL0054", string.Format(messages.PL0054_MaxInterviewsCountByAssignmentExeeded, Constants.MaxInterviewsCountByAssignment)),
             Error<AssignmentEmail>(Invalid_Email, "PL0055", messages.PL0055_InvalidEmail),
-            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword),
-
-            InconsistentAssignmentSettings
+            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword)
         };
 
-        private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow, 
-            BaseAssignmentValue value, IQuestionnaire questionnaire)
+        private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow)
         {
             if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
-                (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1))
+                (assignmentRow.Quantity != null && (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1)))
                     yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
         }
 
