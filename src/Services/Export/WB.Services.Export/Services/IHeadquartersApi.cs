@@ -29,10 +29,6 @@ namespace WB.Services.Export.Services
         [Get("/api/export/v1/interview/batch/summaries")]
         Task<List<InterviewAction>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
-        [Get("/api/export/v1/interviews")]
-        Task<List<InterviewEntity>> GetInterviewBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewId, 
-            [Query(CollectionFormat.Multi)] Guid[] entityId = null);
-
         [Get("/api/export/v1/interview/{interviewId}/image/{image}")]
         Task<HttpContent> GetInterviewImageAsync(Guid interviewId, string image);
         

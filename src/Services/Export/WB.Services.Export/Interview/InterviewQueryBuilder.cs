@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using WB.Services.Export.InterviewDataStorage;
@@ -9,6 +10,32 @@ namespace WB.Services.Export.Interview
 {
     public static class InterviewQueryBuilder
     {
+        public static string GetEnabledQuestionAnswersQuery(Question question)
+        {
+            var parentGroup = question.GetParent() as Group;
+            StringBuilder result = new StringBuilder("select ");
+            result.AppendFormat("data.\"{1}\" as data__{1}, data.\"{0}\" as \"data__{0}\"",
+                question.ColumnName, InterviewDatabaseConstants.InterviewId);
+
+            if (parentGroup.IsInsideRoster)
+            {
+                result.AppendFormat(", data.{0} as data__roster_vector", InterviewDatabaseConstants.RosterVector);
+            }
+
+            result.AppendFormat("{1} from \"{0}\" data {1}", parentGroup.TableName, Environment.NewLine);
+            result.AppendFormat("inner join \"{0}\" enablement {1} ", parentGroup.EnablementTableName, Environment.NewLine);
+            result.AppendFormat("on data.{0} = enablement.{0}", InterviewDatabaseConstants.InterviewId);
+            if (parentGroup.IsInsideRoster)
+            {
+                result.AppendFormat(" AND data.{0} = enablement.{0}{1}",
+                    InterviewDatabaseConstants.RosterVector, Environment.NewLine);
+            }
+
+            result.AppendFormat("{2} where data.{1} = any(@ids) {2}    and enablement.\"{0}\" = TRUE {2}     and data.\"{0}\" is not null",
+                question.ColumnName, InterviewDatabaseConstants.InterviewId, Environment.NewLine);
+            return result.ToString();
+        }
+
         public static string GetInterviewsQuery(Group group)
         {
             StringBuilder query = new StringBuilder($"select ");// data.{InterviewDatabaseConstants.InterviewId} as data__interview_id ");
