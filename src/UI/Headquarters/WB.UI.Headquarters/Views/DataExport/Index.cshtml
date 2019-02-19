@@ -271,7 +271,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-link" data-bind="visible: isRunning(@exportParameters), click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
+                    <button type="button" class="btn btn-link" data-bind="visible: isPreparing(@exportParameters) || isRunning(@exportParameters), click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
                 </div>
             </div>
 

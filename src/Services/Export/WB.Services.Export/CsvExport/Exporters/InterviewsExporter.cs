@@ -137,9 +137,9 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 var interviewEntities = this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
-
-                logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
+                
+                //logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
+                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
                 
                 Parallel.ForEach(batch, interviewToExport =>
@@ -159,13 +159,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                     progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
                 });
 
-                logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
+                //logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
+                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
                 trace.Restart();
 
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-                logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
+                //logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
+                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
             }
 
             progress.Report(100);

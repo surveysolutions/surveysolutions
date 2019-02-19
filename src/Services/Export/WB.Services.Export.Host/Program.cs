@@ -135,10 +135,7 @@ namespace WB.Services.Export.Host
 
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
 
-                if (hosting.HostingEnvironment.IsDevelopment())
-                {
-                    logConfig.WriteTo.Console(LogEventLevel.Information);
-                }
+                logConfig.WriteTo.Console(LogEventLevel.Debug);
 
                 Log.Logger = logConfig.CreateLogger();
 

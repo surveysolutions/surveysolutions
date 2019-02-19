@@ -608,7 +608,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public async Task SaveStateAsync(CancellationToken cancellationToken)
+        public Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             var commands = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
@@ -624,6 +624,7 @@ namespace WB.Services.Export.InterviewDataStorage
             }
 
             logger.LogDebug("Commands {count} applied on DB {time}", commands.Count, sw.Elapsed);
+            return Task.CompletedTask;
         }
 
 

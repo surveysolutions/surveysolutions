@@ -7,34 +7,34 @@ namespace WB.Services.Export.Host.Infra
 {
     public class ApplicationVersionMiddleware
     {
-        private readonly RequestDelegate _next;
-        private readonly string _path;
-        private string _productVersion;
+        private readonly RequestDelegate next;
+        private readonly string path;
+        private readonly string productVersion;
 
         public ApplicationVersionMiddleware(RequestDelegate next, string path)
         {
-            _next = next;
-            _path = path.ToLowerInvariant();
+            this.next = next;
+            this.path = path.ToLowerInvariant();
 
             var assembly = Assembly.GetExecutingAssembly();
             var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            _productVersion = fvi.ProductVersion;
+            productVersion = fvi.FileVersion;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.Value.ToLowerInvariant() == _path)
+            if (context.Request.Path.Value.ToLowerInvariant() == path)
             {
 
                 context.Response.StatusCode = 200;
-                context.Response.ContentLength = _productVersion.Length;
+                context.Response.ContentLength = productVersion.Length;
 
-                await context.Response.WriteAsync(_productVersion);
+                await context.Response.WriteAsync(productVersion);
 
             }
             else
             {
-                await this._next(context);
+                await this.next(context);
             }
         }
     }
