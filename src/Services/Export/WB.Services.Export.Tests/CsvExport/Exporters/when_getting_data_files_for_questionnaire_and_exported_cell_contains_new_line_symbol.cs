@@ -40,7 +40,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             // Act
             await readSideToTabularFormatExportService.ExportAsync(questionnaireExportStructure, new List<Guid>(), "",
-                Create.Tenant(), new Progress<int>(), CancellationToken.None);
+                Create.Tenant(), new ExportProgress(), CancellationToken.None);
 
             // Assert
             csvWriterMock.Verify(x => x.WriteData(fileName, It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()));

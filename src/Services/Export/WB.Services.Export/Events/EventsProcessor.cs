@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
@@ -72,7 +72,7 @@ namespace WB.Services.Export.Events
 
                 Stopwatch globalStopwatch = Stopwatch.StartNew();
 
-                var eta = new SimpleRunningAverage(6); // running average window size
+                var eta = new SimpleRunningAverage(10); // running average window size
 
                 var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
@@ -190,17 +190,18 @@ namespace WB.Services.Export.Events
                         var eventsProcessed = metadata.GlobalSequence - sequenceToStartFrom;
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
-                        dataExportProcessesService.UpdateDataExportProgress(processId, percent);
-                        
                         pageSize = (int)eta.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
 
+                        var estimatedTime = eta.Eta(totalEventsToRead - eventsProcessed);
+                        dataExportProcessesService.UpdateDataExportProgress(processId, percent, estimatedTime);
+                        
                         this.logger.LogInformation(
                         "Processed {pageSize} events. " +
                                "GlobalSequence: {sequence:n0} out of {total:n0}. " +
                                "Took {duration:g}. ETA: {eta}",
                         feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
                         , feed.Total,
-                        feedProcessingStopwatch.Elapsed, eta.Eta(totalEventsToRead - eventsProcessed));
+                        feedProcessingStopwatch.Elapsed,estimatedTime);
                     }
                 }
 

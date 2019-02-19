@@ -9,7 +9,7 @@ namespace WB.Services.Export.Services.Processing
     {
         Task<long> AddDataExport(DataExportProcessArgs args);
         Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant);
-        void UpdateDataExportProgress(long processId, int progressInPercents);
+        void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default);
         void DeleteDataExport(long processId, string reason);
         void ChangeStatusType(long processId, DataExportStatus status);
     }

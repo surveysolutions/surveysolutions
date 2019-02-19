@@ -53,9 +53,12 @@ namespace WB.Services.Export.Host.Jobs
         {
             var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
 
+            var eta = job.GetData<string>(EtaField);
+
             args.Status = new DataExportProcessStatus
             {
                 ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
+                TimeEstimation = eta == null ? (TimeSpan?) null : TimeSpan.Parse(eta),
                 BeginDate = job.StartAt,
                 IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
                 Status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField))
@@ -72,10 +75,15 @@ namespace WB.Services.Export.Host.Jobs
             return jobs;
         }
         
-        public void UpdateDataExportProgress(long processId, int progressInPercents)
+        public void UpdateDataExportProgress(long processId, int progressInPercents, TimeSpan estimatedTime = default)
         {
             logger.LogTrace("Update progress: {progressInPercents}%", progressInPercents);
             jobProgressReporter.UpdateJobData(processId, ProgressField, progressInPercents.ToString());
+
+            if (estimatedTime != default)
+            {
+                jobProgressReporter.UpdateJobData(processId, EtaField, estimatedTime);
+            }
         }
 
         public void DeleteDataExport(long processId, string reason)
@@ -90,5 +98,6 @@ namespace WB.Services.Export.Host.Jobs
 
         public const string StatusField = "exportStatus";
         public const string ProgressField = "progress";
+        public const string EtaField = "eta";
     }
 }

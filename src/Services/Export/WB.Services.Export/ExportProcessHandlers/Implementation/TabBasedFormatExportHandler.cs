@@ -31,14 +31,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, ExportProgress progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportProgress = new Progress<int>();
+            var exportProgress = new ExportProgress();
 
-            exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(donePercent / 2);
+            exportProgress.ProgressChanged += (sender, state) => progress.Report(new ProgressState
+                {
+                    Percent = state.Percent / 2,
+                    Eta = state.Eta
+                });
 
             await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(
                 exportSettings, ExportTempDirectoryPath, exportProgress, cancellationToken);

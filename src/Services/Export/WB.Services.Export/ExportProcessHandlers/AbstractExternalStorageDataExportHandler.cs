@@ -31,7 +31,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override bool CompressExportedData => false;
         
         protected override async Task ExportDataIntoDirectory(ExportSettings settings,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             using (this.GetClient(this.accessToken))
