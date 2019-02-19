@@ -62,7 +62,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         public async Task ExportInterviewsInTabularFormatAsync(
             ExportSettings settings,
             string tempPath,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var tenant = settings.Tenant;
@@ -75,10 +75,10 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
-            var exportInterviewsProgress = new Progress<int>();
-            var exportCommentsProgress = new Progress<int>();
-            var exportInterviewActionsProgress = new Progress<int>();
-            var exportDiagnosticsProgress = new Progress<int>();
+            var exportInterviewsProgress = new ExportProgress();
+            var exportCommentsProgress = new ExportProgress();
+            var exportInterviewActionsProgress = new ExportProgress();
+            var exportDiagnosticsProgress = new ExportProgress();
 
             ProgressAggregator progressAggregator = new ProgressAggregator();
             progressAggregator.Add(exportInterviewsProgress, 0.4);

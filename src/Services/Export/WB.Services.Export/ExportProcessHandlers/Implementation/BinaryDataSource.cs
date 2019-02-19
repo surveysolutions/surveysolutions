@@ -41,7 +41,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         public async Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
             Func<BinaryData, Task> binaryDataAction, 
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();

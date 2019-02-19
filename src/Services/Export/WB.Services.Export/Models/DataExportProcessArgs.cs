@@ -10,6 +10,7 @@ namespace WB.Services.Export.Models
         public DataExportStatus Status { get; set; } = DataExportStatus.Queued;
         public int ProgressInPercents { get; set; }
         public bool IsRunning { get; set; }
+        public TimeSpan? TimeEstimation { get; set; }
     }
 
     public class DataExportProcessArgs

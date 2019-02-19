@@ -68,7 +68,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
 
             //act
             await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
-                new Progress<int>(), CancellationToken.None);
+                new ExportProgress(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile, Has.Count.EqualTo(2));

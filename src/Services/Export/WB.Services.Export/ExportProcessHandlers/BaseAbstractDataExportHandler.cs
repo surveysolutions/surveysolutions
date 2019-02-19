@@ -31,20 +31,25 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        private void HandleProgress(DataExportProcessArgs process, Progress<int> exportProgress)
+        private void HandleProgress(DataExportProcessArgs process, ExportProgress exportProgress)
         {
-            int lastPercent = 0;
             var sw = Stopwatch.StartNew();
 
-            exportProgress.ProgressChanged += (sender, donePercent) =>
+            exportProgress.ProgressChanged += (sender, progress) =>
             {
-                // throttle progress changed events 
-                if (donePercent != lastPercent || sw.Elapsed > TimeSpan.FromSeconds(1))
+                if (sw.Elapsed > TimeSpan.FromSeconds(1))
                 {
-                    this.dataExportProcessesService.UpdateDataExportProgress(process.ProcessId, donePercent);
+                    lock (sw)
+                    {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(1))
+                        {
+                            this.dataExportProcessesService.UpdateDataExportProgress(process.ProcessId,
+                                progress.Percent,
+                                progress.Eta ?? default);
 
-                    lastPercent = donePercent;
-                    sw.Restart();
+                            sw.Restart();
+                        }
+                    }
                 }
             };
         }
@@ -62,7 +67,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var exportProgress = new Progress<int>();
+                var exportProgress = new ExportProgress();
 
                 HandleProgress(dataExportProcessArgs, exportProgress);
 
@@ -79,7 +84,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
 
         protected abstract Task DoExportAsync(DataExportProcessArgs processArgs,
-            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken);
+            ExportSettings exportSettings, string archiveName, ExportProgress exportProgress, CancellationToken cancellationToken);
 
         protected abstract DataExportFormat Format { get; }
 

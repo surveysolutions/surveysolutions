@@ -53,7 +53,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             List<InterviewToExport> interviewsToExport,
             string basePath,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -70,7 +70,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             string basePath,
             List<InterviewToExport> interviewIdsToExport,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
@@ -121,26 +121,23 @@ namespace WB.Services.Export.CsvExport.Exporters
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             long totalInterviewsProcessed = 0;
             
             var batchOptions = new BatchOptions { Max = this.options.Value.MaxRecordsCountPerOneExportQuery };
+            var sw = Stopwatch.StartNew();
+            var progressState = new ProgressState();
 
             foreach (var batch in interviewIdsToExport.BatchInTime(batchOptions, logger))
             {
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIds = batch.Select(b => b.Id).ToArray();
-                var trace = Stopwatch.StartNew();
-
+               
                 var interviewEntities = this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
-                
-                //logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
-                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
-                trace.Restart();
                 
                 Parallel.ForEach(batch, interviewToExport =>
                 {
@@ -156,16 +153,11 @@ namespace WB.Services.Export.CsvExport.Exporters
                     }
 
                     var interviewsProcessed = Interlocked.Increment(ref totalInterviewsProcessed);
-                    progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
+                    progressState.Update(sw.Elapsed, interviewIdsToExport.Count, interviewsProcessed);
+                    progress.Report(progressState);
                 });
 
-                //logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
-                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
-                trace.Restart();
-
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-                //logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
-                //    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
             }
 
             progress.Report(100);

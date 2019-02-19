@@ -260,10 +260,10 @@
                         <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
                         <!-- /ko -->
                         <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
-                        <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                        <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%' + getEstimatedTime(@exportParameters)"></span>
                         <!-- /ko -->
                         <!-- ko if: isPreparing(@Html.Raw(exportParameters)) -->
-                        <span data-bind="text: '@DataExport.Preparing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                        <span data-bind="text: '@DataExport.Preparing - ' + getProgressInPercents(@exportParameters) + '%' + getEstimatedTime(@exportParameters)"></span>
                         <!-- /ko -->
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">

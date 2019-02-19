@@ -30,7 +30,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
         protected override async Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings settings,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             await binaryDataSource.ForEachInterviewMultimediaAsync(settings,

@@ -90,6 +90,7 @@ namespace WB.Services.Export.Jobs
                 BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
                 LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
                 Progress = dataExportProcessDetails.Status.ProgressInPercents,
+                TimeEstimation = dataExportProcessDetails.Status.TimeEstimation,
                 Format = dataExportProcessDetails.ExportSettings.ExportFormat,
                 ProcessStatus = dataExportProcessDetails.Status.Status,
                 Type = dataExportProcessDetails.ExportSettings.ExportFormat == DataExportFormat.Paradata
@@ -129,6 +130,7 @@ namespace WB.Services.Export.Jobs
             dataExportView.CanRefreshBeRequested = process == null;
             dataExportView.DataExportProcessId = process?.DataExportProcessId;
             dataExportView.ProgressInPercents = process?.Progress ?? 0;
+            dataExportView.TimeEstimation = process?.TimeEstimation;
 
             string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
 
