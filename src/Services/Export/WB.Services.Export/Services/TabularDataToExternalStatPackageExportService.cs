@@ -52,7 +52,7 @@ namespace WB.Services.Export.Services
 
         public async Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
             string[] tabularDataFiles,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
@@ -60,14 +60,14 @@ namespace WB.Services.Export.Services
 
         public async Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant,QuestionnaireId questionnaireId,
             string[] tabularDataFiles,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
         private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant,QuestionnaireId questionnaireId, DataExportFormat format,
-            string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+            string[] dataFiles, ExportProgress progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;
             try

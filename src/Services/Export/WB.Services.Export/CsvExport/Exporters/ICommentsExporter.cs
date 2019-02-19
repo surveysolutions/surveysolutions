@@ -14,7 +14,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             List<Guid> interviewIdsToExport,
             string basePath,
             TenantInfo tenant,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken);
 
         void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string folderPath);

@@ -10,7 +10,7 @@ namespace WB.Services.Export.ExportProcessHandlers
     {
         Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
             Func<BinaryData, Task> binaryDataAction, 
-            IProgress<int> progress, 
+            ExportProgress progress, 
             CancellationToken cancellationToken);
     }
 }

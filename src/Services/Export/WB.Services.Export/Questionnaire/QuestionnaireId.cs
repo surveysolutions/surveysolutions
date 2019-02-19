@@ -1,5 +1,8 @@
-﻿namespace WB.Services.Export.Questionnaire
+﻿using System.Diagnostics;
+
+namespace WB.Services.Export.Questionnaire
 {
+    [DebuggerStepThrough]
     public class QuestionnaireId
     {
         public QuestionnaireId(string id)

@@ -353,7 +353,20 @@
         var dataReference = self.getDataReference(type, format);
         if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
             return false;
+
         return dataReference.ProgressInPercents();
+    }
+
+    self.getEstimatedTime = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
+            return '';
+
+        var timeLeft = dataReference.TimeLeft();
+
+        if (timeLeft == '' || timeLeft == null) return '';
+
+        return ' (ETA: ' + dataReference.TimeLeft() + ')';
     }
 
     self.isInQueue = function (type, format) {

@@ -50,7 +50,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public async Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
-            string basePath, IProgress<int> progress, CancellationToken cancellationToken = default)
+            string basePath, ExportProgress progress, CancellationToken cancellationToken = default)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
