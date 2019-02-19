@@ -186,11 +186,14 @@ namespace WB.Tests.Abc.TestFactories
             InterviewKey interviewKey = null,
             Guid? newSupervisorId = null)
         {
+            var qId = questionnaireId ?? Guid.NewGuid();
+            var uId = userId ?? Guid.NewGuid();
+            var qVersion = questionnaireVersion ?? 15;
             return new SynchronizeInterviewEventsCommand(interviewId ?? Guid.NewGuid(), 
-                userId ?? Guid.NewGuid(), 
-                questionnaireId ?? Guid.NewGuid(), 
-                questionnaireVersion ?? 15,
-                synchronizedEvents ?? new IEvent[0], 
+                uId, 
+                qId, 
+                qVersion,
+                synchronizedEvents ?? new IEvent[1] { Create.Event.InterviewCreated(qId, qVersion) }, 
                 interviewStatus, 
                 createdOnClient,
                 interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()),

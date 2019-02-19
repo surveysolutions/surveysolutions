@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
+    <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
+
+    <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

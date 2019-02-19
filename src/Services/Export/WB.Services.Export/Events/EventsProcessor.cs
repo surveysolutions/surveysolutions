@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -33,6 +33,9 @@ namespace WB.Services.Export.Events
             this.dataExportProcessesService = dataExportProcessesService;
         }
 
+        private int pageSize = 10_000;
+        long? maximumSequenceToQuery = null;
+
         /// <summary>
         /// 
         /// </summary>
@@ -41,9 +44,6 @@ namespace WB.Services.Export.Events
         /// <returns>Last event global sequence</returns>
         public async Task HandleNewEvents(long processId, CancellationToken token = default)
         {
-            long? maximumSequenceToQuery = null;
-            long? startedReadAt = null;
-
             using (var scope = serviceProvider.CreateScope())
             {
                 scope.PropagateTenantContext(tenant);
@@ -51,40 +51,82 @@ namespace WB.Services.Export.Events
                 var tenantDbContext = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
                 await tenantDbContext.Database.MigrateAsync(token);
 
+                var sequenceToStartFrom = tenantDbContext.Metadata.GlobalSequence;
+
                 Stopwatch globalStopwatch = Stopwatch.StartNew();
-                while (true)
+
+                var eta = new SimpleRunningAverage(5);
+
+                var eventsProducer = new BlockingCollection<EventsFeed>(2);
+
+                var eventsReader = Task.Run(async () =>
                 {
+                    var readingAvg = new SimpleRunningAverage(5);
+                    readingAvg.Add(pageSize);
+
+                    var readingSequence = sequenceToStartFrom;
+                    var apiTrack = Stopwatch.StartNew();
+
+                    while (true)
+                    {
+                        if (maximumSequenceToQuery.HasValue
+                            && readingSequence >= maximumSequenceToQuery) break;
+
+                        apiTrack.Restart();
+                        var amount = Math.Min((int)readingAvg.Average, pageSize);
+
+                        var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
+
+                        maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+
+                        readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
+
+                        logger.LogDebug("Read {eventsCount} events from HQ. From {start} to {last} Took {elapsed}",
+                            feed.Events.Count,
+                            readingSequence, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
+                            apiTrack.Elapsed);
+
+                        if (feed.Events.Count > 0)
+                        {
+                            eventsProducer.Add(feed, token);
+                            readingSequence = feed.Events.Last().GlobalSequence;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    eventsProducer.CompleteAdding();
+                }, token);
+
+                dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
+
+                var executionTrack = Stopwatch.StartNew();
+
+                foreach (var feed in eventsProducer.GetConsumingEnumerable())
+                {
+                    executionTrack.Restart();
+
                     using (var tr = tenantDbContext.Database.BeginTransaction())
                     {
                         var metadata = tenantDbContext.Metadata;
-                        startedReadAt = startedReadAt ?? metadata.GlobalSequence;
                         eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        if (maximumSequenceToQuery.HasValue
-                            && metadata.GlobalSequence >= maximumSequenceToQuery) break;
-
-                        dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
-
-                        var feed = await tenant.Api.GetInterviewEvents(metadata.GlobalSequence, 10000);
-                        maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
-
-
                         var feedProcessingStopwatch = Stopwatch.StartNew();
-                        if (feed.Events.Count > 0)
+                        var eventsFilter = scope.ServiceProvider.GetService<IEventsFilter>();
+                        var eventsToPublish = await eventsFilter.FilterAsync(feed.Events);
+
+                        try
                         {
-                            var eventsFilter = scope.ServiceProvider.GetService<IEventsFilter>();
-                            var eventsToPublish = await eventsFilter.FilterAsync(feed.Events);
-
-                            var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>()
-                                .Cast<IStatefulDenormalizer>();
-
-                            try
+                            if (eventsToPublish.Count > 0)
                             {
+                                var handlers = scope.ServiceProvider.GetServices<IFunctionalHandler>();
+
                                 foreach (var handler in handlers)
                                 {
                                     foreach (var ev in eventsToPublish)
                                     {
-                                        
                                         try
                                         {
                                             await handler.Handle(ev, token);
@@ -100,49 +142,45 @@ namespace WB.Services.Export.Events
 
                                     await handler.SaveStateAsync(token);
                                 }
-
-                                metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
-
-                                await tenantDbContext.SaveChangesAsync(token);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.LogCritical(e, "Unhandled exception during event handling");
-                                throw;
                             }
 
-                           
+                            metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+
+                            await tenantDbContext.SaveChangesAsync(token);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogCritical(e, "Unhandled exception during event handling");
+                            throw;
                         }
 
                         tr.Commit();
 
-                     
+                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        var totalEventsToRead = maximumSequenceToQuery - startedReadAt;
-                        var eventsProcessed = metadata.GlobalSequence - startedReadAt;
+                        // ReSharper disable once PossibleInvalidOperationException
+                        var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
+                        var eventsProcessed = metadata.GlobalSequence - sequenceToStartFrom;
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
                         dataExportProcessesService.UpdateDataExportProgress(processId, percent);
                         eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        if (metadata.GlobalSequence >= maximumSequenceToQuery)
-                            break;
+                        pageSize = (int)eta.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
 
-                        feedProcessingStopwatch.Stop();
-                        if (feed.Events.Count > 0)
-                        {
-                            this.logger.LogInformation(
-                                "Last received Global sequence {sequence:n0} out of {total:n0}. Took {duration:g}",
-                                feed.Events.LastOrDefault().GlobalSequence, feed.Total,
-                                feedProcessingStopwatch.Elapsed);
-                        }
+                        this.logger.LogInformation(
+                        "Processed {pageSize} events. " +
+                               "GlobalSequence: {sequence:n0} out of {total:n0}. " +
+                               "Took {duration:g}. ETA: {eta}",
+                        feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
+                        , feed.Total,
+                        feedProcessingStopwatch.Elapsed, eta.Eta(totalEventsToRead - eventsProcessed));
                     }
                 }
 
                 logger.LogInformation("Total database refresh done. Took {elapsed:g}", globalStopwatch.Elapsed);
+                await eventsReader;
             }
-
-
         }
     }
 
