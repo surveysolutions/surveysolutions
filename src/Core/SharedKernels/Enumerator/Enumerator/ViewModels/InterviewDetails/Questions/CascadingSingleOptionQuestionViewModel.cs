@@ -167,6 +167,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpdateOptions()
         {
+            this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
+            this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
+
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
@@ -290,6 +293,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return value.HasValue
                 ? this.Options.FirstOrDefault(x => x.Value == value.Value)
                 : null;
+        }
+
+        public override void Dispose()
+        {
+            foreach (var option in this.Options)
+            {
+                option.BeforeSelected -= this.OptionSelected;
+                option.AnswerRemoved -= this.RemoveAnswer;
+            }
+            this.throttlingModel.Dispose();
+            this.Options.ForEach(x => x.DisposeIfDisposable());
+
+            base.Dispose();
         }
     }
 }
