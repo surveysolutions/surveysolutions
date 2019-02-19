@@ -129,7 +129,7 @@ namespace WB.Tests.Unit
                     validationExpression: null,
                     validationMessage: null,
                     showAsList: false,
-                    showAsListLimit: null));
+                    showAsListThreshold: null));
         }
 
         public static void AddNumericQuestion(

@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         validationExpression: null,
                         validationMessage: null,
                         showAsList: false,
-                        showAsListLimit: null));
+                        showAsListThreshold: null));
 
         [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<SingleQuestion>(questionId)

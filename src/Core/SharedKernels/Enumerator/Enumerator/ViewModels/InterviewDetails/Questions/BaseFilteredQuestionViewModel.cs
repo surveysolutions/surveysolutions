@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected Guid interviewId;
         protected IStatefulInterview interview;
-        private int? answer;
+        protected int? Answer;
 
         public Identity Identity { get; private set; }
 
@@ -146,7 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (selectedOption == null)
                 throw new InvalidOperationException($"Option was not found for value '{optionText}'");
 
-            if (this.answer == selectedOption.Value)
+            if (this.Answer == selectedOption.Value)
             {
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
@@ -163,11 +163,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                this.answer = selectedOption.Value;
+                this.Answer = selectedOption.Value;
             }
             catch (InterviewException ex)
             {
-                this.answer = null;
+                this.Answer = null;
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
@@ -176,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             await this.UpdateFilterAndSuggestionsAsync(filter);
 
-            if (string.IsNullOrEmpty(filter) && this.answer != null)
+            if (string.IsNullOrEmpty(filter) && this.Answer != null)
                 await this.RemoveAnswerAsync();
             else
             {
@@ -213,12 +213,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.Identity);
 
-            this.answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
+            this.Answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
 
             if (!singleOptionQuestion.IsAnswered())
                 await this.UpdateFilterAndSuggestionsAsync(string.Empty);
             else
-                await this.UpdateFilterAndSuggestionsAsync(this.GetAnsweredOption(this.answer.Value).Title);
+                await this.UpdateFilterAndSuggestionsAsync(this.GetAnsweredOption(this.Answer.Value).Title);
         }
 
         public void Handle(AnswersRemoved @event)
