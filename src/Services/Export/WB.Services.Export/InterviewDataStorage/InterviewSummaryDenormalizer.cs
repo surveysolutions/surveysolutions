@@ -100,7 +100,7 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             var db = this.tenantContext.DbContext;
 
-            foreach (KeyValuePair<Guid, List<Action<InterviewReference>>> change in changes)
+            foreach (var change in changes)
             {
                 var reference = db.InterviewReferences.Find(change.Key);
                 if (reference != null)

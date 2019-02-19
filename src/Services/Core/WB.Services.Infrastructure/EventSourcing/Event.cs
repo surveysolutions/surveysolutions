@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 using WB.Services.Infrastructure.EventSourcing.Json;
 
@@ -17,5 +18,25 @@ namespace WB.Services.Infrastructure.EventSourcing
 
         public IEvent Payload { get; set; }
         public DateTime EventTimeStamp { get; set; }
+
+        private object publishedEvent;
+        public object AsPublishedEvent()
+        {
+            if (publishedEvent != null) return publishedEvent;
+
+            var ev = this;
+
+            var eventType = ev.Payload.GetType();
+            var genericEventType = typeof(PublishedEvent<>).MakeGenericType(eventType);
+            var ctor = genericEventType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null,
+                new[] { typeof(Event) }, null);
+
+            ctor = ctor ?? throw new ArgumentException(
+                       $"Cannot found a public constructor of PublishedEvent for event type: {eventType.Name}");
+
+            publishedEvent = ctor.Invoke(new[] { (object)ev });
+
+            return publishedEvent;
+        }
     }
 }

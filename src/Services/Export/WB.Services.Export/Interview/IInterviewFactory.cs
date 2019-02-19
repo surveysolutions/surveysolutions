@@ -10,7 +10,7 @@ namespace WB.Services.Export.Interview
 {
     public interface IInterviewFactory
     {
-        List<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId,
+        IEnumerable<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId,
             QuestionnaireDocument questionnaire);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireDocument questionnaire, List<InterviewEntity> interviewEntities);
         List<MultimediaAnswer> GetMultimediaAnswersByQuestionnaire(QuestionnaireDocument questionnaire, Guid[] interviewIds, CancellationToken cancellationToken);

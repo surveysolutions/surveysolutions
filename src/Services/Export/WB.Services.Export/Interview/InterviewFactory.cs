@@ -28,9 +28,8 @@ namespace WB.Services.Export.Interview
             this.tenantContext = tenantContext;
         }
 
-        public List<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
+        public IEnumerable<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
         {
-            List<InterviewEntity> result = new List<InterviewEntity>();
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
                 var connection = tenantContext.DbContext.Database.GetDbConnection();
@@ -50,7 +49,7 @@ namespace WB.Services.Export.Interview
                             IsEnabled = (bool)reader[$"enablement__{InterviewDatabaseConstants.InstanceValue}"]
                         };
 
-                        result.Add(groupInterviewEntity);
+                        yield return groupInterviewEntity;
 
                         foreach (var groupChild in @group.Children)
                         {
@@ -71,7 +70,7 @@ namespace WB.Services.Export.Interview
 
                                 var answer = reader[$"data__{question.ColumnName}"];
                                 FillAnswerToQuestion(question, interviewEntity, answer is DBNull ? null : answer);
-                                result.Add(interviewEntity);
+                                yield return interviewEntity;
                             }
                             else if (groupChild is Variable variable)
                             {
@@ -86,7 +85,7 @@ namespace WB.Services.Export.Interview
                                 };
                                 var val = reader[$"data__{variable.ColumnName}"];
                                 FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
-                                result.Add(interviewEntity);
+                                yield return interviewEntity;
                             }
                             else if (groupChild is StaticText staticText)
                             {
@@ -103,14 +102,12 @@ namespace WB.Services.Export.Interview
                                         : (int[])reader[$"validity__{staticText.ColumnName}"],
                                 };
 
-                                result.Add(interviewEntity);
+                                yield return interviewEntity;
                             }
                         }
                     }
                 }
             }
-
-            return result;
         }
 
         private void FillAnswerToVariable(Variable variable, InterviewEntity entity, object answer)
