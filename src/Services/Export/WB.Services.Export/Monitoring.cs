@@ -27,5 +27,8 @@ namespace WB.Services.Export
                 Latency.Value.Labels(tenant).Observe(duration);
             }
         }
+
+        public static readonly Gauge EventsProcessedCounter = Metrics.CreateGauge("wb_events_processed_count",
+            "Count of events processed by Export Service", "site");
     }
 }

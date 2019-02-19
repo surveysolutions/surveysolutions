@@ -18,7 +18,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public class InterviewActionsExporter: IInterviewActionsExporter
     {
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         public string InterviewActionsFileName => "interview__actions";
 
         public DoExportFileHeader[] ActionFileColumns => new []
@@ -40,7 +40,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+        public InterviewActionsExporter(IOptions<ExportServiceSettings> interviewDataExportSettings,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)
         {

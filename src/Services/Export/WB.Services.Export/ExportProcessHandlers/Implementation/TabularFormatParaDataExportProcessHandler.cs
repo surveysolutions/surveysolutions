@@ -24,7 +24,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly ILogger<TabularFormatParaDataExportProcessHandler> logger;
 
         public TabularFormatParaDataExportProcessHandler(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITenantApi<IHeadquartersApi> tenantApi,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fs,

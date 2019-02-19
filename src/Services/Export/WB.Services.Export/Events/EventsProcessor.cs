@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Prometheus;
+using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.EventSourcing;
@@ -20,20 +20,23 @@ namespace WB.Services.Export.Events
         private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EventsProcessor> logger;
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private static readonly Gauge eventsCounter = Metrics.CreateGauge("wb_events_processed_count", "Count of events processed by Export Service", "site");
-
+        
         public EventsProcessor(
             ITenantContext tenant,
             IServiceProvider serviceProvider,
-            ILogger<EventsProcessor> logger, IDataExportProcessesService dataExportProcessesService)
+            ILogger<EventsProcessor> logger,
+            IDataExportProcessesService dataExportProcessesService,
+            IOptions<ExportServiceSettings> settings)
         {
             this.tenant = tenant;
             this.serviceProvider = serviceProvider;
             this.logger = logger;
             this.dataExportProcessesService = dataExportProcessesService;
+            pageSize = settings.Value.DefaultEventQueryPageSize;
         }
 
-        private int pageSize = 10_000;
+        private int pageSize;
+
         long? maximumSequenceToQuery = null;
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace WB.Services.Export.Events
 
                 Stopwatch globalStopwatch = Stopwatch.StartNew();
 
-                var eta = new SimpleRunningAverage(5);
+                var eta = new SimpleRunningAverage(6); // running average window size
 
                 var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
@@ -73,6 +76,8 @@ namespace WB.Services.Export.Events
                             && readingSequence >= maximumSequenceToQuery) break;
 
                         apiTrack.Restart();
+
+                        // just to make sure that we will not query too much data while skipping deleted questionnaires
                         var amount = Math.Min((int)readingAvg.Average, pageSize);
 
                         var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
@@ -111,7 +116,7 @@ namespace WB.Services.Export.Events
                     using (var tr = tenantDbContext.Database.BeginTransaction())
                     {
                         var metadata = tenantDbContext.Metadata;
-                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
+                        Monitoring.EventsProcessedCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
                         var feedProcessingStopwatch = Stopwatch.StartNew();
                         var eventsFilter = scope.ServiceProvider.GetService<IEventsFilter>();
@@ -156,16 +161,15 @@ namespace WB.Services.Export.Events
 
                         tr.Commit();
 
-                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
+                        Monitoring.EventsProcessedCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        // ReSharper disable once PossibleInvalidOperationException
+                        // ReSharper disable once PossibleInvalidOperationException - max value will always be set
                         var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
                         var eventsProcessed = metadata.GlobalSequence - sequenceToStartFrom;
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
                         dataExportProcessesService.UpdateDataExportProgress(processId, percent);
-                        eventsCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
-
+                        
                         pageSize = (int)eta.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
 
                         this.logger.LogInformation(
@@ -178,14 +182,9 @@ namespace WB.Services.Export.Events
                     }
                 }
 
-                logger.LogInformation("Total database refresh done. Took {elapsed:g}", globalStopwatch.Elapsed);
+                logger.LogInformation("Database refresh done. Took {elapsed:g}", globalStopwatch.Elapsed);
                 await eventsReader;
             }
         }
-    }
-
-    public interface IEventProcessor
-    {
-        Task HandleNewEvents(long processId, CancellationToken token = default);
     }
 }

@@ -28,7 +28,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private readonly ILogger<InterviewsExporter> logger;
         private readonly ICsvWriter csvWriter;
-        private readonly IOptions<InterviewDataExportSettings> options;
+        private readonly IOptions<ExportServiceSettings> options;
         private readonly IInterviewErrorsExporter errorsExporter;
         private readonly IExportQuestionService exportQuestionService;
 
@@ -37,7 +37,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             IInterviewFactory interviewFactory,
             IInterviewErrorsExporter errorsExporter,
             ICsvWriter csvWriter,
-            IOptions<InterviewDataExportSettings> options,
+            IOptions<ExportServiceSettings> options,
             ILogger<InterviewsExporter> logger)
         {
             this.exportQuestionService = exportQuestionService;
