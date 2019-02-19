@@ -39,6 +39,18 @@ namespace WB.Services.Export.Events
 
         long? maximumSequenceToQuery = null;
 
+        private void EnsureMigrated()
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                scope.PropagateTenantContext(tenant);
+
+                var db = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
+                if(db.Database.IsNpgsql())
+                    db.Database.Migrate();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -51,8 +63,10 @@ namespace WB.Services.Export.Events
             {
                 scope.PropagateTenantContext(tenant);
 
+                EnsureMigrated();
+
                 var tenantDbContext = scope.ServiceProvider.GetService<ITenantContext>().DbContext;
-                await tenantDbContext.Database.MigrateAsync(token);
+                //await tenantDbContext.Database.MigrateAsync(token);
 
                 var sequenceToStartFrom = tenantDbContext.Metadata.GlobalSequence;
 
@@ -64,45 +78,51 @@ namespace WB.Services.Export.Events
 
                 var eventsReader = Task.Run(async () =>
                 {
-                    var readingAvg = new SimpleRunningAverage(5);
-                    readingAvg.Add(pageSize);
-
-                    var readingSequence = sequenceToStartFrom;
-                    var apiTrack = Stopwatch.StartNew();
-
-                    while (true)
+                    try
                     {
-                        if (maximumSequenceToQuery.HasValue
-                            && readingSequence >= maximumSequenceToQuery) break;
+                        var readingAvg = new SimpleRunningAverage(5);
+                        readingAvg.Add(pageSize);
 
-                        apiTrack.Restart();
+                        var readingSequence = sequenceToStartFrom;
+                        var apiTrack = Stopwatch.StartNew();
 
-                        // just to make sure that we will not query too much data while skipping deleted questionnaires
-                        var amount = Math.Min((int)readingAvg.Average, pageSize);
-
-                        var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
-
-                        maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
-
-                        readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
-
-                        logger.LogDebug("Read {eventsCount} events from HQ. From {start} to {last} Took {elapsed}",
-                            feed.Events.Count,
-                            readingSequence, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
-                            apiTrack.Elapsed);
-
-                        if (feed.Events.Count > 0)
+                        while (true)
                         {
-                            eventsProducer.Add(feed, token);
-                            readingSequence = feed.Events.Last().GlobalSequence;
-                        }
-                        else
-                        {
-                            break;
+                            if (maximumSequenceToQuery.HasValue
+                                && readingSequence >= maximumSequenceToQuery) break;
+
+                            apiTrack.Restart();
+
+                            // just to make sure that we will not query too much data while skipping deleted questionnaires
+                            var amount = Math.Min((int) readingAvg.Average, pageSize);
+
+                            var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
+
+                            maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+
+                            readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
+
+                            logger.LogDebug("Read {eventsCount} events from HQ. From {start} to {last} Took {elapsed}",
+                                feed.Events.Count,
+                                readingSequence,
+                                feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
+                                apiTrack.Elapsed);
+
+                            if (feed.Events.Count > 0)
+                            {
+                                eventsProducer.Add(feed, token);
+                                readingSequence = feed.Events.Last().GlobalSequence;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                     }
-
-                    eventsProducer.CompleteAdding();
+                    finally
+                    {
+                        eventsProducer.CompleteAdding();
+                    }
                 }, token);
 
                 dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
@@ -120,7 +140,9 @@ namespace WB.Services.Export.Events
 
                         var feedProcessingStopwatch = Stopwatch.StartNew();
                         var eventsFilter = scope.ServiceProvider.GetService<IEventsFilter>();
-                        var eventsToPublish = await eventsFilter.FilterAsync(feed.Events);
+                        var eventsToPublish = eventsFilter != null
+                            ? await eventsFilter?.FilterAsync(feed.Events)
+                            : feed.Events;
 
                         try
                         {
