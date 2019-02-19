@@ -1816,5 +1816,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question.Properties?.DefaultDate;
         }
+
+        private bool? hasAnyMultimediaQuestion;
+        public bool HasAnyMultimediaQuestion()
+        {
+            if (!hasAnyMultimediaQuestion.HasValue)
+            {
+                hasAnyMultimediaQuestion = this.QuestionnaireDocument.Children.TreeToEnumerable(x => x.Children)
+                    .OfType<IQuestion>()
+                    .Any(x => x.QuestionType == QuestionType.Multimedia ||
+                              x.QuestionType == QuestionType.Audio);
+            }
+
+            return hasAnyMultimediaQuestion.Value;
+        }
     }
 }

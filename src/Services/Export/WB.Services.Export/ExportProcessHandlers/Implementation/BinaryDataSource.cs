@@ -61,8 +61,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             {
                 var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
 
-                var allMultimediaAnswers = await this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
-                    settings.Tenant, questionnaire, interviewIds, cancellationToken);
+                var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaire, interviewIds, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 

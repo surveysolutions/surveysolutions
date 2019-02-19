@@ -1,4 +1,5 @@
-﻿using ApprovalTests;
+﻿using System.Collections.Generic;
+using ApprovalTests;
 using ApprovalTests.Core;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
@@ -89,6 +90,53 @@ namespace WB.Services.Export.Tests.Services.Interview
 
             // Assert
             Approvals.Verify(query);
+        }
+
+        [Test]
+        public void GetQuestionAnswersQuery_should_be_able_to_build_query_for_questions_on_top_level()
+        {
+            var questionnaireEntity = new MultimediaQuestion
+            {
+                QuestionType = QuestionType.Multimedia,
+                VariableName = "mult1",
+                PublicKey = Id.gC
+            };
+            Create.QuestionnaireDocumentWithOneChapter(
+                variable: "questionnaire",
+                chapterId: Id.gA,
+                id: Id.gB,
+                children: questionnaireEntity);
+
+            // Act 
+            var result = InterviewQueryBuilder.GetEnabledQuestionAnswersQuery(questionnaireEntity);
+
+           // Assert
+           Approvals.Verify(result);
+        }
+
+        [Test]
+        public void GetQuestionAnswersQuery_should_be_able_to_build_query_for_questions_in_roster()
+        {
+            var questionnaireEntity = new MultimediaQuestion
+            {
+                QuestionType = QuestionType.Multimedia,
+                VariableName = "mult1",
+                PublicKey = Id.gC
+            };
+            Create.QuestionnaireDocumentWithOneChapter(
+                variable: "questionnaire",
+                chapterId: Id.gA,
+                id: Id.gB,
+                children: Create.Roster(variable: "rost", children: new List<IQuestionnaireEntity>
+                {
+                    questionnaireEntity
+                }));
+
+            // Act 
+            var result = InterviewQueryBuilder.GetEnabledQuestionAnswersQuery(questionnaireEntity);
+
+            // Assert
+            Approvals.Verify(result);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -131,9 +130,7 @@ namespace WB.Services.Export.Tests
                 .Setup(x => x.MakeValidFileName(It.IsAny<string>()))
                 .Returns((string f) => f);
 
-            var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
-                new MemoryCache(new MemoryCacheOptions()), 
-                Mock.Of<IQuestionnaireStorage>());
+            var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(Mock.Of<IQuestionnaireStorage>());
             return QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
         }
 
@@ -388,6 +385,7 @@ namespace WB.Services.Export.Tests
                     }
                 }
             };
+            questionnaireDocumentWithOneChapter.QuestionnaireId = new QuestionnaireId(questionnaireDocumentWithOneChapter.PublicKey.ToString("N") + "$" + "145");
             questionnaireDocumentWithOneChapter.ConnectChildrenWithParent();
             return questionnaireDocumentWithOneChapter;
         }

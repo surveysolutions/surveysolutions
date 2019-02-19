@@ -285,5 +285,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
         DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId);
         bool IsPlainRoster(Guid groupId);
+        bool HasAnyMultimediaQuestion();
     }
 }

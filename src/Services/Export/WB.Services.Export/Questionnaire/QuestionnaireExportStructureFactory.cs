@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire.Services;
@@ -14,12 +13,10 @@ namespace WB.Services.Export.Questionnaire
     public class QuestionnaireExportStructureFactory : IQuestionnaireExportStructureFactory
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
-        private readonly IMemoryCache cache;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnaireExportStructureFactory(IMemoryCache cache, IQuestionnaireStorage questionnaireStorage)
+        public QuestionnaireExportStructureFactory(IQuestionnaireStorage questionnaireStorage)
         {
-            this.cache = cache;
             this.questionnaireStorage = questionnaireStorage;
         }
 
