@@ -6628,12 +6628,15 @@ a.disabled {
 .badge.badge_nav {
   background-color: #2a81cb;
   border-radius: 100%;
-  padding: 9px;
+  padding: 9px 0;
   position: absolute;
   top: 15px;
   left: 5px;
-  font-size: 18px;
-  line-height: 20px; }
+  font-size: 16px;
+  line-height: 20px;
+  min-width: 38px;
+  overflow: hidden;
+  text-align: center; }
 
 .navbar-header {
   text-align: center; }
@@ -7749,6 +7752,21 @@ textarea.field-to-fill {
   display: block;
   height: 40px; }
 
+.form-block label {
+  font: 14px/16px "RobotoRegular";
+  font-weight: normal;
+  color: #6b6b6b; }
+
+.form-block input.checkbox-filter ~ label:hover, .form-block input.checkbox-filter ~ label:focus {
+  color: #3f3f3f; }
+
+.form-block input.checkbox-filter ~ label .tick {
+  left: -5px; }
+
+.form-block input.checkbox-filter:checked ~ label {
+  color: #3f3f3f;
+  font-weight: 700; }
+
 .aside-menu {
   position: absolute;
   top: 5px;
@@ -8758,7 +8776,7 @@ body > .ui-pnotify {
   .table-bordered > tfoot > tr > td,
   .table-bordered > tfoot > tr > th {
     border-bottom: none;
-    border-right: none;
+    border-right-color: transparent;
     border-left: 1px solid #f8f9f9; }
     .table-bordered > thead > tr > td:first-child, .table-bordered > thead > tr > th:first-child,
     .table-bordered > tbody > tr > td:first-child,
@@ -9236,21 +9254,21 @@ h1 {
   color: #3f3f3f;
   padding: 0 0 15px; }
 
-h2 {
+h2, .h2 {
   font: 26px/28px "RobotoLight";
   font-weight: normal;
   margin-top: 0;
   margin-bottom: 25px; }
 
-h3 {
+h3, .h3 {
   font: 19px/21px "RobotoBold";
   margin-top: 0; }
 
-h4 {
+h4, .h4 {
   font: 22px/24px "RobotoLight";
   margin-bottom: 20px; }
 
-h5, .preset-filters-container a, .preset-filters-container .export-queue {
+h5, .preset-filters-container a, .preset-filters-container .export-queue, .h5 {
   margin-bottom: 10px;
   font: 14px/16px "RobotoBold"; }
 
@@ -9827,6 +9845,45 @@ dl dd:after {
 
 .padding-left-100 {
   padding-left: 100px; }
+
+.d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+
+.f-row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row; }
+
+.f-col {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+
+.justify-center {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+
+.ai-center {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+.mb-1 {
+  margin-bottom: 10px; }
+
+.mb-05 {
+  margin-bottom: 5px; }
+
+.mb-0 {
+  margin-bottom: 0; }
+
+.h-100 {
+  height: 100%; }
 
 .fade-enter-active, .fade-leave-active {
   -webkit-transition: opacity 0.5s;
