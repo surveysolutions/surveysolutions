@@ -381,7 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             CheckShouldQestionProvideOptions(question, questionId);
 
             //filtered and cascadings
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation);
@@ -459,7 +459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, this.translation);
@@ -1078,7 +1078,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsQuestionFilteredCombobox(Guid questionId)
         {
-            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            var singleQuestion = (this.GetQuestion(questionId) as ICategoricalQuestion);
             return singleQuestion?.IsFilteredCombobox ?? false;
         }
 

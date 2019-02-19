@@ -25,22 +25,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 
         private void BecauseOf() =>
                 questionnaire.UpdateMultiOptionQuestion(
-                    questionId: questionId,
-                    title: titleWithSubstitutionToSelf,
-                    variableName: variableName,
-                    variableLabel: null,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId
-                    , options: options,
-                    linkedToEntityId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers,
-                    yesNoView: yesNoView, 
-                    validationConditions: new System.Collections.Generic.List<ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+                    Create.Command.UpdateMultiOptionQuestion(
+                        questionId,
+                        responsibleId,
+                        titleWithSubstitutionToSelf,
+                        variableName));
 
         [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<MultyOptionsQuestion>(questionId)
@@ -52,13 +41,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
         private static Guid responsibleId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
         private const string variableName = "var";
         private static string titleWithSubstitutionToSelf = string.Format("title with substitution to self - %{0}%", variableName);
-        private static string instructions = "intructions";
-        private static QuestionScope scope = QuestionScope.Interviewer;
-        private static string enablementCondition = null;
-        private static Option[] options = new Option[] { new Option("1", "Option 1"), new Option("2", "Option 2"), };
-        private static Guid? linkedToQuestionId = (Guid?)null;
-        private static bool areAnswersOrdered = false;
-        private static int? maxAllowedAnswers = null;
-        private static bool yesNoView = false;
     }
 }

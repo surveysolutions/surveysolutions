@@ -1044,16 +1044,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
-        public void UpdateMultiOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, QuestionScope scope, string enablementCondition,
-            bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool areAnswersOrdered, int? maxAllowedAnswers, 
-            bool yesNoView, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
+        public void UpdateMultiOptionQuestion(UpdateMultiOptionQuestion command)
         {
-            PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            var title = command.Title;
+            var variableName = command.VariableName;
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            PrepareGeneralProperties(ref title, ref variableName);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
             {
@@ -1063,33 +1064,36 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
-            this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
+            this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
 
-            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            IQuestion newQuestion = CreateQuestion(questionId,
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(
+                command.QuestionId,
                 QuestionType.MultyOption,
-                scope,
+                command.Scope,
                 title,
                 variableName,
-                variableLabel,
-                enablementCondition,
-                hideIfDisabled,
-                null, false, 
-                instructions,
-                properties,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
+                null, false,
+                command.Instructions,
+                command.Properties,
                 null,
-                ConvertOptionsToAnswers(options),
+                ConvertOptionsToAnswers(command.Options),
                 linkedQuestionId,
                 linkedRosterId,
                 null,
                 null,
-                areAnswersOrdered,
-                maxAllowedAnswers,
-                null, null, null,
-                yesNoView,
-                validationConditions,
-                linkedFilterExpression,
+                command.AreAnswersOrdered,
+                command.MaxAllowedAnswers,
+                null,
+                command.IsFilteredCombobox, 
+                null,
+                command.YesNoView,
+                command.ValidationConditions,
+                command.LinkedFilterExpression,
                 false,
                 null,
                 null);
@@ -1222,7 +1226,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId);
 
-            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<ICategoricalQuestion>(questionId);
             IQuestion newQuestion = CreateQuestion(questionId,
                 categoricalOneAnswerQuestion.QuestionType,
                 categoricalOneAnswerQuestion.QuestionScope,
@@ -2133,7 +2137,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId)
         {
-            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<ICategoricalQuestion>(questionId);
             if (categoricalOneAnswerQuestion == null)
             {
                 throw new QuestionnaireException(
