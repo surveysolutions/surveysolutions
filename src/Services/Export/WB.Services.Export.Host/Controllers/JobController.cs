@@ -75,7 +75,7 @@ namespace WB.Services.Export.Host.Controllers
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/status")]
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
-             string questionnaireId,
+            string questionnaireId,
             InterviewStatus? status,
             DateTime? fromDate,
             DateTime? toDate,

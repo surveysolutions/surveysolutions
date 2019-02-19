@@ -36,7 +36,7 @@ namespace WB.Services.Export.Interview
                 var connection = tenantContext.DbContext.Database.GetDbConnection();
                 var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(@group);
 
-                using (var reader = connection.ExecuteReader(interviewsQuery, new {ids = interviewsId}))
+                using (var reader = connection.ExecuteReader(interviewsQuery, new { ids = interviewsId }))
                 {
                     while (reader.Read())
                     {
@@ -44,10 +44,10 @@ namespace WB.Services.Export.Interview
                         var groupInterviewEntity = new InterviewEntity
                         {
                             Identity = new Identity(group.PublicKey,
-                                         @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty),
+                                         @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty),
                             EntityType = EntityType.Section,
-                            InterviewId = (Guid) reader["data__interview_id"],
-                            IsEnabled = (bool) reader[$"enablement__{InterviewDatabaseConstants.InstanceValue}"]
+                            InterviewId = (Guid)reader["data__interview_id"],
+                            IsEnabled = (bool)reader[$"enablement__{InterviewDatabaseConstants.InstanceValue}"]
                         };
 
                         result.Add(groupInterviewEntity);
@@ -57,16 +57,16 @@ namespace WB.Services.Export.Interview
                             if (groupChild is Question question)
                             {
                                 var identity = new Identity(question.PublicKey,
-                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Question,
-                                    InterviewId = (Guid) reader["data__interview_id"],
+                                    InterviewId = (Guid)reader["data__interview_id"],
                                     InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull
                                         ? Array.Empty<int>()
-                                        : (int[]) reader[$"validity__{question.ColumnName}"],
-                                    IsEnabled = (bool) reader[$"enablement__{question.ColumnName}"]
+                                        : (int[])reader[$"validity__{question.ColumnName}"],
+                                    IsEnabled = (bool)reader[$"enablement__{question.ColumnName}"]
                                 };
 
                                 var answer = reader[$"data__{question.ColumnName}"];
@@ -76,13 +76,13 @@ namespace WB.Services.Export.Interview
                             else if (groupChild is Variable variable)
                             {
                                 var identity = new Identity(variable.PublicKey,
-                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Variable,
-                                    InterviewId = (Guid) reader["data__interview_id"],
-                                    IsEnabled = (bool) reader[$"enablement__{variable.ColumnName}"]
+                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
                                 };
                                 var val = reader[$"data__{variable.ColumnName}"];
                                 FillAnswerToVariable(variable, interviewEntity, val is DBNull ? null : val);
@@ -91,18 +91,18 @@ namespace WB.Services.Export.Interview
                             else if (groupChild is StaticText staticText)
                             {
                                 var identity = new Identity(staticText.PublicKey,
-                                    @group.IsInsideRoster ? (int[]) reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.StaticText,
-                                    InterviewId = (Guid) reader["data__interview_id"],
-                                    IsEnabled = (bool) reader[$"enablement__{staticText.ColumnName}"],
+                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    IsEnabled = (bool)reader[$"enablement__{staticText.ColumnName}"],
                                     InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
                                         ? Array.Empty<int>()
-                                        : (int[]) reader[$"validity__{staticText.ColumnName}"],
+                                        : (int[])reader[$"validity__{staticText.ColumnName}"],
                                 };
-                                
+
                                 result.Add(interviewEntity);
                             }
                         }
@@ -143,7 +143,7 @@ namespace WB.Services.Export.Interview
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    var multiOption = (MultyOptionsQuestion) question;
+                    var multiOption = (MultyOptionsQuestion)question;
                     if (answer is int[] asIntArray)
                     {
                         entity.AsIntArray = asIntArray;
@@ -185,16 +185,16 @@ namespace WB.Services.Export.Interview
 
                     break;
                 case QuestionType.GpsCoordinates:
-                    entity.AsGps = answer != null ? JsonConvert.DeserializeObject<GeoPosition>(answer.ToString()) : null;
+                    entity.AsGps = JsonConvert.DeserializeObject<GeoPosition>(answer.ToString());
                     break;
                 case QuestionType.Audio:
-                    entity.AsAudio = answer != null ? JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString()) : null;
+                    entity.AsAudio = JsonConvert.DeserializeObject<AudioAnswer>(answer.ToString());
                     break;
                 case QuestionType.TextList:
-                    entity.AsList = answer != null ? JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString()) : null;
+                    entity.AsList = JsonConvert.DeserializeObject<InterviewTextListAnswer[]>(answer.ToString());
                     break;
                 case QuestionType.Area:
-                    entity.AsArea = answer != null ? JsonConvert.DeserializeObject<Area>(answer.ToString()) : null;
+                    entity.AsArea = JsonConvert.DeserializeObject<Area>(answer.ToString());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Question {question.QuestionType} is not supported by export");
@@ -281,62 +281,39 @@ namespace WB.Services.Export.Interview
             return true;
         }
 
-        public async Task<List<MultimediaAnswer>> GetMultimediaAnswersByQuestionnaire(TenantInfo tenant,
-            QuestionnaireDocument questionnaire, Guid[] interviewIds, CancellationToken cancellationToken)
+        public List<MultimediaAnswer> GetMultimediaAnswersByQuestionnaire(QuestionnaireDocument questionnaire, 
+            Guid[] interviewIds,
+            CancellationToken cancellationToken)
         {
             var entities = questionnaire.Children.TreeToEnumerable(c => c.Children)
-                .Where(c => c is MultimediaQuestion || c is AudioQuestion)
-                .Select(c => (c.PublicKey, c.GetType()))
-                .ToDictionary(c => c.Item1, c => c.Item2);
+                .OfType<Question>().ToList();
 
-            var api = this.tenantApi.For(tenant);
+            var connection = tenantContext.DbContext.Database.GetDbConnection();
 
-            if (!entities.Any())
-                return new List<MultimediaAnswer>();
+            List<MultimediaAnswer> answers = new List<MultimediaAnswer>();
 
-            var answerLines = await api.GetInterviewBatchAsync(interviewIds, entities.Keys.ToArray());
-
-            IEnumerable<MultimediaAnswer> ToMultimediaAnswer()
+            foreach (var multimediaQuestion in entities.Where(x => x.QuestionType == QuestionType.Multimedia || x.QuestionType == QuestionType.Audio))
             {
-                foreach (var a in answerLines)
+                var questionAnswersQuery = InterviewQueryBuilder.GetEnabledQuestionAnswersQuery(multimediaQuestion);
+
+                using (var reader = connection.ExecuteReader(questionAnswersQuery, new {ids = interviewIds}))
                 {
-                    if (!a.IsEnabled) continue;
-
-                    var type = entities[a.Identity.Id];
-
-                    if (type == typeof(MultimediaQuestion))
+                    while (reader.Read())
                     {
-                        if (a.AsString == null) continue;
+                        cancellationToken.ThrowIfCancellationRequested();
 
-                        yield return new MultimediaAnswer
-                        {
-                            Answer = a.AsString,
-                            InterviewId = a.InterviewId,
-                            Type = MultimediaType.Image
-                        };
-
-                        continue;
+                        MultimediaAnswer answer = new MultimediaAnswer();
+                        answer.InterviewId = (Guid) reader[$"data__{InterviewDatabaseConstants.InterviewId}"];
+                        answer.Type = multimediaQuestion.QuestionType == QuestionType.Multimedia
+                            ? MultimediaType.Image
+                            : MultimediaType.Audio;
+                        answer.Answer = (string) reader[$"data__{multimediaQuestion.ColumnName}"];
+                        answers.Add(answer);
                     }
-
-                    if (type == typeof(AudioQuestion))
-                    {
-                        if (a.AsAudio == null) continue;
-
-                        yield return new MultimediaAnswer
-                        {
-                            Answer = a.AsAudio.FileName,
-                            InterviewId = a.InterviewId,
-                            Type = MultimediaType.Audio
-                        };
-
-                        continue;
-                    }
-
-                    throw new NotSupportedException();
                 }
             }
 
-            return ToMultimediaAnswer().ToList();
+            return answers;
         }
 
         public async Task<List<AudioAuditInfo>> GetAudioAuditInfos(TenantInfo tenant,
