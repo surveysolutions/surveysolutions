@@ -113,6 +113,13 @@
                 $scope.activeQuestion.showAsList = question.showAsList;
                 $scope.activeQuestion.showAsListThreshold = question.showAsListThreshold;
 
+                $scope.activeQuestion.categoricalMultiKinds =
+                [
+                    { value: 1, text: $i18next.t('QuestionCheckboxes') },
+                    { value: 2, text: $i18next.t('QuestionYesNoMode') },
+                    { value: 3, text: $i18next.t('QuestionComboBox') }
+                ];
+
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
                 }
@@ -567,21 +574,42 @@
                 });
             };
 
+            $scope.changeCategoricalKind = function (currentQuestion, kind) {
+                var isFilteredCombobox = kind.value === 3;
+                var yesNoView = kind.value === 2;
+
+                if (isFilteredCombobox === currentQuestion.isFilteredCombobox &&
+                    yesNoView === currentQuestion.yesNoView) return;
+
+                currentQuestion.isFilteredCombobox = isFilteredCombobox;
+                currentQuestion.yesNoView = yesNoView;
+                markFormAsChanged();
+            };
+            
+            $scope.getCategoricalKind = function (currentQuestion) {
+                if (currentQuestion.isFilteredCombobox)
+                    return currentQuestion.categoricalMultiKinds[2];
+                else if (currentQuestion.yesNoView)
+                    return currentQuestion.categoricalMultiKinds[1];
+                else
+                    return currentQuestion.categoricalMultiKinds[0];
+            };
+
             $scope.$watch('activeQuestion.isLinked', function(newValue) {
                 if (!$scope.activeQuestion) {
                     return;
                 }
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
+                    $scope.activeQuestion.isFilteredCombobox = false;
                     $scope.activeQuestion.optionsFilterExpression = null;
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;
-                }
-            });
-            $scope.$watch('activeQuestion.yesNoView', function (newValue) {
-                if (newValue && $scope.activeQuestion) {
-                    $scope.activeQuestion.isLinked = false;
+                    if ($scope.initialQuestion) {
+                        $scope.activeQuestion.yesNoView = $scope.initialQuestion.yesNoView;
+                        $scope.activeQuestion.isFilteredCombobox = $scope.initialQuestion.isFilteredCombobox;
+                    }
                 }
             });
 
