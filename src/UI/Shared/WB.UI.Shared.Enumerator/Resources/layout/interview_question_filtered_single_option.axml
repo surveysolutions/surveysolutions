@@ -3,7 +3,8 @@
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
+                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));
+                Visible RenderAsComboBox">
 
     <InstantAutoCompleteTextView
       style="@style/Interview_Question_Answer_FilteredComboBox"
@@ -18,7 +19,8 @@
                      OnItemSelected SaveAnswerBySelectedOptionCommand;
                      OnFocusOut ShowErrorIfNoAnswerCommand;
                      Watermark Localization('FilteredComboboxQuestion_Hint');
-                     Tag Format('Answer_{0}', Identity)" />
+                     Tag Format('Answer_{0}', Identity); 
+                     Visible RenderAsComboBox"/>
     <include layout="@layout/interview_question__remove_button_input" />
   </LinearLayout>
 </LinearLayout>

@@ -39,6 +39,6 @@ namespace Main.Core.Entities.SubEntities.Question
         }
 
         public bool ShowAsList { get; set; }
-        public int? ShowAsListLimit { get; set; }
+        public int? ShowAsListThreshold { get; set; }
     }
 }
