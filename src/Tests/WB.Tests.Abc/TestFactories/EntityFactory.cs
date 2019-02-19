@@ -791,7 +791,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
-            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
+            ISubstitutionService substitutionService = null, 
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
@@ -1131,7 +1132,8 @@ namespace WB.Tests.Abc.TestFactories
             bool? isFilteredCombobox = null,
             string optionsFilterExpression = null,
             List<Answer> answers = null,
-            bool isPrefilled = false)
+            bool isPrefilled = false,
+            int? showAsListThreshold = null)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -1160,7 +1162,9 @@ namespace WB.Tests.Abc.TestFactories
                 Properties = new QuestionProperties(false, false)
                 {
                     OptionsFilterExpression = optionsFilterExpression
-                }
+                },
+                ShowAsList = showAsListThreshold.HasValue,
+                ShowAsListThreshold = showAsListThreshold
             };
         }
 

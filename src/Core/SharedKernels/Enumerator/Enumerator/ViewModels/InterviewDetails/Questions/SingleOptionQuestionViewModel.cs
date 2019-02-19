@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
 
-            this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
+            this.Options.Where(x=> x.Selected && x.Value != selectedOptionToSave).ForEach(x => x.Selected = false);
 
             await this.throttlingModel.ExecuteActionIfNeeded();
         }

@@ -252,7 +252,7 @@
                         } else {
                             command.options = question.options;
                         }
-                        command.showAsListLimit = question.showAsListLimit;
+                        command.showAsListThreshold = question.showAsListThreshold;
                         command.showAsList = question.showAsList;
                         break;
                     case "MultyOption":
