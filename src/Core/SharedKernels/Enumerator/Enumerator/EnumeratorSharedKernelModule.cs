@@ -117,6 +117,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<CategoricalMultiLinkedToQuestionViewModel>();
             registry.Bind<CategoricalMultiLinkedToRosterTitleViewModel>();
             registry.Bind<CategoricalMultiViewModel>();
+            registry.Bind<CategoricalMultiComboboxViewModel>();
+            registry.Bind<CategoricalMultiComboboxAutocompleteViewModel>();
             registry.Bind<QRBarcodeQuestionViewModel>();
             registry.Bind<RealQuestionViewModel>();
             registry.Bind<IntegerQuestionViewModel>();

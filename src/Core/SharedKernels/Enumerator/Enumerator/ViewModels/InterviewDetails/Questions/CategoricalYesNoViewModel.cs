@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(this.Identity.Id);
 
-            this.filteredOptionsViewModel.Init(interview.Id.FormatGuid(), this.Identity, 200);
+            this.filteredOptionsViewModel.Init(interview.Id.FormatGuid(), this.Identity);
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
