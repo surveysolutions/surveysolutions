@@ -1260,6 +1260,15 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.ru.resx">
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.ro.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
@@ -2454,6 +2463,11 @@
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\WebInterviewSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\WebInterviewSetup.Designer.cs">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>

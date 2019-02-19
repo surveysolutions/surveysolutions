@@ -1,17 +1,6 @@
 <template>
 	<main class="interview-setup">
 		<div class="container-fluid">
-			<!--div class="row">
-				<div class="page-header">
-					<ol class="breadcrumb">
-						<li><a href="">Survey setup</a></li>
-					</ol>
-					<h1>
-						Web interview setup for <b>Malawi water protection (ver. 1)</b>
-					</h1> 
-				</div>
-			</div-->
-
             <div class="row">
                 <div class="page-header">
                     <ol class="breadcrumb">
@@ -20,8 +9,7 @@
                         </li>
                     </ol>
                     <h1>
-                        {{$t('WebInterviewSetup.WebInterviewStarted', {name: this.$config.model.questionnaireFullName})}}
-                        {{$t('WebInterviewSetup.WebInterviewSetup_PageHeader')}} for {{$t('WebInterviewSetup.WebInterviewSetup_PageHeader')}}
+                        {{$t('WebInterviewSettings.WebInterviewSetupFor_Title')}} <b> {{this.$config.model.questionnaireFullName}} </b>
                     </h1>
                 </div>
             </div>
@@ -47,7 +35,7 @@
                         <div class="panel-heading" role="tab" id="collapseListGroupHeading1">
                             <h3 class="panel-title">
                                 <a class="" role="button" data-toggle="collapse" href="#collapseListGroup1" aria-expanded="false" aria-controls="collapseListGroup1">
-                                    Customize displayed text for respondents
+                                    {{$t('WebInterviewSettings.CustomizeDisplayedText')}}
                                     <span class="plus"></span>
                                 </a>
                             </h3>
@@ -62,7 +50,7 @@
                                 <div class="tab-content d-flex f-row justify-center">
                                     <div role="tabpanel" class="tab-pane active survey-block d-flex f-col" id="welcome">
                                         <div class="d-flex f-col h-100">
-                                            <div class="h4 high-resolution-title">Example of the Welcome Page</div>
+                                            <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleWelcomePage')}}</div>
                                             <div class="browser-mockup">
                                                 <div class="d-flex justify-center f-row">
                                                     <div class="column d-flex ai-center">
@@ -115,7 +103,7 @@
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block" id="resume">
                                         <div class=" d-flex f-col h-100">
-                                            <div class="h4 high-resolution-title">Example of the Resume Page</div>
+                                            <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleResumePage')}}</div>
                                             <div class="browser-mockup">
                                                 <div class="d-flex justify-center f-row ">
                                                     <div class="column d-flex ai-center">
@@ -172,7 +160,7 @@
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block d-flex f-col" id="finish">
                                         <div class="d-flex f-col h-100">
-                                            <div class="h4 high-resolution-title">Example of the Finish Page</div>
+                                            <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleFinishPage')}}</div>
                                             <div class=" browser-mockup">
                                                 
                                                 <div class="d-flex justify-center f-row">
@@ -234,7 +222,7 @@
                         <div class="panel-heading" role="tab" id="collapseListGroupHeading12">
                             <h3 class="panel-title">
                                 <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup12" aria-expanded="false" aria-controls="collapseListGroup12">
-                                    Customize emails text
+                                    {{$t('WebInterviewSettings.CustomizeEmailsText')}}
                                     <span class="plus"></span>
                                 </a>
                                 
@@ -243,17 +231,17 @@
                         <div id="collapseListGroup12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading12" aria-expanded="false">
                             <div class="collapsed-content text-email">
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#invitation" aria-controls="invitation" role="tab" data-toggle="tab">Invitation</a></li>
-                                    <li role="presentation"><a href="#reminder" aria-controls="reminder" role="tab" data-toggle="tab">Reminder</a></li>
-                                    <li role="presentation"><a href="#reject" aria-controls="reject" role="tab" data-toggle="tab">Reject</a></li>
+                                    <li role="presentation" class="active"><a href="#invitation" aria-controls="invitation" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Invitation')}}</a></li>
+                                    <li role="presentation"><a href="#reminder" aria-controls="reminder" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reminder')}}</a></li>
+                                    <li role="presentation"><a href="#reject" aria-controls="reject" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reject')}}</a></li>
                                 </ul>
                                 <div class="tab-content d-flex f-row justify-center">
                                     <div role="tabpanel" class="tab-pane active survey-block" id="invitation">
-                                        <div class="h4 high-resolution-title">Example of the Invitation Email message</div>
+                                        <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
 
                                             <div class="row-element">
-                                                <div class="h5">Subject:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
                                                         <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
@@ -268,7 +256,7 @@
                                                 </div>
                                             </div>
                                             <div class="row-element">
-                                                <div class="h5">Message:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="invitation-message">
                                                     <p>Dear respondent!</p>
                                                     <p>
@@ -289,11 +277,11 @@
             
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block" id="reminder">
-                                        <div class="h4 high-resolution-title">Example of the Reminder Email message</div>
+                                        <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleReminderEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
 
                                             <div class="row-element">
-                                                <div class="h5">Subject:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
                                                         <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject">
@@ -308,7 +296,7 @@
                                                 </div>
                                             </div>
                                             <div class="row-element">
-                                                <div class="h5">Message:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="reminder-message">
                                                     <p>Dear respondent!</p>
                                                     <p>
@@ -328,11 +316,11 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block" id="reject">
-                                        <div class="h4 high-resolution-title">Example of the Reject Email message</div>
+                                        <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleRejectEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
 
                                             <div class="row-element">
-                                                <div class="h5">Subject:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
                                                         <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
@@ -347,7 +335,7 @@
                                                 </div>
                                             </div>
                                             <div class="row-element">
-                                                <div class="h5">Message:</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="reject-message">
                                                     <p>Dear respondent!</p>
                                                     <p>
@@ -377,7 +365,7 @@
             <hr />
             <div class="row reminder-setting">
                 <div class="col-sm-8">
-                    <h3>Reminder setting</h3>
+                    <h3>{{$t('WebInterviewSettings.ReminderSetting')}}</h3>
                 </div>
                 <div class="col-sm-12 mb-1">
                     <p>
