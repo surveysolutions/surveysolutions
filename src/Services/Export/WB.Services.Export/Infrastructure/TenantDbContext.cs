@@ -13,7 +13,9 @@ namespace WB.Services.Export.Infrastructure
         private readonly ITenantContext tenantContext;
         private readonly string connectionString;
 
-        public TenantDbContext(ITenantContext tenantContext, IOptions<DbConnectionSettings> connectionSettings, DbContextOptions options) : base(options)
+        public TenantDbContext(ITenantContext tenantContext, 
+            IOptions<DbConnectionSettings> connectionSettings,
+            DbContextOptions options) : base(options)
         {
             this.tenantContext = tenantContext;
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);

@@ -37,10 +37,12 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<YesNoQuestionAnswered>
     {
         private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext dbContext;
 
-        public InterviewSummaryDenormalizer(ITenantContext tenantContext)
+        public InterviewSummaryDenormalizer(ITenantContext tenantContext, TenantDbContext dbContext)
         {
             this.tenantContext = tenantContext;
+            this.dbContext = dbContext;
         }
 
         private readonly Dictionary<Guid, List<Action<InterviewReference>>> changes = new Dictionary<Guid, List<Action<InterviewReference>>>();
@@ -98,7 +100,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task SaveStateAsync(CancellationToken cancellationToken = default)
         {
-            var db = this.tenantContext.DbContext;
+            var db = this.dbContext;
 
             foreach (var change in changes)
             {

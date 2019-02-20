@@ -17,6 +17,7 @@ namespace WB.Services.Export.Tests.Questionnaire
     public class DeletedQuestionnaireEventFilterTests
     {
         private ITenantContext tenantContext;
+        private TenantDbContext dbContext;
 
         [SetUp]
         public void Setup()
@@ -25,24 +26,16 @@ namespace WB.Services.Export.Tests.Questionnaire
             tenantContextMock.Setup(x => x.Tenant)
                 .Returns(Create.Tenant());
 
-            var options = new DbContextOptionsBuilder<TenantDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
-                .Options;
-            var dbContext = new TenantDbContext(tenantContextMock.Object, 
-                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()), 
-                options);
+            dbContext = Create.TenantDbContext();
             
-            tenantContextMock.Setup(x => x.DbContext)
-                .Returns(dbContext);
-
             this.tenantContext = tenantContextMock.Object;
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.tenantContext.DbContext.Dispose();
-            this.tenantContext = null;
+            dbContext.Dispose();
+            dbContext = null;
         }
 
         [Test]
@@ -88,7 +81,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             // Assert
             Assert.That(result, Has.Count.EqualTo(2));
 
-            var storedReference = this.tenantContext.DbContext.InterviewReferences.Find(interviewId);
+            var storedReference = dbContext.InterviewReferences.Find(interviewId);
             Assert.That(storedReference, Is.Not.Null, "Should store questionnaire id <-> interview id relation");
         }
 
@@ -143,10 +136,10 @@ namespace WB.Services.Export.Tests.Questionnaire
             Assert.That(result, Is.Empty, "Events by deleted questionnaires should not be published for other denormalizers");
             schemaMock.Verify(x => x.DropQuestionnaireDbStructure(questionnaire), Times.Once, "Schema should be dropped for deleted questionnaire");
 
-            var storedDeletedQuestionnaireReference = this.tenantContext.DbContext.DeletedQuestionnaires.Find(questionnaire.Id);
+            var storedDeletedQuestionnaireReference = dbContext.DeletedQuestionnaires.Find(questionnaire.Id);
             Assert.That(storedDeletedQuestionnaireReference, Is.Not.Null, "Filter should remember that questionnaire schema is dropped");
 
-            var storedInterviewReference = this.tenantContext.DbContext.InterviewReferences.Find(interviewId);
+            var storedInterviewReference = dbContext.InterviewReferences.Find(interviewId);
             Assert.That(storedInterviewReference, Has.Property(nameof(InterviewReference.QuestionnaireId)).EqualTo(questionnaire.Id));
         }
 
@@ -171,14 +164,14 @@ namespace WB.Services.Export.Tests.Questionnaire
             };
 
             // This means that questionnaire has already been deleted on previous events batch
-            this.tenantContext.DbContext.DeletedQuestionnaires.Add(new DeletedQuestionnaireReference(questionnaire.Id));
-            this.tenantContext.DbContext.InterviewReferences.Add(new InterviewReference
+            dbContext.DeletedQuestionnaires.Add(new DeletedQuestionnaireReference(questionnaire.Id));
+            dbContext.InterviewReferences.Add(new InterviewReference
             {
                 InterviewId = interviewId,
                 QuestionnaireId = questionnaire.Id,
                 DeletedAtUtc = DateTime.UtcNow
             });
-            this.tenantContext.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
             var schemaMock = new Mock<IDatabaseSchemaService>();
             var filter = CreateFilter(questionnaireStorage: Create.QuestionnaireStorage(questionnaire), databaseSchemaService: schemaMock.Object);
@@ -198,6 +191,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             return new DeletedQuestionnaireEventFilter
             (
                 tenantContext ?? this.tenantContext,
+                dbContext,
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 databaseSchemaService ?? Mock.Of<IDatabaseSchemaService>()
             );

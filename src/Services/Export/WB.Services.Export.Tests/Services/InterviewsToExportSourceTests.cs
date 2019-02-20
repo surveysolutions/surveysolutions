@@ -16,6 +16,7 @@ namespace WB.Services.Export.Tests.Services
     {
         private ITenantContext tenantContext;
         private InterviewsToExportSource interviewsToExportSource;
+        private TenantDbContext dbContext;
 
         [SetUp]
         public void Setup()
@@ -24,25 +25,17 @@ namespace WB.Services.Export.Tests.Services
             tenantContextMock.Setup(x => x.Tenant)
                 .Returns(Create.Tenant());
 
-            var options = new DbContextOptionsBuilder<TenantDbContext>()
-                .UseInMemoryDatabase(databaseName: "TenantDbContext")
-                .Options;
-            var dbContext = new TenantDbContext(tenantContextMock.Object, 
-                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()), 
-                options);
-            
-            tenantContextMock.Setup(x => x.DbContext)
-                .Returns(dbContext);
+            dbContext = Create.TenantDbContext();
 
             this.tenantContext = tenantContextMock.Object;
-            this.interviewsToExportSource = new InterviewsToExportSource(this.tenantContext);
+            this.interviewsToExportSource = new InterviewsToExportSource(dbContext);
 
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.tenantContext.DbContext.Dispose();
+            this.dbContext.Dispose();
         }
 
         [Test]
@@ -58,8 +51,8 @@ namespace WB.Services.Export.Tests.Services
         {
             var questionnaireId = "qu1";
             var reference = Create.InterviewReference(questionnaireId: questionnaireId, status: InterviewStatus.Completed);
-            this.tenantContext.DbContext.Add(reference);
-            this.tenantContext.DbContext.SaveChanges();
+            this.dbContext.Add(reference);
+            this.dbContext.SaveChanges();
 
             // Act
             var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireId(questionnaireId),
@@ -74,8 +67,8 @@ namespace WB.Services.Export.Tests.Services
             var questionnaireId = "qu1";
             var updateDateUtc = new DateTime(2010, 10, 5);
             var reference = Create.InterviewReference(questionnaireId: questionnaireId, updateDateUtc: updateDateUtc);
-            this.tenantContext.DbContext.Add(reference);
-            this.tenantContext.DbContext.SaveChanges();
+            this.dbContext.Add(reference);
+            this.dbContext.SaveChanges();
 
             // Act
             var found = this.interviewsToExportSource.GetInterviewsToExport(new QuestionnaireId(questionnaireId),
