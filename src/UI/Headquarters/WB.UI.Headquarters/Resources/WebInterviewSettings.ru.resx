@@ -180,4 +180,16 @@
       <value>Настройки напоминаний</value>
       <comment>Настройки напоминаний</comment>
   </data>
+  <data name="WelcomePage" xml:space="preserve">
+      <value>Страница приветствия</value>
+      <comment>Страница приветствия</comment>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+      <value>Страница продолжения</value>
+      <comment>Страница продолжения</comment>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+      <value>Финишная страница</value>
+      <comment>Финишная страница</comment>
+  </data>
 </root>
