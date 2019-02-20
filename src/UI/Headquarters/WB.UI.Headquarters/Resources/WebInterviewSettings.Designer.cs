@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish Page.
+        /// </summary>
+        internal static string FinishPage {
+            get {
+                return ResourceManager.GetString("FinishPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invitation.
         /// </summary>
         internal static string Invitation {
@@ -187,11 +196,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume Page.
+        /// </summary>
+        internal static string ResumePage {
+            get {
+                return ResourceManager.GetString("ResumePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web interview setup for .
         /// </summary>
         internal static string WebInterviewSetupFor_Title {
             get {
                 return ResourceManager.GetString("WebInterviewSetupFor_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Page.
+        /// </summary>
+        internal static string WelcomePage {
+            get {
+                return ResourceManager.GetString("WelcomePage", resourceCulture);
             }
         }
     }
