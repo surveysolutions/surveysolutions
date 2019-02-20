@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_format_first_option_in_AutoCompleteSuggestions () =>
-            cascadingModel.AutoCompleteSuggestions.ElementAt(0).Should().Contain("title klo <b>3</b>");
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).SearchTerm.Should().Be("3");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

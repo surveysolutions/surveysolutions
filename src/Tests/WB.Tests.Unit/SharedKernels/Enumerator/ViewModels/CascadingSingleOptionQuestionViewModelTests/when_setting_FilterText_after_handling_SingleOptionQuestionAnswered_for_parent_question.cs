@@ -59,8 +59,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             // Assert
             cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
             cascadingModel.AutoCompleteSuggestions.Should().HaveCount(2);
-            cascadingModel.AutoCompleteSuggestions.Should().HaveElementAt(0, "title <b>c</b>cc 5");
-            cascadingModel.AutoCompleteSuggestions.Should().HaveElementAt(1, "title b<b>c</b>w 6");
+            cascadingModel.AutoCompleteSuggestions.Select(x=>x.Title).Should().HaveElementAt(0, "title ccc 5");
+            cascadingModel.AutoCompleteSuggestions.Select(x=>x.Title).Should().HaveElementAt(1, "title bcw 6");
         }
     }
 }

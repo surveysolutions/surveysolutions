@@ -69,8 +69,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private List<string> autoCompleteSuggestions = new List<string>();
-        public List<string> AutoCompleteSuggestions
+        private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
+        public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
             get => this.autoCompleteSuggestions;
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
-        public IMvxAsyncCommand<string> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<string>(this.SaveAnswerBySelectedOptionAsync);
+        public IMvxAsyncCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOptionAsync);
         public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
 
         protected abstract IEnumerable<CategoricalOption> GetSuggestions(string filter);
@@ -104,14 +104,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private IEnumerable<string> GetHighlightedSuggestions(string filter)
+        private IEnumerable<OptionWithSearchTerm> GetFilteredSuggestions(string filter)
         {
             foreach (var model in this.GetSuggestions(filter))
             {
                 if (model.Title.IsNullOrEmpty())
                     continue;
 
-                yield return this.GetHighlightedText(model.Title, filter);
+                yield return new OptionWithSearchTerm
+                {
+                    Value = model.Value,
+                    Title = model.Title,
+                    SearchTerm = filter
+                };
             }
         }
 
@@ -127,26 +132,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
         }
 
-        private async Task SaveAnswerBySelectedOptionAsync(string optionText)
+        private async Task SaveAnswerBySelectedOptionAsync(OptionWithSearchTerm option)
         {
-            optionText = this.RemoveHighlighting(optionText);
-
-            await this.UpdateFilterAndSuggestionsAsync(optionText);
-            await this.SaveAnswerAsync(optionText);
+            await this.UpdateFilterAndSuggestionsAsync(option.Title);
+            await this.SaveAnswerAsync(option.Value);
         }
 
-        protected virtual async Task SaveAnswerAsync(string optionText)
+        protected virtual async Task SaveAnswerAsync(int optionValue)
         {
             //if app crashed and automatically restored 
             //the state could be broken
             if (principal?.CurrentUserIdentity == null)
                 return;
 
-            var selectedOption = this.GetOptionByFilter(optionText);
-            if (selectedOption == null)
-                throw new InvalidOperationException($"Option was not found for value '{optionText}'");
-
-            if (this.Answer == selectedOption.Value)
+            if (this.Answer == optionValue)
             {
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
@@ -159,11 +158,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
-                    selectedOption.Value)).ConfigureAwait(false);
+                    optionValue)).ConfigureAwait(false);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                this.Answer = selectedOption.Value;
+                this.Answer = optionValue;
             }
             catch (InterviewException ex)
             {
@@ -181,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
             {
                 var selectedOption = this.GetOptionByFilter(filter);
-                if (selectedOption != null) await this.SaveAnswerAsync(filter);
+                if (selectedOption != null) await this.SaveAnswerAsync(selectedOption.Value);
             }
             
         }
@@ -189,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected async Task UpdateFilterAndSuggestionsAsync(string filter)
         {
             this.FilterText = filter;
-            this.AutoCompleteSuggestions = await Task.Run(() => this.GetHighlightedSuggestions(filter).ToList());
+            this.AutoCompleteSuggestions = await Task.Run(() => this.GetFilteredSuggestions(filter).ToList());
         }
 
         private async Task RemoveAnswerAsync()
@@ -226,18 +225,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!@event.Questions.Contains(this.Identity)) return;
 
             this.InvokeOnMainThread(async () => await this.SetAnswerAndUpdateFilter());
-        }
-
-        private string RemoveHighlighting(string optionText) => optionText.Replace("</b>", "").Replace("<b>", "");
-
-        private string GetHighlightedText(string text, string filter)
-        {
-            var startIndexOfSearchedText = string.IsNullOrEmpty(filter)
-                ? -1
-                : text.IndexOf(filter, StringComparison.OrdinalIgnoreCase);
-
-            return startIndexOfSearchedText >= 0 ? text.Insert(startIndexOfSearchedText + filter.Length, "</b>")
-                .Insert(startIndexOfSearchedText, "<b>") : text;
         }
 
         public virtual void Dispose()
