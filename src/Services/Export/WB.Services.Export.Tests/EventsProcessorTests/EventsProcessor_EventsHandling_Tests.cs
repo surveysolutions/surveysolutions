@@ -52,13 +52,13 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
             var services = new ServiceCollection();
             var apiMock = new Mock<IHeadquartersApi>();
             var handledEvents = new List<PublishedEvent<InterviewCreated>>();
-            var logMock = new Mock<ILogger<EventsProcessor>>();
+            var logMock = new Mock<ILogger<EventsHandler>>();
 
             services.AddTransient<IFunctionalHandler>(c => new EventHandler(handledEvents));
 
             services.AddTransient(c => logMock.Object);
 
-            var provider = Create.SetupEventsProcessor(services, apiMock.Object);
+            var provider = Create.SetupEventsProcessor(services, apiMock.Object, withDefaultEventsFilter: true);
 
             var processor = provider.GetService<EventsProcessor>();
             SetupEvents(apiMock, (0, new EventsFeed

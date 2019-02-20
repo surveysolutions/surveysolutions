@@ -567,10 +567,19 @@ namespace WB.Services.Export.Tests
 
         public static EventsFactory Event = new EventsFactory();
 
-        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api)
+        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api, bool withDefaultEventsFilter = false)
         {
             services.AddMock<ITenantApi<IHeadquartersApi>>(c => c.For(It.IsAny<TenantInfo>()) == api);
             services.AddScoped<ITenantContext, TenantContext>();
+
+            if (withDefaultEventsFilter)
+            {
+                var filerMock = new Mock<IEventsFilter>();
+                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>()))
+                    .Returns<List<Event>>(Task.FromResult);
+
+                services.AddTransient(c => filerMock.Object);
+            }
 
             services.AddDbContext<TenantDbContext>(c =>
             {
@@ -578,9 +587,9 @@ namespace WB.Services.Export.Tests
                 c.ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             }, ServiceLifetime.Singleton);
 
-       //     services.AddLogging();
             services.AddMock<IDataExportProcessesService>();
             services.AddTransient<EventsProcessor>();
+            services.AddTransient<IEventsHandler, EventsHandler>();
 
             var provider = services.BuildServiceProvider();
             provider.SetTenant(new TenantInfo("http://localhost", TenantId.None, "test"));

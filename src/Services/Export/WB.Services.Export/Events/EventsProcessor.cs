@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
 {
@@ -37,8 +36,8 @@ namespace WB.Services.Export.Events
 
         private int pageSize;
 
-        long? maximumSequenceToQuery = null;
-        private const double BatchSizeMultiplier = 2;
+        long? maximumSequenceToQuery;
+        private const double BatchSizeMultiplier = 1;
 
         private void EnsureMigrated()
         {
@@ -52,12 +51,6 @@ namespace WB.Services.Export.Events
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="processId"></param>
-        /// <param name="token"></param>
-        /// <returns>Last event global sequence</returns>
         public async Task HandleNewEvents(long processId, CancellationToken token = default)
         {
             long sequenceToStartFrom;
@@ -75,54 +68,7 @@ namespace WB.Services.Export.Events
 
             var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
-            var eventsReader = Task.Run(async () =>
-            {
-                try
-                {
-                    var readingAvg = new SimpleRunningAverage(5);
-                    readingAvg.Add(pageSize);
-
-                    var readingSequence = sequenceToStartFrom;
-                    var apiTrack = Stopwatch.StartNew();
-
-                    while (true)
-                    {
-                        if (maximumSequenceToQuery.HasValue
-                            && readingSequence >= maximumSequenceToQuery) break;
-
-                        apiTrack.Restart();
-
-                        // just to make sure that we will not query too much data while skipping deleted questionnaires
-                        var amount = Math.Min((int)(readingAvg.Average * BatchSizeMultiplier), pageSize);
-
-                        var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
-
-                        maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
-
-                        readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
-
-                        logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
-                            feed.Events.Count,
-                            readingSequence,
-                            feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
-                            apiTrack.Elapsed);
-
-                        if (feed.Events.Count > 0)
-                        {
-                            eventsProducer.Add(feed, token);
-                            readingSequence = feed.Events.Last().GlobalSequence;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                finally
-                {
-                    eventsProducer.CompleteAdding();
-                }
-            }, token);
+            var eventsReader = Task.Run(() => EventsReaderWorker(token, sequenceToStartFrom, eventsProducer), token);
 
             dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
 
@@ -131,87 +77,90 @@ namespace WB.Services.Export.Events
             foreach (var feed in eventsProducer.GetConsumingEnumerable())
             {
                 executionTrack.Restart();
+
                 using (var batchScope = this.serviceProvider.CreateScope())
                 {
                     batchScope.PropagateTenantContext(tenant);
-                    var tenantDbContext = batchScope.ServiceProvider.GetService<TenantDbContext>();
-                    using (var tr = tenantDbContext.Database.BeginTransaction())
-                    {
-                        var metadata = tenantDbContext.Metadata;
-                        Monitoring.EventsProcessedCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
 
-                        var eventsFilter = batchScope.ServiceProvider.GetService<IEventsFilter>();
-                        var eventsToPublish = eventsFilter != null
-                            ? await eventsFilter.FilterAsync(feed.Events)
-                            : feed.Events;
+                    var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>() ;
+                    
+                    var lastProcessedGlobalSequence = await eventsHandler.HandleEventsFeedAsync(feed, token);
 
-                        try
-                        {
-                            if (eventsToPublish.Count > 0)
-                            {
-                                var handlers = batchScope.ServiceProvider.GetServices<IFunctionalHandler>();
+                    executionTrack.Stop();
 
-                                foreach (var handler in handlers)
-                                {
-                                    foreach (var ev in eventsToPublish)
-                                    {
-                                        try
-                                        {
-                                            await handler.Handle(ev, token);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            e.Data.Add("Event", ev.EventTypeName);
-                                            e.Data.Add("GlobalSequence", ev.GlobalSequence);
+                    // ReSharper disable once PossibleInvalidOperationException - max value will always be set
+                    var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
+                    var eventsProcessed = lastProcessedGlobalSequence - sequenceToStartFrom;
+                    var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
-                                            throw;
-                                        }
-                                    }
+                    var size = (int) runningAverage.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
+                    pageSize = (int) (size * BatchSizeMultiplier);
 
-                                    await handler.SaveStateAsync(token);
-                                }
-                            }
+                    var estimatedTime = runningAverage.Eta(totalEventsToRead - eventsProcessed);
+                    dataExportProcessesService.UpdateDataExportProgress(processId, percent, estimatedTime);
 
-                            metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
-
-                            await tenantDbContext.SaveChangesAsync(token);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.LogCritical(e, "Unhandled exception during event handling");
-                            throw;
-                        }
-
-                        tr.Commit();
-
-                        executionTrack.Stop();
-                        Monitoring.EventsProcessedCounter.Labels(this.tenant.Tenant.Name).Set(metadata.GlobalSequence);
-
-                        // ReSharper disable once PossibleInvalidOperationException - max value will always be set
-                        var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
-                        var eventsProcessed = metadata.GlobalSequence - sequenceToStartFrom;
-                        var percent = eventsProcessed.PercentOf(totalEventsToRead);
-
-                        var size = (int)runningAverage.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
-                        pageSize = (int)(size * BatchSizeMultiplier);
-
-                        var estimatedTime = runningAverage.Eta(totalEventsToRead - eventsProcessed);
-                        dataExportProcessesService.UpdateDataExportProgress(processId, percent, estimatedTime);
-
-                        this.logger.LogInformation(
-                            "Processed {pageSize} events. " +
-                            "GlobalSequence: {sequence:n0} out of {total:n0}. " +
-                            "Took {duration:g}. ETA: {eta}",
-                            feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
-                            , feed.Total,
-                            executionTrack.Elapsed, estimatedTime);
-                    }
+                    this.logger.LogInformation(
+                        "Processed {pageSize} events. " +
+                        "GlobalSequence: {sequence:n0} out of {total:n0}. " +
+                        "Took {duration:g}. ETA: {eta}",
+                        feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
+                        , feed.Total,
+                        executionTrack.Elapsed, estimatedTime);
                 }
             }
 
-
             logger.LogInformation("Database refresh done. Took {elapsed:g}", globalStopwatch.Elapsed);
             await eventsReader;
+        }
+
+        private async Task EventsReaderWorker(CancellationToken token, long sequenceToStartFrom,
+            BlockingCollection<EventsFeed> eventsProducer)
+        {
+            try
+            {
+                var readingAvg = new SimpleRunningAverage(5);
+                readingAvg.Add(pageSize);
+
+                var readingSequence = sequenceToStartFrom;
+                var apiTrack = Stopwatch.StartNew();
+
+                while (true)
+                {
+                    if (maximumSequenceToQuery.HasValue
+                        && readingSequence >= maximumSequenceToQuery) break;
+
+                    apiTrack.Restart();
+
+                    // just to make sure that we will not query too much data while skipping deleted questionnaires
+                    var amount = Math.Min((int)(readingAvg.Average * BatchSizeMultiplier), pageSize);
+
+                    var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
+
+                    maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
+
+                    readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
+
+                    logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
+                        feed.Events.Count,
+                        readingSequence,
+                        feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
+                        apiTrack.Elapsed);
+
+                    if (feed.Events.Count > 0)
+                    {
+                        eventsProducer.Add(feed, token);
+                        readingSequence = feed.Events.Last().GlobalSequence;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                eventsProducer.CompleteAdding();
+            }
         }
     }
 
