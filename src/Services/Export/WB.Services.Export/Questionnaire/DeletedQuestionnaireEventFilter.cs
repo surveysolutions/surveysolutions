@@ -12,14 +12,17 @@ namespace WB.Services.Export.Questionnaire
     public class DeletedQuestionnaireEventFilter : IEventsFilter
     {
         private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDatabaseSchemaService databaseSchemaService;
 
         public DeletedQuestionnaireEventFilter(ITenantContext tenantContext,
+            TenantDbContext dbContext,
             IQuestionnaireStorage questionnaireStorage,
             IDatabaseSchemaService databaseSchemaService)
         {
             this.tenantContext = tenantContext;
+            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.databaseSchemaService = databaseSchemaService;
         }
@@ -44,12 +47,12 @@ namespace WB.Services.Export.Questionnaire
                         break;
                     case InterviewDeleted _:
                     case InterviewHardDeleted _:
-                        reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
+                        reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
                         reference.DeletedAtUtc = @event.EventTimeStamp;
                         forceUpdateQuestionnaire = true;
                         break;
                     default:
-                        reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
+                        reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
                         break;
                 }
 
@@ -58,13 +61,13 @@ namespace WB.Services.Export.Questionnaire
 
                 if (questionnaire.IsDeleted)
                 {
-                    var deletedReference = tenantContext.DbContext.DeletedQuestionnaires.Find(reference.QuestionnaireId);
+                    var deletedReference = this.dbContext.DeletedQuestionnaires.Find(reference.QuestionnaireId);
 
                     if (deletedReference == null)
                     {
                         databaseSchemaService.DropQuestionnaireDbStructure(questionnaire);
 
-                        tenantContext.DbContext.DeletedQuestionnaires.Add(new DeletedQuestionnaireReference(reference.QuestionnaireId));
+                        this.dbContext.DeletedQuestionnaires.Add(new DeletedQuestionnaireReference(reference.QuestionnaireId));
                     }
                 }
                 else
@@ -74,19 +77,19 @@ namespace WB.Services.Export.Questionnaire
 
             }
 
-            this.tenantContext.DbContext.SaveChanges();
+            this.dbContext.SaveChanges();
 
             return result;
         }
 
         private InterviewReference AddInterviewReference(Guid interviewId, string questionnaireIdentity, Event @event)
         {
-            InterviewReference reference = this.tenantContext.DbContext.InterviewReferences.Find(@event.EventSourceId);
+            InterviewReference reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
             if (reference == null)
             {
                 reference = new InterviewReference {QuestionnaireId = questionnaireIdentity, InterviewId = interviewId};
 
-                this.tenantContext.DbContext.Add(reference);
+                this.dbContext.Add(reference);
             }
 
             reference.QuestionnaireId = questionnaireIdentity;

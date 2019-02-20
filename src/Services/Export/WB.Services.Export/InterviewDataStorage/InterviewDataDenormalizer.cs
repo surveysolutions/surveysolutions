@@ -64,6 +64,7 @@ namespace WB.Services.Export.InterviewDataStorage
     {
 
         private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
         private readonly IInterviewDataExportCommandBuilder commandBuilder;
@@ -72,12 +73,14 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly InterviewDataState state;
 
         public InterviewDataDenormalizer(ITenantContext tenantContext, 
+            TenantDbContext dbContext,
             IQuestionnaireStorage questionnaireStorage,
             IMemoryCache memoryCache, 
             IInterviewDataExportCommandBuilder commandBuilder,
             ILogger<InterviewDataDenormalizer> logger)
         {
             this.tenantContext = tenantContext;
+            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.memoryCache = memoryCache;
             this.commandBuilder = commandBuilder;
@@ -615,7 +618,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
             logger.LogDebug("Commands {count} generated in {time}", commands.Count, sw.Elapsed);
             sw.Restart();
-            var db = tenantContext.DbContext.Database.GetDbConnection();
+            var db = dbContext.Database.GetDbConnection();
 
             foreach (var sqlCommand in commands)
             {
@@ -635,7 +638,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    var interviewSummary = await this.tenantContext.DbContext.InterviewReferences.FindAsync(interviewId);
+                    var interviewSummary = await this.dbContext.InterviewReferences.FindAsync(interviewId);
                     if (interviewSummary == null)
                         return null;
                     return new QuestionnaireId(interviewSummary.QuestionnaireId);

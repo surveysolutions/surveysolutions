@@ -16,11 +16,11 @@ namespace WB.Services.Export.Services
 
     public class InterviewsToExportSource : IInterviewsToExportSource
     {
-        private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext dbContext;
 
-        public InterviewsToExportSource(ITenantContext tenantContext)
+        public InterviewsToExportSource(TenantDbContext dbContext)
         {
-            this.tenantContext = tenantContext;
+            this.dbContext = dbContext;
         }
 
         public List<InterviewToExport> GetInterviewsToExport(QuestionnaireId questionnaireIdentity,
@@ -29,7 +29,7 @@ namespace WB.Services.Export.Services
             if (questionnaireIdentity == null) throw new ArgumentNullException(nameof(questionnaireIdentity));
 
             var questionnaireIdString = questionnaireIdentity.ToString();
-            var queryable = this.tenantContext.DbContext.InterviewReferences
+            var queryable = this.dbContext.InterviewReferences
                     .Where(x => x.QuestionnaireId == questionnaireIdString);
 
             if (status.HasValue)
