@@ -43,9 +43,9 @@
                         <div id="collapseListGroup1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="collapseListGroupHeading1" aria-expanded="false">
                             <div class="collapsed-content">
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#welcome" aria-controls="welcome" role="tab" data-toggle="tab">Welcome Page</a></li>
-                                    <li role="presentation"><a href="#resume" aria-controls="resume" role="tab" data-toggle="tab">Resume Page</a></li>
-                                    <li role="presentation"><a href="#finish" aria-controls="finish" role="tab" data-toggle="tab">Finish Page</a></li>
+                                    <li role="presentation" class="active"><a href="#welcome" aria-controls="welcome" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a></li>
+                                    <li role="presentation"><a href="#resume" aria-controls="resume" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a></li>
+                                    <li role="presentation"><a href="#finish" aria-controls="finish" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a></li>
                                 </ul>
                                 <div class="tab-content d-flex f-row justify-center">
                                     <div role="tabpanel" class="tab-pane active survey-block d-flex f-col" id="welcome">
@@ -99,7 +99,6 @@
                                                 </div>
                                             </div>
                                         </div>	
-            
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block" id="resume">
                                         <div class=" d-flex f-col h-100">
@@ -112,7 +111,6 @@
                                                             <div class="default-logo"></div>
                                                             <p class="text-right">Powered by <a href="#">Survey Solutions</a></p>
                                                         </div>
-                                                        
                                                     </div>
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
@@ -151,7 +149,6 @@
                                                             <div class="form-actions">
                                                                 <button type="submit" class="btn btn-info">Start interview</button>
                                                             </div>
-                                                            
                                                         </div>            
                                                     </div>
                                                 </div>
@@ -162,7 +159,6 @@
                                         <div class="d-flex f-col h-100">
                                             <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleFinishPage')}}</div>
                                             <div class=" browser-mockup">
-                                                
                                                 <div class="d-flex justify-center f-row">
                                                     <div class="column d-flex ai-center">
                                                         <div class="logo no-logo">
@@ -170,7 +166,6 @@
                                                             <div class="default-logo"></div>
                                                             <p class="text-right">Powered by <a href="#">Survey Solutions</a></p>
                                                         </div>
-                                                        
                                                     </div>
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
@@ -200,20 +195,17 @@
                                                                         <li>Interview completion date: Mar 13 2017, 21:41</li>
                                                                     </ul>
                                                                 </div>
-                                                            
                                                         </div>            
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-            
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <hr />
             <div class="row mb-05">
@@ -225,21 +217,104 @@
                                     {{$t('WebInterviewSettings.CustomizeEmailsText')}}
                                     <span class="plus"></span>
                                 </a>
-                                
                             </h3>
                         </div>
                         <div id="collapseListGroup12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading12" aria-expanded="false">
                             <div class="collapsed-content text-email">
-                                <ul class="nav nav-tabs" role="tablist">
+
+                                <!--ul class="nav nav-tabs" role="tablist">
                                     <li role="presentation" class="active"><a href="#invitation" aria-controls="invitation" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Invitation')}}</a></li>
                                     <li role="presentation"><a href="#reminder" aria-controls="reminder" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reminder')}}</a></li>
                                     <li role="presentation"><a href="#reject" aria-controls="reject" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reject')}}</a></li>
+                                </ul-->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li v-for="opt in editableStrings" :key="opt.value" :class="{active:opt.isActive}" role="presentation">
+                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(opt)">{{ opt.title }}</a>
+                                    </li>
                                 </ul>
+
                                 <div class="tab-content d-flex f-row justify-center">
+                                    <div v-for="opt in editableStrings" :key="opt.value" :class="{active:opt.isActive}" role="tabpanel" class="tab-pane survey-block">
+                                        <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
+                                        <div class="d-flex justify-center f-col ">
+                                            <div class="row-element">
+                                                <div class="h5">{{opt.emailTitile}}</div>
+                                                <div class="form-group">
+                                                    <div class="field">
+                                                        <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
+                                                        <button type="button" class="btn btn-link btn-clear">
+                                                            <span></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions hidden">
+                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
+                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                </div>
+                                            </div>
+                                            <div class="row-element">
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
+                                                <div  id="invitation-message">
+                                                    <p>Dear respondent!</p>
+                                                    <p>
+                                                        you have started responding to the %SURVEYNAME%, but haven’t completed the process. <br/>
+                                                        Make sure you answer all applicable questions and click ‘complete’ to submit your response. 
+                                                    </p>
+                                                    <p>
+                                                        Thank you!
+                                                    </p>
+                                                </div>
+                                                <div class="form-actions hidden">
+                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
+                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <!--div class="tab-content">
+                                    <div v-for="opt in editableStrings" :key="opt.value" role="tabpanel" class="tab-pane well-sm" :class="{active:opt.isActive}">
+                                        <p>{{textDescription(opt)}}</p>
+                                        <div class="options-group">
+                                            <div class="radio">
+                                                <div class="field">
+                                                    <input class="wb-radio" type="radio" :id="'rbOverrideDefault' + opt.value" v-model.number="opt.overriden" value="0">
+                                                    <label :for="'rbOverrideDefault' + opt.value">
+                                                        <span class="tick"></span>{{defaultText(opt)}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="radio">
+                                                <div class="field">
+                                                    <input class="wb-radio" type="radio" v-model.number="opt.overriden" :id="'rbOverrideCustom' + opt.value" value="1">
+                                                    <label :for="'rbOverrideCustom' + opt.value">
+                                                        <span class="tick"></span>{{$t('WebInterviewSetup.CustomText')}}
+                                                    </label>
+                                                    <button type="submit" class="btn btn-link btn-clear">
+                                                        <span></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <vue-editor v-if="opt.overriden" :editorToolbar="customToolbar" v-model="opt.customText" :id="'txt' + opt.value"></vue-editor>
+                                        <input v-if="opt.overriden" type='hidden' :name="opt.value" :value="opt.customText" />
+                                    </div>
+                                </div-->
+
+
+
+
+
+
+                                <!--div class="tab-content d-flex f-row justify-center">
                                     <div role="tabpanel" class="tab-pane active survey-block" id="invitation">
                                         <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
-
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
@@ -272,14 +347,11 @@
                                                     <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
                                                 </div>
                                             </div>
-
                                         </div>
-            
                                     </div>
                                     <div role="tabpanel" class="tab-pane survey-block" id="reminder">
                                         <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleReminderEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
-
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
@@ -336,6 +408,8 @@
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
+                                                <vue-editor v-if="opt.overriden" :editorToolbar="customToolbar" v-model="opt.customText" :id="'txt' + opt.value"></vue-editor>
+
                                                 <div  id="reject-message">
                                                     <p>Dear respondent!</p>
                                                     <p>
@@ -351,16 +425,13 @@
                                                     <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-            
-                                </div>
+                                </div-->
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <hr />
             <div class="row reminder-setting">
@@ -415,8 +486,54 @@
 </template>
 <script>
 
+import { VueEditor } from "vue2-editor";
+
 export default {
-  
+  data() {
+    return {
+      editableStrings: [],
+      customToolbar: [
+        ["bold", "italic", "underline", "strike", { color: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"]
+      ],
+      submitting: false,
+      updatedMessage: null,
+      updateFailed: false
+    };
+  },
+  mounted() {
+    var self = this;
+    this.editableStrings = _.map(
+      this.$config.model.textOptions,
+      (option, index) => {
+        var customText = self.$config.model.definedTexts[option.key];
+        return {
+          value: option.key,
+          title: option.value,
+          customText: customText,
+          isActive: index === 0,
+          overriden: !_.isNil(customText) && customText !== "" ? 1 : 0
+        };
+      }
+    );
+  },
+  methods: {
+    setActive(opt) {
+      _.map(this.editableStrings, option => {
+        option.isActive = false;
+      });
+
+      opt.isActive = true;
+    },
+    textDescription(opt) {
+      return this.$config.model.textDescriptions[opt.value];
+    },
+  },
+  components: {
+    VueEditor
+  }
 };
 </script>
 

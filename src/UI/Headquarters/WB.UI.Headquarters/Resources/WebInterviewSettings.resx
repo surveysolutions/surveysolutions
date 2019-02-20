@@ -162,4 +162,13 @@
   <data name="ReminderSetting" xml:space="preserve">
     <value>Reminder setting</value>
   </data>
+  <data name="WelcomePage" xml:space="preserve">
+    <value>Welcome Page</value>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+    <value>Resume Page</value>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+    <value>Finish Page</value>
+  </data>
 </root>
