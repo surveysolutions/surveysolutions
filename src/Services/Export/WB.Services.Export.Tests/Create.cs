@@ -424,7 +424,23 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<ITenantContext>());
+            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<ITenantContext>(), Create.TenantDbContext());
+        }
+
+        public static TenantDbContext TenantDbContext(string databaseName = null)
+        {
+            var options = new DbContextOptionsBuilder<TenantDbContext>()
+                .UseInMemoryDatabase(databaseName: databaseName ?? Guid.NewGuid().ToString("N"))
+                .Options;
+            var dbContext = new TenantDbContext(
+                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
+                {
+                    Id = TenantId.None
+                }),
+                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
+                options);
+
+            return dbContext;
         }
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)

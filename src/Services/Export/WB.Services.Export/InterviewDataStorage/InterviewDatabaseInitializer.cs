@@ -21,6 +21,7 @@ namespace WB.Services.Export.InterviewDataStorage
     public class DatabaseSchemaService : IDatabaseSchemaService
     {
         private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext dbContext;
 
         private class ColumnInfo
         {
@@ -41,14 +42,14 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         private static readonly HashSet<string> createdQuestionnaireTables = new HashSet<string>();
-        public DatabaseSchemaService(ITenantContext tenantContext)
+        public DatabaseSchemaService(ITenantContext tenantContext, TenantDbContext dbContext)
         {
             this.tenantContext = tenantContext;
+            this.dbContext = dbContext;
         }
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            var dbContext = tenantContext.DbContext;
             var key = tenantContext.Tenant.SchemaName() + questionnaireDocument.QuestionnaireId.Id;
             if (createdQuestionnaireTables.Contains(key))
                 return;
@@ -75,7 +76,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            var db = tenantContext.DbContext.Database.GetDbConnection();
+            var db = dbContext.Database.GetDbConnection();
             foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
             {
                 if (storedGroup.DoesSupportDataTable)

@@ -21,18 +21,22 @@ namespace WB.Services.Export.Interview
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly ITenantContext tenantContext;
+        private readonly TenantDbContext tenantDbContext;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, ITenantContext tenantContext)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, 
+            ITenantContext tenantContext,
+            TenantDbContext tenantDbContext)
         {
             this.tenantApi = tenantApi;
             this.tenantContext = tenantContext;
+            this.tenantDbContext = tenantDbContext;
         }
 
         public IEnumerable<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
         {
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
-                var connection = tenantContext.DbContext.Database.GetDbConnection();
+                var connection = tenantDbContext.Database.GetDbConnection();
                 var interviewsQuery = InterviewQueryBuilder.GetInterviewsQuery(@group);
 
                 using (var reader = connection.ExecuteReader(interviewsQuery, new { ids = interviewsId }))
@@ -285,7 +289,7 @@ namespace WB.Services.Export.Interview
             var entities = questionnaire.Children.TreeToEnumerable(c => c.Children)
                 .OfType<Question>().ToList();
 
-            var connection = tenantContext.DbContext.Database.GetDbConnection();
+            var connection = tenantDbContext.Database.GetDbConnection();
 
             List<MultimediaAnswer> answers = new List<MultimediaAnswer>();
 
