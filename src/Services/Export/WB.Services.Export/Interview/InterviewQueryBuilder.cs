@@ -69,7 +69,7 @@ namespace WB.Services.Export.Interview
                     }
                 }
 
-                query.AppendFormat(" enablement.{0} as enablement__{0}{1}", InterviewDatabaseConstants.InstanceValue,
+                query.AppendFormat(" enablement.\"{0}\" as \"enablement__{0}\"{1}", group.ColumnName,
                     Environment.NewLine);
 
 
