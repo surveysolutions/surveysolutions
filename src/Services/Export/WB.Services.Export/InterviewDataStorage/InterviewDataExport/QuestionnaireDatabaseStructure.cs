@@ -23,20 +23,12 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public bool CanAddChildren(Group group)
         {
             var questionsCount = group.Children.Count(entity => entity is Question);
-            if (questionsCount + DataColumns.Count > ColumnsLimit
-                || questionsCount + EnablementColumns.Count > ColumnsLimit
-                || questionsCount + ValidityColumns.Count > ColumnsLimit)
-                return false;
             var variablesCount = group.Children.Count(entity => entity is Variable);
-            if (variablesCount + DataColumns.Count > ColumnsLimit
-                || variablesCount + EnablementColumns.Count > ColumnsLimit)
-                return false;
             var staticTextCount = group.Children.Count(entity => entity is StaticText);
-            if (staticTextCount + DataColumns.Count > ColumnsLimit
-                || staticTextCount + EnablementColumns.Count > ColumnsLimit)
-                return false;
             var groupsCount = group.Children.Count(entity => entity is Group roster && !roster.IsRoster);
-            if (groupsCount + EnablementColumns.Count > ColumnsLimit)
+            if (questionsCount + variablesCount + DataColumns.Count > ColumnsLimit
+                || questionsCount + variablesCount + staticTextCount + groupsCount + EnablementColumns.Count > ColumnsLimit
+                || questionsCount + staticTextCount + ValidityColumns.Count > ColumnsLimit)
                 return false;
 
             return true;
@@ -109,9 +101,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public string GetDataTableName(Guid entityId) => entityTableMap[entityId].TableName;
         public string GetEnablementDataTableName(Guid entityId) => entityTableMap[entityId].EnablementTableName;
         public string GetValidityDataTableName(Guid entityId) => entityTableMap[entityId].ValidityTableName;
-        public bool DoesSupportDataTable(Guid entityId) => entityTableMap[entityId].DataColumns.Any(e => e.PublicKey == entityId);
-        public bool DoesSupportEnablementTable(Guid entityId) => entityTableMap[entityId].EnablementColumns.Any(e => e.PublicKey == entityId);
-        public bool DoesSupportValidityTable(Guid entityId) => entityTableMap[entityId].ValidityColumns.Any(e => e.PublicKey == entityId);
+        public bool DoesSupportDataTable(Guid entityId) => entityTableMap[entityId] != null;
+        public bool DoesSupportEnablementTable(Guid entityId) => entityTableMap[entityId] != null;
+        public bool DoesSupportValidityTable(Guid entityId) => entityTableMap[entityId] != null;
 
         public IEnumerable<QuestionnaireLevelDatabaseTable> GetAllLevelTables() => tables.SelectMany(level => level.Value);
         public IEnumerable<QuestionnaireLevelDatabaseTable> GetLevelTables(Guid entityId) => tables[entityId];
