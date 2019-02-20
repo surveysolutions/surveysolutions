@@ -21,8 +21,9 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
         {
             // setup
             var services = new ServiceCollection();
+           
             this.apiMock = new Mock<IHeadquartersApi>();
-            this.provider = Create.SetupEventsProcessor(services, apiMock.Object);
+            this.provider = Create.SetupEventsProcessor(services, apiMock.Object, true);
         }
 
         [Test]

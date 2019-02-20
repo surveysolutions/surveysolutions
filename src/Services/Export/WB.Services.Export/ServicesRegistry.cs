@@ -40,6 +40,7 @@ namespace WB.Services.Export
 
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
+            services.AddTransient<IEventsHandler, EventsHandler>();
             services.AddTransient<IEventsFilter, DeletedQuestionnaireEventFilter>();
             services.AddTransient<IInterviewsToExportSource, InterviewsToExportSource>();
             services.AddTransient<ICsvWriter, CsvWriter>();
