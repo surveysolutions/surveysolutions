@@ -95,28 +95,28 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
             foreach (var @group in allGroups)
             {
-                Group parent = @group;
+                Group currentLevel = @group;
                 while (true)
                 {
-                    if (parent is Group roster && roster.IsRoster || parent is QuestionnaireDocument)
+                    if (currentLevel is Group roster && roster.IsRoster || currentLevel is QuestionnaireDocument)
                         break;
 
-                    parent = parent.GetParent() as Group;
+                    currentLevel = currentLevel.GetParent() as Group;
                 }
 
-                if (!databaseTableMap.ContainsKey(parent.PublicKey))
+                if (!databaseTableMap.ContainsKey(currentLevel.PublicKey))
                 {
-                    databaseTableMap.Add(parent.PublicKey, new List<QuestionnaireLevelDatabaseTable>()
+                    databaseTableMap.Add(currentLevel.PublicKey, new List<QuestionnaireLevelDatabaseTable>()
                     {
-                        CreateTable(questionnaire, parent, 0)
+                        CreateTable(questionnaire, currentLevel, 0)
                     });
                 }
 
-                var levelTables = databaseTableMap[parent.PublicKey];
+                var levelTables = databaseTableMap[currentLevel.PublicKey];
                 var lastTable = levelTables.Last();
                 if (!lastTable.CanAddChildren(@group))
                 {
-                    var newTable = CreateTable(questionnaire, parent, levelTables.Count);
+                    var newTable = CreateTable(questionnaire, currentLevel, levelTables.Count);
                     levelTables.Add(newTable);
                     lastTable = newTable;
                 }
