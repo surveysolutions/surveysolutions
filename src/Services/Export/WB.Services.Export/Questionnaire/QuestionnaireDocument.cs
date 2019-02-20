@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Questionnaire
@@ -163,7 +164,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private Dictionary<Guid, Group> groupsCache;
+        private Dictionary<Guid, Group> groupsCache; 
         private Dictionary<Guid, Group> GroupsCache
         {
             get
@@ -198,16 +199,9 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private string tableName;
-        public override string TableName
-        {
-            get
-            {
-                if (tableName != null) return tableName;
-                tableName = $"{CompressQuestionnaireId(this.QuestionnaireId)}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
-                return tableName;
-            }
-        }
+        private QuestionnaireDatabaseStructure databaseStructure;
+        public QuestionnaireDatabaseStructure DatabaseStructure =>
+            databaseStructure ?? (databaseStructure = new QuestionnaireDatabaseStructure(this));
 
         public bool IsDeleted { get; set; }
 

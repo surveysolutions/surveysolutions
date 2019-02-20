@@ -491,15 +491,12 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var groups = questionnaire.GetInterviewLevelGroups();
-            foreach (var group in groups)
+            var levelTables = questionnaire.DatabaseStructure.GetLevelTables(questionnaire.PublicKey);
+            foreach (var levelTable in levelTables)
             {
-                if (group.DoesSupportDataTable)
-                    state.InsertInterviewInTable(group.TableName, interviewId);
-                if (group.DoesSupportEnablementTable)
-                    state.InsertInterviewInTable(group.EnablementTableName, interviewId);
-                if (group.DoesSupportValidityTable)
-                    state.InsertInterviewInTable(group.ValidityTableName, interviewId);
+                state.InsertInterviewInTable(levelTable.TableName, interviewId);
+                state.InsertInterviewInTable(levelTable.EnablementTableName, interviewId);
+                state.InsertInterviewInTable(levelTable.ValidityTableName, interviewId);
             }
         }
 
@@ -509,13 +506,13 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var @group = questionnaire.Find<Group>(groupId);
-            if (group.DoesSupportDataTable)
-                state.InsertRosterInTable(@group.TableName, interviewId, rosterVector);
-            if (group.DoesSupportEnablementTable)
-                state.InsertRosterInTable(@group.EnablementTableName, interviewId, rosterVector);
-            if (group.DoesSupportValidityTable)
-                state.InsertRosterInTable(@group.ValidityTableName, interviewId, rosterVector);
+            var levelTables = questionnaire.DatabaseStructure.GetLevelTables(groupId);
+            foreach (var levelTable in levelTables)
+            {
+                state.InsertRosterInTable(levelTable.TableName, interviewId, rosterVector);
+                state.InsertRosterInTable(levelTable.EnablementTableName, interviewId, rosterVector);
+                state.InsertRosterInTable(levelTable.ValidityTableName, interviewId, rosterVector);
+            }
         }
 
         public async Task UpdateQuestionValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, NpgsqlDbType valueType, CancellationToken token = default)
@@ -524,10 +521,10 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-            var parentGroup = (Group)entity.GetParent();
-            var columnName = ((Question)entity).ColumnName;
-            state.UpdateValueInTable(parentGroup.TableName, interviewId, rosterVector, columnName, value, valueType);
+            var question = questionnaire.Find<Question>(entityId);
+            var tableName = questionnaire.DatabaseStructure.GetDataTableName(entityId);
+            var columnName = question.ColumnName;
+            state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, valueType);
         }
 
         public async Task UpdateVariableValue(Guid interviewId, Guid entityId, RosterVector rosterVector, object value, CancellationToken token = default)
@@ -537,14 +534,14 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var variable = questionnaire.Find<Variable>(entityId);
-            var parentGroup = (Group)variable.GetParent();
+            var tableName = questionnaire.DatabaseStructure.GetDataTableName(entityId);
             var columnName = variable.ColumnName;
             var columnType = GetPostgresSqlTypeForVariable(variable);
 
             if (columnType == NpgsqlDbType.Double && value is string sValue && sValue == "NaN")
                 value = double.NaN;
 
-            state.UpdateValueInTable(parentGroup.TableName, interviewId, rosterVector, columnName, value, columnType);
+            state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, columnType);
         }
 
         public async Task UpdateEnablementValue(Guid interviewId, Guid entityId, RosterVector rosterVector, bool isEnabled, CancellationToken token = default)
@@ -554,11 +551,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 return;
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
-
-            if (entity is Group group && !group.DoesSupportEnablementTable)
-                return;
-
-            var tableName = ResolveGroupForEnablement(entity).EnablementTableName;
+            var tableName = questionnaire.DatabaseStructure.GetEnablementDataTableName(entityId);
             var columnName = ResolveColumnNameForEnablement(entity);
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, isEnabled, NpgsqlDbType.Boolean);
         }
@@ -571,7 +564,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
             var entity = questionnaire.Find<IQuestionnaireEntity>(entityId);
 
-            var tableName = ((Group)entity.GetParent()).ValidityTableName;
+            var tableName = questionnaire.DatabaseStructure.GetValidityDataTableName(entityId);
             var columnName = (entity as Question)?.ColumnName 
                              ?? (entity as StaticText)?.ColumnName 
                              ?? throw new ArgumentException("Does not support this entity type: " + entity.GetType().Name);
@@ -584,13 +577,13 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var @group = questionnaire.Find<Group>(groupId);
-            if (group.DoesSupportDataTable)
-                state.RemoveRosterFromTable(@group.TableName, interviewId, rosterVector);
-            if (group.DoesSupportEnablementTable)
-                state.RemoveRosterFromTable(@group.EnablementTableName, interviewId, rosterVector);
-            if (group.DoesSupportValidityTable)
-                state.RemoveRosterFromTable(@group.ValidityTableName, interviewId, rosterVector);
+            var levelTables = questionnaire.DatabaseStructure.GetLevelTables(questionnaire.PublicKey);
+            foreach (var levelTable in levelTables)
+            {
+                state.RemoveRosterFromTable(levelTable.TableName, interviewId, rosterVector);
+                state.RemoveRosterFromTable(levelTable.EnablementTableName, interviewId, rosterVector);
+                state.RemoveRosterFromTable(levelTable.ValidityTableName, interviewId, rosterVector);
+            }
         }
 
         public async Task RemoveInterview(Guid interviewId, CancellationToken token = default)
@@ -599,15 +592,12 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var groups = questionnaire.GetAllStoredGroups();
-            foreach (var group in groups)
+            var levelTables = questionnaire.DatabaseStructure.GetAllLevelTables();
+            foreach (var levelTable in levelTables)
             {
-                if (group.DoesSupportDataTable)
-                    state.RemoveInterviewFromTable(group.TableName, interviewId);
-                if (group.DoesSupportEnablementTable)
-                    state.RemoveInterviewFromTable(group.EnablementTableName, interviewId);
-                if (group.DoesSupportValidityTable)
-                    state.RemoveInterviewFromTable(group.ValidityTableName, interviewId);
+                state.RemoveInterviewFromTable(levelTable.TableName, interviewId);
+                state.RemoveInterviewFromTable(levelTable.EnablementTableName, interviewId);
+                state.RemoveInterviewFromTable(levelTable.ValidityTableName, interviewId);
             }
         }
 
@@ -659,8 +649,10 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (entity)
             {
-                case Group group:
+                case Group roster when roster.IsRoster:
                     return InterviewDatabaseConstants.InstanceValue;
+                case Group nonRoster when !nonRoster.IsRoster:
+                    return nonRoster.ColumnName;
                 case Question question:
                     return question.ColumnName;
                 case Variable variable:
