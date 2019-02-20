@@ -112,8 +112,6 @@ namespace WB.Services.Export.InterviewDataStorage
             if (group.IsRoster)
                 columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, InterviewDatabaseConstants.SqlTypes.Bool, defaultValue: "true"));
-
             var questions = group.EnablementColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));

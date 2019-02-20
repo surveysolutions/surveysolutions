@@ -649,10 +649,8 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (entity)
             {
-                case Group roster when roster.IsRoster:
-                    return InterviewDatabaseConstants.InstanceValue;
-                case Group nonRoster when !nonRoster.IsRoster:
-                    return nonRoster.ColumnName;
+                case Group group:
+                    return group.ColumnName;
                 case Question question:
                     return question.ColumnName;
                 case Variable variable:
