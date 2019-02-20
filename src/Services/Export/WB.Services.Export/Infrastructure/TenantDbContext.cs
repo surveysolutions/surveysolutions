@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using WB.Services.Export.InterviewDataStorage;
@@ -18,6 +19,9 @@ namespace WB.Services.Export.Infrastructure
             DbContextOptions options) : base(options)
         {
             this.tenantContext = tenantContext;
+
+            if(tenantContext.Tenant == null) throw new ArgumentException(nameof(TenantDbContext) + " cannot be resolved outside of configured ITenantContext");
+
             var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
             connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
             this.connectionString = connectionStringBuilder.ToString();

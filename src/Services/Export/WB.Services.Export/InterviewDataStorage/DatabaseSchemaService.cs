@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
-    public interface IDatabaseSchemaService
-    {
-        void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
-
-        void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
-    }
-
     public class DatabaseSchemaService : IDatabaseSchemaService
     {
         private readonly ITenantContext tenantContext;
@@ -172,22 +169,22 @@ namespace WB.Services.Export.InterviewDataStorage
         {
             switch (question)
             {
-                case TextQuestion _ : return InterviewDatabaseConstants.SqlTypes.String;
+                case TextQuestion _: return InterviewDatabaseConstants.SqlTypes.String;
                 case NumericQuestion numericQuestion when (numericQuestion.IsInteger): return InterviewDatabaseConstants.SqlTypes.Integer;
                 case NumericQuestion numericQuestion when (!numericQuestion.IsInteger): return InterviewDatabaseConstants.SqlTypes.Double;
-                case TextListQuestion _ : return InterviewDatabaseConstants.SqlTypes.Jsonb;
-                case MultimediaQuestion _ : return InterviewDatabaseConstants.SqlTypes.String;
-                case DateTimeQuestion dateTimeQuestion : return InterviewDatabaseConstants.SqlTypes.DateTime;
-                case AudioQuestion audioQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
-                case AreaQuestion areaQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
-                case GpsCoordinateQuestion gpsCoordinateQuestion : return InterviewDatabaseConstants.SqlTypes.Jsonb;
-                case QRBarcodeQuestion qrBarcodeQuestion : return InterviewDatabaseConstants.SqlTypes.String;
+                case TextListQuestion _: return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case MultimediaQuestion _: return InterviewDatabaseConstants.SqlTypes.String;
+                case DateTimeQuestion dateTimeQuestion: return InterviewDatabaseConstants.SqlTypes.DateTime;
+                case AudioQuestion audioQuestion: return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case AreaQuestion areaQuestion: return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case GpsCoordinateQuestion gpsCoordinateQuestion: return InterviewDatabaseConstants.SqlTypes.Jsonb;
+                case QRBarcodeQuestion qrBarcodeQuestion: return InterviewDatabaseConstants.SqlTypes.String;
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToRosterId.HasValue):
                     return InterviewDatabaseConstants.SqlTypes.IntArray;
                 case SingleQuestion singleQuestion when (singleQuestion.LinkedToQuestionId.HasValue):
                     var singleSourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
                     return singleSourceQuestion is TextListQuestion ? InterviewDatabaseConstants.SqlTypes.Integer : InterviewDatabaseConstants.SqlTypes.IntArray;
-                case SingleQuestion singleQuestion 
+                case SingleQuestion singleQuestion
                     when (!singleQuestion.LinkedToQuestionId.HasValue && !singleQuestion.LinkedToRosterId.HasValue):
                     return InterviewDatabaseConstants.SqlTypes.Integer;
                 case MultyOptionsQuestion yesNoOptionsQuestion when (yesNoOptionsQuestion.YesNoView):
@@ -197,7 +194,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     var multiSourceQuestion = questionnaire.Find<Question>(multiLinkedToQuestion.LinkedToQuestionId.Value);
                     return multiSourceQuestion is TextListQuestion ? InterviewDatabaseConstants.SqlTypes.IntArray : InterviewDatabaseConstants.SqlTypes.Jsonb;
                 case MultyOptionsQuestion multiOptionsQuestion
-                    when(!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
+                    when (!multiOptionsQuestion.LinkedToQuestionId.HasValue && !multiOptionsQuestion.LinkedToRosterId.HasValue):
                     return InterviewDatabaseConstants.SqlTypes.IntArray;
                 default:
                     throw new ArgumentException("Unknown question type: " + question.GetType().Name);
@@ -213,7 +210,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 case VariableType.Double: return InterviewDatabaseConstants.SqlTypes.Double;
                 case VariableType.LongInteger: return InterviewDatabaseConstants.SqlTypes.Long;
                 case VariableType.String: return InterviewDatabaseConstants.SqlTypes.String;
-                default: 
+                default:
                     throw new ArgumentException("Unknown variable type: " + variable.Type);
             }
         }
@@ -221,6 +218,63 @@ namespace WB.Services.Export.InterviewDataStorage
         private static void CreateSchema(DbConnection connection, TenantInfo tenant)
         {
             connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.SchemaName()}\"");
+        }
+
+        public static async Task DropTenantSchemaAsync(IOptions<DbConnectionSettings> connectionSettings, string tenant,
+            ILogger<DatabaseSchemaService> logger)
+        {
+            List<string> tablesToDelete = new List<string>();
+
+            using (var db = new NpgsqlConnection(connectionSettings.Value.DefaultConnection))
+            {
+                await db.OpenAsync();
+
+                logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
+
+                var schemas = await db.QueryAsync<string>(
+                    "select nspname from pg_catalog.pg_namespace where nspname like @tenant " +
+                    "and exists (select tablename from pg_tables where schemaname= nspname and tablename = '__migrations')",
+                    new
+                    {
+                        tenant = tenant + "_%"
+                    });
+
+                foreach (var schema in schemas)
+                {
+                    var tables = await db.QueryAsync<string>("select tablename from pg_tables where schemaname= @schema",
+                            new { schema });
+
+                    foreach (var table in tables)
+                    {
+                        tablesToDelete.Add($@"""{schema}"".""{table}""");
+                    }
+                }
+
+                foreach (var tables in tablesToDelete.Batch(30))
+                {
+                    using (var tr = db.BeginTransaction())
+                    {
+                        foreach (var table in tables)
+                        {
+                            await db.ExecuteAsync($@"drop table if exists {table}");
+                            logger.LogInformation("Dropped {table}", table);
+                        }
+
+                        await tr.CommitAsync();
+                    }
+                }
+
+                using (var tr = db.BeginTransaction())
+                {
+                    foreach (var schema in schemas)
+                    {
+                        await db.ExecuteAsync($@"drop schema if exists ""{schema}""");
+                        logger.LogInformation("Dropped schema {schema}.", schema);
+                    }
+
+                    await tr.CommitAsync();
+                }
+            }
         }
 
         private string GenerateCreateTableScript(string tableName, List<ColumnInfo> columns)
