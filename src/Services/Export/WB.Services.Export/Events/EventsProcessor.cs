@@ -190,7 +190,7 @@ namespace WB.Services.Export.Events
                         var eventsProcessed = metadata.GlobalSequence - sequenceToStartFrom;
                         var percent = eventsProcessed.PercentOf(totalEventsToRead);
 
-                        pageSize = (int)eta.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
+                        pageSize = (int)eta.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds * 1.2);
 
                         var estimatedTime = eta.Eta(totalEventsToRead - eventsProcessed);
                         dataExportProcessesService.UpdateDataExportProgress(processId, percent, estimatedTime);
