@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         [Test]
         public void should_format_first_option_in_AutoCompleteSuggestions() =>
-            cascadingModel.AutoCompleteSuggestions.Should().HaveElementAt(0, "title <b>a</b>bc 1");
+            cascadingModel.AutoCompleteSuggestions.Select(x=>x.Title).Should().HaveElementAt(0, "title abc 1");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
     }

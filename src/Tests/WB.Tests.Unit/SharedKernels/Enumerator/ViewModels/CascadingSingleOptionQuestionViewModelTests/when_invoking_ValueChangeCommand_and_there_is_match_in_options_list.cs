@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel.FilterCommand.Execute("o");
 
-            await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3");
+            await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync(Create.Entity.OptionWithSearchTerm(3));
         }
 
         [NUnit.Framework.Test] public void should_send_answer_command () =>

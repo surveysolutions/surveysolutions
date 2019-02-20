@@ -43,8 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private List<string> autoCompleteSuggestions = new List<string>();
-        public List<string> AutoCompleteSuggestions
+        private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
+        public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
             get => this.autoCompleteSuggestions;
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
@@ -52,15 +52,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxCommand<string> FilterCommand => new MvxCommand<string>(this.UpdateFilter);
         public IMvxCommand RemoveAnswerCommand => new MvxCommand(() => { this.UpdateFilter(null); });
-        public IMvxCommand<string> SaveAnswerBySelectedOptionCommand => new MvxCommand<string>(this.SaveAnswerBySelectedOption);
+        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
         public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(() => { });
 
-        private void SaveAnswerBySelectedOption(string optionText)
+        private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            optionText = this.RemoveHighlighting(optionText);
-
-            var selectedOption = this.filteredOptionsViewModel.GetOptions(optionText)?.FirstOrDefault()?.Value;
-            this.OnAddOption.Invoke(this, selectedOption.Value);
+            this.OnAddOption.Invoke(this, option.Value);
 
             this.UpdateFilter(null);
         }
@@ -68,22 +65,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateFilter(string filter)
         {
             this.FilterText = filter;
-            this.AutoCompleteSuggestions = this.GetHighlightedSuggestions(filter).ToList();
+            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
         }
 
-        private string RemoveHighlighting(string optionText) => optionText.Replace("</b>", "").Replace("<b>", "");
 
-        private string GetHighlightedText(string text, string filter)
-        {
-            var startIndexOfSearchedText = string.IsNullOrEmpty(filter)
-                ? -1
-                : text.IndexOf(filter, StringComparison.OrdinalIgnoreCase);
-
-            return startIndexOfSearchedText >= 0 ? text.Insert(startIndexOfSearchedText + filter.Length, "</b>")
-                .Insert(startIndexOfSearchedText, "<b>") : text;
-        }
-
-        private IEnumerable<string> GetHighlightedSuggestions(string filter)
+        private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
         {
             foreach (var model in this.filteredOptionsViewModel.GetOptions(filter)
                 .Where(x => !this.excludedOptions.Contains(x.Value)))
@@ -91,7 +77,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (model.Title.IsNullOrEmpty())
                     continue;
 
-                yield return this.GetHighlightedText(model.Title, filter);
+                yield return new OptionWithSearchTerm
+                {
+                    Value = model.Value,
+                    Title = model.Title,
+                    SearchTerm = filter
+                };
             }
         }
 

@@ -51,7 +51,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             await BecauseOf();
         }
 
-        public async Task BecauseOf() => await viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("html");
+        public async Task BecauseOf() =>
+            await viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync(
+                Create.Entity.OptionWithSearchTerm(4, "html"));
 
         [NUnit.Framework.Test] public void should_save_answer () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y=>y.SelectedValue == 4)), Times.Once);
