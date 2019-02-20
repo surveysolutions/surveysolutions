@@ -577,7 +577,7 @@ namespace WB.Services.Export.InterviewDataStorage
             if (questionnaire == null)
                 return;
 
-            var levelTables = questionnaire.DatabaseStructure.GetLevelTables(questionnaire.PublicKey);
+            var levelTables = questionnaire.DatabaseStructure.GetLevelTables(groupId);
             foreach (var levelTable in levelTables)
             {
                 state.RemoveRosterFromTable(levelTable.TableName, interviewId, rosterVector);
