@@ -43,14 +43,13 @@ namespace WB.Services.Export.Interview
                 {
                     while (reader.Read())
                     {
-
                         var groupInterviewEntity = new InterviewEntity
                         {
                             Identity = new Identity(group.PublicKey,
                                          @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty),
                             EntityType = EntityType.Section,
                             InterviewId = (Guid)reader["data__interview_id"],
-                            IsEnabled = (bool)reader[$"enablement__{InterviewDatabaseConstants.InstanceValue}"]
+                            IsEnabled = (bool)reader[$"enablement__{group.ColumnName}"]
                         };
 
                         yield return groupInterviewEntity;
