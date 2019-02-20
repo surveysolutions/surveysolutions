@@ -366,7 +366,7 @@
 
         if (timeLeft == '' || timeLeft == null) return '';
 
-        return ' (ETA: ' + dataReference.TimeLeft() + ')';
+        return ' (' + dataReference.TimeLeft() + ')';
     }
 
     self.isInQueue = function (type, format) {

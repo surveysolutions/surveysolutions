@@ -2,6 +2,7 @@ using System;
 using Humanizer;
 using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -26,12 +27,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             get
             {
-                if (TimeEstimation == null)
+                if (TimeEstimation == null || TimeEstimation.Value.TotalSeconds < 1)
                 {
                     return string.Empty;
                 }
 
-                return TimeEstimation.Value.Humanize(1, minUnit: TimeUnit.Second);
+                return Report.TimeLeft + ": " + TimeEstimation.Value.Humanize(1, minUnit: TimeUnit.Second);
             }
         }
     }
