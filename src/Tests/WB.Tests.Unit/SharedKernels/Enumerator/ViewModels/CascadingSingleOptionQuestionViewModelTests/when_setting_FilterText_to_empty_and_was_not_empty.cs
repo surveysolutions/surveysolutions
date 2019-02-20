@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Count.Should().Be(3);
 
         [NUnit.Framework.Test] public void should_create_option_models_with_specified_Texts () =>
-            cascadingModel.AutoCompleteSuggestions.Should().BeEquivalentTo(OptionsIfParentAnswerIs1.Select(x => x.Title));
+            cascadingModel.AutoCompleteSuggestions.Select(x=>x.Title).Should().BeEquivalentTo(OptionsIfParentAnswerIs1.Select(x => x.Title));
 
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;

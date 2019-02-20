@@ -99,12 +99,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield return categoricalOption;
         }
 
-        protected override async Task SaveAnswerAsync(string optionText)
+        protected override async Task SaveAnswerAsync(int optionValue)
         {
             if (!this.answerOnParentQuestion.HasValue)
                 return;
 
-            await base.SaveAnswerAsync(optionText);
+            await base.SaveAnswerAsync(optionValue);
         }
 
         public async void Handle(SingleOptionQuestionAnswered @event)

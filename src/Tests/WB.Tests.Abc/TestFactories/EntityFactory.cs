@@ -82,6 +82,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -2391,5 +2392,11 @@ namespace WB.Tests.Abc.TestFactories
                 Idenifying = idenifying
             };
         }
+
+        public OptionWithSearchTerm OptionWithSearchTerm(int value, string title = null) => new OptionWithSearchTerm
+        {
+            Value = value,
+            Title = title
+        };
     }
 }
