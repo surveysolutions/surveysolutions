@@ -1,4 +1,4 @@
-﻿select data.interview__id as data__interview_id , data.roster__vector as data__roster_vector ,  enablement.instance__state as enablement__instance__state
+﻿select data.interview__id as data__interview_id , data.roster__vector as data__roster_vector ,  enablement."roster1" as "enablement__roster1"
  from 
 "qqqqqqqqqqqqqqqqqqqqqg$6_roster1" data 
  INNER JOIN     "qqqqqqqqqqqqqqqqqqqqqg$6_roster1_e" enablement ON data.interview__id = enablement.interview__id

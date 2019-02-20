@@ -29,6 +29,6 @@ namespace WB.Services.Export.Questionnaire
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
 
-        public string ColumnName => this.PublicKey.ToString();
+        public string ColumnName => this.PublicKey.ToString().ToLower();
     }
 }
