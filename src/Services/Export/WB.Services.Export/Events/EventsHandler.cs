@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,10 +44,12 @@ namespace WB.Services.Export.Events
 
                     var metadata = dbContext.Metadata;
 
+                    var eventHandlerStopwatch = new Stopwatch();
                     if (eventsToPublish.Count > 0)
                     {
                         foreach (var handler in handlers)
                         {
+                            eventHandlerStopwatch.Restart();
                             foreach (var ev in eventsToPublish)
                             {
                                 try
@@ -62,6 +65,10 @@ namespace WB.Services.Export.Events
                             }
 
                             await handler.SaveStateAsync(token);
+                            eventHandlerStopwatch.Stop();
+
+                            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext.Tenant.Name,
+                                handler.GetType().Name, eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
                         }
                     }
 
