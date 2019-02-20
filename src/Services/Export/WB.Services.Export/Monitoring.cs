@@ -36,6 +36,7 @@ namespace WB.Services.Export
 
         public static void TrackEventHandlerProcessingSped(string tenant, string handlerName, double value)
         {
+            if(tenant != null && handlerName != null)
             HandlerEventHandlingSpeedGauge.Labels(tenant, handlerName).Set(value);
         }
     }
