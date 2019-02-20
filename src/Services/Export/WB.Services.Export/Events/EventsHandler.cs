@@ -67,7 +67,7 @@ namespace WB.Services.Export.Events
                             await handler.SaveStateAsync(token);
                             eventHandlerStopwatch.Stop();
 
-                            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext.Tenant.Name,
+                            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext?.Tenant?.Name,
                                 handler.GetType().Name, eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
                         }
                     }
