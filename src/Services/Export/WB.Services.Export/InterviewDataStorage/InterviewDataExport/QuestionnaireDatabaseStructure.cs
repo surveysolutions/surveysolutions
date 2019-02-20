@@ -101,9 +101,6 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public string GetDataTableName(Guid entityId) => entityTableMap[entityId].TableName;
         public string GetEnablementDataTableName(Guid entityId) => entityTableMap[entityId].EnablementTableName;
         public string GetValidityDataTableName(Guid entityId) => entityTableMap[entityId].ValidityTableName;
-        public bool DoesSupportDataTable(Guid entityId) => entityTableMap[entityId] != null;
-        public bool DoesSupportEnablementTable(Guid entityId) => entityTableMap[entityId] != null;
-        public bool DoesSupportValidityTable(Guid entityId) => entityTableMap[entityId] != null;
 
         public IEnumerable<QuestionnaireLevelDatabaseTable> GetAllLevelTables() => tables.SelectMany(level => level.Value);
         public IEnumerable<QuestionnaireLevelDatabaseTable> GetLevelTables(Guid entityId) => tables[entityId];
@@ -111,9 +108,11 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         private QuestionnaireLevelDatabaseTable CreateTable(QuestionnaireDocument questionnaire, Group @group, int tableIndex)
         {
             var printIndex = tableIndex == 0 ? "" : $"__{tableIndex}";
-            var tableName = $"{CompressQuestionnaireId(questionnaire.QuestionnaireId)}_{@group.VariableName ?? @group.PublicKey.FormatGuid()}{printIndex}";
-            var enablementTableName = $"{tableName}_e";
-            var validityTableName = $"{tableName}_v";
+            var questionnairePrefix = GenerateQuestionnairePrefix(questionnaire.VariableName, questionnaire.QuestionnaireId);
+            var groupName = GenerateGroupName(@group);
+            var tableName = $"{questionnairePrefix}{groupName}{printIndex}";
+            var enablementTableName = $"{tableName}__e";
+            var validityTableName = $"{tableName}__v";
 
             return new QuestionnaireLevelDatabaseTable()
             {
@@ -125,13 +124,29 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             };
         }
 
-        protected string CompressQuestionnaireId(QuestionnaireId questionnaireId)
+        private string GenerateGroupName(Group @group)
+        {
+            if (group is QuestionnaireDocument)
+                return string.Empty;
+            return "_" + (@group.VariableName ?? @group.PublicKey.FormatGuid());
+        }
+
+        protected string GenerateQuestionnairePrefix(string questionnaireVariable, QuestionnaireId questionnaireId)
         {
             var strings = questionnaireId.Id.Split('$');
-            strings[0] = Convert.ToBase64String(Guid.Parse(strings[0]).ToByteArray())
-                .Substring(0, 22)
-                .Replace("/", "_")
-                .Replace("+", "-");
+
+            if (!string.IsNullOrEmpty(questionnaireVariable) && questionnaireVariable.Length < 22)
+            {
+                strings[0] = questionnaireVariable;
+            }
+            else
+            {
+                strings[0] = Convert.ToBase64String(Guid.Parse(strings[0]).ToByteArray())
+                    .Substring(0, 22)
+                    .Replace("/", "_")
+                    .Replace("+", "-");
+            }
+
             return string.Join("$", strings);
         }
 
