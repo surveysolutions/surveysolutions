@@ -146,7 +146,7 @@ namespace WB.Services.Export.Events
                     var readingSpeed = feed.Events.Count / apiTrack.Elapsed.TotalSeconds;
                     readingAvg.Add(readingSpeed);
 
-                    Monitoring.TrackEventHandlerProcessingSped(tenant.Tenant.Name, "HqEventsReader", readingSpeed);
+                    Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, "HqEventsReader", readingSpeed);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
                         feed.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
