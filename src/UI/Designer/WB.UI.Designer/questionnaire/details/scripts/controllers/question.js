@@ -3,10 +3,16 @@
         function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, 
             hotkeys, optionsService, alertService, $uibModal) {
             $scope.currentChapterId = $state.params.chapterId;
-            var dictionnaires = {};
+            var dictionnaires = {
+                categoricalMultiKinds:
+                [
+                    { value: 1, text: $i18next.t('QuestionCheckboxes') },
+                    { value: 2, text: $i18next.t('QuestionYesNoMode') },
+                    { value: 3, text: $i18next.t('QuestionComboBox') }
+                ]
+            };
 
             var saveQuestion = 'ctrl+s';
-          
             
             if (hotkeys.get(saveQuestion) !== false) {
                 hotkeys.del(saveQuestion);
@@ -82,6 +88,7 @@
                 $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
                 $scope.activeQuestion.geometryType = question.geometryType;
                 $scope.activeQuestion.defaultDate = question.defaultDate;
+                $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -112,13 +119,6 @@
 
                 $scope.activeQuestion.showAsList = question.showAsList;
                 $scope.activeQuestion.showAsListThreshold = question.showAsListThreshold;
-
-                $scope.activeQuestion.categoricalMultiKinds =
-                [
-                    { value: 1, text: $i18next.t('QuestionCheckboxes') },
-                    { value: 2, text: $i18next.t('QuestionYesNoMode') },
-                    { value: 3, text: $i18next.t('QuestionComboBox') }
-                ];
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -588,11 +588,11 @@
             
             $scope.getCategoricalKind = function (currentQuestion) {
                 if (currentQuestion.isFilteredCombobox)
-                    return currentQuestion.categoricalMultiKinds[2];
+                    return dictionnaires.categoricalMultiKinds[2];
                 else if (currentQuestion.yesNoView)
-                    return currentQuestion.categoricalMultiKinds[1];
+                    return dictionnaires.categoricalMultiKinds[1];
                 else
-                    return currentQuestion.categoricalMultiKinds[0];
+                    return dictionnaires.categoricalMultiKinds[0];
             };
 
             $scope.$watch('activeQuestion.isLinked', function(newValue) {
