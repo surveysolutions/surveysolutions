@@ -6,6 +6,7 @@ using System.Text;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Infrastructure.Tenant;
 
@@ -60,7 +61,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
                 CreateSchema(connection, tenantContext.Tenant);
 
-                foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
+                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
                 {
                     CreateTableForGroup(connection, storedGroup, questionnaireDocument);
                     CreateEnablementTableForGroup(connection, storedGroup);
@@ -77,40 +78,26 @@ namespace WB.Services.Export.InterviewDataStorage
         public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             var db = dbContext.Database.GetDbConnection();
-            foreach (var storedGroup in questionnaireDocument.GetAllStoredGroups())
+            foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
             {
-                if (storedGroup.DoesSupportDataTable)
-                {
-                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE ");
-                }
-
-                if (storedGroup.DoesSupportEnablementTable)
-                {
-                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE");
-                }
-
-                if (storedGroup.DoesSupportValidityTable)
-                {
-                    db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
-                }
+                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE ");
+                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE");
+                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
             }
         }
 
-        private void CreateTableForGroup(DbConnection connection, Group group, QuestionnaireDocument questionnaireDocument)
+        private void CreateTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group, QuestionnaireDocument questionnaireDocument)
         {
-            if (!group.DoesSupportDataTable)
-                return;
-
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
-            if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
+            if (group.IsRoster)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.DataColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
+            var variables = group.DataColumns.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
 
@@ -118,49 +105,47 @@ namespace WB.Services.Export.InterviewDataStorage
             connection.Execute(commandText);
         }
 
-        private void CreateEnablementTableForGroup(DbConnection connection, Group group)
+        private void CreateEnablementTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group)
         {
-            if (!group.DoesSupportEnablementTable)
-                return;
-
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
-            if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
+            if (group.IsRoster)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InstanceValue, InterviewDatabaseConstants.SqlTypes.Bool, defaultValue: "true"));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.EnablementColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
-            var variables = group.Children.Where(entity => entity is Variable).Cast<Variable>();
+            var variables = group.EnablementColumns.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
                 columns.Add(new ColumnInfo(variable.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
-            var staticTexts = group.Children.Where(entity => entity is StaticText).Cast<StaticText>();
+            var staticTexts = group.EnablementColumns.Where(entity => entity is StaticText).Cast<StaticText>();
             foreach (var staticText in staticTexts)
                 columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+
+            var nonRosters = group.EnablementColumns.Where(entity => entity is Group).Cast<Group>();
+            foreach (var notRoster in nonRosters)
+                columns.Add(new ColumnInfo(notRoster.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
         }
 
-        private void CreateValidityTableForGroup(DbConnection connection, Group group)
+        private void CreateValidityTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group)
         {
-            if (!group.DoesSupportValidityTable)
-                return;
-
             var columns = new List<ColumnInfo>();
             columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
-            if (group.RosterLevel > 0)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[{group.RosterLevel}]", isPrimaryKey: true));
+            if (group.IsRoster)
+                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
-            var questions = group.Children.Where(entity => entity is Question).Cast<Question>();
+            var questions = group.ValidityColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
                 columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
-            var staticTexts = group.Children.Where(entity => entity is StaticText).Cast<StaticText>();
+            var staticTexts = group.ValidityColumns.Where(entity => entity is StaticText).Cast<StaticText>();
             foreach (var staticText in staticTexts)
                 columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
