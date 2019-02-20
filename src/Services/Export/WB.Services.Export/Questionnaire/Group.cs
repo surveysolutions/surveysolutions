@@ -105,31 +105,19 @@ namespace WB.Services.Export.Questionnaire
             get
             {
                 if (tableName != null) return tableName;
-                tableName = $"{CompressQuestionnaireId(this.Root.QuestionnaireId)}_{this.VariableName ?? this.PublicKey.FormatGuid()}";
-                return tableName;
+                return tableName = Root.DatabaseStructure.GetDataTableName(PublicKey);
             }
         }
 
-        public string TableNameQ => $"\"{TableName}\"";
-
         private string enablementTableName, validityTableName;
-        public string EnablementTableName => enablementTableName ?? (enablementTableName = $"{TableName}_e");
-        public string ValidityTableName => validityTableName ?? (validityTableName = $"{TableName}_v");
+        public string EnablementTableName => enablementTableName ?? (enablementTableName = Root.DatabaseStructure.GetEnablementDataTableName(PublicKey));
+        public string ValidityTableName => validityTableName ?? (validityTableName = Root.DatabaseStructure.GetValidityDataTableName(PublicKey));
 
         private bool? doesSupportDataTable, doesSupportEnablementTable, doesSupportValidityTable;
+
         public bool DoesSupportDataTable => doesSupportDataTable ?? (doesSupportDataTable = this.IsRoster || Children.Any(c => c is Question || c is Variable)).Value;
         public bool DoesSupportEnablementTable => doesSupportEnablementTable ?? (doesSupportEnablementTable = IsRoster || Children.Any(c => c is Question || c is Variable || c is StaticText)).Value;
         public bool DoesSupportValidityTable => doesSupportValidityTable ?? (doesSupportValidityTable = Children.Any(c => c is Question || c is StaticText)).Value;
-
-        protected string CompressQuestionnaireId(QuestionnaireId questionnaireId)
-        {
-            var strings = questionnaireId.Id.Split('$');
-            strings[0] = Convert.ToBase64String(Guid.Parse(strings[0]).ToByteArray())
-                        .Substring(0, 22)
-                        .Replace("/", "_")
-                        .Replace("+", "-");
-            return string.Join("$", strings);
-        }
         
         private bool? isInRoster;
         public bool IsInsideRoster
@@ -177,6 +165,17 @@ namespace WB.Services.Export.Questionnaire
 
                 this.rosterLevel = result;
                 return this.rosterLevel.Value;
+            }
+        }
+
+        private string columnName;
+        public string ColumnName
+        {
+            get
+            {
+                if (columnName != null) return columnName;
+                columnName = this.VariableName?.ToLower() ?? PublicKey.ToString().ToLower();
+                return columnName;
             }
         }
     }
