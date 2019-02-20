@@ -4,8 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using WB.Services.Export.Ddi;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -24,17 +29,24 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly IJobService jobService;
+        private readonly IServiceProvider serviceProvider;
+        private readonly IOptions<DbConnectionSettings> dbConnectionOptions;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IDdiMetadataAccessor ddiDdiMetadataAccessor, IJobService jobService)
+            IDdiMetadataAccessor ddiDdiMetadataAccessor,
+            IJobService jobService,
+            IServiceProvider serviceProvider,
+            IOptions<DbConnectionSettings> dbConnectionOptions)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.archiveHandleService = archiveHandleService;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.jobService = jobService;
+            this.serviceProvider = serviceProvider;
+            this.dbConnectionOptions = dbConnectionOptions;
         }
 
         [HttpPut]
@@ -95,7 +107,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             TenantInfo tenant)
         {
-            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant, 
+            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant,
                 new QuestionnaireId(questionnaireId),
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
@@ -144,10 +156,21 @@ namespace WB.Services.Export.Host.Controllers
         }
 
         [HttpDelete]
-        [Route("api/v1/delete")]
+        [Route("api/v1/deleteArchives")]
         public async Task<ActionResult> Delete(TenantInfo tenant)
         {
             await this.archiveHandleService.ClearAllExportArchives(tenant);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("api/v1/deleteTenant")]
+        public async Task<ActionResult> StopTenant(string tenant)
+        {
+            if (string.IsNullOrWhiteSpace(tenant)) return BadRequest("No tenant specified");
+
+            var logger = serviceProvider.GetService<ILogger<DatabaseSchemaService>>();
+            await DatabaseSchemaService.DropTenantSchemaAsync(dbConnectionOptions, tenant, logger);
             return Ok();
         }
 
