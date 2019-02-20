@@ -114,10 +114,10 @@ namespace WB.Services.Export.Questionnaire
         public string ValidityTableName => validityTableName ?? (validityTableName = Root.DatabaseStructure.GetValidityDataTableName(PublicKey));
 
         private bool? doesSupportDataTable, doesSupportEnablementTable, doesSupportValidityTable;
-        public bool DoesSupportDataTable => doesSupportDataTable ?? (doesSupportDataTable = Root.DatabaseStructure.DoesSupportDataTable(PublicKey)).Value;
-        public bool DoesSupportEnablementTable => doesSupportEnablementTable ?? (doesSupportEnablementTable = Root.DatabaseStructure.DoesSupportEnablementTable(PublicKey)).Value;
-        public bool DoesSupportValidityTable => doesSupportValidityTable ?? (doesSupportValidityTable = Root.DatabaseStructure.DoesSupportValidityTable(PublicKey)).Value;
 
+        public bool DoesSupportDataTable => doesSupportDataTable ?? (doesSupportDataTable = this.IsRoster || Children.Any(c => c is Question || c is Variable)).Value;
+        public bool DoesSupportEnablementTable => doesSupportEnablementTable ?? (doesSupportEnablementTable = IsRoster || Children.Any(c => c is Question || c is Variable || c is StaticText)).Value;
+        public bool DoesSupportValidityTable => doesSupportValidityTable ?? (doesSupportValidityTable = Children.Any(c => c is Question || c is StaticText)).Value;
         
         private bool? isInRoster;
         public bool IsInsideRoster
