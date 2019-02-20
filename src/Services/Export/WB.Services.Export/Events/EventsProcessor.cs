@@ -135,16 +135,21 @@ namespace WB.Services.Export.Events
                     var amount = Math.Min((int)(readingAvg.Average * BatchSizeMultiplier), pageSize);
 
                     var feed = await tenant.Api.GetInterviewEvents(readingSequence, amount);
+                    apiTrack.Stop();
+
+                    var lastSequence = feed.Events.Count > 0
+                        ? feed.Events.Last().GlobalSequence
+                        : maximumSequenceToQuery;
 
                     maximumSequenceToQuery = maximumSequenceToQuery ?? feed.Total;
 
-                    readingAvg.Add(feed.Events.Count / apiTrack.Elapsed.TotalSeconds);
+                    var readingSpeed = feed.Events.Count / apiTrack.Elapsed.TotalSeconds;
+                    readingAvg.Add(readingSpeed);
+
+                    Monitoring.TrackEventHandlerProcessingSped(tenant.Tenant.Name, "HqEventsReader", readingSpeed);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
-                        feed.Events.Count,
-                        readingSequence,
-                        feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : maximumSequenceToQuery,
-                        apiTrack.Elapsed);
+                        feed.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
 
                     if (feed.Events.Count > 0)
                     {

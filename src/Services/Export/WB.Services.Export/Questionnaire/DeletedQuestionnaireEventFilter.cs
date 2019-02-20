@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
@@ -29,6 +30,7 @@ namespace WB.Services.Export.Questionnaire
 
         public async Task<List<Event>> FilterAsync(ICollection<Event> feed)
         {
+            var filterWatch = Stopwatch.StartNew();
             List<Event> result = new List<Event>();
             foreach (var @event in feed)
             {
@@ -78,6 +80,10 @@ namespace WB.Services.Export.Questionnaire
             }
 
             this.dbContext.SaveChanges();
+            filterWatch.Stop();
+
+            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext.Tenant.Name, 
+                this.GetType().Name, feed.Count / filterWatch.Elapsed.TotalSeconds);
 
             return result;
         }

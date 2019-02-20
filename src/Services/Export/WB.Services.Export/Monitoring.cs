@@ -28,7 +28,15 @@ namespace WB.Services.Export
             }
         }
 
-        public static readonly Gauge EventsProcessedCounter = Metrics.CreateGauge("wb_events_processed_count",
+        public static readonly Gauge EventsProcessedCounter = Metrics.CreateGauge("wb_services_export_events_processed_count",
             "Count of events processed by Export Service", "site");
+
+        public static readonly Gauge HandlerEventHandlingSpeedGauge = Metrics.CreateGauge("wb_services_export_events_handler_speed",
+            "Events handling speed of each event handler", new [] {"site", "handler"});
+
+        public static void TrackEventHandlerProcessingSped(string tenant, string handlerName, double value)
+        {
+            HandlerEventHandlingSpeedGauge.Labels(tenant, handlerName).Set(value);
+        }
     }
 }
