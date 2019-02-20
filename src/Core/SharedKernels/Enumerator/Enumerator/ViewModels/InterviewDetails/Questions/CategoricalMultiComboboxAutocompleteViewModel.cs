@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
         }
 
-        private int[] excludedOptions;
+        private int[] excludedOptions = Array.Empty<int>();
         public Identity Identity { get; private set; }
 
         private string filterText;
@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
-            this.OnAddOption.Invoke(this, option.Value);
+            this.OnAddOption?.Invoke(this, option.Value);
 
             this.UpdateFilter(null);
         }
