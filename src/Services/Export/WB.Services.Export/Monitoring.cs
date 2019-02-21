@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Humanizer;
-using Microsoft.Extensions.Logging;
 using Prometheus;
-using WB.Services.Export.InterviewDataStorage;
 
 namespace WB.Services.Export
 {
@@ -46,9 +42,6 @@ namespace WB.Services.Export
         private static readonly Gauge HandlerEventHandlingSpeedGauge = Metrics.CreateGauge("wb_services_export_events_handler_speed",
             "Events handling speed of each event handler", "site", "handler");
 
-        private static readonly Gauge SqlCommandsExecutionGauge = Metrics.CreateGauge("wb_services_export_sql_generated",
-            "Count of commands of each type", "site", "type");
-
         public static void TrackEventHandlerProcessingSpeed(string tenant, Type handler, double value)
         {
             var handlerName = handler?.Name.Humanize(LetterCasing.LowerCase).Replace(" ", "_");
@@ -74,37 +67,6 @@ namespace WB.Services.Export
                     HandlerEventHandlingSpeedGauge.Labels(metric.label.Select(l => l.value).ToArray()).Set(0);
                 }
             }
-        }
-
-        public static void TrackSqlCommandsGeneration(string tenant, string sqlCommandType, double count)
-        {
-            if (tenant == null) return;
-            SqlCommandsExecutionGauge.Labels(tenant, sqlCommandType).Set(count);
-        }
-
-        public static void DumpSqlCommandsTrack(ILogger<InterviewDataDenormalizer> logger, LogLevel level)
-        {
-
-            var sb = new StringBuilder();
-
-            sb.Append("Executed commands: ");
-            var args = new List<(object, int)>();
-
-            foreach (var family in SqlCommandsExecutionGauge.Collect())
-            {
-                foreach (var metric in family.metric)
-                {
-                    sb.Append($" {{{metric.label[1].value}}}={{{metric.label[1].value}_val}}");
-                    args.Add((metric.label[1].value, (int)metric.gauge.value));
-                }
-            }
-            logger.Log(level, sb.ToString(), args.SelectMany(a => new [] {a.Item1, a.Item2}).ToArray());
-            //    var sb = new Microsoft.Extensions.ObjectPool.DefaultObjectPoolProvider();
-            //    var pool = sb.Create(new StringBuilderPooledObjectPolicy());
-
-            //    pool.Get()
-
-            //    SqlCommandsExecutionGauge.Collect().
         }
     }
 }
