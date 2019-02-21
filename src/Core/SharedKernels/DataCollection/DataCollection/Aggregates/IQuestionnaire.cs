@@ -288,5 +288,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool ShowCascadingAsList(Guid id);
         int? GetCascadingAsListThreshold(Guid id);
+        bool HasAnyMultimediaQuestion();
     }
 }
