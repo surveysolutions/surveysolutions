@@ -76,18 +76,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        public override IObservableCollection<ICompositeEntity> Children
-        {
-            get
-            {
-                var result = new CompositeCollection<ICompositeEntity>();
-                result.Add(new OptionBorderViewModel(this.QuestionState, true));
-                result.AddCollection(this.Options);
-                result.AddCollection(this.comboboxCollection);
-                result.Add(new OptionBorderViewModel(this.QuestionState, false));
-                return result;
-            }
-        }
+        protected override void AddCustomViewModels(CompositeCollection<ICompositeEntity> compositeCollection) 
+            => compositeCollection.AddCollection(this.comboboxCollection);
+
+        protected override void UpdateBorders() { }
 
         protected override IEnumerable<CategoricalMultiOptionViewModel<int>> GetOptions(IStatefulInterview interview)
         {
