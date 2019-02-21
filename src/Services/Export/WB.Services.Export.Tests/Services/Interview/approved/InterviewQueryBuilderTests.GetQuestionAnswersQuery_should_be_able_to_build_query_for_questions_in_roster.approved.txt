@@ -1,6 +1,6 @@
 ﻿select data."interview__id" as data__interview__id, data."mult1" as "data__mult1", data.roster__vector as data__roster_vector
- from "u7u7u7u7u7u7u7u7u7u7uw$145_rost" data 
-inner join "u7u7u7u7u7u7u7u7u7u7uw$145_rost_e" enablement 
+ from "questionnaire$145_rost" data 
+inner join "questionnaire$145_rost__e" enablement 
  on data.interview__id = enablement.interview__id AND data.roster__vector = enablement.roster__vector
 
  where data.interview__id = any(@ids) 
