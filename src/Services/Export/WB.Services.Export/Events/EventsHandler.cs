@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
 {
-    public class EventsHandler : IEventsHandler
+    public class EventsHandler : IEventsHandler, IDisposable
     {
         private readonly ILogger<EventsHandler> logger;
         private readonly IEventsFilter eventsFilter;
@@ -67,8 +68,10 @@ namespace WB.Services.Export.Events
                             await handler.SaveStateAsync(token);
                             eventHandlerStopwatch.Stop();
 
-                            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext?.Tenant?.Name,
-                                handler.GetType().Name, eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
+                            Monitoring.TrackEventHandlerProcessingSped(
+                                this.tenantContext?.Tenant?.Name,
+                                GetHandlerMonitoringKey(handler.GetType()), 
+                                eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
                         }
                     }
 
@@ -80,7 +83,7 @@ namespace WB.Services.Export.Events
                     await dbContext.SaveChangesAsync(token);
                     tr.Commit();
 
-                    Monitoring.EventsProcessedCounter.Labels(this.tenantContext.Tenant.Name).Set(metadata.GlobalSequence);
+                    Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, metadata.GlobalSequence);
 
                     return metadata.GlobalSequence;
                 }
@@ -89,6 +92,17 @@ namespace WB.Services.Export.Events
             {
                 logger.LogCritical(e, "Unhandled exception during event handling");
                 throw;
+            }
+        }
+
+        private string GetHandlerMonitoringKey(Type type) =>type.Name.Humanize(LetterCasing.LowerCase).Replace(" ", "_");
+
+        public void Dispose()
+        {
+            foreach (var handler in handlers)
+            {
+                Monitoring.TrackEventHandlerProcessingSped(this.tenantContext?.Tenant?.Name,
+                    GetHandlerMonitoringKey(handler.GetType()), 0);
             }
         }
     }
