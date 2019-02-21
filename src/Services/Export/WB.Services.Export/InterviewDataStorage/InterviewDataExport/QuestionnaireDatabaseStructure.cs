@@ -49,6 +49,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
             var enablementTableName = $"{tableName}__e";
             var validityTableName = $"{tableName}__v";
 
+            if (tableName.Length > 64 || enablementTableName.Length > 64 || validityTableName.Length > 64)
+                throw new ArgumentException($"Table name can't be more 64 chars: data-{tableName}, enablement-{enablementTableName}, validity-{validityTableName}");
+
             return new QuestionnaireLevelDatabaseTable()
             {
                 Id = group.PublicKey,
