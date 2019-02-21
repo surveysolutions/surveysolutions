@@ -38,6 +38,7 @@ namespace WB.Services.Export.Events
 
         long? maximumSequenceToQuery;
         private const double BatchSizeMultiplier = 1;
+        private const string ApiEventsQueryMonitoringKey = "api_events_query";
 
         private void EnsureMigrated()
         {
@@ -64,7 +65,7 @@ namespace WB.Services.Export.Events
 
             Stopwatch globalStopwatch = Stopwatch.StartNew();
 
-            var runningAverage = new SimpleRunningAverage(5); // running average window size
+            var runningAverage = new SimpleRunningAverage(20); // running average window size
 
             var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
@@ -146,7 +147,7 @@ namespace WB.Services.Export.Events
                     var readingSpeed = feed.Events.Count / apiTrack.Elapsed.TotalSeconds;
                     readingAvg.Add(readingSpeed);
 
-                    Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, "HqEventsReader", readingSpeed);
+                    Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, readingSpeed);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
                         feed.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
@@ -164,6 +165,7 @@ namespace WB.Services.Export.Events
             }
             finally
             {
+                Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, 0);
                 eventsProducer.CompleteAdding();
             }
         }

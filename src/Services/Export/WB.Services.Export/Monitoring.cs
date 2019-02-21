@@ -39,5 +39,11 @@ namespace WB.Services.Export
             if(tenant != null && handlerName != null)
             HandlerEventHandlingSpeedGauge.Labels(tenant, handlerName).Set(value);
         }
+
+        public static void TrackEventsProcessedCount(string tenant, double value)
+        {
+            if(tenant != null)
+                EventsProcessedCounter.Labels(tenant).Set(value);
+        }
     }
 }
