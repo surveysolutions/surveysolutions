@@ -64,7 +64,7 @@ namespace WB.Services.Export.InterviewDataStorage
         private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
-        private readonly IInterviewDataExportCommandBuilder commandBuilder;
+        private readonly IInterviewDataExportBulkCommandBuilder commandBuilder;
         private readonly ILogger<InterviewDataDenormalizer> logger;
 
         private readonly InterviewDataState state;
@@ -72,8 +72,8 @@ namespace WB.Services.Export.InterviewDataStorage
         public InterviewDataDenormalizer(ITenantContext tenantContext, 
             TenantDbContext dbContext,
             IQuestionnaireStorage questionnaireStorage,
-            IMemoryCache memoryCache, 
-            IInterviewDataExportCommandBuilder commandBuilder,
+            IMemoryCache memoryCache,
+            IInterviewDataExportBulkCommandBuilder commandBuilder,
             ILogger<InterviewDataDenormalizer> logger)
         {
             this.tenantContext = tenantContext;
