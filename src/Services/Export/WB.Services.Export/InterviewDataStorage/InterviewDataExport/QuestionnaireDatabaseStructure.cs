@@ -42,12 +42,12 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         private QuestionnaireLevelDatabaseTable CreateTable(QuestionnaireDocument questionnaire, Group @group, int tableIndex)
         {
-            var printIndex = tableIndex == 0 ? "" : $"__{tableIndex}";
+            var printIndex = tableIndex == 0 ? "" : $"${tableIndex}";
             var questionnairePrefix = GenerateQuestionnairePrefix(questionnaire.VariableName, questionnaire.QuestionnaireId);
             var groupName = GenerateGroupName(@group);
             var tableName = $"{questionnairePrefix}{groupName}{printIndex}";
-            var enablementTableName = $"{tableName}__e";
-            var validityTableName = $"{tableName}__v";
+            var enablementTableName = $"{tableName}-e";
+            var validityTableName = $"{tableName}-v";
 
             if (tableName.Length > 64 || enablementTableName.Length > 64 || validityTableName.Length > 64)
                 throw new ArgumentException($"Table name can't be more 64 chars: data-{tableName}, enablement-{enablementTableName}, validity-{validityTableName}");
@@ -66,26 +66,34 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         {
             if (group is QuestionnaireDocument)
                 return string.Empty;
-            return "_" + (@group.VariableName ?? @group.PublicKey.FormatGuid());
+            if (!string.IsNullOrEmpty(group.VariableName) && group.VariableName.Length <= 22)
+                return "_" + group.VariableName;
+
+            return "_" + CompressGuidTo22Chars(@group.PublicKey);
         }
 
         protected string GenerateQuestionnairePrefix(string questionnaireVariable, QuestionnaireId questionnaireId)
         {
             var strings = questionnaireId.Id.Split('$');
 
-            if (!string.IsNullOrEmpty(questionnaireVariable) && questionnaireVariable.Length < 22)
+            if (!string.IsNullOrEmpty(questionnaireVariable) && questionnaireVariable.Length <= 22)
             {
                 strings[0] = questionnaireVariable;
             }
             else
             {
-                strings[0] = Convert.ToBase64String(Guid.Parse(strings[0]).ToByteArray())
-                    .Substring(0, 22)
-                    .Replace("/", "_")
-                    .Replace("+", "-");
+                strings[0] = CompressGuidTo22Chars(Guid.Parse(strings[0]));
             }
 
             return string.Join("$", strings);
+        }
+
+        private static string CompressGuidTo22Chars(Guid guid)
+        {
+            return Convert.ToBase64String(guid.ToByteArray())
+                .Substring(0, 22)
+                .Replace("/", "_")
+                .Replace("+", "-");
         }
 
         private Dictionary<Guid, List<QuestionnaireLevelDatabaseTable>> GetDatabaseTableMap(QuestionnaireDocument questionnaire)
