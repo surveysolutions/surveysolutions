@@ -10,19 +10,18 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataExportBulkCommandBuilder : IInterviewDataExportBulkCommandBuilder
     {
-        public NpgsqlCommand CreateUpdateValueForTable(NpgsqlCommand command, string tableName, RosterTableKey rosterTableKey, IEnumerable<UpdateValueInfo> updateValueInfos)
+        public void AppendUpdateValueForTable(ExportBulkCommand command, string tableName, RosterTableKey rosterTableKey, IEnumerable<UpdateValueInfo> updateValueInfos)
         {
             bool isTopLevel = rosterTableKey.RosterVector == null || rosterTableKey.RosterVector.Length == 0;
 
-            StringBuilder sql = new StringBuilder();
-            sql.Append("UPDATE \"").Append(tableName).Append('"')
+            command.CommandText.Append("UPDATE \"").Append(tableName).Append('"')
                 .Append(" SET ");
 
             int index = command.Parameters.Count;
             foreach (var updateValueInfo in updateValueInfos)
             {
                 index++;
-                sql.Append('"').Append(updateValueInfo.ColumnName).Append("\" = @answer").Append(index).Append(',');
+                command.CommandText.Append('"').Append(updateValueInfo.ColumnName).Append("\" = @answer").Append(index).Append(',');
 
                 if (updateValueInfo.Value == null)
                     command.Parameters.AddWithValue("@answer" + index, DBNull.Value);
@@ -30,90 +29,75 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     command.Parameters.AddWithValue("@answer" + index, updateValueInfo.ValueType, updateValueInfo.Value);
             }
 
-            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
+            command.CommandText.Remove(command.CommandText.Length - 1, 1); // TrimEnd(',');
 
-            sql.Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId"+index);
+            command.CommandText.Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId"+index);
 
             command.Parameters.AddWithValue("@interviewId"+index, NpgsqlDbType.Uuid, rosterTableKey.InterviewId);
 
             if (!isTopLevel)
             {
-                sql.Append(" AND ").Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector"+index);
+                command.CommandText.Append(" AND ").Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector"+index);
                 command.Parameters.AddWithValue("@rosterVector"+index, 
                     NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterTableKey.RosterVector.Coordinates.ToArray());
             }
 
-            sql.Append(';');
-
-            command.CommandText += sql.ToString();
-            return command;
+            command.CommandText.Append(';');
         }
 
-        public NpgsqlCommand CreateInsertInterviewCommandForTable(NpgsqlCommand command, string tableName, IEnumerable<Guid> interviewIds)
+        public void AppendInsertInterviewCommandForTable(ExportBulkCommand command, string tableName, IEnumerable<Guid> interviewIds)
         {
-            StringBuilder sql = new StringBuilder();
-            sql.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(")")
+            command.CommandText.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(")")
                 .Append(" VALUES ");
 
             int index = command.Parameters.Count;
             foreach (var interviewId in interviewIds)
             {
                 index++;
-                sql.Append(" (@interviewId").Append(index).Append("),");
+                command.CommandText.Append(" (@interviewId").Append(index).Append("),");
                 command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, interviewId);
             }
 
-            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
-            sql.Append(" ON CONFLICT DO NOTHING;");
-
-            command.CommandText += sql.ToString();
-            return command;
+            command.CommandText.Remove(command.CommandText.Length - 1, 1); // TrimEnd(',');
+            command.CommandText.Append(" ON CONFLICT DO NOTHING;");
         }
 
-        public NpgsqlCommand CreateDeleteInterviewCommandForTable(NpgsqlCommand command, string tableName, IEnumerable<Guid> interviewIds)
+        public void AppendDeleteInterviewCommandForTable(ExportBulkCommand command, string tableName, IEnumerable<Guid> interviewIds)
         {
-            StringBuilder sql = new StringBuilder();
             int index = command.Parameters.Count;
-            sql.Append("DELETE FROM \"").Append(tableName).Append('"')
+            command.CommandText.Append("DELETE FROM \"").Append(tableName).Append('"')
                 .Append(" WHERE ").Append(InterviewDatabaseConstants.InterviewId).Append(" = ANY(@interviewIds").Append(index).Append(");");
-            command.CommandText += sql.ToString();
             command.Parameters.AddWithValue("@interviewIds"+index, NpgsqlDbType.Array | NpgsqlDbType.Uuid, interviewIds.ToArray());
-            return command;
         }
 
-        public NpgsqlCommand CreateAddRosterInstanceForTable(NpgsqlCommand command, string tableName, IEnumerable<RosterTableKey> rosterInfos)
+        public void AppendAddRosterInstanceForTable(ExportBulkCommand command, string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
-            StringBuilder sql = new StringBuilder();
-            sql.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(", ").Append(InterviewDatabaseConstants.RosterVector).Append(")")
+            command.CommandText.Append("INSERT INTO \"").Append(tableName).Append("\" (").Append(InterviewDatabaseConstants.InterviewId).Append(", ").Append(InterviewDatabaseConstants.RosterVector).Append(")")
                 .Append(" VALUES");
 
             int index = command.Parameters.Count;
             foreach (var rosterInfo in rosterInfos)
             {
                 index++;
-                sql.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
+                command.CommandText.Append("(@interviewId").Append(index).Append(", @rosterVector").Append(index).Append("),");
                 command.Parameters.AddWithValue("@interviewId" + index, NpgsqlDbType.Uuid, rosterInfo.InterviewId);
                 command.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
-            sql.Remove(sql.Length - 1, 1); // TrimEnd(',');
-            sql.Append(" ON CONFLICT DO NOTHING;");
-
-            command.CommandText += sql.ToString();
-            return command;
+            command.CommandText.Remove(command.CommandText.Length - 1, 1); // TrimEnd(',');
+            command.CommandText.Append(" ON CONFLICT DO NOTHING;");
         }
 
-        public NpgsqlCommand CreateRemoveRosterInstanceForTable(NpgsqlCommand command, string tableName, IEnumerable<RosterTableKey> rosterInfos)
+        public void AppendRemoveRosterInstanceForTable(ExportBulkCommand command, string tableName, IEnumerable<RosterTableKey> rosterInfos)
         {
-            StringBuilder sql = new StringBuilder();
-            sql.Append("DELETE FROM \"").Append(tableName).Append('"')
+            command.CommandText.Append("DELETE FROM \"").Append(tableName).Append('"')
                 .Append(" WHERE ");
 
             int index = command.Parameters.Count;
             foreach (var rosterInfo in rosterInfos)
             {
                 index++;
-                sql.Append(" (")
+                command.CommandText.Append(" (")
                     .Append(InterviewDatabaseConstants.InterviewId).Append(" = @interviewId").Append(index)
                     .Append(" AND ")
                     .Append(InterviewDatabaseConstants.RosterVector).Append(" = @rosterVector").Append(index)
@@ -123,59 +107,33 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 command.Parameters.AddWithValue("@rosterVector" + index, NpgsqlDbType.Array | NpgsqlDbType.Integer, rosterInfo.RosterVector.Coordinates.ToArray());
             }
 
-            sql.Remove(sql.Length - 2, 2); // TrimEnd('OR');
-            sql.Append(';');
-
-            command.CommandText += sql.ToString();
-
-            return command;
+            command.CommandText.Remove(command.CommandText.Length - 2, 2); // TrimEnd('OR');
+            command.CommandText.Append(';');
         }
 
-        public List<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state)
+        public DbCommand BuildCommandsInExecuteOrderFromState(InterviewDataState state)
         {
-            NpgsqlCommand command = new NpgsqlCommand();
-
-            var commands = new List<DbCommand>();
-            int lastCommandsCount = commands.Count;
-
-            void Track(string commandType)
-            {
-                if(state.TenantName != null)
-                    Monitoring.TrackSqlCommandsGeneration(state.TenantName, commandType, commands.Count - lastCommandsCount);
-                lastCommandsCount = commands.Count;
-            }
+            ExportBulkCommand command = new ExportBulkCommand();
 
             foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
-                command = CreateInsertInterviewCommandForTable(command, tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds);
-
-            Track("insert_interviews");
+                AppendInsertInterviewCommandForTable(command, tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds);
 
             foreach (var tableWithAddRosters in state.GetRemoveRostersBeforeInsertNewInstancesData())
-                command = CreateRemoveRosterInstanceForTable(command, tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo);
-
-            Track("delete_rosters_before_insert");
+                AppendRemoveRosterInstanceForTable(command, tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo);
 
             foreach (var tableWithAddRosters in state.GetInsertRostersData())
-                command = CreateAddRosterInstanceForTable(command, tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo);
-
-            Track("insert_rosters");
+                AppendAddRosterInstanceForTable(command, tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo);
 
             foreach (var update in state.GetUpdateValuesData())
-                command = CreateUpdateValueForTable(command, update.TableName, update.RosterLevelTableKey, update.UpdateValuesInfo);
+                AppendUpdateValueForTable(command, update.TableName, update.RosterLevelTableKey, update.UpdateValuesInfo);
             
-            Track("updates");
-
             foreach (var tableWithRemoveRosters in state.GetRemoveRostersData())
-                command = CreateRemoveRosterInstanceForTable(command, tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo);
-
-            Track("delete_rosters");
+                AppendRemoveRosterInstanceForTable(command, tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo);
 
             foreach (var tableWithRemoveInterviews in state.GetRemoveInterviewsData())
-                command = CreateDeleteInterviewCommandForTable(command, tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds);
+                AppendDeleteInterviewCommandForTable(command, tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds);
 
-            Track("delete_interviews");
-
-            return new List<DbCommand>() {command};
+            return command.GetCommand();
         }
     }
 }
