@@ -20,6 +20,7 @@
     <PackageReference Include="Google.Apis.Core" Version="1.37.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.37.0.1477" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.205" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.16" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
