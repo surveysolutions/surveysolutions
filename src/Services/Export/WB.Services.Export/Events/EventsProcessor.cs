@@ -114,12 +114,14 @@ namespace WB.Services.Export.Events
                     dataExportProcessesService.UpdateDataExportProgress(exportProcessId, percent, estimatedTime);
 
                     this.logger.LogInformation(
-                        "Processed {pageSize} events. " +
-                        "GlobalSequence: {sequence:n0} out of {total:n0}. " +
-                        "Took {duration:g}. ETA: {eta}",
+                        "Published {pageSize} events. " +
+                        "GlobalSequence: {sequence:n0}/{total:n0}. " +
+                        "Batch time {duration:g}. Total time {globalDuration:g}.  ETA: {eta}",
                         feed.Events.Count, feed.Events.Count > 0 ? feed.Events.Last().GlobalSequence : 0
                         , feed.Total,
-                        executionTrack.Elapsed, estimatedTime);
+                        executionTrack.Elapsed, 
+                        globalStopwatch.Elapsed,
+                        estimatedTime);
                 }
             }
 
