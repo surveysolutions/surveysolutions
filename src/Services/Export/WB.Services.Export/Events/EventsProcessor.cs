@@ -52,7 +52,7 @@ namespace WB.Services.Export.Events
             }
         }
 
-        public async Task HandleNewEvents(long processId, CancellationToken token = default)
+        public async Task HandleNewEvents(long exportProcessId, CancellationToken token = default)
         {
             long sequenceToStartFrom;
             EnsureMigrated();
@@ -63,6 +63,19 @@ namespace WB.Services.Export.Events
                 sequenceToStartFrom = tenantDbContext.Metadata.GlobalSequence;
             }
 
+            try
+            {
+                await HandleNewEventsImplementation(exportProcessId, sequenceToStartFrom, token);
+            }
+            finally
+            {
+                Monitoring.ResetEventHandlerProcessingSpeed(this.tenant?.Tenant?.Name);
+            }
+        }
+
+        private async Task HandleNewEventsImplementation(long exportProcessId, long sequenceToStartFrom,
+            CancellationToken token)
+        {
             Stopwatch globalStopwatch = Stopwatch.StartNew();
 
             var runningAverage = new SimpleRunningAverage(20); // running average window size
@@ -71,7 +84,7 @@ namespace WB.Services.Export.Events
 
             var eventsReader = Task.Run(() => EventsReaderWorker(token, sequenceToStartFrom, eventsProducer), token);
 
-            dataExportProcessesService.ChangeStatusType(processId, DataExportStatus.Preparing);
+            dataExportProcessesService.ChangeStatusType(exportProcessId, DataExportStatus.Preparing);
 
             var executionTrack = Stopwatch.StartNew();
 
@@ -83,8 +96,8 @@ namespace WB.Services.Export.Events
                 {
                     batchScope.PropagateTenantContext(tenant);
 
-                    var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>() ;
-                    
+                    var eventsHandler = batchScope.ServiceProvider.GetRequiredService<IEventsHandler>();
+
                     var lastProcessedGlobalSequence = await eventsHandler.HandleEventsFeedAsync(feed, token);
 
                     executionTrack.Stop();
@@ -98,7 +111,7 @@ namespace WB.Services.Export.Events
                     pageSize = (int) (size * BatchSizeMultiplier);
 
                     var estimatedTime = runningAverage.Eta(totalEventsToRead - eventsProcessed);
-                    dataExportProcessesService.UpdateDataExportProgress(processId, percent, estimatedTime);
+                    dataExportProcessesService.UpdateDataExportProgress(exportProcessId, percent, estimatedTime);
 
                     this.logger.LogInformation(
                         "Processed {pageSize} events. " +
@@ -147,7 +160,7 @@ namespace WB.Services.Export.Events
                     var readingSpeed = feed.Events.Count / apiTrack.Elapsed.TotalSeconds;
                     readingAvg.Add(readingSpeed);
 
-                    Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, readingSpeed);
+                    Monitoring.TrackEventHandlerProcessingSpeed(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, readingSpeed);
 
                     logger.LogDebug("Read {eventsCount:n0} events from HQ. From {start:n0} to {last:n0} Took {elapsed:g}",
                         feed.Events.Count, readingSequence, lastSequence, apiTrack.Elapsed);
@@ -165,7 +178,7 @@ namespace WB.Services.Export.Events
             }
             finally
             {
-                Monitoring.TrackEventHandlerProcessingSped(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, 0);
+                Monitoring.TrackEventHandlerProcessingSpeed(tenant?.Tenant?.Name, ApiEventsQueryMonitoringKey, 0);
                 eventsProducer.CompleteAdding();
             }
         }
