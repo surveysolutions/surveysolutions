@@ -304,7 +304,7 @@
     <value>Header {0} was not found in excel file</value>
   </data>
     <data name="NoParentCascadingOptions" xml:space="preserve">
-    <value>No options for parent cascading question '{0}' found</value>
+    <value>No categories for parent cascading question '{0}' found</value>
   </data>
     <data name="Column" xml:space="preserve">
     <value>column</value>
