@@ -17,5 +17,6 @@ namespace WB.Services.Export.Services.Processing
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public bool IsRunning { get; set; }
+        public TimeSpan? TimeEstimation { get; set; }
     }
 }

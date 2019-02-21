@@ -4,7 +4,6 @@ using System.Linq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {

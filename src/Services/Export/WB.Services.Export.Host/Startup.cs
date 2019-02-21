@@ -13,7 +13,6 @@ using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Storage;
 
@@ -54,9 +53,12 @@ namespace WB.Services.Export.Host
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
+            services.Configure<DbConnectionSettings>(Configuration.GetSection("ConnectionStrings"));
+
             services.UseJobService(Configuration);
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
+            services.AddDbContext<TenantDbContext>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
             {

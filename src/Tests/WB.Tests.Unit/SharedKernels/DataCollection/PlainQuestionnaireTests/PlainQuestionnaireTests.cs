@@ -1,4 +1,6 @@
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
@@ -85,6 +87,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             Assert.That(groupIsHidden);
             Assert.That(questionIsHidden);
             Assert.That(staticTextHidden);
+        }
+
+        [Test]
+        public void HasAnyMultimediaQuestion_should_return_true_for_multimedia_question()
+        {
+            var document = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.MultimediaQuestion());
+
+            // Act
+            var hasAnyMultimediaQuestion = Create.Entity.PlainQuestionnaire(document).HasAnyMultimediaQuestion();
+
+            // Assert
+            Assert.That(hasAnyMultimediaQuestion);
+        }
+
+        [Test]
+        public void HasAnyMultimediaQuestion_should_return_true_for_audio_question()
+        {
+            var document = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.AudioQuestion(Id.gA, "ba1"));
+
+            // Act
+            var hasAnyMultimediaQuestion = Create.Entity.PlainQuestionnaire(document).HasAnyMultimediaQuestion();
+
+            // Assert
+            Assert.That(hasAnyMultimediaQuestion);
         }
     }
 }

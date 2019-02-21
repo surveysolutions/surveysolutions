@@ -26,9 +26,9 @@ namespace WB.Services.Export.Services.Processing
             return archiveUtils.CreateArchive(outputStream, password, compressionLevel);
         }
 
-        public void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress)
+        public void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, ExportProgress exportProgress)
         {
-            this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, exportProgress);
+            this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, new Progress<int>((v) => exportProgress.Report(v)));
         }
 
         public void RecreateExportArchive(string exportTempDirectoryPath, IEnumerable<string> filesToArchive, string archiveFilePath, string archivePassword)
@@ -36,7 +36,7 @@ namespace WB.Services.Export.Services.Processing
             this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
-        public async Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, IProgress<int> exportProgress)
+        public async Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress)
         {
             if (externalFileStorage.IsEnabled())
             {

@@ -8,7 +8,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -88,7 +88,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 headquartersApi: Create.TenantHeadquartersApi(hqApi.Object));
 
 
-            await exporter.ExportAsync(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", Create.Tenant(), new Progress<int>(), CancellationToken.None);
+            await exporter.ExportAsync(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", Create.Tenant(), new ExportProgress(), CancellationToken.None);
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
             Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview__id", "interview__status", "responsible", "interviewers", "rejections__sup", "rejections__hq", "entities__errors", "questions__comments", "interview__duration" }));

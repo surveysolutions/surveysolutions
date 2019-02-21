@@ -12,7 +12,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -20,32 +20,36 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
     {
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger<TabularFormatParaDataExportProcessHandler> logger;
 
         public TabularFormatParaDataExportProcessHandler(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITenantApi<IHeadquartersApi> tenantApi,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fs,
             IFileBasedExportedDataAccessor dataAccessor,
             IDataExportFileAccessor exportFileAccessor,
+            IInterviewsToExportSource interviewsToExportSource,
             ICsvWriter csvWriter,
             ILogger<TabularFormatParaDataExportProcessHandler> logger) 
             :  base(fs, dataAccessor, interviewDataExportSettings, dataExportProcessesService, exportFileAccessor)
         {
             this.tenantApi = tenantApi;
+            this.interviewsToExportSource = interviewsToExportSource;
             this.csvWriter = csvWriter;
             this.logger = logger;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Paradata;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override Task ExportDataIntoDirectory(ExportSettings settings, ExportProgress progress,
             CancellationToken cancellationToken)
         {
             logger.LogInformation("Start paradata export for {settings}", settings);
             var api = this.tenantApi.For(settings.Tenant);
-            var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
+            var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
+                settings.Status, settings.FromDate, settings.ToDate);
             
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -105,6 +109,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             WriteDoFile();
 
             logger.LogInformation("Completed paradata export for {settings}", settings);
+
+            return Task.CompletedTask;
         }
 
         private void WriteDoFile()

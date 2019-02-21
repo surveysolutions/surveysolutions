@@ -13,7 +13,6 @@ using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Implementation
@@ -22,6 +21,7 @@ namespace WB.Services.Export.CsvExport.Implementation
     {
         private readonly ILogger<TabularFormatExportService> logger;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IInterviewsToExportSource interviewsToExportSource;
 
         private readonly ICommentsExporter commentsExporter;
         private readonly IInterviewActionsExporter interviewActionsExporter;
@@ -36,6 +36,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         public TabularFormatExportService(
             ILogger<TabularFormatExportService> logger,
             ITenantApi<IHeadquartersApi> tenantApi,
+            IInterviewsToExportSource interviewsToExportSource,
             IInterviewsExporter interviewsExporter,
             ICommentsExporter commentsExporter,
             IDiagnosticsExporter diagnosticsExporter,
@@ -47,6 +48,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         {
             this.logger = logger;
             this.tenantApi = tenantApi;
+            this.interviewsToExportSource = interviewsToExportSource;
             this.interviewsExporter = interviewsExporter;
             this.commentsExporter = commentsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
@@ -60,7 +62,7 @@ namespace WB.Services.Export.CsvExport.Implementation
         public async Task ExportInterviewsInTabularFormatAsync(
             ExportSettings settings,
             string tempPath,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var tenant = settings.Tenant;
@@ -69,14 +71,14 @@ namespace WB.Services.Export.CsvExport.Implementation
             var fromDate = settings.FromDate;
             var toDate = settings.ToDate;
 
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity, token: cancellationToken);
 
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
-            var exportInterviewsProgress = new Progress<int>();
-            var exportCommentsProgress = new Progress<int>();
-            var exportInterviewActionsProgress = new Progress<int>();
-            var exportDiagnosticsProgress = new Progress<int>();
+            var exportInterviewsProgress = new ExportProgress();
+            var exportCommentsProgress = new ExportProgress();
+            var exportInterviewActionsProgress = new ExportProgress();
+            var exportDiagnosticsProgress = new ExportProgress();
 
             ProgressAggregator progressAggregator = new ProgressAggregator();
             progressAggregator.Add(exportInterviewsProgress, 0.4);
@@ -87,7 +89,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             progressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             var api = this.tenantApi.For(tenant);
-            var interviewsToExport = await api.GetInterviewsToExportAsync(questionnaireIdentity, status, fromDate, toDate);
+            var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();

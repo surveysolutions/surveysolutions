@@ -16,12 +16,12 @@ namespace WB.Services.Export.Ddi.Implementation
         private const string ExportedDataFolderName = "DdiMetaData";
         private readonly IExportFileNameService exportFileNameService;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
-        private readonly InterviewDataExportSettings options;
+        private readonly ExportServiceSettings options;
 
         public DdiMetadataAccessor(
             IDdiMetadataFactory ddiMetadataFactory, 
             IFileSystemAccessor fileSystemAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
+            IOptions<ExportServiceSettings> interviewDataExportSettings, 
             IExportFileNameService exportFileNameService,
             IDataExportFileAccessor dataExportFileAccessor)
         {

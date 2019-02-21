@@ -30,6 +30,17 @@ namespace WB.Services.Export.Questionnaire
         public string Name { get; set; }
         public string Label { get; set; }
         public string Expression { get; set; }
+
+        private string columnName;
+        public string ColumnName
+        {
+            get
+            {
+                if (columnName != null) return columnName;
+                columnName = this.Name.ToLower();
+                return columnName;
+            }
+        }
     }
 
     public enum VariableType
