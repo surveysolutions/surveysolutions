@@ -82,8 +82,8 @@ namespace WB.Services.Export.Questionnaire
             this.dbContext.SaveChanges();
             filterWatch.Stop();
 
-            Monitoring.TrackEventHandlerProcessingSped(this.tenantContext?.Tenant?.Name, 
-                this.GetType().Name, feed.Count / filterWatch.Elapsed.TotalSeconds);
+            Monitoring.TrackEventHandlerProcessingSpeed(this.tenantContext?.Tenant?.Name, 
+                this.GetType(), feed.Count / filterWatch.Elapsed.TotalSeconds);
 
             return result;
         }

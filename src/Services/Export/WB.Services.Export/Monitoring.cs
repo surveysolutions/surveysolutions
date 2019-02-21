@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 using WB.Services.Export.InterviewDataStorage;
@@ -48,10 +49,31 @@ namespace WB.Services.Export
         private static readonly Gauge SqlCommandsExecutionGauge = Metrics.CreateGauge("wb_services_export_sql_generated",
             "Count of commands of each type", "site", "type");
 
-        public static void TrackEventHandlerProcessingSped(string tenant, string handlerName, double value)
+        public static void TrackEventHandlerProcessingSpeed(string tenant, Type handler, double value)
         {
-            if(tenant != null && handlerName != null)
-            HandlerEventHandlingSpeedGauge.Labels(tenant, handlerName).Set(value);
+            var handlerName = handler?.Name.Humanize(LetterCasing.LowerCase).Replace(" ", "_");
+
+            if (tenant != null && handler != null)
+                HandlerEventHandlingSpeedGauge.Labels(tenant, handlerName).Set(value);
+        }
+
+        public static void TrackEventHandlerProcessingSpeed(string tenant, string name, double value)
+        {
+            if (tenant != null && name != null)
+                HandlerEventHandlingSpeedGauge.Labels(tenant, name).Set(value);
+        }
+
+        public static void ResetEventHandlerProcessingSpeed(string tenant)
+        {
+            foreach (var family in HandlerEventHandlingSpeedGauge.Collect())
+            {
+                foreach (var metric in family.metric)
+                {
+                    if(metric.label[0].value != tenant) continue;
+
+                    HandlerEventHandlingSpeedGauge.Labels(metric.label.Select(l => l.value).ToArray()).Set(0);
+                }
+            }
         }
 
         public static void TrackSqlCommandsGeneration(string tenant, string sqlCommandType, double count)
