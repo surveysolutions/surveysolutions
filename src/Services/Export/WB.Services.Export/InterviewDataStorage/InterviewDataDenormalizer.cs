@@ -324,14 +324,15 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task Handle(PublishedEvent<AnswersDeclaredInvalid> @event, CancellationToken token = default)
         {
-            var failedValidationConditions = @event.Event.FailedValidationConditions;
-            foreach (var question in @event.Event.Questions)
+            var failedConditionsStorage = @event.Event.FailedConditionsStorage;
+            foreach (var validationCondition in failedConditionsStorage)
             {
                 await UpdateValidityValue(
                     interviewId: @event.EventSourceId,
-                    entityId: question.Id,
-                    rosterVector: question.RosterVector,
-                    validityValue: failedValidationConditions[question].Select(c => c.FailedConditionIndex).ToArray(), token: token); 
+                    entityId: validationCondition.Key.Id,
+                    rosterVector: validationCondition.Key.RosterVector,
+                    validityValue: validationCondition.Value.Select(c => c.FailedConditionIndex).ToArray(), 
+                    token: token); 
             }
         }
 
