@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ObjectPool;
 using Prometheus;
 using WB.Services.Export.InterviewDataStorage;
 
