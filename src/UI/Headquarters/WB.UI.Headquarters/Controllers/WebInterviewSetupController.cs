@@ -54,6 +54,31 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewNotificationService = webInterviewNotificationService;
         }
 
+        
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult SendInvitations(string id)
+        {
+            var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
+            if (!config.Started) return RedirectToAction("Start", new {id = id});
+
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
+            if (questionnaire == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var model = new SendInvitationsModel
+            {
+                Api = new
+                {
+                    InvitationsInfo = Url.HttpRouteUrl("DefaultApiWithAction", new {controller = "WebInterviewSetupApi", action = "InvitationsInfo", id = id }),
+                    SurveySetupUrl = Url.Action("Index", "SurveySetup")
+                }
+            };
+
+            return View(model);
+        }
+
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Start(string id)
         {
@@ -172,6 +197,11 @@ namespace WB.UI.Headquarters.Controllers
             QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnarieId);
             return questionnaire;
         }
+    }
+
+    public class SendInvitationsModel
+    {
+        public dynamic Api { get; set; }
     }
 
     public class SetupModel

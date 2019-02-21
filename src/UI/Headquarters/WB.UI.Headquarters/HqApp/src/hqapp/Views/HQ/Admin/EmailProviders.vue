@@ -115,7 +115,7 @@ import { isEmpty } from "lodash"
 export default {
   data() {
     return {
-        provider: 'none',
+        provider: null,
         senderAddress: null,
         awsAccessKeyId: null,
         awsSecretAccessKey: null,
@@ -128,18 +128,19 @@ export default {
     self.$store.dispatch("showProgress");
 
     this.$http.get(this.$config.model.api.getSettings)
-        .then(function (response) { // handle success
+        .then(function (response) {
             const settings = response.data || {};
             self.provider = (settings.provider|| "").toLocaleLowerCase();
             self.senderAddress = settings.senderAddress;
             self.awsAccessKeyId = settings.awsAccessKeyId;
             self.awsSecretAccessKey = settings.awsSecretAccessKey;
             self.sendGridApiKey = settings.sendGridApiKey;
+            self.$validator.reset('settings');
         })
-        .catch(function (error) { // handle error
+        .catch(function (error) {
             Vue.config.errorHandler(error, self);
         })
-        .then(function () { // always executed
+        .then(function () {
             self.$store.dispatch("hideProgress");
         });
   },
@@ -168,13 +169,13 @@ export default {
             self.$store.dispatch("showProgress");
 
             this.$http.post(this.$config.model.api.sendTestEmail, { email: this.testEmailAddress })
-                .then(function (response) { // handle success
+                .then(function (response) {
                     self.$validator.reset('testEmail');
                 })
-                .catch(function (error) { // handle error
+                .catch(function (error) {
                     Vue.config.errorHandler(error, self);
                 })
-                .then(function () { // always executed
+                .then(function () {
                     self.$store.dispatch("hideProgress");
                 });
         }
@@ -194,13 +195,13 @@ export default {
             self.$store.dispatch("showProgress");
 
             this.$http.post(this.$config.model.api.updateSettings, settings)
-                .then(function (response) { // handle success
+                .then(function (response) {
                     self.$validator.reset('settings');
                 })
-                .catch(function (error) { // handle error
+                .catch(function (error) {
                     Vue.config.errorHandler(error, self);
                 })
-                .then(function () { // always executed
+                .then(function () {
                     self.$store.dispatch("hideProgress");
                 });
         }else{

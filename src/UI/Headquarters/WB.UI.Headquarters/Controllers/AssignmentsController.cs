@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -31,6 +32,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
@@ -39,7 +41,8 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser currentUser, 
             IPlainStorageAccessor<Assignment> assignmentsStorage, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
+            IInvitationService invitationService)
             : base(commandService, logger)
         {
             this.interviews = interviews;
@@ -48,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaires = questionnaires;
+            this.invitationService = invitationService;
         }
         
         [Localizable(false)]
@@ -104,6 +108,8 @@ namespace WB.UI.Headquarters.Controllers
             assignment.UpdatePassword(password);
 
             this.assignmentsStorage.Store(assignment, null);
+
+            this.invitationService.CreateInvitationForWebInterview(assignment);
 
             return RedirectToAction("Index");
         }

@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -712,7 +713,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
             IPlainStorageAccessor<Assignment> assignmentsStorage = null,
-            IAssignmentsImportFileConverter assignmentsImportFileConverter = null)
+            IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
+            IInvitationService invitationService = null)
         {
             var session = Mock.Of<ISession>(x =>
                 x.Query<AssignmentsImportProcess>() == GetNhQueryable<AssignmentsImportProcess>() &&
@@ -730,7 +732,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                invitationService ?? Mock.Of<IInvitationService>());
         }
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
