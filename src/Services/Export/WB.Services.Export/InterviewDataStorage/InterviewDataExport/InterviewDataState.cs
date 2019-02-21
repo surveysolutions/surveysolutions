@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Options;
 using NpgsqlTypes;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -9,12 +8,19 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataState
     {
+        public InterviewDataState(string tenantName)
+        {
+            TenantName = tenantName;
+        }
+
         private IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         private IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         private IDictionary<string, HashSet<RosterTableKey>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
         private IDictionary<string, HashSet<RosterTableKey>> RemoveRostersBeforeInsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
         private IDictionary<string, HashSet<RosterTableKey>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
-        private IDictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>> UpdateValues = new Dictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>>();
+        private IDictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>> UpdateValues { get; } 
+            = new Dictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>>();
+        public string TenantName { get; }
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
@@ -134,5 +140,26 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 }
             }
         }
+
+        public IEnumerable<BulkUpdate> GetUpdateBulkData()
+        {
+            foreach (var update in UpdateValues)
+            {
+                var updates = update.Value.Select(v => (v.Key, v.Value.Select(_ => _.Value).ToList()));
+
+                yield return new BulkUpdate
+                {
+                    TableName = update.Key,
+                    Values = updates.ToList()
+                };
+            }
+        }
+    }
+
+    public class BulkUpdate
+    {
+        public string TableName { get; set; }
+
+        public List<(RosterTableKey key, List<UpdateValueInfo> updates)> Values { get; set; }
     }
 }

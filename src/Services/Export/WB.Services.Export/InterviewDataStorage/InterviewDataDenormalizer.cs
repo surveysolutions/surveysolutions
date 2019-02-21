@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -9,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Npgsql;
 using NpgsqlTypes;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
@@ -86,7 +83,7 @@ namespace WB.Services.Export.InterviewDataStorage
             this.commandBuilder = commandBuilder;
             this.logger = logger;
 
-            state = new InterviewDataState();
+            state = new InterviewDataState(tenantContext.Tenant?.Name);
         }
 
         public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken token = default)
@@ -616,6 +613,8 @@ namespace WB.Services.Export.InterviewDataStorage
                 sqlCommand.ExecuteNonQuery();
             }
 
+            Monitoring.DumpSqlCommandsTrack(this.logger, LogLevel.Debug);
+
             logger.LogDebug("Commands {count} applied on DB {time}", commands.Count, sw.Elapsed);
             return Task.CompletedTask;
         }
@@ -638,11 +637,6 @@ namespace WB.Services.Export.InterviewDataStorage
                 return null;
             var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, questionnaireId, token: token);
             return questionnaire;
-        }
-
-        private Group ResolveGroupForEnablement(IQuestionnaireEntity entity)
-        {
-            return (entity as Group) ?? ((Group)entity.GetParent());
         }
 
         private string ResolveColumnNameForEnablement(IQuestionnaireEntity entity)
