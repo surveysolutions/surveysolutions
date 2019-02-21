@@ -106,6 +106,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return this.assignmentsAccessor.Query(_ => _.Count(ReadyForWebInterviewAssignments(questionnaireId)));
         }
 
+        public int GetCountOfAssignments(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.assignmentsAccessor.Query(_ => _.Count(ByQuestionnaire(questionnaireIdentity)));
+        }
+
+        private static Expression<Func<Assignment, bool>> ByQuestionnaire(QuestionnaireIdentity questionnaireId)
+        {
+            Expression<Func<Assignment, bool>> readyForWebInterviewAssignments =
+                x => x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
+                     x.QuestionnaireId.Version == questionnaireId.Version &&
+                     !x.Archived &&
+                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity);
+            return readyForWebInterviewAssignments;
+        }
+
         private static Expression<Func<Assignment, bool>> ReadyForWebInterviewAssignments(QuestionnaireIdentity questionnaireId)
         {
             Expression<Func<Assignment, bool>> readyForWebInterviewAssignments =

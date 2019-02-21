@@ -277,6 +277,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send invitations.
+        /// </summary>
+        internal static string SendInvitations {
+            get {
+                return ResourceManager.GetString("SendInvitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {

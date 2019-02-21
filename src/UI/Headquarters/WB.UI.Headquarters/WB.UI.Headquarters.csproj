@@ -712,6 +712,7 @@
     </Content>
     <Content Include="App_GlobalResources\Settings.ru.resx">
       <DependentUpon>Settings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Settings.zh.resx">
       <DependentUpon>Settings.resx</DependentUpon>
@@ -1941,6 +1942,7 @@
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
     <Content Include="Views\Settings\EmailProviders.cshtml" />
+    <Content Include="Views\WebInterviewSetup\SendInvitations.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2034,6 +2036,7 @@
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\WebInterviewSetupApiController.cs" />
     <Compile Include="API\WebInterview\WebStatefullInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\Dashboard.designer.cs">
@@ -2494,6 +2497,7 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">

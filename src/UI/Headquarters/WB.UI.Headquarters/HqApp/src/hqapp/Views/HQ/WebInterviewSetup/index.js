@@ -1,5 +1,7 @@
 import Start from "./Start"
 import Started from "./Started"
+import SendInvitations from "./SendInvitations"
+
 
 export default class WebInterviewSetupComponent {
     get routes() {
@@ -11,6 +13,10 @@ export default class WebInterviewSetupComponent {
         {
             path: '/WebInterviewSetup/Started/:id', 
             component: Started
+        },
+        {
+            path: '/WebInterviewSetup/SendInvitations/:id', 
+            component: SendInvitations
         }
         ]
     }

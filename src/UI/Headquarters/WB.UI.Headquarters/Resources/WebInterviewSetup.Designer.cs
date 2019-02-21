@@ -205,6 +205,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send invitations.
+        /// </summary>
+        public static string WebInterviewSetup_SendInvitationsTitle {
+            get {
+                return ResourceManager.GetString("WebInterviewSetup_SendInvitationsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web interview setup.
         /// </summary>
         public static string WebInterviewSetup_Title {
