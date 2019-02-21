@@ -372,7 +372,8 @@ namespace WB.Services.Export.Tests
             {
                 PublicKey = rosterId ?? Guid.NewGuid(),
                 VariableName = variable,
-                IsRoster = true
+                IsRoster = true,
+                RosterSizeSource = RosterSizeSourceType.FixedTitles
             };
         }
 
