@@ -8,7 +8,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataState
     {
-        public InterviewDataState(string tenantName)
+        public InterviewDataState(string tenantName = null)
         {
             TenantName = tenantName;
         }

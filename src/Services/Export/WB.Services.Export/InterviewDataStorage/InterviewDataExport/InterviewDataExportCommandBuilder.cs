@@ -191,7 +191,8 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
             void Track(string commandType)
             {
-                Monitoring.TrackSqlCommandsGeneration(state.TenantName, commandType, commands.Count - lastCommandsCount);
+                if(state.TenantName != null)
+                    Monitoring.TrackSqlCommandsGeneration(state.TenantName, commandType, commands.Count - lastCommandsCount);
                 lastCommandsCount = commands.Count;
             }
 
