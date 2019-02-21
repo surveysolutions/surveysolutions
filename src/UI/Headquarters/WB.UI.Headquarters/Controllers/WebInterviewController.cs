@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
             this.audioProcessingService = audioProcessingService;
             this.pauseResumeQueue = pauseResumeQueue;
         }
-        
+
         [WebInterviewAuthorize]
         public ActionResult Section(string id, string sectionId)
         {

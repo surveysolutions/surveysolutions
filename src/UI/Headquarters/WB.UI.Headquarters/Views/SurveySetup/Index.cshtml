@@ -30,6 +30,7 @@
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
         var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
+        var $sendInvitationsUrl = '@Url.Action("SendInvitations", "WebInterviewSetup")';
         var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
@@ -38,7 +39,7 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
                 $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint);
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint, $sendInvitationsUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -141,6 +142,12 @@
                             items["webSetup"] = {
                                 name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
+                            }
+                        }
+                        if (!selectedRow.isDisabled) {
+                            items["sendInvitations"] = {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.SendInvitations)",
+                                callback: model.sendInvitations
                             }
                         }
                         if (!selectedRow.isDisabled) {

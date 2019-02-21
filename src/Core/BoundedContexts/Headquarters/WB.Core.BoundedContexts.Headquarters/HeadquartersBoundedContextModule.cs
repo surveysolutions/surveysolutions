@@ -53,6 +53,7 @@ using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
@@ -291,6 +292,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
 
             registry.Bind<IEmailService, EmailService>();
+            registry.Bind<IInvitationService, InvitationService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

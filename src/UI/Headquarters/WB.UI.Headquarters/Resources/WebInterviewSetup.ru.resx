@@ -194,4 +194,7 @@
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>
   </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Отправка приглашений</value>
+  </data>
 </root>

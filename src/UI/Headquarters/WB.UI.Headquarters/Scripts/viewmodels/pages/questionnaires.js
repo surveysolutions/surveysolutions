@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl,
     $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl,
-    $migrateAssignmentsUrl, $questionnairesApiEndpoint) {
+    $migrateAssignmentsUrl, $questionnairesApiEndpoint, $sendInvitationsUrl) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -45,6 +45,12 @@
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
         var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
         window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
+    };
+
+    self.sendInvitations = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $sendInvitationsUrl + '/' + encodeURI(questionnaireId);
     };
 
     self.recordAudio = function(key, opt) {

@@ -6,6 +6,7 @@ using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -37,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
@@ -47,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory,
+            IInvitationService invitationService)
         {
             this.userViewFactory = userViewFactory;
             this.verifier = verifier;
@@ -59,6 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.assignmentsStorage = assignmentsStorage;
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
@@ -239,6 +243,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
 
             this.assignmentsStorage.Store(assignment, null);
+
+            this.invitationService.CreateInvitationForWebInterview(assignment);
 
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
                 questionnaireIdentity, assignment.Id, assignmentToImport.Answers);

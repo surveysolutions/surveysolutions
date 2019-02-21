@@ -193,4 +193,7 @@
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Custom message should not contain more than {0} characters (including html)</value>
   </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Send invitations</value>
+  </data>
 </root>
