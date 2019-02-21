@@ -14,5 +14,6 @@ namespace WB.Services.Export.Services.Processing
         public int ProgressInPercents { get; set; }
         public string DataExportProcessId { get; set; }
         public DataExportStatus StatusOfLatestExportProcess { get; set; }
+        public TimeSpan? TimeEstimation { get; set; }
     }
 }

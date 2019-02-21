@@ -20,7 +20,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         public DropboxBinaryDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IBinaryDataSource binaryDataSource,
             IDataExportFileAccessor dataExportFileAccessor,

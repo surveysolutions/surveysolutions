@@ -7,7 +7,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
@@ -17,7 +17,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected AbstractExternalStorageDataExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService, 
             IDataExportFileAccessor dataExportFileAccessor,
             IBinaryDataSource binaryDataSource) :
@@ -30,8 +30,8 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override DataExportFormat Format => DataExportFormat.Binary;
         protected override bool CompressExportedData => false;
         
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
-            IProgress<int> progress,
+        protected override async Task ExportDataIntoDirectory(ExportSettings settings,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             using (this.GetClient(this.accessToken))

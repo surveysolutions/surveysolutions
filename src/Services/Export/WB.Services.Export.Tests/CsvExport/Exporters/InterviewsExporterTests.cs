@@ -14,7 +14,7 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -48,7 +48,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport>
             {
-                new InterviewToExport(interviewId, interviewKey, 1, InterviewStatus.Completed)
+                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed)
             };
 
             string[][] answers = { new string[1] };
@@ -61,14 +61,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewFactory = new Mock<IInterviewFactory>();
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
-            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null))
-                .Returns(Task.FromResult(new List<InterviewEntity>()));
+            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null,  null))
+                .Returns(new List<InterviewEntity>());
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
             //act
             await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
-                new Progress<int>(), CancellationToken.None);
+                new ExportProgress(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile, Has.Count.EqualTo(2));
@@ -86,7 +86,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
-            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("1"));
+            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("0"));
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));

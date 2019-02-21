@@ -1,0 +1,1 @@
+﻿INSERT INTO "fakeTableName1" (interview__id) VALUES  (@interviewId1), (@interviewId2) ON CONFLICT DO NOTHING;
