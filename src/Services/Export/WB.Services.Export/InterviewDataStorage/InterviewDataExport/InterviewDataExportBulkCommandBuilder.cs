@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
-using Npgsql;
 using NpgsqlTypes;
 
 namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
