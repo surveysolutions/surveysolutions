@@ -138,47 +138,24 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public List<DbCommand> BuildCommandsInExecuteOrderFromState(InterviewDataState state)
         {
             var commands = new List<DbCommand>();
-            int lastCommandsCount = commands.Count;
-
-            void Track(string commandType)
-            {
-                if(state.TenantName != null)
-                    Monitoring.TrackSqlCommandsGeneration(state.TenantName, commandType, commands.Count - lastCommandsCount);
-                lastCommandsCount = commands.Count;
-            }
 
             foreach (var tableWithAddInterviews in state.GetInsertInterviewsData())
                 commands.Add(CreateInsertInterviewCommandForTable(tableWithAddInterviews.TableName, tableWithAddInterviews.InterviewIds));
 
-            Track("insert_interviews");
-
             foreach (var tableWithAddRosters in state.GetRemoveRostersBeforeInsertNewInstancesData())
                 commands.Add(CreateRemoveRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
-
-            Track("delete_rosters_before_insert");
 
             foreach (var tableWithAddRosters in state.GetInsertRostersData())
                 commands.Add(CreateAddRosterInstanceForTable(tableWithAddRosters.TableName, tableWithAddRosters.RosterLevelInfo));
 
-            Track("insert_rosters");
-
-            /*foreach (var update in state.GetUpdateBulkData())
-            {
-                var command = CreateUpdateValueForTable(update);
-                commands.Add(command);
-            }*/
+            foreach (var update in state.GetUpdateValuesData())
+                commands.Add(CreateUpdateValueForTable(update.TableName, update.RosterLevelTableKey, update.UpdateValuesInfo));
             
-            Track("updates");
-
             foreach (var tableWithRemoveRosters in state.GetRemoveRostersData())
                 commands.Add(CreateRemoveRosterInstanceForTable(tableWithRemoveRosters.TableName, tableWithRemoveRosters.RosterLevelInfo));
 
-            Track("delete_rosters");
-
             foreach (var tableWithRemoveInterviews in state.GetRemoveInterviewsData())
                 commands.Add(CreateDeleteInterviewCommandForTable(tableWithRemoveInterviews.TableName, tableWithRemoveInterviews.InterviewIds));
-
-            Track("delete_interviews");
 
             return commands;
         }

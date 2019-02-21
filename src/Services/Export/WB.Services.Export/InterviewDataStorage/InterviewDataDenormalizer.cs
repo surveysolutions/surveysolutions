@@ -83,7 +83,7 @@ namespace WB.Services.Export.InterviewDataStorage
             this.commandBuilder = commandBuilder;
             this.logger = logger;
 
-            state = new InterviewDataState(tenantContext.Tenant?.Name);
+            state = new InterviewDataState();
         }
 
         public Task Handle(PublishedEvent<InterviewCreated> @event, CancellationToken token = default)
@@ -601,21 +601,19 @@ namespace WB.Services.Export.InterviewDataStorage
         public Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
-            var commands = commandBuilder.BuildCommandsInExecuteOrderFromState(state);
-
-            logger.LogDebug("Commands {count} generated in {time}", commands.Count, sw.Elapsed);
-            sw.Restart();
-            var db = dbContext.Database.GetDbConnection();
-
-            foreach (var sqlCommand in commands)
+            using (var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state))
             {
-                sqlCommand.Connection = db;
-                sqlCommand.ExecuteNonQuery();
+                logger.LogDebug("Commands {count} generated in {time}", 1, sw.Elapsed);
+                sw.Restart();
+
+                var db = dbContext.Database.GetDbConnection();
+                command.Connection = db;
+                command.ExecuteNonQuery();
+
+                Monitoring.DumpSqlCommandsTrack(this.logger, LogLevel.Debug);
+                logger.LogDebug("Commands {count} applied on DB {time}", 1, sw.Elapsed);
             }
 
-            Monitoring.DumpSqlCommandsTrack(this.logger, LogLevel.Debug);
-
-            logger.LogDebug("Commands {count} applied on DB {time}", commands.Count, sw.Elapsed);
             return Task.CompletedTask;
         }
 
