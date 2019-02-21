@@ -36,7 +36,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }">
                         <label>{{ $t('Settings.EmailProvider_AwsAccessKeyId')}}</label>
                         <input
-                            data-
+                            data-vv-as="AWS access key id"
                             v-validate="'required'" 
                             class="form-control" 
                             name="awsAccessKeyId" 
@@ -50,6 +50,7 @@
                         <label>{{ $t('Settings.EmailProvider_AwsSecretAccessKey')}}</label>
                         <input 
                             v-validate="'required'" 
+                            data-vv-as="AWS secret access key"
                             name="awsSecretAccessKey" 
                             id="awsSecretAccessKey" 
                             v-model="awsSecretAccessKey" 
@@ -91,18 +92,15 @@
                 <button class="btn btn-success" type="button" :disabled="!isFormDirty || isFetchInProgress" @click="save">Save</button>
             </form> 
 
-            <form v-if="!sendGridIsNotSetUp || !awsIsNotSetUp" data-vv-scope="testEmail">
+            <form v-if="sendGridIsSetUp || awsIsSetUp" data-vv-scope="testEmail">
                 <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                 <h4>{{ $t('Settings.EmailProvider_SendTestEmailHeader')}}</h4>
-                <div v-if="!sendGridIsNotSetUp">
-                    <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
-                        <label>{{ $t('Settings.EmailProvider_TestEmailAddress')}}</label>
-                        <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress" class="form-control" id="testEmailAddress" type="text" v-model="testEmailAddress" maxlength="200" />
-                        <span class="help-block">{{ errors.first('testEmail.testEmailAddress') }}</span>
-                    </div>
-                    <button
-                     class="btn btn-success" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
+                <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
+                    <label>{{ $t('Settings.EmailProvider_TestEmailAddress')}}</label>
+                    <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress" class="form-control" id="testEmailAddress" type="text" v-model="testEmailAddress" maxlength="200" />
+                    <span class="help-block">{{ errors.first('testEmail.testEmailAddress') }}</span>
                 </div>
+                <button class="btn btn-success" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
             </form>
 
             </div>
@@ -112,6 +110,7 @@
 
 <script>
 import Vue from "vue"
+import { isEmpty } from "lodash"
 
 export default {
   data() {
@@ -149,17 +148,18 @@ export default {
         const keys = Object.keys((this.fields || {}).$settings || {});
         return keys.some(key => this.fields.$settings[key].dirty || this.fields.$settings[key].changed);
     },
-    sendGridIsNotSetUp(){
-        return this.provider!='sendgrid' && (this.sendGridApiKey==null || this.senderAddress==null);
+    sendGridIsSetUp(){
+        return this.provider=='sendgrid' && !isEmpty(this.sendGridApiKey) && !isEmpty(this.senderAddress);
     },
-    awsIsNotSetUp(){
-        return this.provider!='amazon' && (this.awsSecretAccessKey==null || this.awsAccessKeyId==null || this.senderAddress==null);
+    awsIsSetUp(){
+        return this.provider=='amazon' && !isEmpty(this.awsSecretAccessKey) && !isEmpty(this.awsAccessKeyId) && !isEmpty(this.senderAddress);
     },
     isFetchInProgress(){
         return this.$store.state.progress.pendingProgress;
     }
   },
   methods: {
+    
     async sendTestEmail(){
         var self = this;
         var validationResult = await this.$validator.validateAll('testEmail');
