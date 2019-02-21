@@ -97,7 +97,7 @@ namespace WB.Services.Export.Host
                 .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose, 
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
                 .WriteTo
-                    .File(Path.GetFullPath(fileLog), 
+                    .File(Path.GetFullPath(fileLog), LogEventLevel.Information, 
                         rollingInterval: RollingInterval.Day);
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
