@@ -83,8 +83,7 @@ namespace WB.UI.Headquarters.API.Export
                     .Select(x => new { x.InterviewId, x.Key }).ToList())
                 .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
 
-            var result = id
-                .SelectMany(i => this.viewFactory.GetInterviewComments(i))
+            var result = this.viewFactory.GetInterviewComments(id)
                 .Select(c => new
                 {
                     c.InterviewId, c.Variable,

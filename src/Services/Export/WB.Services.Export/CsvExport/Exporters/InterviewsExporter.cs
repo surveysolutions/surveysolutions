@@ -217,7 +217,8 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             var errorsCount = interview
                 .Where(x => x.EntityType == EntityType.Question || x.EntityType == EntityType.StaticText)
-                .Count(x => x.InvalidValidations.Length > 0);
+                .Count(x => x.IsEnabled && x.InvalidValidations.Length > 0);
+
             var interviewData = new InterviewData
             {
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
