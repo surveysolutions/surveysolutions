@@ -1,0 +1,9 @@
+﻿select data.interview__id as data__interview_id , data.roster__vector as data__roster_vector ,  data."num1" as "data__num1" ,  enablement."roster1" as "enablement__roster1"
+,  enablement."num1" as "enablement__num1" ,  validity."num1" as "validity__num1"  from 
+"quest$6_roster1" data 
+ INNER JOIN     "quest$6_roster1__e" enablement ON data.interview__id = enablement.interview__id
+    AND data.roster__vector = enablement.roster__vector
+ INNER JOIN     "quest$6_roster1__v" validity ON data.interview__id = validity.interview__id
+   AND data.roster__vector = validity.roster__vector 
+WHERE validity.interview__id = ANY(@ids)
+ORDER BY validity.roster__vector

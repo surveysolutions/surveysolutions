@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Events;
+using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tests.CsvExport.Exporters;
-using WB.Services.Export.Utils;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tests.EventsProcessorTests;
+using WB.Services.Infrastructure;
+using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests
@@ -58,7 +66,7 @@ namespace WB.Services.Export.Tests
             IFileSystemAccessor fileSystemAccessor = null,
             ITenantApi<IHeadquartersApi> headquartersApi = null)
         {
-            return new DiagnosticsExporter(Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings()),
+            return new DiagnosticsExporter(Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 headquartersApi ?? HeadquartersApi());
@@ -92,14 +100,17 @@ namespace WB.Services.Export.Tests
             return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, string variableName = null, params IQuestionnaireEntity[] children)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, long version = 5, string variableName = null, params IQuestionnaireEntity[] children)
         {
-            return new QuestionnaireDocument
+            var questionnaireDocument = new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children,
-                VariableName = variableName
+                VariableName = variableName,
             };
+            questionnaireDocument.QuestionnaireId = new QuestionnaireId(questionnaireDocument.PublicKey.FormatGuid() + "$" + version);
+
+            return questionnaireDocument;
         }
 
         public static TextQuestion TextQuestion(Guid? id = null, 
@@ -126,13 +137,11 @@ namespace WB.Services.Export.Tests
                 .Setup(x => x.MakeValidFileName(It.IsAny<string>()))
                 .Returns((string f) => f);
 
-            var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
-                new MemoryCache(new MemoryCacheOptions()), 
-                Mock.Of<IQuestionnaireStorage>());
+            var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(Mock.Of<IQuestionnaireStorage>());
             return QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
         }
 
-        public static InterviewSummary InterviewSummary(InterviewExportedAction exportedAction = InterviewExportedAction.ApprovedBySupervisor,
+        public static InterviewAction InterviewSummary(InterviewExportedAction exportedAction = InterviewExportedAction.ApprovedBySupervisor,
             string originatorName = "inter",
             UserRoles originatorRole = UserRoles.Interviewer,
             Guid? interviewId = null,
@@ -140,7 +149,7 @@ namespace WB.Services.Export.Tests
             string key = null,
             string interviewerName = "inter",
             string supervisorName = "supervisor")
-            => new InterviewSummary
+            => new InterviewAction
             {
                 Status = exportedAction,
                 InterviewId = interviewId ?? Guid.NewGuid(),
@@ -161,9 +170,9 @@ namespace WB.Services.Export.Tests
                 tenantApi ?? HeadquartersApi());
         }
 
-        public static IOptions<InterviewDataExportSettings> InterviewDataExportSettings()
+        public static IOptions<ExportServiceSettings> InterviewDataExportSettings()
         {
-            return Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings());
+            return Mock.Of<IOptions<ExportServiceSettings>>(x => x.Value == new ExportServiceSettings());
         }
 
         public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
@@ -173,6 +182,7 @@ namespace WB.Services.Export.Tests
         {
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
                 tenantApi,
+                Mock.Of<IInterviewsToExportSource>(),
                 Mock.Of<IInterviewsExporter>(),
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
@@ -278,7 +288,7 @@ namespace WB.Services.Export.Tests
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 Create.InterviewErrorsExporter(),
                 csvWriter ?? Mock.Of<ICsvWriter>(), 
-                Mock.Of<IOptions<Interview.InterviewDataExportSettings>>(s => s.Value == new InterviewDataExportSettings()),
+                Mock.Of<IOptions<ExportServiceSettings>>(s => s.Value == new ExportServiceSettings()),
                 Mock.Of<ILogger<InterviewsExporter>>());
         }
 
@@ -290,6 +300,11 @@ namespace WB.Services.Export.Tests
                 PublicKey = publicKey ?? Guid.NewGuid(),
                 ValidationConditions = validationConditions
             };
+
+        public static Identity Identity(string id, params int[] rosterVector)
+        {
+            return Identity(Guid.Parse(id), rosterVector);
+        }
 
         public static Identity Identity(Guid? id = null, params int[] rosterVector)
         {
@@ -377,6 +392,7 @@ namespace WB.Services.Export.Tests
                     }
                 }
             };
+            questionnaireDocumentWithOneChapter.QuestionnaireId = new QuestionnaireId(questionnaireDocumentWithOneChapter.PublicKey.ToString("N") + "$" + "145");
             questionnaireDocumentWithOneChapter.ConnectChildrenWithParent();
             return questionnaireDocumentWithOneChapter;
         }
@@ -408,7 +424,23 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi());
+            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<ITenantContext>(), Create.TenantDbContext());
+        }
+
+        public static TenantDbContext TenantDbContext(string databaseName = null)
+        {
+            var options = new DbContextOptionsBuilder<TenantDbContext>()
+                .UseInMemoryDatabase(databaseName: databaseName ?? Guid.NewGuid().ToString("N"))
+                .Options;
+            var dbContext = new TenantDbContext(
+                Mock.Of<ITenantContext>(x => x.Tenant == new TenantInfo
+                {
+                    Id = TenantId.None
+                }),
+                Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()),
+                options);
+
+            return dbContext;
         }
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
@@ -439,11 +471,12 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static Group Group(Guid? groupId = null, params IQuestionnaireEntity[] children)
+        public static Group Group(Guid? groupId = null, string variable = null, params IQuestionnaireEntity[] children)
         {
             return new Group(children: children.ToList())
             {
-                PublicKey = groupId ?? Guid.NewGuid()
+                PublicKey = groupId ?? Guid.NewGuid(),
+                VariableName = variable
             };
         }
 
@@ -504,5 +537,94 @@ namespace WB.Services.Export.Tests
 
         public static VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
             => new VariableValueLabel(value, label);
+
+        public static InterviewReference InterviewReference(
+            string questionnaireId = null,
+            Guid? interviewId = null,
+            InterviewStatus? status = null,
+            string key = null,
+            DateTime? updateDateUtc = null)
+        {
+            return new InterviewReference
+            {
+                QuestionnaireId = questionnaireId ?? Id.gA.FormatGuid(),
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Status = status ?? InterviewStatus.Deleted,
+                Key = key,
+                UpdateDateUtc = updateDateUtc
+            };
+        }
+
+        public static IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
+        {
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(It.IsAny<TenantInfo>(),
+                    new QuestionnaireId(questionnaire.Id), 
+                    It.IsAny<bool>(),
+                    CancellationToken.None))
+                .ReturnsAsync(questionnaire);
+            return questionnaireStorage.Object;
+        }
+
+        public static EventsFactory Event = new EventsFactory();
+
+        public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api, bool withDefaultEventsFilter = false)
+        {
+            services.AddMock<ITenantApi<IHeadquartersApi>>(c => c.For(It.IsAny<TenantInfo>()) == api);
+            services.AddScoped<ITenantContext, TenantContext>();
+
+            if (withDefaultEventsFilter)
+            {
+                var filerMock = new Mock<IEventsFilter>();
+                filerMock.Setup(c => c.FilterAsync(It.IsAny<List<Event>>()))
+                    .Returns<List<Event>>(Task.FromResult);
+
+                services.AddTransient(c => filerMock.Object);
+            }
+
+            services.AddDbContext<TenantDbContext>(c =>
+            {
+                c.UseInMemoryDatabase(Guid.NewGuid().ToString("N"));
+                c.ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            }, ServiceLifetime.Singleton);
+
+            services.AddMock<IDataExportProcessesService>();
+            services.AddTransient<EventsProcessor>();
+            services.AddTransient<IEventsHandler, EventsHandler>();
+
+            var provider = services.BuildServiceProvider();
+            provider.SetTenant(new TenantInfo("http://localhost", TenantId.None, "test"));
+            return provider;
+        }
+
+    }
+
+    public class EventsFactory
+    {
+        private int globalSeq = 0;
+        private int eventSeq = 0;
+
+        public Event Event(IEvent payload, Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return new Event()
+            {
+                EventSourceId = interviewId ?? Guid.NewGuid(),
+                Payload = payload,
+                GlobalSequence = globalSeq ?? ++this.globalSeq,
+                Sequence = eventSeq ?? ++this.eventSeq,
+                EventTypeName = payload.GetType().Name,
+                EventTimeStamp = DateTime.UtcNow
+            };
+        }
+
+        public Event CreatedInterview(Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return Event(new InterviewCreated(), interviewId, globalSeq, eventSeq);
+        }
+
+        public Event InterviewOnClientCreated(Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return Event(new InterviewOnClientCreated(), interviewId, globalSeq, eventSeq);
+        }
     }
 }

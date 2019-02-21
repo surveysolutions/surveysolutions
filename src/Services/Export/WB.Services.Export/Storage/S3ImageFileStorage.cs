@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Storage
 {

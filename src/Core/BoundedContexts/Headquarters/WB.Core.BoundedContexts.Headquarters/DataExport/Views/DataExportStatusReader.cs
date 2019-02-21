@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
@@ -14,12 +16,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     {
         private readonly IExportServiceApi exportServiceApi;
         private readonly IExportFileNameService exportFileNameService;
+        private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IAssignmentsService assignmentsService;
 
         public DataExportStatusReader(IExportServiceApi exportServiceApi,
-            IExportFileNameService exportFileNameService)
+            IExportFileNameService exportFileNameService,
+            IQuestionnaireStorage questionnaireStorage,
+            IAssignmentsService assignmentsService)
         {
             this.exportServiceApi = exportServiceApi;
             this.exportFileNameService = exportFileNameService;
+            this.questionnaireStorage = questionnaireStorage;
+            this.assignmentsService = assignmentsService;
         }
 
         public async Task<DataExportArchive> GetDataArchive(QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
@@ -53,8 +61,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             DateTime? fromDate = null,
             DateTime? toDate = null)
         {
-            var result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(
+            DataExportStatusView result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(
                 questionnaireIdentity.ToString(), status, fromDate, toDate);
+
+            var binaryExport = result.DataExports.Where(x => x.DataExportFormat == DataExportFormat.Binary);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var hasAssignmentWithAudioRecordingEnabled = assignmentsService.HasAssignmentWithAudioRecordingEnabled(questionnaireIdentity);
+            foreach (var dataExportView in binaryExport)
+            {
+                if (!questionnaire.HasAnyMultimediaQuestion() &&
+                    !hasAssignmentWithAudioRecordingEnabled)
+                {
+                    dataExportView.CanRefreshBeRequested = false;
+                    dataExportView.HasAnyDataToBePrepared = false;
+                }
+            }
+
             return result;
         }
     }

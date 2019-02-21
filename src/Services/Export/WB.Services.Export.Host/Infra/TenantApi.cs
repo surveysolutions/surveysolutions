@@ -111,7 +111,10 @@ namespace WB.Services.Export.Host.Infra
                         sw.Elapsed.TotalSeconds,
                         size);
 
-                    logger.LogTrace("TenantApi executed with size {size} in {elapsed} ms", size, sw.ElapsedMilliseconds);
+                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms", 
+                        request.RequestUri.LocalPath,
+                        size, 
+                        sw.ElapsedMilliseconds);
 
                     return result;
                 }

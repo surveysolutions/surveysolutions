@@ -7,6 +7,7 @@
         Running = 3,
         Compressing = 4,
         Finished = 5,
-        FinishedWithError = 6
+        FinishedWithError = 6,
+        Preparing = 7
     }
 }

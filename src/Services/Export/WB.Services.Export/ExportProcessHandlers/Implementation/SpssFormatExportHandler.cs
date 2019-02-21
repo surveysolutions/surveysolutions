@@ -19,7 +19,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
@@ -34,7 +34,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.SPSS;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override async Task ExportDataIntoDirectory(ExportSettings settings, ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
@@ -50,11 +50,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         private async Task CreateSpssDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string[] tabDataFiles,
-            IProgress<int> progress, CancellationToken cancellationToken)
+            ExportProgress progress, CancellationToken cancellationToken)
         {
-            var exportProgress = new Progress<int>();
+            var exportProgress = new ExportProgress();
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(50 + (donePercent / 2));
+                (sender, donePercent) => progress.Report(50 + (donePercent.Percent / 2), donePercent.Eta);
 
             await tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                 tenant,
