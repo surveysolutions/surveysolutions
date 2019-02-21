@@ -1289,8 +1289,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 categoricalOneAnswerQuestion.ValidationConditions,
                 null,
                 false,
-                null,
-                null);
+                categoricalOneAnswerQuestion.ShowAsList,
+                categoricalOneAnswerQuestion.ShowAsListThreshold);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
