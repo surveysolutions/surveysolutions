@@ -8,18 +8,12 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 {
     public class InterviewDataState
     {
-        public InterviewDataState(string tenantName = null)
-        {
-            TenantName = tenantName;
-        }
-
         private IDictionary<string, HashSet<Guid>> InsertInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         private IDictionary<string, HashSet<Guid>> RemoveInterviews { get; set; } = new Dictionary<string, HashSet<Guid>>();
         private IDictionary<string, HashSet<RosterTableKey>> InsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
         private IDictionary<string, HashSet<RosterTableKey>> RemoveRostersBeforeInsertRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
         private IDictionary<string, HashSet<RosterTableKey>> RemoveRosters { get; set; } = new Dictionary<string, HashSet<RosterTableKey>>();
         private IDictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>> UpdateValues { get; } = new Dictionary<string, IDictionary<RosterTableKey, IDictionary<string, UpdateValueInfo>>>();
-        public string TenantName { get; }
 
         public void InsertInterviewInTable(string tableName, Guid interviewId)
         {
