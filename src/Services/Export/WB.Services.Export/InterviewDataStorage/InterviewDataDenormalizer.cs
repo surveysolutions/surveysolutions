@@ -598,25 +598,21 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        public Task SaveStateAsync(CancellationToken cancellationToken)
+        public async Task SaveStateAsync(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             using (var command = commandBuilder.BuildCommandsInExecuteOrderFromState(state))
             {
-                logger.LogDebug("Commands {count} generated in {time}", 1, sw.Elapsed);
+                logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
                 sw.Restart();
 
                 var db = dbContext.Database.GetDbConnection();
                 command.Connection = db;
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync(cancellationToken);
 
-                Monitoring.DumpSqlCommandsTrack(this.logger, LogLevel.Debug);
-                logger.LogDebug("Commands {count} applied on DB {time}", 1, sw.Elapsed);
+                logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);
             }
-
-            return Task.CompletedTask;
         }
-
 
         private async Task<QuestionnaireDocument> GetQuestionnaireByInterviewIdAsync(Guid interviewId, CancellationToken token = default)
         {
