@@ -11,7 +11,7 @@ using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Events
 {
-    public class EventsHandler : IEventsHandler, IDisposable
+    public class EventsHandler : IEventsHandler
     {
         private readonly ILogger<EventsHandler> logger;
         private readonly IEventsFilter eventsFilter;
@@ -68,9 +68,9 @@ namespace WB.Services.Export.Events
                             await handler.SaveStateAsync(token);
                             eventHandlerStopwatch.Stop();
 
-                            Monitoring.TrackEventHandlerProcessingSped(
+                            Monitoring.TrackEventHandlerProcessingSpeed(
                                 this.tenantContext?.Tenant?.Name,
-                                GetHandlerMonitoringKey(handler.GetType()), 
+                                handler.GetType(), 
                                 eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
                         }
                     }
@@ -92,17 +92,6 @@ namespace WB.Services.Export.Events
             {
                 logger.LogCritical(e, "Unhandled exception during event handling");
                 throw;
-            }
-        }
-
-        private string GetHandlerMonitoringKey(Type type) =>type.Name.Humanize(LetterCasing.LowerCase).Replace(" ", "_");
-
-        public void Dispose()
-        {
-            foreach (var handler in handlers)
-            {
-                Monitoring.TrackEventHandlerProcessingSped(this.tenantContext?.Tenant?.Name,
-                    GetHandlerMonitoringKey(handler.GetType()), 0);
             }
         }
     }
