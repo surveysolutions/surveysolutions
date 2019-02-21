@@ -102,10 +102,9 @@ namespace WB.Services.Export.Tests
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, long version = 5, string variableName = null, params IQuestionnaireEntity[] children)
         {
-            var questionnaireDocument = new QuestionnaireDocument
+            var questionnaireDocument = new QuestionnaireDocument(children.ToList())
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children,
                 VariableName = variableName,
             };
             questionnaireDocument.QuestionnaireId = new QuestionnaireId(questionnaireDocument.PublicKey.FormatGuid() + "$" + version);
@@ -364,6 +363,16 @@ namespace WB.Services.Export.Tests
                 IsRoster = true,
                 RosterSizeQuestionId = rosterSizeQuestionId,
                 RosterSizeSource = rosterSizeSource
+            };
+        }
+
+        public static Group Roster(Guid? rosterId = null, string variable = null, params IQuestionnaireEntity[] children)
+        {
+            return new Group(children: children.ToList())
+            {
+                PublicKey = rosterId ?? Guid.NewGuid(),
+                VariableName = variable,
+                IsRoster = true
             };
         }
 
