@@ -149,7 +149,7 @@ namespace WB.Services.Export.Questionnaire
             });
         }
 
-        private MemoryCache memoryCache;
+        private readonly MemoryCache memoryCache;
 
         private Dictionary<Guid, IQuestionnaireEntity> entitiesCache;
         private Dictionary<Guid, IQuestionnaireEntity> EntitiesCache
