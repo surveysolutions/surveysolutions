@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     return string.Empty;
                 }
 
-                return Report.TimeLeft + ": " + TimeEstimation.Value.Humanize(2, minUnit: TimeUnit.Minute);
+                return Report.TimeLeft + ": " + TimeEstimation.Value.Humanize(2, minUnit: TimeUnit.Second);
             }
         }
     }
