@@ -1528,7 +1528,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Combobox.
+        ///   Looks up a localized string similar to Combo box.
         /// </summary>
         public static string QuestionComboBox {
             get {
@@ -1681,6 +1681,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Integers between 1 and 50 are allowed.
+        /// </summary>
+        public static string QuestionOneToFiftyAllowed {
+            get {
+                return ResourceManager.GetString("QuestionOneToFiftyAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only integers are allowed.
         /// </summary>
         public static string QuestionOnlyInts {
@@ -1753,7 +1762,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show if less than.
+        ///   Looks up a localized string similar to If not more than.
         /// </summary>
         public static string QuestionShowListLimit {
             get {

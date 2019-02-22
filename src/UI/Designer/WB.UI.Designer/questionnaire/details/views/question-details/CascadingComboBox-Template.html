@@ -43,26 +43,27 @@
     <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required" ng-i18next="SelectParentQuestionError"></p>
 </div>
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="checkbox checkbox-in-column">
             <input id="cb-as-list" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.showAsList" ng-change="showAsListChange()" />
             <label for="cb-as-list"><span></span>{{'ShowAsList' | i18next}}</label>
         </div>
     </div>
+
     <div class="col-md-5 inline-inputs">
-        <div class="form-group checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListThreshold.$valid}">
+        <div class="form-group checkbox checkbox-in-column" ng-show="activeQuestion.showAsList" ng-class="{'has-error': !questionForm.showAsListThreshold.$valid}">
             <label for="edit-question-count-for-list" ng-i18next="QuestionShowListLimit"></label>
-            <input id="edit-question-count-for-list" type="number"
+            <input id="edit-question-count-for-list" type="number" step="1"
                    maxlength="2"
                    name="showAsListThreshold"
                    min="1"
                    max="50"
                    ng-pattern="/^\d+$/"
                    ng-model="activeQuestion.showAsListThreshold"
-                   class="form-control small-numeric-input">
-            <p class="help-block ng-cloak" ng-show="questionForm.showAsListThreshold.$error.pattern" ng-i18next="QuestionOnlyInts">
-            </p>
+                   class="form-control small-numeric-input wb-input">
+            <p class="help-block ng-cloak" ng-show="questionForm.showAsListThreshold.$error.pattern" ng-i18next="QuestionOnlyInts"></p>
+            <p class="help-block ng-cloak" ng-show="questionForm.showAsListThreshold.$error.max || questionForm.showAsListThreshold.$error.min" ng-i18next="QuestionOneToFiftyAllowed"></p>
         </div>
     </div>
-
 </div>
+
