@@ -12,12 +12,13 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         }
     }
 
-    public class DeletedQuestionnaireReferenceTypeConfiguration : IEntityTypeConfiguration<DeletedQuestionnaireReference>
+    public class DeletedQuestionnaireReferenceTypeConfiguration : IEntityTypeConfiguration<GeneratedQuestionnaireReference>
     {
-        public void Configure(EntityTypeBuilder<DeletedQuestionnaireReference> builder)
+        public void Configure(EntityTypeBuilder<GeneratedQuestionnaireReference> builder)
         {
-            builder.ToTable("__deleted_questionnaire_reference");
+            builder.ToTable("__generated_questionnaire_reference");
             builder.HasKey(x => x.Id);
+            builder.Property(_ => _.DeletedAt);
         }
     }
 }

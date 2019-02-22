@@ -574,9 +574,7 @@ namespace WB.Services.Export.Tests
         public static IQuestionnaireStorage QuestionnaireStorage(QuestionnaireDocument questionnaire)
         {
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(It.IsAny<TenantInfo>(),
-                    new QuestionnaireId(questionnaire.Id), 
-                    It.IsAny<bool>(),
+            questionnaireStorage.Setup(x => x.GetQuestionnaireAsync(new QuestionnaireId(questionnaire.Id),
                     CancellationToken.None))
                 .ReturnsAsync(questionnaire);
             return questionnaireStorage.Object;

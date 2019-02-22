@@ -15,17 +15,14 @@ namespace WB.Services.Export.Questionnaire
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IDatabaseSchemaService databaseSchemaService;
 
         public DeletedQuestionnaireEventFilter(ITenantContext tenantContext,
             TenantDbContext dbContext,
-            IQuestionnaireStorage questionnaireStorage,
-            IDatabaseSchemaService databaseSchemaService)
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
-            this.databaseSchemaService = databaseSchemaService;
         }
 
         public async Task<List<Event>> FilterAsync(ICollection<Event> feed)
@@ -39,8 +36,7 @@ namespace WB.Services.Export.Questionnaire
                     if (@event.Payload == null) continue;
 
                     InterviewReference reference;
-                    bool forceUpdateQuestionnaire = false;
-
+                    
                     switch (@event.Payload)
                     {
                         case InterviewCreated interviewCreated:
@@ -53,28 +49,15 @@ namespace WB.Services.Export.Questionnaire
                         case InterviewHardDeleted _:
                             reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
                             reference.DeletedAtUtc = @event.EventTimeStamp;
-                            forceUpdateQuestionnaire = true;
                             break;
                         default:
                             reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
                             break;
                     }
 
-                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant,
-                        new QuestionnaireId(reference.QuestionnaireId), forceUpdateQuestionnaire);
+                    var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId));
 
-                    if (questionnaire.IsDeleted)
-                    {
-                        var deletedReference = this.dbContext.DeletedQuestionnaires.Find(reference.QuestionnaireId);
-
-                        if (deletedReference == null)
-                        {
-                            databaseSchemaService.DropQuestionnaireDbStructure(questionnaire);
-
-                            this.dbContext.DeletedQuestionnaires.Add(new DeletedQuestionnaireReference(reference.QuestionnaireId));
-                        }
-                    }
-                    else
+                    if (!questionnaire.IsDeleted)
                     {
                         result.Add(@event);
                     }

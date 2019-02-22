@@ -12,75 +12,67 @@ using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.Tenant;
 
-namespace WB.Services.Export.InterviewDataStorage
+namespace WB.Services.Export.InterviewDataStorage.Services
 {
-    public class DatabaseSchemaService : IDatabaseSchemaService
+    public class QuestionnaireSchemaGenerator : IQuestionnaireSchemaGenerator
     {
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
+        private readonly IQuestionnaireStorageCache cache;
+        private readonly ILogger<DatabaseSchemaService> logger;
+        private readonly IOptions<DbConnectionSettings> connectionSettings;
 
-        private class ColumnInfo
-        {
-            public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
-            {
-                Name = name;
-                SqlType = sqlType;
-                IsPrimaryKey = isPrimaryKey;
-                DefaultValue = defaultValue;
-                IsNullable = isNullable;
-            }
 
-            public string Name { get; }
-            public string SqlType { get; }
-            public bool IsPrimaryKey { get; }
-            public string DefaultValue { get; }
-            public bool IsNullable { get; }
-        }
-
-        private static readonly HashSet<string> createdQuestionnaireTables = new HashSet<string>();
-        public DatabaseSchemaService(ITenantContext tenantContext, TenantDbContext dbContext)
+        public QuestionnaireSchemaGenerator(ITenantContext tenantContext,
+            TenantDbContext dbContext,
+            IQuestionnaireStorageCache cache,
+            ILogger<DatabaseSchemaService> logger,
+            IOptions<DbConnectionSettings> connectionSettings)
         {
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
+            this.cache = cache;
+            this.logger = logger;
+            this.connectionSettings = connectionSettings;
         }
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            var key = tenantContext.Tenant.SchemaName() + questionnaireDocument.QuestionnaireId.Id;
-            if (createdQuestionnaireTables.Contains(key))
-                return;
+            var connection = dbContext.Database.GetDbConnection();
 
-            using (var transaction = dbContext.Database.BeginTransaction())
+            CreateSchema(connection, tenantContext.Tenant);
+
+            foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
             {
-                var connection = dbContext.Database.GetDbConnection();
-
-                CreateSchema(connection, tenantContext.Tenant);
-
-                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
-                {
-                    CreateTableForGroup(connection, storedGroup, questionnaireDocument);
-                    CreateEnablementTableForGroup(connection, storedGroup);
-                    CreateValidityTableForGroup(connection, storedGroup);
-                }
-
-                transaction.Commit();
-                dbContext.SaveChanges();
+                CreateTableForGroup(connection, storedGroup, questionnaireDocument);
+                CreateEnablementTableForGroup(connection, storedGroup);
+                CreateValidityTableForGroup(connection, storedGroup);
             }
 
-            createdQuestionnaireTables.Add(key);
+            dbContext.SaveChanges();
+
+            logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
+                this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId, questionnaireDocument.TableName);
         }
+
 
         public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
+            this.cache.Remove(questionnaireDocument.QuestionnaireId);
+
             var db = dbContext.Database.GetDbConnection();
             foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
             {
-                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE ");
-                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE");
-                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
+                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE;"
+                           + $"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE;"
+                           + $"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
             }
+
+            logger.LogDebug("Skipping questionnaire creation for {tenantName} ({questionnaireId}[{table}])",
+                this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId, questionnaireDocument.TableName);
         }
 
         private void CreateTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group, QuestionnaireDocument questionnaireDocument)
@@ -203,8 +195,26 @@ namespace WB.Services.Export.InterviewDataStorage
             connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.SchemaName()}\"");
         }
 
-        public static async Task DropTenantSchemaAsync(IOptions<DbConnectionSettings> connectionSettings, string tenant,
-            ILogger<DatabaseSchemaService> logger)
+        private string GenerateCreateTableScript(string tableName, List<ColumnInfo> columns)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{tableName}\"(");
+
+            foreach (var column in columns)
+            {
+                sb.Append($"\"{column.Name}\" {column.SqlType} ");
+                sb.Append(column.IsNullable ? " NULL " : " NOT NULL ");
+                if (column.DefaultValue != null)
+                    sb.Append(" DEFAULT " + column.DefaultValue);
+                sb.AppendLine(",");
+            }
+
+            sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
+            sb.AppendLine(")");
+            return sb.ToString();
+        }
+
+        public async Task DropTenantSchemaAsync(string tenant)
         {
             List<string> tablesToDelete = new List<string>();
 
@@ -225,7 +235,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 foreach (var schema in schemas)
                 {
                     var tables = await db.QueryAsync<string>("select tablename from pg_tables where schemaname= @schema",
-                            new { schema });
+                        new { schema });
 
                     foreach (var table in tables)
                     {
@@ -260,23 +270,23 @@ namespace WB.Services.Export.InterviewDataStorage
             }
         }
 
-        private string GenerateCreateTableScript(string tableName, List<ColumnInfo> columns)
+        private class ColumnInfo
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{tableName}\"(");
-
-            foreach (var column in columns)
+            public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
             {
-                sb.Append($"\"{column.Name}\" {column.SqlType} ");
-                sb.Append(column.IsNullable ? " NULL " : " NOT NULL ");
-                if (column.DefaultValue != null)
-                    sb.Append(" DEFAULT " + column.DefaultValue);
-                sb.AppendLine(",");
+                Name = name;
+                SqlType = sqlType;
+                IsPrimaryKey = isPrimaryKey;
+                DefaultValue = defaultValue;
+                IsNullable = isNullable;
             }
 
-            sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
-            sb.AppendLine(")");
-            return sb.ToString();
+            public string Name { get; }
+            public string SqlType { get; }
+            public bool IsPrimaryKey { get; }
+            public string DefaultValue { get; }
+            public bool IsNullable { get; }
         }
+
     }
 }

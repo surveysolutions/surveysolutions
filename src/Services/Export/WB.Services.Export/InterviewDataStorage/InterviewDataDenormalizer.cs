@@ -631,7 +631,7 @@ namespace WB.Services.Export.InterviewDataStorage
 
             if (questionnaireId == null)
                 return null;
-            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(tenantContext.Tenant, questionnaireId, token: token);
+            var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId, token: token);
             return questionnaire;
         }
 
