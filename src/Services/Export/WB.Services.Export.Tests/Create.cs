@@ -14,6 +14,7 @@ using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
+using WB.Services.Export.Events.Interview.Dtos;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -26,6 +27,7 @@ using WB.Services.Export.Tests.EventsProcessorTests;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
+using AnsweredYesNoOption = WB.Services.Export.Interview.Entities.AnsweredYesNoOption;
 
 namespace WB.Services.Export.Tests
 {
@@ -305,6 +307,11 @@ namespace WB.Services.Export.Tests
             return Identity(Guid.Parse(id), rosterVector);
         }
 
+        public static Identity Identity(Guid? id = null, RosterVector rosterVector = null)
+        {
+            return Identity(id, rosterVector?.Coordinates.ToArray());
+        }
+
         public static Identity Identity(Guid? id = null, params int[] rosterVector)
         {
             return new Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty);
@@ -576,6 +583,7 @@ namespace WB.Services.Export.Tests
         }
 
         public static EventsFactory Event = new EventsFactory();
+        public static EntityFactory Entity = new EntityFactory();
 
         public static ServiceProvider SetupEventsProcessor(ServiceCollection services, IHeadquartersApi api, bool withDefaultEventsFilter = false)
         {
@@ -634,6 +642,72 @@ namespace WB.Services.Export.Tests
         public Event InterviewOnClientCreated(Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
         {
             return Event(new InterviewOnClientCreated(), interviewId, globalSeq, eventSeq);
+        }
+
+        public Event TextQuestionAnswered(Guid questionId, string answer = "answer", Guid? interviewId = null, int? globalSeq = null, int? eventSeq = null)
+        {
+            return Event(new TextQuestionAnswered() { Answer = answer, QuestionId = questionId, RosterVector = RosterVector.Empty }, interviewId, globalSeq, eventSeq);
+        }
+
+        public Event NumericIntegerQuestionAnswered(Guid questionId, int answer, Guid interviewId)
+        {
+            return Event(new NumericIntegerQuestionAnswered() { Answer = answer, QuestionId = questionId, RosterVector = RosterVector.Empty }, interviewId, null, null);
+        }
+
+        public Event NumericRealQuestionAnswered(Guid questionId, decimal answer, Guid interviewId, RosterVector rosterVector)
+        {
+            return Event(new NumericRealQuestionAnswered() { Answer = answer, QuestionId = questionId, RosterVector = rosterVector}, interviewId, null, null);
+        }
+
+        public Event TextListQuestionAnswered(Guid questionId, Tuple<decimal, string>[] answer, Guid interviewId)
+        {
+            return Event(new TextListQuestionAnswered() { Answers = answer, QuestionId = questionId, RosterVector = RosterVector.Empty }, interviewId, null, null);
+        }
+
+        public Event RosterInstancesAdded(Guid interviewId, Guid rosterId, RosterVector outerRosterVector, int rosterInstanceId)
+        {
+            return Event(new RosterInstancesAdded() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId },  }}, interviewId, null, null);
+        }
+
+        public Event RosterInstancesRemoved(Guid interviewId, Guid rosterId, RosterVector outerRosterVector, int rosterInstanceId)
+        {
+            return Event(new RosterInstancesRemoved() { Instances = new[] { new AddedRosterInstance() { GroupId = rosterId, OuterRosterVector = outerRosterVector, RosterInstanceId = rosterInstanceId },  }}, interviewId, null, null);
+        }
+
+        public Event QuestionsEnabled(Guid interviewId, Identity[] questions)
+        {
+            return Event(new QuestionsEnabled() { Questions = questions }, interviewId, null, null);
+        }
+
+        public Event QuestionsDisabled(Guid interviewId, Identity[] questions)
+        {
+            return Event(new QuestionsDisabled() { Questions = questions }, interviewId, null, null);
+        }
+
+        public Event AnswersDeclaredInvalid(Guid interviewId, IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            return Event(new AnswersDeclaredInvalid(failedValidationConditions, DateTimeOffset.UtcNow), interviewId, null, null);
+        }
+
+        public Event AnswersDeclaredValid(Guid interviewId, Identity[] questions)
+        {
+            return Event(new AnswersDeclaredValid() { Questions = questions }, interviewId, null, null);
+        }
+    }
+
+    public class EntityFactory
+    {
+        public InterviewReference InterviewReference()
+        {
+            return new InterviewReference();
+        }
+    }
+
+    public static class EventExtensions
+    {
+        public static PublishedEvent<T> ToPublishedEvent<T>(this Event @event) where T:IEvent
+        {
+            return (PublishedEvent<T>) @event.AsPublishedEvent();
         }
     }
 }
