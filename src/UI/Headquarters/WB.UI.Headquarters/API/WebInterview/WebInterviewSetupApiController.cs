@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IAssignmentsService assignmentsService;
         private readonly IInvitationService invitationService;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
+        
 
         public WebInterviewSetupApiController(
             ICommandService commandService, 
@@ -35,7 +36,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IAssignmentsService assignmentsService,
             IInvitationService invitationService, 
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage) : base(commandService, logger)
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, 
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage) : base(commandService, logger)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -60,6 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
             var emailProviderSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            var status = this.invitationService.GetEmailDistributionStatus();
 
             var totalAssignmentsCount = assignmentsService.GetCountOfAssignments(questionnaireIdentity);
             var totalInvitationsCount = invitationService.GetCountOfInvitations(questionnaireIdentity);
@@ -74,8 +77,38 @@ namespace WB.UI.Headquarters.API.WebInterview
                 TotalAssignmentsCount = totalAssignmentsCount,
                 TotalInvitationsCount = totalInvitationsCount,
                 NotSentInvitationsCount = notSentInvitationsCount,
-                EmailProvider = emailProviderSettings?.Provider ?? EmailProvider.None
+                EmailProvider = emailProviderSettings?.Provider ?? EmailProvider.None,
+                Status = status
             });
+        }
+
+        [HttpGet]
+        public IHttpActionResult EmailDistributionStatus()
+        {
+            InvitationDistributionStatus status = this.invitationService.GetEmailDistributionStatus();
+            if (status == null)
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(status.QuestionnaireIdentity);
+            if (questionnaire == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                Title = questionnaire.Title,
+                FullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version),
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version),
+                Status = status
+            });
+        }
+
+        [HttpPost]
+        public IHttpActionResult CancelEmailDistribution()
+        {
+            invitationService.CancelEmailDistribution();
+            return Ok();
         }
 
         private QuestionnaireBrowseItem FindQuestionnaire(string id)

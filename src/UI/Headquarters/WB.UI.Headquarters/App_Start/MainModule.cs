@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -132,6 +133,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            serviceLocator.GetInstance<SendInvitationsTask>().Run();
             
             InitMetrics();
             MetricsService.Start(serviceLocator);

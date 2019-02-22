@@ -350,6 +350,20 @@ export default {
                     render(data) {
                         return data ? self.$t("Common.Yes") : self.$t("Common.No");
                     }
+                },
+                {
+                    data: "email",
+                    name: "Emai",
+                    title: this.$t("Assignments.Email"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Email"),
+                    searchable: false
+                },
+                {
+                    data: "password",
+                    name: "Password",
+                    title: this.$t("Assignments.Password"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Password"),
+                    searchable: false
                 }
             ];
         },
