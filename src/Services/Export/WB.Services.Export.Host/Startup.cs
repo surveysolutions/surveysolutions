@@ -56,6 +56,7 @@ namespace WB.Services.Export.Host
             services.Configure<DbConnectionSettings>(Configuration.GetSection("ConnectionStrings"));
 
             services.UseJobService(Configuration);
+
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
             services.AddDbContext<TenantDbContext>();
@@ -94,6 +95,7 @@ namespace WB.Services.Export.Host
                 app.UseDeveloperExceptionPage();
             }
 
+            app.StartScheduler();
             app.UseApplicationVersion("/.version");
             app.UseHealthChecks("/.hc");
             app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
