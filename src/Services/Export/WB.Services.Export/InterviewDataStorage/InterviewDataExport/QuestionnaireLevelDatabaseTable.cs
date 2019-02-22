@@ -41,6 +41,9 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                 Entities.Add(group);
             }
 
+            if (group.Children.Count() > ColumnsLimit)
+                throw new ArgumentException("Group can't contains more then limit");
+
             foreach (var child in @group.Children)
             {
                 switch (child)

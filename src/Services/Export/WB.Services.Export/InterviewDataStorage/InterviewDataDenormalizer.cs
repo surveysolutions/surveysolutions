@@ -61,27 +61,30 @@ namespace WB.Services.Export.InterviewDataStorage
     {
 
         private readonly ITenantContext tenantContext;
-        private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IMemoryCache memoryCache;
         private readonly IInterviewDataExportBulkCommandBuilder commandBuilder;
         private readonly ILogger<InterviewDataDenormalizer> logger;
+        private readonly IInterviewReferencesStorage interviewReferencesStorage;
+        private readonly ICommandExecutor commandExecutor;
 
         private readonly InterviewDataState state;
 
-        public InterviewDataDenormalizer(ITenantContext tenantContext, 
-            TenantDbContext dbContext,
+        public InterviewDataDenormalizer(ITenantContext tenantContext,
             IQuestionnaireStorage questionnaireStorage,
             IMemoryCache memoryCache,
             IInterviewDataExportBulkCommandBuilder commandBuilder,
-            ILogger<InterviewDataDenormalizer> logger)
+            ILogger<InterviewDataDenormalizer> logger,
+            IInterviewReferencesStorage interviewReferencesStorage,
+            ICommandExecutor commandExecutor)
         {
             this.tenantContext = tenantContext;
-            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.memoryCache = memoryCache;
             this.commandBuilder = commandBuilder;
             this.logger = logger;
+            this.interviewReferencesStorage = interviewReferencesStorage;
+            this.commandExecutor = commandExecutor;
 
             state = new InterviewDataState();
         }
@@ -331,7 +334,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: validationCondition.Key.Id,
                     rosterVector: validationCondition.Key.RosterVector,
-                    validityValue: validationCondition.Value.Select(c => c.FailedConditionIndex).ToArray(), 
+                    validityValue: validationCondition.Value?.Select(c => c.FailedConditionIndex).ToArray() ?? new []{ 0 }, 
                     token: token); 
             }
         }
@@ -607,9 +610,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 logger.LogDebug("Save state command with {parameters} parameters generated in {time}.", command.Parameters.Count, sw.Elapsed);
                 sw.Restart();
 
-                var db = dbContext.Database.GetDbConnection();
-                command.Connection = db;
-                await command.ExecuteNonQueryAsync(cancellationToken);
+                await commandExecutor.ExecuteNonQueryAsync(command, cancellationToken);
 
                 logger.LogDebug("Save state command applied on DB in {time}", sw.Elapsed);
             }
@@ -622,7 +623,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 async entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromMinutes(3);
-                    var interviewSummary = await this.dbContext.InterviewReferences.FindAsync(interviewId);
+                    var interviewSummary = await interviewReferencesStorage.FindAsync(interviewId);
                     if (interviewSummary == null)
                         return null;
                     return new QuestionnaireId(interviewSummary.QuestionnaireId);
