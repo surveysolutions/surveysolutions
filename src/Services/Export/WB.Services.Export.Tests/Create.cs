@@ -181,7 +181,6 @@ namespace WB.Services.Export.Tests
             ICsvWriter csvWriter = null)
         {
             return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
-                tenantApi,
                 Mock.Of<IInterviewsToExportSource>(),
                 Mock.Of<IInterviewsExporter>(),
                 Mock.Of<ICommentsExporter>(),
