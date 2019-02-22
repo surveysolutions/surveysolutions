@@ -42,15 +42,16 @@ namespace WB.Services.Export.Infrastructure
             }
         }
 
-        public Metadata Metadata
+        public Metadata GlobalSequence
         {
             get
             {
-                
-                var meta = MetadataSet.Find("settings");
+                const string key = "globalSequence";
+
+                var meta = MetadataSet.Find(key);
                 if (meta == null)
                 {
-                    return MetadataSet.Add(new Metadata{Id = "settings"}).Entity;
+                    return MetadataSet.Add(new Metadata{Id = key, Value = "0"}).Entity;
                 }
 
                 return meta;

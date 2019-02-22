@@ -137,9 +137,9 @@ namespace WB.Services.Export.Tests.EventsProcessorTests
             Assert.ThrowsAsync<Exception>(async () => await processor.HandleNewEvents(1));
 
             var db = this.provider.GetService<TenantDbContext>();
-            var meta = db.Metadata;
+            var meta = db.GlobalSequence;
 
-            Assert.That(meta.GlobalSequence, Is.EqualTo(6));
+            Assert.That(meta.AsLong, Is.EqualTo(6));
         }
     }
 }

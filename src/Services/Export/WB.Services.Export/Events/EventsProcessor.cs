@@ -60,7 +60,7 @@ namespace WB.Services.Export.Events
             {
                 scope.PropagateTenantContext(tenant);
                 var tenantDbContext = scope.ServiceProvider.GetService<TenantDbContext>();
-                sequenceToStartFrom = tenantDbContext.Metadata.GlobalSequence;
+                sequenceToStartFrom = tenantDbContext.GlobalSequence.AsLong;
             }
 
             try
