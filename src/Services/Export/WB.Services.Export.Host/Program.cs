@@ -103,7 +103,8 @@ namespace WB.Services.Export.Host
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
             {
-                logConfig = logConfig.WriteTo.Slack(hook, LogEventLevel.Fatal);
+                var workerId = configuration.GetSection("job")["workerId"];
+                logConfig = logConfig.WriteTo.Slack(hook, LogEventLevel.Fatal, workerId ?? "console");
             }
 
             var metadata = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
