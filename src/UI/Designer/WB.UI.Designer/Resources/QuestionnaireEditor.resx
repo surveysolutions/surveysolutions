@@ -748,6 +748,9 @@
   <data name="QuestionOnlyInts" xml:space="preserve">
     <value>Only integers are allowed</value>
   </data>
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>Integers between 1 and 50 are allowed</value>
+  </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
     <value>Question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained too many categories, their number was reduced up to {{count}}</value>
   </data>
@@ -1235,6 +1238,6 @@
     <value>Show as a list of categories</value>
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
-    <value>Show if less than</value>
+    <value>If not more than</value>
   </data>
 </root>
