@@ -41,15 +41,27 @@ namespace WB.Services.Export.Jobs
 
                 await processor.HandleNewEvents(pendingExportProcess.ProcessId, cancellationToken);
 
-                if (pendingExportProcess.StorageType.HasValue)
+                try
                 {
-                    var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
-                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
+                    if (pendingExportProcess.StorageType.HasValue)
+                    {
+                        var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
+                        await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
+                    }
+                    else
+                    {
+                        var handler = this.GetExportHandler(pendingExportProcess.ExportSettings.ExportFormat);
+                        await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
+                    }
                 }
-                else
+                catch (OperationCanceledException)
                 {
-                    var handler = this.GetExportHandler(pendingExportProcess.ExportSettings.ExportFormat);
-                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    this.logger.LogCritical(e, "Export job failed");
+                    throw;
                 }
             }
             catch (OperationCanceledException)
