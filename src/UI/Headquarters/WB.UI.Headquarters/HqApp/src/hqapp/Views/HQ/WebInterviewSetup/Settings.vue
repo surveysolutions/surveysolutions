@@ -228,17 +228,17 @@
                                     <li role="presentation"><a href="#reject" aria-controls="reject" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reject')}}</a></li>
                                 </ul-->
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li v-for="opt in editableStrings" :key="opt.value" :class="{active:opt.isActive}" role="presentation">
-                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(opt)">{{ opt.title }}</a>
+                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
+                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.title }}</a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content d-flex f-row justify-center">
-                                    <div v-for="opt in editableStrings" :key="opt.value" :class="{active:opt.isActive}" role="tabpanel" class="tab-pane survey-block">
+                                    <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane survey-block">
                                         <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
                                             <div class="row-element">
-                                                <div class="h5">{{opt.emailTitile}}</div>
+                                                <div class="h5">{{emailTemplate.emailTitle}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
                                                         <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
@@ -255,14 +255,16 @@
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="invitation-message">
-                                                    <p>Dear respondent!</p>
+                                                    <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.text" :id="'txt' + emailTemplate.value"></vue-editor>
+
+                                                    <!--p>Dear respondent!</p>
                                                     <p>
                                                         you have started responding to the %SURVEYNAME%, but haven’t completed the process. <br/>
                                                         Make sure you answer all applicable questions and click ‘complete’ to submit your response. 
                                                     </p>
                                                     <p>
                                                         Thank you!
-                                                    </p>
+                                                    </p-->
                                                 </div>
                                                 <div class="form-actions hidden">
                                                     <button type="submit" class="btn btn-success btn-sm">save</button>
@@ -278,21 +280,21 @@
 
 
                                 <!--div class="tab-content">
-                                    <div v-for="opt in editableStrings" :key="opt.value" role="tabpanel" class="tab-pane well-sm" :class="{active:opt.isActive}">
-                                        <p>{{textDescription(opt)}}</p>
+                                    <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" role="tabpanel" class="tab-pane well-sm" :class="{active:emailTemplate.isActive}">
+                                        <p>{{emailTitle(emailTemplate)}}</p>
                                         <div class="options-group">
                                             <div class="radio">
                                                 <div class="field">
-                                                    <input class="wb-radio" type="radio" :id="'rbOverrideDefault' + opt.value" v-model.number="opt.overriden" value="0">
-                                                    <label :for="'rbOverrideDefault' + opt.value">
-                                                        <span class="tick"></span>{{defaultText(opt)}}
+                                                    <input class="wb-radio" type="radio" :id="'rbOverrideDefault' + emailTemplate.value" v-model.number="emailTemplate.overriden" value="0">
+                                                    <label :for="'rbOverrideDefault' + emailTemplate.value">
+                                                        <span class="tick"></span>{{defaultText(emailTemplate)}}
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="radio">
                                                 <div class="field">
-                                                    <input class="wb-radio" type="radio" v-model.number="opt.overriden" :id="'rbOverrideCustom' + opt.value" value="1">
-                                                    <label :for="'rbOverrideCustom' + opt.value">
+                                                    <input class="wb-radio" type="radio" v-model.number="emailTemplate.overriden" :id="'rbOverrideCustom' + emailTemplate.value" value="1">
+                                                    <label :for="'rbOverrideCustom' + emailTemplate.value">
                                                         <span class="tick"></span>{{$t('WebInterviewSetup.CustomText')}}
                                                     </label>
                                                     <button type="submit" class="btn btn-link btn-clear">
@@ -301,8 +303,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <vue-editor v-if="opt.overriden" :editorToolbar="customToolbar" v-model="opt.customText" :id="'txt' + opt.value"></vue-editor>
-                                        <input v-if="opt.overriden" type='hidden' :name="opt.value" :value="opt.customText" />
+                                        <vue-editor v-if="emailTemplate.overriden" :editorToolbar="customToolbar" v-model="emailTemplate.customText" :id="'txt' + emailTemplate.value"></vue-editor>
+                                        <input v-if="emailTemplate.overriden" type='hidden' :name="emailTemplate.value" :value="emailTemplate.customText" />
                                     </div>
                                 </div-->
 
@@ -408,7 +410,7 @@
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
-                                                <vue-editor v-if="opt.overriden" :editorToolbar="customToolbar" v-model="opt.customText" :id="'txt' + opt.value"></vue-editor>
+                                                <vue-editor v-if="emailTemplate.overriden" :editorToolbar="customToolbar" v-model="emailTemplate.customText" :id="'txt' + emailTemplate.value"></vue-editor>
 
                                                 <div  id="reject-message">
                                                     <p>Dear respondent!</p>
@@ -491,7 +493,7 @@ import { VueEditor } from "vue2-editor";
 export default {
   data() {
     return {
-      editableStrings: [],
+      emailTemplates: [],
       customToolbar: [
         ["bold", "italic", "underline", "strike", { color: [] }],
         [{ list: "ordered" }, { list: "bullet" }],
@@ -505,7 +507,7 @@ export default {
   },
   mounted() {
     var self = this;
-    this.editableStrings = _.map(
+    this.emailTemplates = _.map(
       this.$config.model.textOptions,
       (option, index) => {
         var customText = self.$config.model.definedTexts[option.key];
@@ -520,15 +522,17 @@ export default {
     );
   },
   methods: {
-    setActive(opt) {
-      _.map(this.editableStrings, option => {
+    setActive(emailTemplate) {
+      _.map(this.emailTemplates, option => {
         option.isActive = false;
       });
-
-      opt.isActive = true;
+      emailTemplate.isActive = true;
     },
-    textDescription(opt) {
-      return this.$config.model.textDescriptions[opt.value];
+    emailTitle(emailTemplate) {
+      return this.$config.model.emailTemplates[emailTemplate.value].title;
+    },
+    emailText(emailTemplate) {
+      return this.$config.model.emailTemplates[emailTemplate.value].text;
     },
   },
   components: {
