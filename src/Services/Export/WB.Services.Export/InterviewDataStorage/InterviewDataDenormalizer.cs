@@ -331,7 +331,7 @@ namespace WB.Services.Export.InterviewDataStorage
                     interviewId: @event.EventSourceId,
                     entityId: validationCondition.Key.Id,
                     rosterVector: validationCondition.Key.RosterVector,
-                    validityValue: validationCondition.Value.Select(c => c.FailedConditionIndex).ToArray(), 
+                    validityValue: validationCondition.Value?.Select(c => c.FailedConditionIndex).ToArray() ?? new []{ 0 }, 
                     token: token); 
             }
         }
