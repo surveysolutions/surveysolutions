@@ -90,7 +90,7 @@ namespace WB.Services.Export.Events
             }
             catch (Exception e)
             {
-                logger.LogCritical(e, "Unhandled exception during event handling");
+                logger.LogCritical(e, e.Message);
                 throw;
             }
         }
