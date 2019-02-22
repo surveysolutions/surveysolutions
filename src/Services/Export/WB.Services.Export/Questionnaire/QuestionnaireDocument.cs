@@ -204,26 +204,5 @@ namespace WB.Services.Export.Questionnaire
             databaseStructure ?? (databaseStructure = new QuestionnaireDatabaseStructure(this));
 
         public bool IsDeleted { get; set; }
-
-        public IEnumerable<Group> GetInterviewLevelGroups()
-        {
-            var itemsQueue = new Queue<Group>();
-            itemsQueue.Enqueue(this);
-
-            while (itemsQueue.Count > 0)
-            {
-                var currentGroup = itemsQueue.Dequeue();
-
-                yield return currentGroup;
-
-                var childGroups = currentGroup.Children
-                    .Where(g => g is Group childGroup && !childGroup.IsRoster).Cast<Group>();
-
-                foreach (var childItem in childGroups)
-                {
-                    itemsQueue.Enqueue(childItem);
-                }
-            }
-        }
     }
 }
