@@ -83,6 +83,7 @@ namespace WB.Services.Export.Host
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
 
             logConfig
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
@@ -127,13 +128,13 @@ namespace WB.Services.Export.Host
 
             host.ConfigureLogging((hosting, logging) =>
             {
+                
                 var logConfig = new LoggerConfiguration();
-                ConfigureSerilog(logConfig, hosting.Configuration);
-
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
-
                 logConfig.WriteTo.Console(LogEventLevel.Debug);
 
+                ConfigureSerilog(logConfig, hosting.Configuration);
+                
                 Log.Logger = logConfig.CreateLogger();
 
                 if (!hosting.HostingEnvironment.IsDevelopment())
