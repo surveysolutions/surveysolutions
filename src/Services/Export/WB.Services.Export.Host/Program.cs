@@ -76,8 +76,6 @@ namespace WB.Services.Export.Host
 
         private static void ConfigureSerilog(LoggerConfiguration logConfig, IConfiguration configuration)
         {
-            var seqConfig = configuration.GetSection("Logging:Seq");
-
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
@@ -85,8 +83,6 @@ namespace WB.Services.Export.Host
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
 
             logConfig
-                .MinimumLevel.Verbose()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
@@ -97,7 +93,7 @@ namespace WB.Services.Export.Host
                 .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose, 
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
                 .WriteTo
-                    .File(Path.GetFullPath(fileLog), 
+                    .File(Path.GetFullPath(fileLog),  LogEventLevel.Debug,
                         rollingInterval: RollingInterval.Day);
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
