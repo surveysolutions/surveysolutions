@@ -1,6 +1,6 @@
 ﻿select data."interview__id" as data__interview__id, data."mult1" as "data__mult1"
  from "questionnaire$145" data 
-inner join "questionnaire$145__e" enablement 
+inner join "questionnaire$145-e" enablement 
  on data.interview__id = enablement.interview__id
  where data.interview__id = any(@ids) 
     and enablement."mult1" = TRUE 
