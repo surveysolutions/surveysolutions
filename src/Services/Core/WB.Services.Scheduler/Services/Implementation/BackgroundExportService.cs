@@ -39,15 +39,17 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            cts.Cancel();
+            cts?.Cancel();
 
             foreach (var backgroundService in backgroundServices)
             {
+                if(backgroundService == null) continue;
+                
                 await backgroundService.StopAsync(cancellationToken);
                 logger.LogInformation("Stopped background service: {name}", backgroundService.GetType().Name);
             }
 
-            cts.Dispose();
+            cts?.Dispose();
             this.scope.Dispose();
         }
     }
