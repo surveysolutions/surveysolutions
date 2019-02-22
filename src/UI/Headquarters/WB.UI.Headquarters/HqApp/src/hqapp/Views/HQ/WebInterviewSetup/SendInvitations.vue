@@ -35,17 +35,24 @@
                 <div class="import-progress">
                     <p>{{totalAssignmentsCount}} assignments in all modes found for the questionnaire</p>
                     <p>{{totalInvitationsCount}} invitations found for the questionnaire. <span v-if="sentInvitationsCount > 0">{{sentInvitationsCount}} invitations have been sent already.</span><span v-else>No invitations have been sent yet.</span></p>
-                    <p v-if="notSentInvitationsCount" class="success-text">{{notSentInvitationsCount}} can be sent</p>
+                    <p v-if="notSentInvitationsCount" class="success-text">{{notSentInvitationsCount}} invitation can be sent</p>
                     <p v-else class="error-text">No invitations to send as of now</p>
                 </div> 
-                <div class="action-buttons">
-                    <a v-if="notSentInvitationsCount" href="#" class="btn btn-success ">Send {{notSentInvitationsCount}} invitations</a>
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
-                </div>  
+                 
             </div>
+            <form method="post">
+                <input type="hidden" :value="questionnaireId" name="questionnaireId"/>
+                <div class="col-sm-7 col-xs-12 action-buttons">
+                    <button type="submit" :disabled="notSentInvitationsCount == 0"  class="btn btn-success ">Send <span v-if="notSentInvitationsCount > 0">{{notSentInvitationsCount}}</span> invitations</button>
+                    <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
+                </div>
+            </form>
         </div>
-        <form method="post">
-        </form>
+        <Confirm ref="sendInvitationsConfirmation"
+                 id="sendInvitationsConfirmation"
+                 slot="modals">
+            {{ $t("Pages.WebInterviewSetup_SendInvitationsConfirmation") }}
+        </Confirm>
     </HqLayout>
 </template>
 <script>
@@ -54,6 +61,7 @@ import Vue from "vue"
 export default {
     data() {
         return {
+            questionnaireId: this.$route.params.id,
             title: null,
             questionnaireIdentity : null,
             started: null,
@@ -96,7 +104,6 @@ export default {
         }
     },
     methods: {
-
     }
 
 };

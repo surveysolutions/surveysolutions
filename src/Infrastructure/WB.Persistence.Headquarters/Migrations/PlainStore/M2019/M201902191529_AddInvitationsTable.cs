@@ -17,7 +17,8 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                 .WithColumn("interviewid").AsGuid().Nullable()
                 .WithColumn("token").AsString().Nullable()
                 .WithColumn("accesstoken").AsString().Nullable()
-                .WithColumn("sentonutc").AsDateTime().Nullable();
+                .WithColumn("sentonutc").AsDateTime().Nullable()
+                .WithColumn("emailid").AsString().Nullable();
         }
 
         public override void Down()

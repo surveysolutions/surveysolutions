@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -33,6 +34,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IAssignmentsService assignmentsService;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IInvitationService invitationService;
+        private readonly SendInvitationsTask sendInvitationsTask;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -42,7 +45,9 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IPlainStorageAccessor<Assignment> assignments,
             IAssignmentsService assignmentsService,
-            IWebInterviewNotificationService webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService, 
+            IInvitationService invitationService, 
+            SendInvitationsTask sendInvitationsTask)
             : base(commandService, 
                   logger)
         {
@@ -52,6 +57,8 @@ namespace WB.UI.Headquarters.Controllers
             this.assignments = assignments;
             this.assignmentsService = assignmentsService;
             this.webInterviewNotificationService = webInterviewNotificationService;
+            this.invitationService = invitationService;
+            this.sendInvitationsTask = sendInvitationsTask;
         }
 
         
@@ -60,6 +67,13 @@ namespace WB.UI.Headquarters.Controllers
         {
             var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
             if (!config.Started) return RedirectToAction("Start", new {id = id});
+
+            var status = this.invitationService.GetEmailDistributionStatus();
+
+            if ((status?.Status ?? InvitationProcessStatus.NotStarted) == InvitationProcessStatus.Started)
+            {
+                return RedirectToAction(nameof(EmailDistributionProgress), new { questionnaireId = id });
+            }
 
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
@@ -77,6 +91,37 @@ namespace WB.UI.Headquarters.Controllers
             };
 
             return View(model);
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        [HttpPost]
+        [ActionName("SendInvitations")]
+        public ActionResult SendInvitationsPost(string id)
+        {
+            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
+            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.Started)
+            {
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name);
+            }
+            sendInvitationsTask.Run();
+            return RedirectToAction("EmailDistributionProgress");
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult EmailDistributionProgress()
+        {
+            var progress = this.invitationService.GetEmailDistributionStatus();
+            if (progress == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(new EmailDistributionProgressModel { Api = new
+            {
+                StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
+                CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
+                SurveySetupUrl = Url.Action("Index", "SurveySetup")
+            }});
         }
 
         [ActivePage(MenuItem.Questionnaires)]
@@ -200,6 +245,11 @@ namespace WB.UI.Headquarters.Controllers
     }
 
     public class SendInvitationsModel
+    {
+        public dynamic Api { get; set; }
+    }
+
+    public class EmailDistributionProgressModel
     {
         public dynamic Api { get; set; }
     }

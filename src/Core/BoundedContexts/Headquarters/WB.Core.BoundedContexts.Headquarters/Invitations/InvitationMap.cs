@@ -16,6 +16,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Property(x => x.Token);
             Property(x => x.AccessToken);
             Property(x => x.SentOnUtc);
+            Property(x => x.EmailId);
+
+            ManyToOne(x => x.Assignment, mto =>
+            {
+                mto.Column("AssignmentId");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
         }
     }
 }
