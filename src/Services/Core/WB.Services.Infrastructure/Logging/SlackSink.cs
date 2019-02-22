@@ -13,12 +13,14 @@ namespace WB.Services.Infrastructure.Logging
         private readonly HttpClient http;
         private readonly string webHook;
         private readonly LogEventLevel level;
+        private readonly string workerId;
 
-        public SlackSink(string webHook, LogEventLevel level)
+        public SlackSink(string webHook, LogEventLevel level, string workerId)
         {
             this.http = new HttpClient();
             this.webHook = webHook;
             this.level = level;
+            this.workerId = workerId;
         }
 
         public void Emit(LogEvent logEvent)
@@ -40,8 +42,10 @@ namespace WB.Services.Infrastructure.Logging
                 }
 
                 AddProp("tenantName", "Tenant");
+                fields.Add(new { title = "Instance", value = workerId});
                 AddProp("jobId", "Job");
                 AddProp("Host");
+                
                 AddProp("VersionInfo");
 
                 if (logEvent.Exception != null)
@@ -58,7 +62,7 @@ namespace WB.Services.Infrastructure.Logging
                     fields.Add(new
                     {
                         title = "StackTrace",
-                        value = logEvent.Exception.ToStringDemystified()
+                        value = logEvent.Exception.ToStringDemystified().Substring(0, 400)
                     });
                 }
 

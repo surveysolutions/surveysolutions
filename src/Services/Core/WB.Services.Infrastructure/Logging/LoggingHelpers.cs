@@ -22,9 +22,9 @@ namespace WB.Services.Infrastructure.Logging
             return sinkConfiguration.Sink(new Postgres(connectionString, schema, tableName, minLevel));
         }
 
-        public static LoggerConfiguration Slack(this LoggerSinkConfiguration sinkConfiguration, string webHook, LogEventLevel level)
+        public static LoggerConfiguration Slack(this LoggerSinkConfiguration sinkConfiguration, string webHook, LogEventLevel level, string workerId)
         {
-            return sinkConfiguration.Sink(new SlackSink(webHook, level));
+            return sinkConfiguration.Sink(new SlackSink(webHook, level, workerId));
         }
     }
 }
