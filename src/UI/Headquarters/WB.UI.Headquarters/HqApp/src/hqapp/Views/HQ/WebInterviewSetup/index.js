@@ -1,6 +1,8 @@
 import Start from "./Start"
 import Started from "./Started"
 import SendInvitations from "./SendInvitations"
+import SendInvitationsProgress from "./SendInvitationsProgress"
+
 
 
 export default class WebInterviewSetupComponent {
@@ -17,6 +19,10 @@ export default class WebInterviewSetupComponent {
         {
             path: '/WebInterviewSetup/SendInvitations/:id', 
             component: SendInvitations
+        },
+        {
+            path: '/WebInterviewSetup/EmailDistributionProgress', 
+            component: SendInvitationsProgress
         }
         ]
     }

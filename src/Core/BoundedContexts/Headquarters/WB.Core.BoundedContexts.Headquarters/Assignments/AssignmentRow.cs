@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public bool IsAudioRecordingEnabled { get; set; }
 
         public List<AssignmentIdentifyingQuestionRow> IdentifyingQuestions { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

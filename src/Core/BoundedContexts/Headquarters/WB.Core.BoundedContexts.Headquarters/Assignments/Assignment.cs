@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual void UpdatePassword(string password)
         {
-            this.Email = password;
+            this.Password = password;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 

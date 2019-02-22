@@ -10,8 +10,6 @@ using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Code;
 
 namespace ASP
