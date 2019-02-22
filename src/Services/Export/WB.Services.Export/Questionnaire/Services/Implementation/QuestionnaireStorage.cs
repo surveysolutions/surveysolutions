@@ -1,35 +1,30 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using WB.Services.Export.Events;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage;
-using WB.Services.Export.Services;
-using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
     internal class QuestionnaireStorage : IQuestionnaireStorage
     {
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly ILogger<QuestionnaireStorage> logger;
-        private readonly IMemoryCache memoryCache;
-        private readonly IServiceProvider serviceProvider;
+        private readonly IDatabaseSchemaService databaseSchemaService;
+        private readonly IQuestionnaireStorageCache cache;
         private readonly JsonSerializerSettings serializer;
+        private readonly ITenantContext tenantContext;
 
-        public QuestionnaireStorage(ITenantApi<IHeadquartersApi> tenantApi,
-            ILogger<QuestionnaireStorage> logger,
-            IMemoryCache memoryCache,
-            IServiceProvider serviceProvider)
+        public QuestionnaireStorage(
+            IQuestionnaireStorageCache cache,
+            IDatabaseSchemaService databaseSchemaService,
+            ITenantContext tenantContext,
+            ILogger<QuestionnaireStorage> logger)
         {
-            this.tenantApi = tenantApi;
             this.logger = logger;
-            this.memoryCache = memoryCache;
-            this.serviceProvider = serviceProvider;
+            this.cache = cache;
+            this.databaseSchemaService = databaseSchemaService;
+            this.tenantContext = tenantContext;
             this.serializer = new JsonSerializerSettings
             {
                 SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
@@ -39,58 +34,41 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
         private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1);
 
-        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, 
-            QuestionnaireId questionnaireId, 
-            bool forceUpdate = false,
+        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
+            QuestionnaireId questionnaireId,
             CancellationToken token = default)
         {
-            var key = $"{nameof(QuestionnaireStorage)}:{tenant}:{questionnaireId}";
-
-            var gotFromCache = memoryCache.TryGetValue(key, out var result);
-
-            if (gotFromCache)
+            if (cache.TryGetValue(questionnaireId, out var result))
             {
-                var questionnaireDocument = (QuestionnaireDocument)result;
-                if (!questionnaireDocument.IsDeleted && forceUpdate)
-                {
-                    memoryCache.Remove(key);
-                }
-                else
-                {
-                    return questionnaireDocument;
-                }
+                return result;
             }
 
             await CacheLock.WaitAsync(token);
 
             try
             {
-                if (memoryCache.TryGetValue(key, out result))
+                if (cache.TryGetValue(questionnaireId, out result))
                 {
-                    return (QuestionnaireDocument)result;
+                    return result;
                 }
 
-                var questionnaireDocument = await this.tenantApi.For(tenant).GetQuestionnaireAsync(questionnaireId);
-                var questionnaire = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireDocument, serializer);
-                
+                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId);
+
+                if (questionnaire == null) return null;
                 questionnaire.QuestionnaireId = questionnaireId;
 
-                memoryCache.Set(key, questionnaire, new MemoryCacheEntryOptions
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(5)
-                });
+                logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
+                    this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
+                
+                cache.Set(questionnaireId, questionnaire);
 
-                if (!questionnaire.IsDeleted)
+                if (questionnaire.IsDeleted)
                 {
-                    using (var scope = this.serviceProvider.CreateScope())
-                    {
-                        scope.ServiceProvider.SetTenant(tenant);
-                        var initializer = scope.ServiceProvider.GetService<IDatabaseSchemaService>();
-                        initializer.CreateQuestionnaireDbStructure(questionnaire);
-
-                        var tenantName = tenant.Name;
-                        logger.LogInformation("Created database structure for {tenantName} ({questionnaireId})", tenantName, questionnaireId);
-                    }
+                    databaseSchemaService.DropQuestionnaireDbStructure(questionnaire);
+                }
+                else
+                {
+                    databaseSchemaService.CreateQuestionnaireDbStructure(questionnaire);
                 }
 
                 return questionnaire;

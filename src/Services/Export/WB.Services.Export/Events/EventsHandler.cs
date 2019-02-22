@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 
@@ -88,6 +89,14 @@ namespace WB.Services.Export.Events
                 }
             }
             catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (PostgresException pe) when (pe.SqlState == "57014")
+            {
+                throw;
+            }
+            catch (Exception e) when (e.InnerException is TaskCanceledException)
             {
                 throw;
             }
