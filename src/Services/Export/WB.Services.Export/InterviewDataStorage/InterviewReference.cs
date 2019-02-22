@@ -39,6 +39,20 @@ namespace WB.Services.Export.InterviewDataStorage
     {
         [Key]
         public string Id { get; set; }
-        public long GlobalSequence { get; set; }
+
+        public string Value { get; set; }
+
+        private long? value;
+
+        [NotMapped]
+        public long AsLong
+        {
+            get => value ?? (value = long.Parse(Value)) ?? 0;
+            set
+            {
+                this.value = null;
+                Value = value.ToString();
+            }
+        }
     }
 }

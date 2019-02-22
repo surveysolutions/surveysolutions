@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
@@ -43,7 +42,7 @@ namespace WB.Services.Export.Events
                         ? await eventsFilter.FilterAsync(feed.Events)
                         : feed.Events;
 
-                    var metadata = dbContext.Metadata;
+                    var globalSequence = dbContext.GlobalSequence;
 
                     var eventHandlerStopwatch = new Stopwatch();
                     if (eventsToPublish.Count > 0)
@@ -70,26 +69,32 @@ namespace WB.Services.Export.Events
 
                             Monitoring.TrackEventHandlerProcessingSpeed(
                                 this.tenantContext?.Tenant?.Name,
-                                handler.GetType(), 
+                                handler.GetType(),
                                 eventsToPublish.Count / eventHandlerStopwatch.Elapsed.TotalSeconds);
                         }
                     }
 
                     if (feed.Events.Count > 0)
                     {
-                        metadata.GlobalSequence = feed.Events.Last().GlobalSequence;
+                        globalSequence.AsLong = feed.Events.Last().GlobalSequence;
                     }
 
                     await dbContext.SaveChangesAsync(token);
                     tr.Commit();
 
-                    Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, metadata.GlobalSequence);
+                    Monitoring.TrackEventsProcessedCount(this.tenantContext?.Tenant?.Name, globalSequence.AsLong);
 
-                    return metadata.GlobalSequence;
+                    return globalSequence.AsLong;
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception e)
             {
+                e.Data.Add("Events", $"{feed.Events.FirstOrDefault()?.GlobalSequence ?? -1}" +
+                                     $":{feed.Events.LastOrDefault()?.GlobalSequence ?? -1}");
                 logger.LogCritical(e, e.Message);
                 throw;
             }

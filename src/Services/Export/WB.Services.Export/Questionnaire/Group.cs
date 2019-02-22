@@ -84,6 +84,12 @@ namespace WB.Services.Export.Questionnaire
             {
                 if (root != null) return root;
 
+                if (this is QuestionnaireDocument doc)
+                {
+                    this.root = doc;
+                    return this.root;
+                }
+
                 var parent = this.GetParent();
                 while (parent != null)
                 {
