@@ -20,7 +20,6 @@ namespace WB.Services.Export.CsvExport.Implementation
     public class TabularFormatExportService : ITabularFormatExportService
     {
         private readonly ILogger<TabularFormatExportService> logger;
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly IInterviewsToExportSource interviewsToExportSource;
 
         private readonly ICommentsExporter commentsExporter;
@@ -35,7 +34,6 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         public TabularFormatExportService(
             ILogger<TabularFormatExportService> logger,
-            ITenantApi<IHeadquartersApi> tenantApi,
             IInterviewsToExportSource interviewsToExportSource,
             IInterviewsExporter interviewsExporter,
             ICommentsExporter commentsExporter,
@@ -47,7 +45,6 @@ namespace WB.Services.Export.CsvExport.Implementation
             IFileSystemAccessor fileSystemAccessor)
         {
             this.logger = logger;
-            this.tenantApi = tenantApi;
             this.interviewsToExportSource = interviewsToExportSource;
             this.interviewsExporter = interviewsExporter;
             this.commentsExporter = commentsExporter;
@@ -88,7 +85,6 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             progressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            var api = this.tenantApi.For(tenant);
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
