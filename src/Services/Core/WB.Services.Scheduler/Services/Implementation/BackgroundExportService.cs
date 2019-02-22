@@ -27,8 +27,6 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             cts = new CancellationTokenSource();
 
-            await serviceProvider.RunJobServiceMigrations(cancellationToken);
-
             this.scope = this.serviceProvider.CreateScope();
             this.backgroundServices = scope.ServiceProvider.GetServices<IHostedSchedulerService>();
 
