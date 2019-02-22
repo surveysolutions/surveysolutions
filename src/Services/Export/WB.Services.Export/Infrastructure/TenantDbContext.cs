@@ -12,7 +12,7 @@ namespace WB.Services.Export.Infrastructure
     public class TenantDbContext : DbContext
     {
         private readonly ITenantContext tenantContext;
-        private readonly string connectionString;
+        private readonly Lazy<string> connectionString;
 
         public TenantDbContext(ITenantContext tenantContext, 
             IOptions<DbConnectionSettings> connectionSettings,
@@ -20,23 +20,29 @@ namespace WB.Services.Export.Infrastructure
         {
             this.tenantContext = tenantContext;
 
-            if(tenantContext.Tenant == null) throw new ArgumentException(nameof(TenantDbContext) + " cannot be resolved outside of configured ITenantContext");
+            // failing later provide much much much more information on who and why injected this without ITenantContext
+            // otherwise there will 2 step stack trace starting from one of the registered middlewares
+            // with zero information on who made a call
+            this.connectionString = new Lazy<string>(() =>
+            {
+                if (tenantContext.Tenant == null) throw new ArgumentException(nameof(TenantDbContext) + " cannot be resolved outside of configured ITenantContext");
 
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
-            connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
-            this.connectionString = connectionStringBuilder.ToString();
+                var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionSettings.Value.DefaultConnection);
+                connectionStringBuilder.SearchPath = tenantContext.Tenant.SchemaName();
+                return connectionStringBuilder.ToString();
+            });
         }
 
         public DbSet<InterviewReference> InterviewReferences { get; set; }
         public DbSet<Metadata> MetadataSet { get; set; }
-        public DbSet<DeletedQuestionnaireReference> DeletedQuestionnaires { get; set; }
+        public DbSet<GeneratedQuestionnaireReference> GeneratedQuestionnaires { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(connectionString, b => {
+                optionsBuilder.UseNpgsql(connectionString.Value, b => {
                     b.MigrationsHistoryTable("__migrations", this.tenantContext.Tenant.SchemaName()); 
                 });
             }

@@ -4,11 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WB.Services.Export.Ddi;
-using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
@@ -27,26 +23,23 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
+        private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly IJobService jobService;
-        private readonly IServiceProvider serviceProvider;
-        private readonly IOptions<DbConnectionSettings> dbConnectionOptions;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
             IDdiMetadataAccessor ddiDdiMetadataAccessor,
             IJobService jobService,
-            IServiceProvider serviceProvider,
-            IOptions<DbConnectionSettings> dbConnectionOptions)
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.archiveHandleService = archiveHandleService;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.jobService = jobService;
-            this.serviceProvider = serviceProvider;
-            this.dbConnectionOptions = dbConnectionOptions;
+            this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
         }
 
         [HttpPut]
@@ -168,9 +161,8 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<ActionResult> StopTenant(string tenant)
         {
             if (string.IsNullOrWhiteSpace(tenant)) return BadRequest("No tenant specified");
-
-            var logger = serviceProvider.GetService<ILogger<DatabaseSchemaService>>();
-            await DatabaseSchemaService.DropTenantSchemaAsync(dbConnectionOptions, tenant, logger);
+            
+            await this.questionnaireSchemaGenerator.DropTenantSchemaAsync(tenant);
             return Ok();
         }
 

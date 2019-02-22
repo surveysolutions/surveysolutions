@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
-    internal class QuestionnaireDocumentSerializationBinder : DefaultSerializationBinder
+    public class QuestionnaireDocumentSerializationBinder : DefaultSerializationBinder
     {
         private static readonly Assembly Assembly = typeof(QuestionnaireDocument).Assembly;
         private static readonly ConcurrentDictionary<string, Type> ResolvedTypes = new ConcurrentDictionary<string, Type>();

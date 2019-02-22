@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
@@ -20,39 +19,24 @@ namespace WB.Services.Export.InterviewDataStorage
         public DateTime? DeletedAtUtc { get; set; }
     }
 
-    public class DeletedQuestionnaireReference
+    public class GeneratedQuestionnaireReference
     {
-        protected DeletedQuestionnaireReference()
+        protected GeneratedQuestionnaireReference()
         {
         }
 
-        public DeletedQuestionnaireReference(string id)
+        public GeneratedQuestionnaireReference(QuestionnaireId id)
         {
-            this.Id = id;
+            this.Id = id.ToString();
         }
 
         public string Id { get; set; }
-    }
+        public DateTime? DeletedAt { get; set; }
 
-    [Table("metadata")]
-    public class Metadata
-    {
-        [Key]
-        public string Id { get; set; }
-
-        public string Value { get; set; }
-
-        private long? value;
-
-        [NotMapped]
-        public long AsLong
+        public GeneratedQuestionnaireReference MarkAsDeleted()
         {
-            get => value ?? (value = long.Parse(Value)) ?? 0;
-            set
-            {
-                this.value = null;
-                Value = value.ToString();
-            }
+            this.DeletedAt = DateTime.UtcNow;
+            return this;
         }
     }
 }

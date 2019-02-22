@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using WB.Services.Export.Events;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -58,6 +59,14 @@ namespace WB.Services.Export.Jobs
                 {
                     throw;
                 }
+                catch (PostgresException pe) when (pe.SqlState == "57014") // 57014: canceling statement due to user request
+                {
+                    throw;
+                }
+                catch (Exception e) when (e.InnerException is TaskCanceledException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
                     this.logger.LogCritical(e, "Export job failed");
@@ -65,6 +74,14 @@ namespace WB.Services.Export.Jobs
                 }
             }
             catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (PostgresException pe) when (pe.SqlState == "57014") // 57014: canceling statement due to user request
+            {
+                throw;
+            }
+            catch (Exception e) when (e.InnerException is TaskCanceledException)
             {
                 throw;
             }

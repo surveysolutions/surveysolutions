@@ -15,6 +15,7 @@ using Polly;
 using Polly.Retry;
 using Refit;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Questionnaire.Services.Implementation;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
 
@@ -55,6 +56,7 @@ namespace WB.Services.Export.Host.Infra
                 {
                     JsonSerializerSettings = new JsonSerializerSettings
                     {
+                        SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
                         TypeNameHandling = TypeNameHandling.Auto
                     }
                 });

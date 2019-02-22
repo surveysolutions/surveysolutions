@@ -17,6 +17,7 @@ using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
 using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
+using WB.Services.Export.InterviewDataStorage.Services;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
@@ -43,6 +44,8 @@ namespace WB.Services.Export
             services.AddTransient<IEventsHandler, EventsHandler>();
             services.AddTransient<IEventsFilter, DeletedQuestionnaireEventFilter>();
             services.AddTransient<IInterviewsToExportSource, InterviewsToExportSource>();
+            services.AddTransient<IQuestionnaireStorageCache, QuestionnaireStorageCache>();
+            services.AddTransient<IQuestionnaireSchemaGenerator, QuestionnaireSchemaGenerator>();
             services.AddTransient<ICsvWriter, CsvWriter>();
             services.AddTransient<ITabularFormatExportService, CsvExport.Implementation.TabularFormatExportService>();
             services.AddTransient<IProductVersion, ProductVersion>();
