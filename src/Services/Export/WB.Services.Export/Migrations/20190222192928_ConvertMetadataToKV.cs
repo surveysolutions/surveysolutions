@@ -13,7 +13,8 @@ namespace WB.Services.Export.Migrations
 
             migrationBuilder.Sql(
                 "insert into metadata (id, value, global_sequence) " +
-                "select 'globalSequence' as id, global_sequence::text as value, global_sequence from metadata");
+                "select 'globalSequence' as id, global_sequence::text as value, global_sequence from metadata;" +
+                "delete from metadata where id = 'settings'");
             
             migrationBuilder.DropColumn(
                 name: "global_sequence",
