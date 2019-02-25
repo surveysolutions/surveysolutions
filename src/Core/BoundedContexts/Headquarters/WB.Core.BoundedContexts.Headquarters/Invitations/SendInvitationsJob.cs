@@ -4,6 +4,7 @@ using System.Threading;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -14,15 +15,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly ILogger logger;
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         public SendInvitationsJob(
             ILogger logger, 
             IInvitationService invitationService, 
-            IEmailService emailService)
+            IEmailService emailService,
+            IWebInterviewConfigProvider webInterviewConfigProvider)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -39,19 +43,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 this.logger.Debug("Invitations distribution job: Started");
 
+                WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(status.QuestionnaireIdentity);
+
+
                 invitationService.StartEmailDistribution();
                 CancellationToken cancellationToken = invitationService.GetCancellationToken() ?? throw new Exception("Cancellation token was requested for not started process");
                 var sw = new Stopwatch();
                 sw.Start();
 
                 var invitationIdsToSend = invitationService.GetInvitationIdsToSend(status.QuestionnaireIdentity);
-                // read email template
 
-                var emailTemplate = new EmailTemplate(
-                    "Invitation to take part in %SURVEYNAME%",
-                    @"Welcome to %SURVEYNAME%! 
-To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD% 
-Thank you for your cooperation!");
+                var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate);
 
                 var surveyName = "Hello World Survey";
 
