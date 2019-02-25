@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,6 @@ using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Storage;
 
@@ -24,6 +24,9 @@ namespace WB.Services.Export.Host
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
+            logger.LogInformation("Export service started. version {version}", 
+                FileVersionInfo.GetVersionInfo(this.GetType().Assembly.Location).ProductVersion);
+
             this.logger = logger;
             Configuration = configuration;
         }
@@ -50,9 +53,13 @@ namespace WB.Services.Export.Host
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
+            services.Configure<DbConnectionSettings>(Configuration.GetSection("ConnectionStrings"));
+
             services.UseJobService(Configuration);
+
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
+            services.AddDbContext<TenantDbContext>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
             {
@@ -88,6 +95,7 @@ namespace WB.Services.Export.Host
                 app.UseDeveloperExceptionPage();
             }
 
+            app.StartScheduler();
             app.UseApplicationVersion("/.version");
             app.UseHealthChecks("/.hc");
             app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());

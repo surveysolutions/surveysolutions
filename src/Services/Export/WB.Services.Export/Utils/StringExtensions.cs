@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Ganss.XSS;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public static class StringExtensions
     {

@@ -21,7 +21,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
@@ -38,8 +38,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
-            IProgress<int> progress, CancellationToken cancellationToken)
+        protected override async Task ExportDataIntoDirectory(ExportSettings settings,
+            ExportProgress progress, CancellationToken cancellationToken)
         {
             await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.TabDataFileExtension);
 

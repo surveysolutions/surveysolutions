@@ -45,7 +45,7 @@ namespace WB.Services.Export.Ddi.Implementation
         public async Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant,
             QuestionnaireId questionnaireId, string basePath)
         {
-            var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
+            var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
             QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureStorage.CreateQuestionnaireExportStructure(bigTemplateObject);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)

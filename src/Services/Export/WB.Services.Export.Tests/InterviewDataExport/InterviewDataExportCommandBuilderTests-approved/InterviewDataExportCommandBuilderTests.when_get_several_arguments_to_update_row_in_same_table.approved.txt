@@ -1,0 +1,1 @@
+﻿UPDATE "fakeTableName1" SET "fakeColumnName1" = @answer1,"fakeColumnName2" = @answer2 WHERE interview__id = @interviewId2 AND roster__vector = @rosterVector2;

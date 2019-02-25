@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        private int Count { get; set; } = 200;
+        public int Count { get; protected set; } = 200;
 
         public virtual event EventHandler OptionsChanged;
 
@@ -51,12 +51,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerNotifier = answerNotifier;
         }
 
-        public virtual void Init(string interviewId, Identity entityIdentity, int maxCountToLoad)
+        public virtual void Init(string interviewId, Identity entityIdentity, int? maxCountToLoad = null)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.Count = maxCountToLoad;
+            if (maxCountToLoad.HasValue)
+                this.Count = maxCountToLoad.Value;
 
             interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);

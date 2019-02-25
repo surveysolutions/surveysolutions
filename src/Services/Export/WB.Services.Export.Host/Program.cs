@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
+using WB.Services.Infrastructure.Logging;
 
 namespace WB.Services.Export.Host
 {
@@ -25,7 +28,7 @@ namespace WB.Services.Export.Host
                 {
                     Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
                     Console.WriteLine(eventArgs.ExceptionObject.ToString());
-                    Log.Logger.Fatal("Unhandled exception occur {exception}", new [] { eventArgs.ExceptionObject.ToString() });
+                    Log.Logger.Fatal("Unhandled exception occur {exception}", new[] { eventArgs.ExceptionObject.ToString() });
                 };
 
                 var isService = !(Debugger.IsAttached || args.Contains("--console"));
@@ -73,34 +76,39 @@ namespace WB.Services.Export.Host
 
         private static void ConfigureSerilog(LoggerConfiguration logConfig, IConfiguration configuration)
         {
-            var seqConfig = configuration.GetSection("Logging:Seq");
-
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
-            var fileLogFolder = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
+            var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
+            var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
 
             logConfig
-                .MinimumLevel.Verbose()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("AppType", "ExportService")
                 .Enrich.WithProperty("Version", fvi.FileVersion)
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
-                .WriteTo.File(Path.GetFullPath(fileLogFolder), rollingInterval: RollingInterval.Day);
+                .WriteTo.Postgres(configuration.GetConnectionString("DefaultConnection"), LogEventLevel.Error)
+                .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose, 
+                    retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
+                .WriteTo
+                    .File(Path.GetFullPath(fileLog),  LogEventLevel.Debug,
+                        rollingInterval: RollingInterval.Day);
+
+            var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
+            if (!string.IsNullOrWhiteSpace(hook))
+            {
+                var workerId = configuration.GetSection("job")["workerId"];
+                logConfig = logConfig.WriteTo.Slack(hook, LogEventLevel.Fatal, workerId ?? "console");
+            }
 
             var metadata = assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
 
             foreach (var assemblyMetadataAttribute in metadata)
             {
                 logConfig.Enrich.WithProperty(assemblyMetadataAttribute.Key, assemblyMetadataAttribute.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(seqConfig["Uri"]))
-            {
-                var apiKey = seqConfig["ApiKey"];
-                logConfig.WriteTo.Seq(seqConfig["Uri"], apiKey: apiKey, restrictedToMinimumLevel: LogEventLevel.Verbose);
             }
         }
 
@@ -110,6 +118,7 @@ namespace WB.Services.Export.Host
 
             host.ConfigureAppConfiguration(c =>
             {
+                c.AddJsonFile($"appsettings.Shared.json", true);
                 c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                 c.AddJsonFile($"appsettings.Production.json", true);
                 c.AddJsonFile($"appsettings.Staging.json", true);
@@ -119,16 +128,13 @@ namespace WB.Services.Export.Host
 
             host.ConfigureLogging((hosting, logging) =>
             {
+                
                 var logConfig = new LoggerConfiguration();
-                ConfigureSerilog(logConfig, hosting.Configuration);
-
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
+                logConfig.WriteTo.Console(LogEventLevel.Debug);
 
-                if (hosting.HostingEnvironment.IsDevelopment())
-                {
-                    logConfig.WriteTo.Console(LogEventLevel.Information);
-                }
-
+                ConfigureSerilog(logConfig, hosting.Configuration);
+                
                 Log.Logger = logConfig.CreateLogger();
 
                 if (!hosting.HostingEnvironment.IsDevelopment())

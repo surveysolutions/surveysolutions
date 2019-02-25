@@ -47,8 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             Assert.That(viewModel.MaxAnswersCountMessage, Is.Not.Empty);
             Assert.That(viewModel.MaxAnswersCountMessage.Split(' ').First(), Is.EqualTo("1"));
-            Assert.That(viewModel.MaxAnswersCountMessage.Split(' ').Contains("3"), Is.True);
-            Assert.That(viewModel.MaxAnswersCountMessage.Split(' ').Contains(maxAllowedAnswers.ToString()), Is.False);
+            Assert.That(viewModel.MaxAnswersCountMessage.Split(' ').Contains(maxAllowedAnswers.ToString()), Is.True);
         }
 
 

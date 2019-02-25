@@ -52,5 +52,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             //aaa
             Assert.That(contentVersion, Is.EqualTo(25));
         }
+
+        [Test]
+        public void should_return_version_26_when_contains_multioption_as_combobox()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.MultyOptionsQuestion(filteredCombobox:true)
+                });
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(26));
+        }
+
+        [Test]
+        public void should_return_version_26_when_contains_singleoption_show_as_list()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.SingleOptionQuestion(showAsList:true)
+                });
+
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+            //aaa
+            Assert.That(contentVersion, Is.EqualTo(26));
+        }
     }
 }

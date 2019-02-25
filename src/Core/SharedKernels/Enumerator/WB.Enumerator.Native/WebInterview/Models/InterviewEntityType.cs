@@ -21,6 +21,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         Unsupported,
         NavigationButton,
         LinkedMulti,
+        MultiCombobox,
         Audio,
         Area,
         GroupTitle,

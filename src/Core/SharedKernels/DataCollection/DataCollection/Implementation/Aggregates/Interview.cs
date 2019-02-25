@@ -1979,10 +1979,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewOnClientCreated))
+                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
                 {
-                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId,
-                        command.QuestionnaireVersion, null, command.OriginDate, questionnaire.IsUsingExpressionStorage()));
+                    throw new InterviewException("Create interview must be first event");
                 }
             }
             else

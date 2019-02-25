@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
+using WB.Services.Infrastructure.Storage;
 using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler.Model

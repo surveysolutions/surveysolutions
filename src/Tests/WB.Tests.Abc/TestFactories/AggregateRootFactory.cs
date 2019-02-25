@@ -102,7 +102,8 @@ namespace WB.Tests.Abc.TestFactories
             bool shouldBeInitialized = true,
             Action<Mock<IInterviewLevel>> setupLevel = null,
             List<InterviewAnswer> answers = null,
-            List<string> protectedAnswers = null)
+            List<string> protectedAnswers = null,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             questionnaireId = questionnaireId ?? questionnaire?.PublicKey ?? Guid.NewGuid();
             if (questionnaire != null)
@@ -115,7 +116,12 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
             }
 
-            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
+            var questionOptionsRepository = optionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(
+                questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
+                questionOptionsRepository: questionOptionsRepository);
+
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
             var serviceLocator = new Mock<IServiceLocator>();
@@ -125,8 +131,7 @@ namespace WB.Tests.Abc.TestFactories
             serviceLocator.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
-            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
-                .Returns(Mock.Of<IQuestionOptionsRepository>);
+            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>()).Returns(questionOptionsRepository);
 
 
             var statefulInterview = new StatefulInterview(

@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         }
 
-        public async Task BecauseOf() => await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3");
+        public async Task BecauseOf() => await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync(Create.Entity.OptionWithSearchTerm(3, "3"));
 
         [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);

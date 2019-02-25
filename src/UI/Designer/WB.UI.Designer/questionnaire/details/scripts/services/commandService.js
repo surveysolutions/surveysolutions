@@ -252,7 +252,7 @@
                         } else {
                             command.options = question.options;
                         }
-                        command.showAsListLimit = question.showAsListLimit;
+                        command.showAsListThreshold = question.showAsListThreshold;
                         command.showAsList = question.showAsList;
                         break;
                     case "MultyOption":
@@ -261,6 +261,7 @@
                         command.linkedToEntityId = question.linkedToEntityId;
                         command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
+                        command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
                     case "Numeric":

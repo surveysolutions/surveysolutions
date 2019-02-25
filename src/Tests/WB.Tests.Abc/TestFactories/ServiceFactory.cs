@@ -898,9 +898,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(interviewSummaries ??
-                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
-                new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(

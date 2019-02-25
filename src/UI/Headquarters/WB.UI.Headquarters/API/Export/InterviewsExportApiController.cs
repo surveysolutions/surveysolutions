@@ -43,17 +43,6 @@ namespace WB.UI.Headquarters.API.Export
             
         }
 
-        [Route("api/export/v1/interview")]
-        [ServiceApiKeyAuthorization]
-        [HttpGet]
-        [ApiNoCache]
-        public HttpResponseMessage Get([QueryString] string questionnaireIdentity, [FromUri] GetInterviewsArgs args)
-        {
-            var result = viewFactory.GetInterviewsToExport(QuestionnaireIdentity.Parse(questionnaireIdentity), args?.status, args?.fromDate, args?.toDate);
-
-            return Request.CreateResponse(HttpStatusCode.OK, result);
-        }
-
         public class GetInterviewsArgs
         {
             public InterviewStatus? status { get; set; }
@@ -94,8 +83,7 @@ namespace WB.UI.Headquarters.API.Export
                     .Select(x => new { x.InterviewId, x.Key }).ToList())
                 .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
 
-            var result = id
-                .SelectMany(i => this.viewFactory.GetInterviewComments(i))
+            var result = this.viewFactory.GetInterviewComments(id)
                 .Select(c => new
                 {
                     c.InterviewId, c.Variable,

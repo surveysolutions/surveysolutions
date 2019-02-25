@@ -11,14 +11,14 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
     public class InterviewActionsExporter: IInterviewActionsExporter
     {
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         public string InterviewActionsFileName => "interview__actions";
 
         public DoExportFileHeader[] ActionFileColumns => new []
@@ -40,7 +40,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+        public InterviewActionsExporter(IOptions<ExportServiceSettings> interviewDataExportSettings,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)
         {
@@ -50,7 +50,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public async Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
-            string basePath, IProgress<int> progress, CancellationToken cancellationToken = default)
+            string basePath, ExportProgress progress, CancellationToken cancellationToken = default)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;

@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.questionState = questionState;
 
-            this.optionsViewModel.Init(interviewId, entityIdentity, 200);
+            this.optionsViewModel.Init(interviewId, entityIdentity);
             this.UpdateSpecialValuesAsync().WaitAndUnwrapException();
 
             allSpecialValues = this.optionsViewModel.GetOptions().Select(x => x.Value).ToHashSet();
