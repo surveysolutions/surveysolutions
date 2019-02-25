@@ -11,7 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class FilteredSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel
     {
-
         public FilteredSingleOptionQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
@@ -38,7 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             comboboxCollection.Add(comboboxViewModel);
         }
 
-        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => await comboboxViewModel.UpdateFilter(FilterText);
+        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
+            await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
 
         
         public override void Dispose()
