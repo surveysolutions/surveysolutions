@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal partial class StatefullInterviewTests
+    internal partial class StatefulInterviewTests
     {
         [Test]
         public void When_question_has_invalid_states_Should_be_exists_in_invalid_questions_collection()

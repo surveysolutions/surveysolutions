@@ -6,7 +6,7 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -32,6 +32,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var message1ForStaticText = "message1 for static text";
             var questionnaireDocumentWithOneChapter = Create.QuestionnaireDocument(
                 Id.g1,
+                1,
                 "variable",
                 Create.NumericIntegerQuestion(questionId, "numeric1",
                     validationConditions: new[]

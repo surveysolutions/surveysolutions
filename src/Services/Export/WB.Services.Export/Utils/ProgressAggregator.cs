@@ -2,29 +2,41 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public class ProgressAggregator
     {
-        private readonly Dictionary<Progress<int>, WeightedProgress> progresses = new Dictionary<Progress<int>, WeightedProgress>();
+        private readonly Dictionary<ExportProgress, WeightedProgress> progresses = new Dictionary<ExportProgress, WeightedProgress>();
 
-        public event EventHandler<int> ProgressChanged;
+        public event EventHandler<ProgressState> ProgressChanged;
+        private readonly ProgressState state = new ProgressState();
 
-        public void Add(Progress<int> progress, double weight)
+        public void Add(ExportProgress progress, double weight)
         {
             this.progresses[progress] = new WeightedProgress {ProgressWeight = weight};
 
             progress.ProgressChanged += (sender, progressArg) =>
             {
-                WeightedProgress weightedProgress = this.progresses[(Progress<int>) sender];
-                weightedProgress.LastReportedProgress = progressArg;
+                lock (state)
+                {
+                    WeightedProgress weightedProgress = this.progresses[(ExportProgress) sender];
+                    weightedProgress.LastReportedProgress = progressArg;
 
-                var progressToReport = (int)this.progresses.Values.Sum(x => x.LastReportedProgress * x.ProgressWeight);
-                this.OnProgressChanged(progressToReport);
+                    state.Percent = (int) this.progresses.Values.Sum(x => (x.LastReportedProgress?.Percent ?? 0) * x.ProgressWeight);
+
+                    if (this.progresses.Values.Any(v => v.LastReportedProgress?.Eta != null))
+                    {
+                        state.Eta = this.progresses.Values
+                            .Where(e => e.LastReportedProgress?.Eta != null)
+                            .Max(v => v.LastReportedProgress.Eta.Value);
+                    }
+
+                    this.OnProgressChanged(state);
+                }
             };
         }
 
-        protected virtual void OnProgressChanged(int progress)
+        protected virtual void OnProgressChanged(ProgressState progress)
         {
             this.ProgressChanged?.Invoke(this, progress);
         }

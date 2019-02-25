@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public static class ConfigurationExtensions
     {

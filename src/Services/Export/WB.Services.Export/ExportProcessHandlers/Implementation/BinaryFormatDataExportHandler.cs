@@ -6,7 +6,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.FileSystem;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
@@ -18,7 +18,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor, IBinaryDataSource binaryDataSource)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
@@ -30,7 +30,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
         protected override async Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings settings,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             await binaryDataSource.ForEachInterviewMultimediaAsync(settings,

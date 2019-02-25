@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
-            cascadingModel.SaveAnswerBySelectedOptionCommand.Execute("3");
+            cascadingModel.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3));
             BecauseOf();
         }
 

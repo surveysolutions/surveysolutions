@@ -611,7 +611,10 @@
     <value>Количество ответов</value>
   </data>
   <data name="QuestionOnlyInts" xml:space="preserve">
-    <value>Разрешены только цифры</value>
+    <value>Разрешены только целые числа</value>
+  </data>
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>Разрешены целые числа между 1 и 50</value>
   </data>
   <data name="QuestionOptionsCut" xml:space="preserve">
     <value>Вопрос был отмечен как "Поле со списком" или "Каскадное поле со списком" во время сохранения и содержал больше категорий, чем разрешено, их количество было уменьшено до {{count}}</value>
@@ -1241,6 +1244,14 @@
     <value>Отображать списком</value>
   </data>
   <data name="QuestionShowListLimit" xml:space="preserve">
-    <value>Если меньше чем</value>
+    <value>Если не больше чем</value>
+  </data>
+  <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>Флажки</value>
+    <comment>Флажки</comment>
+  </data>
+  <data name="QuestionKind" xml:space="preserve">
+    <value>Вид</value>
+    <comment>Вид</comment>
   </data>
 </root>

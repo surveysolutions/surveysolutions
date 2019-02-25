@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Should().HaveCount(3);
 
             List<CategoricalOption> optionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
-            cascadingModel.AutoCompleteSuggestions.Should().Contain(optionsIfParentAnswerIs1.Select(x => x.Title));
+            cascadingModel.AutoCompleteSuggestions.Select(x=>x.Title).Should().Contain(optionsIfParentAnswerIs1.Select(x => x.Title));
         }
 
     }

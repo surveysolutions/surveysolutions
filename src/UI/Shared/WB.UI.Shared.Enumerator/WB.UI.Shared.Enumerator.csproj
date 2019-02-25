@@ -349,6 +349,7 @@
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
+    <Compile Include="Converters\TextWithHighlightedSearchTermConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\EditTextMaxLengthBinding.cs" />
     <Compile Include="CustomBindings\Models\MediaAttachment.cs" />
@@ -440,7 +441,7 @@
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
     <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\InstantAutoComplete.cs" />
+    <Compile Include="CustomControls\InstantAutoCompleteTextView.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\InterviewOverviewTemplateSelector.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
@@ -2469,6 +2470,24 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_group_plain_roster_title.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question_multi_combobox_option_item.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question_multi_combobox.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_question_multi_combobox_new_item.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

@@ -80,26 +80,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 validationExpression: null,
                 validationMessage: null,
                 showAsList:false,
-                showAsListLimit:null));
-        /*
-         * Guid questionnaireId,
-                    Guid questionId,
-                    Guid responsibleId,
-                    CommonQuestionParameters commonQuestionParameters,
-                    string validationExpression,
-                    string validationMessage,
-                    QuestionScope scope,
-                    bool isPreFilled,
-                    Option[] options,
-                    Guid? linkedToEntityId,
-                    bool isFilteredCombobox,
-                    Guid? cascadeFromQuestionId,
-                    List<ValidationCondition> validationConditions,
-                    string linkedFilterExpression,
-                    bool showAsList,
-                    int? showAsListLimit
-         */
-
+                showAsListThreshold: null));
 
         [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId)
