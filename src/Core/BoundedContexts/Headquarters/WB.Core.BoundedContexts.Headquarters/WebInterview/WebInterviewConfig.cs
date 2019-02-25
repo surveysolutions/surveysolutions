@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview
@@ -42,20 +43,13 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public int ReminderAfterDaysIfNoResponse { get; set; }
         public int ReminderAfterDaysIfPartialResponse { get; set; }
 
-        public string GetEmailSubject(EmailTextTemplateType type)
+        public EmailTemplate GetEmailTemplate(EmailTextTemplateType type)
         {
-            if (EmailTemplates.ContainsKey(type))
-                return EmailTemplates[type].Subject;
+            var template = EmailTemplates.ContainsKey(type)
+                ? EmailTemplates[type]
+                : DefaultEmailTemplates[type];
 
-            return DefaultEmailTemplates[type].Subject;
-        }
-
-        public string GetEmailMessage(EmailTextTemplateType type)
-        {
-            if (EmailTemplates.ContainsKey(type))
-                return EmailTemplates[type].Message;
-
-            return DefaultEmailTemplates[type].Message;
+            return new EmailTemplate(template.Subject, template.Message);
         }
     }
 
