@@ -238,46 +238,37 @@
 
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
-                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.title }}</a>
+                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}</a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content d-flex f-row justify-center">
                                     <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane survey-block">
-                                        <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
+                                        <div class="h4 high-resolution-title">{{emailTemplate.title}}</div>
                                         <div class="d-flex justify-center f-col ">
                                             <div class="row-element">
-                                                <div class="h5">{{emailTemplate.title}}</div>
+                                                <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
-                                                        <input type="text" v-model="emailTemplate.subject" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
+                                                        <input type="text" v-model="emailTemplate.subject" class="form-control with-clear-btn" placeholder="Please enter the subject">
                                                         <button type="button" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="form-actions">
-                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                    <button type="submit" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                 </div>
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="invitation-message">
                                                     <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.message" :id="'message' + emailTemplate.value"></vue-editor>
-
-                                                    <!--p>Dear respondent!</p>
-                                                    <p>
-                                                        you have started responding to the %SURVEYNAME%, but haven’t completed the process. <br/>
-                                                        Make sure you answer all applicable questions and click ‘complete’ to submit your response. 
-                                                    </p>
-                                                    <p>
-                                                        Thank you!
-                                                    </p-->
                                                 </div>
                                                 <div class="form-actions">
-                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                    <button type="submit" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -526,6 +517,7 @@ export default {
         return {
           value: key,
           title: defaultEmailTemplate.title,
+          buttonTitle: defaultEmailTemplate.shortTitle,
           subject: subject,
           message: message,
           isActive: key === "invitationTemplate"
@@ -540,11 +532,8 @@ export default {
       });
       emailTemplate.isActive = true;
     },
-    emailSubject(emailTemplate) {
-      return this.$config.model.emailTemplates[emailTemplate.type].subject;
-    },
-    emailMessage(emailTemplate) {
-      return this.$config.model.emailTemplates[emailTemplate.type].message;
+    save(emailTemplate) {
+        
     },
   },
   components: {
