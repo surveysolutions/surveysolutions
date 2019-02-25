@@ -1,0 +1,13 @@
+﻿CREATE TABLE IF NOT EXISTS "test-table-name"(
+"interview_id" uuid  NOT NULL ,
+"roster_vector" int4[]  NOT NULL ,
+"text_q" text  NULL ,
+"int_q" int4  NULL ,
+"real_q" float8  NULL ,
+"text_list_q" jsonb  NULL ,
+"single_q" int4  NULL ,
+"multi_q" int4[]  NULL ,
+"audio_q" jsonb  NULL ,
+"multimedia_q" jsonb  NULL ,
+PRIMARY KEY ("interview_id" , "roster_vector")
+)

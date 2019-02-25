@@ -85,6 +85,7 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewDataExportBulkCommandBuilder, InterviewDataExportBulkCommandBuilder>();
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddTransient<IInterviewReferencesStorage, InterviewReferencesStorage>();
+            services.AddTransient<IDatabaseSchemaCommandBuilder, DatabaseSchemaCommandBuilder>();
 
             services.AddTransient<IEventProcessor, EventsProcessor>();
             services.AddScoped<ITenantContext, TenantContext>();
