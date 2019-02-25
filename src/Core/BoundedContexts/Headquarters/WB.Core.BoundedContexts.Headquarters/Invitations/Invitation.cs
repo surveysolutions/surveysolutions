@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual string EmailId { get; protected set; }
 
-        public virtual string AccessToken { get; protected set; }
+        public virtual string ResumePassword { get; protected set; }
 
         public virtual DateTime? SentOnUtc { get; protected set; }
 
@@ -55,24 +55,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public long TotalCount { get; set; }
         public InvitationProcessStatus Status { get; set; }
         public List<InvitationSendError> Errors { get; set; } = new List<InvitationSendError>();
+        public string BaseUrl { get; set; }
+        public string QuestionnaireTitle { get; set; }
     }
 
     public class InvitationSendError
     {
         public int InvitationId { get; }
+        public int AssignmentId { get; }
+        public string Email { get; }
         public string Error { get; }
 
-        public InvitationSendError(int invitationId, string error)
+        public InvitationSendError(int invitationId, int assignmentId, string email, string error)
         {
             InvitationId = invitationId;
+            AssignmentId = assignmentId;
+            Email = email;
             Error = error;
         }
     }
 
     public enum InvitationProcessStatus
     {
-        NotStarted = 0,
-        Started = 1,
+        Queued = 0,
+        InProgress = 1,
         Done = 2,
         Failed = 3,
         Canceled = 4

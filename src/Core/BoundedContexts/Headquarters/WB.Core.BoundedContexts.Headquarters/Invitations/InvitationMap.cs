@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Property(x => x.AssignmentId);
             Property(x => x.InterviewId);
             Property(x => x.Token);
-            Property(x => x.AccessToken);
+            Property(x => x.ResumePassword);
             Property(x => x.SentOnUtc);
             Property(x => x.EmailId);
 

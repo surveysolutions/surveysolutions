@@ -20,6 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             this.Property(x => x.Quantity);
             this.Property(x => x.Error);
             this.Property(x => x.Verified);
+            this.Property(x => x.Email);
+            this.Property(x => x.Password);
+
             this.Property(x => x.Answers, mapper =>
             {
                 mapper.Type<PostgresJson<List<InterviewAnswer>>>();

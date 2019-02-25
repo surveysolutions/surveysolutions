@@ -16,7 +16,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                 .WithColumn("assignmentid").AsInt32().NotNullable()
                 .WithColumn("interviewid").AsGuid().Nullable()
                 .WithColumn("token").AsString().Nullable()
-                .WithColumn("accesstoken").AsString().Nullable()
+                .WithColumn("resumepassword").AsString().Nullable()
                 .WithColumn("sentonutc").AsDateTime().Nullable()
                 .WithColumn("emailid").AsString().Nullable();
         }
