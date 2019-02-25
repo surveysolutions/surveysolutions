@@ -192,4 +192,28 @@
       <value>Финишная страница</value>
       <comment>Финишная страница</comment>
   </data>
+  <data name="Save" xml:space="preserve">
+      <value>сохранить</value>
+      <comment>сохранить</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+      <value>Отменить</value>
+      <comment>Отменить</comment>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+      <value>Отклоненные</value>
+      <comment>Отклоненные</comment>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+      <value>Приглашение</value>
+      <comment>Приглашение</comment>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+      <value>Нет ответа</value>
+      <comment>Нет ответа</comment>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+      <value>Частичный ответ</value>
+      <comment>Частичный ответ</comment>
+  </data>
 </root>

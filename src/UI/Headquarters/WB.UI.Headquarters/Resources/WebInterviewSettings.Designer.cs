@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customize displayed text for respondents.
         /// </summary>
         internal static string CustomizeDisplayedText {
@@ -169,6 +178,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitation.
+        /// </summary>
+        internal static string InvitationEmailMessage {
+            get {
+                return ResourceManager.GetString("InvitationEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
         internal static string Reject {
@@ -178,11 +196,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reject.
+        /// </summary>
+        internal static string RejectEmailMessage {
+            get {
+                return ResourceManager.GetString("RejectEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reminder.
         /// </summary>
         internal static string Reminder {
             get {
                 return ResourceManager.GetString("Reminder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Response.
+        /// </summary>
+        internal static string ReminderNoResponseEmailMessage {
+            get {
+                return ResourceManager.GetString("ReminderNoResponseEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Partial Response.
+        /// </summary>
+        internal static string ReminderPartialResponseEmailMessage {
+            get {
+                return ResourceManager.GetString("ReminderPartialResponseEmailMessage", resourceCulture);
             }
         }
         
@@ -201,6 +246,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ResumePage {
             get {
                 return ResourceManager.GetString("ResumePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to save.
+        /// </summary>
+        internal static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

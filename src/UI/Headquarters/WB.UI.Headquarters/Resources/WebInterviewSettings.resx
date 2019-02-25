@@ -171,4 +171,22 @@
   <data name="FinishPage" xml:space="preserve">
     <value>Finish Page</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+    <value>No Response</value>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+    <value>Partial Response</value>
+  </data>
 </root>
