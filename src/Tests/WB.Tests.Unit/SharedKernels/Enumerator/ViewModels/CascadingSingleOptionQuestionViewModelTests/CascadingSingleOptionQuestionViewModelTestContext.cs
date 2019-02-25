@@ -38,7 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null)
+            IStatefulInterviewRepository interviewRepository = null,
+            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -52,6 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Stub.MvxMainThreadAsyncDispatcher(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
                 Create.ViewModel.ThrottlingViewModel());
 
             return cascadingSingleOptionQuestionViewModel;
