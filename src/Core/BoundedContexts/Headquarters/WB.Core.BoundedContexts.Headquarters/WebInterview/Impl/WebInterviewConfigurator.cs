@@ -42,5 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             config.Started = false;
             this.configs.Store(config, questionnaireId.ToString());
         }
+
+        public void UpdateEmailTextTemplate(QuestionnaireIdentity questionnaireId, EmailTextTemplateType type, EmailTextTemplate emailTextTemplate)
+        {
+            var config = this.configs.GetById(questionnaireId.ToString()) ?? new WebInterviewConfig();
+            config.EmailTemplates[type] = emailTextTemplate;
+            this.configs.Store(config, questionnaireId.ToString());
+        }
     }
 }

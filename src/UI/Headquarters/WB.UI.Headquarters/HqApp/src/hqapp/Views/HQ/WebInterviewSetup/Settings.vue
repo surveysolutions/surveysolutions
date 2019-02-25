@@ -207,6 +207,20 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <hr />
             <div class="row mb-05">
                 <div class="panel-group" role="tablist">
@@ -222,23 +236,18 @@
                         <div id="collapseListGroup12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading12" aria-expanded="false">
                             <div class="collapsed-content text-email">
 
-                                <!--ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#invitation" aria-controls="invitation" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Invitation')}}</a></li>
-                                    <li role="presentation"><a href="#reminder" aria-controls="reminder" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reminder')}}</a></li>
-                                    <li role="presentation"><a href="#reject" aria-controls="reject" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.Reject')}}</a></li>
-                                </ul-->
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
+                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="presentation">
                                         <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.title }}</a>
                                     </li>
                                 </ul>
 
                                 <div class="tab-content d-flex f-row justify-center">
-                                    <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane survey-block">
+                                    <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane survey-block">
                                         <div class="h4 high-resolution-title">{{$t('WebInterviewSettings.ExampleInvitationEmailMessage')}}</div>
                                         <div class="d-flex justify-center f-col ">
                                             <div class="row-element">
-                                                <div class="h5">{{emailTemplate.emailTitle}}</div>
+                                                <div class="h5">{{emailTemplate.title}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
                                                         <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
@@ -508,15 +517,15 @@ export default {
   mounted() {
     var self = this;
     this.emailTemplates = _.map(
-      this.$config.model.textOptions,
+      this.$config.model.emailTemplates,
       (option, index) => {
-        var customText = self.$config.model.definedTexts[option.key];
+        var defaultText = self.$config.model.definedEmailTemplates[option.key];
         return {
           value: option.key,
-          title: option.value,
-          customText: customText,
-          isActive: index === 0,
-          overriden: !_.isNil(customText) && customText !== "" ? 1 : 0
+          title: option.title,
+          subject: !_.isNil(option.subject) && option.subject !== "" ? option.subject : defaultText.subject,
+          message: !_.isNil(option.message) && option.message !== "" ? option.message : defaultText.message,
+          isActive: index === 0
         };
       }
     );
@@ -528,11 +537,11 @@ export default {
       });
       emailTemplate.isActive = true;
     },
-    emailTitle(emailTemplate) {
-      return this.$config.model.emailTemplates[emailTemplate.value].title;
+    emailSubject(emailTemplate) {
+      return this.$config.model.emailTemplates[emailTemplate.type].subject;
     },
-    emailText(emailTemplate) {
-      return this.$config.model.emailTemplates[emailTemplate.value].text;
+    emailMessage(emailTemplate) {
+      return this.$config.model.emailTemplates[emailTemplate.type].message;
     },
   },
   components: {
