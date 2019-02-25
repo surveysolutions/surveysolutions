@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -22,12 +22,13 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
         private readonly IQuestionnaireStorageCache cache;
+        private readonly IDatabaseSchemaCommandBuilder commandBuilder;
         private readonly ILogger<DatabaseSchemaService> logger;
         private readonly IOptions<DbConnectionSettings> connectionSettings;
 
-
         public QuestionnaireSchemaGenerator(ITenantContext tenantContext,
             TenantDbContext dbContext,
+            IDatabaseSchemaCommandBuilder commandBuilder,
             IQuestionnaireStorageCache cache,
             ILogger<DatabaseSchemaService> logger,
             IOptions<DbConnectionSettings> connectionSettings)
@@ -35,6 +36,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
             this.cache = cache;
+            this.commandBuilder = commandBuilder;
             this.logger = logger;
             this.connectionSettings = connectionSettings;
         }
@@ -66,9 +68,9 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             var db = dbContext.Database.GetDbConnection();
             foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
             {
-                db.Execute($"DROP TABLE IF EXISTS \"{storedGroup.TableName}\" CASCADE;"
-                           + $"DROP TABLE IF EXISTS \"{storedGroup.EnablementTableName}\" CASCADE;"
-                           + $"DROP TABLE IF EXISTS \"{storedGroup.ValidityTableName}\" CASCADE");
+                db.Execute(commandBuilder.GenerateDropTable(storedGroup.TableName)
+                           + commandBuilder.GenerateDropTable(storedGroup.EnablementTableName)
+                           + commandBuilder.GenerateDropTable(storedGroup.ValidityTableName));
             }
 
             logger.LogDebug("Skipping questionnaire creation for {tenantName} ({questionnaireId}[{table}])",
@@ -77,66 +79,66 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
         private void CreateTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group, QuestionnaireDocument questionnaireDocument)
         {
-            var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
+            var columns = new List<CreateTableColumnInfo>();
+            columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.IsRoster)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
+                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
             var questions = group.DataColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
+                columns.Add(new CreateTableColumnInfo(question.ColumnName, GetSqlTypeForQuestion(question, questionnaireDocument), isNullable: true));
 
             var variables = group.DataColumns.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
-                columns.Add(new ColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
+                columns.Add(new CreateTableColumnInfo(variable.ColumnName, GetSqlTypeForVariable(variable), isNullable: true));
 
-            var commandText = GenerateCreateTableScript(group.TableName, columns);
+            var commandText = commandBuilder.GenerateCreateTableScript(group.TableName, columns);
             connection.Execute(commandText);
         }
 
         private void CreateEnablementTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group)
         {
-            var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
+            var columns = new List<CreateTableColumnInfo>();
+            columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.IsRoster)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
+                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
             var questions = group.EnablementColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+                columns.Add(new CreateTableColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var variables = group.EnablementColumns.Where(entity => entity is Variable).Cast<Variable>();
             foreach (var variable in variables)
-                columns.Add(new ColumnInfo(variable.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+                columns.Add(new CreateTableColumnInfo(variable.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var staticTexts = group.EnablementColumns.Where(entity => entity is StaticText).Cast<StaticText>();
             foreach (var staticText in staticTexts)
-                columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+                columns.Add(new CreateTableColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
             var nonRosters = group.EnablementColumns.Where(entity => entity is Group).Cast<Group>();
             foreach (var notRoster in nonRosters)
-                columns.Add(new ColumnInfo(notRoster.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
+                columns.Add(new CreateTableColumnInfo(notRoster.ColumnName, InterviewDatabaseConstants.SqlTypes.Bool, isNullable: false, defaultValue: "true"));
 
-            var commandText = GenerateCreateTableScript(group.EnablementTableName, columns);
+            var commandText = commandBuilder.GenerateCreateTableScript(group.EnablementTableName, columns);
             connection.Execute(commandText);
         }
 
         private void CreateValidityTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group)
         {
-            var columns = new List<ColumnInfo>();
-            columns.Add(new ColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
+            var columns = new List<CreateTableColumnInfo>();
+            columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.InterviewId, InterviewDatabaseConstants.SqlTypes.Guid, isPrimaryKey: true));
             if (group.IsRoster)
-                columns.Add(new ColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
+                columns.Add(new CreateTableColumnInfo(InterviewDatabaseConstants.RosterVector, $"int4[]", isPrimaryKey: true));
 
             var questions = group.ValidityColumns.Where(entity => entity is Question).Cast<Question>();
             foreach (var question in questions)
-                columns.Add(new ColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
+                columns.Add(new CreateTableColumnInfo(question.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
             var staticTexts = group.ValidityColumns.Where(entity => entity is StaticText).Cast<StaticText>();
             foreach (var staticText in staticTexts)
-                columns.Add(new ColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
+                columns.Add(new CreateTableColumnInfo(staticText.ColumnName, InterviewDatabaseConstants.SqlTypes.IntArray, isNullable: true));
 
-            var commandText = GenerateCreateTableScript(group.ValidityTableName, columns);
+            var commandText = commandBuilder.GenerateCreateTableScript(group.ValidityTableName, columns);
             connection.Execute(commandText);
         }
 
@@ -190,28 +192,9 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             }
         }
 
-        private static void CreateSchema(DbConnection connection, TenantInfo tenant)
+        private void CreateSchema(DbConnection connection, TenantInfo tenant)
         {
-            connection.Execute($"CREATE SCHEMA IF NOT EXISTS \"{tenant.SchemaName()}\"");
-        }
-
-        private string GenerateCreateTableScript(string tableName, List<ColumnInfo> columns)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"CREATE TABLE IF NOT EXISTS \"{tableName}\"(");
-
-            foreach (var column in columns)
-            {
-                sb.Append($"\"{column.Name}\" {column.SqlType} ");
-                sb.Append(column.IsNullable ? " NULL " : " NOT NULL ");
-                if (column.DefaultValue != null)
-                    sb.Append(" DEFAULT " + column.DefaultValue);
-                sb.AppendLine(",");
-            }
-
-            sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
-            sb.AppendLine(")");
-            return sb.ToString();
+            connection.Execute(commandBuilder.GenerateCreateSchema(tenant.SchemaName()));
         }
 
         public async Task DropTenantSchemaAsync(string tenant)
@@ -270,23 +253,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             }
         }
 
-        private class ColumnInfo
-        {
-            public ColumnInfo(string name, string sqlType, bool isPrimaryKey = false, bool isNullable = false, string defaultValue = null)
-            {
-                Name = name;
-                SqlType = sqlType;
-                IsPrimaryKey = isPrimaryKey;
-                DefaultValue = defaultValue;
-                IsNullable = isNullable;
-            }
-
-            public string Name { get; }
-            public string SqlType { get; }
-            public bool IsPrimaryKey { get; }
-            public string DefaultValue { get; }
-            public bool IsNullable { get; }
-        }
 
     }
 }
