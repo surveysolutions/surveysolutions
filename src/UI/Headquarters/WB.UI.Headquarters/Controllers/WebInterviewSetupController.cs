@@ -129,9 +129,28 @@ namespace WB.UI.Headquarters.Controllers
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             model.DefinedTexts = config.CustomMessages;
 
+            model.EmailTemplates = config.EmailTemplates;
+            model.DefaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates;
+
             return View(model);
         }
-        
+
+        [HttpPost]
+        public ActionResult UpdateEmailTemplate(string id, EmailTextTemplateType type)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+
+            var customMessage = Request.Unvalidated[type.ToString()];
+            if (customMessage != null)
+            {
+                //customMessages[(WebInterviewUserMessages)customMessageName] = customMessage;
+            }
+
+            //this.configurator.UpdateEmailTextTemplate(questionnaireIdentity, type, template);
+
+            return new HttpStatusCodeResult(200);
+        }
+
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult EmailDistributionProgress()
         {
@@ -292,6 +311,8 @@ namespace WB.UI.Headquarters.Controllers
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefinedTexts { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplate> DefaultEmailTemplates { get; set; }
         public string DownloadAssignmentsUrl { get; set; }
         public string UpdateTextsUrl { get; set; }
     }

@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public WebInterviewConfig()
         {
             this.CustomMessages = new Dictionary<WebInterviewUserMessages, string>();
+            this.EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>();
         }
 
         public QuestionnaireIdentity QuestionnaireId { get; set; }
@@ -26,5 +27,39 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 { WebInterviewUserMessages.WebSurveyHeader, Enumerator.Native.Resources.WebInterview.WebSurvey },
                 { WebInterviewUserMessages.WelcomeText,     Enumerator.Native.Resources.WebInterview.WelcomeText }
             };
+
+        public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
+
+        public static Dictionary<EmailTextTemplateType, EmailTextTemplate> DefaultEmailTemplates =>
+        new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
+        {
+            { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_InvitationTemplate_Subject, Enumerator.Native.Resources.WebInterview.Email_InvitationTemplate_Message) },
+            { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_NoResponse_Subject, Enumerator.Native.Resources.WebInterview.Email_NoResponse_Message) },
+            { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Subject, Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Message) },
+            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Subject, Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Message) }
+        };
+    }
+
+    public class EmailTextTemplate
+    {
+        public EmailTextTemplate() { }
+
+        public EmailTextTemplate(string subject, string message)
+        {
+            Subject = subject;
+            Message = message;
+        }
+
+        public string Title { get; set; } = "title";
+        public string Subject { get; set; }
+        public string Message { get; set; }
+    }
+
+    public enum EmailTextTemplateType
+    {
+        InvitationTemplate = 1,
+        Reminder_NoResponse,
+        Reminder_PartialResponse,
+        RejectEmail,
     }
 }

@@ -88,6 +88,100 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Welcome to %SURVEYNAME%!
+        ///
+        ///To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_InvitationTemplate_Message {
+            get {
+                return ResourceManager.GetString("Email_InvitationTemplate_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation to take part in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_InvitationTemplate_Subject {
+            get {
+                return ResourceManager.GetString("Email_InvitationTemplate_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are receiving this reminder because you haven’t started responding to %SURVEYNAME%!
+        /// 
+        ///To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_NoResponse_Message {
+            get {
+                return ResourceManager.GetString("Email_NoResponse_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reminder, don’t forget to take part in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_NoResponse_Subject {
+            get {
+                return ResourceManager.GetString("Email_NoResponse_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are receiving this reminder because you have started responding to %SURVEYNAME%, but haven’t completed the process.
+        /// 
+        ///To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+        /// 
+        ///Please answer all applicable questions and click the ‘COMPLETE’ button to submit your responses.
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_PartialResponse_Message {
+            get {
+                return ResourceManager.GetString("Email_PartialResponse_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reminder, please finish your response to %SURVEYNAME%.
+        /// </summary>
+        public static string Email_PartialResponse_Subject {
+            get {
+                return ResourceManager.GetString("Email_PartialResponse_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for taking part in %SURVEYNAME%!
+        /// 
+        ///While processing your response our staff has found some issues, which you are hereby asked to review.
+        /// 
+        ///To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+        /// 
+        ///We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your responses.
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_RejectEmail_Message {
+            get {
+                return ResourceManager.GetString("Email_RejectEmail_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your action is required in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_RejectEmail_Subject {
+            get {
+                return ResourceManager.GetString("Email_RejectEmail_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
