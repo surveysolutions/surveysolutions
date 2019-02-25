@@ -13,10 +13,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     {
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage;
-        private CancellationTokenSource cancellationTokenSource;
+        private static CancellationTokenSource cancellationTokenSource;
 
         public InvitationService(
-            IPlainStorageAccessor<Invitation> invitationStorage, 
+            IPlainStorageAccessor<Invitation> invitationStorage,
             IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage)
         {
             this.invitationStorage = invitationStorage;
@@ -86,7 +86,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => _.Count(x => x.Assignment.Email != null && x.Assignment.Email!= string.Empty && x.Assignment.Archived == false && x.SentOnUtc == null));
+            return invitationStorage.Query(_ => _.Count(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                x.Assignment.Email != null && x.Assignment.Email != string.Empty && 
+                x.Assignment.Archived == false &&
+                x.SentOnUtc == null));
+        }
+
+        public int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return invitationStorage.Query(_ => _.Count(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                x.Assignment.Archived == false &&
+                x.SentOnUtc != null));
+        }
+
+        public List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return invitationStorage.Query(_ => _.Where(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
+                x.Assignment.Archived == false &&
+                x.SentOnUtc == null).Select(x => x.Id).ToList());
         }
 
         public InvitationDistributionStatus GetEmailDistributionStatus()
@@ -94,42 +118,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return this.invitationsDistributionStatusStorage.GetById(AppSetting.InvitationsDistributionStatus);
         }
 
-        public List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return invitationStorage.Query(_ => _.Where(x => x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId && 
-                                                             x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version && 
-                                                             x.Assignment.Email != null && x.Assignment.Email!= string.Empty &&
-                                                             x.Assignment.Archived == false && 
-                                                             x.SentOnUtc == null).Select(x => x.Id).ToList());
-        }
-
-        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName)
+        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
+            string baseUrl, string questionnaireTitle)
         {
             var status = new InvitationDistributionStatus
             {
                 QuestionnaireIdentity = questionnaireIdentity,
                 ResponsibleName = identityName,
-                Status = InvitationProcessStatus.NotStarted
+                Status = InvitationProcessStatus.Queued,
+                BaseUrl = baseUrl,
+                QuestionnaireTitle = questionnaireTitle
             };
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
         public void StartEmailDistribution()
         {
-            this.cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource = new CancellationTokenSource();
             var status = this.GetEmailDistributionStatus();
-            status.Status = InvitationProcessStatus.Started;
+            status.Status = InvitationProcessStatus.InProgress;
             status.TotalCount = this.GetCountOfNotSentInvitations(status.QuestionnaireIdentity);
             status.StartedDate = DateTime.UtcNow;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
-        public void StopEmailDistribution()
+        public void CompleteEmailDistribution()
         {
             var status = this.GetEmailDistributionStatus();
             status.Status = InvitationProcessStatus.Done;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
-            this.cancellationTokenSource = null;
+            cancellationTokenSource = null;
         }
 
         public void EmailDistributionFailed()
@@ -137,17 +155,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var status = this.GetEmailDistributionStatus();
             status.Status = InvitationProcessStatus.Failed;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
-            this.cancellationTokenSource = null;
+            cancellationTokenSource = null;
+        }
+
+        public void EmailDistributionCanceled()
+        {
+            var status = this.GetEmailDistributionStatus();
+            status.Status = InvitationProcessStatus.Canceled;
+            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            cancellationTokenSource = null;
         }
 
         public void CancelEmailDistribution()
         {
-            this.cancellationTokenSource?.Cancel();
+            cancellationTokenSource.Cancel();
         }
 
-        public CancellationToken? GetCancellationToken()
+        public CancellationToken GetCancellationToken()
         {
-            return cancellationTokenSource?.Token;
+            return cancellationTokenSource.Token;
         }
 
         public Invitation GetInvitation(int invitationId)
@@ -155,11 +181,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.GetById(invitationId);
         }
 
-        public void InvitationWasNotSent(int invitationId, string reason)
+        public void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason)
         {
             var status = this.GetEmailDistributionStatus();
             status.WithErrorsCount++;
-            status.Errors.Add(new InvitationSendError(invitationId, reason));
+            status.Errors.Add(new InvitationSendError(invitationId, assignmentId, email, reason));
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
@@ -179,60 +205,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void CreateInvitationForWebInterview(Assignment assignment);
         int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity);
         int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity);
+        int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity);
         InvitationDistributionStatus GetEmailDistributionStatus();
         List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity);
         Invitation GetInvitation(int invitationId);
-        void InvitationWasNotSent(int invitationId, string reason);
+        void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason);
         void MarkInvitationAsSent(int invitationId, string emailId);
 
-        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName);
+        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string baseUrl, string questionnaireTitle);
         void StartEmailDistribution();
-        void StopEmailDistribution();
+        void CompleteEmailDistribution();
         void EmailDistributionFailed();
+        void EmailDistributionCanceled();
         void CancelEmailDistribution();
-        CancellationToken? GetCancellationToken();
-    }
-
-    public sealed class TokenGenerator
-    {
-        private const string Encode_32_Chars = "SXVNWRCK53MTFQP7A6HUBZ4GEID921L8";
-
-        private static readonly ThreadLocal<char[]> _charBufferThreadLocal =
-            new ThreadLocal<char[]>(() => new char[13]);
-
-        private TokenGenerator()
-        {
-        }
-
-        /// <summary>
-        /// Returns a single instance of the <see cref="TokenGenerator"/>.
-        /// </summary>
-        public static TokenGenerator Instance { get; } = new TokenGenerator();
-
-        /// <summary>
-        /// Returns an ID. e.g: <c>0HLHI1F5INOFA</c>
-        /// </summary>
-        public string Generate(long id) => GenerateImpl(id);
-
-        private static string GenerateImpl(long id)
-        {
-            var buffer = _charBufferThreadLocal.Value;
-
-            buffer[0] = Encode_32_Chars[(int) (id >> 60) & 31];
-            buffer[1] = Encode_32_Chars[(int) (id >> 55) & 31];
-            buffer[2] = Encode_32_Chars[(int) (id >> 50) & 31];
-            buffer[3] = Encode_32_Chars[(int) (id >> 45) & 31];
-            buffer[4] = Encode_32_Chars[(int) (id >> 40) & 31];
-            buffer[5] = Encode_32_Chars[(int) (id >> 35) & 31];
-            buffer[6] = Encode_32_Chars[(int) (id >> 30) & 31];
-            buffer[7] = Encode_32_Chars[(int) (id >> 25) & 31];
-            buffer[8] = Encode_32_Chars[(int) (id >> 20) & 31];
-            buffer[9] = Encode_32_Chars[(int) (id >> 15) & 31];
-            buffer[10] = Encode_32_Chars[(int) (id >> 10) & 31];
-            buffer[11] = Encode_32_Chars[(int) (id >> 5) & 31];
-            buffer[12] = Encode_32_Chars[(int) id & 31];
-
-            return new string(buffer, 0, buffer.Length);
-        }
+        CancellationToken GetCancellationToken();
     }
 }

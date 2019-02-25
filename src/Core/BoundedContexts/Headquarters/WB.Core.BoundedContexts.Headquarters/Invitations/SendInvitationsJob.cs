@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -38,16 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 if (status == null)
                     return;
 
-                if (status.Status > InvitationProcessStatus.Started)
+                if (status.Status > InvitationProcessStatus.InProgress)
                     return;
 
                 this.logger.Debug("Invitations distribution job: Started");
 
                 WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(status.QuestionnaireIdentity);
 
-
                 invitationService.StartEmailDistribution();
-                CancellationToken cancellationToken = invitationService.GetCancellationToken() ?? throw new Exception("Cancellation token was requested for not started process");
+                var cancellationToken = invitationService.GetCancellationToken();
                 var sw = new Stopwatch();
                 sw.Start();
 
@@ -55,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate);
 
-                var surveyName = "Hello World Survey";
+                var surveyName = status.QuestionnaireTitle;
 
                 foreach (var invitationId in invitationIdsToSend)
                 {
@@ -65,48 +63,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var password = invitation.Assignment.Password;
                     var address = invitation.Assignment.Email;
 
-                    var link = "https://hell0.world";
+                    var link = $"{status.BaseUrl}/{invitation.Token}/Start";
 
                     var hasPassword = !string.IsNullOrWhiteSpace(password);
-                    if (!hasPassword && emailTemplate.HasPassword)
-                    {
-                        // can't be sent
-                        invitationService.InvitationWasNotSent(invitationId, "Assignment doesn't have password, but template requires password");
-                        continue;
-                    }
 
-                    if (hasPassword && !emailTemplate.HasPassword)
-                    {
-                        // can't be sent
-                        invitationService.InvitationWasNotSent(invitationId, "Assignment has password, but template doesn't %PASSWORD%.");
-                        continue;
-                    }
-
-                    var email = UserEmail.FromTemplate(emailTemplate)
+                    var email = PersonalizedWebInterviewEmail.FromTemplate(emailTemplate)
                         .SubstitutePassword(password)
                         .SubstituteLink(link)
                         .SubstituteSurveyName(surveyName);
                     
                     try
                     {
-                        var emailId = emailService.SendEmailAsync(address, email.Subject, email.Message, email.Message).Result;
+                        var emailId = emailService.SendEmailAsync(address, email.Subject, 
+                            hasPassword ? email.MessageWithPasswordHtml : email.MessageHtml, 
+                            hasPassword ? email.MessageWithPassword : email.Message).Result;
                         invitationService.MarkInvitationAsSent(invitationId, emailId);
                     }
                     catch (EmailServiceException e)
                     {
-                        invitationService.InvitationWasNotSent(invitationId, e.Message);
+                        invitationService.InvitationWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                     }
                 }
                
                 sw.Stop();
                 
-                invitationService.StopEmailDistribution();
+                invitationService.CompleteEmailDistribution();
 
                 this.logger.Debug($"Invitations distribution job: Finished. Elapsed time: {sw.Elapsed}");
             }
             catch (OperationCanceledException)
             {
-                invitationService.EmailDistributionFailed();
+                invitationService.EmailDistributionCanceled();
                 this.logger.Error($"Invitations distribution job: CANCELED.");
             }
             catch (Exception ex)
@@ -114,7 +101,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 invitationService.EmailDistributionFailed();
                 this.logger.Error($"Invitations distribution job: FAILED. Reason: {ex.Message} ", ex);
             }
-
         }
     }
 

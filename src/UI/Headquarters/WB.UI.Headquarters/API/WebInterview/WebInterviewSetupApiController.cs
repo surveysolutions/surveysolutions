@@ -1,4 +1,12 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http;
+using CsvHelper;
+using CsvHelper.Configuration;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -8,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
@@ -27,6 +36,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IAssignmentsService assignmentsService;
         private readonly IInvitationService invitationService;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
+        private readonly IArchiveUtils archiveUtils;
         
 
         public WebInterviewSetupApiController(
@@ -36,14 +46,15 @@ namespace WB.UI.Headquarters.API.WebInterview
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IAssignmentsService assignmentsService,
             IInvitationService invitationService, 
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, 
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage) : base(commandService, logger)
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
+            IArchiveUtils archiveUtils) : base(commandService, logger)
         {
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.assignmentsService = assignmentsService;
             this.invitationService = invitationService;
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
+            this.archiveUtils = archiveUtils;
         }
 
         [HttpGet]
@@ -67,6 +78,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var totalAssignmentsCount = assignmentsService.GetCountOfAssignments(questionnaireIdentity);
             var totalInvitationsCount = invitationService.GetCountOfInvitations(questionnaireIdentity);
             var notSentInvitationsCount = invitationService.GetCountOfNotSentInvitations(questionnaireIdentity);
+            var sentInvitationsCount = invitationService.GetCountOfSentInvitations(questionnaireIdentity);
 
             return Ok(new
             {
@@ -77,6 +89,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 TotalAssignmentsCount = totalAssignmentsCount,
                 TotalInvitationsCount = totalInvitationsCount,
                 NotSentInvitationsCount = notSentInvitationsCount,
+                SentInvitationsCount = sentInvitationsCount,
                 EmailProvider = emailProviderSettings?.Provider ?? EmailProvider.None,
                 Status = status
             });
@@ -102,6 +115,40 @@ namespace WB.UI.Headquarters.API.WebInterview
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version),
                 Status = status
             });
+        }
+
+        [HttpGet]
+        public HttpResponseMessage ExportInvitationErrors()
+        {
+            InvitationDistributionStatus status = this.invitationService.GetEmailDistributionStatus();
+            if (status == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            using (MemoryStream resultStream = new MemoryStream())
+            using (var streamWriter = new StreamWriter(resultStream))
+            using (var csvWriter = new CsvWriter(streamWriter, new Configuration{Delimiter = "\t"}))
+            {
+                csvWriter.WriteHeader<InvitationSendError>();
+
+                csvWriter.NextRecord();
+                csvWriter.WriteRecords(status.Errors);
+                csvWriter.Flush();
+                streamWriter.Flush();
+
+                var response = this.Request.CreateResponse(HttpStatusCode.OK);
+                resultStream.Seek(0, SeekOrigin.Begin);
+
+                response.Content = new ByteArrayContent(archiveUtils.CompressStream(resultStream,"notSentInvitations.tab"));
+
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "notSentInvitations.zip"
+                };
+
+                return response;
+            }
         }
 
         [HttpPost]

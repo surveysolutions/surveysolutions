@@ -85,7 +85,7 @@ export default {
                 self.totalAssignmentsCount = invitationsInfo.totalAssignmentsCount || 0,
                 self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
                 self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
-                self.sentInvitationsCount = self.totalInvitationsCount - self.notSentInvitationsCount;
+                self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0;
                 self.emailProvider = (invitationsInfo.emailProvider || "").toLocaleLowerCase()
             })
             .catch(function (error) { 

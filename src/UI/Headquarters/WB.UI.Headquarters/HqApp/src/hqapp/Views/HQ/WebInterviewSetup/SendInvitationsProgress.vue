@@ -16,16 +16,38 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block preloading-done-with-errors active-preloading">
+                <div class="import-progress">
+                    
+                </div> 
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-7 col-xs-12">
                 <div class="import-progress">
-                    <p>{{totalCount}} invitations to send.</p>
+                    <p v-if="isQueued" class="default-text">Preparing</p>
+                    <p v-if="isInProgress">Sending</p>
+                    <p v-if="isDone">Done</p>
+                    <p v-if="isFailed" class="error-text">The process failed. Please report to support@mysurvey.solutions</p>
+                    <p v-if="isCanceled" class="error-text">The process was cancelled</p>
+                    <p v-if="isInProgress || isQueued">{{totalCount}} invitations to send.</p>
                     <p v-if="processedCount == 0" class="default-text">None were sent.</p>
                     <p v-else class="success-text">{{processedCount}} sent successfully.</p>
                     <p v-if="withErrorsCount == 0" class="default-text">None failed</p>
                     <p v-else class="error-text">{{withErrorsCount}} not sent because of errors.</p>
-                </div> 
+                    <p v-if="isStopped && withErrorsCount > 0">
+                        <a :href="exportErrorsLink" target="_blank">Download list of assignments with errors</a>
+                    </p>
+                </div>
+                <div class="cancelable-progress" v-if="isInProgress">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: overallProgressPercent + '%' }">
+                            <span class="sr-only">{{overallProgressPercent}}%</span>
+                        </div>
+                    </div>
+                    <button class="btn  btn-link" type="button" @click="cancel">Cancel</button>
+                </div>
                 <div class="col-sm-7 col-xs-12 action-buttons">
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">Cancel</a>  
                     <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
                 </div> 
             </div>
@@ -55,7 +77,18 @@ export default {
         }, 3000);
     },
     computed:{
-        
+        isQueued() { return this.status === 'Queued'; },
+        isInProgress() { return  this.status === 'InProgress'; },
+        isDone() { return  this.status === 'Done'; },
+        isFailed() { return  this.status === 'Failed'; },
+        isCanceled() { return  this.status === 'Canceled'; },
+        isStopped() { return this.isDone || this.isFailed || this.isCanceled; },
+        overallProgressPercent() {
+            return Math.round((this.processedCount * 100) / this.totalCount);
+        },
+        exportErrorsLink(){
+            return this.$config.model.api.exportErrors;
+        }
     },
     methods: {
         updateStatus(){
@@ -77,8 +110,9 @@ export default {
                 });
         },
         cancel(){
+            var self = this;
             self.$store.dispatch("showProgress");
-            this.$http.post(`${this.$config.model.stopUrl}/${this.processId}`).then(function (response) {
+            this.$http.post(this.$config.model.api.cancelUrl).then(function (response) {
                 self.$store.dispatch("hideProgress");
             });
         }
