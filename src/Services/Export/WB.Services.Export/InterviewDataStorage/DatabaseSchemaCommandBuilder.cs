@@ -21,23 +21,23 @@ namespace WB.Services.Export.InterviewDataStorage
             }
 
             sb.AppendLine($"PRIMARY KEY ({string.Join(" , ", columns.Where(c => c.IsPrimaryKey).Select(c => $"\"{c.Name}\""))})");
-            sb.AppendLine(")");
+            sb.AppendLine(");");
             return sb.ToString();
         }
 
         public string GenerateCreateSchema(string schemaName)
         {
-            return $"CREATE SCHEMA IF NOT EXISTS \"{schemaName}\"";
+            return $"CREATE SCHEMA IF NOT EXISTS \"{schemaName}\";";
         }
 
         public string GenerateDropTable(string tableName)
         {
-            return $"DROP TABLE IF EXISTS \"{tableName}\" CASCADE ";
+            return $"DROP TABLE IF EXISTS \"{tableName}\" CASCADE;";
         }
 
         public string GenerateDropSchema(string schemaName)
         {
-            return $@"drop schema if exists ""{schemaName}""";
+            return $@"drop schema if exists ""{schemaName}"";";
         }
     }
 }

@@ -10,4 +10,4 @@
 "audio_q" jsonb  NULL ,
 "multimedia_q" jsonb  NULL ,
 PRIMARY KEY ("interview_id" , "roster_vector")
-)
+);
