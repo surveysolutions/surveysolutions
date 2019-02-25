@@ -237,7 +237,7 @@
                             <div class="collapsed-content text-email">
 
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="presentation">
+                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
                                         <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.title }}</a>
                                     </li>
                                 </ul>
@@ -250,13 +250,13 @@
                                                 <div class="h5">{{emailTemplate.title}}</div>
                                                 <div class="form-group">
                                                     <div class="field">
-                                                        <input type="text" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
+                                                        <input type="text" v-model="emailTemplate.subject" class="form-control with-clear-btn" placeholder="Please enter the subject" value="Invitation to participate in data collection for WHO">
                                                         <button type="button" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="form-actions hidden">
+                                                <div class="form-actions">
                                                     <button type="submit" class="btn btn-success btn-sm">save</button>
                                                     <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
                                                 </div>
@@ -264,7 +264,7 @@
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div  id="invitation-message">
-                                                    <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.text" :id="'txt' + emailTemplate.value"></vue-editor>
+                                                    <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.message" :id="'message' + emailTemplate.value"></vue-editor>
 
                                                     <!--p>Dear respondent!</p>
                                                     <p>
@@ -275,7 +275,7 @@
                                                         Thank you!
                                                     </p-->
                                                 </div>
-                                                <div class="form-actions hidden">
+                                                <div class="form-actions">
                                                     <button type="submit" class="btn btn-success btn-sm">save</button>
                                                     <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
                                                 </div>
@@ -517,15 +517,18 @@ export default {
   mounted() {
     var self = this;
     this.emailTemplates = _.map(
-      this.$config.model.emailTemplates,
-      (option, index) => {
-        var defaultText = self.$config.model.definedEmailTemplates[option.key];
+      this.$config.model.defaultEmailTemplates,
+      (value, key) => {
+        var defaultEmailTemplate = value;
+        var custom = self.$config.model.emailTemplates[key];
+        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
+        var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message
         return {
-          value: option.key,
-          title: option.title,
-          subject: !_.isNil(option.subject) && option.subject !== "" ? option.subject : defaultText.subject,
-          message: !_.isNil(option.message) && option.message !== "" ? option.message : defaultText.message,
-          isActive: index === 0
+          value: key,
+          title: defaultEmailTemplate.title,
+          subject: subject,
+          message: message,
+          isActive: key === "invitationTemplate"
         };
       }
     );

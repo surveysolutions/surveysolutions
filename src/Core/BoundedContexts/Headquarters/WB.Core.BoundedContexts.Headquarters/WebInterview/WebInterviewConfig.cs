@@ -38,6 +38,25 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Subject, Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Message) },
             { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Subject, Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Message) }
         };
+
+        public int ReminderAfterDaysIfNoResponse { get; set; }
+        public int ReminderAfterDaysIfPartialResponse { get; set; }
+
+        public string GetEmailSubject(EmailTextTemplateType type)
+        {
+            if (EmailTemplates.ContainsKey(type))
+                return EmailTemplates[type].Subject;
+
+            return DefaultEmailTemplates[type].Subject;
+        }
+
+        public string GetEmailMessage(EmailTextTemplateType type)
+        {
+            if (EmailTemplates.ContainsKey(type))
+                return EmailTemplates[type].Message;
+
+            return DefaultEmailTemplates[type].Message;
+        }
     }
 
     public class EmailTextTemplate
@@ -50,14 +69,14 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             Message = message;
         }
 
-        public string Title { get; set; } = "title";
+        public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
     }
 
     public enum EmailTextTemplateType
     {
-        InvitationTemplate = 1,
+        InvitationTemplate,
         Reminder_NoResponse,
         Reminder_PartialResponse,
         RejectEmail,
