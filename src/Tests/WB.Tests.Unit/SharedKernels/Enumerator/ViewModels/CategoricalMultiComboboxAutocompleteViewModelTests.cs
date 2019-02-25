@@ -9,11 +9,11 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
-    [TestOf(typeof(CategoricalMultiComboboxAutocompleteViewModel))]
-    public class CategoricalMultiComboboxAutocompleteViewModelTests: MvxIoCSupportingTest
+    [TestOf(typeof(CategoricalComboboxAutocompleteViewModel))]
+    public class CategoricalComboboxAutocompleteViewModelTests : MvxIoCSupportingTest
     {
 
-        public CategoricalMultiComboboxAutocompleteViewModelTests() => base.Setup();
+        public CategoricalComboboxAutocompleteViewModelTests() => base.Setup();
 
         [Test]
         public void when_FilterCommand_then_AutoCompleteSuggestions_should_contains_filtered_options_only()
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = SetUp.StatefulInterview(questionnaire);
             var excludedOptions = new[] { 1 };
             var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
-            var vm = Create.ViewModel.CategoricalMultiComboboxAutocompleteViewModel(filteredViewModel);
+            var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             // act
             vm.FilterCommand.Execute("2");
             // assert
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = SetUp.StatefulInterview(questionnaire);
             var excludedOptions = new[] {1};
             var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
-            var vm = Create.ViewModel.CategoricalMultiComboboxAutocompleteViewModel(filteredViewModel);
+            var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             vm.ExcludeOptions(excludedOptions);
             // act
             vm.FilterCommand.Execute("1");
@@ -84,9 +84,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
 
             var mockOfOnAddEvent = new Mock<EventHandler<int>>();
-            var vm = Create.ViewModel.CategoricalMultiComboboxAutocompleteViewModel(filteredViewModel);
+            var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             
-            vm.OnAddOption += mockOfOnAddEvent.Object;
+            vm.OnItemSelected += mockOfOnAddEvent.Object;
             vm.FilterCommand.Execute("2");
 
             // act
