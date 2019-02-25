@@ -94,6 +94,37 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.Questionnaires)]
+        [HttpPost]
+        [ActionName("SendInvitations")]
+        public ActionResult SendInvitationsPost(string id)
+        {
+            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
+            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.Started)
+            {
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name);
+            }
+            sendInvitationsTask.Run();
+            return RedirectToAction("EmailDistributionProgress");
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult EmailDistributionProgress()
+        {
+            var progress = this.invitationService.GetEmailDistributionStatus();
+            if (progress == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(new EmailDistributionProgressModel { Api = new
+            {
+                StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
+                CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
+                SurveySetupUrl = Url.Action("Index", "SurveySetup")
+            }});
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Settings(string id)
         {
             if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
@@ -188,24 +219,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return new HttpStatusCodeResult(200);
         }
-
-        [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult EmailDistributionProgress()
-        {
-            var progress = this.invitationService.GetEmailDistributionStatus();
-            if (progress == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(new EmailDistributionProgressModel { Api = new
-            {
-                StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
-                CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
-                SurveySetupUrl = Url.Action("Index", "SurveySetup")
-            }});
-        }
-
 
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Start(string id)
