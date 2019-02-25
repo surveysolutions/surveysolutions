@@ -15,29 +15,35 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public abstract class BaseFilteredQuestionViewModel : MvxNotifyPropertyChanged,
+    public abstract class BaseComboboxQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>, 
-        ICompositeQuestion, 
+        ILiteEventHandler<AnswersRemoved>,
+        ICompositeQuestionWithChildren,
         IDisposable
     {
         protected const int SuggestionsMaxCount = 50;
+        protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         protected readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
-        protected BaseFilteredQuestionViewModel(
+        protected CategoricalComboboxAutocompleteViewModel comboboxViewModel;
+        protected CovariantObservableCollection<ICompositeEntity> comboboxCollection = new CovariantObservableCollection<ICompositeEntity>();
+
+        protected BaseComboboxQuestionViewModel(
             IPrincipal principal,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IStatefulInterviewRepository interviewRepository,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            FilteredOptionsViewModel filteredOptionsViewModel)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -46,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.InstructionViewModel = instructionViewModel;
+            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
         protected Guid interviewId;
@@ -76,14 +83,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
-        public IMvxAsyncCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOptionAsync);
         public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
-
-        protected abstract IEnumerable<CategoricalOption> GetSuggestions(string filter);
-        protected abstract CategoricalOption GetAnsweredOption(int answer);
-        protected abstract CategoricalOption GetOptionByFilter(string filter);
+       
         protected virtual void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState) { }
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -98,33 +100,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ((QuestionStateViewModel<SingleOptionQuestionAnswered>)this.QuestionState).Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
 
+            this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
+            this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
+
             this.Initialize(interviewId, entityIdentity, navigationState);
+
             Task.Run(this.SetAnswerAndUpdateFilter).WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
-        }
-
-        private IEnumerable<OptionWithSearchTerm> GetFilteredSuggestions(string filter)
-        {
-            foreach (var model in this.GetSuggestions(filter))
-            {
-                if (model.Title.IsNullOrEmpty())
-                    continue;
-
-                yield return new OptionWithSearchTerm
-                {
-                    Value = model.Value,
-                    Title = model.Title,
-                    SearchTerm = filter
-                };
-            }
         }
 
         private void ShowErrorIfNoAnswer()
         {
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
-            var selectedOption = this.GetOptionByFilter(this.FilterText);
+            var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault();
 
             if (selectedOption != null) return;
 
@@ -132,11 +122,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
         }
 
-        private async Task SaveAnswerBySelectedOptionAsync(OptionWithSearchTerm option)
+        protected async Task SetAnswerAndUpdateFilter()
         {
-            await this.UpdateFilterAndSuggestionsAsync(option.Title);
-            await this.SaveAnswerAsync(option.Value);
+            var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.Identity);
+
+            this.Answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
+
+            if (!singleOptionQuestion.IsAnswered())
+                await this.comboboxViewModel.UpdateFilter(string.Empty);
+            else
+                await this.comboboxViewModel.UpdateFilter(this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value).Title);
         }
+
 
         protected virtual async Task SaveAnswerAsync(int optionValue)
         {
@@ -171,27 +168,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task UpdateFilterAndSaveIfExactMatchWithAnyOptionAsync(string filter)
+        
+        protected async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
-            await this.UpdateFilterAndSuggestionsAsync(filter);
-
-            if (string.IsNullOrEmpty(filter) && this.Answer != null)
-                await this.RemoveAnswerAsync();
-            else
-            {
-                var selectedOption = this.GetOptionByFilter(filter);
-                if (selectedOption != null) await this.SaveAnswerAsync(selectedOption.Value);
-            }
-            
+            await SaveAnswerAsync(selectedOptionCode);
         }
 
-        protected async Task UpdateFilterAndSuggestionsAsync(string filter)
+        protected async void ComboboxInstantViewModel_OnAnswerRemoved(object sender, EventArgs e)
         {
-            this.FilterText = filter;
-            this.AutoCompleteSuggestions = await Task.Run(() => this.GetFilteredSuggestions(filter).ToList());
+            await RemoveAnswerAsync();
         }
 
-        private async Task RemoveAnswerAsync()
+        protected async Task RemoveAnswerAsync()
         {
             try
             {
@@ -208,23 +196,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        protected async Task SetAnswerAndUpdateFilter()
-        {
-            var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.Identity);
 
-            this.Answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
-
-            if (!singleOptionQuestion.IsAnswered())
-                await this.UpdateFilterAndSuggestionsAsync(string.Empty);
-            else
-                await this.UpdateFilterAndSuggestionsAsync(this.GetAnsweredOption(this.Answer.Value).Title);
-        }
-
+        
         public void Handle(AnswersRemoved @event)
         {
             if (!@event.Questions.Contains(this.Identity)) return;
 
-            this.InvokeOnMainThread(async () => await this.SetAnswerAndUpdateFilter());
+            this.InvokeOnMainThread(async () =>
+            {
+                if (comboboxViewModel != null) await comboboxViewModel?.UpdateFilter(null);
+            });
         }
 
         public virtual void Dispose()
@@ -232,5 +213,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
         }
+
+        protected OptionBorderViewModel optionsTopBorderViewModel;
+        protected OptionBorderViewModel optionsBottomBorderViewModel;
+
+        public abstract IObservableCollection<ICompositeEntity> Children { get; }
     }
 }

@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public virtual event EventHandler OptionsChanged;
 
+        public int? ParentValue { set; get; }
+
         private Identity questionIdentity;
 
         private class CategoricalOptionEqualityComparer : IEqualityComparer<CategoricalOption>
@@ -66,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
             {
-                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, null, Filter, this.Count);
+                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count);
             }
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
@@ -79,13 +81,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual List<CategoricalOption> GetOptions(string filter = "")
         {
             this.Filter = filter;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, null, filter, this.Count).ToList();
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count).ToList();
             return Options;
         }
 
+        public virtual CategoricalOption GetAnsweredOption(int answer)
+            => this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, answer, ParentValue);
+
+
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, null, Filter, Count)
+            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count)
                                 .ToList();
 
             var listOfNewOptions = newOptions.ToList();
