@@ -129,10 +129,48 @@ namespace WB.UI.Headquarters.Controllers
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             model.DefinedTexts = config.CustomMessages;
 
-            model.EmailTemplates = config.EmailTemplates;
-            model.DefaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates;
+            model.EmailTemplates = config.EmailTemplates.ToDictionary(t => t.Key, t =>
+                new EmailTextTemplateViewModel()
+                {
+                    Subject = t.Value.Subject,
+                    Message = t.Value.Message
+                }); ;
+            model.DefaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates.ToDictionary(t => t.Key, t => 
+                new EmailTextTemplateViewModel()
+                {
+                    ShortTitle = GetShortTitleForEmailTemplateGroup(t.Key),
+                    Title = GetTitleForEmailTemplateGroup(t.Key),
+                    Subject = t.Value.Subject,
+                    Message = t.Value.Message
+                });
 
             return View(model);
+        }
+
+        private static string GetTitleForEmailTemplateGroup(EmailTextTemplateType type)
+        {
+            switch (type)
+            {
+                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.ExampleInvitationEmailMessage;
+                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
+                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
+                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.ExampleRejectEmailMessage;
+                default:
+                    throw new ArgumentException("Unknown email template type "+ type.ToString());
+            }
+        }
+
+        private static string GetShortTitleForEmailTemplateGroup(EmailTextTemplateType type)
+        {
+            switch (type)
+            {
+                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.InvitationEmailMessage;
+                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
+                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
+                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
+                default:
+                    throw new ArgumentException("Unknown email template type "+ type.ToString());
+            }
         }
 
         [HttpPost]
@@ -311,9 +349,17 @@ namespace WB.UI.Headquarters.Controllers
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefinedTexts { get; set; }
-        public Dictionary<EmailTextTemplateType, EmailTextTemplate> EmailTemplates { get; set; }
-        public Dictionary<EmailTextTemplateType, EmailTextTemplate> DefaultEmailTemplates { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> EmailTemplates { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> DefaultEmailTemplates { get; set; }
         public string DownloadAssignmentsUrl { get; set; }
         public string UpdateTextsUrl { get; set; }
+    }
+
+    public class EmailTextTemplateViewModel
+    {
+        public string ShortTitle { get; set; }
+        public string Title { get; set; }
+        public string Subject { get; set; }
+        public string Message { get; set; }
     }
 }

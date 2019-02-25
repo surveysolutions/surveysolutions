@@ -69,7 +69,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             Message = message;
         }
 
-        public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
     }
