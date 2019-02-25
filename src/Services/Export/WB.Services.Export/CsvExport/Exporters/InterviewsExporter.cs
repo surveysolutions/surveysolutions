@@ -136,7 +136,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIds = batch.Select(b => b.Id).ToArray();
                
-                var interviewEntities = this.interviewFactory.GetInterviewEntities(tenant, interviewIds, questionnaire);
+                var interviewEntities = this.interviewFactory.GetInterviewEntities(interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
                 
                 Parallel.ForEach(batch, interviewToExport =>

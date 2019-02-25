@@ -61,7 +61,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewFactory = new Mock<IInterviewFactory>();
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
-            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null,  null))
+            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null,  null))
                 .Returns(new List<InterviewEntity>());
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
