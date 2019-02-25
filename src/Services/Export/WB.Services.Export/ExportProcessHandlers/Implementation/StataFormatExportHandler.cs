@@ -20,7 +20,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             ITabularFormatExportService tabularFormatExportService,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
@@ -33,7 +33,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.STATA;
 
-        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override async Task ExportDataIntoDirectory(ExportSettings settings, ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
@@ -46,11 +46,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         }
 
         private async Task CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
-            IProgress<int> progress, CancellationToken cancellationToken)
+            ExportProgress progress, CancellationToken cancellationToken)
         {
-            var exportProgress = new Progress<int>();
+            var exportProgress = new ExportProgress();
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(50 + (donePercent / 2));
+                (sender, donePercent) => progress.Report(50 + (donePercent.Percent / 2), donePercent.Eta);
 
             await tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
                  tenant,

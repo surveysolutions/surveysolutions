@@ -1,0 +1,1 @@
+﻿DELETE FROM "questionnaireVariable$17_roster1" WHERE  (interview__id = @interviewId1 AND roster__vector = @rosterVector1) ;DELETE FROM "questionnaireVariable$17_roster1-e" WHERE  (interview__id = @interviewId3 AND roster__vector = @rosterVector3) ;DELETE FROM "questionnaireVariable$17_roster1-v" WHERE  (interview__id = @interviewId5 AND roster__vector = @rosterVector5) ;

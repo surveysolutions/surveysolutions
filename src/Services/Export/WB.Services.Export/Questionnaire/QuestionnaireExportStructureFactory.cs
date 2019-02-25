@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire.Services;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Questionnaire
@@ -15,19 +13,17 @@ namespace WB.Services.Export.Questionnaire
     public class QuestionnaireExportStructureFactory : IQuestionnaireExportStructureFactory
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
-        private readonly IMemoryCache cache;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnaireExportStructureFactory(IMemoryCache cache, IQuestionnaireStorage questionnaireStorage)
+        public QuestionnaireExportStructureFactory(IQuestionnaireStorage questionnaireStorage)
         {
-            this.cache = cache;
             this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
             QuestionnaireId questionnaireId)
         {
-            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(questionnaireId);
             if (questionnaire == null) return null;
             return CreateQuestionnaireExportStructure(questionnaire);
         }

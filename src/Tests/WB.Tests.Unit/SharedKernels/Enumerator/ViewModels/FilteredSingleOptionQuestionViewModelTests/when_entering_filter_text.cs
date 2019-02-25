@@ -65,9 +65,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
         [NUnit.Framework.Test] public void should_suggestions_list_contains_only_items_after_filtering_text () 
         {
-            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "<b>a</b>bc");
-            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "b<b>a</b>c");
-            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "bb<b>a</b>");
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i.Title == "abc");
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i.Title == "bac");
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i.Title == "bba");
         }
 
         static FilteredSingleOptionQuestionViewModel viewModel;

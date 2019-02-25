@@ -4,6 +4,7 @@ import Vue from "vue"
 
 Vue.component("Audio",              () => import(/* webpackChunkName: "questions" */"./Audio"))
 Vue.component("CategoricalMulti",   () => import(/* webpackChunkName: "questions" */"./CategoricalMulti"))
+Vue.component("MultiCombobox",      () => import(/* webpackChunkName: "questions" */"./MultiCombobox"))
 Vue.component("CategoricalSingle",  () => import(/* webpackChunkName: "questions" */"./CategoricalSingle"))
 Vue.component("CategoricalYesNo",   () => import(/* webpackChunkName: "questions" */"./CategoricalYesNo"))
 Vue.component("Combobox",           () => import(/* webpackChunkName: "questions" */"./Combobox"))

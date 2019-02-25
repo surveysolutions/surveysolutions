@@ -6,6 +6,10 @@
       <WBVersionInfoFile>$([MSBuild]::GetPathOfFileAbove('.version', '$(MSBuildThisFileDirectory)../'))</WBVersionInfoFile>
       <ProductVersion>$([System.IO.File]::ReadAllText($(WBVersionInfoFile)))</ProductVersion>
 
+      <!-- Extending Product Version with 0 if needed -->
+      <_productVersionHas3Parts>$([System.Text.RegularExpressions.Regex]::Match($(ProductVersion),'\d+\.\d+\.\d+').Success)</_productVersionHas3Parts>
+      <ProductVersion Condition="'$(_productVersionHas3Parts)' == 'False'">$(ProductVersion).0</ProductVersion>
+
       <!-- Setting default build number to zero for local dev builds -->
       <BuildNumber Condition="'$(BuildNumber)' == ''">42</BuildNumber>
       
@@ -17,6 +21,8 @@
 
       <!-- Combine version property. Leaving clean version for release branch -->
       <Version>$(ProductVersion)-$(CleanSuffix).$(BuildNumber)</Version>
+
+      <!-- On local dev PC export service has `-dev` suffix -->
       <Version Condition=" '$(CleanSuffix)' == '' ">$(ProductVersion)-dev.$(BuildNumber)</Version>
       <Version Condition=" '$(CleanSuffix)' == 'release' ">$(ProductVersion).$(BuildNumber)</Version>
       <FileVersion>$(ProductVersion).$(BuildNumber)</FileVersion>

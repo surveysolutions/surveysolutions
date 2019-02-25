@@ -82,6 +82,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -791,7 +792,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
             Translation translation = null, 
-            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
+            ISubstitutionService substitutionService = null, 
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
@@ -1131,7 +1133,8 @@ namespace WB.Tests.Abc.TestFactories
             bool? isFilteredCombobox = null,
             string optionsFilterExpression = null,
             List<Answer> answers = null,
-            bool isPrefilled = false)
+            bool isPrefilled = false,
+            int? showAsListThreshold = null)
         {
             answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Entity.Answer(a.ToString(), a)).ToList();
             if (parentCodes != null)
@@ -1160,7 +1163,9 @@ namespace WB.Tests.Abc.TestFactories
                 Properties = new QuestionProperties(false, false)
                 {
                     OptionsFilterExpression = optionsFilterExpression
-                }
+                },
+                ShowAsList = showAsListThreshold.HasValue,
+                ShowAsListThreshold = showAsListThreshold
             };
         }
 
@@ -2402,5 +2407,11 @@ namespace WB.Tests.Abc.TestFactories
                 Idenifying = idenifying
             };
         }
+
+        public OptionWithSearchTerm OptionWithSearchTerm(int value, string title = null) => new OptionWithSearchTerm
+        {
+            Value = value,
+            Title = title
+        };
     }
 }

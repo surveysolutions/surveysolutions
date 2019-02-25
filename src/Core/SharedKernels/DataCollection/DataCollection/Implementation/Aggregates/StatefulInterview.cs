@@ -259,6 +259,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeTextQuestion();
         public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionQuestion();
         public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeYesNoQuestion();
+        public InterviewTreeCascadingQuestion GetCascadingQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeCascadingQuestion();
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionLinkedToListQuestion();
         public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAudioQuestion();
@@ -775,6 +776,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
+
+        public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
+        {
+            var question = this.GetCascadingQuestion(questionIdentity);
+            if (question == null)
+                return false;
+            var parentQuestion = question.GetCascadingParentQuestion();
+            if (!parentQuestion.IsAnswered())
+                return false;
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var optionsCount =  questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null).Take(threshold + 1).Count();
+
+            if (optionsCount > threshold)
+                return true;
+            return false;
+        }
 
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithoutFilter(question, value, parentQuestionValue);

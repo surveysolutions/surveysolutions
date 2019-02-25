@@ -48,6 +48,18 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
+
         public string Instructions { get; set; }
+
+        private string columnName;
+        public string ColumnName
+        {
+            get
+            {
+                if (columnName != null) return columnName;
+                columnName = this.VariableName.ToLower();
+                return columnName;
+            }
+        }
     }
 }

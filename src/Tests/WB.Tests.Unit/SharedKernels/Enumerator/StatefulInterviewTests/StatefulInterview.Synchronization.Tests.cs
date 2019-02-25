@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal partial class StatefullInterviewTests
+    internal partial class StatefulInterviewTests
     {
         [Test]
         public void When_unanswered_question_has_comment_Should_add_to_comments_of_question()

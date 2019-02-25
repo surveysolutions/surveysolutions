@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal partial class StatefullInterviewTests
+    internal partial class StatefulInterviewTests
     {
         [Test]
         public void When_compliete_interview_with_yes_no_protected_question_on_tablet_Should_not_exists_new_protected_events()

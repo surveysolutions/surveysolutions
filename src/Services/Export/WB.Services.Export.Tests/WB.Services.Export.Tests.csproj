@@ -16,10 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ApprovalTests" Version="3.0.19" />
+    <PackageReference Include="AutoBogus" Version="2.2.1" />
+    <PackageReference Include="Bogus" Version="25.0.4" />
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.2" />
 
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
 
@@ -41,6 +45,10 @@
     <Reference Include="StatData">
       <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,1 @@
+﻿INSERT INTO "questionnaireVariable$17" (interview__id) VALUES  (@interviewId1) ON CONFLICT DO NOTHING;INSERT INTO "questionnaireVariable$17-e" (interview__id) VALUES  (@interviewId2) ON CONFLICT DO NOTHING;INSERT INTO "questionnaireVariable$17-v" (interview__id) VALUES  (@interviewId3) ON CONFLICT DO NOTHING;
