@@ -23,7 +23,6 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Tests.EventsProcessorTests;
 using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
@@ -440,7 +439,7 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<ITenantContext>(), Create.TenantDbContext());
+            return new InterviewFactory(Create.HeadquartersApi(), Create.TenantDbContext());
         }
 
         public static TenantDbContext TenantDbContext(string databaseName = null)
