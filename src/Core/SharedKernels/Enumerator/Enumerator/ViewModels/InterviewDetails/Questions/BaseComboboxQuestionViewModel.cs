@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -65,17 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; }
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
-        private string filterText;
-        public string FilterText
-        {
-            get => this.filterText;
-            set
-            {
-                this.filterText = value;
-                this.RaisePropertyChanged();
-            }
-        }
-
+        
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
         {
@@ -84,8 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
-        public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand(this.ShowErrorIfNoAnswer);
-       
+        
         protected virtual void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState) { }
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -104,37 +90,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
 
             this.Initialize(interviewId, entityIdentity, navigationState);
-
-            Task.Run(this.SetAnswerAndUpdateFilter).WaitAndUnwrapException();
-
+            
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private void ShowErrorIfNoAnswer()
-        {
-            if (string.IsNullOrEmpty(this.FilterText)) return;
-
-            var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault();
-
-            if (selectedOption != null) return;
-
-            var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
-            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
-        }
-
-        protected async Task SetAnswerAndUpdateFilter()
-        {
-            var singleOptionQuestion = this.interview.GetSingleOptionQuestion(this.Identity);
-
-            this.Answer = singleOptionQuestion.GetAnswer()?.SelectedValue;
-
-            if (!singleOptionQuestion.IsAnswered())
-                await this.comboboxViewModel.UpdateFilter(string.Empty);
-            else
-                await this.comboboxViewModel.UpdateFilter(this.filteredOptionsViewModel.GetAnsweredOption(this.Answer.Value).Title);
-        }
-
-
+        
         protected virtual async Task SaveAnswerAsync(int optionValue)
         {
             //if app crashed and automatically restored 
@@ -195,8 +155,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(exception);
             }
         }
-
-
         
         public void Handle(AnswersRemoved @event)
         {
