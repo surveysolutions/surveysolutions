@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.invitationService.GetEmailDistributionStatus();
 
-            if ((status?.Status ?? InvitationProcessStatus.NotStarted) == InvitationProcessStatus.Started)
+            if ((status?.Status ?? InvitationProcessStatus.Queued) == InvitationProcessStatus.InProgress)
             {
                 return RedirectToAction(nameof(EmailDistributionProgress), new { questionnaireId = id });
             }
@@ -99,10 +99,19 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SendInvitationsPost(string id)
         {
             QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
-            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.Started)
+
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
+            if (questionnaire == null)
             {
-                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name);
+                return this.HttpNotFound();
             }
+
+            var baseUrl = this.Url.Content("~/WebInterview");
+            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
+            {
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, baseUrl, questionnaire.Title);
+            }
+
             sendInvitationsTask.Run();
             return RedirectToAction("EmailDistributionProgress");
         }
@@ -120,6 +129,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
                 CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
+                ExportErrors = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "ExportInvitationErrors" }),
                 SurveySetupUrl = Url.Action("Index", "SurveySetup")
             }});
         }

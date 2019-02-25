@@ -241,6 +241,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
+            assignment.UpdatePassword(assignmentToImport.Password);
+            assignment.UpdateEmail(assignmentToImport.Email);
 
             this.assignmentsStorage.Store(assignment, null);
 
