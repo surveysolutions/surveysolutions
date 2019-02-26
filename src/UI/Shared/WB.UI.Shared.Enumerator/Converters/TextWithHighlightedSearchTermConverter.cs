@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
 using MvvmCross.Converters;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
@@ -17,30 +13,14 @@ namespace WB.UI.Shared.Enumerator.Converters
             var searchTerm = (string) parameter;
             if (string.IsNullOrEmpty(searchTerm)) return value;
 
-            var allIndexesOfSearchTerms = value.AllIndexesOf(searchTerm).ToArray();
-            if (!allIndexesOfSearchTerms.Any()) return value;
-
-            var valueWithHighlightedSearchTerms = string.Empty;
-            var prevIndexOfSearchTermEntry = -1;
-
-            foreach (var indexOfSearchTermEntry in allIndexesOfSearchTerms)
+            var lastIndex = value.LastIndexOf(searchTerm, StringComparison.OrdinalIgnoreCase);
+            while (lastIndex >= 0)
             {
-                var substringToHighlight = value.Substring(indexOfSearchTermEntry, searchTerm.Length);
-
-                if (prevIndexOfSearchTermEntry == -1 && indexOfSearchTermEntry > 0)
-                    valueWithHighlightedSearchTerms += value.Substring(0, indexOfSearchTermEntry);
-                else if(prevIndexOfSearchTermEntry > -1 && prevIndexOfSearchTermEntry + searchTerm.Length < indexOfSearchTermEntry)
-                    valueWithHighlightedSearchTerms += value.Substring(prevIndexOfSearchTermEntry + searchTerm.Length, indexOfSearchTermEntry + 1);
-
-                valueWithHighlightedSearchTerms += $"<b>{substringToHighlight}</b>";
-
-                prevIndexOfSearchTermEntry = indexOfSearchTermEntry;
+                value = value.Insert(lastIndex + searchTerm.Length, "</b>").Insert(lastIndex, "<b>");
+                lastIndex = value.LastIndexOf(searchTerm, lastIndex, StringComparison.OrdinalIgnoreCase);
             }
 
-            if(prevIndexOfSearchTermEntry + searchTerm.Length < value.Length)
-                valueWithHighlightedSearchTerms += value.Substring(prevIndexOfSearchTermEntry + searchTerm.Length, value.Length - prevIndexOfSearchTermEntry - searchTerm.Length);
-
-            return valueWithHighlightedSearchTerms;
+            return value;
         }
     }
 }
