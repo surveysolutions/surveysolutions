@@ -18,8 +18,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CategoricalMultiViewModel : CategoricalMultiViewModelBase<int, int>,
         ILiteEventHandler<MultipleOptionsQuestionAnswered>
     {
-        private readonly IUserInteractionService userInteraction;
-        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
+        protected readonly IUserInteractionService userInteraction;
+        protected readonly FilteredOptionsViewModel filteredOptionsViewModel;
 
         public CategoricalMultiViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -60,12 +60,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(this.Identity.Id);
 
-            this.filteredOptionsViewModel.Init(interview.Id.FormatGuid(), this.Identity, 200);
+            this.filteredOptionsViewModel.Init(interview.Id.FormatGuid(), this.Identity);
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
 
-        private int[] selectedOptionsToSave;
-        private bool isRosterSizeQuestion;
+        protected int[] selectedOptionsToSave;
+        protected bool isRosterSizeQuestion;
         
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<int>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => x.Value).ToArray();
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected override int[] GetAnsweredOptionsFromInterview(IStatefulInterview interview) 
             => interview.GetMultiOptionQuestion(this.Identity).GetAnswer()?.CheckedValues?.ToArray();
         
-        public void Handle(MultipleOptionsQuestionAnswered @event)
+        public virtual void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 

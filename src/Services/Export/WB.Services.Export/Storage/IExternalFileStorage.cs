@@ -15,8 +15,8 @@ namespace WB.Services.Export.Storage
 
         Task RemoveAsync(string path);
 
-        Task<FileObject> StoreAsync(string path, byte[] data, string contentType, IProgress<int> progress = null);
-        Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
+        Task<FileObject> StoreAsync(string path, byte[] data, string contentType, ExportProgress progress = null);
+        Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, ExportProgress progress = null);
 
         Task<FileObject> GetObjectMetadataAsync(string key);
         Task<bool> IsExistAsync(string path);

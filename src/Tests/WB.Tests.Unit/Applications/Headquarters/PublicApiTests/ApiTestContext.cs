@@ -98,7 +98,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static AttachmentsApiV2Controller CreateAttachmentsApiV2Controller(
             IAttachmentContentService attachmentContentService)
         {
-            return new AttachmentsApiV2Controller(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+            var res = new AttachmentsApiV2Controller(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+            res.Request = new HttpRequestMessage();
+            return res;
         }
 
         protected static QuestionnairesApiV2Controller CreateQuestionnairesApiV2Controller(

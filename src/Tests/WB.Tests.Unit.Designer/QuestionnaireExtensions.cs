@@ -69,15 +69,32 @@ namespace WB.Tests.Unit.Designer
             int? maxAllowedAnswers = null,
             bool yesNoView = false,
             string optionsFilterExpression = null,
-            string linkedFilterExpression = null)
+            string linkedFilterExpression = null,
+            bool isFilteredCombobox = false)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             var questionProperties = Create.QuestionProperties();
             questionProperties.OptionsFilterExpression = optionsFilterExpression;
-            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, false, instructions, responsibleId, 
-                options ?? new Option[2] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"} },
-                linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView, 
-                new List<ValidationCondition>(), linkedFilterExpression: linkedFilterExpression, properties: questionProperties);
+            var command = Create.Command.UpdateMultiOptionQuestion(
+                questionId,
+                responsibleId,
+                title,
+                variableName,
+                variableLabel,
+                enablementCondition,
+                instructions,
+                validationExpression,
+                validationMessage,
+                scope,
+                options,
+                linkedToQuestionId,
+                areAnswersOrdered,
+                maxAllowedAnswers,
+                yesNoView,
+                linkedFilterExpression,
+                isFilteredCombobox);
+            command.Properties = questionProperties;
+            questionnaire.UpdateMultiOptionQuestion(command);
         }
 
         public static void AddSingleOptionQuestion(
@@ -97,16 +114,41 @@ namespace WB.Tests.Unit.Designer
             string instructions = null,
             Guid? linkedToQuestionId = null,
             bool isFilteredCombobox = false,
-            Guid? cascadeFromQuestionId = null)
+            Guid? cascadeFromQuestionId = null,
+            bool showAsList = false,
+            int? showAsListThreshold = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
 
             var optionsList = options ?? new Option[] { new Option { Title = "one", Value = "1" }, new Option { Title = "two", Value = "2" } };
 
-            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, 
-                responsibleId, optionsList,
-                linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+            questionnaire.UpdateSingleOptionQuestion(
+                new UpdateSingleOptionQuestion(
+                        questionnaireId: questionnaire.Id,
+                        questionId: questionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = title,
+                            VariableName = variableName,
+                            VariableLabel = null,
+                            EnablementCondition = enablementCondition,
+                            Instructions = instructions,
+                            HideIfDisabled = false
+                        },
+
+                        isPreFilled: isPreFilled,
+                        scope: scope,
+                        responsibleId: responsibleId,
+                        options: options,
+                        linkedToEntityId: linkedToQuestionId,
+                        isFilteredCombobox: isFilteredCombobox,
+                        cascadeFromQuestionId: cascadeFromQuestionId,
+                        validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                        linkedFilterExpression: null,
+                        validationExpression: null,
+                        validationMessage: null,
+                        showAsList: showAsList,
+                        showAsListThreshold: showAsListThreshold));
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {

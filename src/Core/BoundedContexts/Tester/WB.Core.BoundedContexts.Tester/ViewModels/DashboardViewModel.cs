@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
@@ -16,7 +15,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -33,6 +31,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         private QuestionnaireDownloadViewModel QuestionnaireDownloader { get; }
+        private QuestionnairesType showedQuestionnairesType = QuestionnairesType.My;
 
         public DashboardViewModel(
             IPrincipal principal,
@@ -62,15 +61,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
-            {
-#pragma warning disable 4014 // we want fire and forget action here
                 Task.Run(this.LoadServerQuestionnairesAsync);
-#pragma warning restore 4014
-            }
             else
-            {
-                this.SearchByLocalQuestionnaires();
-            }
+                this.SearchByLocalQuestionnaires(QuestionnairesType.My);
 
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
@@ -80,145 +73,160 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
        
-        private void SearchByLocalQuestionnaires(string searchTerm = null)
+        private void SearchByLocalQuestionnaires(QuestionnairesType type, string searchTerm = null)
         {
-            var trimmedSearchText = (searchTerm ?? "").Trim();
+            this.showedQuestionnairesType = type;
 
-            if (searchTerm == "crash")
-            {
-                throw new InvalidOperationException("KABOOOOOOM");
-            }
-            bool EmptyFilter(QuestionnaireListItem x) => true;
+            var filteredBySearchTerm = this.localQuestionnaires.Where(x => this.HasSearchTerm(searchTerm, x)).ToArray();
 
-            bool TitleSearchFilter(QuestionnaireListItem x) => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Title, trimmedSearchText, CompareOptions.IgnoreCase) >= 0 || (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));
+            this.MyQuestionnairesCount = filteredBySearchTerm.Count(x => x.IsOwner);
+            this.PublicQuestionnairesCount = filteredBySearchTerm.Count(x => x.IsPublic);
+            this.SharedWithMeCount = filteredBySearchTerm.Count(x => x.IsShared);
 
-            Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
-                ? (Func<QuestionnaireListItem, bool>) EmptyFilter
-                : TitleSearchFilter;
-
-            var myQuestionnaires = this.localQuestionnaires
-                .Where(questionnaire =>
-                    searchFilter(questionnaire)
-                    &&
-                    (
-                        questionnaire.IsOwner || questionnaire.IsShared
-                    ))
-                .ToList();
-
-            var publicQuestionnaires = this.localQuestionnaires
-                .Where(questionnaire => searchFilter(questionnaire) && questionnaire.IsPublic)
-                .ToList();
-
-            var selectedQuestionnaires = this.IsPublicShowed ? publicQuestionnaires : myQuestionnaires;
-
-            this.MyQuestionnairesCount = myQuestionnaires.Count;
-            this.PublicQuestionnairesCount = publicQuestionnaires.Count;
-
-            this.IsListEmpty = !selectedQuestionnaires.Any();
-
-            this.Questionnaires = selectedQuestionnaires
-                .Select(questionnaire => ToDashboardQuestionnaire(questionnaire, searchTerm))
+            this.Questionnaires = filteredBySearchTerm
+                .Where(this.FilterByType)
+                .Select(x => ToViewModel(x, searchTerm))
                 .OrderByDescending(questionnaire => questionnaire.LastEntryDate)
                 .ToList();
+
+            this.IsListEmpty = !this.Questionnaires.Any();
+        }
+
+        private QuestionnaireListItemViewModel ToViewModel(QuestionnaireListItem item, string searchTerm) =>
+            new QuestionnaireListItemViewModel
+            {
+                Id = item.Id,
+                Title = item.Title,
+                LastEntryDate = item.LastEntryDate,
+                OwnerName = item.OwnerName,
+                IsOwner = item.IsOwner,
+                IsPublic = item.IsPublic,
+                IsShared = item.IsShared,
+                SearchTerm = searchTerm,
+                Type = this.showedQuestionnairesType
+            };
+
+        private bool FilterByType(QuestionnaireListItem x)
+        {
+            switch (this.showedQuestionnairesType)
+            {
+                case QuestionnairesType.My when !x.IsOwner:
+                case QuestionnairesType.SharedWithMe when !x.IsShared:
+                case QuestionnairesType.Public when !x.IsPublic:
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool HasSearchTerm(string searchTerm, QuestionnaireListItem x)
+        {
+            if (string.IsNullOrEmpty(searchTerm)) return true;
+
+            var titleHasSearchTerm = CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Title, searchTerm, CompareOptions.IgnoreCase) >= 0;
+            var ownerNameHasSearchTerm = x.OwnerName?.Contains(searchTerm) ?? false;
+
+            return titleHasSearchTerm || ownerNameHasSearchTerm;
         }
 
         private string humanizedLastUpdateDate;
         public string HumanizedLastUpdateDate
         {
-            get { return this.humanizedLastUpdateDate; }
-            set { this.humanizedLastUpdateDate = value; RaisePropertyChanged(); }
+            get => this.humanizedLastUpdateDate;
+            set => this.SetProperty(ref this.humanizedLastUpdateDate, value);
         }
 
-        private IList<QuestionnaireListItem> questionnaires = new List<QuestionnaireListItem>();
-        public IList<QuestionnaireListItem> Questionnaires
+        private IList<QuestionnaireListItemViewModel> questionnaires = new List<QuestionnaireListItemViewModel>();
+        public IList<QuestionnaireListItemViewModel> Questionnaires
         {
-            get { return this.questionnaires; }
-            set { this.questionnaires = value; RaisePropertyChanged(); }
+            get => this.questionnaires;
+            set => this.SetProperty(ref this.questionnaires, value);
         }
 
         private bool showEmptyQuestionnaireListText;
         public bool ShowEmptyQuestionnaireListText
         {
-            get { return this.showEmptyQuestionnaireListText; }
-            set { this.showEmptyQuestionnaireListText = value; RaisePropertyChanged(); }
+            get => this.showEmptyQuestionnaireListText;
+            set => this.SetProperty(ref this.showEmptyQuestionnaireListText, value);
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return isInProgress; }
-            set { isInProgress = value; RaisePropertyChanged(); }
+            get => isInProgress;
+            set => this.SetProperty(ref this.isInProgress, value);
         }
 
         private string progressIndicator;
         public string ProgressIndicator
         {
-            get { return progressIndicator; }
-            set { progressIndicator = value; RaisePropertyChanged(); }
+            get => progressIndicator;
+            set => this.SetProperty(ref this.progressIndicator, value);
         }
 
         private int myQuestionnairesCount;
         public int MyQuestionnairesCount
         {
-            get { return myQuestionnairesCount; }
-            set { myQuestionnairesCount = value; RaisePropertyChanged(); }
+            get => myQuestionnairesCount;
+            set => this.SetProperty(ref this.myQuestionnairesCount, value);
         }
 
         private int publicQuestionnairesCount;
         public int PublicQuestionnairesCount
         {
-            get { return publicQuestionnairesCount; }
-            set { publicQuestionnairesCount = value; RaisePropertyChanged(); }
+            get => publicQuestionnairesCount;
+            set => this.SetProperty(ref this.publicQuestionnairesCount, value);
         }
 
-        private bool isPublicShowed;
-        public bool IsPublicShowed
+        private int sharedWithMeCount;
+        public int SharedWithMeCount
         {
-            get { return isPublicShowed; }
-            set { isPublicShowed = value; RaisePropertyChanged(); }
+            get => sharedWithMeCount;
+            set => this.SetProperty(ref this.sharedWithMeCount, value);
         }
 
         private bool isSearchVisible;
         public bool IsSearchVisible
         {
-            get { return isSearchVisible; }
-            set { isSearchVisible = value; RaisePropertyChanged(); }
+            get => isSearchVisible;
+            set => this.SetProperty(ref this.isSearchVisible, value);
         }
 
+        private bool isListEmpty;
         public bool IsListEmpty
         {
-            get { return this.isListEmpty; }
-            set { this.isListEmpty = value; RaisePropertyChanged(); }
+            get => this.isListEmpty;
+            set => this.SetProperty(ref this.isListEmpty, value);
         }
-        
-        public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
-
-        public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
-
-        public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
-
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
-
-        private IMvxAsyncCommand<QuestionnaireListItem> loadQuestionnaireCommand;
-
-        public IMvxAsyncCommand<QuestionnaireListItem> LoadQuestionnaireCommand => 
-            this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
-            = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
-
-
-        public IMvxAsyncCommand RefreshQuestionnairesCommand => new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress);
-        
-        public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
-        public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
 
         private string searchText;
         public string SearchText
         {
-            get { return this.searchText; }
-            set { this.searchText = value; RaisePropertyChanged(); }
+            get => this.searchText;
+            set => this.SetProperty(ref this.searchText, value);
         }
 
-        private bool isListEmpty;
+        public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
+
+        public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
+
+        public IMvxCommand SearchCommand => new MvxCommand<string>(x =>
+            this.SearchByLocalQuestionnaires(this.showedQuestionnairesType, x));
+
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
+
+        public IMvxAsyncCommand<QuestionnaireListItemViewModel> LoadQuestionnaireCommand =>
+            new MvxAsyncCommand<QuestionnaireListItemViewModel>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress);
+
+        public IMvxAsyncCommand RefreshQuestionnairesCommand => new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress);
+
+        public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(() =>
+            this.SearchByLocalQuestionnaires(QuestionnairesType.My, this.SearchText));
+
+        public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(() =>
+            this.SearchByLocalQuestionnaires(QuestionnairesType.Public, this.SearchText));
+        public IMvxCommand ShowSharedWithMeCommand => new MvxCommand(() =>
+            this.SearchByLocalQuestionnaires(QuestionnairesType.SharedWithMe, this.SearchText));
 
         private void ShowSearch()
         {
@@ -240,21 +248,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        private void ShowPublicQuestionnaires()
-        {
-            this.IsPublicShowed = true;
 
-            this.SearchByLocalQuestionnaires(this.SearchText);
-        }
-
-        private void ShowMyQuestionnaires()
-        {
-            this.IsPublicShowed = false;
-
-            this.SearchByLocalQuestionnaires(this.SearchText);
-        }
-
-        private async Task LoadQuestionnaireAsync(QuestionnaireListItem questionnaireListItem)
+        private async Task LoadQuestionnaireAsync(QuestionnaireListItemViewModel questionnaireListItem)
         {
             if (this.IsInProgress) return;
 
@@ -298,7 +293,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     LastUpdateDate = lastUpdateDate
                 });
 
-                this.SearchByLocalQuestionnaires();
+                this.SearchByLocalQuestionnaires(this.showedQuestionnairesType);
             }
             catch (RestException ex)
             {
@@ -326,37 +321,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
                 ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow, culture: CultureInfo.InvariantCulture))
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
-        }
-
-        private QuestionnaireListItem ToDashboardQuestionnaire(QuestionnaireListItem x, string searchTerm)
-        {
-            return new QuestionnaireListItem
-                   {
-                       Id = x.Id,
-                       IsPublic = this.IsPublicShowed,
-                       LastEntryDate = x.LastEntryDate,
-                       OwnerName = x.OwnerName,
-                       Title = ToDashboardTitle(x.Title, searchTerm)
-            };
-        }
-
-        private static string ToDashboardTitle(string questionnaireTitle, string searchTerm)
-        {
-            if (string.IsNullOrEmpty(searchTerm)) return questionnaireTitle;
-
-            var index = CultureInfo.CurrentCulture.CompareInfo.IndexOf(questionnaireTitle, searchTerm, CompareOptions.IgnoreCase);
-
-            string title;
-            if (index >= 0)
-            {
-                var substringToHightlight =  questionnaireTitle.Substring(index, searchTerm.Length);
-                title = Regex.Replace(questionnaireTitle, Regex.Escape(searchTerm), "<b>" + substringToHightlight + "</b>", RegexOptions.IgnoreCase);
-            }
-            else
-            {
-                title = questionnaireTitle;
-            }
-            return title;
         }
 
         public void CancelLoadServerQuestionnaires()

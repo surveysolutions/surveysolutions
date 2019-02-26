@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -98,7 +100,10 @@ namespace WB.Tests.Abc.TestFactories
             Guid? supervisorId = null,
             QuestionnaireDocument questionnaire = null, 
             bool shouldBeInitialized = true,
-            Action<Mock<IInterviewLevel>> setupLevel = null)
+            Action<Mock<IInterviewLevel>> setupLevel = null,
+            List<InterviewAnswer> answers = null,
+            List<string> protectedAnswers = null,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             questionnaireId = questionnaireId ?? questionnaire?.PublicKey ?? Guid.NewGuid();
             if (questionnaire != null)
@@ -111,7 +116,12 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
             }
 
-            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
+            var questionOptionsRepository = optionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            var plainQuestionnaire = Create.Entity.PlainQuestionnaire(
+                questionnaire ?? Create.Entity.QuestionnaireDocumentWithOneQuestion(), 1,
+                questionOptionsRepository: questionOptionsRepository);
+
+            var questionnaireRepository = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(plainQuestionnaire, questionnaire ?? 
                 Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
             var serviceLocator = new Mock<IServiceLocator>();
@@ -121,8 +131,7 @@ namespace WB.Tests.Abc.TestFactories
             serviceLocator.Setup(x => x.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(CreateDefaultInterviewExpressionStateProvider(setupLevel));
 
-            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>())
-                .Returns(Mock.Of<IQuestionOptionsRepository>);
+            serviceLocator.Setup(x => x.GetInstance<IQuestionOptionsRepository>()).Returns(questionOptionsRepository);
 
 
             var statefulInterview = new StatefulInterview(
@@ -134,7 +143,7 @@ namespace WB.Tests.Abc.TestFactories
             if (shouldBeInitialized)
             {
                 var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1),
-                    supervisorId ?? Guid.NewGuid(), InterviewKey.Parse("11-11-11-11"), null, null);
+                    supervisorId ?? Guid.NewGuid(), InterviewKey.Parse("11-11-11-11"), null, answers, protectedAnswers);
                 statefulInterview.CreateInterview(command);
             }
 

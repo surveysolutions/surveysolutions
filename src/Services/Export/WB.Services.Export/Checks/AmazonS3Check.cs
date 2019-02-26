@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Checks
 {
@@ -19,17 +20,15 @@ namespace WB.Services.Export.Checks
             this.amazonS3Settings = amazonS3Settings.Value;
         }
 
-        public async Task<bool> CheckAsync()
+        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
         {
             await amazonS3.ListObjectsV2Async(new ListObjectsV2Request
             {
                 BucketName = amazonS3Settings.BucketName,
                 MaxKeys = 1
-            });
+            }, cancellationToken);
 
-            return true;
+            return HealthCheckResult.Healthy();
         }
-
-        public string Name => "Amazon S3 Configuration";
     }
 }

@@ -202,13 +202,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswerWithTimeStamp>(
                 $@"with interviews as(
-                    select entityid, interviewid, latitude, longitude, timestamp, status
+                    select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
                     from
                         (
                             select
                                 i.entityid,
                                 s.interviewid,
                                 s.status,
+                                e.featured as idenifying,
                                 (i.asgps ->> 'Latitude')::float8 as latitude,
                                 (i.asgps ->> 'Longitude')::float8 as longitude,
                                 (i.asgps ->> 'Timestamp') as timestamp
@@ -225,7 +226,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                 and e.question_scope = 0
                         ) as q
                 ) 
-                select entityid, interviewid, latitude, longitude, timestamp, status
+                select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
                 from   interviews;",
                 new
                 {
@@ -394,15 +395,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Write(item.InvalidValidations?.Length > 0 ? string.Join("-", item.InvalidValidations) : null);
                     Write(item.WarningValidations?.Length > 0 ? string.Join("-", item.WarningValidations) : null);
                     Write(item.AsString);
-                    Write(item.AsInt);
-                    Write(item.AsLong);
-                    Write(item.AsDouble);
-                    Write(item.AsDateTime);
+                    if (item.AsInt != null) importer.Write(item.AsInt.Value); else importer.WriteNull();
+                    if (item.AsLong != null) importer.Write(item.AsLong.Value); else importer.WriteNull();
+                    if (item.AsDouble != null) importer.Write(item.AsDouble.Value); else importer.WriteNull();
+                    if (item.AsDateTime != null) importer.Write(item.AsDateTime.Value); else importer.WriteNull();
                     WriteJson(item.AsList);
                     Write(item.AsIntArray);
                     WriteJson(item.AsIntMatrix);
                     WriteJson(item.AsGps);
-                    Write(item.AsBool);
+                    if (item.AsBool != null) importer.Write(item.AsBool.Value); else importer.WriteNull();
                     WriteJson(item.AsYesNo);
                     WriteJson(item.AsAudio);
                     WriteJson(item.AsArea);
@@ -410,8 +411,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                     void Write<T>(T value)
                     {
-                        if (value == null) importer.WriteNull();
-                        else importer.Write(value);
+                        if (value == null) importer.WriteNull(); else importer.Write(value);
                     }
 
                     void WriteJson<T>(T value)
@@ -420,6 +420,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         else importer.Write(JsonConvert.SerializeObject(value), NpgsqlDbType.Jsonb);
                     }
                 }
+
+                importer.Complete();
             }
 
             conn.Execute($"DO $$ BEGIN PERFORM readside.update_report_table_data({interview.id}); END $$;");

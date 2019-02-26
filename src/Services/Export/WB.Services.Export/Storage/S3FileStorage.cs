@@ -136,7 +136,7 @@ namespace WB.Services.Export.Storage
             return client.GetPreSignedURL(preSignedUrlRequest);
         }
 
-        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
+        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, ExportProgress progress = null)
         {
             try
             {
@@ -208,7 +208,7 @@ namespace WB.Services.Export.Storage
             return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, IProgress<int> progress = null)
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, ExportProgress progress = null)
         {
             using (var ms = new MemoryStream(data))
             {

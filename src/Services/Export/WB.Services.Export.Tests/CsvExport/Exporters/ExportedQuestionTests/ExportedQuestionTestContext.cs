@@ -17,8 +17,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
             object value,
             string[] columnNames = null,
             QuestionSubtype ? questionSubType = null,
-            bool isDisabled = false
-            )
+            bool isDisabled = false,
+            QuestionnaireDocument questionnaire = null)
         {
             InterviewEntity interviewQuestion = new InterviewEntity
             {
@@ -53,7 +53,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                     interviewQuestion.AsString = (string) value;
                     break;
                 case QuestionType.SingleOption:
-                    interviewQuestion.AsString = (string) value;
+                    interviewQuestion.AsInt = (int?) value;
                     break;
                 case QuestionType.GpsCoordinates:
                     interviewQuestion.AsGps = (GeoPosition) value;
@@ -75,7 +75,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 ColumnHeaders = Create.ColumnHeaders(columnNames),
                 ColumnValues = columnValues,
             };
-            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
+            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem, questionnaire);
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,

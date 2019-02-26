@@ -129,12 +129,6 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Mis cuestionarios</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Cuestionarios públicos</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Cuestionarios</value>
   </data>

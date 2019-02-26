@@ -150,6 +150,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize);
 
+        bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity question, int threshold);
+
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);

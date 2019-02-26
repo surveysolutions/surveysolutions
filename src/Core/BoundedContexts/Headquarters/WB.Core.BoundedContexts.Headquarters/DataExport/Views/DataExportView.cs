@@ -1,5 +1,8 @@
-﻿using System;
+using System;
+using Humanizer;
+using Humanizer.Localisation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
@@ -18,5 +21,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public int ProgressInPercents { get; set; }
         public string DataExportProcessId { get; set; }
         public DataExportStatus StatusOfLatestExportProcess { get; set; }
+        public TimeSpan? TimeEstimation { get; set; }
+        
+        public string TimeLeft
+        {
+            get
+            {
+                if (TimeEstimation == null || TimeEstimation.Value.TotalSeconds < 1)
+                {
+                    return string.Empty;
+                }
+
+                return Report.TimeLeft + ": " + TimeEstimation.Value.Humanize(2, minUnit: TimeUnit.Second);
+            }
+        }
     }
 }

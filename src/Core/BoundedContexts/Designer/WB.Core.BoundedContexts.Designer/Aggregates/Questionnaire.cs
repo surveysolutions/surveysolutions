@@ -873,7 +873,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: null,
                 maxAnswerCount: null,
                 linkedFilterExpression: null,
-                isTimestamp: false);
+                isTimestamp: false,
+                showAsList:null,
+                showAsListThreshold: null);
 
             this.innerDocument.Add(question, command.ParentGroupId);
             
@@ -948,7 +950,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null, null, null,
                         command.ValidationConditions,
                         null,
-                        false);
+                        false,
+                        null,
+                        null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -990,7 +994,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null, null, null, null,
                         command.ValidationConditions,
                         null,
-                        false);
+                        false,
+                        null,
+                        null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1031,21 +1037,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null, null, null, null, null,null, null, null, null, null, null,null,
                 command.ValidationConditions,
                 null,
-                command.IsTimestamp);
+                command.IsTimestamp,
+                null,
+                null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
 
-        public void UpdateMultiOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, QuestionScope scope, string enablementCondition,
-            bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool areAnswersOrdered, int? maxAllowedAnswers, 
-            bool yesNoView, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
+        public void UpdateMultiOptionQuestion(UpdateMultiOptionQuestion command)
         {
-            PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            var title = command.Title;
+            var variableName = command.VariableName;
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            PrepareGeneralProperties(ref title, ref variableName);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
+
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
             {
@@ -1055,34 +1064,39 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
-            this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
+            this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
 
-            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            IQuestion newQuestion = CreateQuestion(questionId,
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(
+                command.QuestionId,
                 QuestionType.MultyOption,
-                scope,
+                command.Scope,
                 title,
                 variableName,
-                variableLabel,
-                enablementCondition,
-                hideIfDisabled,
-                null, false, 
-                instructions,
-                properties,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
+                null, false,
+                command.Instructions,
+                command.Properties,
                 null,
-                ConvertOptionsToAnswers(options),
+                ConvertOptionsToAnswers(command.Options),
                 linkedQuestionId,
                 linkedRosterId,
                 null,
                 null,
-                areAnswersOrdered,
-                maxAllowedAnswers,
-                null, null, null,
-                yesNoView,
-                validationConditions,
-                linkedFilterExpression,
-                false);
+                command.AreAnswersOrdered,
+                command.MaxAllowedAnswers,
+                null,
+                command.IsFilteredCombobox, 
+                null,
+                command.YesNoView,
+                command.ValidationConditions,
+                command.LinkedFilterExpression,
+                false,
+                null,
+                null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
             
@@ -1090,69 +1104,72 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: SingleOption command handlers
 
-        public void UpdateSingleOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope,
-            string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool isFilteredCombobox, 
-            Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
+        public void UpdateSingleOptionQuestion(UpdateSingleOptionQuestion command)
         {
             Answer[] answers;
 
-            if (options == null && (isFilteredCombobox || cascadeFromQuestionId.HasValue))
+            if (command.Options == null && (command.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue))
             {
-                IQuestion originalQuestion = this.GetQuestion(questionId);
+                IQuestion originalQuestion = this.GetQuestion(command.QuestionId);
                 answers = originalQuestion.Answers.ToArray();                
             }
             else
             {
-                answers = ConvertOptionsToAnswers(options);                
+                answers = ConvertOptionsToAnswers(command.Options);                
             }
 
+            var title = command.Title;
+            var variableName = command.VariableName;
+
             PrepareGeneralProperties(ref title, ref variableName);
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
             
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
 
-            if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
+            if (command.IsFilteredCombobox || command.CascadeFromQuestionId.HasValue)
             {
-                var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+                var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
                 answers = categoricalOneAnswerQuestion?.Answers.ToArray();
             }
 
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
-            this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
+            this.ExtractLinkedQuestionValues(command.LinkedToEntityId, out linkedQuestionId, out linkedRosterId);
 
-            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            IQuestion newQuestion = CreateQuestion(questionId,
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            IQuestion newQuestion = CreateQuestion(command.QuestionId,
                 QuestionType.SingleOption,
-                scope,
+                command.Scope,
                 title,
                 variableName,
-                variableLabel,
-                enablementCondition,
-                hideIfDisabled,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
                 null,
-                isPreFilled,
-                instructions,
-                properties,
+                command.IsPreFilled,
+                command.Instructions,
+                command.Properties,
                 null,
                 answers,
                 linkedQuestionId,
                 linkedRosterId,
                 null, null, null, null, null,
-                isFilteredCombobox,
-                cascadeFromQuestionId,
+                command.IsFilteredCombobox,
+                command.CascadeFromQuestionId,
                 null,
-                validationConditions,
-                linkedFilterExpression,
-                false);
+                command.ValidationConditions,
+                command.LinkedFilterExpression,
+                false,
+                showAsList:command.ShowAsList,
+                showAsListThreshold: command.ShowAsListThreshold);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1197,7 +1214,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoricalOneAnswerQuestion.ValidationConditions,
                 null,
-                false);
+                false,
+                null,
+                null);
 
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
@@ -1207,7 +1226,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId);
 
-            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<ICategoricalQuestion>(questionId);
             IQuestion newQuestion = CreateQuestion(questionId,
                 categoricalOneAnswerQuestion.QuestionType,
                 categoricalOneAnswerQuestion.QuestionScope,
@@ -1230,7 +1249,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoricalOneAnswerQuestion.ValidationConditions,
                 null,
-                false);
+                false,
+                null,
+                null);
 
             this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
         }
@@ -1267,7 +1288,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 categoricalOneAnswerQuestion.ValidationConditions,
                 null,
-                false);
+                false,
+                categoricalOneAnswerQuestion.ShowAsList,
+                categoricalOneAnswerQuestion.ShowAsListThreshold);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1319,7 +1342,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 command.ValidationConditions,
                 null,
-                false);
+                false,
+                null,
+                null);
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
         }
@@ -1369,7 +1394,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     command.ValidationConditions,
                     null,
-                    false);
+                    false,
+                    null,
+                    null);
 
             if (question != null)
             {
@@ -1423,7 +1450,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     command.ValidationConditions,
                     null,
-                    false);
+                    false,
+                    null,
+                    null);
 
             if (question != null)
             {
@@ -1477,7 +1506,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 new List<ValidationCondition>(),
                 null,
-                false);
+                false,
+                null,
+                null);
 
             if (question != null)
             {
@@ -1531,7 +1562,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 null,
                 new List<ValidationCondition>(),
                 null,
-                false);
+                false,
+                null,
+                null);
             newQuestion.IsSignature = command.IsSignature;
             if (question != null)
             {
@@ -1573,7 +1606,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,null,null,
                     command.ValidationConditions,
                     null,
-                    false);
+                    false,
+                    null,
+                    null);
 
             if (question != null)
             {
@@ -2102,7 +2137,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId)
         {
-            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
+            var categoricalOneAnswerQuestion = this.innerDocument.Find<ICategoricalQuestion>(questionId);
             if (categoricalOneAnswerQuestion == null)
             {
                 throw new QuestionnaireException(
@@ -2278,7 +2313,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int? countOfDecimalPlaces, bool? areAnswersOrdered, int? maxAllowedAnswers,
             int? maxAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             bool? yesNoView, IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression, bool isTimestamp)
+            string linkedFilterExpression, bool isTimestamp,
+            bool? showAsList, int? showAsListThreshold)
         {
             AbstractQuestion question;
 
@@ -2294,7 +2330,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
                 case QuestionType.SingleOption:
-                    question = new SingleQuestion();
+                    question = new SingleQuestion()
+                    {
+                        ShowAsList = showAsList ?? false,
+                        ShowAsListThreshold = showAsListThreshold
+                    };
+
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
 

@@ -7,7 +7,10 @@
                     <div class="page-header clearfix" v-if="hasHeader">
                         <div :class="{'neighbor-block-to-search': hasSearch}">
                             <slot name="headers">
-                                <h1>{{title}}</h1>
+                                <div :class="{'topic-with-button': topicButtonRef}">
+                                    <h1>{{title}}</h1>
+                                    <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">{{ topicButton }} </a>
+                                </div>
                                 <i v-if="subtitle">{{ subtitle }}</i>
                             </slot>
                             <slot name="subtitle" />
@@ -43,7 +46,9 @@ export default {
         hasSearch: {
             type: Boolean,
             default() { return false; }
-        }
+        },
+        topicButton: String,
+        topicButtonRef: String
     },
     watch: {
         showProgress: function (value) {

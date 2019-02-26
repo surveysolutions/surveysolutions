@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
@@ -45,18 +46,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToInterviewerApp))
-            };
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = RESPONSEAPPLICATIONFILENAME
-            };
-
-            return response;
+            return this.AsProgressiveDownload(this.fileSystemAccessor.ReadFile(pathToInterviewerApp),
+                @"application/vnd.android.package-archive",
+                RESPONSEAPPLICATIONFILENAME);
         }
 
         [HttpGet]

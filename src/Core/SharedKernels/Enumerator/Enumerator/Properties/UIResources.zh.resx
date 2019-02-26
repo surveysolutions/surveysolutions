@@ -189,12 +189,6 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>我的问卷</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>公开问卷</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>问卷</value>
   </data>

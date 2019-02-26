@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class FilteredSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel
+    public class FilteredSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel
     {
-        private readonly FilteredOptionsViewModel filteredOptionsViewModel;
-
         public FilteredSingleOptionQuestionViewModel(
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
@@ -22,32 +20,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
-                instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, eventRegistry: eventRegistry)
+                instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
-            this.filteredOptionsViewModel = filteredOptionsViewModel;
         }
 
-        protected override void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            base.Init(interviewId, entityIdentity, navigationState);
+
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
+
+            SetAnswerAndUpdateFilter();
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => this.SetAnswerAndUpdateFilter();
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
+            comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
 
-        protected override IEnumerable<CategoricalOption> GetSuggestions(string filter) 
-            => this.filteredOptionsViewModel.GetOptions(filter);
-
-        protected override CategoricalOption GetAnsweredOption(int answer)
-            => this.interview.GetOptionForQuestionWithoutFilter(this.Identity, answer);
-        protected override CategoricalOption GetOptionByFilter(string filter)
-            => this.interview.GetOptionForQuestionWithFilter(this.Identity, filter);
-
+        
         public override void Dispose()
         {
             base.Dispose();
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
+        }
+        
+        public override IObservableCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                
+                result.Add(this.optionsTopBorderViewModel);
+                result.AddCollection(comboboxCollection);
+                result.Add(this.optionsBottomBorderViewModel);
+
+                return result;
+            }
         }
     }
 }
