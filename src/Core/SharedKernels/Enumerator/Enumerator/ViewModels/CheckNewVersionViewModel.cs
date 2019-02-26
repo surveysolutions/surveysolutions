@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private bool isVersionCheckInProgress;
         private bool isNewVersionAvaliable;
         private string checkNewVersionResult;
+        private string checkNewVersionDetails;
 
         public CheckNewVersionViewModel(
             ISynchronizationService synchronizationService, 
@@ -56,6 +58,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => this.RaiseAndSetIfChanged( ref this.checkNewVersionResult, value);
         }
 
+        public string CheckNewVersionDetails
+        {
+            get => this.checkNewVersionDetails;
+            set => this.RaiseAndSetIfChanged( ref this.checkNewVersionDetails, value);
+        }
+
         public string Version { get; set; }
 
         public IMvxAsyncCommand CheckVersionCommand => new MvxAsyncCommand(this.CheckVersion);
@@ -71,6 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsNewVersionAvaliable = false;
             this.IsVersionCheckInProgress = true;
             this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
+            this.CheckNewVersionDetails = string.Empty;
             try
             {
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
@@ -80,9 +89,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     {
                         this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
+
+                        var bytesReceived = progress.BytesReceived.Bytes().Humanize("0.00");
+                        var total = progress.TotalBytesToReceive.HasValue
+                            ? progress.TotalBytesToReceive.Value.Bytes().Humanize("0.00")
+                            : "N/A";
+
+                        var speed = progress.Speed.HasValue
+                            ? progress.Speed.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00")
+                            : "N/A";
+
+                        this.CheckNewVersionDetails = $"{bytesReceived}/{total} @ {speed}";
                     }));
 
                 this.CheckNewVersionResult = null;
+                this.checkNewVersionDetails = string.Empty;
             }
             catch (Exception) when (cancellationTokenSource.IsCancellationRequested)
             {
@@ -93,6 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.logger.Error("Error when updating", ex);
                 this.CheckNewVersionResult = ex.Message;
             }
+
+            this.checkNewVersionDetails = string.Empty;
             this.IsVersionCheckInProgress = false;
         }
 

@@ -25,7 +25,6 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             string mailLevelFileName = "main level.tab";
             string nestedRosterFileName = "nested roster level.tab";
-            string fileNameExported = "main level.sav";
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(
                 CreateHeaderStructureForLevel("main level"),
@@ -52,7 +51,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             //act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                     Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] {mailLevelFileName, nestedRosterFileName},
-                    new Progress<int>(), CancellationToken.None);
+                    new ExportProgress(), CancellationToken.None);
 
            //Assert
             datasetWriter.Verify(
@@ -65,10 +64,8 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
         {
             TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            long questionnaireVersion = 3;
             string mailLevelFileName = "main level.tab";
             string nestedRosterFileName = "nested roster level.tab";
-            string fileNameExported = "main level.sav";
             string extraFile = "extra.tab";
             string extraFileExported = "extra.sav";
 
@@ -106,7 +103,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             // Act
             await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                     Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] { mailLevelFileName, nestedRosterFileName , extraFile },
-                    new Progress<int>(), CancellationToken.None);
+                    new ExportProgress(), CancellationToken.None);
 
             //Assert
             datasetWriter.Verify(

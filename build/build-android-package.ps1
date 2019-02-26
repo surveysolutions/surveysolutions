@@ -31,11 +31,12 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
     return Log-Block "Building Android project: $AndroidProject => $([System.IO.Path]::GetFileName($OutFileName))" {
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
-            '/t:SignAndroidPackage;MoveApkFile'
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
 
             if(-not $NoCleanUp.IsPresent) {
-                '/t:Clean'
+                '/t:Clean;SignAndroidPackage;MoveApkFile'
+            } else {
+                '/t:SignAndroidPackage;MoveApkFile'
             }
             
             if($ExcludeExtensions -eq $True) {

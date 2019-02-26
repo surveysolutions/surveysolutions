@@ -189,4 +189,7 @@
   <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
     <value>TEAM SIZE</value>
   </data>
+  <data name="TimeLeft" xml:space="preserve">
+    <value>Time left</value>
+  </data>
 </root>

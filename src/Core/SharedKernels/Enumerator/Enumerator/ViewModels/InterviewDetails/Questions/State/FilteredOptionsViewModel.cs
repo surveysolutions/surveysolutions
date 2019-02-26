@@ -17,9 +17,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        private int Count { get; set; } = 200;
+        public int Count { get; protected set; } = 200;
 
         public virtual event EventHandler OptionsChanged;
+
+        public int? ParentValue { set; get; }
 
         private Identity questionIdentity;
 
@@ -51,12 +53,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerNotifier = answerNotifier;
         }
 
-        public virtual void Init(string interviewId, Identity entityIdentity, int maxCountToLoad)
+        public virtual void Init(string interviewId, Identity entityIdentity, int? maxCountToLoad = null)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
-            this.Count = maxCountToLoad;
+            if (maxCountToLoad.HasValue)
+                this.Count = maxCountToLoad.Value;
 
             interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity, this.interview.Language);
@@ -65,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!questionnaire.IsQuestionFilteredCombobox(entityIdentity.Id))
             {
-                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, null, Filter, this.Count);
+                this.Options = interview.GetTopFilteredOptionsForQuestion(entityIdentity, ParentValue, Filter, this.Count);
             }
 
             if (questionnaire.IsSupportFilteringForOptions(entityIdentity.Id))
@@ -78,13 +81,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual List<CategoricalOption> GetOptions(string filter = "")
         {
             this.Filter = filter;
-            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, null, filter, this.Count).ToList();
+            this.Options = this.interview.GetTopFilteredOptionsForQuestion(this.questionIdentity, ParentValue, filter, this.Count).ToList();
             return Options;
         }
 
+        public virtual CategoricalOption GetAnsweredOption(int answer)
+            => this.interview.GetOptionForQuestionWithoutFilter(this.questionIdentity, answer, ParentValue);
+
+
         private void AnswerNotifierOnQuestionAnswered(object sender, EventArgs eventArgs)
         {
-            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, null, Filter, Count)
+            var newOptions = interview.GetTopFilteredOptionsForQuestion(questionIdentity, ParentValue, Filter, Count)
                                 .ToList();
 
             var listOfNewOptions = newOptions.ToList();

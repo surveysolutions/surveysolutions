@@ -1,4 +1,4 @@
-$k6 = "https://github.com/loadimpact/k6/releases/download/v0.22.1/k6-v0.22.1-win64.zip"
+$k6 = "https://github.com/loadimpact/k6/releases/download/v0.23.1/k6-v0.23.1-win64.zip"
 $temp = ".\.tmp"
 
 New-Item $temp -Type Directory -ErrorAction SilentlyContinue

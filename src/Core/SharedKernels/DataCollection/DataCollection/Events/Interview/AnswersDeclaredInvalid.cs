@@ -29,7 +29,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             }
         }
 
-        public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
+        public AnswersDeclaredInvalid(
+            IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
             DateTimeOffset originDate) : base(originDate)
         {
             if (failedValidationConditions != null)

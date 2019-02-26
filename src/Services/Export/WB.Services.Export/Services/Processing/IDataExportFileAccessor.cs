@@ -12,8 +12,8 @@ namespace WB.Services.Export.Services.Processing
     {
         string GetExternalStoragePath(TenantInfo tenant, string name);
         IZipArchive CreateExportArchive(Stream outputStream, string archivePassword, CompressionLevel compressionLevel = CompressionLevel.Fastest);
-        void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress);
-        Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, IProgress<int> exportProgress);
+        void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, ExportProgress exportProgress);
+        Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, ExportProgress exportProgress);
         void RecreateExportArchive(string exportTempDirectoryPath, IEnumerable<string> filesToArchive, string archiveFilePath, string password);
     }
 }

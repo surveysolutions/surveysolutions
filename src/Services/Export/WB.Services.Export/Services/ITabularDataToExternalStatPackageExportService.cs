@@ -8,7 +8,7 @@ namespace WB.Services.Export.Services
 {
     internal interface ITabularDataToExternalStatPackageExportService
     {
-        Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
-        Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
+        Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, ExportProgress progress, CancellationToken cancellationToken);
+        Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, ExportProgress progress, CancellationToken cancellationToken);
     }
 }

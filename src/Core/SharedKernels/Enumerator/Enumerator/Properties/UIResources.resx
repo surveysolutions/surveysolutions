@@ -121,10 +121,13 @@
     <value>Your user account is locked. Please contact the support team at support@mysurvey.solutions.</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>My questionnaires</value>
+    <value>My</value>
+  </data>
+  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Shared with me</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Public questionnaires</value>
+    <value>Public</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Questionnaires</value>

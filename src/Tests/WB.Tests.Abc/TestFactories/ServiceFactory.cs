@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -612,7 +613,8 @@ namespace WB.Tests.Abc.TestFactories
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
             IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
             IInterviewerVersionReader interviewerVersionReader = null,
-            IInterviewFactory interviewFactory = null)
+            IInterviewFactory interviewFactory = null,
+            IAuthorizedUser currentUser = null)
         {
             var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
             return new InterviewerProfileFactory(
@@ -621,7 +623,7 @@ namespace WB.Tests.Abc.TestFactories
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                Mock.Of<IAuthorizedUser>(),
+                currentUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IQRCodeHelper>());
         }
 
@@ -893,9 +895,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(interviewSummaries ??
-                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
-                new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(
@@ -1002,7 +1002,8 @@ namespace WB.Tests.Abc.TestFactories
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                httpClientFactory ?? Mock.Of<IHttpClientFactory>()
+                httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
+                new SimpleFileHandler()
             );
         }
 
@@ -1012,6 +1013,20 @@ namespace WB.Tests.Abc.TestFactories
             mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
+        }
+
+        public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
+        {
+            return new EnumeratorGroupGroupStateCalculationStrategy();
+        }
+    }
+
+    internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
+    {
+        public Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response, IProgress<TransferProgress> transferProgress,
+            CancellationToken token)
+        {
+            return response.Content.ReadAsByteArrayAsync();
         }
     }
 

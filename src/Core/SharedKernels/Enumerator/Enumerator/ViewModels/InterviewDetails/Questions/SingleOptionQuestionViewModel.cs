@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.instructionViewModel.Init(interviewId, entityIdentity, navigationState);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, 200);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity);
 
             this.questionIdentity = entityIdentity;
             var interview = this.interviewRepository.Get(interviewId);
@@ -187,7 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
 
-            this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
+            this.Options.Where(x=> x.Selected && x.Value != selectedOptionToSave).ForEach(x => x.Selected = false);
 
             await this.throttlingModel.ExecuteActionIfNeeded();
         }

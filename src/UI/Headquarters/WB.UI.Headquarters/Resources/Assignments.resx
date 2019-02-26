@@ -309,4 +309,7 @@
   <data name="AudioRecordingExplanation" xml:space="preserve">
     <value>When enabled, interviewer application will record interview process. With turning audio audit on an amount of synchronization data would be significantly larger</value>
   </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>New Assignment</value>
+  </data>
 </root>

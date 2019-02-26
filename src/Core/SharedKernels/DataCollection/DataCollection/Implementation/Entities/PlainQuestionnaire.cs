@@ -381,7 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             CheckShouldQestionProvideOptions(question, questionId);
 
             //filtered and cascadings
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation);
@@ -459,7 +459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, this.translation);
@@ -1012,6 +1012,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetGroup(entityId)?.IsPlainMode ?? false;
         }
 
+        public bool ShowCascadingAsList(Guid questionId)
+        {
+            if (!this.IsQuestionCascading(questionId))
+                return false;
+            var question = this.GetQuestion(questionId);
+            return (question as SingleQuestion)?.ShowAsList ?? false;
+        }
+
+        public int? GetCascadingAsListThreshold(Guid questionId)
+        {
+            if (!this.IsQuestionCascading(questionId))
+                return null;
+            var question = this.GetQuestion(questionId);
+            return (question as SingleQuestion)?.ShowAsListThreshold;
+        }
+
         public string GetValidationMessage(Guid questionId, int conditionIndex)
         {
             if (IsQuestion(questionId))
@@ -1062,7 +1078,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsQuestionFilteredCombobox(Guid questionId)
         {
-            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            var singleQuestion = (this.GetQuestion(questionId) as ICategoricalQuestion);
             return singleQuestion?.IsFilteredCombobox ?? false;
         }
 
@@ -1815,6 +1831,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot return default date for question with id '{dateQuestionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             return question.Properties?.DefaultDate;
+        }
+
+        private bool? hasAnyMultimediaQuestion;
+        public bool HasAnyMultimediaQuestion()
+        {
+            if (!hasAnyMultimediaQuestion.HasValue)
+            {
+                hasAnyMultimediaQuestion = this.QuestionnaireDocument.Children.TreeToEnumerable(x => x.Children)
+                    .OfType<IQuestion>()
+                    .Any(x => x.QuestionType == QuestionType.Multimedia ||
+                              x.QuestionType == QuestionType.Audio);
+            }
+
+            return hasAnyMultimediaQuestion.Value;
         }
     }
 }

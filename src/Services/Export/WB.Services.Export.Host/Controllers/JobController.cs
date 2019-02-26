@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WB.Services.Export.Ddi;
 using WB.Services.Export.Interview;
+using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -22,19 +23,23 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
+        private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly IJobService jobService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IDdiMetadataAccessor ddiDdiMetadataAccessor, IJobService jobService)
+            IDdiMetadataAccessor ddiDdiMetadataAccessor,
+            IJobService jobService,
+            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.archiveHandleService = archiveHandleService;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.jobService = jobService;
+            this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
         }
 
         [HttpPut]
@@ -75,7 +80,7 @@ namespace WB.Services.Export.Host.Controllers
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/status")]
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
-             string questionnaireId,
+            string questionnaireId,
             InterviewStatus? status,
             DateTime? fromDate,
             DateTime? toDate,
@@ -95,7 +100,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             TenantInfo tenant)
         {
-            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant, 
+            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant,
                 new QuestionnaireId(questionnaireId),
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
@@ -144,10 +149,20 @@ namespace WB.Services.Export.Host.Controllers
         }
 
         [HttpDelete]
-        [Route("api/v1/delete")]
+        [Route("api/v1/deleteArchives")]
         public async Task<ActionResult> Delete(TenantInfo tenant)
         {
             await this.archiveHandleService.ClearAllExportArchives(tenant);
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("api/v1/deleteTenant")]
+        public async Task<ActionResult> StopTenant(string tenant)
+        {
+            if (string.IsNullOrWhiteSpace(tenant)) return BadRequest("No tenant specified");
+            
+            await this.questionnaireSchemaGenerator.DropTenantSchemaAsync(tenant);
             return Ok();
         }
 

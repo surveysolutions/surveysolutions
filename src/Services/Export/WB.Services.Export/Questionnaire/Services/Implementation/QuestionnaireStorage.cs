@@ -1,23 +1,30 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Services;
-using WB.Services.Infrastructure.Tenant;
+using WB.Services.Export.InterviewDataStorage;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
     internal class QuestionnaireStorage : IQuestionnaireStorage
     {
-        private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        private readonly IMemoryCache memoryCache;
+        private readonly ILogger<QuestionnaireStorage> logger;
+        private readonly IDatabaseSchemaService databaseSchemaService;
+        private readonly IQuestionnaireStorageCache cache;
         private readonly JsonSerializerSettings serializer;
+        private readonly ITenantContext tenantContext;
 
-        public QuestionnaireStorage(ITenantApi<IHeadquartersApi> tenantApi, IMemoryCache memoryCache)
+        public QuestionnaireStorage(
+            IQuestionnaireStorageCache cache,
+            IDatabaseSchemaService databaseSchemaService,
+            ITenantContext tenantContext,
+            ILogger<QuestionnaireStorage> logger)
         {
-            this.tenantApi = tenantApi;
-            this.memoryCache = memoryCache;
+            this.logger = logger;
+            this.cache = cache;
+            this.databaseSchemaService = databaseSchemaService;
+            this.tenantContext = tenantContext;
             this.serializer = new JsonSerializerSettings
             {
                 SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
@@ -25,18 +32,51 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
             };
         }
 
-        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId)
+        private static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1);
+
+        public async Task<QuestionnaireDocument> GetQuestionnaireAsync(
+            QuestionnaireId questionnaireId,
+            CancellationToken token = default)
         {
-            return await this.memoryCache.GetOrCreateAsync($"{nameof(QuestionnaireStorage)}:{tenant}:{questionnaireId}",
-                async entry =>
+            if (cache.TryGetValue(questionnaireId, out var result))
+            {
+                return result;
+            }
+
+            await CacheLock.WaitAsync(token);
+
+            try
+            {
+                if (cache.TryGetValue(questionnaireId, out result))
                 {
-                    var questionnaireDocument = await this.tenantApi.For(tenant).GetQuestionnaireAsync(questionnaireId);
+                    return result;
+                }
 
-                    var questionnaire = JsonConvert.DeserializeObject<QuestionnaireDocument>(questionnaireDocument, serializer);
-                    entry.SlidingExpiration = TimeSpan.FromMinutes(1);
-                    return questionnaire;
-                });
+                var questionnaire = await this.tenantContext.Api.GetQuestionnaireAsync(questionnaireId);
 
+                if (questionnaire == null) return null;
+                questionnaire.QuestionnaireId = questionnaireId;
+
+                logger.LogDebug("Got questionnaire document from tenant: {tenantName}. {questionnaireId} [{tableName}]",
+                    this.tenantContext.Tenant.Name, questionnaire.QuestionnaireId, questionnaire.TableName);
+                
+                cache.Set(questionnaireId, questionnaire);
+
+                if (questionnaire.IsDeleted)
+                {
+                    databaseSchemaService.DropQuestionnaireDbStructure(questionnaire);
+                }
+                else
+                {
+                    databaseSchemaService.CreateQuestionnaireDbStructure(questionnaire);
+                }
+
+                return questionnaire;
+            }
+            finally
+            {
+                CacheLock.Release();
+            }
         }
     }
 }

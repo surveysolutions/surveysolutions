@@ -11,5 +11,6 @@
         public const int MaxRosterPropagationLimit = 10000;
         public const int MaxInterviewsCountByAssignment = 10000;
         public const int MaxTotalRosterPropagationLimit = 80000;
+        public const int DefaultCascadingAsListThreshold = 50;
     }
 }
