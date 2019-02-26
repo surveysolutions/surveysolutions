@@ -60,6 +60,7 @@ namespace WB.Services.Export.Host
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
             services.AddDbContext<TenantDbContext>();
+            services.AddTransient<IOnDemandCollector, AppVersionCollector>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
             {
