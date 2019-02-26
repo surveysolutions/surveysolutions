@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionState;
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.displaySelectedValue = displaySelectedValue;
+            this.FilterText = string.Empty;
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -91,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
             this.OnItemSelected?.Invoke(this, option.Value);
-            this.UpdateFilter(displaySelectedValue ? option.Title : null);
+            this.UpdateFilter(displaySelectedValue ? option.Title : string.Empty);
         }
 
         public void UpdateFilter(string filter)
