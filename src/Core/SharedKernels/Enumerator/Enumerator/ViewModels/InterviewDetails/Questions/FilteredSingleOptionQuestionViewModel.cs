@@ -22,23 +22,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository, eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
-            this.comboboxViewModel = new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, true);
         }
 
-        protected override void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            base.Init(interviewId, entityIdentity, navigationState);
+
             this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
 
-            this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
-            this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
-            this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
-
-            comboboxCollection.Add(comboboxViewModel);
+            SetAnswerAndUpdateFilter();
         }
 
-        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
-            await comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs) => 
+            comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
 
         
         public override void Dispose()
@@ -46,10 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Dispose();
             this.filteredOptionsViewModel.OptionsChanged -= FilteredOptionsViewModelOnOptionsChanged;
             this.filteredOptionsViewModel.Dispose();
-
-            this.comboboxViewModel.OnItemSelected -= this.ComboboxInstantViewModel_OnItemSelected;
-            this.comboboxViewModel.OnAnswerRemoved -= ComboboxInstantViewModel_OnAnswerRemoved;
-            this.comboboxViewModel.Dispose();
         }
         
         public override IObservableCollection<ICompositeEntity> Children
