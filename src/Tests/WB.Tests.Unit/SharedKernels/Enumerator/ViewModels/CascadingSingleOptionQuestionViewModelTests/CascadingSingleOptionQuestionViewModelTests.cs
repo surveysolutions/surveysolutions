@@ -110,13 +110,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository, filteredOptionsViewModel: filteredOptionsViewModel);
+                questionnaireRepository: questionnaireRepository, 
+                filteredOptionsViewModel: filteredOptionsViewModel);
 
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
             StatefulInterviewMock.Setup(x => x.GetSingleOptionQuestion(parentIdentity))
                 .Returns(secondParentOptionAnswer);
-
+            
+            //aa
             cascadingModel.Handle(Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
