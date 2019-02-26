@@ -130,7 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             using (var csvWriter = new CsvWriter(new StringWriter(sb), cfg))
                 csvWriter.WriteRecords(options);
 
-            return new MemoryStream(Encoding.Unicode.GetBytes(sb.ToString()));
+            return new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
         }
         
         private Configuration CreateCsvConfiguration() => new Configuration

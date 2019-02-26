@@ -315,7 +315,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My questionnaires.
+        ///   Looks up a localized string similar to My.
         /// </summary>
         public static string Dashboard_MyQuestionnairesLinkText {
             get {
@@ -324,11 +324,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public questionnaires.
+        ///   Looks up a localized string similar to Public.
         /// </summary>
         public static string Dashboard_PublicQuestionnairesLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_PublicQuestionnairesLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shared with me.
+        /// </summary>
+        public static string Dashboard_SharedWithMeLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_SharedWithMeLinkText", resourceCulture);
             }
         }
         

@@ -38,7 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null)
+            IStatefulInterviewRepository interviewRepository = null,
+            FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -50,7 +51,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,
-                Mock.Of<QuestionInstructionViewModel>());
+                Mock.Of<QuestionInstructionViewModel>(),
+                Stub.MvxMainThreadAsyncDispatcher(),
+                filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
+                Create.ViewModel.ThrottlingViewModel());
+
             return cascadingSingleOptionQuestionViewModel;
         }
 
@@ -76,8 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             navigationState = Create.Other.NavigationState();
             QuestionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             var userInterfaceStateService = Mock.Of<IUserInterfaceStateService>(
-                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true)
-                );
+                x => x.WaitWhileUserInterfaceIsRefreshingAsync() == Task.FromResult(true));
             
             AnsweringViewModelMock = new Mock<AnsweringViewModel>(Mock.Of<ICommandService>(), userInterfaceStateService, Mock.Of<IMvxMessenger>());
             

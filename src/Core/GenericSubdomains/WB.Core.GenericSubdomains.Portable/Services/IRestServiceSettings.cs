@@ -9,5 +9,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         int BufferSize { get;  }
         bool AcceptUnsignedSslCertificate { get;  }
         string UserAgent { get; }
+        int MaxDegreeOfParallelism { get; }
     }
 }

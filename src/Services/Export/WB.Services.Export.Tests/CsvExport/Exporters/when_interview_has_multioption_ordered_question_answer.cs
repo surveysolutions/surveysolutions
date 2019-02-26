@@ -34,8 +34,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             exportedQuestion.Should().BeEquivalentTo(new[] { "2", "1" });
         }
 
-        static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
-        static QuestionnaireExportStructure questionnaaireExportStructure;
         static InterviewDataExportView result;
         static InterviewData interview;
         static Guid questionId;

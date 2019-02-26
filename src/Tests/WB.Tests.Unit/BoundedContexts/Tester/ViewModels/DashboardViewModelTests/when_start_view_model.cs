@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -67,7 +66,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         public async Task Because() => await viewModel.Initialize();
 
         [Test] public void should_set_ShowEmptyQuestionnaireListText_to_true() => viewModel.ShowEmptyQuestionnaireListText.Should().BeTrue();
-        [Test] public void should_set_IsPublicShowed_to_false() => viewModel.IsPublicShowed.Should().BeFalse();
         [Test] public void should_Questionnaires_have_2_questionnaires() => viewModel.Questionnaires.Count.Should().Be(2);
         [Test] public void should_contains_only_my_questionnares() => viewModel.Questionnaires.All(_ => !_.IsPublic).Should().BeTrue();
         [Test] public void should_set_MyQuestionnairesCount_to_2() => viewModel.MyQuestionnairesCount.Should().Be(2);

@@ -448,7 +448,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     {
                         this.ValidateStreamVersion(connection, eventStream);
 
-                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
+                        var storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer));
+
                         foreach (var @event in storedEvents)
                         {
                             connection.Insert(@event);

@@ -192,6 +192,9 @@
   <data name="Generating" xml:space="preserve">
     <value>Generating</value>
   </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
   <data name="Compressing" xml:space="preserve">
     <value>Compressing</value>
   </data>

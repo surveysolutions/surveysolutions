@@ -70,7 +70,11 @@
     <item name="android:textColor">@color/dashboard_public_questionnaire</item>
   </style>
 
-  <style name="Dashboard_QuestionnairesList">
+    <style name="Dashboard_SharedWithMeQuestionnairesLink" parent="Dashboard_MyQuestionnairesLink">
+        <item name="android:textColor">@color/dashboard_shared_with_me_questionnaire</item>
+    </style>
+
+    <style name="Dashboard_QuestionnairesList">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>

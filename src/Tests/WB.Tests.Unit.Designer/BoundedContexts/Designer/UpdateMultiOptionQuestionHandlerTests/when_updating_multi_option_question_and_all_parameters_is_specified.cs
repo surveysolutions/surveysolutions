@@ -26,6 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 
         private void BecauseOf() =>
             questionnaire.UpdateMultiOptionQuestion(
+                Create.Command.UpdateMultiOptionQuestion(
                 questionId: questionId,
                 title: title,
                 variableName: variableName,
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                 instructions: instructions,
                 responsibleId: responsibleId
                 , options: options,
-                linkedToEntityId: linkedToQuestionId,
+                linkedToQuestionId: linkedToQuestionId,
                 areAnswersOrdered: areAnswersOrdered,
                 maxAllowedAnswers: maxAllowedAnswers,
                 yesNoView: yesNoView, 
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     Expression = validationExpression,
                     Message = validationMessage
                 } },
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+                linkedFilterExpression: null));
 
 
         [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>

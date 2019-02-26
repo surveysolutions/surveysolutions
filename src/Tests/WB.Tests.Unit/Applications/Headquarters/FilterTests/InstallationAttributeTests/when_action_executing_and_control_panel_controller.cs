@@ -10,7 +10,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
             var attribute = CreateInstallationAttribute();
             attribute.OnActionExecuting(CreateFilterContext(
                 new ControlPanelController(null, 
-                null, null, null, null, null, null)));
+                null, null, null, null, null, null,
+                assignmentsService: null, interviewPackagesService: null, userViewFactory: null, serializer: null)));
         }
     }
 }

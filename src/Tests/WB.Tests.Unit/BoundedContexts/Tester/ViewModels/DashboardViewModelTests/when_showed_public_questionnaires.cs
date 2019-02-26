@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -32,7 +31,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         public void Because() => viewModel.ShowPublicQuestionnairesCommand.Execute();
 
-        [Test] public void should_set_IsPublicShowed_to_true () => viewModel.IsPublicShowed.Should().BeTrue();
         [Test] public void should_Questionnaires_have_3_questionnaires () => viewModel.Questionnaires.Count.Should().Be(3);
         [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
 

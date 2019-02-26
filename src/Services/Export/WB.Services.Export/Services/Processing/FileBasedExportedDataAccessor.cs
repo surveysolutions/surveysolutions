@@ -12,13 +12,13 @@ namespace WB.Services.Export.Services.Processing
     class FileBasedExportedDataAccessor : IFileBasedExportedDataAccessor
     {
         private readonly IExportFileNameService exportFileNameService;
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public FileBasedExportedDataAccessor(
             IExportFileNameService exportFileNameService, 
             IFileSystemAccessor fileSystemAccessor, 
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings)
+            IOptions<ExportServiceSettings> interviewDataExportSettings)
         {
             this.exportFileNameService = exportFileNameService;
             this.fileSystemAccessor = fileSystemAccessor;

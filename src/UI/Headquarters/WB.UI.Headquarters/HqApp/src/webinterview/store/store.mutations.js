@@ -1,4 +1,4 @@
-import { forEach } from "lodash"
+import { forEach, differenceBy } from "lodash"
 import Vue from "vue"
 
 export default {
@@ -12,6 +12,10 @@ export default {
         })
     },
     SET_SECTION_DATA(state, sectionData) {
+        var entitiesToDelete = differenceBy(state.entities, sectionData, 'identity');
+        forEach(entitiesToDelete, entity => {
+            Vue.delete(state.entityDetails, entity.identity)
+        });
         state.entities = sectionData
     },
     CLEAR_ENTITIES(state, {ids}) {

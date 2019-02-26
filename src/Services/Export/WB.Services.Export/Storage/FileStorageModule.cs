@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Checks;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Storage
 {
@@ -16,7 +15,7 @@ namespace WB.Services.Export.Storage
         {
             services.Configure<AmazonS3Settings>(configuration.GetSection("storage:s3"));
 
-            var isS3Enabled = configuration.GetSection("Storage:S3").GetValue<bool>("Enabled");
+            var isS3Enabled = configuration.IsS3Enabled();
 
             if (isS3Enabled)
             {
@@ -41,7 +40,6 @@ namespace WB.Services.Export.Storage
 
                 services.AddTransient<ITransferUtility>(c => new TransferUtility(c.GetService<IAmazonS3>()));
                 services.AddTransient<IImageFileStorage, S3ImageFileStorage>();
-                services.AddTransient<IHealthCheck, AmazonS3Check>();
             }
             else
             {

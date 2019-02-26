@@ -55,6 +55,5 @@
 
 <div>
     <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
-         ng-class="{'has-error': !questionForm.linkedToEntity.$valid}"
          class="form-group" ng-include="'views/question-details/CascadingComboBox-template.html'" />
 </div>

@@ -14,7 +14,7 @@ namespace WB.Services.Export.ExportProcessHandlers
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IFileBasedExportedDataAccessor FileBasedExportedDataAccessor;
-        protected readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        protected readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         protected readonly IDataExportProcessesService dataExportProcessesService;
 
         protected string ExportTempDirectoryPath;
@@ -22,7 +22,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected BaseAbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -31,20 +31,25 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        private void HandleProgress(DataExportProcessArgs process, Progress<int> exportProgress)
+        private void HandleProgress(DataExportProcessArgs process, ExportProgress exportProgress)
         {
-            int lastPercent = 0;
             var sw = Stopwatch.StartNew();
 
-            exportProgress.ProgressChanged += (sender, donePercent) =>
+            exportProgress.ProgressChanged += (sender, progress) =>
             {
-                // throttle progress changed events 
-                if (donePercent != lastPercent || sw.Elapsed > TimeSpan.FromSeconds(1))
+                if (sw.Elapsed > TimeSpan.FromSeconds(1))
                 {
-                    this.dataExportProcessesService.UpdateDataExportProgress(process, donePercent);
+                    lock (sw)
+                    {
+                        if (sw.Elapsed > TimeSpan.FromSeconds(1))
+                        {
+                            this.dataExportProcessesService.UpdateDataExportProgress(process.ProcessId,
+                                progress.Percent,
+                                progress.Eta ?? default);
 
-                    lastPercent = donePercent;
-                    sw.Restart();
+                            sw.Restart();
+                        }
+                    }
                 }
             };
         }
@@ -62,14 +67,13 @@ namespace WB.Services.Export.ExportProcessHandlers
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var exportProgress = new Progress<int>();
+                var exportProgress = new ExportProgress();
 
                 HandleProgress(dataExportProcessArgs, exportProgress);
 
                 var archiveName = this.FileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
-
-                this.dataExportProcessesService.ChangeStatusType(
-                    dataExportProcessArgs.ProcessId, DataExportStatus.Running);
+                
+                this.dataExportProcessesService.ChangeStatusType(dataExportProcessArgs.ProcessId, DataExportStatus.Running);
 
                 await DoExportAsync(dataExportProcessArgs, dataExportProcessArgs.ExportSettings, archiveName, exportProgress, cancellationToken);
             }
@@ -80,7 +84,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
 
         protected abstract Task DoExportAsync(DataExportProcessArgs processArgs,
-            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken);
+            ExportSettings exportSettings, string archiveName, ExportProgress exportProgress, CancellationToken cancellationToken);
 
         protected abstract DataExportFormat Format { get; }
 

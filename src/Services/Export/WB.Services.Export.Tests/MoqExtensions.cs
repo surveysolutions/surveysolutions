@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Language.Flow;
 
@@ -60,6 +62,21 @@ namespace WB.Services.Export.Tests
 
                 return Expression.Call(method);
             }
+        }
+
+        public static void AddMock<TService>(this ServiceCollection coll, Expression<Func<TService, bool>> predicate = null) where TService : class
+        {
+            coll.AddTransient(c => predicate == null ? Mock.Of<TService>() : Mock.Of(predicate));
+        }
+
+        public static void AddScopedMock<TService>(this ServiceCollection coll, Expression<Func<TService, bool>> predicate = null) where TService : class
+        {
+            coll.AddScoped(c => predicate == null ? Mock.Of<TService>() : Mock.Of(predicate));
+        }
+        
+        public static void Verify<T>(this Mock<ILogger<T>> logMock, LogLevel level, Predicate<Exception> exception, Func<Times> times)
+        {
+            logMock.Verify(l => l.Log(level, 0, It.IsAny<object>(), Match.Create(exception), It.IsAny<Func<object, Exception, string>>()), times);
         }
     }
 }

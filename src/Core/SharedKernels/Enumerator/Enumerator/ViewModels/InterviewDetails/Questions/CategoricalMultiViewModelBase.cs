@@ -24,30 +24,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         IDisposable
     {
-        private readonly ThrottlingViewModel throttlingModel;
+        protected readonly ThrottlingViewModel throttlingModel;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IPrincipal principal;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        protected readonly IStatefulInterviewRepository interviewRepository;
         private Guid interviewId;
         private bool areAnswersOrdered;
-        private int? maxAllowedAnswers;
+        protected int? maxAllowedAnswers;
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
         public IQuestionStateViewModel QuestionState { get; }
         public AnsweringViewModel Answering { get; }
-        public IObservableCollection<ICompositeEntity> Children
+        public virtual IObservableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                result.Add(new OptionBorderViewModel(this.QuestionState, true));
+                result.Add(this.topBorderViewModel);
                 result.AddCollection(this.Options);
-                result.Add(new OptionBorderViewModel(this.QuestionState, false));
+
+                this.AddCustomViewModels(result);
+
+                result.Add(this.bottomBorderViewModel);
+
                 return result;
             }
         }
 
+        private readonly OptionBorderViewModel topBorderViewModel;
+        private readonly OptionBorderViewModel bottomBorderViewModel;
         public CovariantObservableCollection<CategoricalMultiOptionViewModel<TOptionValue>> Options { get; set; }
 
         public Identity Identity { get; private set; }
@@ -86,6 +92,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
 
             this.throttlingModel = throttlingModel;
+
+            this.topBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
+            this.bottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
         }
         
         protected abstract void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<TOptionValue>> answeredViewModels);
@@ -96,6 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected abstract bool IsInterviewAnswer(TInterviewAnswer interviewAnswer, TOptionValue optionValue);
         protected virtual void Init(IStatefulInterview interview, IQuestionnaire questionnaire) { }
         protected virtual TInterviewAnswer[] FilterAnsweredOptions(TInterviewAnswer[] answeredOptions) => answeredOptions;
+        protected virtual void AddCustomViewModels(CompositeCollection<ICompositeEntity> compositeCollection) { }
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -110,11 +120,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Identity = entityIdentity;
             this.interviewId = interview.Id;
-
-            this.Init(interview, questionnaire);
-
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+
+            this.Init(interview, questionnaire);
 
             this.throttlingModel.Init(SaveAnswer);
 
@@ -156,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             CategoricalMultiOptionViewModel<TOptionValue> vm, bool isAnswerProtected = false)
             => vm.Init(this.QuestionState, title, value, isAnswerProtected, async () => await this.ToggleAnswerAsync(vm));
 
-        private async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
+        protected async Task ToggleAnswerAsync(CategoricalMultiOptionViewModel<TOptionValue> optionViewModel)
         {
             var allSelectedOptions = this.Options.Where(x => x.IsAnswered()).ToArray();
 
@@ -213,10 +222,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.maxAllowedAnswers.HasValue)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    filteredAnswers.Count, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
+                    filteredAnswers.Count, this.maxAllowedAnswers.Value);
             }
 
             this.HasOptions = this.Options.Any();
+            this.UpdateBorders();
+        }
+
+        protected virtual void UpdateBorders()
+        {
+            this.topBorderViewModel.HasOptions = this.HasOptions;
+            this.bottomBorderViewModel.HasOptions = this.HasOptions;
         }
 
         public virtual void Handle(AnswersRemoved @event)

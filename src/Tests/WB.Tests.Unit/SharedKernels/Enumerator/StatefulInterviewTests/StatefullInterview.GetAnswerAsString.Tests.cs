@@ -9,7 +9,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     [TestOf(typeof(StatefulInterview))]
-    internal partial class StatefullInterviewTests
+    internal partial class StatefulInterviewTests
     {
         [Test]
         public void When_GetAnswerAsString_for_prefilled_single_fixed_question_Then_should_be_returned_answered_option_text()
