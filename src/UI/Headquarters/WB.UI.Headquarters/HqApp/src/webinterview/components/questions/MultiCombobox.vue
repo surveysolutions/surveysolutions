@@ -5,12 +5,12 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group" v-for="(row) in this.selectedOptions" :key="row.value">
-                    <div class="field answered" v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
-                        <input autocomplete="off" type="text" class="field-to-fill" 
-                            :value="row.title"
-                            :disabled="!$me.acceptAnswer || row.isProtected" />
+                    <div class="field answered" v-bind:class="{ 'unavailable-option locked-option': isProtected(row.value) }">
+                        <div class="field-to-fill">
+                            {{row.title}}
+                        </div>
                         <button type="submit" class="btn btn-link btn-clear" 
-                            v-if="$me.acceptAnswer && !row.isProtected"
+                            v-if="$me.acceptAnswer && !isProtected(row.value)"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(row.value)"><span></span>
                         </button>
@@ -50,12 +50,6 @@
                 selectedOption: null
             }
         },
-
-        watch: {
-            selectedOption(newValue) {
-                
-            }
-        },
         computed: {
             selectedOptions() {
                 var self = this;
@@ -68,6 +62,9 @@
             }
         },
         methods: {
+            isProtected(val){
+                return includes(this.$me.protectedAnswer, val)
+            },
             appendCompboboxItem(newValue) {
                 if(includes(this.$me.answer, newValue)) return
 

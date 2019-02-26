@@ -16,9 +16,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class CascadingSingleOptionQuestionViewModel : BaseFilteredQuestionViewModel, 
-         ILiteEventHandler<SingleOptionQuestionAnswered>,
-         ICompositeQuestionWithChildren
+    public class CascadingSingleOptionQuestionViewModel : BaseComboboxQuestionViewModel, 
+         ILiteEventHandler<SingleOptionQuestionAnswered>
     {
         private readonly ThrottlingViewModel throttlingModel;
 
@@ -40,23 +39,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
+            FilteredOptionsViewModel filteredOptionsViewModel,
             ThrottlingViewModel throttlingModel) :
             base(principal: principal, questionStateViewModel: questionStateViewModel, answering: answering,
                 instructionViewModel: instructionViewModel, interviewRepository: interviewRepository,
-                eventRegistry: eventRegistry)
+                eventRegistry: eventRegistry, filteredOptionsViewModel)
         {
             this.questionnaireRepository = questionnaireRepository ??
                                            throw new ArgumentNullException(nameof(questionnaireRepository));
 
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-
+            
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.comboboxViewModel = new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, true);
 
             this.throttlingModel = throttlingModel;
             this.throttlingModel.Init(SaveAnswer);
         }
 
-        protected override void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        protected override async void Initialize(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
@@ -76,27 +77,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
 
-            this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
-            this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
+            this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
+            
+            this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
+            this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
+            this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
 
-            UpdateOptions();
-        }
-        protected override CategoricalOption GetOptionByFilter(string filter)
-            => this.interview.GetOptionForQuestionWithFilter(this.Identity, filter, this.answerOnParentQuestion);
-
-        protected override CategoricalOption GetAnsweredOption(int answer)
-            => this.interview.GetOptionForQuestionWithoutFilter(this.Identity, answer, this.answerOnParentQuestion);
-
-        protected override IEnumerable<CategoricalOption> GetSuggestions(string filter)
-        {
-            if (!this.answerOnParentQuestion.HasValue)
-                yield break;
-
-            var categoricalOptions = this.interview.GetTopFilteredOptionsForQuestion(this.Identity,
-                this.answerOnParentQuestion.Value, filter, SuggestionsMaxCount);
-
-            foreach (var categoricalOption in categoricalOptions)
-                yield return categoricalOption;
+            await UpdateOptions();
         }
 
         protected override async Task SaveAnswerAsync(int optionValue)
@@ -115,22 +103,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!parentSingleOptionQuestion.IsAnswered()) return;
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
-            
-            await this.UpdateFilterAndSuggestionsAsync(string.Empty);
+            this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
 
             if (showCascadingAsList)
             {
-                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(async () =>
                 {
-                    this.RaisePropertyChanged(() => RenderAsComboBox);
-                    UpdateOptions();
-                    this.RaisePropertyChanged(() => Options);
-                    this.RaisePropertyChanged(() => Children);
+                    await this.RaisePropertyChanged(() => RenderAsComboBox);
+                    await UpdateOptions();
+                    await this.RaisePropertyChanged(() => Options);
+                    await this.RaisePropertyChanged(() => Children);
                 });
             }
         }
-
-        
         public bool RenderAsComboBox
         {
             get {
@@ -142,30 +127,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-
-        public IObservableCollection<ICompositeEntity> Children
+        public override IObservableCollection<ICompositeEntity> Children
         {
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
 
-                if (!showCascadingAsList)
-                    return result;
-
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(Options);
+                result.AddCollection(comboboxCollection);
                 result.Add(this.optionsBottomBorderViewModel);
 
                 return result;
             }
         }
 
-        private OptionBorderViewModel optionsTopBorderViewModel;
-        private OptionBorderViewModel optionsBottomBorderViewModel;
-
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options { get; private set; }
 
-        private void UpdateOptions()
+        private async Task UpdateOptions()
         {
             this.Options.ForEach(x => x.BeforeSelected -= this.OptionSelected);
             this.Options.ForEach(x => x.AnswerRemoved -= this.RemoveAnswer);
@@ -173,19 +152,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
-            optionsTopBorderViewModel.HasOptions = false;
-            optionsBottomBorderViewModel.HasOptions = false;
+            await this.comboboxViewModel.UpdateFilter(null);
+            this.comboboxCollection.Remove(this.comboboxViewModel);
 
             if (!RenderAsComboBox)
             {
-                var singleOptionQuestionOptionViewModels = GetSuggestions(String.Empty)
+                var singleOptionQuestionOptionViewModels = filteredOptionsViewModel.GetOptions()
                     .Select(model => this.ToViewModel(model, isSelected: Answer.HasValue && model.Value == Answer.Value))
                     .ToList();
 
                 singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
-
-                optionsTopBorderViewModel.HasOptions = true;
-                optionsBottomBorderViewModel.HasOptions = true;
+            }
+            else
+            {
+                this.comboboxCollection.Add(this.comboboxViewModel);
             }
         }
 
@@ -242,7 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private int? previousOptionToReset = null;
         private int? selectedOptionToSave = null;
-        private IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private async Task SaveAnswer()
         {
@@ -304,6 +284,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             this.throttlingModel.Dispose();
             this.Options.ForEach(x => x.DisposeIfDisposable());
+
+            this.comboboxViewModel.OnItemSelected -= ComboboxInstantViewModel_OnItemSelected;
+            this.comboboxViewModel.OnAnswerRemoved -= ComboboxInstantViewModel_OnAnswerRemoved;
+            this.comboboxViewModel.Dispose();
 
             base.Dispose();
         }

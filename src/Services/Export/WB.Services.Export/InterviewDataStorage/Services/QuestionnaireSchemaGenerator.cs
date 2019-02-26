@@ -43,38 +43,56 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            var connection = dbContext.Database.GetDbConnection();
-
-            CreateSchema(connection, tenantContext.Tenant);
-
-            foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+            try
             {
-                CreateTableForGroup(connection, storedGroup, questionnaireDocument);
-                CreateEnablementTableForGroup(connection, storedGroup);
-                CreateValidityTableForGroup(connection, storedGroup);
+                var connection = dbContext.Database.GetDbConnection();
+
+                CreateSchema(connection, tenantContext.Tenant);
+
+                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+                {
+                    CreateTableForGroup(connection, storedGroup, questionnaireDocument);
+                    CreateEnablementTableForGroup(connection, storedGroup);
+                    CreateValidityTableForGroup(connection, storedGroup);
+                }
+
+                dbContext.SaveChanges();
+
+                logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
+                    this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId,
+                    questionnaireDocument.TableName);
             }
-
-            dbContext.SaveChanges();
-
-            logger.LogInformation("Created database structure for {tenantName} ({questionnaireId} [{table}])",
-                this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId, questionnaireDocument.TableName);
+            catch (Exception e)
+            {
+                e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
+                e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
+                throw e;
+            }
         }
-
 
         public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            this.cache.Remove(questionnaireDocument.QuestionnaireId);
-
-            var db = dbContext.Database.GetDbConnection();
-            foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+            try
             {
-                db.Execute(commandBuilder.GenerateDropTable(storedGroup.TableName)
-                           + commandBuilder.GenerateDropTable(storedGroup.EnablementTableName)
-                           + commandBuilder.GenerateDropTable(storedGroup.ValidityTableName));
-            }
+                this.cache.Remove(questionnaireDocument.QuestionnaireId);
 
-            logger.LogDebug("Skipping questionnaire creation for {tenantName} ({questionnaireId}[{table}])",
-                this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId, questionnaireDocument.TableName);
+                var db = dbContext.Database.GetDbConnection();
+                foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
+                {
+                    db.Execute(commandBuilder.GenerateDropTable(storedGroup.TableName)
+                               + commandBuilder.GenerateDropTable(storedGroup.EnablementTableName)
+                               + commandBuilder.GenerateDropTable(storedGroup.ValidityTableName));
+                }
+
+                logger.LogDebug("Skipping questionnaire creation for {tenantName} ({questionnaireId}[{table}])",
+                    this.tenantContext.Tenant?.Name, questionnaireDocument.QuestionnaireId, questionnaireDocument.TableName);
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("questionnaireId", questionnaireDocument.QuestionnaireId.ToString());
+                e.Data.Add("questionnaireTitle", questionnaireDocument.Title);
+                throw e;
+            }
         }
 
         private void CreateTableForGroup(DbConnection connection, QuestionnaireLevelDatabaseTable group, QuestionnaireDocument questionnaireDocument)

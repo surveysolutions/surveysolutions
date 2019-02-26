@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class CategoricalMultiComboboxViewModel : CategoricalMultiViewModel
     {
         private string interviewId;
-        private readonly CategoricalMultiComboboxAutocompleteViewModel comboboxViewModel;
+        private readonly CategoricalComboboxAutocompleteViewModel comboboxViewModel;
         private readonly CovariantObservableCollection<ICompositeEntity> comboboxCollection = new CovariantObservableCollection<ICompositeEntity>();
 
         public CategoricalMultiComboboxViewModel(
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             throttlingModel)
         {
             this.comboboxViewModel =
-                new CategoricalMultiComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel);
+                new CategoricalComboboxAutocompleteViewModel(questionStateViewModel, filteredOptionsViewModel, false);
         }
 
         public override void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.Init(interviewId, entityIdentity, navigationState);
 
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
-            this.comboboxViewModel.OnAddOption += ComboboxInstantViewModel_OnAddOption;
+            this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
         }
 
         protected override void Init(IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.comboboxCollection.Add(this.comboboxViewModel);
         }
 
-        private async void ComboboxInstantViewModel_OnAddOption(object sender, int selectedOptionCode)
+        private async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public override void Dispose()
         {
-            this.comboboxViewModel.OnAddOption -= this.ComboboxInstantViewModel_OnAddOption;
+            this.comboboxViewModel.OnItemSelected -= this.ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.Dispose();
 
             base.Dispose();

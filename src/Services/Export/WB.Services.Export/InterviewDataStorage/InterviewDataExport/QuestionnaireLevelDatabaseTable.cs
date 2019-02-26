@@ -35,9 +35,13 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public void AddChildren(Group group)
         {
-            if (group.IsRoster || group is QuestionnaireDocument)
+            if (group.IsRoster)
             {
                 EnablementColumns.Add(group);
+                Entities.Add(group);
+            }
+            else if (group is QuestionnaireDocument)
+            {
                 Entities.Add(group);
             }
 
