@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         [Test]
         public void when_setting_FilterText_in_not_empty_value()
         {
-            CategoricalComboboxAutocompleteViewModel cascadingModel;
+            CategoricalComboboxAutocompleteViewModel comboModel;
 
             SetUp();
 
@@ -53,16 +53,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository,
                 Mock.Of<AnswerNotifier>());
 
-            cascadingModel = CreateCategoricalComboboxAutocompleteViewModel(
+            comboModel = CreateCategoricalComboboxAutocompleteViewModel(
                 Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(), filtered);
 
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            comboModel.Init(interviewId, questionIdentity, navigationState);
 
             //act
-            cascadingModel.FilterCommand.Execute("3");
+            comboModel.FilterCommand.Execute("3");
 
-            cascadingModel.FilterText.Should().NotBeNull();
-            cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
+            comboModel.FilterText.Should().NotBeNull();
+            comboModel.AutoCompleteSuggestions.Should().NotBeEmpty();
         }
     }
 }
