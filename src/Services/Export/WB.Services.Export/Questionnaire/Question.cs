@@ -57,7 +57,7 @@ namespace WB.Services.Export.Questionnaire
             get
             {
                 if (columnName != null) return columnName;
-                columnName = this.VariableName.ToLower();
+                columnName = this.VariableName?.ToLower();
                 if (string.IsNullOrEmpty(columnName))
                     throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}");
                 return columnName;
