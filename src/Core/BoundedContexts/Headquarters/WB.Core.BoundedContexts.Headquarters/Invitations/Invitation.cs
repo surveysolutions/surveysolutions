@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -25,13 +26,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual string Token { get; protected set; }
 
-        public virtual string EmailId { get; protected set; }
-
-        public virtual string ResumePassword { get; protected set; }
+        public virtual string InvitationEmailId { get; protected set; }
 
         public virtual DateTime? SentOnUtc { get; protected set; }
 
+        public virtual string ResumePassword { get; protected set; }
+
         public virtual Assignment Assignment { get; protected set; }
+
+        public virtual DateTime? LastReminderSentOnUtc { get; protected set; }
+
+        public virtual string LastReminderEmailId { get; protected set; }
+
+        public virtual int NumberOfRemindersSent  { get; protected set; }
+
+        public virtual InterviewSummary Interview { get; protected set; }
 
         public virtual void SetToken(string token)
         {
@@ -40,8 +49,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual void InvitationWasSent(string emailId)
         {
-            this.EmailId = emailId;
+            this.InvitationEmailId = emailId;
             this.SentOnUtc = DateTime.UtcNow;
+        }
+
+        public virtual void ReminderWasSent(string emailId)
+        {
+            this.LastReminderEmailId = emailId;
+            this.LastReminderSentOnUtc = DateTime.UtcNow;
+            this.NumberOfRemindersSent++;
         }
     }
 

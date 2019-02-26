@@ -28,7 +28,7 @@
                     <p v-if="isQueued" class="default-text">Preparing</p>
                     <p v-if="isInProgress">Sending</p>
                     <p v-if="isDone">Done</p>
-                    <p v-if="isFailed" class="error-text">The process failed. Please report to support@mysurvey.solutions</p>
+                    <p v-if="isFailed" class="error-text">The process failed. Please contact your server administrator to check email provider settings.</p>
                     <p v-if="isCanceled" class="error-text">The process was cancelled</p>
                     <p v-if="isInProgress || isQueued">{{totalCount}} invitations to send.</p>
                     <p v-if="processedCount == 0" class="default-text">None were sent.</p>
