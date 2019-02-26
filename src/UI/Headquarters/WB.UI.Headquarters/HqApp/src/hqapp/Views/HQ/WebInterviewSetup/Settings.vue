@@ -257,8 +257,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-actions">
-                                                    <button type="submit" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
-                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                                    <button type="submit" @click="saveEmailSubject(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                    <button type="submit" @click="cancelEditEmailSubject(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                 </div>
                                             </div>
                                             <div class="row-element">
@@ -267,8 +267,8 @@
                                                     <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.message" :id="'message' + emailTemplate.value"></vue-editor>
                                                 </div>
                                                 <div class="form-actions">
-                                                    <button type="submit" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
-                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                                    <button type="submit" @click="saveEmailMessage(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                    <button type="submit" @click="cancelEditEmailMessage(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -532,8 +532,23 @@ export default {
       });
       emailTemplate.isActive = true;
     },
-    save(emailTemplate) {
-        
+    saveEmailSubject(type) {
+
+    },
+    cancelEditEmailSubject(emailTemplate) {
+        var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
+        var custom = this.$config.model.emailTemplates[emailTemplate.value];
+        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
+        emailTemplate.subject = subject;
+    },
+    saveEmailMessage(type) {
+
+    },
+    cancelEditEmailMessage(emailTemplate) {
+        var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
+        var custom = this.$config.model.emailTemplates[emailTemplate.value];
+        var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message;
+        emailTemplate.message = message;
     },
   },
   components: {
