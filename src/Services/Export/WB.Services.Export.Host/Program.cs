@@ -81,6 +81,7 @@ namespace WB.Services.Export.Host
 
             var fileLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service.log");
             var verboseLog = Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-verbose-.log");
+            var errorDetailedLog= Path.Combine(Directory.GetCurrentDirectory(), "..", "logs", "export-service-errors-.log");
 
             logConfig
                 .ReadFrom.Configuration(configuration)
@@ -91,11 +92,19 @@ namespace WB.Services.Export.Host
                 .Enrich.WithProperty("VersionInfo", fvi.ProductVersion)
                 .Enrich.WithProperty("Host", Environment.MachineName)
                 .WriteTo.Postgres(configuration.GetConnectionString("DefaultConnection"), LogEventLevel.Error)
-                .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose, 
+                .WriteTo.File(Path.GetFullPath(verboseLog), LogEventLevel.Verbose,
                     retainedFileCountLimit: 3, rollingInterval: RollingInterval.Day)
+                .WriteTo.File(Path.GetFullPath(errorDetailedLog),
+                    LogEventLevel.Error,
+                        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}{Properties:j}",
+                    rollingInterval: RollingInterval.Day, retainedFileCountLimit: 5)
+
                 .WriteTo
-                    .File(Path.GetFullPath(fileLog),  LogEventLevel.Debug,
-                        rollingInterval: RollingInterval.Day);
+                    .File(Path.GetFullPath(fileLog), LogEventLevel.Debug,
+                    
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                    rollingInterval: RollingInterval.Day);
+                
 
             var hook = configuration.GetSection("Slack").GetValue<string>("Hook");
             if (!string.IsNullOrWhiteSpace(hook))
@@ -118,23 +127,21 @@ namespace WB.Services.Export.Host
 
             host.ConfigureAppConfiguration(c =>
             {
-                c.AddJsonFile($"appsettings.Shared.json", true);
                 c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                 c.AddJsonFile($"appsettings.Production.json", true);
-                c.AddJsonFile($"appsettings.Staging.json", true);
 
                 c.AddCommandLine(args);
             });
 
             host.ConfigureLogging((hosting, logging) =>
             {
-                
+
                 var logConfig = new LoggerConfiguration();
                 logConfig.Enrich.WithProperty("Environment", hosting.HostingEnvironment.EnvironmentName);
                 logConfig.WriteTo.Console(LogEventLevel.Debug);
 
                 ConfigureSerilog(logConfig, hosting.Configuration);
-                
+
                 Log.Logger = logConfig.CreateLogger();
 
                 if (!hosting.HostingEnvironment.IsDevelopment())
