@@ -47,10 +47,12 @@ namespace WB.Services.Infrastructure.Logging
                         fields.Add(key.ToString(), logEvent.Exception.Data[key]);
                     }
 
-                    message.Attachments.Add(new Attachment
-                    {
-                        text = $"```\r\n{logEvent.Exception.ToStringDemystified()}\r\n```"
-                    });
+                    blocks.Add(new Section($"```\r\n{logEvent.Exception.ToStringDemystified()}\r\n```"));
+
+                    //message.Attachments.Add(new Attachment
+                    //{
+                    //    text = $"```\r\n{logEvent.Exception.ToStringDemystified()}\r\n```"
+                    //});
                 }
                 
                 blocks.Add(new Context()
@@ -63,9 +65,9 @@ namespace WB.Services.Infrastructure.Logging
                     }
                 });
 
-                var messageText = JsonConvert.SerializeObject(message);
+                var messageText = JsonConvert.SerializeObject(blocks);
 
-                File.AppendAllLines("debug.hook", new List<string>{messageText});
+                //File.AppendAllLines("debug.hook", new List<string>{messageText});
                 http.PostAsync(this.webHook, new StringContent(messageText,  Encoding.UTF8, "application/json"));
 
                 void AddPropertyToField(string name, string title = null)
