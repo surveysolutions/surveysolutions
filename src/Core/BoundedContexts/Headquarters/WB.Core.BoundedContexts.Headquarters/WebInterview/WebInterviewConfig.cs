@@ -34,10 +34,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public static Dictionary<EmailTextTemplateType, EmailTextTemplate> DefaultEmailTemplates =>
         new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
         {
-            { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_InvitationTemplate_Subject, Enumerator.Native.Resources.WebInterview.Email_InvitationTemplate_Message) },
-            { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_NoResponse_Subject, Enumerator.Native.Resources.WebInterview.Email_NoResponse_Message) },
-            { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Subject, Enumerator.Native.Resources.WebInterview.Email_PartialResponse_Message) },
-            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Subject, Enumerator.Native.Resources.WebInterview.Email_RejectEmail_Message) }
+            { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message) },
+            { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_NoResponse.Subject, EmailTemplateTexts.Reminder_NoResponse.Message) },
+            { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_PartialResponse.Subject, EmailTemplateTexts.Reminder_PartialResponse.Message) },
+            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message) }
         };
 
         public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
@@ -73,5 +73,55 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         Reminder_NoResponse,
         Reminder_PartialResponse,
         RejectEmail,
+    }
+
+    public class EmailTemplateTexts
+    {
+        public class InvitationTemplate
+        {
+            public static string Subject => "Invitation to take part in %SURVEYNAME%";
+            public static string Message => @"Welcome to %SURVEYNAME%!
+
+To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+ 
+Thank you for your cooperation!";
+        }
+
+        public class Reminder_NoResponse
+        {
+            public static string Subject => "Reminder, don’t forget to take part in %SURVEYNAME%";
+            public static string Message => @"You are receiving this reminder because you haven’t started responding to %SURVEYNAME%!
+ 
+To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+ 
+Thank you for your cooperation!";
+        }
+
+        public class Reminder_PartialResponse
+        {
+            public static string Subject => "Reminder, please finish your response to %SURVEYNAME%";
+            public static string Message => @"You are receiving this reminder because you have started responding to %SURVEYNAME%, but haven’t completed the process.
+ 
+To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+ 
+Please answer all applicable questions and click the ‘COMPLETE’ button to submit your responses.
+ 
+Thank you for your cooperation!";
+        }
+
+        public class RejectEmail
+        {
+            public static string Subject => "Your action is required in %SURVEYNAME%";
+            public static string Message => @"Thank you for taking part in %SURVEYNAME%!
+ 
+While processing your response our staff has found some issues, which you are hereby asked to review.
+ 
+To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+ 
+We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your responses.
+ 
+Thank you for your cooperation!";
+        }
+
     }
 }
