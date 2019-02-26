@@ -30,10 +30,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.displaySelectedValue = displaySelectedValue;
         }
 
-        public async void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
-            await this.UpdateFilter(FilterText);
+            this.UpdateFilter(FilterText);
         }
 
         private int[] excludedOptions = Array.Empty<int>();
@@ -57,13 +57,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => this.RaiseAndSetIfChanged(ref this.autoCompleteSuggestions, value);
         }
 
-        public IMvxAsyncCommand<string> FilterCommand => new MvxAsyncCommand<string>(this.UpdateFilter);
-        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(async() =>
+        public IMvxCommand<string> FilterCommand => new MvxCommand<string>(this.UpdateFilter);
+        public IMvxCommand RemoveAnswerCommand => new MvxCommand(()=>
         {
-            await this.UpdateFilter(null);
+            this.UpdateFilter(null);
             this.OnAnswerRemoved?.Invoke(this,null);
         });
-        public IMvxAsyncCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxAsyncCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
+        public IMvxCommand<OptionWithSearchTerm> SaveAnswerBySelectedOptionCommand => new MvxCommand<OptionWithSearchTerm>(this.SaveAnswerBySelectedOption);
         public IMvxCommand ShowErrorIfNoAnswerCommand => new MvxCommand( ShowErrorIfNoAnswer);
 
         public IMvxCommand<OptionWithSearchTerm> UpdateText => new MvxCommand<OptionWithSearchTerm>(this.UpdateTextValue);
@@ -88,16 +88,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        private async Task SaveAnswerBySelectedOption(OptionWithSearchTerm option)
+        private void SaveAnswerBySelectedOption(OptionWithSearchTerm option)
         {
             this.OnItemSelected?.Invoke(this, option.Value);
-            await this.UpdateFilter(displaySelectedValue ? option.Title : null);
+            this.UpdateFilter(displaySelectedValue ? option.Title : null);
         }
 
-        public async Task UpdateFilter(string filter)
+        public void UpdateFilter(string filter)
         {
             this.FilterText = filter;
-            this.AutoCompleteSuggestions = await Task.Run(() => this.GetSuggestions(filter).ToList());
+            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
         }
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)

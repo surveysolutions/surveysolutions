@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Moq;
 using MvvmCross.Tests;
 using NUnit.Framework;
@@ -15,7 +16,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
         public CategoricalComboboxAutocompleteViewModelTests() => base.Setup();
 
-        [Ignore("Vitalii to fix")]
         [Test]
         public void when_FilterCommand_then_AutoCompleteSuggestions_should_contains_filtered_options_only()
         {
@@ -36,12 +36,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             // act
             vm.FilterCommand.Execute("2");
+            Thread.Sleep(1000);
             // assert
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(2));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] { 2, 3 }));
         }
 
-        [Ignore("Vitalii to fix")]
         [Test]
         public void when_FilterCommand_and_has_excluded_options_then_AutoCompleteSuggestions_should_not_contains_excluded_options()
         {
@@ -63,6 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             vm.ExcludeOptions(excludedOptions);
             // act
             vm.FilterCommand.Execute("1");
+            Thread.Sleep(1000);
             // assert
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(2));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] {2, 3}));
