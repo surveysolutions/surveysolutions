@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -118,6 +119,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return this.invitationsDistributionStatusStorage.GetById(AppSetting.InvitationsDistributionStatus);
         }
 
+        public void MarkInvitationAsReminded(int invitationId, string emailId)
+        {
+            var invitation = this.GetInvitation(invitationId);
+            invitation.ReminderWasSent(emailId);
+            invitationStorage.Store(invitation, invitationId);
+        }
+
         public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
             string baseUrl, string questionnaireTitle)
         {
@@ -176,6 +184,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return cancellationTokenSource.Token;
         }
 
+        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int value)
+        {
+            var thresholdDate = DateTime.UtcNow.AddDays(-value);
+            return invitationStorage.Query(_ => _.Where(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                x.InterviewId != null &&
+                (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate &&
+                x.Interview.Status < InterviewStatus.Completed).Select(x => x.Id).ToList());
+        }
+
+        public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int value)
+        {
+            var thresholdDate = DateTime.UtcNow.AddDays(-value);
+            return invitationStorage.Query(_ => _.Where(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                x.SentOnUtc !=null  &&
+                x.InterviewId == null &&
+                (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate 
+                ).Select(x => x.Id).ToList());
+        }
+
         public Invitation GetInvitation(int invitationId)
         {
             return invitationStorage.GetById(invitationId);
@@ -211,6 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         Invitation GetInvitation(int invitationId);
         void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason);
         void MarkInvitationAsSent(int invitationId, string emailId);
+        void MarkInvitationAsReminded(int invitationId, string emailId);
 
         void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string baseUrl, string questionnaireTitle);
         void StartEmailDistribution();
@@ -219,5 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void EmailDistributionCanceled();
         void CancelEmailDistribution();
         CancellationToken GetCancellationToken();
+        IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int value);
+        IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int value);
     }
 }
