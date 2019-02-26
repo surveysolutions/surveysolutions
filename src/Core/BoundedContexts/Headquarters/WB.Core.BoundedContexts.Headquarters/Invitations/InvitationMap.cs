@@ -16,11 +16,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             Property(x => x.Token);
             Property(x => x.ResumePassword);
             Property(x => x.SentOnUtc);
-            Property(x => x.EmailId);
+            Property(x => x.InvitationEmailId);
+            Property(x => x.LastReminderSentOnUtc);
+            Property(x => x.LastReminderEmailId);
+            Property(x => x.NumberOfRemindersSent);
 
             ManyToOne(x => x.Assignment, mto =>
             {
                 mto.Column("AssignmentId");
+                mto.Cascade(Cascade.None);
+                mto.Update(false);
+                mto.Insert(false);
+            });
+
+            ManyToOne(x => x.Interview, mto =>
+            {
+                mto.Column("InterviewId");
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
                 mto.Insert(false);

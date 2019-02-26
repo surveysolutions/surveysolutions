@@ -18,7 +18,10 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                 .WithColumn("token").AsString().Nullable()
                 .WithColumn("resumepassword").AsString().Nullable()
                 .WithColumn("sentonutc").AsDateTime().Nullable()
-                .WithColumn("emailid").AsString().Nullable();
+                .WithColumn("invitationemailid").AsString().Nullable()
+                .WithColumn("lastremindersentonutc").AsDateTime().Nullable()
+                .WithColumn("lastreminderemailid").AsString().Nullable()
+                .WithColumn("numberofreminderssent").AsString().Nullable();
         }
 
         public override void Down()
