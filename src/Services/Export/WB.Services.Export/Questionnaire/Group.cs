@@ -156,7 +156,11 @@ namespace WB.Services.Export.Questionnaire
             get
             {
                 if (columnName != null) return columnName;
-                columnName = this.VariableName?.ToLower() ?? PublicKey.ToString().ToLower();
+                columnName = !string.IsNullOrWhiteSpace(this.VariableName)
+                                ? this.VariableName.ToLower() 
+                                : PublicKey.ToString().ToLower();
+                if (string.IsNullOrEmpty(columnName))
+                    throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}, Questionnaire: {Root.QuestionnaireId.Id}");
                 return columnName;
             }
         }

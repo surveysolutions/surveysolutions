@@ -58,6 +58,8 @@ namespace WB.Services.Export.Questionnaire
             {
                 if (columnName != null) return columnName;
                 columnName = this.VariableName.ToLower();
+                if (string.IsNullOrEmpty(columnName))
+                    throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}");
                 return columnName;
             }
         }
