@@ -25,9 +25,9 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
-    internal class CascadingSingleOptionQuestionViewModelTestContext : MvxIoCSupportingTest
+    internal class CategoricalComboboxAutocompleteViewModelTestContext : MvxIoCSupportingTest
     {
-        public CascadingSingleOptionQuestionViewModelTestContext()
+        public CategoricalComboboxAutocompleteViewModelTestContext()
         {
             base.Setup();
 
@@ -36,25 +36,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
         }
 
-        protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(
-            IQuestionnaireStorage questionnaireRepository = null,
-            IStatefulInterviewRepository interviewRepository = null,
+        protected static CategoricalComboboxAutocompleteViewModel CreateCategoricalComboboxAutocompleteViewModel(
+            IQuestionStateViewModel questionState = null,
             FilteredOptionsViewModel filteredOptionsViewModel = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
 
-            var cascadingSingleOptionQuestionViewModel = new CascadingSingleOptionQuestionViewModel(
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                EventRegistry.Object,
-                principal, 
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(), 
-                QuestionStateMock.Object,
-                AnsweringViewModelMock.Object,
-                Mock.Of<QuestionInstructionViewModel>(),
-                Stub.MvxMainThreadAsyncDispatcher(),
+            var cascadingSingleOptionQuestionViewModel = new CategoricalComboboxAutocompleteViewModel(
+                questionState ?? Mock.Of<IQuestionStateViewModel>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
-                Create.ViewModel.ThrottlingViewModel());
+            true);
 
             return cascadingSingleOptionQuestionViewModel;
         }

@@ -590,9 +590,9 @@ namespace WB.Tests.Abc.TestFactories
         public CategoricalMultiOptionViewModel CategoricalMultiOptionViewModel(IUserInteractionService userInteractionService = null)
             => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>());
 
-        public CategoricalMultiComboboxAutocompleteViewModel CategoricalMultiComboboxAutocompleteViewModel(
+        public CategoricalComboboxAutocompleteViewModel CategoricalComboboxAutocompleteViewModel(
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
-            new CategoricalMultiComboboxAutocompleteViewModel(
-                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel);
+            new CategoricalComboboxAutocompleteViewModel(
+                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, false);
     }
 }

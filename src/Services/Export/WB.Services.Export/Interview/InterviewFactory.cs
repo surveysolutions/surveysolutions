@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.InterviewDataStorage;
@@ -20,19 +19,16 @@ namespace WB.Services.Export.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        private readonly ITenantContext tenantContext;
         private readonly TenantDbContext tenantDbContext;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, 
-            ITenantContext tenantContext,
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi,
             TenantDbContext tenantDbContext)
         {
             this.tenantApi = tenantApi;
-            this.tenantContext = tenantContext;
             this.tenantDbContext = tenantDbContext;
         }
 
-        public IEnumerable<InterviewEntity> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId, QuestionnaireDocument questionnaire)
+        public IEnumerable<InterviewEntity> GetInterviewEntities(Guid[] interviewsId, QuestionnaireDocument questionnaire)
         {
             foreach (var group in questionnaire.GetAllStoredGroups())
             {
