@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -62,9 +63,10 @@ namespace WB.Services.Infrastructure.Logging
                     }
                 });
 
-                http.PostAsync(this.webHook,
-                    new StringContent(JsonConvert.SerializeObject(message), 
-                        Encoding.UTF8, "application/json"));
+                var messageText = JsonConvert.SerializeObject(message);
+
+                File.AppendAllLines("debug.hook", new List<string>{messageText});
+                http.PostAsync(this.webHook, new StringContent(messageText,  Encoding.UTF8, "application/json"));
 
                 void AddPropertyToField(string name, string title = null)
                 {
@@ -160,7 +162,5 @@ namespace WB.Services.Infrastructure.Logging
             [JsonProperty("text")]
             public string Text { get; set; }
         }
-
-
     }
 }
