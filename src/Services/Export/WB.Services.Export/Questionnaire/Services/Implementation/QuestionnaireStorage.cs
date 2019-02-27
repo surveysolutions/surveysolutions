@@ -64,7 +64,10 @@ namespace WB.Services.Export.Questionnaire.Services.Implementation
 
                 if (questionnaire.IsDeleted)
                 {
-                    databaseSchemaService.DropQuestionnaireDbStructure(questionnaire);
+                    if (databaseSchemaService.TryDropQuestionnaireDbStructure(questionnaire))
+                    {
+                        this.cache.Remove(questionnaireId);
+                    }
                 }
                 else
                 {
