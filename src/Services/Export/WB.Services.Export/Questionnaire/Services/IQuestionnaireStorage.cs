@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Questionnaire.Services
 {
