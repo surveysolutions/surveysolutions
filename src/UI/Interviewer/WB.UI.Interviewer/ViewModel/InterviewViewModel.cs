@@ -133,17 +133,20 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewDisappearing()
         {
-            var interviewId = Guid.Parse(InterviewId);
-            var interview = interviewRepository.Get(this.InterviewId);
-            if (!interview.IsCompleted)
+            if (InterviewId != null) 
             {
-                commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
+                var interviewId = Guid.Parse(InterviewId);
+                var interview = interviewRepository.Get(this.InterviewId);
+                if (!interview.IsCompleted)
+                {
+                    commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
+                }
+
+                auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
+
+                if (IsAudioRecordingEnabled == true)
+                    Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
             }
-
-            auditLogService.Write(new CloseInterviewAuditLogEntity(interviewId, interviewKey?.ToString()));
-
-            if (IsAudioRecordingEnabled == true)
-                Task.Run(() => audioAuditService.StopAudioRecordingAsync(interviewId));
 
             base.ViewDisappearing();
         }
