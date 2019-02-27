@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Dapper;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 
 namespace WB.Services.Export.InterviewDataStorage.Services
 {
@@ -15,16 +8,13 @@ namespace WB.Services.Export.InterviewDataStorage.Services
     {
         private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
         private readonly TenantDbContext dbContext;
-        private readonly IQuestionnaireStorageCache cache;
 
         public DatabaseSchemaService(
             IQuestionnaireSchemaGenerator questionnaireSchemaGenerator,
-            TenantDbContext dbContext,
-            IQuestionnaireStorageCache cache)
+            TenantDbContext dbContext)
         {
             this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
             this.dbContext = dbContext;
-            this.cache = cache;
         }
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
@@ -40,7 +30,7 @@ namespace WB.Services.Export.InterviewDataStorage.Services
             questionnaireSchemaGenerator.CreateQuestionnaireDbStructure(questionnaireDocument);
         }
 
-        public void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
+        public bool TryDropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
@@ -52,12 +42,13 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
             if (reference.DeletedAt == null)
             {
-                this.cache.Remove(questionnaireDocument.QuestionnaireId);
-
                 this.questionnaireSchemaGenerator.DropQuestionnaireDbStructure(questionnaireDocument);
 
                 reference.DeletedAt = DateTime.UtcNow;
+                return true;
             }
+
+            return false;
         }
     }
 }
