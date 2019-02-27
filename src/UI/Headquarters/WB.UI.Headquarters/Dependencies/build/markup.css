@@ -7044,7 +7044,7 @@ a.disabled {
     position: relative; }
   .cancelable-progress .wrapper-progress {
     float: left;
-    width: 70%; }
+    width: 85%; }
     .cancelable-progress .wrapper-progress > span {
       display: block;
       margin-bottom: 7px;

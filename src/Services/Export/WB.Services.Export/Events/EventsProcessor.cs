@@ -78,7 +78,7 @@ namespace WB.Services.Export.Events
         {
             Stopwatch globalStopwatch = Stopwatch.StartNew();
 
-            var runningAverage = new SimpleRunningAverage(20); // running average window size
+            var runningAverage = new SimpleRunningAverage(50); // running average window size
 
             var eventsProducer = new BlockingCollection<EventsFeed>(2);
 
@@ -101,18 +101,31 @@ namespace WB.Services.Export.Events
                     var lastProcessedGlobalSequence = await eventsHandler.HandleEventsFeedAsync(feed, token);
 
                     executionTrack.Stop();
-
+                    
                     // ReSharper disable once PossibleInvalidOperationException - max value will always be set
                     var totalEventsToRead = maximumSequenceToQuery.Value - sequenceToStartFrom;
                     var eventsProcessed = lastProcessedGlobalSequence - sequenceToStartFrom;
-                    var percent = eventsProcessed.PercentOf(totalEventsToRead);
+                    var percent = eventsProcessed.PercentDOf(totalEventsToRead);
 
-                    var size = (int) runningAverage.Add(feed.Events.Count / executionTrack.Elapsed.TotalSeconds);
+                    // in events/second
+                    var thisBatchProcessingSpeed = feed.Events.Count / executionTrack.Elapsed.TotalSeconds;
+
+                    // setting next batch size to be equal average processing speed * multiplier
+                    var size = (int) runningAverage.Add(thisBatchProcessingSpeed);
                     pageSize = (int) (size * BatchSizeMultiplier);
 
-                    var estimatedTime = runningAverage.Eta(totalEventsToRead - eventsProcessed);
-                    dataExportProcessesService.UpdateDataExportProgress(exportProcessId, percent, estimatedTime);
+                    // estimation by average processing speed, seconds
+                    var estimatedAverage = runningAverage.Eta(totalEventsToRead - eventsProcessed);
 
+                    // estimation by overall progress timer, seconds
+                    var estimationByTotal = globalStopwatch.Elapsed.TotalSeconds / (percent / 100.0) 
+                        - globalStopwatch.Elapsed.TotalSeconds;
+
+                    // taking average between two estimations
+                    var estimatedTime = TimeSpan.FromSeconds((estimatedAverage.TotalSeconds + estimationByTotal) / 2.0);
+
+                    dataExportProcessesService.UpdateDataExportProgress(exportProcessId, (int) percent, estimatedTime);
+                    
                     this.logger.LogInformation(
                         "Published {pageSize} events. " +
                         "GlobalSequence: {sequence:n0}/{total:n0}. " +
