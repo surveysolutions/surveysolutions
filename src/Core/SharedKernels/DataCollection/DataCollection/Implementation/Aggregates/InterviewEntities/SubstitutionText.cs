@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net;
-using CommonMark;
-using CommonMark.Syntax;
+using Markdig;
+using Markdig.Parsers;
+using Markdig.Parsers.Inlines;
+using Markdig.Renderers;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -121,19 +124,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private static string MarkdownTextToHtml(string text)
         {
-            var settings = CommonMarkSettings.Default.Clone();
-            settings.OutputFormat = OutputFormat.CustomDelegate;
-            settings.OutputDelegate = (doc, output, s) =>
+            using (var writer = new StringWriter())
             {
-                // this magic should be here because markdown engine wraps up text into paragraph which breaks down layout of our interview.
-                // in our case we just ignore auto generated paragraph
-                if (doc.FirstChild?.Tag == BlockTag.Paragraph)
-                    doc.FirstChild.Tag = BlockTag.Document;
+                var renderer = new HtmlRenderer(writer) { EnableHtmlEscape = false, EnableHtmlForBlock = false};
 
-                new CommonMark.Formatters.HtmlFormatter(output, s).WriteDocument(doc);
-            };
+                var builder = new MarkdownPipelineBuilder();
 
-            return CommonMarkConverter.Convert(text, settings);
+                builder.BlockParsers.Clear();
+                builder.InlineParsers.Clear();
+
+                builder.BlockParsers.AddIfNotAlready<ParagraphBlockParser>();
+                builder.InlineParsers.AddIfNotAlready<LinkInlineParser>();
+                builder.InlineParsers.AddIfNotAlready<AutolineInlineParser>();
+
+                var pipeline = builder.Build();
+
+                pipeline.Setup(renderer);
+                var document = Markdown.Parse(text, pipeline);
+                renderer.Render(document);
+
+                return writer.ToString();
+            }
         }
 
         public override string ToString() => this.Text;
