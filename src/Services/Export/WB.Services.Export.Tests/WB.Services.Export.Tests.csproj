@@ -51,4 +51,10 @@
     <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
