@@ -1,26 +1,19 @@
-﻿using System.Diagnostics;
-using WB.Services.Infrastructure.Tenant;
+﻿using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export
 {
-#if RANDOMSCHEMA
     public static class TenantInfoExtension
     {
-        private static readonly long pid;
+        private static string DebugTag { get; set; } = string.Empty;
 
-        static TenantInfoExtension()
+        public static void AddSchemaDebugTag(string tag)
         {
-            pid = Process.GetCurrentProcess().Id;
+            DebugTag = tag;
         }
 
-        public static string SchemaName(this TenantInfo tenantInfo) =>
-            tenantInfo.Name + "_" + pid + "_" + tenantInfo.Id;
+        public static string SchemaName(this TenantInfo tenantInfo)
+        {
+            return tenantInfo.Name + "_" + DebugTag + tenantInfo.Id;
+        }
     }
-#else
-    public static class TenantInfoExtension
-    {
-        public static string SchemaName(this TenantInfo tenantInfo) =>
-            tenantInfo.Name + "_" + tenantInfo.Id;
-    }
-#endif
 }
