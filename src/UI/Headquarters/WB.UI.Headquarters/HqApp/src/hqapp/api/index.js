@@ -132,6 +132,15 @@ class AssignmentsApi {
 
         return this.http.patch(url,  {enabled: isEnabled})
     }
+
+    async quantitySettings(assignmentId) {
+        var url = `${this.base}/${assignmentId}/quantityMutable`
+
+        const response = await this.http.get(url)
+        const responseData = response.data
+
+        return responseData
+    }
 }
 
 class HqApiClient {

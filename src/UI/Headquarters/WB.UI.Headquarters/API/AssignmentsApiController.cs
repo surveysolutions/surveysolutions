@@ -169,6 +169,9 @@ namespace WB.UI.Headquarters.API
             if (request.Quantity < -1)
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
 
+            if(!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
+                return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.WebMode);
+
             assignment.UpdateQuantity(request.Quantity);
             this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();

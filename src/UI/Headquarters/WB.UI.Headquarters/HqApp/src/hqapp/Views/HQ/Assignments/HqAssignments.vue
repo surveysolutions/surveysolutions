@@ -138,6 +138,7 @@
         <ModalFrame ref="editQuantityModal"
                     :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
+            <p v-if="!editedQuantityMutable"><b >{{ $t("Assignments.WebMode")}}</b></p>
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
@@ -155,7 +156,8 @@
                            autocomplete="off"
                            @keyup.enter="updateQuantity"
                            id="newQuantity"
-                           placeholder="1">
+                           placeholder="1"
+                           :disabled="!editedQuantityMutable">
 
                     <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
                 </div>
@@ -163,7 +165,7 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-primary"
-                        :disabled="!showSelectors"
+                        :disabled="!showSelectors || !editedQuantityMutable"
                         @click="updateQuantity">{{$t("Common.Save")}}</button>
                 <button type="button"
                         class="btn btn-link"
@@ -192,7 +194,8 @@ export default {
             newResponsibleId: null,
             editedRowId: null,
             editedQuantity: null,
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            editedQuantityMutable: null
         };
     },
 
@@ -260,7 +263,7 @@ export default {
                 {
                     data: "quantity",
                     name: "Quantity",
-                    class: "type-numeric pointer",
+                    class: "type-numeric pointer editable",
                     searchHighlight: false,
                     searchable: false,
                     title: this.$t("Assignments.Size"),
@@ -344,6 +347,7 @@ export default {
                 {
                     data: "isAudioRecordingEnabled",
                     name: "IsAudioRecordingEnabled",
+                    class: "pointer editable",
                     title: this.$t("Assignments.IsAudioRecordingEnabled"),
                     tooltip: this.$t("Assignments.Tooltip_Table_IsAudioRecordingEnabled"),
                     searchable: false,
@@ -521,6 +525,12 @@ export default {
             if (columnName === "Quantity" && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
+
+                this.$hq.Assignments.quantitySettings(rowId).then(data => {
+                    this.editedQuantityMutable = data.Mutable;
+                    this.$refs.editQuantityModal.modal("show");
+                });
+
                 this.$refs.editQuantityModal.modal("show");
             }
             if (columnName === "IsAudioRecordingEnabled" && this.config.isHeadquarter && !this.showArchive.key) {
