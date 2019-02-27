@@ -44,9 +44,11 @@ namespace WB.Services.Export.Host
                 WebConfigReader.Read(Configuration, webConfig, logger);
             }
 
+            services.AddTransient<TenantModelBinder>();
             services.AddMvcCore(ops =>
             {
                 ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+                ops.Filters.Add<TenantInfoPropagationActionFilter>();
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonFormatters();
