@@ -680,5 +680,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        /// </summary>
+        public static string WebMode {
+            get {
+                return ResourceManager.GetString("WebMode", resourceCulture);
+            }
+        }
     }
 }

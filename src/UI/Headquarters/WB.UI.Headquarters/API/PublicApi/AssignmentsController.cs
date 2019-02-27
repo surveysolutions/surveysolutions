@@ -347,6 +347,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
+            if (!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+
             assignment.UpdateQuantity(quantity);
             assignmentsStorage.Store(assignment, id);
             this.auditLog.AssignmentSizeChanged(id, quantity);
@@ -435,5 +438,26 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.assignmentsStorage.Store(assignment, assignment.Id);
             return Request.CreateResponse(HttpStatusCode.NoContent);
         }
+
+        /// <summary>
+        /// Gets status of audio recording for provided assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200"></response>
+        /// <response code="404">Assignment not found</response>
+        [HttpGet]
+        [Route("{id:int}/quantityMutable")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        public AssignmentQuantityMutable QuantityMutable(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return new AssignmentQuantityMutable
+            {
+                Mutable = string.IsNullOrEmpty(assignment.Email) && string.IsNullOrEmpty(assignment.Password)
+            };
+        }
+
     }
 }
