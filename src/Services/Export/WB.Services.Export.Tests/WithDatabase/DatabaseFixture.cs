@@ -47,10 +47,18 @@ namespace WB.Services.Export.Tests.WithDatabase
             }
         }
 
-        protected static IConfiguration Configuration => new ConfigurationBuilder()
+        protected static IConfiguration Configuration = new ConfigurationBuilder()
             .AddJsonFile($@"appsettings.json", true)
             .Build();
 
-        public static string ConnectionString => Configuration.GetConnectionString("DefaultConnection");
+        public static string ConnectionString
+        {
+            get
+            {
+
+                var cs = Configuration.GetConnectionString("DefaultConnection");
+                return cs;
+            }
+        }
     }
 }
