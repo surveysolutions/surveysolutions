@@ -52,6 +52,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.fr.resx">
+      <Link>Common.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.resx">
       <Link>Common.resx</Link>
     </EmbeddedResource>
@@ -91,6 +94,9 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ModeOfDataCollection.ru.resx">
       <Link>ModeOfDataCollection.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.fr.resx">
+      <Link>PdfStrings.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx">
       <Link>PdfStrings.resx</Link>
     </EmbeddedResource>
@@ -99,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.zh.resx">
       <Link>PdfStrings.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.fr.resx">
+      <Link>QuestionnaireEditor.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.resx">
       <Link>QuestionnaireEditor.resx</Link>
@@ -126,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\StudyType.resx">
       <Link>StudyType.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.fr.resx">
+      <Link>VerificationMessages.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx">
       <Link>VerificationMessages.resx</Link>
@@ -184,6 +196,9 @@
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.zh.resx">
       <Link>FindReplaceResources.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.fr.resx">
+      <Link>NotificationResources.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx">
       <Link>NotificationResources.resx</Link>
     </EmbeddedResource>
@@ -193,17 +208,26 @@
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.zh.resx">
       <Link>NotificationResources.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\Paging.fr.resx">
+      <Link>Paging.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\Paging.resx">
       <Link>Paging.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\Paging.zh.resx">
       <Link>Paging.zh.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.fr.resx">
+      <Link>PdfMessages.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx">
       <Link>PdfMessages.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.ru.resx">
       <Link>PdfMessages.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.fr.resx">
+      <Link>QuestionnaireController.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx">
       <Link>QuestionnaireController.resx</Link>
@@ -216,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireEditor.zh.resx">
       <Link>QuestionnaireEditor.zh.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireHistoryResources.fr.resx">
+      <Link>QuestionnaireHistoryResources.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireHistoryResources.zh.resx">
       <Link>QuestionnaireHistoryResources.zh.resx</Link>
