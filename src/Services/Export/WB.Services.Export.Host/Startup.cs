@@ -44,9 +44,11 @@ namespace WB.Services.Export.Host
                 WebConfigReader.Read(Configuration, webConfig, logger);
             }
 
+            services.AddTransient<TenantModelBinder>();
             services.AddMvcCore(ops =>
             {
                 ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+                ops.Filters.Add<TenantInfoPropagationActionFilter>();
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonFormatters();
@@ -82,7 +84,12 @@ namespace WB.Services.Export.Host
             healthChecksBuilder
                 .AddCheck<EfCoreHealthCheck>("EF migrations")
                 .AddDbContextCheck<JobContext>("Database");
-            ServicesRegistry.Configure(services, Configuration);
+
+            services.Configure(Configuration);
+            
+            #if RANDOMSCHEMA && DEBUG
+            TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
+            #endif
 
             // Create the IServiceProvider based on the container.
             return services.BuildServiceProvider();

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommonMark;
-using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Markdig;
+using Markdig.Parsers;
+using Markdig.Parsers.Inlines;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -85,21 +88,29 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return links.Any();
         }
 
-        private static IEnumerable<string> GetMarkdownLinksFromText(string text)
+        public static IEnumerable<string> GetMarkdownLinksFromText(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) yield break;
 
-            var markdownDocument = CommonMarkConverter.Parse(text);
+            var builder = new MarkdownPipelineBuilder();
 
-            foreach (var node in markdownDocument.AsEnumerable())
+            builder.BlockParsers.Clear();
+            builder.InlineParsers.Clear();
+
+            builder.BlockParsers.AddIfNotAlready<ParagraphBlockParser>();
+            builder.InlineParsers.AddIfNotAlready<LinkInlineParser>();
+            builder.InlineParsers.AddIfNotAlready<AutolineInlineParser>();
+
+            var pipeline = builder.Build();
+
+            foreach (var node in Markdown.Parse(text, pipeline).AsEnumerable())
             {
-                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
-
-                var url = node.Inline.TargetUrl.ToLower();
-
-                if (!string.IsNullOrWhiteSpace(url))
+                if(!(node is LeafBlock leafBlock)) continue;
+                foreach (var inline in leafBlock.Inline)
                 {
-                    yield return url;
+                    if(!(inline is LinkInline link)) continue;
+
+                    yield return link.Url?.ToLower();
                 }
             }
         }

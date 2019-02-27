@@ -286,5 +286,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             return text;
         }
+
+        [Test]
+        public void when_create_substitution_text_with_markdown_lists_then_lists_markup_should_not_be_converted_into_html()
+        {
+            // arrange
+            var markdownTextWithListItem = "1. List option 1";
+
+            // act
+            var substitutionText = CreateSubstitutionText(Id.Identity1, markdownTextWithListItem);
+
+            // assert
+            Assert.That(substitutionText.Text, Is.EqualTo(markdownTextWithListItem));
+        }
     }
 }

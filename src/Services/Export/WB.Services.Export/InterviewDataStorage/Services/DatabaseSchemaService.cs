@@ -19,6 +19,10 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
+            if (this.dbContext.Database.IsNpgsql())
+            {
+                this.dbContext.Database.Migrate();
+            }
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
             if (reference != null)
