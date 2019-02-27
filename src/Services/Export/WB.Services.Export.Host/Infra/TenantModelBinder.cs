@@ -6,7 +6,7 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Host.Infra
 {
-    public class TenantEntityBinder : IModelBinder
+    public class TenantModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
@@ -27,7 +27,9 @@ namespace WB.Services.Export.Host.Infra
 
             TenantInfo tenantInfo = new TenantInfo(baseUrl, tenantId, name);
             bindingContext.Result = ModelBindingResult.Success(tenantInfo);
+            
             return Task.CompletedTask;
         }
     }
 }
+
