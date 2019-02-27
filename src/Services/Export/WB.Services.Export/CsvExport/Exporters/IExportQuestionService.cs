@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -11,8 +10,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     public interface IExportQuestionService
     {
-        string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header,
-            QuestionnaireDocument questionnaire);
+        string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header);
         string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled);
     }
 
@@ -20,10 +18,9 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
-        public string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header,
-            QuestionnaireDocument questionnaire)
+        public string[] GetExportedQuestion(InterviewEntity question, ExportedQuestionHeaderItem header)
         {
-            var answers = this.GetAnswers(question, header, questionnaire);
+            var answers = this.GetAnswers(question, header);
 
             if (answers.Length != header.ColumnHeaders.Count)
                 throw new InvalidOperationException(
@@ -55,8 +52,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private string[] GetAnswers(InterviewEntity question, ExportedQuestionHeaderItem header,
-            QuestionnaireDocument questionnaire)
+        private string[] GetAnswers(InterviewEntity question, ExportedQuestionHeaderItem header)
         {
             if (question == null)
                 return BuildMissingValueAnswer(header);
@@ -107,7 +103,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                         case QuestionSubtype.MultyOption_Linked:
                         {
                             if (question.AsIntMatrix != null)
-                                return GetMultiLinkedToRosterAnswers(question.AsIntMatrix, header, header.ColumnHeaders.Count, questionnaire).ToArray();
+                                return GetMultiLinkedToRosterAnswers(question.AsIntMatrix, header, header.ColumnHeaders.Count).ToArray();
                             if (question.AsIntArray != null)
                                 return GetMultiLinkedToListAnswers(question.AsIntArray, header, header.ColumnHeaders.Count).ToArray();
                         }
@@ -121,7 +117,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.SingleOption:
                 {
                     return header.QuestionSubType == QuestionSubtype.SingleOption_Linked && question.AsIntArray != null
-                        ? GetSingleLinkedToRosterAnswer(question.AsIntArray, header, questionnaire).ToArray()
+                        ? GetSingleLinkedToRosterAnswer(question.AsIntArray, header).ToArray()
                         : new[] {this.ConvertAnswerToStringValue(question.AsInt, header)};
                 }
                 case QuestionType.TextList:
@@ -216,19 +212,11 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        private IEnumerable<string> GetSingleLinkedToRosterAnswer(int[] answer, ExportedQuestionHeaderItem header, QuestionnaireDocument questionnaire)
+        private IEnumerable<string> GetSingleLinkedToRosterAnswer(int[] answer, ExportedQuestionHeaderItem header)
         {
             if (answer == null) yield return ExportFormatSettings.MissingNumericQuestionValue;
 
-            var linkedTo = questionnaire.Find<Question>(header.PublicKey);
-            var isNumericRosterSource = questionnaire.GetRosterSizeSourcesForEntity(
-                    linkedTo.LinkedToQuestionId ?? linkedTo.LinkedToRosterId.Value)
-                .Select(questionnaire.IsIntegerQuestion)
-                .ToArray();
-
-            var answerWithFixedNumericRosterCodes = answer.Select((value, index) => isNumericRosterSource[index] ? value + 1 : value).ToArray();
-
-            yield return ConvertAnswerToStringValue(answerWithFixedNumericRosterCodes, header);
+            yield return ConvertAnswerToStringValue(answer, header);
         }
 
         private IEnumerable<string> GetMultiLinkedToListAnswers(int[] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
@@ -243,19 +231,12 @@ namespace WB.Services.Export.CsvExport.Exporters
                 yield return ExportFormatSettings.MissingNumericQuestionValue;
         }
 
-        private IEnumerable<string> GetMultiLinkedToRosterAnswers(int[][] answers, ExportedQuestionHeaderItem header, int expectedColumnCount,
-            QuestionnaireDocument questionnaire)
+        private IEnumerable<string> GetMultiLinkedToRosterAnswers(int[][] answers, ExportedQuestionHeaderItem header, int expectedColumnCount)
         {
             if (answers != null)
             {
-                var linkedTo = questionnaire.Find<Question>(header.PublicKey);
-                var isNumericRosterSource = questionnaire.GetRosterSizeSourcesForEntity(
-                        linkedTo.LinkedToQuestionId ?? linkedTo.LinkedToRosterId.Value)
-                    .Select(questionnaire.IsIntegerQuestion)
-                    .ToArray();
-
                 foreach (var answer in answers)
-                    yield return this.ConvertAnswerToStringValue(answer.Select((value, index) => isNumericRosterSource[index] ? value + 1 : value).ToArray(), header);
+                    yield return this.ConvertAnswerToStringValue(answer, header);
             }
 
             for (int i = 0; i < expectedColumnCount - (answers?.Length ?? 0); i++)
