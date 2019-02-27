@@ -12,7 +12,6 @@ using Npgsql;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage.Services
@@ -21,7 +20,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
     {
         private readonly ITenantContext tenantContext;
         private readonly TenantDbContext dbContext;
-        private readonly IQuestionnaireStorageCache cache;
         private readonly IDatabaseSchemaCommandBuilder commandBuilder;
         private readonly ILogger<DatabaseSchemaService> logger;
         private readonly IOptions<DbConnectionSettings> connectionSettings;
@@ -29,13 +27,11 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         public QuestionnaireSchemaGenerator(ITenantContext tenantContext,
             TenantDbContext dbContext,
             IDatabaseSchemaCommandBuilder commandBuilder,
-            IQuestionnaireStorageCache cache,
             ILogger<DatabaseSchemaService> logger,
             IOptions<DbConnectionSettings> connectionSettings)
         {
             this.tenantContext = tenantContext;
             this.dbContext = dbContext;
-            this.cache = cache;
             this.commandBuilder = commandBuilder;
             this.logger = logger;
             this.connectionSettings = connectionSettings;
@@ -74,8 +70,6 @@ namespace WB.Services.Export.InterviewDataStorage.Services
         {
             try
             {
-                this.cache.Remove(questionnaireDocument.QuestionnaireId);
-
                 var db = dbContext.Database.GetDbConnection();
                 foreach (var storedGroup in questionnaireDocument.DatabaseStructure.GetAllLevelTables())
                 {

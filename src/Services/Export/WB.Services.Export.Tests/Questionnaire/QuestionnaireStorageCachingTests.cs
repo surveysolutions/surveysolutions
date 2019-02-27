@@ -48,7 +48,8 @@ namespace WB.Services.Export.Tests.Questionnaire
             this.db = new TenantDbContext(tenantContext, Options.Create(new DbConnectionSettings()), options);
 
             this.cache = new QuestionnaireStorageCache(db, memoryCache, tenantContext);
-            this.dbSchema = new DatabaseSchemaService(this.schemaGeneratorMock.Object, db, cache);
+
+            this.dbSchema = new DatabaseSchemaService(this.schemaGeneratorMock.Object, db);
             this.storage = new QuestionnaireStorage(cache, dbSchema, tenantContext, new NullLogger<QuestionnaireStorage>());
         }
 
@@ -161,10 +162,10 @@ namespace WB.Services.Export.Tests.Questionnaire
         public void should_drop_schema_only_once_by_database_schema_service()
         {
             var doc = Create.QuestionnaireDocument();
-            this.dbSchema.DropQuestionnaireDbStructure(doc);
-            this.dbSchema.DropQuestionnaireDbStructure(doc);
-            this.dbSchema.DropQuestionnaireDbStructure(doc);
-            this.dbSchema.DropQuestionnaireDbStructure(doc);
+            this.dbSchema.TryDropQuestionnaireDbStructure(doc);
+            this.dbSchema.TryDropQuestionnaireDbStructure(doc);
+            this.dbSchema.TryDropQuestionnaireDbStructure(doc);
+            this.dbSchema.TryDropQuestionnaireDbStructure(doc);
 
             this.schemaGeneratorMock.Verify(q => q.DropQuestionnaireDbStructure(doc), Times.Once);
         }
