@@ -10,7 +10,8 @@
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
-    
+    <Configurations>Debug;Release;DebugEmptyTenant</Configurations>
+    <DefineConstants Condition="'$(Configuration)' == 'DebugEmptyTenant'">DEBUG;TRACE;RANDOMSCHEMA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

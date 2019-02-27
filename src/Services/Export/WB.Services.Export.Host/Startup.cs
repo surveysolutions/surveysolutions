@@ -82,7 +82,12 @@ namespace WB.Services.Export.Host
             healthChecksBuilder
                 .AddCheck<EfCoreHealthCheck>("EF migrations")
                 .AddDbContextCheck<JobContext>("Database");
-            ServicesRegistry.Configure(services, Configuration);
+
+            services.Configure(Configuration);
+            
+            #if RANDOMSCHEMA && DEBUG
+            TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
+            #endif
 
             // Create the IServiceProvider based on the container.
             return services.BuildServiceProvider();

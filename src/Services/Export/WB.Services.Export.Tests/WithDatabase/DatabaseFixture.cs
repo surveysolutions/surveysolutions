@@ -35,12 +35,6 @@ namespace WB.Services.Export.Tests.WithDatabase
                     createCommand.ExecuteNonQuery();
                 }
             }
-
-            //using (var db = new NpgsqlConnection(ConnectionString))
-            //{
-            //    db.Open();
-            //    db.Execute("create schema if not exists " + TenantName);
-            //}
         }
 
         [OneTimeTearDown]
