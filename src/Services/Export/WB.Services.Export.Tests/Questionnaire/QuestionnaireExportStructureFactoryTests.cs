@@ -40,7 +40,7 @@ namespace WB.Services.Export.Tests.Questionnaire
             ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
 
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Count, Is.EqualTo(2));
-            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name).ToArray(), Is.EquivalentTo(new[] { "mult__1", "mult__2" }));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name).ToArray(), Is.EquivalentTo(new[] { "mult__0", "mult__1" }));
 
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[0].ExportType, Is.EqualTo(ExportValueType.String));
             Assert.That(exportedQuestionHeaderItem.ColumnHeaders[1].ExportType, Is.EqualTo(ExportValueType.String));
