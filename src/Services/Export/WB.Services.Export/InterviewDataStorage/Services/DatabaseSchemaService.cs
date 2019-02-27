@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Questionnaire;
@@ -20,7 +21,10 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
         public void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument)
         {
-            this.dbContext.Database.Migrate();
+            if (this.dbContext.Database.IsNpgsql())
+            {
+                this.dbContext.Database.Migrate();
+            }
             var reference = this.dbContext.GeneratedQuestionnaires.Find(questionnaireDocument.QuestionnaireId.ToString());
 
             if (reference != null)
