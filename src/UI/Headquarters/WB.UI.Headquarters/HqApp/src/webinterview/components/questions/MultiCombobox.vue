@@ -86,8 +86,9 @@
                 if(!includes(this.$me.answer, valueToRemove)) return
 
                 const newAnswer = without(this.$me.answer, valueToRemove)
-
+                
                 if (this.$me.isRosterSize) {
+                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
                     modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
