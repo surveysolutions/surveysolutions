@@ -77,10 +77,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             }
-
-            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
+            
             this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
-
             SetAnswerAndUpdateFilter();
 
             UpdateOptions();
