@@ -43,6 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ar.resx">
+      <Link>TesterUIResources.ar.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.es.resx">
       <Link>TesterUIResources.es.resx</Link>
     </EmbeddedResource>
@@ -51,6 +54,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.id-ID.resx">
       <Link>TesterUIResources.id-ID.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.ka.resx">
+      <Link>TesterUIResources.ka.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.km.resx">
       <Link>TesterUIResources.km.resx</Link>

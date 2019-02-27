@@ -518,7 +518,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_1()
+        public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
         {
             // arrange
             var multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
@@ -552,11 +552,11 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
         }
 
         [Test]
-        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_1()
+        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
         {
             // arrange
             var singleOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
@@ -590,7 +590,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
         }
 
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)

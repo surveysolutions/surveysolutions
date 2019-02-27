@@ -14,7 +14,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.10" />
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="DotNetZip" Version="1.12.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />

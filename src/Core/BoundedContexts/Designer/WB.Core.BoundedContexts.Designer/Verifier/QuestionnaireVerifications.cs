@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using CommonMark;
-using CommonMark.Syntax;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -17,7 +14,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -364,16 +360,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool TextHasMarkdownLinkWithUnknownVariable(string text, string[] allAllowedVariableNames)
         {
-            if (string.IsNullOrEmpty(text)) return false;
-
-            var markdownDocument = CommonMarkConverter.Parse(text);
-
-            foreach (var node in markdownDocument.AsEnumerable())
+            foreach (var url in GroupVerifications.GetMarkdownLinksFromText(text))
             {
-                if (!node.IsOpening || node.Inline == null || node.Inline.Tag != InlineTag.Link) continue;
-
-                var url = node.Inline.TargetUrl.ToLower();
-
                 if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) continue;
                 if (allAllowedVariableNames.Contains(url)) continue;
                 if(new []{ "cover", "complete", "overview" }.Contains(url)) continue;

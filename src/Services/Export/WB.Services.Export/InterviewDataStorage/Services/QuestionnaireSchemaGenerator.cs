@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
@@ -206,10 +207,10 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
         private void CreateSchema(DbConnection connection, TenantInfo tenant)
         {
-            connection.Execute(commandBuilder.GenerateCreateSchema(tenant.SchemaName()));
+            connection.Execute(commandBuilder.GenerateCreateSchema(tenant));
         }
 
-        public async Task DropTenantSchemaAsync(string tenant)
+        public async Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default)
         {
             List<string> tablesToDelete = new List<string>();
 
@@ -219,17 +220,19 @@ namespace WB.Services.Export.InterviewDataStorage.Services
 
                 logger.LogInformation("Start drop tenant scheme: {tenant}", tenant);
 
-                var schemas = await db.QueryAsync<string>(
-                    "select nspname from pg_catalog.pg_namespace where nspname like @tenant " +
-                    "and exists (select tablename from pg_tables where schemaname= nspname and tablename = '__migrations')",
+                var schemas = (await db.QueryAsync<string>(
+                    "select nspname from pg_catalog.pg_namespace n " +
+                    "join pg_catalog.pg_description d on d.objoid = n.oid " +
+                    "where d.description = @tenant",
                     new
                     {
-                        tenant = tenant + "_%"
-                    });
+                        tenant 
+                    })).ToList();
 
                 foreach (var schema in schemas)
                 {
-                    var tables = await db.QueryAsync<string>("select tablename from pg_tables where schemaname= @schema",
+                    var tables = await db.QueryAsync<string>(
+                        "select tablename from pg_tables where schemaname= @schema",
                         new { schema });
 
                     foreach (var table in tables)
