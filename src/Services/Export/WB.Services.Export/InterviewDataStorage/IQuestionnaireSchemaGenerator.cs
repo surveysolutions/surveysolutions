@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.InterviewDataStorage
@@ -7,6 +8,6 @@ namespace WB.Services.Export.InterviewDataStorage
     {
         void CreateQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
         void DropQuestionnaireDbStructure(QuestionnaireDocument questionnaireDocument);
-        Task DropTenantSchemaAsync(string tenant);
+        Task DropTenantSchemaAsync(string tenant, CancellationToken cancellationToken = default);
     }
 }
