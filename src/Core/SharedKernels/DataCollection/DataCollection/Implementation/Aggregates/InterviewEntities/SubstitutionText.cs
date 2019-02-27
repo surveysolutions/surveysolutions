@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var document = Markdown.Parse(text, pipeline);
                 renderer.Render(document);
 
-                return writer.ToString();
+                return writer.ToString().TrimEnd('\n');
             }
         }
 
