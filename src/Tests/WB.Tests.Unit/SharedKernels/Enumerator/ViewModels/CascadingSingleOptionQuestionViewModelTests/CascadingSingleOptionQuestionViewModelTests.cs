@@ -582,55 +582,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         [Test]
-        public void when_invoking_ValueChangeCommand_and_there_is_match_in_options_list_with_already_saved_answer()
-        {
-
-            CascadingSingleOptionQuestionViewModel cascadingModel;
-            int answerOnChildQuestion = 3;
-            Mock<ValidityViewModel> ValidityModelMock = new Mock<ValidityViewModel>();
-            SetUp();
-
-            var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(answerOnChildQuestion));
-            var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(1));
-
-            var interview = new Mock<IStatefulInterview>();
-
-            interview.Setup(x => x.QuestionnaireIdentity).Returns(questionnaireId);
-            interview.Setup(x => x.GetSingleOptionQuestion(questionIdentity)).Returns(childAnswer);
-            interview.Setup(x => x.GetSingleOptionQuestion(parentIdentity)).Returns(parentOptionAnswer);
-            interview.Setup(x => x.GetOptionForQuestionWithoutFilter(questionIdentity, 3, 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
-            interview.Setup(x => x.GetOptionForQuestionWithFilter(questionIdentity, "3", 1)).Returns(new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 });
-            interview.Setup(x => x.GetTopFilteredOptionsForQuestion(Moq.It.IsAny<Identity>(), Moq.It.IsAny<int?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<int>()))
-                .Returns((Identity identity, int? value, string filter, int count) => Options.Where(x => x.ParentValue == value && x.Title.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
-
-            var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview.Object);
-
-            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
-
-            QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
-
-            var filteredOptionsViewModel = Abc.SetUp.FilteredOptionsViewModel(new List<CategoricalOption>()
-            {
-                new CategoricalOption() { Title = "3", Value = 3, ParentValue = 1 }
-            });
-
-            cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
-                interviewRepository: interviewRepository,
-                questionnaireRepository: questionnaireRepository, filteredOptionsViewModel: filteredOptionsViewModel);
-
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
-
-            var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
-            combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3, "3"));
-
-
-            //act
-            combo.SaveAnswerBySelectedOptionCommand.Execute(Create.Entity.OptionWithSearchTerm(3, "3"));
-
-            AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Once);
-        }
-
-        [Test]
         public void when_handling_AnswersRemoved_for_cascading_question()
         {
             CascadingSingleOptionQuestionViewModel cascadingModel;
