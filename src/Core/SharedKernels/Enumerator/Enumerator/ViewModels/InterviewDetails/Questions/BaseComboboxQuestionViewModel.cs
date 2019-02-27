@@ -81,6 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.optionsTopBorderViewModel = new OptionBorderViewModel(this.QuestionState, true);
             this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.QuestionState, false);
 
+            this.filteredOptionsViewModel.Init(interviewId, entityIdentity, SuggestionsMaxCount);
+
             this.comboboxViewModel.Init(interviewId, entityIdentity, navigationState);
             this.comboboxViewModel.OnItemSelected += ComboboxInstantViewModel_OnItemSelected;
             this.comboboxViewModel.OnAnswerRemoved += ComboboxInstantViewModel_OnAnswerRemoved;
