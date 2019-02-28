@@ -134,7 +134,7 @@ class AssignmentsApi {
     }
 
     async quantitySettings(assignmentId) {
-        var url = `${this.base}/${assignmentId}/quantityMutable`
+        var url = `${this.base}/${assignmentId}/assignmentQuantitySettings`
 
         const response = await this.http.get(url)
         const responseData = response.data
