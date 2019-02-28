@@ -152,7 +152,6 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
             model.QuestionnaireIdentity = questionnaireIdentity;
-            model.UseCaptcha = true;
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
@@ -184,6 +183,10 @@ namespace WB.UI.Headquarters.Controllers
                     Subject = t.Value.Subject,
                     Message = t.Value.Message
                 });
+            model.ReminderAfterDaysIfNoResponse = config.ReminderAfterDaysIfNoResponse;
+            model.ReminderAfterDaysIfPartialResponse = config.ReminderAfterDaysIfPartialResponse;
+            model.Started = config.Started;
+            model.UseCaptcha = config.UseCaptcha;
 
             return View(model);
         }
@@ -376,6 +379,9 @@ namespace WB.UI.Headquarters.Controllers
         public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> DefaultEmailTemplates { get; set; }
         public string DownloadAssignmentsUrl { get; set; }
         public string UpdateTextsUrl { get; set; }
+        public int? ReminderAfterDaysIfNoResponse { get; set; } 
+        public int? ReminderAfterDaysIfPartialResponse { get; set; }
+        public bool Started { get; set; }
     }
 
     public class EmailTextTemplateViewModel
