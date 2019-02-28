@@ -18,7 +18,9 @@ export default {
         },
         tableOptions() { 
             return {
-                rowId: "id",
+                rowId: (row) => {
+                    return `row${row.id}`
+                },
                 deferLoading: 0,
                 order: [[4, 'desc']],
                 columns: this.getTableColumns(),
