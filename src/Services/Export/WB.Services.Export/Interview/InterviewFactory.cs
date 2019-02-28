@@ -303,7 +303,18 @@ namespace WB.Services.Export.Interview
                         answer.Type = multimediaQuestion.QuestionType == QuestionType.Multimedia
                             ? MultimediaType.Image
                             : MultimediaType.Audio;
-                        answer.Answer = (string) reader[$"data__{multimediaQuestion.ColumnName}"];
+                        var stringAnswer = (string) reader[$"data__{multimediaQuestion.ColumnName}"];
+                        if (answer.Type == MultimediaType.Audio)
+                        {
+                            var objectAnswer = JsonConvert.DeserializeObject<AudioAnswer>(stringAnswer);
+                            answer.Answer = objectAnswer.FileName;
+                        }
+                        else if(answer.Type == MultimediaType.Image)
+                        {
+                            answer.Answer = stringAnswer;
+
+                        }
+
                         answers.Add(answer);
                     }
                 }
