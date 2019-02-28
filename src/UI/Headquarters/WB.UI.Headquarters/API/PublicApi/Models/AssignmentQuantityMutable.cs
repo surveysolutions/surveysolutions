@@ -8,6 +8,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Is Quantity Mutable.
         /// </summary>
         [DataMember(IsRequired = true)]
-        public bool Mutable { get; set; }
+        public bool CanChangeQuantity { get; set; }
     }
 }

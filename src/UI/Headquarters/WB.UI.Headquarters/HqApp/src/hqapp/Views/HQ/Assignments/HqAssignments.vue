@@ -527,7 +527,7 @@ export default {
                 this.editedQuantity = cellData;
 
                 this.$hq.Assignments.quantitySettings(rowId).then(data => {
-                    this.editedQuantityMutable = data.Mutable;
+                    this.editedQuantityMutable = data.CanChangeQuantity;
                     this.$refs.editQuantityModal.modal("show");
                 });
 
