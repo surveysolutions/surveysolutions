@@ -440,22 +440,22 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Gets status of audio recording for provided assignment
+        /// Gets Quantity Settings for provided assignment
         /// </summary>
         /// <param name="id">Assignment id</param>
         /// <response code="200"></response>
         /// <response code="404">Assignment not found</response>
         [HttpGet]
-        [Route("{id:int}/quantityMutable")]
+        [Route("{id:int}/assignmentQuantitySettings")]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public AssignmentQuantityMutable QuantityMutable(int id)
+        public AssignmentQuantityMutable AssignmentQuantitySettings(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
             if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
 
             return new AssignmentQuantityMutable
             {
-                Mutable = string.IsNullOrEmpty(assignment.Email) && string.IsNullOrEmpty(assignment.Password)
+                CanChangeQuantity = string.IsNullOrEmpty(assignment.Email) && string.IsNullOrEmpty(assignment.Password)
             };
         }
 
