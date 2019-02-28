@@ -365,7 +365,9 @@ export default {
             if (this.showSelectors) defaultSortIndex += 1;
 
             var tableOptions = {
-                rowId: "id",
+                rowId: function(row){
+                    return `row${row.id}`
+                },
                 deferLoading: 0,
                 order: [[defaultSortIndex, "desc"]],
                 columns,
@@ -504,14 +506,15 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
+            const parsedRowId = rowId.replace('row', '');
             if (columnName === "Quantity" && this.config.isHeadquarter && !this.showArchive.key) {
-                this.editedRowId = rowId;
+                this.editedRowId = parsedRowId;
                 this.editedQuantity = cellData;
                 this.$refs.editQuantityModal.modal("show");
             }
             if (columnName === "IsAudioRecordingEnabled" && this.config.isHeadquarter && !this.showArchive.key) {
-                this.editedRowId = rowId;
-                this.$hq.Assignments.audioSettings(rowId).then(data => {
+                this.editedRowId = parsedRowId;
+                this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled;
                     this.$refs.editAudioEnabledModal.modal("show");
                 });
