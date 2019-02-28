@@ -405,11 +405,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             {
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "0"),
                     Create.Entity.PreloadingValue(txtInRoster, "")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
                     Create.Entity.PreloadingValue(txtInRoster, ""))
             });
 
@@ -1857,11 +1857,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             {
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "0"),
                     Create.Entity.PreloadingValue(txtInRoster, "text 1")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
                     Create.Entity.PreloadingValue(txtInRoster, "text 2"))
             });
 
@@ -1869,23 +1869,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             {
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
-                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "0"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "0"),
                     Create.Entity.PreloadingValue(txtInNestedRoster, "text 3")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
-                    Create.Entity.PreloadingValue($"{nestedroster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "0"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
                     Create.Entity.PreloadingValue(txtInNestedRoster, "text 4")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
-                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "0"),
                     Create.Entity.PreloadingValue(txtInNestedRoster, "text 5")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
-                    Create.Entity.PreloadingValue($"{nestedroster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
                     Create.Entity.PreloadingValue(txtInNestedRoster, "text 6")),
             });
 
@@ -1990,11 +1990,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             {
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster1}__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "0"),
                     Create.Entity.PreloadingValue(txtInRoster1, "")),
                 Create.Entity.PreloadingRow(
                     Create.Entity.PreloadingValue("interview__id", "1"),
-                    Create.Entity.PreloadingValue($"{roster1}__id", "2"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "1"),
                     Create.Entity.PreloadingValue(txtInRoster1, ""))
             });
 
