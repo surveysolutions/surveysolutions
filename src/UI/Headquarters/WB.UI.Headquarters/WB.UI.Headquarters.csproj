@@ -2048,6 +2048,7 @@
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\WebInterviewSettingsApiController.cs" />
     <Compile Include="API\WebInterview\WebInterviewSetupApiController.cs" />
     <Compile Include="API\WebInterview\WebStatefulInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
