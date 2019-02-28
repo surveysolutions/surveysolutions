@@ -23,7 +23,7 @@
                          :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
                                        @input="appendCompboboxItem" 
-                                      :disabled="!$me.acceptAnswer"
+                                      :disabled="!$me.acceptAnswer || allAnswersGiven"
                                       :optionsSource="optionsSource"
                                       :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                     </div>
@@ -59,6 +59,9 @@
                         value: val
                     }
                 })
+            },
+            allAnswersGiven() {
+                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
             }
         },
         methods: {
