@@ -14,16 +14,16 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
-    internal class StataFormatExportHandler : TabBasedFormatExportHandler
+    public class StataFormatExportHandler : TabBasedFormatExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
         public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<ExportServiceSettings> interviewDataExportSettings,
-            IDataExportProcessesService dataExportProcessesService,
             ITabularFormatExportService tabularFormatExportService,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
+            IDataExportProcessesService dataExportProcessesService,
             ILogger<StataFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, dataExportFileAccessor)
@@ -38,21 +38,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
 
-            await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+            var exportedFiles = await this.CreateStataDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+
+            CheckFileListsAndThrow(tabFiles, exportedFiles);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
             await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.StataDataFileExtension);
         }
 
-        private async Task CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
+        private async Task<string[]> CreateStataDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
             ExportProgress progress, CancellationToken cancellationToken)
         {
             var exportProgress = new ExportProgress();
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent.Percent / 2), donePercent.Eta);
 
-            await tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
+            return await tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
                  tenant,
                  questionnaireIdentity,
                  tabDataFiles,
