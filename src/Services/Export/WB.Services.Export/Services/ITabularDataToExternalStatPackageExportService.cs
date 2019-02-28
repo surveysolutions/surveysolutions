@@ -6,7 +6,7 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Services
 {
-    internal interface ITabularDataToExternalStatPackageExportService
+    public interface ITabularDataToExternalStatPackageExportService
     {
         Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, ExportProgress progress, CancellationToken cancellationToken);
         Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, ExportProgress progress, CancellationToken cancellationToken);
