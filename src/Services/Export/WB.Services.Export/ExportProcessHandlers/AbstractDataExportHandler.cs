@@ -1,19 +1,17 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    abstract class AbstractDataExportHandler : BaseAbstractDataExportHandler
+    public abstract class AbstractDataExportHandler : BaseAbstractDataExportHandler
     {
         private readonly IDataExportFileAccessor dataExportFileAccessor;
 
-        protected AbstractDataExportHandler(
+        public AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<ExportServiceSettings> interviewDataExportSettings,
@@ -24,7 +22,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override async Task DoExportAsync(DataExportProcessArgs processArgs,
+        public override async Task DoExportAsync(DataExportProcessArgs processArgs,
             ExportSettings exportSettings, string archiveName, 
             ExportProgress exportProgress, CancellationToken cancellationToken)
         {
