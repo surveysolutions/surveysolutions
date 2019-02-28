@@ -19,7 +19,7 @@
                     <div class="form-block">
                         <h3>Spam protection</h3>
                         <div class="form-group mb-0">
-                            <input checked="checked" class="checkbox-filter" data-val="true" id="useCaptcha" name="UseCaptcha" type="checkbox" value="true">
+                            <input checked="checked" class="checkbox-filter" data-val="true" id="useCaptcha" name="UseCaptcha" type="checkbox" v-model="spamProtectionIsEnabled" @change="switchSpamProtection">
                             <label for="useCaptcha">
                                 <span class="tick"></span>
                                 {{$t('WebInterviewSetup.UseCaptcha')}}
@@ -59,30 +59,31 @@
                                                             <div class="default-logo"></div>
                                                             <p class="text-right">Powered by <a href="#">Survey Solutions</a></p>
                                                         </div>
-                                                        
                                                     </div>
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
                                                             <div class="row-element">
-                                                                <div  class="h2 editable" id="header-welcome">
-                                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis non vehicula metus, eget malesuada eros. 
-                                                                    Aenean consequat pharetra neque, sed eleifend dolor scelerisque vitae. Interdum et malesuada fames ac ante ipsum primis in faucibus. 
-                                                                    Vivamus porttitor sapien ut erat rutrum, ut semper massa fringilla. Donec faucibus eros neque, vitae malesuada mi egestas sed. .
-                                                                    Nulla malesuada enim ut dui mattis commodo. Vivamus mi orci, pharetra nec odio 
-                                                                    </p>
+                                                                <div class="h2 editable" @click="enablePageTextEditMode('welcomeText')" v-if="!isEditModePageTextEditMode('welcomeText')">
+                                                                    {{webInterviewPageText("welcomeText")}}
                                                                 </div>
-                                                                <div class="form-actions hidden">
-                                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                                <div v-if="isEditModePageTextEditMode('welcomeText')">
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="welcomeText" :id="welcomeText-edit"></vue-editor>
+                                                                </div>
+                                                                <div class="form-actions" v-if="isEditModePageTextEditMode('welcomeText')">
+                                                                    <button type="submit" @click="savePageTextEditMode('welcomeText')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                                    <button type="submit" @click="cancelPageTextEditMode('welcomeText')" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row-element">
-                                                                <div class="editable" id="text-welcome">
-                                                                    <b>You have been invited to take part in the following survey: "%QUESTIONNAIRE%" </b>
+                                                                <div class="editable" id="text-welcome" @click="enablePageTextEditMode('invitation')" v-if="!isEditModePageTextEditMode('invitation')">
+                                                                    <b>{{webInterviewPageText("invitation")}}</b>
                                                                 </div>
-                                                                <div class="form-actions hidden">
-                                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                                <div v-if="isEditModePageTextEditMode('invitation')">
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="invitationText" :id="invitation-edit"></vue-editor>
+                                                                </div>
+                                                                <div class="form-actions" v-if="isEditModePageTextEditMode('invitation')">
+                                                                    <button type="submit" @click="savePageTextEditMode('invitation')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                                    <button type="submit" @click="cancelPageTextEditMode('invitation')" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                                 </div>
                                                             </div>
                                                             <div class="additional-info-block">
@@ -114,17 +115,30 @@
                                                     </div>
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
-                                                            <div class="row-element">
+                                                            <div class="row-element" v-if="!isEditModePageTextEditMode('webSurveyHeader')">
                                                                 <div  class="h2 editable">
-                                                                    <p>Survey Solutions Web Survey
-                                                                    </p>
+                                                                    <p>{{webInterviewPageText("webSurveyHeader")}}</p>
                                                                 </div>
-                                                                <div class="form-actions hidden">
-                                                                    <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                                    <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                                <div v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webSurveyHeaderText" :id="webSurveyHeader-edit"></vue-editor>
+                                                                </div>
+                                                                <div class="form-actions" v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                    <button type="submit" @click="savePageTextEditMode('webSurveyHeader')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                                    <button type="submit" @click="cancelPageTextEditMode('webSurveyHeader')" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row-element">
+                                                                <!--div  class="h2 editable">
+                                                                    <b>{{webInterviewPageText("webSurveyHeader")}}</b>
+                                                                </div>
+                                                                <div v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webSurveyHeaderText" :id="webSurveyHeader-edit"></vue-editor>
+                                                                </div>
+                                                                <div class="form-actions" v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                    <button type="submit" @click="savePageTextEditMode('webSurveyHeader')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                                    <button type="submit" @click="cancelPageTextEditMode('webSurveyHeader')" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                                                </div-->
+
                                                                 <div class="editable">
                                                                     <b>This interview has not been completed Survey: "Copy of Cope of Bosnia and Herzogowina Water and Sanitation Survey 2017 (friday draft)"</b>
                                                                 </div>
@@ -171,12 +185,14 @@
                                                         <div class="">
                                                                 <div class="row-element">
                                                                     <div  class="h2 editable">
-                                                                        <p>Survey Solutions Web Survey
-                                                                        </p>
+                                                                        <b>{{webInterviewPageText("webSurveyHeader")}}</b>
                                                                     </div>
-                                                                    <div class="form-actions hidden">
-                                                                        <button type="submit" class="btn btn-success btn-sm">save</button>
-                                                                        <button type="submit" class="btn btn-link btn-sm btn-cancel">Cancel</button>
+                                                                    <div v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                        <vue-editor :editorToolbar="customToolbar" v-model="webSurveyHeaderText" :id="webSurveyHeader-edit"></vue-editor>
+                                                                    </div>
+                                                                    <div class="form-actions" v-if="isEditModePageTextEditMode('webSurveyHeader')">
+                                                                        <button type="submit" @click="savePageTextEditMode('webSurveyHeader')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                                        <button type="submit" @click="cancelPageTextEditMode('webSurveyHeader')" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                                     </div>
                                                                 </div>
                                                                 <div class="mb-1 row-element">
@@ -207,26 +223,19 @@
                     </div>
                 </div>
             </div>
-
-
-
             <hr />
-
-
-
-
             <div class="row mb-05">
                 <div class="panel-group" role="tablist">
                     <div class="panel">
-                        <div class="panel-heading" role="tab" id="collapseListGroupHeading12">
+                        <div class="panel-heading" role="tab" id="collapseListEmailTemplates">
                             <h3 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseListGroup12" aria-expanded="false" aria-controls="collapseListGroup12">
+                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseEmailTemplate" aria-expanded="false" aria-controls="collapseEmailTemplate">
                                     {{$t('WebInterviewSettings.CustomizeEmailsText')}}
                                     <span class="plus"></span>
                                 </a>
                             </h3>
                         </div>
-                        <div id="collapseListGroup12" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading12" aria-expanded="false">
+                        <div id="collapseEmailTemplate" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListEmailTemplates" aria-expanded="false">
                             <div class="collapsed-content text-email">
 
                                 <ul class="nav nav-tabs" role="tablist">
@@ -248,19 +257,21 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="form-actions" v-if="emailTemplate.isChanged">
+                                                <!--div class="form-actions" v-if="emailTemplate.isChanged">
                                                     <button type="submit" @click="saveEmailSubject(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
                                                     <button type="submit" @click="cancelEditEmailSubject(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
-                                                </div>
+                                                </div-->
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
                                                 <div>
                                                     <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.message" @change="markChanged(emailTemplate)" :id="'message' + emailTemplate.value"></vue-editor>
                                                 </div>
-                                                <div class="form-actions" v-if="emailTemplate.isChanged">
-                                                    <button type="submit" @click="saveEmailMessage(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
-                                                    <button type="submit" @click="cancelEditEmailMessage(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                            </div>
+                                            <div class="row-element">
+                                                <div class="form-actions">
+                                                    <button type="submit" @click="saveEmailTemplate(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
+                                                    <button type="submit" @click="cancelEditEmailTemplate(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,15 +292,17 @@
                         <span>
                             Send to people <b>with no response</b> in
                         </span>
-                        <select class="selectpicker" tabindex="-98">
-                            <option>1 day</option>
-                            <option>2 days</option>
-                            <option>3 days</option>
-                            <option>5 days</option>
-                            <option>1 week</option>
-                            <option>2 weeks</option>
+                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfNoResponse" @change="updateReminderSettings">
+                            <option value="1">1 day</option>
+                            <option value="2">2 days</option>
+                            <option value="3">3 days</option>
+                            <option value="5">5 days</option>
+                            <option value="7">1 week</option>
+                            <option value="14">2 weeks</option>
                         </select>
-                        <span>after the last invitation or reminder.</span>
+                        <span> 
+                            after the last invitation or reminder.
+                        </span>
                     </p>
                     
                 </div>
@@ -298,29 +311,22 @@
                         <span>
                             Send to people <b>with a partial response</b> in
                         </span>
-                        <select class="selectpicker" tabindex="-98">
-                            <option>1 day</option>
-                            <option>2 days</option>
-                            <option>3 days</option>
-                            <option>5 days</option>
-                            <option>1 week</option>
-                            <option>2 weeks</option>
+                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse" @change="updateReminderSettings">
+                            <option value="1">1 day</option>
+                            <option value="2">2 days</option>
+                            <option value="3">3 days</option>
+                            <option value="5">5 days</option>
+                            <option value="7">1 week</option>
+                            <option value="14">2 weeks</option>
                         </select>
-                        <span>after the last invitation or reminder.</span>
+                        <span>
+                            after the last invitation or reminder.
+                        </span>
                     </p>
-                    
                 </div>
             </div>
         </div>
     </main>
-
-
-
-
-
-
-
-
 </template>
 <script>
 
@@ -330,6 +336,11 @@ export default {
   data() {
     return {
       emailTemplates: [],
+      webInterviewPageMessages: [],
+      spamProtectionIsEnabled: false,
+      started: false,
+      reminderAfterDaysIfNoResponse: 3,
+      reminderAfterDaysIfPartialResponse: 3,
       customToolbar: [
         ["bold", "italic", "underline", "strike", { color: [] }],
         [{ list: "ordered" }, { list: "bullet" }],
@@ -342,8 +353,16 @@ export default {
       isChanged: false
     };
   },
-  mounted() {
+
+  beforeMount() {
+
     var self = this;
+    self.questionnaireId = this.$config.model.questionnaireIdentity.id;
+    self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
+    self.started = this.$config.model.started;
+    self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
+    self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
+
     this.emailTemplates = _.map(
       this.$config.model.defaultEmailTemplates,
       (value, key) => {
@@ -357,10 +376,31 @@ export default {
           buttonTitle: defaultEmailTemplate.shortTitle,
           subject: subject,
           message: message,
+          isChanged: false,
           isActive: key === "invitationTemplate"
         };
       }
     );
+
+    this.webInterviewPageMessages = _.map(
+      this.$config.model.defaultTexts,
+      (value, key) => {
+        var customText = self.$config.model.definedTexts[key];
+        var defaultText = value;
+        var message = customText == undefined || _.isNil(customText) || customText !== "" ? defaultText : customText
+        return {
+          value: key,
+          text: message,
+          defaultText: defaultText,
+          cancelText: message,
+          isChanged: false,
+          isEditMode: false
+        };
+      }
+    ).reduce(function(map, obj) {
+        map[obj.value] = obj;
+        return map;
+    }, {});
   },
   methods: {
     setActive(emailTemplate) {
@@ -369,27 +409,73 @@ export default {
       });
       emailTemplate.isActive = true;
     },
-    saveEmailSubject(type) {
-
+    markChanged(emailTemplate) {
+        emailTemplate.isChanged = true;
     },
-    cancelEditEmailSubject(emailTemplate) {
-        var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
-        var custom = this.$config.model.emailTemplates[emailTemplate.value];
-        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
-        emailTemplate.subject = subject;
-    },
-    saveEmailMessage(type) {
-
-    },
-    cancelEditEmailMessage(emailTemplate) {
+    cancelEditEmailTemplate(emailTemplate) {
         var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
         var custom = this.$config.model.emailTemplates[emailTemplate.value];
         var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message;
         emailTemplate.message = message;
+        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
+        emailTemplate.subject = subject;
+        emailTemplate.isChanged = false;
     },
-    markChanged(emailTemplate) {
-        emailTemplate.isChanged = true;
+    async saveEmailTemplate(emailTemplate) {
+        await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message);
+        this.$config.model.emailTemplates.push({
+            key:   emailTemplate.value,
+            value: {subject: emailTemplate.subject, message: emailTemplate.message }
+        });
+        emailTemplate.isChanged = false;
+    },
+    webInterviewPageText(type) {
+        return this.webInterviewPageMessages[type].text;
+    },
+    markWebPageTextChanged(type){
+        this.webInterviewPageMessages[type].isChanged = true;
+    },
+    enablePageTextEditMode(type) {
+        this.webInterviewPageMessages[type].isEditMode = true;
+    },
+    isEditModePageTextEditMode(type) {
+        return this.webInterviewPageMessages[type].isEditMode;
+    },
+    async savePageTextEditMode(type) {
+        var editText = this.webInterviewPageMessages[type];
+        const questionnaireId = this.$config.model.questionnaireIdentity.id;
+        await this.$hq.WebInterviewSettings.updatePageMessage(questionnaireId, type, editText.text);
+        editText.cancelText = editText.text;
+        editText.isEditMode = false;
+    },
+    cancelPageTextEditMode(type) {
+        var editText = this.webInterviewPageMessages[type];
+        editText.text = editText.cancelText;
+        editText.isEditMode = false;
+    },
+    async switchSpamProtection() {
+        await this.$hq.WebInterviewSettings.updateSpamProtection(this.questionnaireId, this.spamProtectionIsEnabled);
+    },
+    async updateReminderSettings() {
+        await this.$hq.WebInterviewSettings.updateReminderSettings(this.questionnaireId, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse);
+    },
+    async startWebInterview() {
+        await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId);
+    },
+    async stopWebInterview() {
+        await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId);
     }
+  },
+  computed: {
+      welcomeText() {
+          return this.webInterviewPageText('welcomeText');
+      },
+      invitationText() {
+          return this.webInterviewPageText('invitation');
+      },
+      webSurveyHeaderText() {
+          return this.webInterviewPageText('webSurveyHeader');
+      }
   },
   components: {
     VueEditor
