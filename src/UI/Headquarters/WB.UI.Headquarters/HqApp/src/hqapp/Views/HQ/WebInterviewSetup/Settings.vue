@@ -50,7 +50,7 @@
                                                                     {{webInterviewPageText("welcomeText")}}
                                                                 </div>
                                                                 <div v-if="isEditModePageTextEditMode('welcomeText')">
-                                                                    <vue-editor :editorToolbar="customToolbar" v-model="this.webInterviewPageText('welcomeText')" :id="welcomeText-edit"></vue-editor>
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['welcomeText'].text" id="welcomeTextEdit"></vue-editor>
                                                                 </div>
                                                                 <div class="form-actions" v-if="isEditModePageTextEditMode('welcomeText')">
                                                                     <button type="submit" @click="savePageTextEditMode('welcomeText')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -62,7 +62,7 @@
                                                                     <b>{{webInterviewPageText("invitation")}}</b>
                                                                 </div>
                                                                 <div v-if="isEditModePageTextEditMode('invitation')">
-                                                                    <vue-editor :editorToolbar="customToolbar" v-model="invitationText" :id="invitation-edit"></vue-editor>
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['invitation'].text" id="invitationEdit"></vue-editor>
                                                                 </div>
                                                                 <div class="form-actions" v-if="isEditModePageTextEditMode('invitation')">
                                                                     <button type="submit" @click="savePageTextEditMode('invitation')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -98,12 +98,12 @@
                                                     </div>
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
-                                                            <div class="row-element" v-if="!isEditModePageTextEditMode('resumeWelcome')">
+                                                            <div class="row-element" @click="enablePageTextEditMode('resumeWelcome')" v-if="!isEditModePageTextEditMode('resumeWelcome')">
                                                                 <div  class="h2 editable">
                                                                     <p>{{webInterviewPageText("resumeWelcome")}}</p>
                                                                 </div>
                                                                 <div v-if="isEditModePageTextEditMode('resumeWelcome')">
-                                                                    <vue-editor :editorToolbar="customToolbar" v-model="resumeWelcomeText" :id="resumeWelcomeEdit"></vue-editor>
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['resumeWelcome'].text" id="resumeWelcomeEdit"></vue-editor>
                                                                 </div>
                                                                 <div class="form-actions" v-if="isEditModePageTextEditMode('resumeWelcome')">
                                                                     <button type="submit" @click="savePageTextEditMode('resumeWelcome')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -111,11 +111,11 @@
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row-element">
-                                                                <div  class="h2 editable" v-if="!isEditModePageTextEditMode('resumeInvitation')">
+                                                                <div  class="h2 editable" @click="enablePageTextEditMode('resumeInvitation')" v-if="!isEditModePageTextEditMode('resumeInvitation')">
                                                                     <b>{{webInterviewPageText("resumeInvitation")}}</b>
                                                                 </div>
                                                                 <div v-if="isEditModePageTextEditMode('resumeInvitation')">
-                                                                    <vue-editor :editorToolbar="customToolbar" v-model="resumeInvitationText" :id="resumeInvitationEdit"></vue-editor>
+                                                                    <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['resumeInvitation'].text" :id="resumeInvitationEdit"></vue-editor>
                                                                 </div>
                                                                 <div class="form-actions" v-if="isEditModePageTextEditMode('resumeInvitation')">
                                                                     <button type="submit" @click="savePageTextEditMode('resumeInvitation')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -159,11 +159,11 @@
                                                     <div class="column  d-flex ai-center">
                                                         <div class="">
                                                                 <div class="row-element">
-                                                                    <div  class="h2 editable" v-if="!isEditModePageTextEditMode('webSurveyHeader')">
+                                                                    <div  class="h2 editable" @click="enablePageTextEditMode('webSurveyHeader')" v-if="!isEditModePageTextEditMode('webSurveyHeader')">
                                                                         <b>{{webInterviewPageText("webSurveyHeader")}}</b>
                                                                     </div>
                                                                     <div v-if="isEditModePageTextEditMode('webSurveyHeader')">
-                                                                        <vue-editor :editorToolbar="customToolbar" v-model="webSurveyHeaderText" :id="webSurveyHeaderEdit"></vue-editor>
+                                                                        <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['webSurveyHeader'].text" id="webSurveyHeaderEdit"></vue-editor>
                                                                     </div>
                                                                     <div class="form-actions" v-if="isEditModePageTextEditMode('webSurveyHeader')">
                                                                         <button type="submit" @click="savePageTextEditMode('webSurveyHeader')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -171,11 +171,11 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="mb-1 row-element">
-                                                                    <div  class="h2 editable" v-if="!isEditModePageTextEditMode('finishInterview')">
+                                                                    <div  class="h2 editable" @click="enablePageTextEditMode('finishInterview')" v-if="!isEditModePageTextEditMode('finishInterview')">
                                                                         <b>{{webInterviewPageText("finishInterview")}}</b>
                                                                     </div>
                                                                     <div v-if="isEditModePageTextEditMode('finishInterview')">
-                                                                        <vue-editor :editorToolbar="customToolbar" v-model="finishInterviewText" :id="finishInterviewEdit"></vue-editor>
+                                                                        <vue-editor :editorToolbar="customToolbar" v-model="webInterviewPageMessages['finishInterview'].text" id="finishInterviewEdit"></vue-editor>
                                                                     </div>
                                                                     <div class="form-actions" v-if="isEditModePageTextEditMode('finishInterview')">
                                                                         <button type="submit" @click="savePageTextEditMode('finishInterview')" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
@@ -207,12 +207,12 @@
                     <div class="panel">
                         <div class="panel-heading" role="tab" id="collapseListEmailTemplates">
                             <h3 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseEmailTemplate" aria-expanded="false" aria-controls="collapseEmailTemplate">
+                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseEmailTemplate" aria-expanded="true" aria-controls="collapseEmailTemplate">
                                     {{$t('WebInterviewSettings.CustomizeEmailsText')}}
                                 </a>
                             </h3>
                         </div>
-                        <div id="collapseEmailTemplate" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListEmailTemplates" aria-expanded="false">
+                        <div id="collapseEmailTemplate" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListEmailTemplates" aria-expanded="true">
                             <div class="collapsed-content text-email">
 
                                 <ul class="nav nav-tabs" role="tablist">
@@ -479,24 +479,7 @@ export default {
     }
   },
   computed: {
-      welcomeText() {
-          return this.webInterviewPageText('welcomeText');
-      },
-      invitationText() {
-          return this.webInterviewPageText('invitation');
-      },
-      webSurveyHeaderText() {
-          return this.webInterviewPageText('webSurveyHeader');
-      },
-      resumeWelcomeText() {
-          return this.webInterviewPageText('resumeWelcome');
-      },
-      resumeInvitationText() {
-          return this.webInterviewPageText('resumeInvitation');
-      },
-      finishInterviewText() {
-          return this.webInterviewPageText('finishInterview');
-      }
+      
   },
   components: {
     VueEditor
