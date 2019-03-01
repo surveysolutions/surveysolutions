@@ -60,7 +60,7 @@ $version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 setupExportService "$HQsitePath\.bin\Export\appsettings.json"
 
 # Cleaning up slack configuration section from config
-$hqConfig = "$HQsitePath\Configuration\Headquarters.Web.config"
+$hqConfig = "$HQsitePath\Web.config"
 [xml]$xml = Get-Content $hqConfig
 $node = $xml.SelectSingleNode("//slack")
 $node.ParentNode.RemoveChild($node)
