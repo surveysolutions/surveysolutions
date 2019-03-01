@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateViewModelsByAnsweredOptions(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
+            this.InvokeOnMainThread(()=>this.UpdateViewModelsByAnsweredOptions(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray()));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
