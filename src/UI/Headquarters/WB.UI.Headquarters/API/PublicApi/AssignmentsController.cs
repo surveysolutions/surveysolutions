@@ -448,12 +448,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route("{id:int}/assignmentQuantitySettings")]
         [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-        public AssignmentQuantityMutable AssignmentQuantitySettings(int id)
+        public AssignmentQuantitySettings AssignmentQuantitySettings(int id)
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
             if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return new AssignmentQuantityMutable
+            return new AssignmentQuantitySettings
             {
                 CanChangeQuantity = string.IsNullOrEmpty(assignment.Email) && string.IsNullOrEmpty(assignment.Password)
             };
