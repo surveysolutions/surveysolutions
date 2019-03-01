@@ -1,6 +1,9 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {

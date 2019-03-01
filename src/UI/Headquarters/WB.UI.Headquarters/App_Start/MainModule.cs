@@ -134,7 +134,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             serviceLocator.GetInstance<SendInvitationsTask>().Run();
-            serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60);
+            serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             
             InitMetrics();
             MetricsService.Start(serviceLocator);
