@@ -216,4 +216,7 @@
   <data name="SendInvitations" xml:space="preserve">
     <value>Отправить приглашения</value>
   </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Загрузить web ссылки</value>
+  </data>
 </root>

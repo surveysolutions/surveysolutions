@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -1764,7 +1765,9 @@ namespace WB.Tests.Abc.TestFactories
             string questionnaireTitle = null, 
             DateTime? updatedAt = null,
             Guid? responsibleId = null,
-            List<string> protectedVariables = null)
+            List<string> protectedVariables = null,
+            string email = null,
+            string password = null)
         {
             var result = new Assignment();
             
@@ -1810,6 +1813,8 @@ namespace WB.Tests.Abc.TestFactories
                 asDynamic.ResponsibleId = responsibleId.Value;
             }
             asDynamic.ProtectedVariables = protectedVariables;
+            asDynamic.Email = email;
+            asDynamic.Password = password;
 
             return result;
         }
@@ -2413,5 +2418,18 @@ namespace WB.Tests.Abc.TestFactories
             Value = value,
             Title = title
         };
+
+        public Invitation Invitation(int id, Assignment assignment, string token = null)
+        {
+            var invitation = new Invitation();
+
+            var asDynamic = invitation.AsDynamic();
+            asDynamic.Id = id;
+            asDynamic.AssignmentId = assignment.Id;
+            asDynamic.Assignment = assignment;
+            asDynamic.Token = token;
+
+            return invitation;
+        }
     }
 }

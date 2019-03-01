@@ -32,6 +32,7 @@
         //var $webInterviewUrl = '@Url.Action("Settings", "WebInterviewSetup")';
         var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
         var $sendInvitationsUrl = '@Url.Action("SendInvitations", "WebInterviewSetup")';
+        var $downloadLinksUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "LinksExport", action = "Download"})';
         var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
@@ -143,6 +144,12 @@
                             items["webSetup"] = {
                                 name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
+                            }
+                        }
+                        if (!selectedRow.isDisabled) {
+                            items["downloadLinks"] = {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.DownloadLinks)",
+                                callback: model.downloadLinks
                             }
                         }
                         if (!selectedRow.isDisabled) {

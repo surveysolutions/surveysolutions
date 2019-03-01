@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
@@ -207,6 +208,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 ).Select(x => x.Id).ToList());
         }
 
+        public void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message)
+        {
+        }
+
+        public List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return invitationStorage.Query(_ => 
+                _.Where(x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version)
+                .ToList());
+        }
+
         public Invitation GetInvitation(int invitationId)
         {
             return invitationStorage.GetById(invitationId);
@@ -253,5 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         CancellationToken GetCancellationToken();
         IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int value);
         IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int value);
+        void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message);
+        List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
     }
 }
