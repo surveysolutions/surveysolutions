@@ -2011,7 +2011,7 @@
     <Compile Include="API\DataCollection\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
-    <Compile Include="API\PublicApi\Models\AssignmentQuantityMutable.cs" />
+    <Compile Include="API\PublicApi\Models\AssignmentQuantitySettings.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
