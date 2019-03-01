@@ -33,6 +33,8 @@ namespace WB.UI.Shared.Web.Slack
 
             if (settingsProvider.TryGetSection<SlackApiConfiguration>("slack", out var section))
             {
+                if (string.IsNullOrWhiteSpace(section.OuathToken)) return;
+
                 this.config = section;
                 this.httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", config.OuathToken);
