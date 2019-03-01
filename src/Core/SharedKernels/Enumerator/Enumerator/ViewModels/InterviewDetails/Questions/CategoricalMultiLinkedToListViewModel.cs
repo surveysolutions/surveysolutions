@@ -77,32 +77,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId != this.linkedToQuestionId)
                 return;
 
-            foreach (var answer in @event.Answers)
+            this.InvokeOnMainThread(() =>
             {
-                var option = this.Options.FirstOrDefault(o => o.Value == answer.Item1);
-                if (option != null) option.Title = answer.Item2;
-            }
+                foreach (var answer in @event.Answers)
+                {
+                    var option = this.Options.FirstOrDefault(o => o.Value == answer.Item1);
+                    if (option != null) option.Title = answer.Item2;
+                }
+            });
         }
 
         public void Handle(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.UpdateViewModels();
+            this.InvokeOnMainThread(this.UpdateViewModels);
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateViewModelsByAnsweredOptions(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            this.InvokeOnMainThread(() => this.UpdateViewModelsByAnsweredOptions(@event.SelectedValues.Select(Convert.ToInt32).ToArray()));
         }
 
         public void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.UpdateViewModels();
+            this.InvokeOnMainThread(this.UpdateViewModels);
         }
 
         public void Handle(QuestionsDisabled @event)
@@ -110,16 +113,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.UpdateViewModels();
+            this.InvokeOnMainThread(this.UpdateViewModels);
         }
 
         public override void Handle(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
-                this.UpdateViewModelsByAnsweredOptions(Array.Empty<int>());
+                this.InvokeOnMainThread(()=>this.UpdateViewModelsByAnsweredOptions(Array.Empty<int>()));
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.UpdateViewModels();
+                this.InvokeOnMainThread(this.UpdateViewModels);
         }
     }
 }
