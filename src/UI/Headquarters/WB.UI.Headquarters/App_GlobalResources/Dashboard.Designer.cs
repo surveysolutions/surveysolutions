@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download web links.
+        /// </summary>
+        internal static string DownloadLinks {
+            get {
+                return ResourceManager.GetString("DownloadLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export questionnaire.
         /// </summary>
         internal static string ExportQuestionnaire {

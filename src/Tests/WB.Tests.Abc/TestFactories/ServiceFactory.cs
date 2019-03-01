@@ -1022,6 +1022,18 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
+
+        public IInvitationService InvitationService(params Invitation[] invitations)
+        {
+            IPlainStorageAccessor<Invitation> accessor = new TestPlainStorage<Invitation>();
+            foreach (var invitation in invitations)
+            {
+                accessor.Store(invitation, invitation.Id);
+            }
+
+            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>());
+            return service;
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler

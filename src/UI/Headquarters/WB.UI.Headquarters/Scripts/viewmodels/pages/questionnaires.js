@@ -53,6 +53,13 @@
         window.location.href = $sendInvitationsUrl + '/' + encodeURI(questionnaireId);
     };
 
+    self.downloadLinks = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $downloadLinksUrl + '/' + encodeURI(questionnaireId);
+    };
+    
+
     self.recordAudio = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
 

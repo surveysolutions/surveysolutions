@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -41,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             buffer[11] = Encode_32_Chars[(int) (id >> 5) & 31];
             buffer[12] = Encode_32_Chars[(int) id & 31];
 
-            return new string(buffer, 0, buffer.Length);
+            return new string(buffer, 0, buffer.Length).Substring(4);
         }
     }
 }

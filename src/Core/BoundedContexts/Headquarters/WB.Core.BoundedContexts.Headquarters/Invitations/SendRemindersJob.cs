@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 catch (EmailServiceException)
                 {
-                    //invitationService.InvitationWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
+                    invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 catch (EmailServiceException)
                 {
-                    //invitationService.InvitationWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
+                    invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                 }
             }
         }
