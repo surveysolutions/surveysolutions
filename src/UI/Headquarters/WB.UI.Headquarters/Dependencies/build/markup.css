@@ -8619,21 +8619,19 @@ body > .ui-pnotify {
   font: 14px/16px Arial, sans-serif; }
   .table td.type-numeric {
     text-align: right; }
-	table td.editable {
+  .table td.editable {
     position: relative; }
-	table td.editable:after { 
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 0; 
-    height: 0; 
-    display: block;
-    border-left: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-
-    border-top: 10px solid #2a81cb;
-}
+    .table td.editableafter {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      display: block;
+      border-left: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid #2a81cb; }
   .table tr .without-break {
     white-space: nowrap;
     max-width: 300px;
