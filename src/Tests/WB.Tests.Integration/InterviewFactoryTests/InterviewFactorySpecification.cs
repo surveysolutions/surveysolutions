@@ -36,6 +36,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         private string connectionString;
         protected PostgreReadSideStorage<InterviewSummary> interviewSummaryRepository;
         protected PostgreReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsRepository;
+        protected PostgresPlainStorageRepository<InterviewFlag> interviewFlagsStorage;
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
 
@@ -58,7 +59,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(CumulativeReportStatusChangeMap),
-                    typeof(InterviewCommentedStatusMap)
+                    typeof(InterviewCommentedStatusMap),
+                    typeof(InterviewFlagMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
@@ -81,6 +83,11 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
                 this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>());
+            this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
+                new List<Type>
+                {
+                    typeof(InterviewFlagMap)
+                }, true, new UnitOfWorkConnectionSettings().PlainStorageSchemaName)));
         }
 
         [TearDown]
@@ -134,7 +141,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork);
+                sessionProvider: this.UnitOfWork,
+                interviewFlagsStorage: this.interviewFlagsStorage);
         }
         
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum

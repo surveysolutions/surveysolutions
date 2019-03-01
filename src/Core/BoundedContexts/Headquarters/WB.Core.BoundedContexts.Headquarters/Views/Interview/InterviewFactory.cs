@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using Supercluster;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -27,42 +28,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly IUnitOfWork sessionProvider;
+        private readonly IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            IUnitOfWork sessionProvider)
+            IUnitOfWork sessionProvider,
+            IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage)
         {
             this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
-        }
-
-        public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
-            Identity sectionId)
-        {
-            return sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
-                    $@"SELECT {Column.EntityId} as Id, {Column.RosterVector}
-                       FROM {Table.InterviewsView}
-                       WHERE {Column.InterviewId} = @InterviewId
-                        AND {Column.HasFlag} = true
-                        AND parentid = @sectionId
-                        AND {Column.RosterVector} = @RosterVector",
-                    new
-                    {
-                        InterviewId = interviewId,
-                        RosterVector = sectionId.RosterVector.ToString().Trim('_'),
-                        SectionId = sectionId.Id
-                    })
-                .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
-                .ToArray();
+            this.interviewFlagsStorage = interviewFlagsStorage;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
-                    $"SELECT {Column.EntityId}, {Column.RosterVector} " +
-                    $"FROM {Table.InterviewsView} WHERE {Column.InterviewId} = @InterviewId AND {Column.HasFlag} = true",
-                    new { InterviewId = interviewId })
-                .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
-                .ToArray();
+            => this.interviewFlagsStorage.Query(x => x
+                    .Where(y => y.InterviewId == interviewId)
+                    .Select(y => new { y.EntityId, y.RosterVector }))
+                .Select(x => Identity.Create(x.EntityId, RosterVector.Parse(x.RosterVector))).ToArray();
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
@@ -74,38 +56,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             ThrowIfInterviewApprovedByHq(interview);
             ThrowIfInterviewReceivedByInterviewer(interview);
 
-            var interviewInfo = GetInterviewId(interviewId);
+            var rosterVector = questionIdentity.RosterVector.ToString().Trim('_');
 
-            var entityMap = GetQuestionnaireEntities(interview.QuestionnaireIdentity);
-
-            var row = new
+            var flag = this.interviewFlagsStorage.Query(x => x.FirstOrDefault(y => y.InterviewId == interviewId &&
+                                                                                   y.EntityId == questionIdentity.Id &&
+                                                                                   y.RosterVector == rosterVector));
+            if (flagged && flag == null)
             {
-                interviewInfo.id,
-                entityId = entityMap[questionIdentity.Id],
-                rosterVector = questionIdentity.RosterVector.ToString().Trim('_'),
-                hasFlag = flagged
-            };
+                this.interviewFlagsStorage.Store(new InterviewFlag
+                {
+                    InterviewId = interviewId,
+                    EntityId = questionIdentity.Id,
+                    RosterVector = rosterVector
 
-            var flaggedRows = sessionProvider.Session.Connection
-                .Query<(int interviewId, int entityId, string rosterVector, bool hasFlag)>
-                ($"select interviewid, entityid, rostervector, hasflag from {Table.Interviews} " +
-                 $"where interviewid = @id and entityid = @entityid and rostervector = @rostervector", row).ToList();
-
-            switch (flaggedRows.Count)
-            {
-                // do not add new row with false value
-                case 0 when flagged == false:
-                    return;
-                case 0:
-                    sessionProvider.Session.Connection.Execute(
-                        $@"INSERT INTO {Table.Interviews} (interviewid, entityid, rostervector, isenabled, hasflag)
-                       VALUES(@id, @entityid, @rostervector, true, @hasFlag)", row);
-                    break;
-                default:
-                    sessionProvider.Session.Connection.Execute(
-                        $@"UPDATE {Table.Interviews} SET hasflag=@hasFlag where interviewid=@id and entityid=@entityid and rostervector=@rostervector", row);
-                    break;
+                }, null);
             }
+            else if(!flagged && flag != null)
+                this.interviewFlagsStorage.Remove(flag);
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -118,6 +85,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             conn.Execute($@"DELETE FROM {Table.InterviewsId} i WHERE i.{Column.InterviewId} = @InterviewId",
                 new { InterviewId = interviewId });
+
+            var interviewFlags = this.interviewFlagsStorage.Query(x => x.Where(y => y.InterviewId == interviewId));
+            this.interviewFlagsStorage.Remove(interviewFlags);
         }
 
         public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
