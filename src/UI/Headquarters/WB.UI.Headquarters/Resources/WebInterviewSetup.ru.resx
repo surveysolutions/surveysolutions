@@ -188,8 +188,8 @@
     <value>Сообщения обновлены</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-    <value>Включить защиту от спама</value>
-    <comment>Включить защиту от спама</comment>
+      <value>Использовать captcha перед стартом интервью</value>
+      <comment>Включить защиту от спама</comment>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>

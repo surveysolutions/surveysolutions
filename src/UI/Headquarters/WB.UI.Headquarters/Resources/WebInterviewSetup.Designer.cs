@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable spam protection.
+        ///   Looks up a localized string similar to Use Captcha before interview start.
         /// </summary>
         public static string UseCaptcha {
             get {
