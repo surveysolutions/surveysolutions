@@ -24,12 +24,12 @@ namespace WB.Services.Export
 
                     state.Percent = (int) this.progresses.Values.Sum(x => (x.LastReportedProgress?.Percent ?? 0) * x.ProgressWeight);
 
-                    if (this.progresses.Values.Any(v => v.LastReportedProgress?.Eta != null))
-                    {
-                        state.Eta = this.progresses.Values
-                            .Where(e => e.LastReportedProgress?.Eta != null)
-                            .Max(v => v.LastReportedProgress.Eta.Value);
-                    }
+                    //if (this.progresses.Values.Any(v => v.LastReportedProgress?.Eta != null))
+                    //{
+                    //    state.Eta = this.progresses.Values
+                    //        .Where(e => e.LastReportedProgress?.Eta != null)
+                    //        .Max(v => v.LastReportedProgress.Eta.Value);
+                    //}
 
                     this.OnProgressChanged(state);
                 }
