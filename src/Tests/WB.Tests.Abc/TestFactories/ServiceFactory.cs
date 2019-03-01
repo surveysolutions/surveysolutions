@@ -945,11 +945,12 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewFactory InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
             IUnitOfWork sessionProvider = null,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
+            IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage = null)
         {
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>());
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
+                interviewFlagsStorage ?? Mock.Of<IPlainStorageAccessor<InterviewFlag>>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
