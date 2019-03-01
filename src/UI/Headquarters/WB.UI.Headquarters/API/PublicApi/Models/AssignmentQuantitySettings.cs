@@ -2,10 +2,10 @@
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
-    public class AssignmentQuantityMutable
+    public class AssignmentQuantitySettings
     {
         /// <summary>
-        /// Is Quantity Mutable.
+        /// Assignment Quantity Settings.
         /// </summary>
         [DataMember(IsRequired = true)]
         public bool CanChangeQuantity { get; set; }

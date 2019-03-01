@@ -138,7 +138,7 @@
         <ModalFrame ref="editQuantityModal"
                     :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
-            <p v-if="!editedQuantityMutable"><b >{{ $t("Assignments.WebMode")}}</b></p>
+            <p v-if="!canEditQuantity"><b >{{ $t("Assignments.WebMode")}}</b></p>
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
@@ -157,7 +157,7 @@
                            @keyup.enter="updateQuantity"
                            id="newQuantity"
                            placeholder="1"
-                           :disabled="!editedQuantityMutable">
+                           :disabled="!canEditQuantity">
 
                     <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
                 </div>
@@ -165,7 +165,7 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-primary"
-                        :disabled="!showSelectors || !editedQuantityMutable"
+                        :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{$t("Common.Save")}}</button>
                 <button type="button"
                         class="btn btn-link"
@@ -195,7 +195,7 @@ export default {
             editedRowId: null,
             editedQuantity: null,
             editedAudioRecordingEnabled: null,
-            editedQuantityMutable: null
+            canEditQuantity: null
         };
     },
 
@@ -527,7 +527,7 @@ export default {
                 this.editedQuantity = cellData;
 
                 this.$hq.Assignments.quantitySettings(rowId).then(data => {
-                    this.editedQuantityMutable = data.CanChangeQuantity;
+                    this.canEditQuantity = data.CanChangeQuantity;
                     this.$refs.editQuantityModal.modal("show");
                 });
 
