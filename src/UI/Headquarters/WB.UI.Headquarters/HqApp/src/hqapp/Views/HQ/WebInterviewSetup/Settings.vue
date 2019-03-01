@@ -13,7 +13,6 @@
                     </h1>
                 </div>
             </div>
-    
             <div class="row">
                 <div class="col-sm-8">
                     <div class="form-block">
@@ -325,6 +324,20 @@
                     </p>
                 </div>
             </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="action-buttons">
+                        <button v-if="!started" @click="startWebInterview" type="submit" class="btn btn-success">{{$t('WebInterviewSetup.Start')}}</button>
+                        <input  v-if="started" @click="stopWebInterview" type="submit" class="btn btn-danger" :value="$t('WebInterviewSetup.StopWebInterview')" />
+                        <a class="btn btn-primary" :href="this.$config.model.downloadAssignmentsUrl">
+                            {{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}
+                        </a>
+                        <a :href="this.$config.model.surveySetupUrl" class="back-link">
+                            {{$t('WebInterviewSetup.BackToQuestionnaires')}}
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </template>
@@ -387,7 +400,7 @@ export default {
       (value, key) => {
         var customText = self.$config.model.definedTexts[key];
         var defaultText = value;
-        var message = customText == undefined || _.isNil(customText) || customText !== "" ? defaultText : customText
+        var message = customText == undefined || _.isNil(customText) || customText === "" ? defaultText : customText
         return {
           value: key,
           text: message,
@@ -415,18 +428,23 @@ export default {
     cancelEditEmailTemplate(emailTemplate) {
         var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
         var custom = this.$config.model.emailTemplates[emailTemplate.value];
-        var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message;
+        var message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
         emailTemplate.message = message;
-        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
+        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
         emailTemplate.subject = subject;
         emailTemplate.isChanged = false;
     },
     async saveEmailTemplate(emailTemplate) {
         await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message);
-        this.$config.model.emailTemplates.push({
+        if (!this.$config.model.emailTemplates[emailTemplate.value]) {
+            this.$config.model.emailTemplates[emailTemplate.value] = [];
+        }
+        this.$config.model.emailTemplates[emailTemplate.value].subject = emailTemplate.subject, 
+        this.$config.model.emailTemplates[emailTemplate.value].message = emailTemplate.message, 
+        /*this.$config.model.emailTemplates.push({
             key:   emailTemplate.value,
             value: {subject: emailTemplate.subject, message: emailTemplate.message }
-        });
+        });*/
         emailTemplate.isChanged = false;
     },
     webInterviewPageText(type) {
@@ -461,9 +479,11 @@ export default {
     },
     async startWebInterview() {
         await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId);
+        this.started = true;
     },
     async stopWebInterview() {
         await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId);
+        this.started = false;
     }
   },
   computed: {
