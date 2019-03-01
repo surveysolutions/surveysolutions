@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                         hasPassword ? email.MessageWithPassword : email.Message).Result;
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
                 }
-                catch (EmailServiceException)
+                catch (EmailServiceException e)
                 {
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                 }
@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                         hasPassword ? email.MessageWithPassword : email.Message).Result;
                     invitationService.MarkInvitationAsReminded(invitationId, emailId);
                 }
-                catch (EmailServiceException)
+                catch (EmailServiceException e)
                 {
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
                 }
