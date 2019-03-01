@@ -153,12 +153,9 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
             model.QuestionnaireIdentity = questionnaireIdentity;
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
-
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
                 new { controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString() });
-            model.UpdateTextsUrl = Url.Action("UpdateMessages", new { id = questionnaireIdentity.ToString() });
-            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
             model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
                 .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
@@ -254,7 +251,6 @@ namespace WB.UI.Headquarters.Controllers
         public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> EmailTemplates { get; set; }
         public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> DefaultEmailTemplates { get; set; }
         public string DownloadAssignmentsUrl { get; set; }
-        public string UpdateTextsUrl { get; set; }
         public int? ReminderAfterDaysIfNoResponse { get; set; } 
         public int? ReminderAfterDaysIfPartialResponse { get; set; }
         public bool Started { get; set; }
