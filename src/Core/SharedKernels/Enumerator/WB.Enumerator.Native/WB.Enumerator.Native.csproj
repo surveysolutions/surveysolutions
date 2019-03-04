@@ -37,8 +37,7 @@
     <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Owin" Version="1.0" />
-    <PackageReference Include="StackExchange.Exceptional" Version="2.0.0-alpha3-00183" />
-    <PackageReference Include="StackExchange.Exceptional.Shared" Version="2.0.0-alpha3-00183" />
+    <PackageReference Include="StackExchange.Exceptional" Version="2.0.0" />
     <PackageReference Include="WebGrease" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>
