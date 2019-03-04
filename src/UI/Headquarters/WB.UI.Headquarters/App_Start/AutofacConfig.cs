@@ -87,7 +87,6 @@ namespace WB.UI.Headquarters
 
             Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
-
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
                 ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
@@ -151,8 +150,7 @@ namespace WB.UI.Headquarters
 
             ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
 
-            var externalStoragesSection = settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages");
-            if (externalStoragesSection != null)
+            if (settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages", out var externalStoragesSection))
             {
                 externalStoragesSettings = new ExternalStoragesSettings
                 {
@@ -192,7 +190,7 @@ namespace WB.UI.Headquarters
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
-
+            
             autofacKernel.Load(new NLogLoggingModule(),
                 
                 new OrmModule(connectionSettings),

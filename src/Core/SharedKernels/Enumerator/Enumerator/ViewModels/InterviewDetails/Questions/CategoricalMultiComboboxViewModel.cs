@@ -66,6 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
                 this.comboboxCollection.Add(this.comboboxViewModel);
+
+            comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
         }
 
         private async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)

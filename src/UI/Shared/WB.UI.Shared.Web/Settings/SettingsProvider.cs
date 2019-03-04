@@ -48,8 +48,19 @@ namespace WB.UI.Shared.Web.Settings
             }
         }
 
-        public TSection TryGetSection<TSection>(string name) where TSection : ConfigurationSection
-            => NConfigurator.Default.GetSection<TSection>(name);
+        public bool TryGetSection<TSection>(string name, out TSection section) where TSection : ConfigurationSection
+        {
+            var result =  NConfigurator.Default.GetSection<TSection>(name);
+
+            if (result != null)
+            {
+                section = result;
+                return true;
+            }
+
+            section = null;
+            return false;
+        }
 
         public TSection GetSection<TSection>(string name) where TSection : ConfigurationSection
         {

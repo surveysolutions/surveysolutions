@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.UpdateViewModelsByAnsweredOptions(@event.AnsweredOptions);
+            this.InvokeOnMainThread(()=>this.UpdateViewModelsByAnsweredOptions(@event.AnsweredOptions));
         }
 
         public override void Dispose()

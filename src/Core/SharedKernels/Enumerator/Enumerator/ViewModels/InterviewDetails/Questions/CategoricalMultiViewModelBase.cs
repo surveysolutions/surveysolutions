@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.UpdateViewModels();
+            this.UpdateViewModels(); //executed in main thread
         }
 
         private async Task SaveAnswer()
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     // reset to previous state
-                    this.UpdateOptionsFromInterview();
+                    this.InvokeOnMainThread(this.UpdateOptionsFromInterview);
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
@@ -194,7 +194,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateOptionsFromInterview()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
             this.UpdateViewModelsByAnsweredOptions(answeredOptions);
@@ -239,7 +238,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.UpdateOptionsFromInterview();
+            this.InvokeOnMainThread(this.UpdateOptionsFromInterview);
         }
 
         public virtual void Dispose()

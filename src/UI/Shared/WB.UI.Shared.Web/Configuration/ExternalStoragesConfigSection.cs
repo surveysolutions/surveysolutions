@@ -13,6 +13,7 @@ namespace WB.UI.Shared.Web.Configuration
             set => base[oauth2] = value;
         }
     }
+
     public class OAuth2ConfigurationElement : ConfigurationElement
     {
         private const string dropbox = "dropbox";
