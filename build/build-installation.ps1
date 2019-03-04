@@ -52,8 +52,6 @@ Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 Remove-Item "$HQsitePath\HostMap.config"
 
 Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
-
-
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
@@ -61,7 +59,24 @@ $version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
 
 setupExportService "$HQsitePath\.bin\Export\appsettings.json"
 
-& (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" "/p:SurveySolutionsVersion=$version" | Write-Host
+# Cleaning up slack configuration section from config
+$hqConfig = "$HQsitePath\Web.config"
+[xml]$xml = Get-Content $hqConfig
+$node = $xml.SelectSingleNode("//slack")
+$node.ParentNode.RemoveChild($node)
+$xml.save($hqConfig)
+
+$installationArgs = @(
+    $InstallationProject;
+    '/t:Build';
+    "/p:HarvestDir=$HQsitePath";
+    "/p:HarvestDirectory=$HQsitePath";
+    "/p:Configuration=Release";
+    "/p:Platform=x64";
+    "/p:SurveySolutionsVersion=$version";
+)
+
+& (GetPathToMSBuild) $installationArgs | Write-Host
 
 $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 

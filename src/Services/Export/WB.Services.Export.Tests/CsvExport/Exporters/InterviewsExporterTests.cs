@@ -101,7 +101,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
     internal class ExportViewFactoryTests
     {
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_0()
         {
             //arrange
             var questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
@@ -136,30 +136,30 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 CreateInterviewDataWith2PropagatedLevels(rosterSizeId, nestedRosterSizeId, questionInsideRosterGroupId), questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("1"));
-            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("0"));
+            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("1"));
 
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[0].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("0"));
 
 
-            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[1].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("0"));
 
-            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[2].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("1"));
 
 
-            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("1"));
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_0()
         {
             //arrange
             var numericRosterId = Id.g1;
@@ -207,7 +207,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var result = exporter.CreateInterviewDataExportView(questionnaireExportStructure, interviewData, questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]

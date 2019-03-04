@@ -26,6 +26,7 @@ using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
 using NLog;
+using NLog.Targets;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
@@ -39,6 +40,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Logging.Slack;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -70,6 +72,8 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
+            Target.Register<SlackFatalNotificationsTarget>("slack");
+            
             EnsureJsonStorageForErrorsExists();
             app.Use(RemoveServerNameFromHeaders);
 

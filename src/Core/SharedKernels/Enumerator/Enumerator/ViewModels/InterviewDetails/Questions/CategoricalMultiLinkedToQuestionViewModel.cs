@@ -73,22 +73,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
-
-            this.UpdateViewModelsByAnsweredOptions(@event.SelectedRosterVectors?.Select(RosterVector.Convert)?.ToArray());
+            this.InvokeOnMainThread(
+                ()=>this.UpdateViewModelsByAnsweredOptions(@event.SelectedRosterVectors?.Select(RosterVector.Convert)?.ToArray()));
         }
 
         public void Handle(LinkedOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.UpdateViewModels();
+            this.InvokeOnMainThread(this.UpdateViewModels);
         }
 
         public virtual void Handle(RosterInstancesTitleChanged @event)
         {
             if (!@event.ChangedInstances.Any(x => this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            this.UpdateViewModels();
+            this.InvokeOnMainThread(this.UpdateViewModels);
         }
     }
 }

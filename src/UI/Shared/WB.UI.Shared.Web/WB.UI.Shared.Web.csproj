@@ -128,6 +128,10 @@
   <ItemGroup>
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
+    <Compile Include="Slack\ChannelsCollection.cs" />
+    <Compile Include="Slack\ISlackMessageThrottler.cs" />
+    <Compile Include="Slack\SlackApiClient.cs" />
+    <Compile Include="Slack\SlackApiConfiguration.cs" />
     <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Extensions\ProgressiveDownload.cs" />
@@ -219,6 +223,9 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />
+    <Compile Include="Slack\SlackAttachmentsDto.cs" />
+    <Compile Include="Slack\SlackChannelConfiguration.cs" />
+    <Compile Include="Slack\SlackMessageThrottler.cs" />
     <Compile Include="Versions\ProductVersion.cs" />
     <Compile Include="Versions\ProductVersionHistory.cs" />
     <Compile Include="Versions\ProductVersionModule.cs" />

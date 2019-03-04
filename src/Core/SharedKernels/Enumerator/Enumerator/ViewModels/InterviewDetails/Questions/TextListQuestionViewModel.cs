@@ -95,10 +95,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ShowOrHideAddNewItem()
         {
-            var answerVeiewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
+            var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
-            bool denyAddNewItem = (this.maxAnswerCount.HasValue && answerVeiewModels.Count >= maxAnswerCount.Value) ||
-                                  (this.isRosterSizeQuestion && answerVeiewModels.Count >= Constants.MaxLongRosterRowCount);
+            bool denyAddNewItem = (this.maxAnswerCount.HasValue && answerViewModels.Count >= maxAnswerCount.Value) ||
+                                  (this.isRosterSizeQuestion && answerViewModels.Count >= Constants.MaxLongRosterRowCount);
 
             if (denyAddNewItem && this.addNewItemViewModel != null)
             {
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.ShowOrHideAddNewItem());
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem);
             }
             catch (InterviewException ex)
             {
