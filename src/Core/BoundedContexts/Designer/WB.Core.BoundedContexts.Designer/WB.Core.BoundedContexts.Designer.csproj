@@ -13,9 +13,6 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Implementation\Services\GoogleDiff.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="ReferencedAssemblies\System.Collections.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
