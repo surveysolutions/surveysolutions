@@ -1,27 +1,40 @@
-﻿using CsQuery.ExtensionMethods.Internal;
-using Ganss.XSS;
+﻿using Ganss.XSS;
 
 namespace WB.Core.BoundedContexts.Designer.Commands
 {
     internal class CommandUtils
     {
+        static string[] AllowedTags = new string[]
+        {
+            "u", "s", "i", "b", "br", "font", "tt", "big", "strong", "small", "sup", "sub", "blockquote",
+                "cite", "dfn", "p", "em"
+        };
+
+        static string[] AllowedAttributes = new string[]
+        {
+            "color", "size"
+        };
+
         public static string SanitizeHtml(string html, bool removeAllTags = false)
         {
             if (string.IsNullOrWhiteSpace(html))
                 return html;
 
-            var sanitizer = new HtmlSanitizer {KeepChildNodes = true};
+            var sanitizer = new HtmlSanitizer { KeepChildNodes = true };
 
             if (!removeAllTags)
             {
                 sanitizer.AllowedTags.Clear();
-                sanitizer.AllowedTags.AddRange(new[]
+                foreach (var tag in AllowedTags)
                 {
-                    "u", "s", "i", "b", "br", "font", "tt", "big", "strong", "small", "sup", "sub", "blockquote",
-                    "cite", "dfn", "p", "em"
-                });
+                    sanitizer.AllowedTags.Add(tag);
+                }
+
                 sanitizer.AllowedAttributes.Clear();
-                sanitizer.AllowedAttributes.AddRange(new[] {"color", "size"});
+                foreach (var attribute in AllowedAttributes)
+                {
+                    sanitizer.AllowedAttributes.Add(attribute);
+                }
             }
             else
             {
