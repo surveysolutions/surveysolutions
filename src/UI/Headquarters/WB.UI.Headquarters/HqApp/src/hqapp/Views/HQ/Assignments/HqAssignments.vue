@@ -368,6 +368,16 @@ export default {
                     title: this.$t("Assignments.Password"),
                     tooltip: this.$t("Assignments.Tooltip_Table_Password"),
                     searchable: false
+                },
+                {
+                    data: "webMode",
+                    name: "WebMode",                    
+                    title: this.$t("Assignments.WebMode"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_WebMode"),
+                    searchable: false,
+                    render(data) {
+                        return data ? self.$t("Common.Yes") : self.$t("Common.No");
+                    }
                 }
             ];
         },

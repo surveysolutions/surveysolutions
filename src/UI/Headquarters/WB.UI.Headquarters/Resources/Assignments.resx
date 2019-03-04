@@ -319,12 +319,22 @@
     <value>Email</value>
   </data>
   <data name="EmailExplanation" xml:space="preserve">
-    <value>Email would be used in communication with assignment recipient</value>
+    <value>Email will be used in communication with assignment recipient</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
   <data name="PasswordExplanation" xml:space="preserve">
-    <value>Password would be used to protect assignment</value>
+    <value>Password will be used to protect assignment</value>
   </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Web Mode</value>
+  </data>
+  <data name="WebModeExplanation" xml:space="preserve">
+    <value>This Assignment will be used with Web Mode</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Activated</value>
+  </data>
+    
 </root>

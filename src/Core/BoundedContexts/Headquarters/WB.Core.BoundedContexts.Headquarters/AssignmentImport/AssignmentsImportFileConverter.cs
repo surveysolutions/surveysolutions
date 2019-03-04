@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 var preloadingEmail = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.EmailColumnName);
                 var preloadingPassword = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.PasswordColumnName);
+                var preloadingWebMode = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.WebModeColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
@@ -60,9 +61,25 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     {
                         Column = preloadingPassword.Column,
                         Value = preloadingPassword.Value
-                    }
+                    },
+                    WebMode = preloadingWebMode == null ? null : ToAssignmentWebMode(preloadingWebMode)
                 };
             }
+        }
+
+        private AssignmentWebMode ToAssignmentWebMode(PreloadingValue preloadingWebMode)
+        {
+            var webMode = new AssignmentWebMode
+            {
+                Column = preloadingWebMode.Column,
+                Value = preloadingWebMode.Value
+
+            };
+
+            if (int.TryParse(preloadingWebMode.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var intNumericValue))
+                webMode.WebMode = intNumericValue == 1;
+
+            return webMode;
         }
 
         private AssignmentInterviewId ToAssignmentInterviewId(PreloadingValue value)

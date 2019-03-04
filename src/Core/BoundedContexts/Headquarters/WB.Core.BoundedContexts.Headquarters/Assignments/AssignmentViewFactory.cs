@@ -102,7 +102,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         IdentifyingQuestions = this.GetIdentifyingColumnText(x),
                         IsAudioRecordingEnabled = x.IsAudioRecordingEnabled,
                         Email = x.Email,
-                        Password = x.Password
+                        Password = x.Password,
+                        WebMode = x.WebMode
                     };
 
                     if (input.ShowQuestionnaireTitle)

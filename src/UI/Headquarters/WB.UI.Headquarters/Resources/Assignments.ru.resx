@@ -322,4 +322,13 @@
   <data name="PasswordExplanation" xml:space="preserve">
     <value>Пароль будет использован для защиты задания</value>
   </data>
+    <data name="WebMode" xml:space="preserve">
+    <value>Веб режим</value>
+  </data>
+    <data name="WebModeExplanation" xml:space="preserve">
+    <value>Задание в Веб режиме</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Активирован</value>
+  </data>
 </root>

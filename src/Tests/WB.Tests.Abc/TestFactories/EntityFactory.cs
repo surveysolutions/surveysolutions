@@ -1767,7 +1767,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? responsibleId = null,
             List<string> protectedVariables = null,
             string email = null,
-            string password = null)
+            string password = null,
+            bool? webMode = null)
         {
             var result = new Assignment();
             
@@ -1815,6 +1816,7 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.ProtectedVariables = protectedVariables;
             asDynamic.Email = email;
             asDynamic.Password = password;
+            asDynamic.WebMode = webMode;
 
             return result;
         }

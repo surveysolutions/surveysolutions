@@ -57,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual string Email { get; protected set; }
         public virtual string Password { get; protected set; }
+        public virtual bool? WebMode { get; protected set; }
 
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
@@ -139,10 +140,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Email = email;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
-
         public virtual void UpdatePassword(string password)
         {
             this.Password = password?.ToUpperInvariant();
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+        public virtual void UpdateMode(bool? mode)
+        {
+            this.WebMode = mode;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
