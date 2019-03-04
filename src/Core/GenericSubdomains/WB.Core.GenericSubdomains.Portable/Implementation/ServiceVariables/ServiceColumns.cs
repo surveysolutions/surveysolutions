@@ -33,6 +33,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string ResponsibleColumnName = "_responsible";
         public const string AssignmentsCountColumnName = "_quantity";
 
+        public const string WebModeColumnName = "_webmode";
         public const string EmailColumnName = "_email";
         public const string PasswordColumnName = "_password";
         public const string PasswordSpecialValue = "?";

@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activated.
+        /// </summary>
+        public static string Activated {
+            get {
+                return ResourceManager.GetString("Activated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         public static string Active {
@@ -232,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email would be used in communication with assignment recipient.
+        ///   Looks up a localized string similar to Email will be used in communication with assignment recipient.
         /// </summary>
         public static string EmailExplanation {
             get {
@@ -322,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password would be used to protect assignment.
+        ///   Looks up a localized string similar to Password will be used to protect assignment.
         /// </summary>
         public static string PasswordExplanation {
             get {
@@ -682,11 +691,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        ///   Looks up a localized string similar to Web Mode.
         /// </summary>
         public static string WebMode {
             get {
                 return ResourceManager.GetString("WebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Assignment will be used with Web Mode.
+        /// </summary>
+        public static string WebModeExplanation {
+            get {
+                return ResourceManager.GetString("WebModeExplanation", resourceCulture);
             }
         }
     }

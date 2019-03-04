@@ -25,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Property(x => x.IsAudioRecordingEnabled);
             Property(x => x.Password);
             Property(x => x.Email);
+            Property(x => x.WebMode);
 
             Component(x => x.QuestionnaireId, cmp =>
             {

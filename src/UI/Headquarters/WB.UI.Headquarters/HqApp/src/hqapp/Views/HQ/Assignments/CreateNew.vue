@@ -68,6 +68,31 @@
                             </div>
                         </wb-question>
 
+                        <wb-question :question="webMode" 
+                                     noValidation="true"
+                                     noComments="true"                                     
+                                     questionCssClassName="multiselect-question">
+                            <h5>
+                                {{ this.$t("Assignments.WebMode") }}
+                            </h5>
+                            <div class="question-unit">
+                                <div class="options-group">
+                                    <div class="form-group">
+                                        <div class="field answered">
+                                            <input id="webModeId"
+                                                checked="checked"                                            
+                                                v-model="webMode.answer"   
+                                                data-val="true"                                                                                 
+                                                type="checkbox" class="wb-checkbox"/>
+                                                <label for="webModeId">
+                                                    <span class="tick"></span> {{$t("Assignments.Activated")}}
+                                                </label>
+                                        </div>
+                                    </div>                                  
+                                </div>                                
+                            </div>
+                        </wb-question>
+
                         <wb-question :question="emailQuestion" 
                                      noValidation="true"
                                      noComments="true"                                     
@@ -88,7 +113,7 @@
                                 </div>                                
                             </div>
                         </wb-question>
-
+                        
                         <wb-question :question="passwordQuestion" 
                                      noValidation="true"
                                      noComments="true"                                     
@@ -119,6 +144,7 @@
                                 <input type="hidden" name="size" :value="sizeQuestion.answer"/>
                                 <input type="hidden" name="email" :value="emailQuestion.answer"/>
                                 <input type="hidden" name="password" :value="passwordQuestion.answer"/>
+                                <input type="hidden" name="webMode" :value="webMode.answer"/>
 
                                 <button type="button" @click="create" class="btn btn-success btn-lg">
                                     {{ $t('Common.Create') }}
@@ -170,6 +196,15 @@ export default {
                 id: "password",
                 acceptAnswer: true,
                 isAnswered: false,
+                validity: {
+                    isValid: true
+                }
+            },
+            webMode: {
+                id: "webMode",
+                acceptAnswer: true,
+                isAnswered: true,
+                answer: false,
                 validity: {
                     isValid: true
                 }

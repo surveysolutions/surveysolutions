@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
-        public ActionResult Create(string id, Guid responsibleId, int? size, string email, string password)
+        public ActionResult Create(string id, Guid responsibleId, int? size, string email, string password, bool? webMode)
         {
             var interview = this.interviews.Get(id);
             if (interview == null)
@@ -106,6 +106,7 @@ namespace WB.UI.Headquarters.Controllers
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
             assignment.UpdateEmail(email);
             assignment.UpdatePassword(password);
+            assignment.UpdateMode(webMode);
 
             this.assignmentsStorage.Store(assignment, null);
 

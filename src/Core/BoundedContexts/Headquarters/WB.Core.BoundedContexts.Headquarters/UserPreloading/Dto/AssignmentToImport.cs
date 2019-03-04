@@ -17,5 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 
         public virtual string Email { get; set; }
         public virtual string Password { get; set; }
+        public virtual bool? WebMode { set; get; }
     }
 }
