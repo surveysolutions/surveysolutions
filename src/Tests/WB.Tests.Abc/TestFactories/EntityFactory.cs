@@ -2431,5 +2431,22 @@ namespace WB.Tests.Abc.TestFactories
 
             return invitation;
         }
+
+        public WebInterviewEmailTemplate EmailTemplate(string subject = null, string message = null)
+        {
+            return new WebInterviewEmailTemplate(subject ?? "Subject", message ?? "Message");
+        }
+
+        public PersonalizedWebInterviewEmail PersonalizedEmail(string subject = null, string message = null)
+        {
+            var email = PersonalizedWebInterviewEmail.FromTemplate(new WebInterviewEmailTemplate("Subject", "Message"));
+
+            var asDynamic = email.AsDynamic();
+            asDynamic.Subject = subject ?? "Subject";
+            asDynamic.Message = message ?? "Message";
+            asDynamic.MessageWithPassword = message ?? "Message with password";
+
+            return email;
+        }
     }
 }

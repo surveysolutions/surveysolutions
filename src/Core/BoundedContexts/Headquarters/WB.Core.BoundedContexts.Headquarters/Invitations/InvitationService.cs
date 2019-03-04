@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using NHibernate.Linq;
+using Microsoft.Ajax.Utilities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -83,36 +84,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => _.Count(x => x.Assignment.Archived == false));
+            return invitationStorage.Query(_ => _
+                .Count(x => x.Assignment.Archived == false));
         }
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => _.Count(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                x.Assignment.Email != null && x.Assignment.Email != string.Empty && 
-                x.Assignment.Archived == false &&
-                x.SentOnUtc == null));
+            return invitationStorage.Query(_ => _
+                .Count(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Email != null && x.Assignment.Email != string.Empty && 
+                    x.Assignment.Archived == false &&
+                    x.SentOnUtc == null));
         }
 
         public int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => _.Count(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                x.Assignment.Archived == false &&
-                x.SentOnUtc != null));
+            return invitationStorage.Query(_ => _
+                .Count(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Archived == false &&
+                    x.SentOnUtc != null));
         }
 
         public List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => _.Where(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
-                x.Assignment.Archived == false &&
-                x.SentOnUtc == null).Select(x => x.Id).ToList());
+            return invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
+                    x.Assignment.Archived == false &&
+                    x.SentOnUtc == null)
+                .Select(x => x.Id)
+                .ToList());
         }
 
         public InvitationDistributionStatus GetEmailDistributionStatus()
@@ -185,27 +192,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return cancellationTokenSource.Token;
         }
 
-        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int value)
+        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
         {
-            var thresholdDate = DateTime.UtcNow.AddDays(-value);
-            return invitationStorage.Query(_ => _.Where(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                x.InterviewId != null &&
-                (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate &&
-                x.Interview.Status < InterviewStatus.Completed).Select(x => x.Id).ToList());
+            var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
+            return invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.InterviewId != null &&
+                    (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate &&
+                    x.Interview.Status < InterviewStatus.Completed)
+                .Select(x => x.Id)
+                .ToList());
         }
 
-        public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int value)
+        public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
         {
-            var thresholdDate = DateTime.UtcNow.AddDays(-value);
-            return invitationStorage.Query(_ => _.Where(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                x.SentOnUtc !=null  &&
-                x.InterviewId == null &&
-                (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate 
-                ).Select(x => x.Id).ToList());
+            var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
+            return invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.SentOnUtc !=null  &&
+                    x.InterviewId == null &&
+                    (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate)
+                .Select(x => x.Id)
+                .ToList());
         }
 
         public void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message)
@@ -214,11 +226,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity)
         {
-            return invitationStorage.Query(_ => 
-                _.Where(x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version)
+            return invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version)
                 .ToList());
+        }
+
+        public IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations()
+        {
+            return invitationStorage.Query(_ => _.Select(x => x.Assignment.Questionnaire).Distinct().ToList());
         }
 
         public Invitation GetInvitation(int invitationId)
@@ -265,9 +282,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void EmailDistributionCanceled();
         void CancelEmailDistribution();
         CancellationToken GetCancellationToken();
-        IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int value);
-        IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int value);
+        IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);
+        IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);
         void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message);
         List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
+        IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
     }
 }
