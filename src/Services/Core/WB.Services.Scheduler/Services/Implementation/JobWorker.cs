@@ -32,30 +32,35 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             while (true)
             {
-                if (token.IsCancellationRequested) return;
-
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    var jobService = scope.ServiceProvider.GetService<IJobService>();
-
-                    JobItem job = await jobService.GetFreeJobAsync(token);
-
-                    if (job != null)
-                    {
-                        var executor = scope.ServiceProvider.GetService<IJobExecutor>();
-                        await executor.ExecuteAsync(job, token);
-                    }
-                }
-
-                if (token.IsCancellationRequested) return;
-
                 try
                 {
+                    if (token.IsCancellationRequested) return;
+
+                    using (var scope = serviceProvider.CreateScope())
+                    {
+                        var jobService = scope.ServiceProvider.GetService<IJobService>();
+
+                        JobItem job = await jobService.GetFreeJobAsync(token);
+
+                        if (job != null)
+                        {
+                            var executor = scope.ServiceProvider.GetService<IJobExecutor>();
+                            await executor.ExecuteAsync(job, token);
+                        }
+                    }
+
+                    if (token.IsCancellationRequested) return;
+
                     await Task.Delay(TimeSpan.FromSeconds(5), token);
                 }
                 catch (TaskCanceledException)
                 {
-                    logger.LogInformation("Cancellation requested");
+                    Info("Cancellation requested. Stopping JobWorker");
+                    throw;
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "[{Id}] Job worker got an exception. Log, ignore and continue working", Id);
                 }
             }
         }
