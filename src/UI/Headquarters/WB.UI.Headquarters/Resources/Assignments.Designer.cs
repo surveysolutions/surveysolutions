@@ -205,6 +205,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web Mode.
+        /// </summary>
+        public static string CreateAssignmentWebMode {
+            get {
+                return ResourceManager.GetString("CreateAssignmentWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Assignment will be used with Web Mode.
+        /// </summary>
+        public static string CreateAssignmentWebModeExplanation {
+            get {
+                return ResourceManager.GetString("CreateAssignmentWebModeExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on.
         /// </summary>
         public static string CreatedAt {
@@ -691,20 +709,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Mode.
+        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
         /// </summary>
         public static string WebMode {
             get {
                 return ResourceManager.GetString("WebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This Assignment will be used with Web Mode.
-        /// </summary>
-        public static string WebModeExplanation {
-            get {
-                return ResourceManager.GetString("WebModeExplanation", resourceCulture);
             }
         }
     }
