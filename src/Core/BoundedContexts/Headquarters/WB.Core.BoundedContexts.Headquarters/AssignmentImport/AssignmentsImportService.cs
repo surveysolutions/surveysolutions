@@ -243,6 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
             assignment.UpdatePassword(assignmentToImport.Password);
             assignment.UpdateEmail(assignmentToImport.Email);
+            assignment.UpdateMode(assignmentToImport.WebMode);
 
             this.assignmentsStorage.Store(assignment, null);
 
@@ -329,6 +330,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var email = assignment.Select(_ => _.Email).FirstOrDefault(_ => _ != null)?.Value;
             var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
+            var webMode = assignment.Select(_ => _.WebMode).FirstOrDefault(_ => _ != null)?.WebMode;
 
             return new AssignmentToImport
             {
@@ -339,7 +341,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Verified = false,
                 ProtectedVariables = protectedQuestions,
                 Email = email,
-                Password = password
+                Password = password,
+                WebMode = webMode
             };
         }
 

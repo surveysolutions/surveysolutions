@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var serviceValue in (assignmentRow.RosterInstanceCodes ?? Array.Empty<AssignmentValue>()).Union(
                 new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity,
-                    assignmentRow.Email, assignmentRow.Password}))
+                    assignmentRow.Email, assignmentRow.Password, assignmentRow.WebMode}))
             {
                 if (serviceValue == null) continue;
 

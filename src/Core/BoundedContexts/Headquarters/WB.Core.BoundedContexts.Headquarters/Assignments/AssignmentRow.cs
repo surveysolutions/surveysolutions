@@ -22,5 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public List<AssignmentIdentifyingQuestionRow> IdentifyingQuestions { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public bool? WebMode { get; set; }
     }
 }

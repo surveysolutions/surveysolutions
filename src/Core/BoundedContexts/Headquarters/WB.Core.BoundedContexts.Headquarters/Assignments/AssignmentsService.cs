@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
+                && (assigment.WebMode == null || assigment.WebMode == false))
             .ToList());
         }
 
@@ -38,7 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 x.Where(assigment =>
                         (assigment.ResponsibleId == supervisorId || assigment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
                         && !assigment.Archived
-                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
+                        && (assigment.WebMode == null || assigment.WebMode == false))
                     .ToList());
         }
 
