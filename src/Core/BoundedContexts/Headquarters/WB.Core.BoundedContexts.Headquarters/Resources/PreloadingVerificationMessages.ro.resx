@@ -223,6 +223,6 @@
     <value>Opțiunile de răspuns de la întrebarea care deschide Lista trebuie să fie de tip text</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Cod necorespunzător pentru lista numerică. Secvența codurilor trebuie să fie 1, 2, ... pentru a număra înregistrările din listă</value>
+    <value>Cod necorespunzător pentru lista numerică. Secvența codurilor trebuie să fie 0, 1, ... pentru a număra înregistrările din listă</value>
   </data>
 </root>
