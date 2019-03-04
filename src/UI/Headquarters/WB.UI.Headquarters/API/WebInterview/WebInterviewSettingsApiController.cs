@@ -1,18 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
-using CsvHelper;
-using CsvHelper.Configuration;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -236,6 +228,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return Ok();
 
             config.Started = true;
+            config.BaseUrl = this.Url.Content("~/WebInterview");
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();

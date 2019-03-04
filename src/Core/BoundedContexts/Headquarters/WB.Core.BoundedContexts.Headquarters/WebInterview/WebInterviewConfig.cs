@@ -42,8 +42,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 
         public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
         public int? ReminderAfterDaysIfPartialResponse { get; set; } = 3;
+        public string BaseUrl { get; set; }
 
-        public WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
+        public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
         {
             var template = EmailTemplates.ContainsKey(type)
                 ? EmailTemplates[type]

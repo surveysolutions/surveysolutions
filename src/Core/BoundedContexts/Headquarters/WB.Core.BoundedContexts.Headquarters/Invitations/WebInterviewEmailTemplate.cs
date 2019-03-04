@@ -22,7 +22,7 @@
 
     public class PersonalizedWebInterviewEmail
     {
-        private PersonalizedWebInterviewEmail(string subject, string message, string messageWithPassword)
+        protected PersonalizedWebInterviewEmail(string subject, string message, string messageWithPassword)
         {
             this.Subject = subject;
             this.Message = message;

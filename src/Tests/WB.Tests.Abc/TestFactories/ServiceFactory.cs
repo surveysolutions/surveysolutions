@@ -26,6 +26,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -47,6 +48,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -1033,6 +1035,28 @@ namespace WB.Tests.Abc.TestFactories
 
             var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>());
             return service;
+        }
+
+        public SendRemindersJob SendRemindersJob(
+            ILogger logger = null, 
+            IInvitationService invitationService = null,  
+            IEmailService emailService = null,
+            IWebInterviewConfigProvider webInterviewConfigProvider = null, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null)
+        {
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
+
+            var settingsMock = new Mock<IWebInterviewConfigProvider>();
+            settingsMock.Setup(x => x.Get(It.IsAny<QuestionnaireIdentity>())).Returns(Mock.Of<WebInterviewConfig>(_ 
+                => _.ReminderAfterDaysIfNoResponse == 2
+                && _.ReminderAfterDaysIfPartialResponse == 2));
+
+            return new SendRemindersJob(
+                logger ?? Mock.Of<ILogger>(),
+                invitationService ?? Mock.Of<IInvitationService>(),
+                emailService ?? emailServiceMock.Object,
+                webInterviewConfigProvider ?? settingsMock.Object);
         }
     }
 
