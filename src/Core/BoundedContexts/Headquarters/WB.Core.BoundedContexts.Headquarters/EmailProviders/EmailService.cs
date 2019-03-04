@@ -32,6 +32,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         public async Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody)
         {
             EmailProviderSettings settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            if (!IsConfigured())
+                throw new Exception("Email provider was not set up properly");
+
             switch (settings.Provider)
             {
                 case EmailProvider.Amazon:
@@ -42,7 +45,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                     throw new Exception("Email provider wasn't set up");
             }
         }
-        
+
+        public bool IsConfigured()
+        {
+            var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            switch (settings.Provider)
+            {
+                case EmailProvider.None: return false;
+                case EmailProvider.Amazon:
+                    return !string.IsNullOrWhiteSpace(settings.AwsAccessKeyId) &&
+                           !string.IsNullOrWhiteSpace(settings.AwsSecretAccessKey);
+                case EmailProvider.SendGrid:
+                    return !string.IsNullOrWhiteSpace(settings.SendGridApiKey);
+                default:
+                    return false;
+            }
+        }
+
         public async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, ISendGridEmailSettings settings)
         {
             var client = new SendGridClient(settings.SendGridApiKey);
@@ -86,7 +105,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             public string Message { get; set; }
             public string Help { get; set; }
             public string Field { get; set; }
-
         }
 
         public async Task<string> SendEmailWithAmazon(string to, string subject, string htmlBody, string textBody, IAmazonEmailSettings settings)
@@ -97,6 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 var sendRequest = new SendEmailRequest
                 {
                     Source = settings.SenderAddress,
+                    
                     Destination = new Destination
                     {
                         ToAddresses = new List<string> { to }
@@ -135,5 +154,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
     public interface IEmailService
     {
         Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody);
+        bool IsConfigured();
     }
 }
