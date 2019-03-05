@@ -28,14 +28,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
-        private Identity questionIdentity;
         private string interviewId;
         private bool isRosterSizeQuestion;
         private int? maxAnswerCount;
 
         public QuestionInstructionViewModel InstructionViewModel { get; private set; }
         private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
-        private IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         private TextListAddNewItemViewModel addNewItemViewModel
             => this.Answers?.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
@@ -58,19 +56,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.mainThreadDispatcher = mainThreadDispatcher;
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.userInteractionService = userInteractionService;
             this.Answering = answering;
             this.Answers = new CovariantObservableCollection<ICompositeEntity>();
         }
-
-        public Identity Identity => this.questionIdentity;
+        public Identity Identity { get; private set; }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
+            this.Identity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
             this.InstructionViewModel.Init(interviewId, entityIdentity, navigationState);
@@ -79,8 +75,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(this.questionIdentity.Id);
-            this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
+            this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(this.Identity.Id);
+            this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.Identity.Id);
 
             var textListQuestion = interview.GetTextListQuestion(entityIdentity);
             if (textListQuestion.IsAnswered())
@@ -153,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.addNewItemViewModel.Text = string.Empty;
         }
 
-        private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
+        private async void ListItemEdited(object sender, EventArgs eventArgs) => await this.SaveAnswers();
 
         private async Task SaveAnswers()
         {
@@ -172,15 +168,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var command = new AnswerTextListQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
-                questionId: this.questionIdentity.Id,
-                rosterVector: this.questionIdentity.RosterVector,
+                questionId: this.Identity.Id,
+                rosterVector: this.Identity.RosterVector,
                 answers: answers);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(this.ShowOrHideAddNewItem);
+                this.InvokeOnMainThread(this.ShowOrHideAddNewItem);
             }
             catch (InterviewException ex)
             {
@@ -198,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModel.ItemEdited += this.ListItemEdited;
             optionViewModel.ItemDeleted += this.ListItemDeleted;
-            optionViewModel.IsProtected = interview.IsAnswerProtected(this.questionIdentity, value);
+            optionViewModel.IsProtected = interview.IsAnswerProtected(this.Identity, value);
 
             return optionViewModel;
         }
