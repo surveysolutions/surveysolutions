@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IKeywordsProvider, KeywordsProvider>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
 
-            registry.Bind<IPlainAggregateRootRepository<User>, UserRepository>();
             registry.Bind<IPatchGenerator, JsonPatchService>();
             registry.Bind<IPatchApplier, JsonPatchService>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
@@ -77,14 +76,12 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();
             registry.Bind<IQuestionnaireInfoViewFactory, QuestionnaireInfoViewFactory>();
             registry.Bind<IAccountListViewFactory, AccountListViewFactory>();
-            registry.Bind<IAccountViewFactory, AccountViewFactory>();
             registry.Bind<IAllowedAddressService, AllowedAddressService>();
             registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
             registry.Bind<IIpAddressProvider, IpAddressProvider>();
             registry.Bind<ITranslationsService, TranslationsService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.Bind<IAccountRepository, DesignerAccountRepository>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
@@ -106,23 +103,6 @@ namespace WB.Core.BoundedContexts.Designer
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            CommandRegistry
-                .Setup<User>()
-                .ResolvesIdFrom<UserCommand>(command => command.UserId)
-                .InitializesWith<RegisterUser>((command, aggregate) => aggregate.Register(command.ApplicationName, command.UserName, command.Email, command.UserId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken, command.FullName))
-                .Handles<AssignUserRole>((command, aggregate) => aggregate.AddRole(command.Role))
-                .Handles<ChangeUserPassword>((command, aggregate) => aggregate.ChangePassword(command.Password))
-                .Handles<ChangeSecurityQuestion>((command, aggregate) => aggregate.ChangePasswordQuestionAndAnswer(command.PasswordQuestion, command.PasswordAnswer))
-                .Handles<SetPasswordResetToken>((command, aggregate) => aggregate.ChangePasswordResetToken(command.PasswordResetToken, command.PasswordResetExpirationDate))
-                .Handles<ConfirmUserAccount>((command, aggregate) => aggregate.Confirm())
-                .Handles<DeleteUserAccount>((command, aggregate) => aggregate.Delete())
-                .Handles<LockUserAccount>((command, aggregate) => aggregate.Lock())
-                .Handles<RegisterFailedLogin>((command, aggregate) => aggregate.LoginFailed())
-                .Handles<RemoveUserRole>((command, aggregate) => aggregate.RemoveRole(command.Role))
-                .Handles<ResetUserPassword>((command, aggregate) => aggregate.ResetPassword(command.Password, command.PasswordSalt))
-                .Handles<UnlockUserAccount>((command, aggregate) => aggregate.Unlock())
-                .Handles<UpdateUserAccount>((command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment, command.CanImportOnHq, command.FullName));
-
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)

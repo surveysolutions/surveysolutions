@@ -624,7 +624,7 @@ namespace WB.UI.Designer.Controllers
             {
                 sb = $"{sb} Desc";
             }
-            var users = accountListViewFactory.Load(new AccountListViewInputModel()
+            var users = accountListViewFactory.Load(new AccountListViewInputModel
             {
                 Filter = f,
                 Page = page,
@@ -632,7 +632,7 @@ namespace WB.UI.Designer.Controllers
                 Order = sb ?? string.Empty,
             });
 
-            Func<IAccountView, bool> editAction = (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
+            Func<IIdentityUser, bool> editAction = (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
 
             IEnumerable<AccountListViewItemModel> retVal = users.Items.Select(x =>
                          new AccountListViewItemModel
