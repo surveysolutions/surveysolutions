@@ -167,6 +167,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!@event.Questions.Contains(this.Identity)) return;
 
+            this.Answer = null;
+
             this.InvokeOnMainThread( () =>
             {
                 comboboxViewModel?.UpdateFilter(null);
