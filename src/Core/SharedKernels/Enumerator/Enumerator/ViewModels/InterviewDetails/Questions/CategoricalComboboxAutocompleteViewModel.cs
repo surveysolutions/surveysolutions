@@ -74,14 +74,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 FilterText = arg.Title;
         }
 
-
         private void ShowErrorIfNoAnswer()
         {
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
             var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault();
 
-            if (selectedOption != null) return;
+            if (selectedOption != null &&
+                selectedOption.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase))
+            {
+                this.OnItemSelected?.Invoke(this, selectedOption.Value);
+                return;
+            }
 
             var errorMessage = UIResources.Interview_Question_Filter_MatchError.FormatString(this.FilterText);
             this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(errorMessage);
