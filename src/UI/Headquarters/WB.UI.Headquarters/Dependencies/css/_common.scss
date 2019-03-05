@@ -775,6 +775,24 @@ dl{
 .mb-0{
 	margin-bottom: 0;
 }
+.mb-20{
+	margin-bottom: 20px;
+}
+.mb-30{
+	margin-bottom: 30px;
+}
 .h-100{
 	height: 100%;
+}
+
+.font-bold{
+	font-family: "RobotoBold";
+}
+.link-underlined{
+	text-decoration: underline;
+}
+@media (min-width: 680px){
+	.mw-50{
+		max-width: 50%;
+	}
 }
