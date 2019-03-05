@@ -100,9 +100,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void UpdateFilter(string filter)
         {
-            filter = filter ?? string.Empty;
-            this.FilterText = filter;
-            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
+            this.InvokeOnMainThreadAsync(() =>
+            {
+                filter = filter ?? string.Empty;
+                this.FilterText = filter;
+                this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
+            });
         }
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
