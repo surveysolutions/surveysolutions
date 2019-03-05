@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get => this.filterText;
             set
             {
-                this.filterText = value;
+                this.filterText = (value ?? string.Empty);
                 this.RaisePropertyChanged();
             }
         }
@@ -100,6 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void UpdateFilter(string filter)
         {
+            filter = filter ?? string.Empty;
             this.FilterText = filter;
             this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
         }
