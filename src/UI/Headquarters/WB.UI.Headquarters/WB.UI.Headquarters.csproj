@@ -147,41 +147,8 @@
     <Reference Include="FluentMigrator.Runner.Core, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Core.3.1.3\lib\net461\FluentMigrator.Runner.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FluentMigrator.Runner.Db2, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Db2.3.1.3\lib\net461\FluentMigrator.Runner.Db2.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.Firebird, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Firebird.3.1.3\lib\net461\FluentMigrator.Runner.Firebird.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.Hana, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Hana.3.1.3\lib\net461\FluentMigrator.Runner.Hana.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.Jet, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Jet.3.1.3\lib\net461\FluentMigrator.Runner.Jet.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.MySql, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.MySql.3.1.3\lib\net461\FluentMigrator.Runner.MySql.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.Oracle, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Oracle.3.1.3\lib\net461\FluentMigrator.Runner.Oracle.dll</HintPath>
-    </Reference>
     <Reference Include="FluentMigrator.Runner.Postgres, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Postgres.3.1.3\lib\net461\FluentMigrator.Runner.Postgres.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.Redshift, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.Redshift.3.1.3\lib\net461\FluentMigrator.Runner.Redshift.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.SqlAnywhere, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.SqlAnywhere.3.1.3\lib\net461\FluentMigrator.Runner.SqlAnywhere.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.SQLite, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.SQLite.3.1.3\lib\net461\FluentMigrator.Runner.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.SqlServer, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.SqlServer.3.1.3\lib\net461\FluentMigrator.Runner.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator.Runner.SqlServerCe, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Runner.SqlServerCe.3.1.3\lib\net461\FluentMigrator.Runner.SqlServerCe.dll</HintPath>
     </Reference>
     <Reference Include="GeoJSON.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.70\lib\net45\GeoJSON.Net.dll</HintPath>
