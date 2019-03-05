@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
@@ -9,11 +8,7 @@ using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
-using Java.Lang;
 using MvvmCross.Binding.Attributes;
-using MvvmCross.Binding.Extensions;
-using MvvmCross.Platforms.Android;
-using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Binding.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
@@ -207,171 +202,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             var ims = (InputMethodManager)this.Context.GetSystemService(Context.InputMethodService);
             ims.HideSoftInputFromWindow(this.WindowToken, 0);
-        }
-    }
-
-    public class MvxFilteringAdapterC : MvxAdapter, IFilterable, IJavaObject, IDisposable
-    {
-        private object _syncLock = new object();
-        public Func<object, string, bool> DefaultFilterPredicate = (Func<object, string, bool>)((item, filterString) => item.ToString().ToLowerInvariant().Contains(filterString.ToLowerInvariant()));
-        private string _partialText;
-        private MvxReplaceableJavaContainer _javaContainer;
-
-        public Func<object, string, bool> FilterPredicate { get; set; }
-
-        protected virtual ValueTuple<int, IEnumerable> FilterValues(string constraint)
-        {
-            if (this.PartialText == constraint)
-                return new ValueTuple<int, IEnumerable>(-1, (IEnumerable)null);
-            this.PartialText = constraint;
-            IEnumerable enumerable = this.ItemsSource.Filter((Func<object, bool>)(item => this.FilterPredicate(item, constraint)));
-            return new ValueTuple<int, IEnumerable>(enumerable.Count(), enumerable);
-        }
-
-        public override IEnumerable ItemsSource
-        {
-            get
-            {
-                return base.ItemsSource;
-            }
-            set
-            {
-                lock (this._syncLock)
-                    this.FilteredItemsSource = value;
-                base.ItemsSource = value;
-            }
-        }
-
-        private IEnumerable FilteredItemsSource { get; set; }
-
-        public event EventHandler PartialTextChanged;
-
-        public string PartialText
-        {
-            get
-            {
-                return this._partialText;
-            }
-            private set
-            {
-                this._partialText = value;
-                this.FireConstraintChanged();
-            }
-        }
-
-        private void FireConstraintChanged()
-        {
-            (this.Context as Activity)?.RunOnUiThread((System.Action)(() =>
-            {
-                // ISSUE: reference to a compiler-generated field
-                EventHandler partialTextChanged = this.PartialTextChanged;
-                if (partialTextChanged == null)
-                    return;
-                partialTextChanged((object)this, EventArgs.Empty);
-            }));
-        }
-
-        public MvxFilteringAdapterC(Context context)
-          : this(context, MvxAndroidBindingContextHelpers.Current())
-        {
-        }
-
-        public MvxFilteringAdapterC(Context context, IMvxAndroidBindingContext bindingContext)
-          : base(context, bindingContext)
-        {
-            this.ReturnSingleObjectFromGetItem = true;
-            this.FilterPredicate = this.DefaultFilterPredicate;
-            this.Filter = (Filter)new MvxFilteringAdapterC.MyFilter(this);
-        }
-
-        protected MvxFilteringAdapterC(IntPtr javaReference, JniHandleOwnership transfer)
-          : base(javaReference, transfer)
-        {
-        }
-
-        public bool ReturnSingleObjectFromGetItem { get; set; }
-
-        public override Java.Lang.Object GetItem(int position)
-        {
-            if (!this.ReturnSingleObjectFromGetItem)
-                return base.GetItem(position);
-            if (this._javaContainer == null)
-                this._javaContainer = new MvxReplaceableJavaContainer();
-            this._javaContainer.Object = this.GetRawItem(position);
-            return (Java.Lang.Object)this._javaContainer;
-        }
-
-        public override object GetRawItem(int position)
-        {
-            lock (this._syncLock)
-            {
-                IEnumerable filteredItemsSource = this.FilteredItemsSource;
-                return filteredItemsSource != null ? filteredItemsSource.ElementAt(position) : (object)null;
-            }
-        }
-
-        public override int GetPosition(object item)
-        {
-            lock (this._syncLock)
-            {
-                IEnumerable filteredItemsSource = this.FilteredItemsSource;
-                return filteredItemsSource != null ? filteredItemsSource.GetPosition(item) : 0;
-            }
-        }
-
-        public override int Count
-        {
-            get
-            {
-                lock (this._syncLock)
-                {
-                    IEnumerable filteredItemsSource = this.FilteredItemsSource;
-                    return filteredItemsSource != null ? filteredItemsSource.Count() : 0;
-                }
-            }
-        }
-
-        public Filter Filter { get; set; }
-
-        private class MyFilter : Filter
-        {
-            private readonly MvxFilteringAdapterC _owner;
-
-            public MyFilter(MvxFilteringAdapterC owner)
-            {
-                this._owner = owner;
-            }
-
-            protected override Filter.FilterResults PerformFiltering(ICharSequence constraint)
-            {
-                ValueTuple<int, IEnumerable> valueTuple = this._owner.FilterValues(constraint == null ? string.Empty : constraint.ToString());
-                int num = valueTuple.Item1;
-                IEnumerable enumerable = valueTuple.Item2;
-                if (num == -1)
-                    return new Filter.FilterResults();
-                return new Filter.FilterResults()
-                {
-                    Count = num,
-                    Values = (Java.Lang.Object)new MvxReplaceableJavaContainer()
-                    {
-                        Object = (object)enumerable
-                    }
-                };
-            }
-
-            protected override void PublishResults(ICharSequence constraint, Filter.FilterResults results)
-            {
-                if (results == null || results.Count <= 0)
-                    return;
-                MvxReplaceableJavaContainer values = results.Values as MvxReplaceableJavaContainer;
-                if (values == null)
-                    return;
-                lock (this._owner._syncLock)
-                {
-                    this._owner.FilteredItemsSource = values.Object as IEnumerable;
-                    this._owner.NotifyDataSetChanged();
-                }
-            }
         }
     }
 }
