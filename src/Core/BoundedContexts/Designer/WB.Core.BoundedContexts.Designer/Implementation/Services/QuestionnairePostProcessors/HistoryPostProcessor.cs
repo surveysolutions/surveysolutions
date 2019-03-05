@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -76,8 +77,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
-        private IPlainStorageAccessor<User> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
+        private IIdentityService accountStorage
+            => ServiceLocator.Current.GetInstance<IIdentityService>();
 
         private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();

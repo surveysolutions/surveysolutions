@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views;
@@ -77,15 +78,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
-        private IPlainStorageAccessor<User> accountStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
+        private IIdentityService accountStorage
+            => ServiceLocator.Current.GetInstance<IIdentityService>();
 
         private IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireListViewItem>>();
 
         private IRecipientNotifier emailNotifier => ServiceLocator.Current.GetInstance<IRecipientNotifier>();
-
-        private IAccountRepository accountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
 
         private void Create(QuestionnaireDocument document, bool shouldPreserveSharedPersons, 
             Guid? questionnaireId = null, string questionnaireTitle = null, Guid? createdBy = null,
@@ -222,11 +221,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 ShareChangeType.Share, personEmail, questionnaireListViewItem.QuestionnaireId, shareType);
         }
 
-        private void SendEmailNotifications(string questionnaireTitle, Guid? questionnaireOwnerId, Guid responsibleId,
-            ShareChangeType shareChangeType, string mailTo, string questionnaireId, ShareType shareType)
+        private void SendEmailNotifications(string questionnaireTitle,
+            Guid? questionnaireOwnerId,
+            Guid responsibleId,
+            ShareChangeType shareChangeType, 
+            string mailTo, 
+            string questionnaireId, 
+            ShareType shareType)
         {
             string mailFrom = this.accountStorage.GetById(responsibleId.FormatGuid())?.Email;
-            string mailToUserName = this.accountRepository.GetUserNameByEmail(mailTo);
+            string mailToUserName = this.accountStorage.GetUserNameByEmail(mailTo);
 
             this.emailNotifier.NotifyTargetPersonAboutShareChange(shareChangeType, mailTo, mailToUserName, questionnaireId,
                 questionnaireTitle, shareType, mailFrom);

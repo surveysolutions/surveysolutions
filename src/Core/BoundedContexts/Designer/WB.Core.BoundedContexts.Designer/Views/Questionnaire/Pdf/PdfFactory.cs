@@ -4,13 +4,11 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -28,14 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly ITranslationsService translationService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
+        private readonly IIdentityService accountsStorage;
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IPlainStorageAccessor<Aggregates.User> accountsStorage,
+            IIdentityService accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             ITranslationsService translationService,
             PdfSettings pdfSettings,

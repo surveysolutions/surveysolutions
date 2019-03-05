@@ -2,7 +2,6 @@
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -78,14 +77,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Pass
         public bool IsPasswordsDecryptable
         {
             get { return true; }
-        }
-
-        /// <summary>
-        /// Gets how passwords are stored in the database.
-        /// </summary>
-        public MembershipPasswordFormat PasswordFormat
-        {
-            get { return MembershipPasswordFormat.Encrypted; }
         }
 
         /// <summary>

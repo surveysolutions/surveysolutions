@@ -1,5 +1,4 @@
 
-using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -14,11 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         /// Gets if passwords can be decrypted.
         /// </summary>
         bool IsPasswordsDecryptable { get; }
-
-        /// <summary>
-        /// Gets how passwords are stored in the database.
-        /// </summary>
-        MembershipPasswordFormat PasswordFormat { get; }
 
         /// <summary>
         /// Encrypt a password

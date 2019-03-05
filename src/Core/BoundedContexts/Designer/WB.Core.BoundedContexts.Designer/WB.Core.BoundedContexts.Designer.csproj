@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>netstandard2</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
@@ -13,32 +13,15 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="ReferencedAssemblies\System.Collections.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.dll" />
-    <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Extensions.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Numerics.dll" />
-    <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Markdig" Version="0.16.0" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
+    <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
@@ -46,12 +29,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
     <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">
