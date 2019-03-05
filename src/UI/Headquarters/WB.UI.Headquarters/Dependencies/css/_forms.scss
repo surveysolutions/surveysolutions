@@ -712,3 +712,22 @@ textarea.field-to-fill{
 		}
 	}
 }
+.form-container{
+	.form-group{
+		
+		.field{
+			margin-right: 20px;
+			width: 250px;
+		}
+		
+		input{
+			width: 100%;
+		}
+		.help-block{
+			font-size: 14px;
+			line-height: 16px;
+		}
+	}
+	
+
+}

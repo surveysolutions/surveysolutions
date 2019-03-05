@@ -9,6 +9,9 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string AwsAccessKeyId{ get; set; }
         public string AwsSecretAccessKey{ get; set; }
         public string SendGridApiKey{ get; set; }
+        public string SenderName{ get; set; }
+        public string ReplyAddress{ get; set; }
+        public string Address{ get; set; }
     }
 
     public interface ISendGridEmailSettings
