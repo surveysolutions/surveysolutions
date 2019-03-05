@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     {
         private readonly IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage;
-        private readonly IPlainStorageAccessor<User> accountStorage;
+        private readonly IIdentityService accountStorage;
 
-        QuestionnaireListViewFolder publicQuestionnairesFolder = new QuestionnaireListViewFolder()
+        readonly QuestionnaireListViewFolder publicQuestionnairesFolder = new QuestionnaireListViewFolder()
         {
             Title = Common.PublicQuestionnaires,
         };
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage,
-            IPlainStorageAccessor<User> accountStorage)
+            IIdentityService accountStorage)
         {
             this.folderStorage = folderStorage;
             this.questionnaireStorage = questionnaireStorage;

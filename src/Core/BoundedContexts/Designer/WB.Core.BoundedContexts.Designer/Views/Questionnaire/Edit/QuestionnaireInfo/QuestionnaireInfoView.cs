@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public bool IsReadOnlyForUser { get; set; }
         public bool IsSharedWithUser { get; set; }
 
-        public bool HasViewerAdminRights { get; set; }
+        //public bool HasViewerAdminRights { get; set; } TODO fill on UI
 
         public List<AttachmentView> Attachments { get; set; }
 

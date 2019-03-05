@@ -4,12 +4,10 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -20,22 +18,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
-        private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
-        private readonly IMembershipUserService membershipUserService;
+        private readonly IIdentityService membershipUserService;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
-            IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
-            IMembershipUserService membershipUserService)
+            IIdentityService membershipUserService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.questionnaires = questionnaires;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
-            this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
         }
@@ -97,7 +92,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
-                    Login = this.accountsStorage.GetById(x.UserId.FormatGuid()).UserName,
+                    Login = this.membershipUserService.GetById(x.UserId.FormatGuid()).UserName,
                     UserId = x.UserId,
                     IsOwner = x.IsOwner,
                     ShareType = x.ShareType
@@ -107,7 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
             {
-                var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
+                var owner = this.membershipUserService.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
                 if (owner != null)
                 {
                     sharedPersons.Add(new SharedPersonView
@@ -125,7 +120,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.IsSharedWithUser = person != null;
-            questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
             questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
 
             questionnaireInfoView.Macros = questionnaireDocument

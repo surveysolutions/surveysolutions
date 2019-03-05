@@ -1,32 +1,39 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class IpAddressProvider : IIpAddressProvider
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public IpAddressProvider(IHttpContextAccessor httpContextAccessor)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
         public IPAddress GetClientIpAddress()
         {
             IPAddress ip = null;
-            var userHostAddress = HttpContext.Current.Request.UserHostAddress ?? "";
 
-            IPAddress.TryParse(userHostAddress, out ip);
+            var httpContext = this.httpContextAccessor.HttpContext;
+            ip = httpContext.Connection.RemoteIpAddress;
 
-            var xForwardedForKey = HttpContext.Current.Request.ServerVariables.AllKeys.FirstOrDefault(x => x.ToUpper() == "X_FORWARDED_FOR");
+            KeyValuePair<string, StringValues> xForwardedForKey = httpContext.Request.Headers.FirstOrDefault(x => x.Key.ToUpper() == "X_FORWARDED_FOR");
 
-            var isXForwardedKeyIsMissing = string.IsNullOrEmpty(xForwardedForKey);
+            var isXForwardedKeyIsMissing = string.IsNullOrEmpty(xForwardedForKey.Key);
             if (isXForwardedKeyIsMissing)
                 return ip;
 
-            var xForwardedFor = HttpContext.Current.Request.ServerVariables[xForwardedForKey];
-
-            var isForwardedParamIsEmpty = string.IsNullOrEmpty(xForwardedFor);
+            var isForwardedParamIsEmpty = string.IsNullOrEmpty(xForwardedForKey.Value);
             if (isForwardedParamIsEmpty)
                 return ip;
 
-            return xForwardedFor.Split(',').Select(IPAddress.Parse).LastOrDefault(x => !IsPrivateIpAddress(x)) ?? ip;
+            return xForwardedForKey.Value.Select(IPAddress.Parse).LastOrDefault(x => !IsPrivateIpAddress(x)) ?? ip;
         }
 
         private static bool IsPrivateIpAddress(IPAddress ip)

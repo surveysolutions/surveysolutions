@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -25,12 +24,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
-        private readonly IAccountRepository accountRepository;
+        private readonly IIdentityService accountRepository;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
-            IAccountRepository accountRepository)
+            IIdentityService accountRepository)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.listItemStorage = listItemStorage;
@@ -89,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     Email = x.Email,
                     IsOwner = x.IsOwner,
-                    Login = accountRepository.GetByProviderKey(x.UserId)?.UserName ?? string.Empty,
+                    Login = accountRepository.GetById(x.UserId.FormatGuid())?.UserName ?? string.Empty,
                     ShareType = x.ShareType,
                     UserId = x.UserId
                 });
