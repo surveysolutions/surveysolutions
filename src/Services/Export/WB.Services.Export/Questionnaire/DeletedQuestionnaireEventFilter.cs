@@ -55,6 +55,12 @@ namespace WB.Services.Export.Questionnaire
                             break;
                     }
 
+                    if (reference == null)
+                    {
+                        throw new Exception(
+                            $"Encountered interview id {@event.EventSourceId} without corresponding InterviewCreated or InterviewOnClientCreated events");
+                    }
+
                     var questionnaire = await questionnaireStorage.GetQuestionnaireAsync(new QuestionnaireId(reference.QuestionnaireId));
 
                     if (!questionnaire.IsDeleted)
@@ -66,6 +72,8 @@ namespace WB.Services.Export.Questionnaire
                 {
                     e.Data.Add("Event", @event.EventTypeName);
                     e.Data.Add("GlobalSequence", @event.GlobalSequence);
+                    e.Data.Add("InterviewId", @event.EventSourceId);
+
                     throw;
                 }
             }
