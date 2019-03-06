@@ -153,6 +153,18 @@
   <data name="EmailSubject" xml:space="preserve">
     <value>Subject:</value>
   </data>
+  <data name="MainText" xml:space="preserve">
+    <value>Main text:</value>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+    <value>Description for password:</value>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+    <value>Start interview button</value>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+    <value>Shown only if password is required and set</value>
+  </data>
   <data name="ExampleReminderEmailMessage" xml:space="preserve">
     <value>Example of the Reminder Email message</value>
   </data>
@@ -188,5 +200,29 @@
   </data>
   <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
     <value>Partial Response</value>
+  </data>
+  <data name="AdditionalSettings" xml:space="preserve">
+    <value>Additional settings</value>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+    <value>Send to people with no response</value>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+    <value>Send to people with a partial response</value>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+    <value>Do not send</value>
+  </data>
+  <data name="AfterXDay" xml:space="preserve">
+    <value>After {{count}} day</value>
+  </data>
+  <data name="AfterXDay_plural" xml:space="preserve">
+    <value>After {{count}} days</value>
+  </data>
+  <data name="AfterXWeek" xml:space="preserve">
+    <value>After {{count}} week</value>
+  </data>
+  <data name="AfterXWeek_plural" xml:space="preserve">
+    <value>After {{count}} weeks</value>
   </data>
 </root>
