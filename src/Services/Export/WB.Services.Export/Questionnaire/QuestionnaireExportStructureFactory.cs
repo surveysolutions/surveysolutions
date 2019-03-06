@@ -471,7 +471,7 @@ namespace WB.Services.Export.Questionnaire
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question,
-                    this.GetRostersSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
+                    this.GetRosterSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -540,24 +540,16 @@ namespace WB.Services.Export.Questionnaire
             headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
         }
 
-        private int GetRostersSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,
+        private int GetRosterSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rosterVector = this.GetRosterSizeSourcesForEntity(GetReferencedByLinkedQuestionEntity(question, questionnaire));
+            Guid rosterSizeQuestionId =
+                this.GetRosterSizeSourcesForEntity(GetReferencedByLinkedQuestionEntity(question, questionnaire)).Last();
 
-            int[] sizes = new int[rosterVector.Count];
+            if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
+                return Constants.MaxRosterRowCount;
 
-            for (int i = 0; i < rosterVector.Count; i++)
-            {
-                var vectorValue = rosterVector[i];
-                var levelSize = maxValuesForRosterSizeQuestions.ContainsKey(vectorValue)
-                    ? maxValuesForRosterSizeQuestions[vectorValue]
-                    : Constants.MaxRosterRowCount;
-                sizes[i] = levelSize;
-            }
-
-            var size = sizes.Aggregate(1, (a, b) => a * b);
-            return Math.Min(size, Constants.MaxSizeOfLinkedQuestion);
+            return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
 
         private IQuestionnaireEntity GetReferencedByLinkedQuestionEntity(Question question, QuestionnaireDocument questionnaire)
