@@ -34,10 +34,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public static Dictionary<EmailTextTemplateType, EmailTextTemplate> DefaultEmailTemplates =>
         new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
         {
-            { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message) },
-            { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_NoResponse.Subject, EmailTemplateTexts.Reminder_NoResponse.Message) },
-            { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_PartialResponse.Subject, EmailTemplateTexts.Reminder_PartialResponse.Message) },
-            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message) }
+            { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message, EmailTemplateTexts.InvitationTemplate.PasswordDescription, EmailTemplateTexts.InvitationTemplate.LinkText) },
+            { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_NoResponse.Subject, EmailTemplateTexts.Reminder_NoResponse.Message, EmailTemplateTexts.Reminder_NoResponse.PasswordDescription, EmailTemplateTexts.Reminder_NoResponse.LinkText) },
+            { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_PartialResponse.Subject, EmailTemplateTexts.Reminder_PartialResponse.Message, EmailTemplateTexts.Reminder_PartialResponse.PasswordDescription, EmailTemplateTexts.Reminder_PartialResponse.LinkText) },
+            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) }
         };
 
         public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
                 ? EmailTemplates[type]
                 : DefaultEmailTemplates[type];
 
-            return new WebInterviewEmailTemplate(template.Subject, template.Message);
+            return new WebInterviewEmailTemplate(template.Subject, template.Message, template.PasswordDescription, template.LinkText);
         }
     }
 
@@ -58,15 +58,18 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
     {
         public EmailTextTemplate() { }
 
-        public EmailTextTemplate(string subject, string message)
+        public EmailTextTemplate(string subject, string message, string passwordDescription, string linkText)
         {
             Subject = subject;
             Message = message;
+            PasswordDescription = passwordDescription;
+            LinkText = linkText;
         }
 
-        public string Subject { get; set; }
-        public string Message { get; set; }
-    }
+        public string Subject { get; }       
+        public string Message { get; }       
+        public string PasswordDescription { get; }       
+        public string LinkText { get; }    }
 
     public enum EmailTextTemplateType
     {
@@ -86,6 +89,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
  
 Thank you for your cooperation!";
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "START NEW INTERVIEW";
         }
 
         public class Reminder_NoResponse
@@ -96,6 +101,9 @@ Thank you for your cooperation!";
 To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
  
 Thank you for your cooperation!";
+
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "START NEW INTERVIEW";
         }
 
         public class Reminder_PartialResponse
@@ -108,6 +116,8 @@ To continue the survey click on the following link: %SURVEYLINK% and enter your 
 Please answer all applicable questions and click the ‘COMPLETE’ button to submit your responses.
  
 Thank you for your cooperation!";
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "CONTINUE INTERVIEW";
         }
 
         public class RejectEmail
@@ -122,6 +132,8 @@ To continue the survey click on the following link: %SURVEYLINK% and enter your 
 We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your responses.
  
 Thank you for your cooperation!";
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "CONTINUE INTERVIEW";
         }
 
     }

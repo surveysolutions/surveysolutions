@@ -61,6 +61,51 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional settings.
+        /// </summary>
+        internal static string AdditionalSettings {
+            get {
+                return ResourceManager.GetString("AdditionalSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After {{count}} day.
+        /// </summary>
+        internal static string AfterXDay {
+            get {
+                return ResourceManager.GetString("AfterXDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After {{count}} days.
+        /// </summary>
+        internal static string AfterXDay_plural {
+            get {
+                return ResourceManager.GetString("AfterXDay_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After {{count}} week.
+        /// </summary>
+        internal static string AfterXWeek {
+            get {
+                return ResourceManager.GetString("AfterXWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After {{count}} weeks.
+        /// </summary>
+        internal static string AfterXWeek_plural {
+            get {
+                return ResourceManager.GetString("AfterXWeek_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Cancel {
@@ -84,6 +129,24 @@ namespace WB.UI.Headquarters.Resources {
         internal static string CustomizeEmailsText {
             get {
                 return ResourceManager.GetString("CustomizeEmailsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description for password:.
+        /// </summary>
+        internal static string DescriptionForPassword {
+            get {
+                return ResourceManager.GetString("DescriptionForPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not send.
+        /// </summary>
+        internal static string DoNotSend {
+            get {
+                return ResourceManager.GetString("DoNotSend", resourceCulture);
             }
         }
         
@@ -187,6 +250,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Main text:.
+        /// </summary>
+        internal static string MainText {
+            get {
+                return ResourceManager.GetString("MainText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reject.
         /// </summary>
         internal static string Reject {
@@ -255,6 +327,42 @@ namespace WB.UI.Headquarters.Resources {
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send to people with no response.
+        /// </summary>
+        internal static string SendWithNoResponse {
+            get {
+                return ResourceManager.GetString("SendWithNoResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send to people with a partial response.
+        /// </summary>
+        internal static string SendWithPartialResponse {
+            get {
+                return ResourceManager.GetString("SendWithPartialResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shown only if password is required and set.
+        /// </summary>
+        internal static string ShownPasswordIsRequired {
+            get {
+                return ResourceManager.GetString("ShownPasswordIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start interview button.
+        /// </summary>
+        internal static string StartInterviewButton {
+            get {
+                return ResourceManager.GetString("StartInterviewButton", resourceCulture);
             }
         }
         
