@@ -713,19 +713,30 @@ textarea.field-to-fill{
 	}
 }
 .form-container{
+	.form-inline{
+		.form-group{
+			vertical-align: top;
+			.field{
+				width: 250px;
+			}
+		}
+	}
 	.form-group{
 		
 		.field{
 			margin-right: 20px;
-			width: 250px;
+			width: 100%;
 		}
-		
+		// & > .field{
+		// 	width: 100%;
+		// }
 		input{
 			width: 100%;
 		}
 		.help-block{
 			font-size: 14px;
 			line-height: 16px;
+			font-style: italic;
 		}
 	}
 	

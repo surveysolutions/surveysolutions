@@ -88,7 +88,25 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amazon SES.
+        ///   Looks up a localized string similar to Sender postal address.
+        /// </summary>
+        internal static string EmailProvider_Address {
+            get {
+                return ResourceManager.GetString("EmailProvider_Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current postal address of the sender..
+        /// </summary>
+        internal static string EmailProvider_AddressHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_AddressHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amazon Simple Email Service (SES).
         /// </summary>
         internal static string EmailProvider_Amazon {
             get {
@@ -97,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Amazon SES to send invitations and reminders.
+        ///   Looks up a localized string similar to Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available [here](link-to-support-site)..
         /// </summary>
         internal static string EmailProvider_AmazonDescription {
             get {
@@ -115,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can find the AWS account ID from AWS Management Console.
+        /// </summary>
+        internal static string EmailProvider_AwsAccessKeyIdHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_AwsAccessKeyIdHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Secret access key.
         /// </summary>
         internal static string EmailProvider_AwsSecretAccessKey {
@@ -124,11 +151,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AWS access keys.
+        ///   Looks up a localized string similar to Found in Security Credentials at AWS Management Console.
         /// </summary>
-        internal static string EmailProvider_AwsSecretAccessKeyHeader {
+        internal static string EmailProvider_AwsSecretAccessKeyHelp {
             get {
-                return ResourceManager.GetString("EmailProvider_AwsSecretAccessKeyHeader", resourceCulture);
+                return ResourceManager.GetString("EmailProvider_AwsSecretAccessKeyHelp", resourceCulture);
             }
         }
         
@@ -142,11 +169,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot send invitations and notifications.
+        ///   Looks up a localized string similar to Invitation messages for web interviews are not sent to the respondents by Survey Solutions..
         /// </summary>
         internal static string EmailProvider_NoneDescription {
             get {
                 return ResourceManager.GetString("EmailProvider_NoneDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up bulk email service provider. Configure how the invitations for web interviews will be sent..
+        /// </summary>
+        internal static string EmailProvider_PageDesc {
+            get {
+                return ResourceManager.GetString("EmailProvider_PageDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reply address.
+        /// </summary>
+        internal static string EmailProvider_ReplyAddress {
+            get {
+                return ResourceManager.GetString("EmailProvider_ReplyAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address where the replies from the invitees may be sent (default is the sender email address.).
+        /// </summary>
+        internal static string EmailProvider_ReplyAddressHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_ReplyAddressHelp", resourceCulture);
             }
         }
         
@@ -160,7 +214,43 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SendGrid.
+        ///   Looks up a localized string similar to Sender information.
+        /// </summary>
+        internal static string EmailProvider_SenderHeader {
+            get {
+                return ResourceManager.GetString("EmailProvider_SenderHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address of the sender that will appear in the FROM field of the incoming messages..
+        /// </summary>
+        internal static string EmailProvider_SenderHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SenderHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sender name.
+        /// </summary>
+        internal static string EmailProvider_SenderName {
+            get {
+                return ResourceManager.GetString("EmailProvider_SenderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of the sender that will appear in the FROM field of the incoming messages..
+        /// </summary>
+        internal static string EmailProvider_SenderNameHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SenderNameHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SendGrid Email Delivery Service.
         /// </summary>
         internal static string EmailProvider_Sendgrid {
             get {
@@ -178,7 +268,16 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use SendGrid to send invitations and reminders.
+        ///   Looks up a localized string similar to Found in Security Credentials at AWS Management Console.
+        /// </summary>
+        internal static string EmailProvider_SendGridApiKeyHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendGridApiKeyHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure the parameters to access Sendgrid below. More information on usage of Sendgrid with Survey Solutions is available [here](link-to-support-site)..
         /// </summary>
         internal static string EmailProvider_SendgridDescription {
             get {
@@ -201,6 +300,15 @@ namespace Resources {
         internal static string EmailProvider_SendTestEmailHeader {
             get {
                 return ResourceManager.GetString("EmailProvider_SendTestEmailHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify bulk email service provider.
+        /// </summary>
+        internal static string EmailProvider_ServiceProvideHeader {
+            get {
+                return ResourceManager.GetString("EmailProvider_ServiceProvideHeader", resourceCulture);
             }
         }
         

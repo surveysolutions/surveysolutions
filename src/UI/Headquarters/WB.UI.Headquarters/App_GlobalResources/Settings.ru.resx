@@ -233,9 +233,7 @@
   <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
     <value>Секретный ключ доступа</value>
   </data>
-  <data name="EmailProvider_AwsSecretAccessKeyHeader" xml:space="preserve">
-    <value>Ключи AWS</value>
-  </data>
+
   <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
     <value>Электронная почта</value>
   </data>
