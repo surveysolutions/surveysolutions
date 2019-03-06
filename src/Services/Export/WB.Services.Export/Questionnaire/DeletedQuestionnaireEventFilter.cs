@@ -40,10 +40,13 @@ namespace WB.Services.Export.Questionnaire
                     switch (@event.Payload)
                     {
                         case InterviewCreated interviewCreated:
-                            reference = AddInterviewReference(@event.EventSourceId, interviewCreated.QuestionnaireIdentity, @event);
+                            reference = AddInterviewReference(@event, interviewCreated.QuestionnaireIdentity);
                             break;
                         case InterviewOnClientCreated interviewOnClientCreated:
-                            reference = AddInterviewReference(@event.EventSourceId, interviewOnClientCreated.QuestionnaireIdentity, @event);
+                            reference = AddInterviewReference(@event,interviewOnClientCreated.QuestionnaireIdentity);
+                            break;
+                        case InterviewFromPreloadedDataCreated fromPreloaded:
+                            reference = AddInterviewReference(@event, fromPreloaded.QuestionnaireIdentity);
                             break;
                         case InterviewDeleted _:
                         case InterviewHardDeleted _:
@@ -87,12 +90,12 @@ namespace WB.Services.Export.Questionnaire
             return result;
         }
 
-        private InterviewReference AddInterviewReference(Guid interviewId, string questionnaireIdentity, Event @event)
+        private InterviewReference AddInterviewReference(Event @event, string questionnaireIdentity)
         {
             InterviewReference reference = this.dbContext.InterviewReferences.Find(@event.EventSourceId);
             if (reference == null)
             {
-                reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = interviewId };
+                reference = new InterviewReference { QuestionnaireId = questionnaireIdentity, InterviewId = @event.EventSourceId };
 
                 this.dbContext.Add(reference);
             }
