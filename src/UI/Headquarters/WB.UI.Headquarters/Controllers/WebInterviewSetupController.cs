@@ -170,15 +170,19 @@ namespace WB.UI.Headquarters.Controllers
                 new EmailTextTemplateViewModel()
                 {
                     Subject = t.Value.Subject,
-                    Message = t.Value.Message
-                }); ;
+                    Message = t.Value.Message,
+                    PasswordDescription = t.Value.PasswordDescription,
+                    LinkText = t.Value.LinkText
+                });
             model.DefaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates.ToDictionary(t => t.Key, t => 
                 new EmailTextTemplateViewModel()
                 {
                     ShortTitle = GetShortTitleForEmailTemplateGroup(t.Key),
                     Title = GetTitleForEmailTemplateGroup(t.Key),
                     Subject = t.Value.Subject,
-                    Message = t.Value.Message
+                    Message = t.Value.Message,
+                    PasswordDescription = t.Value.PasswordDescription,
+                    LinkText = t.Value.LinkText
                 });
             model.ReminderAfterDaysIfNoResponse = config.ReminderAfterDaysIfNoResponse;
             model.ReminderAfterDaysIfPartialResponse = config.ReminderAfterDaysIfPartialResponse;
@@ -262,5 +266,7 @@ namespace WB.UI.Headquarters.Controllers
         public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
+        public string PasswordDescription { get; set; }
+        public string LinkText { get; set; }
     }
 }

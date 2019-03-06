@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var settings = Mock.Of<WebInterviewConfig>(_ => 
                 _.BaseUrl == "baseUrl" &&
                 _.ReminderAfterDaysIfPartialResponse == 2 &&
-                _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%"));
+                _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "Password: ", "LINK"));
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
 
@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var settings = Mock.Of<WebInterviewConfig>(_ => 
                 _.BaseUrl == "baseUrl" &&
                 _.ReminderAfterDaysIfNoResponse == 2 && 
-                _.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%"));
+                _.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "Password: ", "LINK"));
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
 

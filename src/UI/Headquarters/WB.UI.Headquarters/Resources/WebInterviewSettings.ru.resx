@@ -216,4 +216,54 @@
       <value>Частичный ответ</value>
       <comment>Частичный ответ</comment>
   </data>
+  <data name="AdditionalSettings" xml:space="preserve">
+      <value>Дополнительные настройки</value>
+      <comment>Дополнительные настройки</comment>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+      <value>Отправлять в случае отсутствия ответа</value>
+      <comment>Отправлять в случае отсутствия ответа</comment>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+      <value>Отправлять в случае частичного ответа
+</value>
+      <comment>Отправлять в случае частичного ответа
+      </comment>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+      <value>Не отправлять</value>
+      <comment>Не отправлять</comment>
+  </data>
+  <data name="AfterXDay" xml:space="preserve">
+      <value>Через {{count}} день</value>
+      <comment>Через {{count}} день</comment>
+  </data>
+  <data name="AfterXDay_plural" xml:space="preserve">
+      <value>Через {{count}} дня(-ей)</value>
+      <comment>Через {{count}} дня(-ей)</comment>
+  </data>
+  <data name="AfterXWeek" xml:space="preserve">
+      <value>Через {{count}} неделю</value>
+      <comment>Через {{count}} неделю</comment>
+  </data>
+  <data name="AfterXWeek_plural" xml:space="preserve">
+      <value>Через {{count}} недели</value>
+      <comment>Через {{count}} недели</comment>
+  </data>
+  <data name="MainText" xml:space="preserve">
+      <value>Основной текст:</value>
+      <comment>Основной текст:</comment>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+      <value>Описание для пароля:</value>
+      <comment>Описание для пароля:</comment>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+      <value>Кнопка начала интервью</value>
+      <comment>Кнопка начала интервью</comment>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+      <value>Показывать только если пароль необходим и установлен</value>
+      <comment>Показывать только если пароль необходим и установлен</comment>
+  </data>
 </root>

@@ -203,119 +203,166 @@
             </div>
             <hr />
             <div class="row mb-05">
-                <div class="panel-group" role="tablist">
-                    <div class="panel">
-                        <div class="panel-heading" role="tab" id="collapseListEmailTemplates">
-                            <h3 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapseEmailTemplate" aria-expanded="true" aria-controls="collapseEmailTemplate">
-                                    {{$t('WebInterviewSettings.CustomizeEmailsText')}}
-                                </a>
-                            </h3>
-                        </div>
-                        <div id="collapseEmailTemplate" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListEmailTemplates" aria-expanded="true">
-                            <div class="collapsed-content text-email">
+				<div class="col-md-12">
+					<h3>{{$t('WebInterviewSettings.CustomizeEmailsText')}}</h3>
+					<div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
+                                <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}</a>
+                            </li>
+                        </ul>
 
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value" :class="{active:emailTemplate.isActive}" role="presentation">
-                                        <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content d-flex f-row justify-center">
-                                    <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane survey-block">
-                                        <div class="h4 high-resolution-title">{{emailTemplate.title}}</div>
-                                        <div class="d-flex justify-center f-col ">
-                                            <div class="row-element">
-                                                <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
-                                                <div class="form-group">
-                                                    <div class="field">
-                                                        <input type="text" v-model="emailTemplate.subject" @change="markChanged(emailTemplate)" class="form-control with-clear-btn" placeholder="Please enter the subject">
-                                                        <button type="button" class="btn btn-link btn-clear">
-                                                            <span></span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <!--div class="form-actions" v-if="emailTemplate.isChanged">
-                                                    <button type="submit" @click="saveEmailSubject(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
-                                                    <button type="submit" @click="cancelEditEmailSubject(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
-                                                </div-->
-                                            </div>
-                                            <div class="row-element">
-                                                <div class="h5">{{$t('WebInterviewSettings.EmailMessage')}}</div>
-                                                <div>
-                                                    <vue-editor :editorToolbar="customToolbar" v-model="emailTemplate.message" @change="markChanged(emailTemplate)" :id="'message' + emailTemplate.value"></vue-editor>
-                                                </div>
-                                            </div>
-                                            <div class="row-element">
-                                                <div class="form-actions">
-                                                    <button type="submit" @click="saveEmailTemplate(emailTemplate)" class="btn btn-success btn-sm">{{$t('WebInterviewSettings.Save')}}</button>
-                                                    <button type="submit" @click="cancelEditEmailTemplate(emailTemplate)" class="btn btn-link btn-sm btn-cancel">{{$t('WebInterviewSettings.Cancel')}}</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+						<div class="tab-content">
+							<div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type" :class="{active:emailTemplate.isActive}" role="tabpanel" class="tab-pane email-section">
+								<form v-on:submit.prevent="saveEmailTemplate(emailTemplate)" :data-vv-scope="'emailTemplateData' + emailTemplate.value">
+									<div class="email-block d-flex mb-30">
+										<div class="email-custiomization email-block-unit">
+											<div class="">
+												<div class="row-element mb-30">
+													<p>You can use following placeholders in the text
+															%recipientname% as the name of recipient
+															%deadline% end date when this interview will be accepted
+															%interviewurl% web address of this interview
+															%interviewpass% interview password, if set
+															%org% issuing organization
+													</p>
+												</div>
+												<div class="row-element">
+													<div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
+													<div class="form-group mb-30">
+														<div class="field">
+															<input type="text" v-model="emailTemplate.subject"
+                                                                data-vv-as="Please enter the subject"
+                                                                v-validate="'required'"
+                                                                data-vv-name="subject"
+                                                                maxlength="200"
+                                                                class="form-control with-clear-btn" 
+                                                                placeholder="Please enter the subject">
+															<button type="button" class="btn btn-link btn-clear">
+																<span></span>
+															</button>
+														</div>
+													</div>
+												</div>
+												<div class="row-element">
+													<div class="h5">{{$t('WebInterviewSettings.MainText')}}</div>
+													<div class="form-group mb-30">
+														<div class="field">
+															<textarea v-model="emailTemplate.message"
+                                                                data-vv-as="Please enter the main text"
+                                                                v-validate="'required'" 
+                                                                data-vv-name="message"
+                                                                maxlength="200"
+                                                                class="form-control js-elasticArea" 
+                                                                placeholder="Please enter the main text">
+															</textarea>
+															<button type="button" class="btn btn-link btn-clear">
+																<span></span>
+															</button>
+														</div>
+													</div>
+												</div>
+												<div class="row-element">
+													<div class="h5 mb-0">{{$t('WebInterviewSettings.DescriptionForPassword')}}</div>
+													<div class="gray-text mb-1">{{$t('WebInterviewSettings.ShownPasswordIsRequired')}}</div>
+													<div class="form-group mb-30">
+														<div class="field">
+															<input type="text" 
+                                                                v-model="emailTemplate.passwordDescription" 
+                                                                data-vv-name="passwordDescription"
+                                                                data-vv-as="Please enter password description"
+                                                                v-validate="'required'"
+                                                                maxlength="500"
+                                                                class="form-control with-clear-btn" 
+                                                                placeholder="Please enter password description">
+															<button type="button" class="btn btn-link btn-clear">
+																<span></span>
+															</button>
+														</div>
+													</div>
+												</div>
+												<div class="row-element">
+													<div class="h5">{{$t('WebInterviewSettings.StartInterviewButton')}}</div>
+													<input type="text"  
+                                                        v-model="emailTemplate.linkText" 
+                                                        v-validate="'required'" 
+                                                        data-vv-name="linkText"
+                                                        maxlength="200"
+                                                        data-vv-as="Please enter link text"
+                                                        class="width-dynamic btn-success editable mb-1" 
+                                                        placeholder="Button name" />
+												</div>
+											</div>
+										</div>
+										<div class="preview email-block-unit">
+											<div class="browser-mockup h-100"  style="white-space: pre;">
+												<h1>{{ emailTemplate.subject }}</h1>
+												<br />
+												<p>{{ emailTemplate.message }}</p>
+												<hr />
+												<p>{{ emailTemplate.passwordDescription }}</p>
+												<hr />
+												<span class="btn btn-success btn-md md-30">{{ emailTemplate.linkText }}</span>
+											</div>
+										</div>
+									</div>
+									<div class="">
+										<button type="submit" @click="saveEmailTemplate(emailTemplate)" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+										<button type="button" @click="cancelEditEmailTemplate(emailTemplate)" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
             <hr />
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="form-block">
-                        <h3>Spam protection</h3>
-                        <div class="form-group mb-0">
-                            <input checked="checked" class="checkbox-filter" data-val="true" id="useCaptcha" name="UseCaptcha" type="checkbox" v-model="spamProtectionIsEnabled" @change="switchSpamProtection">
-                            <label for="useCaptcha">
-                                <span class="tick"></span>
-                                {{$t('WebInterviewSetup.UseCaptcha')}}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="row mb-05">
+				<div class="col-md-12">
+					<form>
+						<h3>{{$t('WebInterviewSettings.AdditionalSettings')}}</h3>
+						<div class="form-group mb-20">
+							<input class="checkbox-filter" id="Captcha" type="checkbox" v-model="spamProtectionIsEnabled">
+							<label for="Captcha">
+								<span class="tick"></span>{{$t('WebInterviewSetup.UseCaptcha')}}
+							</label>
+						</div>
+						<div class="notification-block mb-20">
+							<div class="mb-1">
+								{{$t('WebInterviewSettings.SendWithNoResponse')}}
+							</div>
+							<select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfNoResponse">
+                                <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
+                                <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
+                                <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
+                                <option value="3">{{$t('WebInterviewSettings.AfterXDay', {count: 3})}}</option>
+                                <option value="5">{{$t('WebInterviewSettings.AfterXDay', {count: 5})}}</option>
+                                <option value="7">{{$t('WebInterviewSettings.AfterXWeek', {count: 1})}}</option>
+                                <option value="14">{{$t('WebInterviewSettings.AfterXWeek', {count: 2})}}</option>
+							</select>
+						</div>
+						<div class="notification-block mb-30">
+							<div class="mb-1">
+								{{$t('WebInterviewSettings.SendWithPartialResponse')}}
+							</div>
+							<select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse">
+                                <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
+                                <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
+                                <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
+                                <option value="3">{{$t('WebInterviewSettings.AfterXDay', {count: 3})}}</option>
+                                <option value="5">{{$t('WebInterviewSettings.AfterXDay', {count: 5})}}</option>
+                                <option value="7">{{$t('WebInterviewSettings.AfterXWeek', {count: 1})}}</option>
+                                <option value="14">{{$t('WebInterviewSettings.AfterXWeek', {count: 2})}}</option>
+							</select>
+						</div>
+						<div class="">
+							<button type="submit" @click="saveAdditionalSettings()" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+							<button type="submit" @click="cancelAdditionalSettings()" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+						</div>
+					</form>
+				</div>
+			</div>  
             <hr />
-            <div class="row reminder-setting">
-                <div class="col-sm-8">
-                    <h3>{{$t('WebInterviewSettings.ReminderSetting')}}</h3>
-                </div>
-                <div class="col-sm-12 mb-1">
-                    <p>
-                        <span>
-                            Send to people with no response
-                        </span>
-                    </p>
-                    <p>
-                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfNoResponse" @change="updateReminderSettings">
-                            <option value="null">Do not send</option>
-                            <option value="1">After 1 day</option>
-                            <option value="2">After 2 days</option>
-                            <option value="3">After 3 days</option>
-                            <option value="5">After 5 days</option>
-                            <option value="7">After 1 week</option>
-                            <option value="14">After 2 weeks</option>
-                        </select>
-                    </p>
-                </div>
-                <div class="col-sm-12">
-                    <p>
-                        <span>
-                            Send to people with a partial response
-                        </span>
-                    </p>
-                    <p>
-                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse" @change="updateReminderSettings">
-                            <option value="null">Do not send</option>
-                            <option value="1">After 1 day</option>
-                            <option value="2">After 2 days</option>
-                            <option value="3">After 3 days</option>
-                            <option value="5">After 5 days</option>
-                            <option value="7">After 1 week</option>
-                            <option value="14">After 2 weeks</option>
-                        </select>
-                    </p>
-                </div>
-            </div>
             <div class="row">
                 <div class="form-group">
                     <div class="action-buttons">
@@ -329,7 +376,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div>          
         </div>
     </main>
 </template>
@@ -363,10 +410,13 @@ export default {
 
     var self = this;
     self.questionnaireId = this.$config.model.questionnaireIdentity.id;
-    self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
     self.started = this.$config.model.started;
+    self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
     self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
     self.reminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
+    self.cancelSpamProtectionIsEnabled = this.$config.model.useCaptcha;
+    self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
+    self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
 
     this.emailTemplates = _.map(
       this.$config.model.defaultEmailTemplates,
@@ -375,12 +425,16 @@ export default {
         var custom = self.$config.model.emailTemplates[key];
         var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
         var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message
+        var passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription !== "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
+        var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText !== "" ? defaultEmailTemplate.linkText : custom.linkText
         return {
           value: key,
           title: defaultEmailTemplate.title,
           buttonTitle: defaultEmailTemplate.shortTitle,
           subject: subject,
           message: message,
+          passwordDescription: passwordDescription,
+          linkText: linkText,
           isChanged: false,
           isActive: key === "invitationTemplate"
         };
@@ -420,24 +474,37 @@ export default {
     cancelEditEmailTemplate(emailTemplate) {
         var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
         var custom = this.$config.model.emailTemplates[emailTemplate.value];
-        var message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
-        emailTemplate.message = message;
-        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
-        emailTemplate.subject = subject;
+        emailTemplate.message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message;
+        emailTemplate.subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
+        emailTemplate.passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription;
+        emailTemplate.linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText;
         emailTemplate.isChanged = false;
     },
     async saveEmailTemplate(emailTemplate) {
-        await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message);
-        if (!this.$config.model.emailTemplates[emailTemplate.value]) {
-            this.$config.model.emailTemplates[emailTemplate.value] = [];
+        var self = this;
+        var validationResult = await this.$validator.validateAll('emailTemplateData'+ emailTemplate.value);
+        alert(validationResult);
+        if (validationResult)
+        {
+            await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message, emailTemplate.passwordDescription, emailTemplate.linkText)
+            .then(function (response) {
+                if (!self.$config.model.emailTemplates[emailTemplate.value]) {
+                    self.$config.model.emailTemplates[emailTemplate.value] = [];
+                }
+                var userTemplate = self.$config.model.emailTemplates[emailTemplate.value];
+                userTemplate.subject = emailTemplate.subject, 
+                userTemplate.message = emailTemplate.message, 
+                userTemplate.passwordDescription = emailTemplate.passwordDescription, 
+                userTemplate.linkText = emailTemplate.linkText, 
+                emailTemplate.isChanged = false;
+            })
+            .catch(function (error) {
+                Vue.config.errorHandler(error, self);
+            })
+            .then(function () {
+                self.$store.dispatch("hideProgress");
+            });
         }
-        this.$config.model.emailTemplates[emailTemplate.value].subject = emailTemplate.subject, 
-        this.$config.model.emailTemplates[emailTemplate.value].message = emailTemplate.message, 
-        /*this.$config.model.emailTemplates.push({
-            key:   emailTemplate.value,
-            value: {subject: emailTemplate.subject, message: emailTemplate.message }
-        });*/
-        emailTemplate.isChanged = false;
     },
     webInterviewPageText(type) {
         return this.webInterviewPageMessages[type].text;
@@ -463,19 +530,58 @@ export default {
         editText.text = editText.cancelText;
         editText.isEditMode = false;
     },
-    async switchSpamProtection() {
+    /*async switchSpamProtection() {
         await this.$hq.WebInterviewSettings.updateSpamProtection(this.questionnaireId, this.spamProtectionIsEnabled);
     },
     async updateReminderSettings() {
         await this.$hq.WebInterviewSettings.updateReminderSettings(this.questionnaireId, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse);
-    },
+    },*/
     async startWebInterview() {
-        await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId);
-        this.started = true;
+        var self = this;
+        await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId)
+        .then(function (response) {
+            self.started = true;
+        })
+        .catch(function (error) {
+            Vue.config.errorHandler(error, self);
+        })
+        .then(function () {
+            self.$store.dispatch("hideProgress");
+        });
     },
     async stopWebInterview() {
-        await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId);
-        this.started = false;
+        var self = this;
+        await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId)
+        .then(function (response) {
+            self.started = false;
+        })
+        .catch(function (error) {
+            Vue.config.errorHandler(error, self);
+        })
+        .then(function () {
+            self.$store.dispatch("hideProgress");
+        });
+    },
+    async saveAdditionalSettings() {
+        var self = this;
+        self.$store.dispatch("showProgress");
+        await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId, this.spamProtectionIsEnabled, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse)
+        .then(function (response) {
+            self.cancelSpamProtectionIsEnabled = this.spamProtectionIsEnabled;
+            self.cancelReminderAfterDaysIfNoResponse = this.reminderAfterDaysIfNoResponse;
+            self.cancelReminderAfterDaysIfPartialResponse = this.reminderAfterDaysIfPartialResponse;
+        })
+        .catch(function (error) {
+            Vue.config.errorHandler(error, self);
+        })
+        .then(function () {
+            self.$store.dispatch("hideProgress");
+        });
+    },
+    cancelAdditionalSettings() {
+        this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled;
+        this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
+        this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
     }
   },
   computed: {

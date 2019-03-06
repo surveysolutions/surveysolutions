@@ -2434,14 +2434,14 @@ namespace WB.Tests.Abc.TestFactories
             return invitation;
         }
 
-        public WebInterviewEmailTemplate EmailTemplate(string subject = null, string message = null)
+        public WebInterviewEmailTemplate EmailTemplate(string subject = null, string message = null, string passwordDescription = null, string linkText = null)
         {
-            return new WebInterviewEmailTemplate(subject ?? "Subject", message ?? "Message");
+            return new WebInterviewEmailTemplate(subject ?? "Subject", message ?? "Message", passwordDescription ?? "Password", linkText ?? "LINK");
         }
 
         public PersonalizedWebInterviewEmail PersonalizedEmail(string subject = null, string message = null)
         {
-            var email = PersonalizedWebInterviewEmail.FromTemplate(new WebInterviewEmailTemplate("Subject", "Message"));
+            var email = PersonalizedWebInterviewEmail.FromTemplate(new WebInterviewEmailTemplate("Subject", "Message", "password:", "LINK"));
 
             var asDynamic = email.AsDynamic();
             asDynamic.Subject = subject ?? "Subject";

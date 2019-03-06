@@ -120,6 +120,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             public EmailTextTemplateType Type { get; set; }
             public string Subject { get; set; }
             public string Message { get; set; }
+            public string PasswordDescription { get; set; }
+            public string LinkText { get; set; }
         }
 
         [Route(@"{id}/emailTemplate")]
@@ -134,7 +136,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return NotFound();
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            config.EmailTemplates[updateModel.Type] = new EmailTextTemplate(updateModel.Subject, updateModel.Message);
+            config.EmailTemplates[updateModel.Type] = new EmailTextTemplate(updateModel.Subject, updateModel.Message, updateModel.PasswordDescription, updateModel.LinkText);
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();
@@ -207,6 +209,33 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             config.UseCaptcha = updateModel.IsEnabled;
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
+        }
+
+        public class UpdateAdditionalSettingsModel
+        {
+            public bool SpamProtection { get; set; } 
+            public int? ReminderAfterDaysIfNoResponse { get; set; } 
+            public int? ReminderAfterDaysIfPartialResponse { get; set; } 
+        }
+
+        [Route(@"{id}/additionalSettings")]
+        [HttpPost]
+        public IHttpActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.UseCaptcha = updateModel.SpamProtection;
+            config.ReminderAfterDaysIfNoResponse = updateModel.ReminderAfterDaysIfNoResponse;
+            config.ReminderAfterDaysIfPartialResponse = updateModel.ReminderAfterDaysIfPartialResponse;
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();

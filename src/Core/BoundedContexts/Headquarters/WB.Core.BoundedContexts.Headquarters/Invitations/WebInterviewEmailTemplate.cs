@@ -9,17 +9,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public const string SurveyName = "%SURVEYNAME%";
 
         public string Subject { get; }
-        public string Message { get; }
+        public string MainText { get; }
+        public string PasswordDescription { get; }
+        public string LinkText { get; }
 
-        public WebInterviewEmailTemplate(string subject, string message)
+        public WebInterviewEmailTemplate(string subject, string mainText, string passwordDescription, string linkText)
         {
             this.Subject = subject;
-            this.Message = message;
+            this.MainText = mainText;
+            this.PasswordDescription = passwordDescription;
+            this.LinkText = linkText;
         }
 
-        public bool HasPassword => Message.Contains(Password);
-        public bool HasLink => Message.Contains(SurveyLink);
-        public bool HasSurveyName => Message.Contains(SurveyName);
+        public bool HasPassword => string.IsNullOrWhiteSpace(PasswordDescription);
+        public bool HasLink => string.IsNullOrWhiteSpace(LinkText);
+        public bool HasSurveyName => MainText.Contains(SurveyName);
     }
 
     public class PersonalizedWebInterviewEmail
@@ -41,7 +45,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public static PersonalizedWebInterviewEmail FromTemplate(WebInterviewEmailTemplate webInterviewEmailTemplate)
         {
-            var userEmail = new PersonalizedWebInterviewEmail(webInterviewEmailTemplate.Subject, webInterviewEmailTemplate.Message, webInterviewEmailTemplate.Message);
+            var subject = webInterviewEmailTemplate.Subject;
+            var messageWithoutPassword = webInterviewEmailTemplate.MainText + webInterviewEmailTemplate.LinkText;
+            var messageWithPassword = webInterviewEmailTemplate.MainText + webInterviewEmailTemplate.LinkText +
+                          webInterviewEmailTemplate.PasswordDescription;
+            var userEmail = new PersonalizedWebInterviewEmail(subject, messageWithoutPassword, messageWithPassword);
             return userEmail;
         }
 
