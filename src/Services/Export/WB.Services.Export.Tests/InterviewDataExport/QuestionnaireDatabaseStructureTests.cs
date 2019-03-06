@@ -76,5 +76,46 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Assert.That(last.EnablementTableName, Is.EqualTo(enablementTableName));
             Assert.That(last.ValidityTableName, Is.EqualTo(validityTableName));
         }
+
+        [Test]
+        public void when_questionnaire_has_entities_with_postgress_system_columns_should_generate_escaped_column_names()
+        {
+            var questionnaireVariable = "questionnaireVariable";
+            var questionnaireId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var rosterVariable = "rosterVariable";
+            var rosterId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+            var id3 = Guid.Parse("33333333333333333333333333333333");
+            var id4 = Guid.Parse("44444444444444444444444444444444");
+            var id5 = Guid.Parse("55555555555555555555555555555555");
+            var id6 = Guid.Parse("66666666666666666666666666666666");
+            var id7 = Guid.Parse("77777777777777777777777777777777");
+            var id8 = Guid.Parse("88888888888888888888888888888888");
+            var id9 = Guid.Parse("99999999999999999999999999999999");
+            var id10 = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, version: 2222, variableName: questionnaireVariable, 
+                children: Create.Roster(rosterId, variable: rosterVariable, 
+                    children: new IQuestionnaireEntity[] {
+                    Create.TextQuestion(id3, variable: "oid"),
+                    Create.TextQuestion(id4, variable: "tableOid"),
+                    Create.Variable(id5, name: "xMin"),
+                    Create.Group(id6, variable: "cmin", children: new IQuestionnaireEntity[]
+                    {
+                        Create.Variable(id7, name: "XMAX"),
+                        Create.TextQuestion(id8, variable:"cmax")
+                    }),
+                    Create.Variable(id9, name: "ctid"),
+                    Create.TextQuestion(id10, variable:"normal_Name")
+                }));
+
+            Assert.That(questionnaire.Find<Question>(id3).ColumnName, Is.EqualTo("oid__1"));
+            Assert.That(questionnaire.Find<Question>(id4).ColumnName, Is.EqualTo("tableoid__1"));
+            Assert.That(questionnaire.Find<Variable>(id5).ColumnName, Is.EqualTo("xmin__1"));
+            Assert.That(questionnaire.Find<Group>(id6).ColumnName, Is.EqualTo("cmin__1"));
+            Assert.That(questionnaire.Find<Variable>(id7).ColumnName, Is.EqualTo("xmax__1"));
+            Assert.That(questionnaire.Find<Question>(id8).ColumnName, Is.EqualTo("cmax__1"));
+            Assert.That(questionnaire.Find<Variable>(id9).ColumnName, Is.EqualTo("ctid__1"));
+            Assert.That(questionnaire.Find<Question>(id10).ColumnName, Is.EqualTo("normal_name"));
+        }
     }
 }

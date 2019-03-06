@@ -458,11 +458,12 @@ namespace WB.Services.Export.Tests
             return dbContext;
         }
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string name = "variable")
             => new Variable()
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Type = type
+                Type = type,
+                Name = name
             };
 
         public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
