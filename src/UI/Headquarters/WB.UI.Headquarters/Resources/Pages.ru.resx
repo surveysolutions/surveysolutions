@@ -1286,6 +1286,6 @@
     <value>Настройка рассылки</value>
   </data>
   <data name="EmailProvidersTitle" xml:space="preserve">
-    <value>Настроить сервисы рассылки</value>
+    <value>Cервисы массовой рассылки</value>
   </data>
 </root>
