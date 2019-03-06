@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             model = new CommandController.CommandExecutionModel();
             commandInflaterMock = new Mock<ICommandInflater>();
-            commandInflaterMock.Setup(x => x.PrepareDeserializedCommandForExecution(Moq.It.IsAny<ICommand>()))
+            commandInflaterMock.Setup(x => x.PrepareDeserializedCommandForExecution(Moq.It.IsAny<ICommand>(), TODO))
                 .Throws(new CommandInflaitingException(CommandInflatingExceptionType.Common, "test"));
 
             controller = CreateCommandController(commandInflater:commandInflaterMock.Object);

@@ -26,8 +26,6 @@ namespace WB.UI.Designer.Api.Attributes
 
         private IIpAddressProvider ipAddressProvider => ServiceLocator.Current.GetInstance<IIpAddressProvider>();
 
-        private IAccountRepository AccountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
-
         private readonly Func<string, string, bool> validateUserCredentials;
 
         public ApiBasicAuthAttribute(bool onlyAllowedAddresses = false)

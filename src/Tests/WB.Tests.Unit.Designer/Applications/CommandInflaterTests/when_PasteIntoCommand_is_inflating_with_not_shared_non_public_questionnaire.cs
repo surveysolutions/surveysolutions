@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage, sharedPersons);
 
 
-            Assert.Throws<CommandInflaitingException>(() => commandInflater.PrepareDeserializedCommandForExecution(command));
+            Assert.Throws<CommandInflaitingException>(() => commandInflater.PrepareDeserializedCommandForExecution(command, TODO));
         }
 
 

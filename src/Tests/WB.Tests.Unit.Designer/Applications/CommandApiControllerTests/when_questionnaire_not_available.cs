@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             
             model = new CommandController.CommandExecutionModel();
             commandInflaterMock = new Mock<ICommandInflater>();
-            commandInflaterMock.Setup(x => x.PrepareDeserializedCommandForExecution(Moq.It.IsAny<ICommand>()))
+            commandInflaterMock.Setup(x => x.PrepareDeserializedCommandForExecution(Moq.It.IsAny<ICommand>(), TODO))
                 .Throws(new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "test"));
 
             controller = CreateCommandController(commandInflater:commandInflaterMock.Object);

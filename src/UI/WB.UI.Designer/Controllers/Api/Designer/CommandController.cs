@@ -1,13 +1,27 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
-using MultipartDataMediaFormatter.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -18,14 +32,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
-using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.CommandDeserialization;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
-    public class CommandController : ApiController
+    public class CommandController : Controller
     {
         public struct CommandExecutionModel
         {
@@ -34,7 +46,6 @@ namespace WB.UI.Designer.Api
         }
 
         private readonly ICommandService commandService;
-        private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
         private readonly ICommandInflater commandInflater;
 
@@ -42,9 +53,12 @@ namespace WB.UI.Designer.Api
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
 
+        // Get the default form options so that we can use them to set the default limits for
+        // request body data
+        private static readonly FormOptions defaultFormOptions = new FormOptions();
+
         public CommandController(
             ICommandService commandService,
-            ICommandDeserializer commandDeserializer,
             ILogger logger,
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
@@ -54,7 +68,6 @@ namespace WB.UI.Designer.Api
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
             this.commandService = commandService;
-            this.commandDeserializer = commandDeserializer;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
@@ -62,29 +75,35 @@ namespace WB.UI.Designer.Api
 
         public class AttachmentModel
         {
-            public HttpFile File { get; set; }
+            public IFormFile File { get; set; }
             public string FileName { get; set; }
             public string Command { get; set; }
         }
 
         [Route("~/api/command/attachment")]
         [HttpPost]
-        public HttpResponseMessage UpdateAttachment(AttachmentModel model)
+        public async Task<IActionResult> UpdateAttachment(AttachmentModel model)
         {
             var commandType = typeof(AddOrUpdateAttachment).Name;
             AddOrUpdateAttachment command;
             try
             {
-                command = (AddOrUpdateAttachment)this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateAttachment)this.Deserialize(commandType, model.Command);
 
                 if (model.File != null)
                 {
-                    command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(model.File.Buffer);
+                    byte[] postedFile;
+                    using (var stream = new MemoryStream())
+                    {
+                        await model.File.CopyToAsync(stream);
+                        postedFile = stream.ToArray();
+                    }
+                    command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(postedFile);
 
                     this.attachmentService.SaveContent(
                         contentId: command.AttachmentContentId,
-                        contentType: model.File.MediaType,
-                        binaryContent: model.File.Buffer);
+                        contentType: model.File.ContentType,
+                        binaryContent: postedFile);
                 }
                 else
                 {
@@ -101,12 +120,12 @@ namespace WB.UI.Designer.Api
             }
             catch (FormatException e)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.Error($"Error on command of type ({commandType}) handling ", e);
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
             return this.ProcessCommand(command, commandType).Response;
@@ -114,41 +133,45 @@ namespace WB.UI.Designer.Api
 
         [Route("~/api/command/updateLookupTable")]
         [HttpPost]
-        public async Task<HttpResponseMessage> UpdateLookupTable()
+        public async Task<IActionResult> UpdateLookupTable()
         {
             var commandType = "UpdateLookupTable";
             const string fileParameterName = "file";
             const string commandParameterName = "command";
 
-            if (!this.Request.Content.IsMimeMultipartContent())
+            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                return this.StatusCode((int)HttpStatusCode.UnsupportedMediaType);
             }
-
-            var multipartStreamProvider = new MultipartMemoryStreamProvider();
 
             UpdateLookupTable updateLookupTableCommand;
             try
             {
-                await this.Request.Content.ReadAsMultipartAsync(multipartStreamProvider);
-                
+                var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType),
+                    defaultFormOptions.MultipartBoundaryLengthLimit);
+                var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+
+
                 string fileStreamContent = string.Empty;
                 string commandContent = string.Empty;
-
-                foreach (var content in multipartStreamProvider.Contents)
+                var section = await reader.ReadNextSectionAsync();
+                while (section != null)
                 {
-                    switch (content.Headers.ContentDisposition.Name.Replace("\"", string.Empty))
+                    Dictionary<string, StringValues> sectionHeaders = section.Headers;
+                    switch (sectionHeaders["Content-Disposition"].ToString().Replace("\"", string.Empty))
                     {
                         case fileParameterName:
-                            fileStreamContent = await content.ReadAsStringAsync();
+                            fileStreamContent = await section.ReadAsStringAsync();
                             break;
                         case commandParameterName:
-                            commandContent = await content.ReadAsStringAsync();
+                            commandContent = await section.ReadAsStringAsync();
                             break;
                     }
+
+                    section = await reader.ReadNextSectionAsync();
                 }
 
-                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent);
+                updateLookupTableCommand = (UpdateLookupTable)this.Deserialize(commandType, commandContent);
 
                 if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
                 {
@@ -170,23 +193,23 @@ namespace WB.UI.Designer.Api
             }
             catch (FormatException)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                return StatusCode((int) HttpStatusCode.NotAcceptable,
                     Resources.QuestionnaireController.SelectTabFile);
             }
             catch (ArgumentException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e); 
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
 
             return this.ProcessCommand(updateLookupTableCommand, commandType).Response;
         }
 
-        public HttpResponseMessage Post(CommandExecutionModel model)
+        public IActionResult Post(CommandExecutionModel model)
         {
             try
             {
-                var concreteCommand = this.commandDeserializer.Deserialize(model.Type, model.Command);
+                var concreteCommand = this.Deserialize(model.Type, model.Command);
                 return this.ProcessCommand(concreteCommand, model.Type).Response;
             }
             catch (Exception e)
@@ -198,7 +221,7 @@ namespace WB.UI.Designer.Api
 
         public class TranslationModel
         {
-            public HttpFile File { get; set; }
+            public IFormFile File { get; set; }
             public string Command { get; set; }
         }
 
@@ -211,7 +234,10 @@ namespace WB.UI.Designer.Api
             AddOrUpdateTranslation command;
             try
             {
-                command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateTranslation)this.Deserialize(commandType, model.Command);
+
+
+
                 if (model.File != null && model.File.Buffer?.Length > 0)
                 {
                     this.translationsService.Store(command.QuestionnaireId,
@@ -245,6 +271,91 @@ namespace WB.UI.Designer.Api
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
             return this.Request.CreateResponse(resultMessage);
+        }
+
+        public ICommand Deserialize(string commandType, string serializedCommand)
+        {
+            try
+            {
+                Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
+                ICommand command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+
+                return command;
+            }
+            catch (Exception e)
+            {
+                logger.Error("Error on command deserialization.", e);
+                throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+            }
+        }
+
+        protected Dictionary<string, Type> KnownCommandTypes => new Dictionary<string, Type>
+         {
+             { "UpdateQuestionnaire", typeof (UpdateQuestionnaire) },
+             { "UpdateGroup", typeof (UpdateGroup) },
+             { "AddGroup", typeof (AddGroup) },
+             { "DeleteGroup", typeof (DeleteGroup) },
+             { "MoveGroup", typeof (MoveGroup) },
+             { "AddDefaultTypeQuestion", typeof (AddDefaultTypeQuestion) },
+             { "DeleteQuestion", typeof (DeleteQuestion) },
+             { "MoveQuestion", typeof (MoveQuestion) },
+             { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaire) },
+             { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaire) },
+             { "ReplaceTexts", typeof (ReplaceTextsCommand) },
+             //Update questions command
+             { "UpdateTextQuestion", typeof (UpdateTextQuestion) },
+             { "UpdateNumericQuestion", typeof (UpdateNumericQuestion) },
+             { "UpdateDateTimeQuestion", typeof (UpdateDateTimeQuestion) },
+             { "UpdateTextListQuestion", typeof (UpdateTextListQuestion) },
+             { "UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestion) },
+             { "UpdateMultimediaQuestion", typeof (UpdateMultimediaQuestion) },
+             { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestion) },
+             { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestion) },
+             { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestion) },
+             { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
+             { "UpdateAreaQuestion", typeof (UpdateAreaQuestion) },
+             { "UpdateAudioQuestion", typeof (UpdateAudioQuestion) },
+             { "ReplaceOptionsWithClassification", typeof(ReplaceOptionsWithClassification)},
+                    
+             //Static text commands
+             { "AddStaticText", typeof (AddStaticText) },
+             { "UpdateStaticText", typeof (UpdateStaticText) },
+             { "DeleteStaticText", typeof (DeleteStaticText) },
+             { "MoveStaticText", typeof (MoveStaticText) },
+
+             // Variables
+             { "AddVariable", typeof(AddVariable) },
+             { "UpdateVariable", typeof(UpdateVariable) },
+             { "DeleteVariable", typeof(DeleteVariable) },
+             { "MoveVariable", typeof(MoveVariable) },
+
+             {"PasteAfter", typeof(PasteAfter) },
+             {"PasteInto", typeof(PasteInto) },
+             //Macro commands
+             { "AddMacro", typeof (AddMacro) },
+             { "UpdateMacro", typeof (UpdateMacro) },
+             { "DeleteMacro", typeof (DeleteMacro) },
+             //Lookup table commands
+             { "AddLookupTable", typeof (AddLookupTable) },
+             { "UpdateLookupTable", typeof (UpdateLookupTable) },
+             { "DeleteLookupTable", typeof (DeleteLookupTable) },
+             //Attachment commands
+             { "AddOrUpdateAttachment", typeof (AddOrUpdateAttachment) },
+             { "DeleteAttachment", typeof (DeleteAttachment) },
+             //Translation commands
+             { "AddOrUpdateTranslation", typeof (AddOrUpdateTranslation) },
+             { "DeleteTranslation", typeof (DeleteTranslation) },
+             { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
+             // Metadata
+             { "UpdateMetadata", typeof (UpdateMetadata) },
+         };
+
+        private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
+        {
+            if (!KnownCommandTypes.ContainsKey(commandType))
+                throw new CommandDeserializationException(string.Format("Command type '{0}' is not supported.", commandType));
+
+            return KnownCommandTypes[commandType];
         }
 
         private CommandProcessResult ProcessCommand(ICommand concreteCommand, string commandType)
@@ -304,6 +415,53 @@ namespace WB.UI.Designer.Api
         }
 
         public bool HasErrors { get; set; }
-        public HttpResponseMessage Response { get; set; }
+        public IActionResult Response { get; set; }
+    }
+
+    // https://github.com/aspnet/Docs/blob/master/aspnetcore/mvc/models/file-uploads/sample/FileUploadSample/MultipartRequestHelper.cs
+    public static class MultipartRequestHelper
+    {
+        // Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
+        // The spec says 70 characters is a reasonable limit.
+        public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
+        {
+            var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary);
+            if (string.IsNullOrWhiteSpace(boundary))
+            {
+                throw new InvalidDataException("Missing content-type boundary.");
+            }
+
+            if (boundary.Length > lengthLimit)
+            {
+                throw new InvalidDataException(
+                    $"Multipart boundary length limit {lengthLimit} exceeded.");
+            }
+
+            return boundary;
+        }
+
+        public static bool IsMultipartContentType(string contentType)
+        {
+            return !string.IsNullOrEmpty(contentType)
+                   && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
+        {
+            // Content-Disposition: form-data; name="key";
+            return contentDisposition != null
+                   && contentDisposition.DispositionType.Equals("form-data")
+                   && string.IsNullOrEmpty(contentDisposition.FileName)
+                   && string.IsNullOrEmpty(contentDisposition.FileNameStar);
+        }
+
+        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
+        {
+            // Content-Disposition: form-data; name="myfile1"; filename="Misc 002.jpg"
+            return contentDisposition != null
+                   && contentDisposition.DispositionType.Equals("form-data")
+                   && (!string.IsNullOrEmpty(contentDisposition.FileName)
+                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar));
+        }
     }
 }
