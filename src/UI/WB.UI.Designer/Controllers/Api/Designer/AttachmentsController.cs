@@ -1,0 +1,129 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Services;
+using Microsoft.AspNetCore.Http.Headers;
+using Microsoft.Net.Http.Headers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using WB.UI.Designer1.Extensions;
+
+namespace WB.UI.Designer.Api
+{
+    [Route("attachments")]
+    public class AttachmentsController : Controller
+    {
+        private const int defaultImageSizeToScale = 156;
+
+        private readonly IAttachmentService attachmentService;
+        private readonly IHostingEnvironment environment;
+
+        public AttachmentsController(IAttachmentService attachmentService,
+            IHostingEnvironment environment)
+        {
+            this.attachmentService = attachmentService;
+            this.environment = environment;
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult Get(Guid id)
+        {
+            return this.CreateAttachmentResponse(id);
+        }
+
+        [HttpGet]
+        [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
+        public IActionResult Thumbnail(Guid id)
+        {
+            return this.CreateAttachmentResponse(id, defaultImageSizeToScale, true);
+        }
+
+        [HttpGet]
+        [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
+        public IActionResult Thumbnail(Guid id, int size)
+        {
+            return this.CreateAttachmentResponse(id, size, true);
+        }
+
+        private IActionResult CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
+        {
+            AttachmentMeta attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
+
+            if (attachment == null) return NotFound();
+
+            var requestHeaders = new RequestHeaders(this.Request.Headers);
+
+            if (requestHeaders.IfNoneMatch.Any(x => x.Tag.ToString().Trim('"') == attachment.ContentId))
+                return base.StatusCode((int)HttpStatusCode.NotModified);
+
+            AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+
+            if (thumbnail)
+            {
+                string contentType = "image/jpg";
+                byte[] thumbBytes = null;
+                if (attachmentContent.Details.Thumbnail == null)
+                {
+                    if (attachmentContent.IsImage())
+                    {
+                        thumbBytes = attachmentContent.Content;
+                    }
+
+                    if (attachmentContent.IsAudio())
+                    {
+                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath("Content/images/icons-files-audio.png"));
+                        contentType = @"image/png";
+                    }
+
+                    if (attachmentContent.IsPdf())
+                    {
+                        thumbBytes = System.IO.File.ReadAllBytes(environment.MapPath(@"~/Content/images/icons-files-pdf.png"));
+                        contentType = @"image/png";
+                    }
+                }
+                else
+                {
+                    thumbBytes = attachmentContent.Details.Thumbnail;
+                }
+
+                if (thumbBytes == null)
+                {
+                    return NoContent();
+                }
+
+                if (sizeToScale != null && contentType == "image/jpg")
+                {
+                    thumbBytes = GetTransformedContent(thumbBytes, sizeToScale);
+                }
+
+                return File(thumbBytes, contentType);
+            }
+
+            if (attachmentContent.Content == null) return NoContent();
+
+            return File(attachmentContent.Content, attachmentContent.ContentType, attachment.FileName,
+                attachment.LastUpdateDate, new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\""), false);
+        }
+
+        private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
+        {
+            if (!sizeToScale.HasValue) return source;
+            using (var outputStream = new MemoryStream())
+            {
+                using (Image<Rgba32> image = Image.Load(source, out var format))
+                {
+                    image.Mutate(ctx => ctx.Resize(sizeToScale.Value, sizeToScale.Value)); 
+                    image.Save(outputStream, format); 
+                } 
+
+                return outputStream.ToArray();
+            }
+        }
+    }
+}
