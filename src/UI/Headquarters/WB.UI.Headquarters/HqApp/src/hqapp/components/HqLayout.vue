@@ -1,6 +1,6 @@
 <template>
     <main>
-        <div class="container-fluid">
+        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" > 
             <div class="row">
                 <slot name="filters" />
                 <div :class="information">
@@ -44,6 +44,10 @@ export default {
             default() { return false; }
         },
         hasSearch: {
+            type: Boolean,
+            default() { return false; }
+        },
+        fixedWidth: {
             type: Boolean,
             default() { return false; }
         },

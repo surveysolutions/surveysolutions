@@ -448,7 +448,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set up email providers.
+        ///   Looks up a localized string similar to Bulk Email Services.
         /// </summary>
         public static string EmailProvidersTitle {
             get {
