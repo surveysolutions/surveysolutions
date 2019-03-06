@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
         }
 
         private void BecauseOf() =>
-            commandInflater.PrepareDeserializedCommandForExecution(command);
+            commandInflater.PrepareDeserializedCommandForExecution(command, TODO);
 
         [NUnit.Framework.Test] public void should_not_be_null () =>
            command.SourceDocument.Should().NotBeNull();

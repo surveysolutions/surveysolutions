@@ -264,14 +264,6 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
-    <Compile Include="Api\Designer\ClassificationsController.cs" />
-    <Compile Include="Api\Designer\CommentsController.cs" />
-    <Compile Include="Api\Designer\FindReplaceController.cs" />
-    <Compile Include="Api\Designer\ImportController.cs" />
-    <Compile Include="Api\Designer\Qbank\MySqlFoldersAndQuestionnaires.cs" />
-    <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
-    <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
-    <Compile Include="Api\Designer\SearchController.cs" />
     <Compile Include="Api\Headquarters\HQLookupController.cs" />
     <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
@@ -288,13 +280,6 @@
     <Compile Include="Code\UrlExtensions.cs" />
     <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
-    <Compile Include="Api\Designer\TranslationsController.cs" />
-    <Compile Include="Api\Designer\AttachmentsController.cs" />
-    <Compile Include="Api\Designer\CommandController.cs" />
-    <Compile Include="Api\Designer\ControlPanelApiController.cs" />
-    <Compile Include="Api\Designer\ExpressionGenerationController.cs" />
-    <Compile Include="Api\Designer\QuestionnaireController.cs" />
-    <Compile Include="Api\Designer\UsersController.cs" />
     <Compile Include="Api\Headquarters\HQAttachmentController.cs" />
     <Compile Include="Api\Headquarters\HQTranslationsController.cs" />
     <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
@@ -306,8 +291,6 @@
     <Compile Include="Api\Tester\UserController.cs" />
     <Compile Include="Api\Headquarters\ImportV2Controller.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
-    <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
-    <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
@@ -346,6 +329,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201901111638_AddIndexOnTypeColumnInClassificationsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201903051455_AddIdentityTables.cs" />
     <Compile Include="Migrations\RepositoriesMigration.cs" />
     <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
@@ -382,8 +366,6 @@
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
-    <Compile Include="Code\ICommandInflater.cs" />
-    <Compile Include="Code\Implementation\CommandInflater.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
@@ -393,7 +375,6 @@
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="Code\VerificationErrorsMapper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
-    <Compile Include="CommandDeserialization\DesignerCommandDeserializer.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -538,6 +519,7 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Compile Include="Migrations\PlainStore\M001-100\M201809041548_AddDiffWithPreviousVersionColumn.cs" />
+    <EmbeddedResource Include="Migrations\PlainStore\M001-100\M201903051455_AspNetIdentityDataMigration.sql" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\chekboxes.png" />
     <Content Include="questionnaire\content\i\chekboxes2k.png" />

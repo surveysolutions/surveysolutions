@@ -1,3 +1,4 @@
+using System;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.UI.Designer.Code

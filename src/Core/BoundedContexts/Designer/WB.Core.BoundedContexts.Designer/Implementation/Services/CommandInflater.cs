@@ -2,12 +2,12 @@ using Main.Core.Documents;
 using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Identity;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,23 +17,24 @@ namespace WB.UI.Designer.Code.Implementation
 {
     public class CommandInflater : ICommandInflater
     {
-        private readonly IMembershipUserService userHelper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList;
-        private readonly IAccountRepository accountRepository;
         private readonly IClassificationsStorage classificationsStorage;
+        private readonly ILoggedInUser user;
+        private readonly IIdentityService identityService;
 
-        public CommandInflater(IMembershipUserService userHelper,
+        public CommandInflater(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList,
-            IAccountRepository accountRepository, 
-            IClassificationsStorage classificationsStorage)
+            IClassificationsStorage classificationsStorage,
+            ILoggedInUser user,
+            IIdentityService identityService)
         {
-            this.userHelper = userHelper;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.questionnairesList = questionnairesList;
-            this.accountRepository = accountRepository;
             this.classificationsStorage = classificationsStorage;
+            this.user = user ?? throw new ArgumentNullException(nameof(user));
+            this.identityService = identityService;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -83,13 +84,13 @@ namespace WB.UI.Designer.Code.Implementation
                     "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId ||
-                this.userHelper.WebUser.IsAdmin)
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id ||
+                this.user.IsAdmin)
                 return questionnaire;
 
             var questionnaireListItem = this.questionnairesList.GetById(id.FormatGuid());
             if (questionnaireListItem == null ||
-                questionnaireListItem.SharedPersons.All(x => x.UserId != this.userHelper.WebUser.UserId))
+                questionnaireListItem.SharedPersons.All(x => x.UserId != this.user.Id))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden,
                     "You don't have permissions to access the source questionnaire");
@@ -102,8 +103,8 @@ namespace WB.UI.Designer.Code.Implementation
         {
             if (!(command is QuestionnaireCommandBase currentCommand)) return;
 
-            currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
-            currentCommand.IsResponsibleAdmin = this.userHelper.WebUser.IsAdmin;
+            currentCommand.ResponsibleId = this.user.Id;
+            currentCommand.IsResponsibleAdmin = this.user.IsAdmin;
         }
 
         private void ValidateAddSharedPersonCommand(ICommand command)
@@ -111,9 +112,9 @@ namespace WB.UI.Designer.Code.Implementation
             if (!(command is AddSharedPersonToQuestionnaire addSharedPersonCommand)) 
                 return;
 
-            var user = accountRepository.GetByNameOrEmail(addSharedPersonCommand.EmailOrLogin);
+            var user = identityService.GetByNameOrEmail(addSharedPersonCommand.EmailOrLogin);
 
-            addSharedPersonCommand.PersonId = user.ProviderUserKey;
+            addSharedPersonCommand.PersonId = user.Id;
             addSharedPersonCommand.EmailOrLogin = user.Email;
         }
 
@@ -122,8 +123,8 @@ namespace WB.UI.Designer.Code.Implementation
             if (!(command is RemoveSharedPersonFromQuestionnaire removeSharedPersonCommand)) 
                 return;
 
-            var user = accountRepository.GetByNameOrEmail(removeSharedPersonCommand.Email);
-            removeSharedPersonCommand.PersonId = user.ProviderUserKey;
+            var user = identityService.GetByNameOrEmail(removeSharedPersonCommand.Email);
+            removeSharedPersonCommand.PersonId = user.Id;
             removeSharedPersonCommand.Email = user.Email;
         }
     }

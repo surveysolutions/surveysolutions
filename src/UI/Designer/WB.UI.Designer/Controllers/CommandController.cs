@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers
             try
             {
                 var concreteCommand = this.commandDeserializer.Deserialize(type, command);
-                this.commandPreprocessor.PrepareDeserializedCommandForExecution(concreteCommand);
+                this.commandPreprocessor.PrepareDeserializedCommandForExecution(concreteCommand, TODO);
                 this.commandService.Execute(concreteCommand);
             }
             catch (Exception e)
