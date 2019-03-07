@@ -129,6 +129,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
+
                 await this.emailService.SendEmailAsync(model.Email, "Test email", "<h1>Hello there!</h1>", "Hello there!");
                 return Request.CreateResponse(HttpStatusCode.OK, new {Sucess = true});
             }

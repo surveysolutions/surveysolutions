@@ -41,13 +41,12 @@
                                     id="replyAddress" 
                                     v-model="replyAddress" 
                                     type="text" 
-                                    class="form-control" 
+                                    class="form-control with-clear-btn" 
                                     maxlength="200" />
                                 <button type="button" @click="replyAddress=null" class="btn btn-link btn-clear"><span></span></button>
                                 <span class="gray-text help-block">{{ $t('Settings.EmailProvider_ReplyAddressHelp')}}</span>
                                 <span class="help-block">{{ errors.first('settings.replyAddress') }}</span>
                             </div>
-
                         </div>
                     </div>
                 <div class="form-group" :class="{ 'has-error': errors.has('settings.senderName') }">
@@ -60,7 +59,7 @@
                             id="senderName" 
                             v-model="senderName" 
                             type="text" 
-                            class="form-control" 
+                            class="form-control  with-clear-btn" 
                             maxlength="200" />
                         <button type="button" @click="senderName=null" class="btn btn-link btn-clear"><span></span></button>
                         <span class="gray-text  help-block">{{ $t('Settings.EmailProvider_SenderNameHelp')}}</span>
@@ -77,7 +76,7 @@
                             id="address" 
                             v-model="address" 
                             type="text" 
-                            class="form-control" 
+                            class="form-control  with-clear-btn" 
                             maxlength="200" />
                         <button type="button" @click="address=null" class="btn btn-link btn-clear"><span></span></button>
                         <span class="gray-text  help-block">{{ $t('Settings.EmailProvider_AddressHelp')}}</span>
@@ -103,7 +102,7 @@
                                 <p>{{ $t('Settings.EmailProvider_AmazonDescription')}}</p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_AwsAccessKeyId')}}</label>
-                                    <div class="field">
+                                    <div class="field" :class="{ 'answered': awsAccessKeyId }">
                                         <input
                                             data-vv-as="AWS access key id"
                                             v-validate="'required'" 
@@ -113,14 +112,14 @@
                                             type="text" 
                                             v-model="awsAccessKeyId" 
                                             maxlength="200" />
-                                        <button type="button" class="btn btn-link btn-clear"><span></span></button>
+                                        <button  @click="awsAccessKeyId=null" type="button" class="btn btn-link btn-clear"><span></span></button>
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_AwsAccessKeyIdHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.awsAccessKeyId') }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.awsSecretAccessKey') }">
                                     <label  class="h5">{{ $t('Settings.EmailProvider_AwsSecretAccessKey')}}</label>
-                                    <div class="field">
+                                    <div class="field"  :class="{ 'answered': awsSecretAccessKey }">
                                         <input 
                                             v-validate="'required'" 
                                             data-vv-as="AWS secret access key"
@@ -130,7 +129,7 @@
                                             class="form-control  with-clear-btn" 
                                             type="text" 
                                             maxlength="200" />
-                                            <button type="button" class="btn btn-link btn-clear"><span></span></button>
+                                        <button @click="awsSecretAccessKey=null" type="button" class="btn btn-link btn-clear"><span></span></button>
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_AwsSecretAccessKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                     </div>
@@ -146,15 +145,16 @@
                                 <p>{{ $t('Settings.EmailProvider_SendgridDescription')}}</p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.sendGridApiKey') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_SendGridApiKey')}}</label>
-                                    <div class="field">
+                                    <div class="field" :class="{ 'answered': sendGridApiKey }">
                                         <input v-validate="'required'" 
-                                        data-vv-as="API key"
-                                        name="sendGridApiKey" 
-                                        class="form-control  with-clear-btn" 
-                                        id="sendGridApiKey" 
-                                        type="text" 
-                                        v-model="sendGridApiKey" maxlength="200" />
-                                        <button type="button" class="btn btn-link btn-clear"><span></span></button>
+                                            data-vv-as="API key"
+                                            name="sendGridApiKey" 
+                                            class="form-control  with-clear-btn" 
+                                            id="sendGridApiKey" 
+                                            type="text" 
+                                            v-model="sendGridApiKey" 
+                                            maxlength="200" />
+                                        <button @click="sendGridApiKey=null" type="button" class="btn btn-link btn-clear"><span></span></button>
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_SendGridApiKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                                     </div>
@@ -169,18 +169,32 @@
                 </div>
                 <p class="text-success" v-if="providerSettingsResult">{{providerSettingsResult}}</p>
             </form> 
-            <form v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp)" data-vv-scope="testEmail">
+            <form v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp)" data-vv-scope="testEmail" class="form-container">
                 <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                 <h4>{{ $t('Settings.EmailProvider_SendTestEmailHeader')}}</h4>
+                <div class="form-inline">
                 <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
-                    <label>{{ $t('Settings.EmailProvider_TestEmailAddress')}}</label>
-                    <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress" class="form-control" id="testEmailAddress" type="text" v-model="testEmailAddress" maxlength="200" />
-                    <span class="help-block">{{ errors.first('testEmail.testEmailAddress') }}</span>
+                    <label class="h5">{{ $t('Settings.EmailProvider_TestEmailAddress')}}</label>
+                    <div class="field" :class="{ 'answered': testEmailAddress }"> 
+                        <input 
+                            data-vv-as="email" 
+                            v-validate="'required|email'"
+                            name="testEmailAddress" 
+                            class="form-control  with-clear-btn" 
+                            id="testEmailAddress" 
+                            type="text" 
+                            v-model="testEmailAddress" 
+                            maxlength="200" />
+                        <button @click="testEmailAddress=null" type="button" class="btn btn-link btn-clear"><span></span></button>
+                        <span class="help-block">{{ errors.first('testEmail.testEmailAddress') }}</span>
+                    </div>
                 </div>
-                <button class="btn btn-default" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
+                 </div>
                 <p class="text-success" v-if="sendEmailResult">{{sendEmailResult}}</p>
             </form>
-
             </div>
         </div>
     </HqLayout>
@@ -307,7 +321,11 @@ export default {
             this.$http.post(this.$config.model.api.updateSettings, settings)
                 .then(function (response) {
                     self.$validator.reset('settings');
-                    self.providerSettingsResult = "Email service is configured succeessfully. Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive."
+                    self.providerSettingsResult = "Email service configuration was saved succeessfully."
+                    if (settings.provider!="none")
+                    {
+                        self.providerSettingsResult +=" Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive."
+                    }
                 })
                 .catch(function (error) {
                     Vue.config.errorHandler(error, self);
