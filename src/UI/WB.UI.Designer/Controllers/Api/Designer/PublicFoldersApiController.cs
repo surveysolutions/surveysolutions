@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Shared.Web.Filters;
+using WB.UI.Designer1.Extensions;
 
 
 namespace WB.UI.Designer.Api
 {
-    [Authorize]
-    [ApiNoCache]
+    [ResponseCache(NoStore = true)]
     [Authorize(Roles = "Administrator")]
-    public class PublicFoldersApiController : ApiController
+    public class PublicFoldersApiController : Controller
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IMembershipUserService userService;
 
-        public PublicFoldersApiController(IPublicFoldersStorage publicFoldersStorage,
-            IMembershipUserService userService)
+        public PublicFoldersApiController(IPublicFoldersStorage publicFoldersStorage)
         {
             this.publicFoldersStorage = publicFoldersStorage;
-            this.userService = userService;
         }
 
         public class TreeNode
@@ -64,7 +60,7 @@ namespace WB.UI.Designer.Api
         public TreeNode CreateFolder(CreateFolderModel model)
         {
             var id = Guid.NewGuid();
-            var userId = userService.WebUser.UserId;
+            var userId = User.GetId();
             var folder = this.publicFoldersStorage.CreateFolder(id, model.Title, model.ParentId, userId);
             return new TreeNode()
             {

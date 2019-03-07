@@ -2,27 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
-    public class ExpressionGenerationController : ApiController
+    public class ExpressionGenerationController : Controller
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
-        private readonly ILogger logger;
+        private readonly ILogger<ExpressionGenerationController> logger;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
         private IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IQuestionnaireViewFactory questionnaireViewFactory, IDesignerEngineVersionService engineVersionService, IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+        public ExpressionGenerationController(ILogger<ExpressionGenerationController> logger, 
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IQuestionnaireViewFactory questionnaireViewFactory, 
+            IDesignerEngineVersionService engineVersionService, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -32,7 +35,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage GetAllClassesForLatestVersion(Guid id, int? version)
+        public IActionResult GetAllClassesForLatestVersion(Guid id, int? version)
         {
             var questionnaire = this.GetQuestionnaire(id).Source;
 
@@ -48,12 +51,12 @@ namespace WB.UI.Designer.Api
                 resultBuilder.AppendLine(keyValuePair.Value);
             }
 
-            return this.Request.CreateResponse(HttpStatusCode.OK, resultBuilder.ToString());
+            return Ok(resultBuilder.ToString());
         }
 
 
         [HttpGet]
-        public HttpResponseMessage GetCompilationResultForLatestVersion(Guid id)
+        public IActionResult GetCompilationResultForLatestVersion(Guid id)
         {
             //do async
             var questionnaire = this.GetQuestionnaire(id).Source;
@@ -64,19 +67,19 @@ namespace WB.UI.Designer.Api
                 specifiedCompilationVersion ?? this.engineVersionService.LatestSupportedVersion, out _);
             if (generated.Success)
             {
-                return this.Request.CreateResponse(HttpStatusCode.OK, "No errors");
+                return Ok("No errors");
             }
             else
             {
                 //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
                 var errorLocations = generated.Diagnostics.Select(x => x.Message).ToArray();
 
-                return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
             }
         }
 
         [HttpGet]
-        public HttpResponseMessage GetLatestVersionAssembly(Guid id, int? version)
+        public IActionResult GetLatestVersionAssembly(Guid id, int? version)
         {
             //do async
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
@@ -85,22 +88,15 @@ namespace WB.UI.Designer.Api
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, supervisorVersion, out assembly);
             if (generated.Success)
             {
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new  ByteArrayContent(Convert.FromBase64String(assembly))
-                };
-
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-msdownload");
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment"); 
-                response.Content.Headers.ContentDisposition.FileName = string.Format("expressions-{0}.dll", id);
-                return response;
+                return File(Convert.FromBase64String(assembly), "application/x-msdownload",
+                    string.Format("expressions-{0}.dll", id));
             }
             else
             {
                 //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
                 var errorLocations = generated.Diagnostics.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
 
-                return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+                return StatusCode((int) HttpStatusCode.PreconditionFailed, errorLocations);
             }
         }
 
@@ -110,7 +106,7 @@ namespace WB.UI.Designer.Api
 
             if (questionnaire == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new Exception("Questionnaire not found");
             }
 
             return questionnaire;

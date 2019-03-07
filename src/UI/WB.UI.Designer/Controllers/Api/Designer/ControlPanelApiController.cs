@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.Infrastructure.Versions;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
 {
-    [NoTransaction]
-    [LocalOrDevelopmentAccessOnly]
-    public class ControlPanelApiController : ApiController
+    [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
+    public class ControlPanelApiController : Controller
     {
         public class VersionsInfo
         {
@@ -35,7 +34,6 @@ namespace WB.UI.Designer.Api
             this.productVersionHistory = productVersionHistory;
         }
 
-        [NoTransaction]
         public VersionsInfo GetVersions()
         {
             return new VersionsInfo(

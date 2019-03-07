@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.Filters;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api.Designer
 {
-    [ApiNoCache]
+    [ResponseCache(NoStore = true)]
     [Authorize]
-    [RoutePrefix("api/search")]
-    [CamelCase]
-    public class SearchController : ApiController
+    [Route("api/search")]
+    public class SearchController : Controller
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly IQuestionnaireSearchStorage questionnaireSearchStorage;
@@ -37,7 +35,7 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [Route("")]
-        public Task<SearchResultModel> Search([FromUri] SearchQueryModel model)
+        public IActionResult Search([FromQuery] SearchQueryModel model)
         {
             var searchResult = questionnaireSearchStorage.Search(new SearchInput()
             {
@@ -69,7 +67,7 @@ namespace WB.UI.Designer.Api.Designer
                     }).ToList()
             };
 
-            return Task.FromResult(result);
+            return Ok(result);
         }
     }
 
