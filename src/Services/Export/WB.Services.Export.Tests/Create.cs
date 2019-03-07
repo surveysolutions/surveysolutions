@@ -612,6 +612,7 @@ namespace WB.Services.Export.Tests
             return provider;
         }
 
+        public static ValueVector<Guid> ValueVector(params Guid[] rosterIds) => new ValueVector<Guid>(rosterIds);
     }
 
     public class EventsFactory
