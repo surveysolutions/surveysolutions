@@ -106,8 +106,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
         /// <param name="exportType">Format of export data to download</param>
         /// <param name="status">Status of exported interviews</param>
-        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
-        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be UTC date</param>
+        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be UTC date</param>
         /// 
         /// <response code="200">Canceled</response>
         /// <response code="400">Questionnaire id is malformed</response>
@@ -178,7 +178,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 RunningProcess = runningExportStatus == null ? null : new RunningProcess
                 {
                     StartDate = runningExportStatus.BeginDate,
-                    ProgressInPercents = runningExportStatus.Progress
+                    ProgressInPercents = runningExportStatus.Progress,
+                    Status = runningExportStatus.ProcessStatus
                 }
             });
         }
@@ -253,6 +254,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             public DateTime StartDate { get; set; }
             [Required]
             public int ProgressInPercents { get; set; }
+
+            [Required]
+            public DataExportStatus Status { get; set; }
         }
     }
 }
