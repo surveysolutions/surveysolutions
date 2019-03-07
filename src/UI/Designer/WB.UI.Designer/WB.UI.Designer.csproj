@@ -264,6 +264,7 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="Api\Designer\UsersController.cs" />
     <Compile Include="Api\Headquarters\HQLookupController.cs" />
     <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
@@ -300,7 +301,6 @@
     <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Implementation\Services\VideoConverter.cs" />
-    <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201811071318_AttachmentThumbnail.cs" />
@@ -329,9 +329,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201901111638_AddIndexOnTypeColumnInClassificationsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201903051455_AddIdentityTables.cs" />
     <Compile Include="Migrations\RepositoriesMigration.cs" />
-    <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
@@ -342,22 +340,6 @@
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
-    <Compile Include="Models\VerificationMessageError.cs" />
-    <Compile Include="Resources\Paging.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Paging.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\PdfMessages.Designer.cs">
-      <DependentUpon>PdfMessages.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\ErrorMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -373,7 +355,6 @@
     <Compile Include="Code\IQuestionnaireHelper.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
-    <Compile Include="Code\VerificationErrorsMapper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -413,8 +394,6 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
-    <Compile Include="Models\VerificationMessage.cs" />
-    <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -436,47 +415,10 @@
     <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Pdf\TitlePageDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\AccountResources.Designer.cs">
-      <DependentUpon>AccountResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\FindReplaceResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\QuestionnaireController.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\NotificationResources.Designer.cs">
-      <DependentUpon>NotificationResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\QuestionnaireEditor.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\QuestionnaireHistoryResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\UnderConstruction.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UnderConstruction.resx</DependentUpon>
-    </Compile>
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
-    <Compile Include="Services\IWebTesterService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
-    <Compile Include="Implementation\Services\WebTesterService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="Utils\Pdf.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
@@ -519,7 +461,6 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Compile Include="Migrations\PlainStore\M001-100\M201809041548_AddDiffWithPreviousVersionColumn.cs" />
-    <EmbeddedResource Include="Migrations\PlainStore\M001-100\M201903051455_AspNetIdentityDataMigration.sql" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\chekboxes.png" />
     <Content Include="questionnaire\content\i\chekboxes2k.png" />
@@ -563,141 +504,6 @@
     <Content Include="Scripts\classifications\store.js" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
-    <EmbeddedResource Include="Resources\AccountResources.ar.resx" />
-    <EmbeddedResource Include="Resources\AccountResources.es.resx">
-      <DependentUpon>AccountResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AccountResources.fr.resx">
-      <DependentUpon>AccountResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AccountResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AccountResources.ru.resx">
-      <DependentUpon>AccountResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AccountResources.zh.resx">
-      <DependentUpon>AccountResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ar.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.ar.resx" />
-    <EmbeddedResource Include="Resources\FindReplaceResources.es.resx">
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.fr.resx">
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx">
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.zh.resx">
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.ar.resx" />
-    <EmbeddedResource Include="Resources\NotificationResources.es.resx">
-      <DependentUpon>NotificationResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.fr.resx">
-      <DependentUpon>NotificationResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
-      <DependentUpon>NotificationResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.zh.resx">
-      <DependentUpon>NotificationResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Paging.ar.resx" />
-    <EmbeddedResource Include="Resources\Paging.es.resx">
-      <DependentUpon>Paging.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Paging.fr.resx">
-      <DependentUpon>Paging.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Paging.ru.resx">
-      <DependentUpon>Paging.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Paging.zh.resx">
-      <DependentUpon>Paging.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.ar.resx" />
-    <EmbeddedResource Include="Resources\PdfMessages.es.resx">
-      <DependentUpon>PdfMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.fr.resx">
-      <DependentUpon>PdfMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
-      <DependentUpon>PdfMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.zh.resx">
-      <DependentUpon>PdfMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireController.ar.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireController.es.resx">
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireController.fr.resx">
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx">
-      <DependentUpon>QuestionnaireController.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.ar.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx">
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx">
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx">
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ar.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx">
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.fr.resx">
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.zh.resx">
-      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UnderConstruction.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UnderConstruction.zh.resx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1051,6 +857,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Resources\" />
     <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
@@ -1082,52 +889,6 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Paging.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Paging.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PdfMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx">
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\QuestionnaireController.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

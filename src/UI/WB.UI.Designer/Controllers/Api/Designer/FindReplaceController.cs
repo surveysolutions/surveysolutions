@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Web.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Filters;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api
 {
-    [CamelCase]
     [Authorize]
-    public class FindReplaceController : ApiController
+    public class FindReplaceController : Controller
     {
         private const int SearchForAllowedLength = 500;
         private readonly IFindReplaceService replaceService;
@@ -22,20 +20,20 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public HttpResponseMessage FindAll(Guid id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IActionResult FindAll(Guid id, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             if (searchFor?.Length > SearchForAllowedLength)
             {
                 var message = string.Format(FindReplaceResources.SearchForTooLong, SearchForAllowedLength);
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, message);
+                return StatusCode((int) HttpStatusCode.BadRequest, message);
             }
 
             if (useRegex && !IsValidRegex(searchFor))
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, FindReplaceResources.SearchForRegexNotValid);
+                return StatusCode((int) HttpStatusCode.BadRequest, FindReplaceResources.SearchForRegexNotValid);
             }
 
-            return Request.CreateResponse(this.replaceService.FindAll(id, searchFor, matchCase, matchWholeWord, useRegex));
+            return Ok(this.replaceService.FindAll(id, searchFor, matchCase, matchWholeWord, useRegex));
         }
 
         private static bool IsValidRegex(string pattern)

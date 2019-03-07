@@ -1,57 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Hosting;
-using System.Web.Http;
 using Autofac;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.Designer.Qbank;
-using WB.UI.Designer.Filters;
-using WB.UI.Shared.Web.Filters;
+using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api.Designer
 {
-    [ApiNoCache]
+    [ResponseCache(NoStore = true)]
     [Authorize(Roles = "Administrator")]
-    [RoutePrefix("api/import")]
-    [CamelCase]
+    [Route("api/import")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class ImportController : ApiController
+    public class ImportController : Controller
     {
         private readonly IClassificationsStorage classificationsStorage;
         private readonly ICommandService commandService;
-        protected readonly IMembershipUserService UserHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private readonly IMembershipUserService userService;
-        
+        private readonly IHostingEnvironment hostingEnvironment;
+
 
         public ImportController(IClassificationsStorage classificationsStorage, 
             ICommandService commandService, 
-            IMembershipUserService userHelper, 
-            IPublicFoldersStorage publicFoldersStorage, 
-            IMembershipUserService userService)
+            IPublicFoldersStorage publicFoldersStorage,
+            IHostingEnvironment hostingEnvironment)
         {
             this.classificationsStorage = classificationsStorage;
             this.commandService = commandService;
-            UserHelper = userHelper;
             this.publicFoldersStorage = publicFoldersStorage;
-            this.userService = userService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         [HttpPost]
@@ -67,7 +60,8 @@ namespace WB.UI.Designer.Api.Designer
             mysqlPublicFolders.ForEach(x => x.IdGuid = Guid.Parse(x.Id.ToString().PadLeft(32, '1')));
             var publicFoldersIdMap = mysqlPublicFolders.ToDictionary(x => x.Id, x => x.IdGuid.Value);
             mysqlPublicFolders.ForEach(x =>
-                publicFoldersStorage.CreateFolder(x.IdGuid.Value, x.Name, publicFoldersIdMap.ContainsKey(x.Pid) ? publicFoldersIdMap[x.Pid] : (Guid?)null, userService.WebUser.UserId)
+                publicFoldersStorage.CreateFolder(x.IdGuid.Value, x.Name, publicFoldersIdMap.ContainsKey(x.Pid) ? publicFoldersIdMap[x.Pid] : (Guid?)null,
+                    User.GetId())
             );
 
             var mysqlAllQuestions = NewMethod1();
@@ -187,16 +181,16 @@ namespace WB.UI.Designer.Api.Designer
                     PublicKey = Guid.Parse(varNumber.ToString().PadLeft(32, '0')),
                     Title = mysqlQuestionnaire.Name,
                     Description = mysqlQuestionnaire.Description,
-                    Children = sections.ToReadOnlyCollection(),
+                    Children = new ReadOnlyCollection<IComposite>(sections),
                     IsPublic = true,
                     HideIfDisabled = true,
                     VariableName = "Q_" + varNumber.ToString().PadLeft(4, '0'),
-                    CreatedBy = this.UserHelper.WebUser.UserId,
+                    CreatedBy = User.GetId(),
                     CreationDate = DateTime.UtcNow,
                     IsDeleted = false
                 };
 
-                var command = new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaire);
+                var command = new ImportQuestionnaire(User.GetId(), questionnaire);
                 InScopeExecutor.Current.ExecuteActionInScope((locator) =>
                 {
                     commandService.Execute(command);
@@ -209,10 +203,10 @@ namespace WB.UI.Designer.Api.Designer
             }
         }
 
-        private static List<MySqlFoldersAndQuestionnaires> NewMethod()
+        private List<MySqlFoldersAndQuestionnaires> NewMethod()
         {
             var foldersAndQuestionnairesJson =
-                File.ReadAllText(HostingEnvironment.MapPath("~/Content/qbank/FoldersAndQuestionnaires.json"));
+                System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/FoldersAndQuestionnaires.json"));
             var foldersAndQuestionnaires = JsonConvert
                 .DeserializeObject<MySqlFoldersAndQuestionnaires[]>(foldersAndQuestionnairesJson)
                 .Where(x => x.Published == 1)
@@ -221,10 +215,10 @@ namespace WB.UI.Designer.Api.Designer
         }
 
 
-        private static List<MySqlOptions> NewMethod4()
+        private List<MySqlOptions> NewMethod4()
         {
             var questionsWithOptionsJson =
-                File.ReadAllText(HostingEnvironment.MapPath("~/Content/qbank/Options.json"));
+                System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Options.json"));
 
             var questionsWithOptions = JsonConvert
                 .DeserializeObject<MySqlOptions[]>(questionsWithOptionsJson)
@@ -232,10 +226,10 @@ namespace WB.UI.Designer.Api.Designer
             return questionsWithOptions;
         }
 
-        private static List<MySqlSectionToQuestionnaires> NewMethod3()
+        private List<MySqlSectionToQuestionnaires> NewMethod3()
         {
             var sectionToQuestionnairesJson =
-                File.ReadAllText(HostingEnvironment.MapPath("~/Content/qbank/SectionToQuestionnaires.json"));
+                System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/SectionToQuestionnaires.json"));
 
 
             var sectionToQuestionnaires = JsonConvert
@@ -244,18 +238,18 @@ namespace WB.UI.Designer.Api.Designer
             return sectionToQuestionnaires;
         }
 
-        private static List<MySqlSections> NewMethod2()
+        private List<MySqlSections> NewMethod2()
         {
-            var sectionsJson = File.ReadAllText(HostingEnvironment.MapPath("~/Content/qbank/Sections.json"));
+            var sectionsJson = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Sections.json"));
             var sections = JsonConvert.DeserializeObject<MySqlSections[]>(sectionsJson)
                 .Where(x => x.Published == 1)
                 .ToList();
             return sections;
         }
 
-        private static List<MySqlQuestions> NewMethod1()
+        private List<MySqlQuestions> NewMethod1()
         {
-            var questionsJson = File.ReadAllText(HostingEnvironment.MapPath("~/Content/qbank/Questions.json"));
+            var questionsJson = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/qbank/Questions.json"));
             var questions = JsonConvert.DeserializeObject<MySqlQuestions[]>(questionsJson).ToList();
             return questions;
         }
@@ -304,9 +298,9 @@ namespace WB.UI.Designer.Api.Designer
             classificationsStorage.Store(bdEntities);
         }
 
-        private static MysqlClassificationEntity[] ReadAndParseClassifications()
+        private MysqlClassificationEntity[] ReadAndParseClassifications()
         {
-            var json = File.ReadAllText(HostingEnvironment.MapPath("~/Content/QbankClassifications.json"));
+            var json = System.IO.File.ReadAllText(this.hostingEnvironment.MapPath("Content/QbankClassifications.json"));
             var entities = JsonConvert.DeserializeObject<MysqlClassificationEntity[]>(json);
             return entities;
         }

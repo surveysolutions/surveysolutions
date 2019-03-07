@@ -264,4 +264,7 @@
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\WebTester\" />
+  </ItemGroup>
 </Project>

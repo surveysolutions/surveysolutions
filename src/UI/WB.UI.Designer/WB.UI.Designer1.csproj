@@ -27,4 +27,215 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Compile Update="Resources\AccountResources.Designer.cs">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\FindReplaceResources.Designer.cs">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\NotificationResources.Designer.cs">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Paging.Designer.cs">
+      <DependentUpon>Paging.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\PdfMessages.Designer.cs">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireController.Designer.cs">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\QuestionnaireHistoryResources.Designer.cs">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\UnderConstruction.Designer.cs">
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\AccountResources.es.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AccountResources.fr.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AccountResources.resx">
+      <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AccountResources.ru.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AccountResources.zh.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.es.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.fr.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.resx">
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.ru.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.zh.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.es.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.fr.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.resx">
+      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.ru.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\FindReplaceResources.zh.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResources.es.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResources.fr.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResources.resx">
+      <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResources.ru.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\NotificationResources.zh.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Paging.es.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Paging.fr.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Paging.resx">
+      <LastGenOutput>Paging.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Paging.ru.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Paging.zh.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfMessages.es.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfMessages.fr.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfMessages.resx">
+      <LastGenOutput>PdfMessages.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfMessages.ru.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfMessages.zh.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.es.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.fr.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.resx">
+      <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.ru.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireController.zh.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.es.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.fr.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.zh.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.es.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.fr.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.resx">
+      <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.ru.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireHistoryResources.zh.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UnderConstruction.resx">
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

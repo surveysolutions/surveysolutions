@@ -1,39 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
-using WB.UI.Shared.Web.Filters;
+using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
     [QuestionnairePermissions]
-    [ApiNoCache]
-    public class QuestionnaireController : ApiController
+    [ResponseCache(NoStore = true)]
+    public class QuestionnaireController : Controller
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
-        private readonly IMembershipUserService userHelper;
-        private readonly WebTesterSettings webTesterSettings;
+        private readonly IOptions<WebTesterSettings> webTesterSettings;
 
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
@@ -48,8 +44,7 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IMembershipUserService userHelper, 
-            WebTesterSettings webTesterSettings,
+            IOptions<WebTesterSettings> webTesterSettings,
             IWebTesterService webTesterService)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
@@ -58,50 +53,44 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
-
-            this.userHelper = userHelper;
             this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage Get(string id)
+        public IActionResult Get(string id)
         {
-            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, this.userHelper.WebUser.UserId);
+            var questionnaireInfoView = this.questionnaireInfoViewFactory.Load(id, User.GetId());
 
             if (questionnaireInfoView == null)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(ExceptionMessages.QuestionCannotBeFound , id));
+                return NotFound(string.Format(ExceptionMessages.QuestionCannotBeFound , id));
             }
 
-            return this.Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);
+            return Ok(questionnaireInfoView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public NewChapterView Chapter(string id, string chapterId)
+        public IActionResult Chapter(string id, string chapterId)
         {
             var chapterInfoView = this.chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
 
             if (chapterInfoView == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
-            return chapterInfoView;
+            return Ok(chapterInfoView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public HttpResponseMessage EditVariable(string id, Guid variableId)
+        public IActionResult EditVariable(string id, Guid variableId)
         {
             var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
 
-            if (variableView == null) return this.Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                string.Format(ExceptionMessages.VariableWithIdWasNotFound, variableId, id));
+            if (variableView == null) return NotFound(string.Format(ExceptionMessages.VariableWithIdWasNotFound, variableId, id));
 
-            var result = this.Request.CreateResponse(HttpStatusCode.OK, new
+            var result = Ok(new
             {
                 Id = variableView.ItemId,
                 Expression = variableView.VariableData.Expression,
@@ -116,14 +105,13 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [CamelCase]
-        public NewEditQuestionView EditQuestion(string id, Guid questionId)
+        public IActionResult EditQuestion(string id, Guid questionId)
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             if (editQuestionView == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
             bool shouldTruncateOptions = editQuestionView.Type == QuestionType.SingleOption
@@ -136,54 +124,50 @@ namespace WB.UI.Designer.Api
                 editQuestionView.Options = editQuestionView.Options.Take(MaxCountOfOptionForFileredCombobox).ToArray();   
             }
 
-            return editQuestionView;
+            return Ok(editQuestionView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public NewEditGroupView EditGroup(string id, Guid groupId)
+        public IActionResult EditGroup(string id, Guid groupId)
         {
             var editGroupView = this.questionnaireInfoFactory.GetGroupEditView(id, groupId);
 
             if (editGroupView == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
-            return editGroupView;
+            return Ok(editGroupView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public NewEditRosterView EditRoster(string id, Guid rosterId)
+        public IActionResult EditRoster(string id, Guid rosterId)
         {
             var editRosterView = this.questionnaireInfoFactory.GetRosterEditView(id, rosterId);
 
             if (editRosterView == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
-            return editRosterView;
+            return Ok(editRosterView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public NewEditStaticTextView EditStaticText(string id, Guid staticTextId)
+        public IActionResult EditStaticText(string id, Guid staticTextId)
         {
             var staticTextEditView = this.questionnaireInfoFactory.GetStaticTextEditView(id, staticTextId);
 
             if (staticTextEditView == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                return NotFound();
             }
 
-            return staticTextEditView;
+            return Ok(staticTextEditView);
         }
 
         [HttpGet]
-        [CamelCase]
-        public VerificationResult Verify(Guid id)
+        public IActionResult Verify(Guid id)
         {
             var questionnaireView = this.GetQuestionnaire(id);
             QuestionnaireVerificationMessage[] verificationMessagesAndWarning = this.questionnaireVerifier.Verify(questionnaireView).ToArray();
@@ -202,30 +186,27 @@ namespace WB.UI.Designer.Api
             VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, readOnlyQuestionnaire);
             VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, readOnlyQuestionnaire);
 
-            return new VerificationResult
+            return Ok(new VerificationResult
             {
                 Errors = errors,
                 Warnings = warnings
-            };
+            });
         }
 
         [HttpGet]
-        [CamelCase]
         public string WebTest(Guid id)
         {
             var token = this.webTesterService.CreateTestQuestionnaire(id);
-            return $"{webTesterSettings.BaseUri}/{token}";
+            return $"{webTesterSettings.Value.BaseUri}/{token}";
         }
 
         [HttpGet]
-        [CamelCase]
         public List<QuestionnaireItemLink> GetAllBrokenGroupDependencies(string id, Guid groupId)
         {
             return this.questionnaireInfoFactory.GetAllBrokenGroupDependencies(id, groupId);
         }
 
         [HttpGet]
-        [CamelCase]
         public List<DropdownEntityView> GetQuestionsEligibleForNumericRosterTitle(string id, Guid rosterId, Guid rosterSizeQuestionId)
         {
             return this.questionnaireInfoFactory.GetQuestionsEligibleForNumericRosterTitle(id, rosterId, rosterSizeQuestionId);
@@ -237,7 +218,7 @@ namespace WB.UI.Designer.Api
 
             if (questionnaire == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new Exception("Not found");
             }
 
             return questionnaire;

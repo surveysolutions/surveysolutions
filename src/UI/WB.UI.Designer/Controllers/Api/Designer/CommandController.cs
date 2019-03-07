@@ -149,7 +149,7 @@ namespace WB.UI.Designer.Api
             {
                 var boundary = MultipartRequestHelper.GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType),
                     defaultFormOptions.MultipartBoundaryLengthLimit);
-                var reader = new MultipartReader(boundary, HttpContext.Request.Body);
+                var reader = new MultipartReader(boundary.ToString(), HttpContext.Request.Body);
 
 
                 string fileStreamContent = string.Empty;
@@ -228,36 +228,40 @@ namespace WB.UI.Designer.Api
 
         [Route("~/api/command/translation")]
         [HttpPost]
-        public HttpResponseMessage UpdateTranslation(TranslationModel model)
+        public async Task<IActionResult> UpdateTranslation(TranslationModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
             AddOrUpdateTranslation command;
             try
             {
                 command = (AddOrUpdateTranslation)this.Deserialize(commandType, model.Command);
-
-
-
-                if (model.File != null && model.File.Buffer?.Length > 0)
+                if (model.File != null)
                 {
+                    byte[] postedFile;
+                    using (var stream = new MemoryStream())
+                    {
+                        await model.File.CopyToAsync(stream);
+                        postedFile = stream.ToArray();
+                    }
+
                     this.translationsService.Store(command.QuestionnaireId,
                         command.TranslationId,
-                        model.File.Buffer);
+                        postedFile);
                 }
             }
             catch (FormatException e)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
                 this.logger.Error($"Error on command of type ({commandType}) handling ", e);
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidExcelFileException e)
             {
                 this.logger.Error($"Error on command of type ({commandType}) handling ", e);
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+                return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
 
             var commandResponse = this.ProcessCommand(command, commandType);
@@ -270,7 +274,7 @@ namespace WB.UI.Designer.Api
             var resultMessage = storedTranslationsCount == 1
                 ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
                 : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
-            return this.Request.CreateResponse(resultMessage);
+            return Ok(resultMessage);
         }
 
         public ICommand Deserialize(string commandType, string serializedCommand)
@@ -353,7 +357,7 @@ namespace WB.UI.Designer.Api
         private Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
         {
             if (!KnownCommandTypes.ContainsKey(commandType))
-                throw new CommandDeserializationException(string.Format("Command type '{0}' is not supported.", commandType));
+                throw new Exception(string.Format("Command type '{0}' is not supported.", commandType));
 
             return KnownCommandTypes[commandType];
         }
@@ -370,17 +374,17 @@ namespace WB.UI.Designer.Api
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.Forbidden,
                         exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotFound,
                         exc.Message));
                 }
 
-                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotAcceptable,
                     exc.Message));
             }
             catch (Exception e)
@@ -394,21 +398,21 @@ namespace WB.UI.Designer.Api
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                    return new CommandProcessResult(StatusCode((int) HttpStatusCode.Forbidden,
                         domainEx.Message));
                 }
 
-                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                return new CommandProcessResult(StatusCode((int) HttpStatusCode.NotAcceptable,
                     domainEx.Message));
             }
 
-            return new CommandProcessResult(this.Request.CreateResponse(new JsonResponseResult()), false);
+            return new CommandProcessResult(Ok(), false);
         }
     }
 
     public class CommandProcessResult
     {
-        public CommandProcessResult(HttpResponseMessage httpResponseMessage, bool hasErrors = true)
+        public CommandProcessResult(IActionResult httpResponseMessage, bool hasErrors = true)
         {
             this.Response = httpResponseMessage;
             this.HasErrors = hasErrors;
@@ -423,10 +427,10 @@ namespace WB.UI.Designer.Api
     {
         // Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
         // The spec says 70 characters is a reasonable limit.
-        public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
+        public static StringSegment GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
         {
             var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary);
-            if (string.IsNullOrWhiteSpace(boundary))
+            if (string.IsNullOrWhiteSpace(boundary.ToString()))
             {
                 throw new InvalidDataException("Missing content-type boundary.");
             }
@@ -444,24 +448,6 @@ namespace WB.UI.Designer.Api
         {
             return !string.IsNullOrEmpty(contentType)
                    && contentType.IndexOf("multipart/", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        public static bool HasFormDataContentDisposition(ContentDispositionHeaderValue contentDisposition)
-        {
-            // Content-Disposition: form-data; name="key";
-            return contentDisposition != null
-                   && contentDisposition.DispositionType.Equals("form-data")
-                   && string.IsNullOrEmpty(contentDisposition.FileName)
-                   && string.IsNullOrEmpty(contentDisposition.FileNameStar);
-        }
-
-        public static bool HasFileContentDisposition(ContentDispositionHeaderValue contentDisposition)
-        {
-            // Content-Disposition: form-data; name="myfile1"; filename="Misc 002.jpg"
-            return contentDisposition != null
-                   && contentDisposition.DispositionType.Equals("form-data")
-                   && (!string.IsNullOrEmpty(contentDisposition.FileName)
-                       || !string.IsNullOrEmpty(contentDisposition.FileNameStar));
         }
     }
 }

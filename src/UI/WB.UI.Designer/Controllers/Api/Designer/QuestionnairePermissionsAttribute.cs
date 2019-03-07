@@ -1,36 +1,30 @@
 using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api
 {
     public class QuestionnairePermissionsAttribute : ActionFilterAttribute
     {
-        private IMembershipUserService UserHelper => ServiceLocator.Current.GetInstance<IMembershipUserService>();
-
         private IQuestionnaireViewFactory QuestionnaireViewFactory => ServiceLocator.Current.GetInstance<IQuestionnaireViewFactory>();
+        private ILoggedInUser loggedInUser => ServiceLocator.Current.GetInstance<ILoggedInUser>();
 
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var id = actionContext.ControllerContext.RouteData.Values["id"];
-            Guid parsedId;
-            if (id == null || !Guid.TryParse(id.ToString(), out parsedId))
+            var id = context.ActionArguments["id"];
+            if (id == null || !Guid.TryParse(id.ToString(), out var parsedId))
             {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.NotFound, ErrorMessages.NoQuestionnaireIdToValidatePremissions);
+                context.Result = new NotFoundResult();
             }
             else
             {
-                IMembershipWebUser user = this.UserHelper.WebUser;
-                bool hasAccess = user.IsAdmin || this.QuestionnaireViewFactory.HasUserAccessToQuestionnaire(parsedId, user.UserId);
+                bool hasAccess = loggedInUser.IsAdmin || this.QuestionnaireViewFactory.HasUserAccessToQuestionnaire(parsedId, loggedInUser.Id);
                 if (!hasAccess)
                 {
-                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, ErrorMessages.NoAccessToQuestionnaire);
+                    context.Result = new ForbidResult();
                 }
             }
         }
