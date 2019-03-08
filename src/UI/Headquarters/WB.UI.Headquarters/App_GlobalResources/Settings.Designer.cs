@@ -268,7 +268,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found in Security Credentials at AWS Management Console.
+        ///   Looks up a localized string similar to You can find it on API Keys page under Sendgrid settings menu item.
         /// </summary>
         internal static string EmailProvider_SendGridApiKeyHelp {
             get {
