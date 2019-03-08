@@ -274,6 +274,6 @@
     <value>Found in Security Credentials at AWS Management Console</value>
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
-    <value>Found in Security Credentials at AWS Management Console</value>
+    <value>You can find it on API Keys page under Sendgrid settings menu item</value>
   </data>
 </root>
