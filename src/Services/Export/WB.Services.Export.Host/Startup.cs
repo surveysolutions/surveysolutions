@@ -104,7 +104,6 @@ namespace WB.Services.Export.Host
             }
 
             app.StartScheduler();
-            app.UseApplicationVersion("/.version");
             app.UseHealthChecks("/.hc");
             app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
             app.UseMvc();
