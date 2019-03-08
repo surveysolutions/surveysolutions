@@ -249,9 +249,6 @@
   <data name="EmailProvider_SenderHeader" xml:space="preserve">
     <value>Информация об отправителе</value>
   </data>
-  <data name="EmailProvider_SenderAddress" xml:space="preserve">
-    <value>Электронная почта отправителя</value>
-  </data>
   <data name="EmailProvider_SenderHelp" xml:space="preserve">
     <value>Адрес отправителя, который будет отображаться в поле ОТ для входящих сообщений.</value>
   </data>

@@ -240,9 +240,6 @@
   <data name="EmailProvider_SenderHeader" xml:space="preserve">
     <value>Sender information</value>
   </data>
-  <data name="EmailProvider_SenderAddress" xml:space="preserve">
-    <value>Sender email address</value>
-  </data>
   <data name="EmailProvider_SenderHelp" xml:space="preserve">
     <value>Email address of the sender that will appear in the FROM field of the incoming messages.</value>
   </data>
