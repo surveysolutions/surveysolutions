@@ -15,6 +15,14 @@ namespace WB.UI.Designer1
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
+            
+            // Put the database update into a scope to ensure
+            // that all resources will be disposed.
+            using (var scope = serviceProvider.CreateScope())
+            {
+                UpdateDatabase(scope.ServiceProvider);
+            }
+
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)

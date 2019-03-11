@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Migrations.PlainStore;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Versions;
@@ -34,6 +36,14 @@ namespace WB.UI.Designer1
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(b =>
+                {
+                    b.AddPostgres()
+                        .WithGlobalConnectionString("DefaultConnection")
+                        .ScanIn(typeof(M001_Init).Assembly).For.Migrations();
+                });
 
             services.AddDbContext<DesignerDbContext>(options =>
                 options.UseNpgsql(
