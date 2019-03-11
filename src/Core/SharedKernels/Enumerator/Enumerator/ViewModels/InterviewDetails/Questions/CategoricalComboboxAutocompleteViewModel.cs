@@ -32,18 +32,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.Identity = entityIdentity;
-            this.UpdateFilter(this.FilterText);
+            this.UpdateFilter(null);
         }
 
         private int[] excludedOptions = Array.Empty<int>();
         public Identity Identity { get; private set; }
 
-        private string filterText;
-        public string FilterText
-        {
-            get => this.filterText;
-            set => this.RaiseAndSetIfChanged(ref this.filterText, value);
-        }
+        public string FilterText { get; set; }
 
         private List<OptionWithSearchTerm> autoCompleteSuggestions = new List<OptionWithSearchTerm>();
         public List<OptionWithSearchTerm> AutoCompleteSuggestions
@@ -66,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
-            var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault();
+            var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));
 
             if (selectedOption?.Title.Equals(this.FilterText, StringComparison.CurrentCultureIgnoreCase) == true)
                 this.SaveAnswerBySelectedOption(ToOptionWithSearchTerm(string.Empty, selectedOption));
@@ -86,9 +81,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void UpdateFilter(string filter) => this.InvokeOnMainThread(() =>
         {
-            this.AutoCompleteSuggestions.RemoveAll(x => true);
-            this.AutoCompleteSuggestions.AddRange(this.GetSuggestions(filter));
+            this.AutoCompleteSuggestions = this.GetSuggestions(filter).ToList();
             this.FilterText = filter;
+            this.RaisePropertyChanged(() => this.FilterText);
         });
 
         private IEnumerable<OptionWithSearchTerm> GetSuggestions(string filter)
