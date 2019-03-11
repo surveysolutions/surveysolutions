@@ -301,42 +301,12 @@
     <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Implementation\Services\VideoConverter.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201811071318_AttachmentThumbnail.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201809071827_FullNameToUsersTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M022_AddCommentsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M005_AddNhibernateKeyIfMissing.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M013_AddTargetItemDateTimeToHistory.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M008_AddFindReplaceToHistory.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M009_Users.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M011_AddColumnResultingQuestionnaireDocument.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M010_Users_indexes.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M021_AddCreatorNameFieldForFolders.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M020_AddHierarhyFieldForFolders.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M019_AddRelationsForFolders.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201806041250_RemoveObsoleteTables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201812211517_FillQuestionnaireSearchEntities.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201812181637_AddQuestionnaireSearchEntities.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201901111638_AddIndexOnTypeColumnInClassificationsTable.cs" />
-    <Compile Include="Migrations\RepositoriesMigration.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
     <Compile Include="Models\FolderBreadcrumbsModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
-    <Compile Include="Models\LogonModel.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
@@ -460,7 +430,6 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
-    <Compile Include="Migrations\PlainStore\M001-100\M201809041548_AddDiffWithPreviousVersionColumn.cs" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\chekboxes.png" />
     <Content Include="questionnaire\content\i\chekboxes2k.png" />
@@ -857,6 +826,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Resources\" />
     <Folder Include="Views\Comments\" />
   </ItemGroup>
