@@ -1,9 +1,14 @@
-﻿@using System.Web.Configuration
+﻿@using Microsoft.Extensions.Options
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
 @using WB.UI.Designer.Resources
-
 @using WB.UI.Shared.Web.Extensions
+
+@inject IOptions<UiConfig> uiConfig
+@inject IProductVersion ProductVersion
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -11,12 +16,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer</title>
-    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-designer"))
-    <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
-    <link href="~/questionnaire/content/designer-start/designer-start.css" rel="stylesheet" />
+    @Html.GenerateFavicon(Url.Content("~/favicon"))
+    <link href="~/css/bootstrap-custom.css" rel="stylesheet" />
+    <link href="~/css/designer-start.css" rel="stylesheet" />
     
-    @Scripts.Render("~/simplepage")
-
     <script type="text/javascript">
         function FrameCheck() {
             if (top != self)
@@ -31,7 +34,7 @@
     <header>
         <a href="http://www.worldbank.org" class="logo"></a>
         <nav>
-            <a class="btn btn-default" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]" target="_blank">@AccountResources.Help</a>
+            <a class="btn btn-default" href="@uiConfig.Value.DesignerHelpUrl" target="_blank">@AccountResources.Help</a>
             <a class="btn btn-default" href="@Url.Action("Register","Account")">@AccountResources.Register</a>
             <a class="btn btn-default" href="@Url.Action("Login", "Account")">@AccountResources.Login</a>
         </nav>
@@ -50,7 +53,7 @@
                         }
                         <div class="form-row">
                             <div class="form-left">
-                                <img src="~/questionnaire/content/i/designer-logo.png" />
+                                <img src="~/i/designer-logo.png" />
                                 <p>
                                     @AccountResources.AppDescription
                                 </p>
@@ -61,7 +64,7 @@
                             <div class="form-right">
                                 @if (TempData.ContainsKey(Alerts.SUCCESS))
                                 {
-                                    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+                                    <div class="alert alert-success header">@Html.Raw(TempData[Alerts.SUCCESS])</div>
                                 }
                                 @RenderBody()
                             </div>
@@ -73,9 +76,9 @@
     </section>
 
 <footer>
-    @Html.Partial("_commonFooter")
+    <partial name="_CommonFooter"/>
 </footer>
 
-    <!-- Site version is: @(ServiceLocator.Current.GetInstance<IProductVersion>()) --> 
+    <!-- Site version is: @(ProductVersion.ToString()) --> 
 </body>
 </html>

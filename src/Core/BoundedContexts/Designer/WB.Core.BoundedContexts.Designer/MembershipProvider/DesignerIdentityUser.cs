@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
@@ -10,5 +11,12 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
     public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser>
     {
+        public DesignerDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        protected DesignerDbContext()
+        {
+        }
     }
 }

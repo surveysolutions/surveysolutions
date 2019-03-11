@@ -9,17 +9,31 @@
 
   <ItemGroup>
     <None Remove="appsettings.ini" />
+    <None Remove="gulpfile.js" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.ini" />
+    <Content Include="gulpfile.js" />
+    <Content Include="Styles\bootstrap-custom.less" />
+    <Content Include="Styles\bootstrap-override.less" />
+    <Content Include="Styles\bootstrap-override.min.css">
+      <DependentUpon>bootstrap-override.css</DependentUpon>
+    </Content>
+    <Content Include="Styles\custom-fonts.less" />
+    <Content Include="Styles\designer-start.less" />
+    <Content Include="Styles\font-styles.less" />
+    <Content Include="Styles\inputs.less" />
+    <Content Include="Styles\wb-variables.less" />
   </ItemGroup>
 
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
+    <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
   </ItemGroup>
 
 
@@ -235,7 +249,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 </Project>
