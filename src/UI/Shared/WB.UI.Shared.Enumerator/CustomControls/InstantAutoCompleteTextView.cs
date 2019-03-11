@@ -87,7 +87,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public void SetText(string text)
         {
             this.SetText(text, true);
-            this.SetSelection(text.Length);
+            this.SetSelection(text?.Length ?? 0);
             this.PerformFiltering(text, 0);
         }
 
