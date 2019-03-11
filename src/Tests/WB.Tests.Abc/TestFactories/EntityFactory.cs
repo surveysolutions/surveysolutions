@@ -2441,12 +2441,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public PersonalizedWebInterviewEmail PersonalizedEmail(string subject = null, string message = null)
         {
-            var email = PersonalizedWebInterviewEmail.FromTemplate(new WebInterviewEmailTemplate("Subject", "Message", "password:", "LINK"));
+            var email = new PersonalizedWebInterviewEmail("Subject", "Message", "password:");
 
             var asDynamic = email.AsDynamic();
             asDynamic.Subject = subject ?? "Subject";
-            asDynamic.Message = message ?? "Message";
-            asDynamic.MessageWithPassword = message ?? "Message with password";
+            asDynamic.MessageText = message ?? "Message text";
+            asDynamic.MessageHtml = message ?? "Message html";
 
             return email;
         }

@@ -15,23 +15,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IWebInterviewEmailRenderer emailRenderer;
 
         public SendInvitationsJob(
             ILogger logger, 
             IInvitationService invitationService, 
             IEmailService emailService,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider, 
+            IWebInterviewEmailRenderer emailRenderer)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.emailRenderer = emailRenderer;
         }
 
         public void Execute(IJobExecutionContext context)
         {
             try
             {
+                if (!emailService.IsConfigured())
+                    return;
+
                 InvitationDistributionStatus status = invitationService.GetEmailDistributionStatus();
 
                 if (status == null)
@@ -43,6 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 this.logger.Debug("Invitations distribution job: Started");
 
                 WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(status.QuestionnaireIdentity);
+                
+                var senderInfo = emailService.GetSenderInfo();
 
                 invitationService.StartEmailDistribution();
                 var cancellationToken = invitationService.GetCancellationToken();
@@ -60,23 +68,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     cancellationToken.ThrowIfCancellationRequested();
 
                     Invitation invitation = invitationService.GetInvitation(invitationId);
+
                     var password = invitation.Assignment.Password;
                     var address = invitation.Assignment.Email;
 
                     var link = $"{status.BaseUrl}/{invitation.Token}/Start";
 
-                    var hasPassword = !string.IsNullOrWhiteSpace(password);
-
-                    var email = PersonalizedWebInterviewEmail.FromTemplate(emailTemplate)
-                        .SubstitutePassword(password)
-                        .SubstituteLink(link)
-                        .SubstituteSurveyName(surveyName);
+                    var email = emailRenderer.RenderEmail(emailTemplate, password, link, surveyName, senderInfo.Address, senderInfo.SenderName);
                     
                     try
                     {
-                        var emailId = emailService.SendEmailAsync(address, email.Subject, 
-                            hasPassword ? email.MessageWithPasswordHtml : email.MessageHtml, 
-                            hasPassword ? email.MessageWithPassword : email.Message).Result;
+                        var emailId = emailService.SendEmailAsync(address, email.Subject, email.MessageHtml, email.MessageText).Result;
                         invitationService.MarkInvitationAsSent(invitationId, emailId);
                     }
                     catch (EmailServiceException e)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using Amazon;
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
@@ -60,6 +59,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 default:
                     return false;
             }
+        }
+
+        public ISenderInformation GetSenderInfo()
+        {
+            var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            return settings;
         }
 
         public async Task<string> SendEmailWithSendGrid(string to, string subject, string htmlBody, string textBody, ISendGridEmailSettings settings)
@@ -155,5 +160,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
     {
         Task<string> SendEmailAsync(string to, string subject, string htmlBody, string textBody);
         bool IsConfigured();
+        ISenderInformation GetSenderInfo();
     }
 }

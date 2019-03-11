@@ -3,12 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 
@@ -38,17 +39,20 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         private readonly IEmailService emailService;
         private readonly IAuditLog auditLog;
+        private readonly IWebInterviewEmailRenderer emailRenderer;
 
         public AdminSettingsController(
             IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
-            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, IEmailService emailService, IAuditLog auditLog)
+            IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage, IEmailService emailService, IAuditLog auditLog, 
+            IWebInterviewEmailRenderer emailRenderer)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
             this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
             this.emailService = emailService;
             this.auditLog = auditLog;
+            this.emailRenderer = emailRenderer;
             ;
         }
 
@@ -127,10 +131,15 @@ namespace WB.UI.Headquarters.API
         [CamelCase]
         public async Task<HttpResponseMessage> SendTestEmail([FromBody] TestEmailModel model)
         {
+            var settings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             try
             {
+                var template = new WebInterviewEmailTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message, EmailTemplateTexts.InvitationTemplate.PasswordDescription, EmailTemplateTexts.InvitationTemplate.LinkText);
 
-                await this.emailService.SendEmailAsync(model.Email, "Test email", "<h1>Hello there!</h1>", "Hello there!");
+                var email = emailRenderer.RenderEmail(template, "XXXXXXXX", "link_example", "SURVEY NAME EXAMPLE", settings.Address, settings.SenderName);
+
+                await this.emailService.SendEmailAsync(model.Email, email.Subject, email.MessageHtml, email.MessageText);
+
                 return Request.CreateResponse(HttpStatusCode.OK, new {Sucess = true});
             }
             catch (EmailServiceException e)
