@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -20,6 +21,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 
     public static class RemindersTestsExtensions
     {
+        
+        public static Mock<IEmailService> WithSenderInfo(this Mock<IEmailService> emailService)
+        {
+            emailService
+                .Setup(x => x.GetSenderInfo())
+                .Returns(() =>
+                {
+                    return Mock.Of<ISenderInformation>();
+                });
+            
+            return emailService;
+        }
+
         public static Mock<IEmailService> CollectSentEmails(this Mock<IEmailService> emailService, List<SentEmailForTests> sentEmails, string[] emailIds)
         {
             var queue = new Queue<string>(emailIds);

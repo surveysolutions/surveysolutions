@@ -1954,6 +1954,8 @@
     <Content Include="Views\WebInterviewSetup\Settings.cshtml" />
     <Content Include="Views\WebInterviewSetup\SendInvitations.cshtml" />
     <Content Include="Views\WebInterviewSetup\EmailDistributionProgress.cshtml" />
+    <Content Include="Views\WebEmails\EmailHtml.cshtml" />
+    <Content Include="Views\WebEmails\EmailText.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -2349,6 +2351,7 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\WebInterview\EmailModel.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
@@ -2488,6 +2491,7 @@
     <Compile Include="Services\QuestionnaireExporter.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
+    <Compile Include="Services\WebInterviewEmailRenderer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\Binding\AutofacBinderResolver.cs" />

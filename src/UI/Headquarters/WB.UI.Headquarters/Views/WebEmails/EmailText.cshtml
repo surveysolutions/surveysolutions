@@ -1,0 +1,19 @@
+﻿@model WB.UI.Headquarters.Models.WebInterview.EmailModel
+
+@{ Layout = null; }
+
+@Model.Subject
+
+@Model.MainText
+
+@if (!string.IsNullOrWhiteSpace(Model.Password))
+{
+@Model.PasswordDescription
+@Model.Password
+}
+
+<a href="@Model.Link">@Model.LinkText</a>
+
+
+@Model.SenderName. @Model.Address
+Powered by <a href="https://mysurvey.solutions/">Survey Solutions</a>
