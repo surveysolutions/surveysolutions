@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.archiveUtils = archiveUtils;
         }
 
-        [Route(@"{id}/fetchEmailTemplates")]
+        /*[Route(@"{id}/fetchEmailTemplates")]
         [HttpGet]
         public IHttpActionResult GetEmailTemplates(string id)
         {
@@ -87,9 +87,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 EmailTemplates = emailTemplates,
                 DefaultEmailTemplates = defaultEmailTemplates,
             });
-        }
+        }*/
 
-        private static string GetTitleForEmailTemplateGroup(EmailTextTemplateType type)
+        /*private static string GetTitleForEmailTemplateGroup(EmailTextTemplateType type)
         {
             switch (type)
             {
@@ -113,6 +113,33 @@ namespace WB.UI.Headquarters.API.WebInterview
                 default:
                     throw new ArgumentException("Unknown email template type " + type.ToString());
             }
+        }*/
+
+        public class UpdatePageTemplateModel
+        {
+            public WebInterviewUserMessages TitleType { get; set; }
+            public string TitleMessage { get; set; }
+            public WebInterviewUserMessages MessageType { get; set; }
+            public string MessageText { get; set; }
+        }
+
+        [Route(@"{id}/pageTemplate")]
+        [HttpPost]
+        public IHttpActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return NotFound();
+
+            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaire == null)
+                return NotFound();
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+            config.CustomMessages[updateModel.TitleType] = updateModel.TitleMessage;
+            config.CustomMessages[updateModel.MessageType] = updateModel.MessageText;
+            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
+
+            return Ok();
         }
 
         public class UpdateEmailTemplateModel
@@ -166,53 +193,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             return Ok();
         }
 
-        public class UpdateReminderSettingsModel
-        {
-            public int? ReminderAfterDaysIfNoResponse { get; set; } 
-            public int? ReminderAfterDaysIfPartialResponse { get; set; } 
-        }
-
-        [Route(@"{id}/reminderSettings")]
-        [HttpPost]
-        public IHttpActionResult UpdateReminderSettings(string id, [FromBody]UpdateReminderSettingsModel updateModel)
-        {
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
-                return NotFound();
-
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            if (questionnaire == null)
-                return NotFound();
-
-            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            config.ReminderAfterDaysIfNoResponse = updateModel.ReminderAfterDaysIfNoResponse;
-            config.ReminderAfterDaysIfPartialResponse = updateModel.ReminderAfterDaysIfPartialResponse;
-            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
-
-            return Ok();
-        }
-
-        public class UpdateSpamProtectionModel
-        {
-            public bool IsEnabled { get; set; } 
-        }
-
-        [Route(@"{id}/spamProtection")]
-        [HttpPost]
-        public IHttpActionResult UpdateSpamProtection(string id, [FromBody]UpdateSpamProtectionModel updateModel)
-        {
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
-                return NotFound();
-
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            if (questionnaire == null)
-                return NotFound();
-
-            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            config.UseCaptcha = updateModel.IsEnabled;
-            this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
-
-            return Ok();
-        }
 
         public class UpdateAdditionalSettingsModel
         {

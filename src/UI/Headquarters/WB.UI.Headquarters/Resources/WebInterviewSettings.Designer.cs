@@ -133,6 +133,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        internal static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description for password:.
         /// </summary>
         internal static string DescriptionForPassword {
@@ -219,6 +228,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ExampleWelcomePage {
             get {
                 return ResourceManager.GetString("ExampleWelcomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field is required..
+        /// </summary>
+        internal static string FieldRequired {
+            get {
+                return ResourceManager.GetString("FieldRequired", resourceCulture);
             }
         }
         
@@ -363,6 +381,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string StartInterviewButton {
             get {
                 return ResourceManager.GetString("StartInterviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        internal static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
