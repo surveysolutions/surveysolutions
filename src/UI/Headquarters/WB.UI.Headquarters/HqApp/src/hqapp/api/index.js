@@ -107,7 +107,8 @@ class Reports {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
             templateId: questionnaireId,
             templateVersion: version,
-            from, to
+            from,
+            to
         })
     }
 }
@@ -149,23 +150,23 @@ class WebInterviewSettingsApi {
         this.base = "api/v1/webInterviewSettings"
     }
 
-    async fetchEmailTemplates(questionnaireId) {
+    /*async fetchEmailTemplates(questionnaireId) {
         var url = `${this.base}/${questionnaireId}/emailTemplates`
 
         const response = await this.http.get(url)
         const responseData = response.data
 
         return responseData
-    }
+    }*/
 
     updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
         var url = `${this.base}/${questionnaireId}/emailTemplate`;
         return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText });
     }
 
-    updatePageMessage(questionnaireId, type, message) {
-        var url = `${this.base}/${questionnaireId}/pageMessage`;
-        return this.http.post(url, { type: type, message: message });
+    updatePageMessage(questionnaireId, titleType, titleMessage, messageType, messageText) {
+        var url = `${this.base}/${questionnaireId}/pageTemplate`;
+        return this.http.post(url, { titleType: titleType, titleMessage: titleMessage, messageType: messageType, messageText: messageText });
     }
 
     /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
