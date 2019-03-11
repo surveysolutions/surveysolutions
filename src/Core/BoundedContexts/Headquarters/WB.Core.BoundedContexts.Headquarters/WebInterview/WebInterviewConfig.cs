@@ -66,10 +66,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             LinkText = linkText;
         }
 
-        public string Subject { get; }       
-        public string Message { get; }       
-        public string PasswordDescription { get; }       
-        public string LinkText { get; }
+        public string Subject { get; set; }       
+        public string Message { get; set; }       
+        public string PasswordDescription { get; set; }       
+        public string LinkText { get; set; }
     }
 
     public enum EmailTextTemplateType
