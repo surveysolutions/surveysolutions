@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentMigrator;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
+﻿using FluentMigrator;
 
 namespace WB.UI.Designer.Migrations.PlainStore
 {
     [Migration(201812181637)]
     public class M201812181637_AddQuestionnaireSearchEntities : Migration
     {
-        private string tableName = QuestionnaireSearchStorage.TableName;
-        private string tableNameWithShema = QuestionnaireSearchStorage.TableNameWithSchema;
+        private string tableName = "questionnairesearchentities";
+        private string tableNameWithShema = "plainstore.questionnairesearchentities";
 
         public override void Up()
         {
