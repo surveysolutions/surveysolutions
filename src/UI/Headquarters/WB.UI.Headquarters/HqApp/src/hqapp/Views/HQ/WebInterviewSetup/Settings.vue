@@ -14,9 +14,6 @@
                 </div>
             </div>
 
-
-
-
             <div class="row">
 				<div class="col-md-12">
 					<h3>{{$t('WebInterviewSettings.CustomizeDisplayedText')}}</h3>
@@ -28,29 +25,42 @@
 						</ul>
 						<div class="tab-content">
 							<div role="tabpanel" class="tab-pane active page-preview-block" id="welcome">
-								<form class="">
+								<form class="" :data-vv-scope="'welcomePage'">
 									<div class="d-flex f-row">
 										<div class="costomization-block">
 											<div class="row-element mb-30">
 												<div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
-												<div class="form-group has-error">
+												<div class="form-group" :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }">
 													<div class="field">
-														<textarea  v-model="webInterviewPageMessages['welcomeText'].text" class="form-control js-elasticArea h2" placeholder="Please enter the main text"></textarea>
+														<textarea-autosize 
+                                                            v-model="webInterviewPageMessages['welcomeText'].text" 
+                                                            v-validate="'required'"
+                                                            data-vv-name="welcomeTextTitle"
+                                                            class="form-control js-elasticArea h2" 
+                                                            placeholder="Please enter the main text">
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
-														<span class="help-block">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+														<span class="help-block" v-if="errors.has('welcomePage.welcomeTextTitle')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
 											<div class="row-element mb-30">
 												<div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
-												<div class="form-group">
+												<div class="form-group" :class="{ 'has-error': errors.has('welcomePage.welcomeTextDescription') }">
 													<div class="field">
-														<textarea v-model="webInterviewPageMessages['invitation'].text" class="form-control js-elasticArea font-bold" placeholder="Please enter the main text"></textarea>
+														<textarea-autosize 
+                                                            v-model="webInterviewPageMessages['invitation'].text" 
+                                                            v-validate="'required'"
+                                                            data-vv-name="welcomeTextDescription"
+                                                            class="form-control js-elasticArea font-bold" 
+                                                            placeholder="Please enter the main text">
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
+														<span class="help-block" v-if="errors.has('welcomePage.welcomeTextDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
@@ -126,7 +136,7 @@
 								</form>
 							</div>
 							<div role="tabpanel" class="tab-pane page-preview-block" id="resume">
-								<form class="">
+								<form class=""  :data-vv-scope="'resumePage'">
 									<div class="d-flex f-row">
 										<div class="costomization-block">
 											<div class="row-element mb-30">
@@ -137,6 +147,7 @@
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
+														<span class="help-block">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
@@ -148,6 +159,7 @@
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
+														<span class="help-block">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
@@ -239,7 +251,7 @@
 								</form>
 							</div>
 							<div role="tabpanel" class="tab-pane page-preview-block" id="finish">
-								<form class="">
+								<form class="" :data-vv-scope="'finishPage'">
 									<div class="d-flex f-row">
 										<div class="costomization-block">
 											<div class="row-element mb-30">
@@ -250,6 +262,7 @@
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
+														<span class="help-block">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
@@ -261,11 +274,12 @@
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
+														<span class="help-block">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 													</div>
 												</div>
 											</div>
 											<div class="">
-												<button type="submit" @click="savePageTextEditMode('webSurveyHeader', 'finishInterview')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+												<button type="submit" @click="savePageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
 												<button type="submit" @click="cancelPageTextEditMode('webSurveyHeader', 'finishInterview')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
 											</div>
 										</div>
@@ -349,7 +363,7 @@
 												</div>
 												<div class="row-element">
 													<div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
-													<div class="form-group mb-30">
+													<div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.subject') }">
 														<div class="field">
 															<input type="text" v-model="emailTemplate.subject"
                                                                 data-vv-as="Please enter the subject"
@@ -361,31 +375,33 @@
 															<button type="button" class="btn btn-link btn-clear">
 																<span></span>
 															</button>
+    														<span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.subject')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 														</div>
 													</div>
 												</div>
 												<div class="row-element">
 													<div class="h5">{{$t('WebInterviewSettings.MainText')}}</div>
-													<div class="form-group mb-30">
+													<div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }">
 														<div class="field">
-															<textarea v-model="emailTemplate.message"
+															<textarea-autosize v-model="emailTemplate.message"
                                                                 data-vv-as="Please enter the main text"
                                                                 v-validate="'required'" 
                                                                 data-vv-name="message"
                                                                 maxlength="1000"
                                                                 class="form-control js-elasticArea" 
                                                                 placeholder="Please enter the main text">
-															</textarea>
+															</textarea-autosize>
 															<button type="button" class="btn btn-link btn-clear">
 																<span></span>
 															</button>
+    														<span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.message')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 														</div>
 													</div>
 												</div>
 												<div class="row-element">
 													<div class="h5 mb-0">{{$t('WebInterviewSettings.DescriptionForPassword')}}</div>
 													<div class="gray-text mb-1">{{$t('WebInterviewSettings.ShownPasswordIsRequired')}}</div>
-													<div class="form-group mb-30">
+													<div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription') }">
 														<div class="field">
 															<input type="text" 
                                                                 v-model="emailTemplate.passwordDescription" 
@@ -398,12 +414,13 @@
 															<button type="button" class="btn btn-link btn-clear">
 																<span></span>
 															</button>
+    														<span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 														</div>
 													</div>
 												</div>
                                                 <div class="row-element">
 													<div class="h5">{{$t('WebInterviewSettings.StartInterviewButton')}}</div>
-													<div class="form-group mb-30">
+													<div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }">
 														<div class="field">
 															<input type="text" 
                                                                 v-model="emailTemplate.linkText" 
@@ -412,6 +429,7 @@
                                                                 maxlength="200"
                                                                 class="form-control with-clear-btn width-dynamic" 
                                                                 placeholder="Please enter the text" />
+    														<span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
 														</div>
 													</div>
 												</div>
@@ -584,10 +602,10 @@ export default {
       (value, key) => {
         var defaultEmailTemplate = value;
         var custom = self.$config.model.emailTemplates[key];
-        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject !== "" ? defaultEmailTemplate.subject : custom.subject;
-        var message = custom == undefined || _.isNil(custom.message) || custom.message !== "" ? defaultEmailTemplate.message : custom.message
-        var passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription !== "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
-        var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText !== "" ? defaultEmailTemplate.linkText : custom.linkText
+        var subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
+        var message = custom == undefined || _.isNil(custom.message) || custom.message === "" ? defaultEmailTemplate.message : custom.message
+        var passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription
+        var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
         return {
           value: key,
           title: defaultEmailTemplate.title,
@@ -638,9 +656,9 @@ export default {
     async saveEmailTemplate(emailTemplate) {
         var self = this;
         var validationResult = await this.$validator.validateAll('emailTemplateData'+ emailTemplate.value);
-        alert(validationResult);
         if (validationResult)
         {
+            self.$store.dispatch("showProgress");
             await this.$hq.WebInterviewSettings.updateEmailTemplate(this.questionnaireId, emailTemplate.value, emailTemplate.subject, emailTemplate.message, emailTemplate.passwordDescription, emailTemplate.linkText)
             .then(function (response) {
                 if (!self.$config.model.emailTemplates[emailTemplate.value]) {
@@ -669,24 +687,34 @@ export default {
     isEditModePageTextEditMode(type) {
         return this.webInterviewPageMessages[type].isEditMode;
     },
-    async savePageTextEditMode(title, message) {
-        var editText = this.webInterviewPageMessages[type];
-        const questionnaireId = this.$config.model.questionnaireIdentity.id;
-        await this.$hq.WebInterviewSettings.updatePageMessage(questionnaireId, type, editText.text);
-        editText.cancelText = editText.text;
+    async savePageTextEditMode(scope, titleType, messageType) {
+        var self = this;
+        var validationResult = await this.$validator.validateAll(scope);
+        if (validationResult)
+        {
+            var editTitleText = this.webInterviewPageMessages[titleType];
+            var editDescriptionText = this.webInterviewPageMessages[messageType];
+            self.$store.dispatch("showProgress");
+            await this.$hq.WebInterviewSettings.updatePageMessage(questionnaireId, titleType, editTitleText.text, messageType, editDescriptionText)
+            .then(function (response) {
+                editTitleText.cancelText = editTitleText.text;
+                editDescriptionText.cancelText = editDescriptionText.text;
+            })
+            .catch(function (error) {
+                Vue.config.errorHandler(error, self);
+            })
+            .then(function () {
+                self.$store.dispatch("hideProgress");
+            });
+        }
     },
     cancelPageTextEditMode(type) {
         var editText = this.webInterviewPageMessages[type];
         editText.text = editText.cancelText;
     },
-    /*async switchSpamProtection() {
-        await this.$hq.WebInterviewSettings.updateSpamProtection(this.questionnaireId, this.spamProtectionIsEnabled);
-    },
-    async updateReminderSettings() {
-        await this.$hq.WebInterviewSettings.updateReminderSettings(this.questionnaireId, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse);
-    },*/
     async startWebInterview() {
         var self = this;
+        self.$store.dispatch("showProgress");
         await this.$hq.WebInterviewSettings.startWebInterview(this.questionnaireId)
         .then(function (response) {
             self.started = true;
@@ -700,6 +728,7 @@ export default {
     },
     async stopWebInterview() {
         var self = this;
+        self.$store.dispatch("showProgress");
         await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId)
         .then(function (response) {
             self.started = false;
@@ -735,9 +764,6 @@ export default {
   },
   computed: {
       
-  },
-  components: {
-    VueEditor
   }
 };
 </script>
