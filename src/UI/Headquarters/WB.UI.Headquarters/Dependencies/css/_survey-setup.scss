@@ -28,7 +28,35 @@
 		padding: 0;
 	}
 }
+.welcome-page{
+	.text-example{
+		width: 70%;
+		max-width: 460px;
+		margin: 45px 0 30px 30px;
+	}
+	.icon{
+		min-height: 570px;
+		background-image: url("../img/logo.svg");
+		background-repeat: no-repeat;
+		min-width: 190px;
+		background-size: 100%;
+	}
+	.font-bold{
+		font-size: 16px;
+		line-height: 18px;
+	}
+	.browser-mockup{
+		.h2, p{
+			white-space: pre-line;
+		}
+	}
+}
 .interview-setup{
+	.help-block{
+		font-style: italic;
+		font-size: 14px;
+    line-height: 16px;
+	}
 	.page-header{
 		p{
 			font: 16px/18px Arial, "Helvetica Neue", Helvetica, sans-serif; 
@@ -56,16 +84,10 @@
 			margin-right: 0;
 		}
 		li:first-child{
-			a{
-				padding-left: 0;
-				border-left: none;
-			}
 			&.active > a{
 				border-left: none;
 			}
 		}
-		
-		
 		li.active > a{
 			border: 2px solid #E5E5E5;
 			border-bottom-color: transparent;
@@ -75,77 +97,46 @@
 	.high-resolution-title{
 		display: none;
 	}
-	.icon{
-		svg{
-			opacity: 0.1;
-			width: 100%;
-			height: auto;
-		}
-	}
-	.text-example{
-		max-width: 460px;
-		margin: 45px 0 30px -12px;
-	}
+
 	.row-element{
 		transition:  all 0.2ms linear;
-		
-		textarea{
-			padding: 10px 12px;
-			border: 2px solid #E5E5E5;
-			border-radius: 4px;
-			&:hover,
-			&:focus,
-			&:active{
-				border-color: #E5E5E5;
-				outline: none;
-				box-shadow: none;
-			}
-			cursor: pointer;
-			width: 100%;
-			resize: none;
-			&:read-only{
-				background-color: transparent;
-				border-color: transparent;
-				&:hover,
-				&:focus,
-				&:active{
-					outline: none;
-					box-shadow: none;
-					border-color: #E5E5E5;
-				}
-			}
-			&:read-only{
-				border-color: transparent
+		textarea,
+		input{
+			&::placeholder{
+				font: 14px/16px Arial, "Helvetica Neue", Helvetica, sans-serif; 
+				text-transform: none;
+				letter-spacing: normal;
+				font-style: italic;
 			}
 		}
-		.width-dynamic{
-			cursor: pointer;
-			
-			font: 12px/14px "TrebuchetMSBold";
-    		text-transform: uppercase;
-    		letter-spacing: 0.13em;
-			text-align: center;
-			border: 2px solid #E5E5E5;
-			color: #303030;
-			background-color: transparent;
-			padding: 10px 9px;
+		textarea{
+			padding: 10px 30px 10px 18px;
+			cursor: auto;
+			border-width: 2px;
 			border-radius: 4px;
-			min-width: 180px;
+			width: 100%;
+			resize: none;
+
+		}
+		.form-control{
+			padding: 10px 30px 10px 18px;
+		}  
+		.width-dynamic{
+			font: 12px/14px "TrebuchetMSBold";
+    	text-transform: uppercase;
+    	letter-spacing: 0.13em;
+			min-width: 300px;
+			width: 300px;
 			max-width: 100%;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			
 			&:read-only{
-
 				&.btn-primary{
-
 					background-color: $blue;
 					border-color: $blue;
 					&:hover{
-
 						background-color: transparent;
-
 					}
 				}
 				&.btn-success{
@@ -156,9 +147,7 @@
 
 					}
 				}
-				
 				color: #fff;
-				
 			}
 			&:hover,
 			&:focus,
@@ -177,22 +166,15 @@
 			font: 12px/14px "TrebuchetMSBold";
     		text-transform: uppercase;
 			letter-spacing: 0.13em;
-			margin-left: 12px;
 			padding: 10px 9px;
-		  }
-		  
-		  
+		}
 	}
 	.additional-info{
 		font-size: 14px;
 		line-height: 16px;
-		margin-left: 12px;
 		color: #BEBEBE;
 	}
 	.logo-icon{
-		margin-left: 12px;
-
-		margin-bottom: 30px;
 		img{
 			display: block;
 			max-height: 120px;
@@ -209,44 +191,15 @@
 				display: block;
 			}
 		}
-	}
-	.tab-content{
-		margin-bottom: 60px;
-	}
-	.page-preview-block{
-		max-width: 780px;
-		.width-dynamic{
-			margin-left: 12px;
-		}
-	}
-	.email-section{
-		.email-custiomization{
-			max-width: 520px;
-		}
-		.preview{
-			max-width: 780px;
-		}
-		textarea{
-			padding: 10px 30px 10px 15px;
-			cursor: auto;
-		}
-	}
-	.form-control{
-		padding: 10px 30px 10px 15px;
-	}
+	}	
 	.gray-text{
 		font-size: 14px;
 		line-height: 16px;
 	}
 	.preview{
+		width: 780px;
 		padding: 0 30px;
 		margin-left: 30px;
-		.browser-mockup{
-			padding-bottom: 30px;
-			.btn{
-				cursor: auto;
-			}
-		}
 	}
 	label,
 	.notification-block{
@@ -256,8 +209,10 @@
 	}
 	.email-block{
 		flex-direction: row;
-
 	}
+}
+.costomization-block{
+	width: 600px;
 }
 .browser-mockup {
 	border-top: 2em solid rgba(230, 230, 230, 0.7);
@@ -293,12 +248,7 @@
 	  .icon{
 		  width: 30%;
 	  }
-	  .text-example{
-		  width: 70%;
-		  margin-left: 30px;
-	  }
   }
-
 @media (max-width: 680px){
 	.radio-accordion{
 		.radio{
@@ -312,63 +262,26 @@
 }
 @media (max-width: $screen-sm-min){
     .interview-setup{
-		.icon{
-			display: none;
-		}
-		.text-example{
-			width: 100%;
-			margin-left: 0;
-		}
+		
 		.tab-pane{
 			width: 100%;
 			margin-left: auto;
 			margin-right: auto;
 		}
-		.mockup-block{
-			justify-content: center; 
-		}
 	}
-
 }
 @media (max-width: $screen-md-min){
 	.interview-setup {
-		.email-block{
-			flex-direction: column;
-			.email-custiomization{
-				margin-bottom: 30px;
-			}
-			.preview{
-				margin-left: 0;
-				padding: 0;
-			}
+		.preview{
+			display: none;
 		}
-		
 	}
 }
-@media (min-width: 2370px){
+@media (max-width: 660px){
     .interview-setup{
-
-		.web-interview-section-preview{
-			.nav-tabs{
-				display: none;
+			.costomization-block{
+				width: 100%;
 			}
-			&.text-email{
-				.tab-content{
-					justify-content: space-around;
-				}
-			}
-			.tab-content{
-				justify-content: space-between;
-				
-				& > .tab-pane{
-					display: block;
-					flex-grow: 1;
-				}
-				.high-resolution-title{
-					display: block;
-				}
-			}
-		}
 	}
 }
 .radio-accordion{
@@ -382,7 +295,6 @@
 			color: #303030;
 		}
 	}
-	
 	.extended-block{
 		transition: all 0.1s linear;
 		height: 0;
