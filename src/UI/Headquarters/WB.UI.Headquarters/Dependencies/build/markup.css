@@ -7771,22 +7771,16 @@ textarea.field-to-fill {
   color: #3f3f3f;
   font-weight: 700; }
 
-.form-container .form-inline .form-group {
-  vertical-align: top; }
-  .form-container .form-inline .form-group .field {
-    width: 250px; }
-
 .form-container .form-group .field {
   margin-right: 20px;
-  width: 100%; }
+  width: 250px; }
 
 .form-container .form-group input {
   width: 100%; }
 
 .form-container .form-group .help-block {
   font-size: 14px;
-  line-height: 16px;
-  font-style: italic; }
+  line-height: 16px; }
 
 .aside-menu {
   position: absolute;
@@ -9907,23 +9901,20 @@ dl dd:after {
       -ms-flex-align: center;
           align-items: center; }
 
-.mb-0 {
-  margin-bottom: 0; }
+.mb-1 {
+  margin-bottom: 10px; }
 
 .mb-05 {
   margin-bottom: 5px; }
 
-.mb-1 {
-  margin-bottom: 10px; }
+.mb-0 {
+  margin-bottom: 0; }
 
 .mb-20 {
   margin-bottom: 20px; }
 
 .mb-30 {
   margin-bottom: 30px; }
-
-.mb-40 {
-  margin-bottom: 40px; }
 
 .h-100 {
   height: 100%; }
