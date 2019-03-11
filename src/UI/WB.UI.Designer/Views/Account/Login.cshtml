@@ -1,25 +1,33 @@
-﻿@using WB.UI.Designer.Resources
-@using WB.UI.Shared.Web.Captcha
+﻿@using Microsoft.Extensions.Options
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.LogonModel
+@inject IOptions<CaptchaConfig> CaptchaConfig
 
 @{
     ViewBag.Title = AccountResources.Login;
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
 
-@using (Html.BeginForm("login", "account", null, FormMethod.Post, new { @id = "start-log-in", autocomplete = "off" }))
-{
+
+
+<form asp-action="Login" asp-controller="Account" method="post" id="start-log-in" autocomplete="off">
     @Html.AntiForgeryToken()
     <h1>
         @AccountResources.Welcome<br />
         @AccountResources.AppName
     </h1>
-    <p class="note">@AccountResources.LoginMessage @Html.ActionLink(AccountResources.Register, "register", "Account")</p>
+    <p class="note">
+        @AccountResources.LoginMessage
+        <a asp-action="Register">
+            @AccountResources.Register
+        </a>
+    </p>
 
-    if (TempData.ContainsKey(Alerts.ERROR))
+    @if (TempData.ContainsKey(Alerts.ERROR))
     {
-        <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+        <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
     }
     <div class="form-group">
         @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginOrEmail })
@@ -39,24 +47,31 @@
     <div class="form-group">
         @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = AccountResources.StaySignedIn })
 
-        <label for="StaySignedIn" >
+        <label for="StaySignedIn">
             <span></span>@AccountResources.StaySignedIn
         </label>
 
         <br>
     </div>
 
-    if (this.Model.ShouldShowCaptcha)
+    @if (this.Model.ShouldShowCaptcha)
     {
         <div class="recaptcha">
-            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
+            <div class="g-recaptcha" data-sitekey="@CaptchaConfig.Value.RecaptchaPublicKey"></div>
         </div>
     }
     <div class="form-actions">
         <input class="btn btn-success btn-lg" type="submit" value="@AccountResources.Login" />
-        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">@AccountResources.ForgotPassword</a>
+        <a class="btn btn-link" asp-action="PasswordReset">@AccountResources.ForgotPassword</a>
     </div>
-}
+</form>
+
+
+
 @section Scripts {
-    @Scripts.Render("~/editform")
+    @if (Model.ShouldShowCaptcha)
+    {
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    }
+    <partial name="_ValidationScriptsPartial" />
 }
