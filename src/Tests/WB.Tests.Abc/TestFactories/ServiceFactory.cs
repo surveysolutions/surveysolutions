@@ -1042,7 +1042,8 @@ namespace WB.Tests.Abc.TestFactories
             IInvitationService invitationService = null,  
             IEmailService emailService = null,
             IWebInterviewConfigProvider webInterviewConfigProvider = null, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null,
+            IWebInterviewEmailRenderer emailRenderer = null)
         {
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
@@ -1056,7 +1057,8 @@ namespace WB.Tests.Abc.TestFactories
                 logger ?? Mock.Of<ILogger>(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider ?? settingsMock.Object);
+                webInterviewConfigProvider ?? settingsMock.Object,
+                emailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>());
         }
     }
 

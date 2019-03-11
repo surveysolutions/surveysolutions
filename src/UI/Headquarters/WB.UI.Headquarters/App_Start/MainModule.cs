@@ -109,6 +109,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
+            registry.Bind<IWebInterviewEmailRenderer, WebInterviewEmailRenderer>();
 
             EventBusSettings eventBusSettings = settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings();
             registry.BindToConstant(() => eventBusSettings);
