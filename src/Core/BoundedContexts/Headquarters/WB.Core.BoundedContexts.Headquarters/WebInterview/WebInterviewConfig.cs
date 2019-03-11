@@ -69,7 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         public string Subject { get; }       
         public string Message { get; }       
         public string PasswordDescription { get; }       
-        public string LinkText { get; }    }
+        public string LinkText { get; }
+    }
 
     public enum EmailTextTemplateType
     {
