@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute("WebInterview.Start", "WebInterview/{id}/Start", new { controller = "WebInterview", action = "Start" },
-                constraints: new { id = new IntRouteConstraint() });
+                constraints: new {  });
             routes.MapRoute("WebInterview.Interview", "WebInterview/Interview/{id}", new { controller = "WebInterview", action = "Interview" },
                 constraints: new { id = new GuidRouteConstraint() });
 
