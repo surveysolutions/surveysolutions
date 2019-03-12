@@ -11,6 +11,7 @@ using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {
+    [Ignore("Temp")]
     [TestOf(typeof(SendRemindersJob))]
     public class SendRemindersJobTests
     {
