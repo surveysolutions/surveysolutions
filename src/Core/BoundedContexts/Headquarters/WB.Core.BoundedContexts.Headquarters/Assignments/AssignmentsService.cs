@@ -130,7 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
-                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity);
+                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity) &&
+                     x.WebMode == true;
             return readyForWebInterviewAssignments;
         }
 

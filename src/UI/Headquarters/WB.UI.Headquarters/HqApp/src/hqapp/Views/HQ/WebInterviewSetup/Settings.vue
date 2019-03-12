@@ -65,15 +65,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--div class="row-element mb-30">
-                                            <div class="h5">Start interview button</div>
-                                            <div class="form-group">
-                                                <div class="field">
-                                                    <input type="text" class="form-control with-clear-btn width-dynamic" placeholder="Please enter the text" value="Start new interview">
-
-                                                </div>
-                                            </div>
-                                        </div-->
                                         <div class="">
                                             <button type="submit" @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
                                             <button type="submit" @click="cancelPageTextEditMode('welcomeText', 'invitation')"  class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
@@ -180,33 +171,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--div class="row-element mb-30">
-                                            <div class="h5">Description:</div>
-                                            <div class="form-group">
-                                                <div class="field">
-                                                    <textarea  class="form-control js-elasticArea font-bold primary-text" placeholder="Please enter the main text">We have noticed that you have already started this interview, but did not finished</textarea>
-                                                    <button type="button" class="btn btn-link btn-clear">
-                                                        <span></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div-->
-                                        <!--div class="row-element mb-30">
-                                            <div class="h5">Start interview button</div>
-                                            <div class="form-group">
-                                                <div class="field">
-                                                    <input type="text" class="form-control with-clear-btn width-dynamic" placeholder="Please enter the text" value="Start new interview">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-element mb-30">
-                                            <div class="h5">Restore interview button</div>
-                                            <div class="form-group">
-                                                <div class="field">
-                                                    <input type="text" class="form-control with-clear-btn width-dynamic" placeholder="Please enter the text" value="Restore interview">
-                                                </div>
-                                            </div>
-                                        </div-->
                                         <div class="">
                                             <button type="submit" @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
                                             <button type="submit" @click="cancelPageTextEditMode('resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
