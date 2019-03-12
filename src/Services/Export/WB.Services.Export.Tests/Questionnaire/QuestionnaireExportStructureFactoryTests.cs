@@ -139,6 +139,50 @@ namespace WB.Services.Export.Tests.Questionnaire
 
             Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
             Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
+        }      
+        
+
+        [Test]
+        public void when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_question_in_other_roster()
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(Id.g1),
+                Create.Roster(Id.g2, rosterSizeQuestionId: Id.g1, rosterSizeSourceType:RosterSizeSourceType.Question, 
+                    children: new IQuestionnaireEntity[]
+                    {
+                        Create.TextQuestion(Id.g3)
+                    }),
+                Create.MultyOptionsQuestion(Id.g8, areAnswersOrdered: true, options: new Answer[]
+                {
+                    new Answer() { AnswerValue = "1", AnswerText = "1"}, 
+                    new Answer() { AnswerValue = "2", AnswerText = "2"}, 
+                    new Answer() { AnswerValue = "3", AnswerText = "3"}, 
+                }),
+                Create.Roster(Id.g4, rosterSizeQuestionId: Id.g1, rosterSizeSourceType: RosterSizeSourceType.Question,
+                    children: new IQuestionnaireEntity[]
+                    {
+                        Create.Roster(Id.g5, rosterSizeQuestionId: Id.g8, rosterSizeSourceType:RosterSizeSourceType.Question,
+                            children: new IQuestionnaireEntity[]
+                            {
+                                Create.MultyOptionsQuestion(Id.g7, variable:"multi", linkedToQuestionId: Id.g3)
+                            })
+                    })
+            );
+            var questionnaireExportStructureFactory = CreateExportViewFactory();
+
+
+            // act
+            var questionnaireExportStructure = questionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+
+            // assert
+            HeaderStructureForLevel headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[Create.ValueVector(Id.g1, Id.g8)];
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[Id.g7] as ExportedQuestionHeaderItem;
+
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Count, Is.EqualTo(60));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.Name), Is.EqualTo(Enumerable.Range(0, 60).Select(value => "multi__" + value)));
+            Assert.That(exportedQuestionHeaderItem.ColumnHeaders.Select(x => x.ExportType), Is.EqualTo(Enumerable.Range(0, 60).Select(_ => ExportValueType.String)));
+            Assert.That(exportedQuestionHeaderItem.QuestionSubType, Is.EqualTo(QuestionSubtype.MultyOption_Linked));
+            Assert.That(exportedQuestionHeaderItem.QuestionType, Is.EqualTo(QuestionType.MultyOption));
         }
     }
 }
