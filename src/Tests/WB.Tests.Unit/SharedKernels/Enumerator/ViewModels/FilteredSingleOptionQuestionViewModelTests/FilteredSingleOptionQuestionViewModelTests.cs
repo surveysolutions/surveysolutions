@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -219,6 +221,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var autocomplete = viewModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
             autocomplete.FilterText.Should().Be("3");
+        }
+
+        [Test]
+        public void when_execute_FilterCommand_and_single_question_answered_and_filter_is_empty_and_focus_out_should_validity_have_not_saved_state_with_message()
+        {
+            // arrange
+            var questionId = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+            {
+                Create.Entity.SingleOptionQuestion(questionId.Id, showAsListThreshold: 50,
+                    answerCodes: new[] {1m, 2m, 3m})
+            });
+            var interview = SetUp.StatefulInterview(questionnaire);
+            interview.AnswerSingleOptionQuestion(Guid.Empty, questionId.Id, questionId.RosterVector, DateTimeOffset.UtcNow, 1);
+
+            var vm = Create.ViewModel.FilteredSingleOptionQuestionViewModel(questionId, questionnaire, interview);
+            vm.Init(interview.Id.ToString("N"), questionId, Create.Other.NavigationState());
+
+            var combobox = vm.Children.OfType<CategoricalComboboxAutocompleteViewModel>().First();
+            combobox.FilterCommand.Execute(string.Empty);
+            // act
+            combobox.ShowErrorIfNoAnswerCommand.Execute();
+            // assert
+            Assert.That(vm.QuestionState.Validity.Error.ValidationErrors, Has.One.Items);
         }
     }
 }
