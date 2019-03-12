@@ -1,4 +1,4 @@
-﻿select data."interview__id" as data__interview__id, data."mult1" as "data__mult1", data.roster__vector as data__roster_vector
+﻿select data."interview__id" as data__interview__id, data."mult1" as "data__mult1", data.roster__vector as data__roster__vector
  from "questionnaire$145_rost" data 
 inner join "questionnaire$145_rost-e" enablement 
  on data.interview__id = enablement.interview__id AND data.roster__vector = enablement.roster__vector
