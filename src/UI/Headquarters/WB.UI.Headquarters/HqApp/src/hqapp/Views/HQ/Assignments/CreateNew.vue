@@ -95,7 +95,7 @@
 
                         <wb-question :question="emailQuestion" 
                                      noValidation="true"
-                                     noComments="true"                                     
+                                     noComments="true"                                                                          
                                      questionCssClassName="text-question">
                             <h5>
                                 {{ this.$t("Assignments.Email") }}
@@ -116,11 +116,16 @@
                         
                         <wb-question :question="passwordQuestion" 
                                      noValidation="true"
-                                     noComments="true"                                     
+                                     noComments="true"                                                                         
                                      questionCssClassName="text-question">
                             <h5>
                                 {{ this.$t("Assignments.Password") }}
                             </h5>
+                            <div class="instructions-wrapper">
+                                <div class="information-block instruction">
+                                    <p>{{ this.$t("Assignments.PasswordInstructions") }}</p>
+                                </div>
+                            </div>
                             <div class="question-unit">
                                 <div class="options-group">
                                     <div class="form-group">
@@ -130,10 +135,8 @@
                                                 name="password"
                                                 type="text" autocomplete="off" class="field-to-fill"/>
                                         </div>
-                                    </div>
-                                  
-                                </div>
-                                
+                                    </div>                                  
+                                </div>                                
                             </div>
                         </wb-question>                       
 
@@ -204,7 +207,7 @@ export default {
                 id: "webMode",
                 acceptAnswer: true,
                 isAnswered: true,
-                answer: false,
+                answer: false,                
                 validity: {
                     isValid: true
                 }
