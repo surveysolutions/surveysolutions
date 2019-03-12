@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Html(string id)
         {
             var emailParams = emailParamsStorage.GetById(id);
+            this.ViewBag.Id = id;
             return View("EmailHtml", emailParams);
         }
 

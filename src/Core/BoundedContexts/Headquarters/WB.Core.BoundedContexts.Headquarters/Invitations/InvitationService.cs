@@ -191,29 +191,56 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
         {
             var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
-            return invitationStorage.Query(_ => _
+            var partialResponseInvitations = invitationStorage.Query(_ => _
                 .Where(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
                     x.InterviewId != null &&
-                    (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate &&
+                    x.SentOnUtc !=null  &&
+                    x.SentOnUtc < thresholdDate &&
                     x.Interview.Status < InterviewStatus.Completed)
                 .Select(x => x.Id)
                 .ToList());
+
+            var partialResponseInvitations1 = invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.InterviewId != null &&
+                    x.LastReminderSentOnUtc != null &&
+                    x.LastReminderSentOnUtc < thresholdDate &&
+                    x.Interview.Status < InterviewStatus.Completed)
+                .Select(x => x.Id)
+                .ToList());
+
+            return partialResponseInvitations.Union(partialResponseInvitations1).ToList();
         }
 
         public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
         {
-            var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
-            return invitationStorage.Query(_ => _
+            DateTime thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
+            var noResponseInvitations = invitationStorage.Query(_ => _
                 .Where(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.SentOnUtc !=null  &&
                     x.InterviewId == null &&
-                    (x.LastReminderSentOnUtc ?? x.SentOnUtc) < thresholdDate)
+                    x.LastReminderSentOnUtc == null &&
+                    x.SentOnUtc !=null  &&
+                    x.SentOnUtc < thresholdDate)
                 .Select(x => x.Id)
                 .ToList());
+
+            var noResponseInvitations1 = invitationStorage.Query(_ => _
+                .Where(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.InterviewId == null &&
+                    x.LastReminderSentOnUtc != null &&
+                    x.LastReminderSentOnUtc < thresholdDate)
+                .Select(x => x.Id)
+                .ToList());
+
+            return noResponseInvitations.Union(noResponseInvitations1).ToList();
         }
 
         public void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message)

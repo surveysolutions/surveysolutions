@@ -9,9 +9,15 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Create.Column("webmode").OnTable("assignments").AsBoolean().Nullable();
-            
-            Create.Column("webmode").OnTable("assignmenttoimport").AsBoolean().Nullable();
+            if (!Schema.Table("assignments").Column("webmode").Exists())
+            {
+                Create.Column("webmode").OnTable("assignments").AsBoolean().Nullable();
+            }
+
+            if (!Schema.Table("assignmenttoimport").Column("webmode").Exists())
+            {
+                Create.Column("webmode").OnTable("assignmenttoimport").AsBoolean().Nullable();
+            }
         }
 
         public override void Down()

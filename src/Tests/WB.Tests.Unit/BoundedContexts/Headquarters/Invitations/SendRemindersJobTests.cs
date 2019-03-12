@@ -97,8 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
-                emailService: emailService.Object,
-                emailRenderer: emailRendererMock.Object);
+                emailService: emailService.Object);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
@@ -161,8 +160,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
-                emailService: emailService.Object,
-                emailRenderer: emailRendererMock.Object);
+                emailService: emailService.Object);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
