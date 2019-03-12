@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Npgsql;
 using NpgsqlTypes;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Infrastructure;
@@ -539,8 +540,8 @@ namespace WB.Services.Export.InterviewDataStorage
             var columnName = variable.ColumnName;
             var columnType = GetPostgresSqlTypeForVariable(variable);
 
-            if (columnType == NpgsqlDbType.Double && value is string sValue && sValue == "NaN")
-                value = double.NaN;
+            if (columnType == NpgsqlDbType.Double && value is string)
+                value = Double.Parse(value.ToString(), CultureInfo.InvariantCulture);
 
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, columnType);
         }
