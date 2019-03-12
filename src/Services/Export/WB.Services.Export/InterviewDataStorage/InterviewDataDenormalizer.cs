@@ -540,8 +540,8 @@ namespace WB.Services.Export.InterviewDataStorage
             var columnName = variable.ColumnName;
             var columnType = GetPostgresSqlTypeForVariable(variable);
 
-            if (columnType == NpgsqlDbType.Double && value is string)
-                value = Double.Parse(value.ToString(), CultureInfo.InvariantCulture);
+            if (columnType == NpgsqlDbType.Double && value is string stringValue)
+                value = Double.Parse(stringValue, CultureInfo.InvariantCulture);
 
             state.UpdateValueInTable(tableName, interviewId, rosterVector, columnName, value, columnType);
         }
