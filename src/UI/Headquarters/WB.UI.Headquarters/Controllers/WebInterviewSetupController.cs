@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
@@ -36,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IInvitationService invitationService;
         private readonly SendInvitationsTask sendInvitationsTask;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -47,7 +49,8 @@ namespace WB.UI.Headquarters.Controllers
             IAssignmentsService assignmentsService,
             IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 
-            SendInvitationsTask sendInvitationsTask)
+            SendInvitationsTask sendInvitationsTask,
+            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
             : base(commandService, 
                   logger)
         {
@@ -59,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.invitationService = invitationService;
             this.sendInvitationsTask = sendInvitationsTask;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         
@@ -152,6 +156,7 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
             model.QuestionnaireIdentity = questionnaireIdentity;
+            model.HasLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.LogoUrl = Url.Action("ThumbnailOrDefault", "CompanyLogo", new { httproute = "DefaultApi" });
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
@@ -249,6 +254,7 @@ namespace WB.UI.Headquarters.Controllers
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireFullName { get; set; }
         public string SurveySetupUrl { get; set; }
+        public bool HasLogo { get; set; }
         public string LogoUrl { get; set; }
         public KeyValuePair<string, string>[] TextOptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }

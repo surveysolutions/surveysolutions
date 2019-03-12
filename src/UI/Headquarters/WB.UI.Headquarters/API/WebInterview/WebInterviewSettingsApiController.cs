@@ -55,70 +55,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.archiveUtils = archiveUtils;
         }
 
-        /*[Route(@"{id}/fetchEmailTemplates")]
-        [HttpGet]
-        public IHttpActionResult GetEmailTemplates(string id)
-        {
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
-            {
-                NotFound();
-            }
-
-            QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
-            if (questionnaire == null)
-            {
-                NotFound();
-            }
-
-            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            var emailTemplates = config.EmailTemplates.ToDictionary(t => t.Key, t =>
-                new EmailTextTemplateViewModel()
-                {
-                    Subject = t.Value.Subject,
-                    Message = t.Value.Message
-                }); ;
-            var defaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates.ToDictionary(t => t.Key, t =>
-                new EmailTextTemplateViewModel()
-                {
-                    ShortTitle = GetShortTitleForEmailTemplateGroup(t.Key),
-                    Title = GetTitleForEmailTemplateGroup(t.Key),
-                    Subject = t.Value.Subject,
-                    Message = t.Value.Message
-                });
-
-            return Ok(new
-            {
-                EmailTemplates = emailTemplates,
-                DefaultEmailTemplates = defaultEmailTemplates,
-            });
-        }*/
-
-        /*private static string GetTitleForEmailTemplateGroup(EmailTextTemplateType type)
-        {
-            switch (type)
-            {
-                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.ExampleInvitationEmailMessage;
-                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
-                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
-                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.ExampleRejectEmailMessage;
-                default:
-                    throw new ArgumentException("Unknown email template type " + type.ToString());
-            }
-        }
-
-        private static string GetShortTitleForEmailTemplateGroup(EmailTextTemplateType type)
-        {
-            switch (type)
-            {
-                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.InvitationEmailMessage;
-                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
-                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
-                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
-                default:
-                    throw new ArgumentException("Unknown email template type " + type.ToString());
-            }
-        }*/
-
         public class UpdatePageTemplateModel
         {
             [Required] public WebInterviewUserMessages TitleType { get; set; }
@@ -209,7 +145,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public class UpdateAdditionalSettingsModel
         {
-            [Required] public bool SpamProtection { get; set; } 
+            public bool SpamProtection { get; set; } 
             public int? ReminderAfterDaysIfNoResponse { get; set; } 
             public int? ReminderAfterDaysIfPartialResponse { get; set; } 
         }
@@ -218,9 +154,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         public IHttpActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
