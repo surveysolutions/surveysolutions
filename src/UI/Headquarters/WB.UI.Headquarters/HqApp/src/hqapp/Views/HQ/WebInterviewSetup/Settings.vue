@@ -36,6 +36,8 @@
                                                             v-model="webInterviewPageMessages['welcomeText'].text" 
                                                             v-validate="'required'"
                                                             data-vv-name="welcomeTextTitle"
+                                                            :min-height="77"
+                                                            maxlength="200"
                                                             class="form-control js-elasticArea h2" 
                                                             placeholder="Please enter the main text">
                                                         </textarea-autosize>
@@ -54,6 +56,8 @@
                                                             v-model="webInterviewPageMessages['invitation'].text" 
                                                             v-validate="'required'"
                                                             data-vv-name="welcomeTextDescription"
+                                                            :min-height="56"
+                                                            maxlength="200"
                                                             class="form-control js-elasticArea font-bold" 
                                                             placeholder="Please enter the main text">
                                                         </textarea-autosize>
@@ -87,8 +91,8 @@
 
 													<div class="text-example">
 														<div class="row-element mb-30">
-															<div class="logo-icon no-logo">
-																<img :src="logoUrl" alt="Survey Logo">
+															<div class="logo-icon" :class="{ 'no-logo': !hasLogo }">
+																<img :src="logoUrl" v-if="hasLogo" alt="Survey Logo">
 																<div class="default-icon">
 																	<svg width="178" height="83" viewBox="0 0 178 83" fill="none" xmlns="http://www.w3.org/2000/svg">
 																		<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0173 53.3122C14.2271 52.8087 14.437 52.3261 14.6258 51.8226C15.9478 48.5915 15.9898 48.4656 15.9898 44.5632V28.9745H12.0238V44.6052C12.0238 48.4866 12.0868 48.6335 13.3878 51.8016C13.5766 52.2841 13.8075 52.7877 14.0173 53.3122ZM15.8849 59.3966C16.7033 57.3825 17.5216 55.3683 18.34 53.3542C19.9558 49.3888 20.0187 49.221 20.0187 44.5632V26.9603C20.0187 25.5966 19.62 24.9462 18.0043 24.9462H12.0238V20.813H23.9847V44.4793C23.9847 50.1021 23.8378 50.4588 22.0122 54.8858C19.3263 61.4318 16.6613 67.9988 13.9753 74.5448C11.2894 67.9568 8.62442 61.3479 5.91749 54.7809C4.21778 50.6686 4.00794 50.1441 4.00794 44.7101V28.9745H7.97392V44.6052C7.97392 49.2419 8.05785 49.4308 9.65264 53.3332L12.1288 59.4176C13.1779 61.9143 14.9196 61.7884 15.8849 59.3966ZM2.01446 24.9252H7.9949V18.7778C7.9949 17.2252 8.62442 16.7637 10.0094 16.7637H26.0202C27.6359 16.7637 28.0346 17.4141 28.0346 18.7778V44.4793C28.0346 50.8575 27.8667 51.2561 25.7474 56.4174C22.4529 64.495 19.1584 72.5726 15.8639 80.6292C14.5839 83.7973 13.3878 83.7553 12.1288 80.6292C8.83426 72.5096 5.53977 64.3901 2.2243 56.2915C0.251808 51.5079 0 50.8994 0 44.7101V26.9603C0 25.8274 0.293776 24.9252 2.01446 24.9252Z" fill="#303030"/>
@@ -114,10 +118,10 @@
 															</div>
 														</div>
 														<div class="row-element mb-20">
-															<div class="h2">{{webInterviewPageMessages['welcomeText'].text}}</div>
+															<div class="h2">{{previewText(webInterviewPageMessages['welcomeText'].text)}}</div>
 														</div>
 														<div class="row-element mb-40">
-															<p  class="font-bold">{{webInterviewPageMessages['invitation'].text}}</p>
+															<p  class="font-bold">{{previewText(webInterviewPageMessages['invitation'].text)}}</p>
 														</div>
 														<div class="row-element mb-40">
 															<a href="javascript:void(0);" class="btn btn-success btn-lg">Start New interview</a>
@@ -143,13 +147,15 @@
 												<div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
 												<div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeWelcome') }">
 													<div class="field">
-														<textarea 
+														<textarea-autosize 
                                                             v-model="webInterviewPageMessages['resumeWelcome'].text"  
                                                             v-validate="'required'"
                                                             data-vv-name="resumeWelcome"
+                                                            :min-height="77"
+                                                            maxlength="200"
                                                             class="form-control js-elasticArea h2" 
                                                             placeholder="Please enter the main text">
-                                                        </textarea>
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
@@ -161,13 +167,15 @@
 												<div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
 												<div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeInvitation') }">
 													<div class="field">
-														<textarea 
+														<textarea-autosize 
                                                             v-model="webInterviewPageMessages['resumeInvitation'].text" 
                                                             v-validate="'required'"
-                                                            data-vv-name="resumeInvitation"                                                            
+                                                            data-vv-name="resumeInvitation" 
+                                                            :min-height="56"   
+                                                            maxlength="200"                                                        
                                                             class="form-control js-elasticArea font-bold" 
                                                             placeholder="Please enter the main text">
-                                                        </textarea>
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
@@ -216,8 +224,8 @@
 
 													<div class="text-example">
 														<div class="row-element mb-30">
-															<div class="logo-icon">
-																<img :src="logoUrl" alt="Survey Logo">
+															<div class="logo-icon" :class="{ 'no-logo': !hasLogo }">
+																<img :src="logoUrl" v-if="hasLogo" alt="Survey Logo">
 																<div class="default-icon">
 																	<svg width="178" height="83" viewBox="0 0 178 83" fill="none" xmlns="http://www.w3.org/2000/svg">
 																		<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0173 53.3122C14.2271 52.8087 14.437 52.3261 14.6258 51.8226C15.9478 48.5915 15.9898 48.4656 15.9898 44.5632V28.9745H12.0238V44.6052C12.0238 48.4866 12.0868 48.6335 13.3878 51.8016C13.5766 52.2841 13.8075 52.7877 14.0173 53.3122ZM15.8849 59.3966C16.7033 57.3825 17.5216 55.3683 18.34 53.3542C19.9558 49.3888 20.0187 49.221 20.0187 44.5632V26.9603C20.0187 25.5966 19.62 24.9462 18.0043 24.9462H12.0238V20.813H23.9847V44.4793C23.9847 50.1021 23.8378 50.4588 22.0122 54.8858C19.3263 61.4318 16.6613 67.9988 13.9753 74.5448C11.2894 67.9568 8.62442 61.3479 5.91749 54.7809C4.21778 50.6686 4.00794 50.1441 4.00794 44.7101V28.9745H7.97392V44.6052C7.97392 49.2419 8.05785 49.4308 9.65264 53.3332L12.1288 59.4176C13.1779 61.9143 14.9196 61.7884 15.8849 59.3966ZM2.01446 24.9252H7.9949V18.7778C7.9949 17.2252 8.62442 16.7637 10.0094 16.7637H26.0202C27.6359 16.7637 28.0346 17.4141 28.0346 18.7778V44.4793C28.0346 50.8575 27.8667 51.2561 25.7474 56.4174C22.4529 64.495 19.1584 72.5726 15.8639 80.6292C14.5839 83.7973 13.3878 83.7553 12.1288 80.6292C8.83426 72.5096 5.53977 64.3901 2.2243 56.2915C0.251808 51.5079 0 50.8994 0 44.7101V26.9603C0 25.8274 0.293776 24.9252 2.01446 24.9252Z" fill="#303030"/>
@@ -243,10 +251,10 @@
 															</div>
 														</div>
 														<div class="row-element mb-20">
-															<div class="h2">{{webInterviewPageMessages['resumeWelcome'].text}}</div>
+															<div class="h2">{{previewText(webInterviewPageMessages['resumeWelcome'].text)}}</div>
 														</div>
 														<div class="row-element mb-40">
-															<p  class="font-bold">{{webInterviewPageMessages['resumeInvitation'].text}}</p>
+															<p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
 														</div>
 														<div class="row-element mb-40">
 															<p  class="font-bold primary-text">We have noticed that you have already started this interview, but did not finished</p>
@@ -270,13 +278,15 @@
 												<div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
 												<div class="form-group" :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
 													<div class="field">
-														<textarea  
+														<textarea-autosize  
                                                             v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                                             v-validate="'required'"
-                                                            data-vv-name="webSurveyHeader"                                                             
+                                                            data-vv-name="webSurveyHeader"   
+                                                            :min-height="77" 
+                                                            maxlength="200"                                                         
                                                             class="form-control js-elasticArea h2" 
                                                             placeholder="Please enter the main text">
-                                                        </textarea>
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
@@ -288,13 +298,15 @@
 												<div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
 												<div class="form-group" :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
 													<div class="field">
-														<textarea 
+														<textarea-autosize 
                                                             v-model="webInterviewPageMessages['finishInterview'].text"
                                                             v-validate="'required'"
-                                                            data-vv-name="finishInterview"                                                              
+                                                            data-vv-name="finishInterview"  
+                                                            :min-height="56" 
+                                                            maxlength="200"                                                           
                                                             class="form-control js-elasticArea font-bold" 
                                                             placeholder="Please enter the main text">
-                                                        </textarea>
+                                                        </textarea-autosize>
 														<button type="button" class="btn btn-link btn-clear">
 															<span></span>
 														</button>
@@ -316,8 +328,8 @@
 
 													<div class="text-example">
 														<div class="row-element mb-30">
-															<div class="logo-icon">
-																<img :src="logoUrl" alt="Survey Logo">
+															<div class="logo-icon" :class="{ 'no-logo': !hasLogo }">
+																<img :src="logoUrl" v-if="hasLogo" alt="Survey Logo">
 																<div class="default-icon">
 																	<svg width="178" height="83" viewBox="0 0 178 83" fill="none" xmlns="http://www.w3.org/2000/svg">
 																		<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0173 53.3122C14.2271 52.8087 14.437 52.3261 14.6258 51.8226C15.9478 48.5915 15.9898 48.4656 15.9898 44.5632V28.9745H12.0238V44.6052C12.0238 48.4866 12.0868 48.6335 13.3878 51.8016C13.5766 52.2841 13.8075 52.7877 14.0173 53.3122ZM15.8849 59.3966C16.7033 57.3825 17.5216 55.3683 18.34 53.3542C19.9558 49.3888 20.0187 49.221 20.0187 44.5632V26.9603C20.0187 25.5966 19.62 24.9462 18.0043 24.9462H12.0238V20.813H23.9847V44.4793C23.9847 50.1021 23.8378 50.4588 22.0122 54.8858C19.3263 61.4318 16.6613 67.9988 13.9753 74.5448C11.2894 67.9568 8.62442 61.3479 5.91749 54.7809C4.21778 50.6686 4.00794 50.1441 4.00794 44.7101V28.9745H7.97392V44.6052C7.97392 49.2419 8.05785 49.4308 9.65264 53.3332L12.1288 59.4176C13.1779 61.9143 14.9196 61.7884 15.8849 59.3966ZM2.01446 24.9252H7.9949V18.7778C7.9949 17.2252 8.62442 16.7637 10.0094 16.7637H26.0202C27.6359 16.7637 28.0346 17.4141 28.0346 18.7778V44.4793C28.0346 50.8575 27.8667 51.2561 25.7474 56.4174C22.4529 64.495 19.1584 72.5726 15.8639 80.6292C14.5839 83.7973 13.3878 83.7553 12.1288 80.6292C8.83426 72.5096 5.53977 64.3901 2.2243 56.2915C0.251808 51.5079 0 50.8994 0 44.7101V26.9603C0 25.8274 0.293776 24.9252 2.01446 24.9252Z" fill="#303030"/>
@@ -343,10 +355,10 @@
 															</div>
 														</div>
 														<div class="row-element mb-20">
-															<div class="h2">{{webInterviewPageMessages['webSurveyHeader'].text}}</div>
+															<div class="h2">{{previewText(webInterviewPageMessages['webSurveyHeader'].text)}}</div>
 														</div>
 														<div class="row-element mb-40">
-															<p  class="font-bold">{{webInterviewPageMessages['finishInterview'].text}}</p>
+															<p  class="font-bold">{{previewText(webInterviewPageMessages['finishInterview'].text)}}</p>
 														</div>
 													</div>            
 												</div>
@@ -377,13 +389,9 @@
 										<div class="costomization-block email-block-unit">
 											<div class="">
 												<div class="row-element mb-30">
-													<!--p>You can use following placeholders in the text
-															%recipientname% as the name of recipient
-															%deadline% end date when this interview will be accepted
-															%interviewurl% web address of this interview
-															%interviewpass% interview password, if set
-															%org% issuing organization
-													</p-->
+													<p>You can use following placeholders in the text
+													    <br/>%SURVEYNAME% as the name of survey
+													</p>
 												</div>
 												<div class="row-element">
 													<div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
@@ -412,6 +420,7 @@
                                                                 v-validate="'required'" 
                                                                 data-vv-name="message"
                                                                 maxlength="1000"
+                                                                :min-height="79"
                                                                 class="form-control js-elasticArea" 
                                                                 placeholder="Please enter the main text">
 															</textarea-autosize>
@@ -468,23 +477,23 @@
                                         <div class="preview email-block-unit">
 											<div class="browser-mockup">
 												<div class="email-example">
-													<table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
+													<table class="em-table" align="center" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; box-sizing: border-box; max-width: 600px; background-image: url('../../Dependencies/img/logo.svg'); background-repeat: no-repeat;  background-size: 270px auto;  background-position: 115% 45px;">
 														<tr>
 															<td style="border: 6px solid #E5E5E5;  padding: 50px 55px 115px; box-sizing: border-box;">
 																<table border="0" width="100%" cellpadding="0" cellspacing="0" >
 																	<tr>
 																		<td style="padding-bottom: 80px;">
-																			<img :src="logoUrl" alt="Custom logo" style="display: block; max-height: 170px; width: auto" class="em-img"/>
+																			<img :src="logoUrl"  v-if="hasLogo" alt="Custom logo" style="display: block; max-height: 170px; width: auto" class="em-img"/>
 																		</td>
 																	</tr>
 																	<tr>
-																		<td style="font-size: 24px; line-height: 30px; color: #727272; font-weight: bold; white-space: pre-line;">{{emailTemplate.subject}}</td>
+																		<td style="font-size: 24px; line-height: 30px; color: #727272; font-weight: bold; white-space: pre-line;">{{ previewText(emailTemplate.subject)}}</td>
 																	</tr>
 																	<tr>
-																		<td style="padding: 40px 0; font-size: 16px; line-height: 20px; white-space: pre-line;">{{ emailTemplate.message }}</td>
+																		<td style="padding: 40px 0; font-size: 16px; line-height: 20px; white-space: pre-line;">{{ previewText(emailTemplate.message) }}</td>
 																	</tr>
 																	<tr>
-																		<td style="padding: 0px 0 5px; font-size: 16px; line-height: 20px; white-space: pre-line;">{{ emailTemplate.passwordDescription }}</td>
+																		<td style="padding: 0px 0 5px; font-size: 16px; line-height: 20px; white-space: pre-line;">{{ previewText(emailTemplate.passwordDescription) }}</td>
 																	</tr>
 																	<tr>
 																		<td style="padding: 0px 0 50px; font-size: 24px; line-height: 30px; color: #727272; font-weight: bold;">
@@ -493,7 +502,7 @@
 																	</tr>
 																	<tr>
 																		<td>
-																			<a href="javascript:void(0);" class="btn-success" style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">{{ emailTemplate.linkText }}</a>
+																			<a href="javascript:void(0);" class="btn-success" style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">{{ previewText(emailTemplate.linkText) }}</a>
 																		</td>
 																	</tr>
 																</table>
@@ -535,7 +544,7 @@
             <hr />
             <div class="row mb-05">
 				<div class="col-md-12">
-					<form>
+					<form v-on:submit.prevent="dummy">
 						<h3>{{$t('WebInterviewSettings.AdditionalSettings')}}</h3>
 						<div class="form-group mb-20">
 							<input class="checkbox-filter" id="Captcha" type="checkbox" v-model="spamProtectionIsEnabled">
@@ -593,6 +602,7 @@
     </main>
 </template>
 <script>
+import Vue from "vue"
 
 export default {
   data() {
@@ -613,6 +623,7 @@ export default {
 
     var self = this;
     self.questionnaireId = this.$config.model.questionnaireIdentity.id;
+    self.questionnaireTitle = this.$config.model.questionnaireTitle;
     self.started = this.$config.model.started;
     self.spamProtectionIsEnabled = this.$config.model.useCaptcha;
     self.reminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
@@ -621,6 +632,7 @@ export default {
     self.cancelReminderAfterDaysIfNoResponse = this.$config.model.reminderAfterDaysIfNoResponse;
     self.cancelReminderAfterDaysIfPartialResponse = this.$config.model.reminderAfterDaysIfPartialResponse;
     self.logoUrl = this.$config.model.logoUrl;
+    self.hasLogo = this.$config.model.hasLogo;
 
     this.emailTemplates = _.map(
       this.$config.model.defaultEmailTemplates,
@@ -785,6 +797,11 @@ export default {
         this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled;
         this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
         this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
+    },
+    previewText(text) {
+        return text
+            .replace(/%surveyname%/ig, this.questionnaireTitle)
+            .replace(/%QUESTIONNAIRE%/ig, this.questionnaireTitle);
     },
     dummy() {
         return false;
