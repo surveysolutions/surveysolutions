@@ -9,10 +9,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
         }
 
-        protected override void SetValueToView(InstantAutoCompleteTextView control, string value)
-        {
-            control.PartialText = value;
-        }
+        protected override void SetValueToView(InstantAutoCompleteTextView control, string value) => control.SetText(value);
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
     }

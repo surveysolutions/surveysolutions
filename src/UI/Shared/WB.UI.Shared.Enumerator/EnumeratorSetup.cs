@@ -184,7 +184,7 @@ namespace WB.UI.Shared.Enumerator
 
         private static void RegisterAutoCompleteTextViewBindings(IMvxTargetBindingFactoryRegistry registry)
         {
-            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>(nameof(InstantAutoCompleteTextView.PartialText),
+            registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("PartialText",
                 (ctrl) => new InstantAutoCompleteTextViewPartialTextTargetBinding(ctrl));
 
             registry.RegisterCustomBindingFactory<InstantAutoCompleteTextView>("OnPartialTextChanged",

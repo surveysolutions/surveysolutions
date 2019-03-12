@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.eventRegistry.Subscribe(this, interviewId);
 
-            this.UpdateViewModels(); //executed in main thread
+            this.UpdateViewModelsInMainThread(); 
         }
 
         private async Task SaveAnswer()
@@ -145,20 +145,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     // reset to previous state
-                    this.InvokeOnMainThread(this.UpdateOptionsFromInterview);
+                    this.UpdateOptionsFromInterviewInMainThread();
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
 
-        protected virtual void UpdateViewModels()
+        protected virtual void UpdateViewModelsInMainThread()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
 
-            this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title);
+            this.InvokeOnMainThread(() => this.Options.SynchronizeWith(this.GetOptions(interview).ToList(), (s, t) => s.Value.Equals(t.Value) && s.Title == t.Title));
 
-            this.UpdateOptionsFromInterview();
+            this.UpdateOptionsFromInterviewInMainThread();
         }
 
         protected void InitViewModel(string title, TOptionValue value, IStatefulInterview interview,
@@ -191,41 +191,47 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
-        private void UpdateOptionsFromInterview()
+        private void UpdateOptionsFromInterviewInMainThread()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateViewModelsByAnsweredOptions(answeredOptions);
+            this.UpdateViewModelsByAnsweredOptionsInMainThread(answeredOptions);
         }
 
-        protected void UpdateViewModelsByAnsweredOptions(TInterviewAnswer[] answeredOptions)
+        protected void UpdateViewModelsByAnsweredOptionsInMainThread(TInterviewAnswer[] answeredOptions)
         {
             answeredOptions = answeredOptions ?? Array.Empty<TInterviewAnswer>();
 
             var filteredAnswers = this.FilterAnsweredOptions(answeredOptions).ToList();
-            
-            foreach (var option in this.Options)
+
+            this.InvokeOnMainThread(() =>
             {
-                var answeredOption = answeredOptions.Where(x => this.IsInterviewAnswer(x, option.Value)).Take(1).ToArray();
+                foreach (var option in this.Options)
+                {
+                    var answeredOption = answeredOptions.Where(x => this.IsInterviewAnswer(x, option.Value)).Take(1)
+                        .ToArray();
 
-                this.SetAnswerToOptionViewModel(option, answeredOption);
+                    this.SetAnswerToOptionViewModel(option, answeredOption);
 
-                if (this.areAnswersOrdered)
-                    option.CheckedOrder = option.Checked && answeredOption.Any() ? filteredAnswers.IndexOf(answeredOption[0]) + 1 : (int?)null;
+                    if (this.areAnswersOrdered)
+                        option.CheckedOrder = option.Checked && answeredOption.Any()
+                            ? filteredAnswers.IndexOf(answeredOption[0]) + 1
+                            : (int?) null;
+
+                    if (this.maxAllowedAnswers.HasValue)
+                        option.CanBeChecked = option.Checked || filteredAnswers.Count < this.maxAllowedAnswers;
+                }
 
                 if (this.maxAllowedAnswers.HasValue)
-                    option.CanBeChecked = option.Checked || filteredAnswers.Count < this.maxAllowedAnswers;
-            }
+                {
+                    this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
+                        filteredAnswers.Count, this.maxAllowedAnswers.Value);
+                }
 
-            if (this.maxAllowedAnswers.HasValue)
-            {
-                this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    filteredAnswers.Count, this.maxAllowedAnswers.Value);
-            }
-
-            this.HasOptions = this.Options.Any();
-            this.UpdateBorders();
+                this.HasOptions = this.Options.Any();
+                this.UpdateBorders();
+            });
         }
 
         protected virtual void UpdateBorders()
@@ -238,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.InvokeOnMainThread(this.UpdateOptionsFromInterview);
+            this.InvokeOnMainThread(this.UpdateOptionsFromInterviewInMainThread);
         }
 
         public virtual void Dispose()
