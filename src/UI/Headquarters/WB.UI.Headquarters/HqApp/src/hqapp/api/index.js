@@ -164,9 +164,9 @@ class WebInterviewSettingsApi {
         return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText });
     }
 
-    updatePageMessage(questionnaireId, titleType, titleMessage, messageType, messageText) {
+    updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText) {
         var url = `${this.base}/${questionnaireId}/pageTemplate`;
-        return this.http.post(url, { titleType: titleType, titleMessage: titleMessage, messageType: messageType, messageText: messageText });
+        return this.http.post(url, { titleType: titleType, titleText: titleText, messageType: messageType, messageText: messageText });
     }
 
     /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {

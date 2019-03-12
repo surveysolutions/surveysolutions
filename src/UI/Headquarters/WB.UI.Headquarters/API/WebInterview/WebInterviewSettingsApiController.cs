@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public class UpdatePageTemplateModel
         {
             public WebInterviewUserMessages TitleType { get; set; }
-            public string TitleMessage { get; set; }
+            public string TitleText { get; set; }
             public WebInterviewUserMessages MessageType { get; set; }
             public string MessageText { get; set; }
         }
@@ -135,7 +135,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return NotFound();
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
-            config.CustomMessages[updateModel.TitleType] = updateModel.TitleMessage;
+            config.CustomMessages[updateModel.TitleType] = updateModel.TitleText;
             config.CustomMessages[updateModel.MessageType] = updateModel.MessageText;
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 

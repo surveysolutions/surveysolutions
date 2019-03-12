@@ -152,6 +152,7 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
             model.QuestionnaireIdentity = questionnaireIdentity;
+            model.LogoUrl = Url.Action("ThumbnailOrDefault", "CompanyLogo", new { httproute = "DefaultApi" });
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
@@ -248,6 +249,7 @@ namespace WB.UI.Headquarters.Controllers
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireFullName { get; set; }
         public string SurveySetupUrl { get; set; }
+        public string LogoUrl { get; set; }
         public KeyValuePair<string, string>[] TextOptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
