@@ -205,15 +205,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Mode.
-        /// </summary>
-        public static string CreateAssignmentWebMode {
-            get {
-                return ResourceManager.GetString("CreateAssignmentWebMode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This Assignment will be used with Web Mode.
         /// </summary>
         public static string CreateAssignmentWebModeExplanation {
@@ -457,6 +448,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        /// </summary>
+        public static string SizeNoChandeInWebMode {
+            get {
+                return ResourceManager.GetString("SizeNoChandeInWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stop.
         /// </summary>
         public static string Stop {
@@ -579,6 +579,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Table_UpdatedAt {
             get {
                 return ResourceManager.GetString("Tooltip_Table_UpdatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment was created in Web Mode.
+        /// </summary>
+        public static string Tooltip_Table_WebMode {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_WebMode", resourceCulture);
             }
         }
         
@@ -709,7 +718,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        ///   Looks up a localized string similar to Web Mode.
         /// </summary>
         public static string WebMode {
             get {

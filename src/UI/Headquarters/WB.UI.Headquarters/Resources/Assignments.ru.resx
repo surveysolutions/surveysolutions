@@ -220,7 +220,7 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
-  <data name="WebMode" xml:space="preserve">
+  <data name="SizeNoChandeInWebMode" xml:space="preserve">
     <value>Количество не может быть изменено для назначения в веб режиме.</value>
   </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
@@ -322,7 +322,7 @@
   <data name="PasswordExplanation" xml:space="preserve">
     <value>Пароль будет использован для защиты задания</value>
   </data>
-    <data name="CreateAssignmentWebMode" xml:space="preserve">
+    <data name="WebMode" xml:space="preserve">
     <value>Веб режим</value>
   </data>
     <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
@@ -330,5 +330,8 @@
   </data>
   <data name="Activated" xml:space="preserve">
     <value>Активирован</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Задание создано в Веб режиме</value>
   </data>
 </root>
