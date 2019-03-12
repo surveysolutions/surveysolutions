@@ -120,12 +120,12 @@
 															<p  class="font-bold">{{webInterviewPageMessages['invitation'].text}}</p>
 														</div>
 														<div class="row-element mb-40">
-															<a href="#" class="btn btn-success btn-lg">Start New interview</a>
+															<a href="javascript:void(0);" class="btn btn-success btn-lg">Start New interview</a>
 														</div>
 														<div class="row-element">
 															<div class="additional-info">
 																If you have already started this interview, <br />
-																and want to continue &mdash; <a href="#" class="link-underlined">restore previous interview</a>
+																and want to continue &mdash; <a href="javascript:void(0);" class="link-underlined">restore previous interview</a>
 															</div>
 														</div>
 													</div>            
@@ -252,8 +252,8 @@
 															<p  class="font-bold primary-text">We have noticed that you have already started this interview, but did not finished</p>
 														</div>
 														<div class="row-element">
-															<a href="#" class="btn btn-success btn-lg mb-1">Start New interview</a>
-															<a href="#" class="btn btn-primary btn-lg mb-1">Restore interview</a>
+															<a href="javascript:void(0);" class="btn btn-success btn-lg mb-1">Start New interview</a>
+															<a href="javascript:void(0);" class="btn btn-primary btn-lg mb-1">Restore interview</a>
 														</div>
 													</div>            
 												</div>
@@ -493,7 +493,7 @@
 																	</tr>
 																	<tr>
 																		<td>
-																			<a href="#" class="btn-success" style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">{{ emailTemplate.linkText }}</a>
+																			<a href="javascript:void(0);" class="btn-success" style="text-decoration: none; background: #368E19; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; border: 2px solid #368E19; color: #fff; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; font-size: 14px; box-shadow: none;">{{ emailTemplate.linkText }}</a>
 																		</td>
 																	</tr>
 																</table>
