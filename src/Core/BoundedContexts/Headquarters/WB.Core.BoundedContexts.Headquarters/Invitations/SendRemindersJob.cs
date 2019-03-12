@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var password = invitation.Assignment.Password;
                 var address = invitation.Assignment.Email;
 
-                var link = $"{baseUrl}/{invitation.Token}/Start";
+                var link = $"{baseUrl}/WebInterview/{invitation.Token}/Start";
 
 
                 var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";

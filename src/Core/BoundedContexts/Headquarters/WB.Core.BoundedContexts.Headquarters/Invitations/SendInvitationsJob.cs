@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                     var password = invitation.Assignment.Password;
                     var address = invitation.Assignment.Email;
-                    var link = $"{webInterviewConfig.BaseUrl}/{invitation.Token}/Start";
+                    var link = $"{webInterviewConfig.BaseUrl}/WebInterview/{invitation.Token}/Start";
 
                     var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
                     var emailParams = new EmailParameters
