@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -105,7 +106,12 @@ namespace WB.UI.Headquarters.Controllers
             assignment.Reassign(responsibleId);
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
             assignment.UpdateEmail(email);
-            assignment.UpdatePassword(password);
+
+            var updatedPassword = password == ServiceColumns.PasswordSpecialValue
+                ? WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6)
+                : password;
+
+            assignment.UpdatePassword(updatedPassword); 
             assignment.UpdateMode(webMode);
 
             this.assignmentsStorage.Store(assignment, null);

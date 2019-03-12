@@ -339,4 +339,7 @@
   <data name="Tooltip_Table_WebMode" xml:space="preserve">
     <value>Assignment was created in Web Mode</value>
   </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Use single symbol '?' to generate password</value>
+  </data>
 </root>
