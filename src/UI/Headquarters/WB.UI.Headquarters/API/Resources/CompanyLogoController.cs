@@ -53,5 +53,36 @@ namespace WB.UI.Headquarters.API.Resources
 
             return Request.CreateResponse(HttpStatusCode.NotFound);
         }
+
+        [HttpGet]
+        public HttpResponseMessage ThumbnailOrDefault()
+        {
+            var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
+
+            if (companyLogo == null)
+            {
+                companyLogo = new CompanyLogo()
+                {
+                    Logo = System.IO.File.ReadAllBytes(HttpContext.Current.Server.MapPath("~/Dependencies/img/logo.png"))
+                };
+            }
+
+            var stringEtag = companyLogo.GetEtagValue();
+            var etag = $"\"{stringEtag}\"";
+
+            var incomingEtag = HttpContext.Current.Request.Headers[@"If-None-Match"];
+            if (string.Compare(incomingEtag, etag, StringComparison.InvariantCultureIgnoreCase) == 0)
+                return new HttpResponseMessage(HttpStatusCode.NotModified);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(imageProcessingService.ResizeImage(companyLogo.Logo, defaultImageHeightToScale, defaultImageWidthToScale))
+            };
+
+            response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(@"image/png");
+            response.Headers.ETag = new EntityTagHeaderValue(etag);
+
+            return response;
+        }
     }
 }
