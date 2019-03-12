@@ -349,6 +349,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use single symbol &apos;?&apos; to generate password.
+        /// </summary>
+        public static string PasswordInstructions {
+            get {
+                return ResourceManager.GetString("PasswordInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         public static string Questionnaire {
