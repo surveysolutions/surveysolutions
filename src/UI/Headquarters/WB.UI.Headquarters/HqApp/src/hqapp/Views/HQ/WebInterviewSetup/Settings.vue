@@ -666,8 +666,7 @@ export default {
           value: key,
           text: message,
           defaultText: defaultText,
-          cancelText: message,
-          isEditMode: false
+          cancelText: message
         };
       }
     ).reduce(function(map, obj) {
