@@ -73,7 +73,7 @@
                                      noComments="true"                                     
                                      questionCssClassName="multiselect-question">
                             <h5>
-                                {{ this.$t("Assignments.CreateAssignmentWebMode") }}
+                                {{ this.$t("Assignments.WebMode") }}
                             </h5>
                             <div class="question-unit">
                                 <div class="options-group">
