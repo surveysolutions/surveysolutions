@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -117,16 +121,19 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public class UpdatePageTemplateModel
         {
-            public WebInterviewUserMessages TitleType { get; set; }
-            public string TitleText { get; set; }
-            public WebInterviewUserMessages MessageType { get; set; }
-            public string MessageText { get; set; }
+            [Required] public WebInterviewUserMessages TitleType { get; set; }
+            [Required] public string TitleText { get; set; }
+            [Required] public WebInterviewUserMessages MessageType { get; set; }
+            [Required] public string MessageText { get; set; }
         }
 
         [Route(@"{id}/pageTemplate")]
         [HttpPost]
         public IHttpActionResult UpdatePageTemplate(string id, [FromBody]UpdatePageTemplateModel updateModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -144,17 +151,20 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public class UpdateEmailTemplateModel
         {
-            public EmailTextTemplateType Type { get; set; }
-            public string Subject { get; set; }
-            public string Message { get; set; }
-            public string PasswordDescription { get; set; }
-            public string LinkText { get; set; }
+            [Required] public EmailTextTemplateType Type { get; set; }
+            [Required] public string Subject { get; set; }
+            [Required] public string Message { get; set; }
+            [Required] public string PasswordDescription { get; set; }
+            [Required] public string LinkText { get; set; }
         }
 
         [Route(@"{id}/emailTemplate")]
         [HttpPost]
         public IHttpActionResult UpdateEmailTemplate(string id, [FromBody]UpdateEmailTemplateModel updateModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -171,14 +181,17 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public class UpdatePageMessageModel
         {
-            public WebInterviewUserMessages Type { get; set; }
-            public string Message { get; set; }
+            [Required] public WebInterviewUserMessages Type { get; set; }
+            [Required] public string Message { get; set; }
         }
 
         [Route(@"{id}/pageMessage")]
         [HttpPost]
         public IHttpActionResult UpdatePageMessage(string id, [FromBody]UpdatePageMessageModel updateModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
@@ -196,7 +209,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public class UpdateAdditionalSettingsModel
         {
-            public bool SpamProtection { get; set; } 
+            [Required] public bool SpamProtection { get; set; } 
             public int? ReminderAfterDaysIfNoResponse { get; set; } 
             public int? ReminderAfterDaysIfPartialResponse { get; set; } 
         }
@@ -205,6 +218,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         [HttpPost]
         public IHttpActionResult UpdateAdditionalSettings(string id, [FromBody]UpdateAdditionalSettingsModel updateModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return NotFound();
 
