@@ -692,6 +692,17 @@ namespace WB.Services.Export.Tests
         {
             return Event(new AnswersDeclaredValid() { Questions = questions }, interviewId, null, null);
         }
+
+        public Event VariablesChanged(Guid interviewId, Identity variableId, object value)
+        {
+            return Event(new VariablesChanged
+            {
+                ChangedVariables = new[]
+                {
+                    new ChangedVariable(variableId, value)
+                }
+            }, interviewId);
+        }
     }
 
     public class EntityFactory

@@ -1,4 +1,4 @@
-﻿select data.interview__id as data__interview_id ,  data."num1" as "data__num1" ,  enablement."group1" as "enablement__group1"
+﻿select data.interview__id as data__interview__id ,  data."num1" as "data__num1" ,  enablement."group1" as "enablement__group1"
 ,  enablement."num1" as "enablement__num1" ,  validity."num1" as "validity__num1"  from 
 "quest$6" data 
  INNER JOIN     "quest$6-e" enablement ON data.interview__id = enablement.interview__id

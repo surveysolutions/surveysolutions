@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
 namespace WB.Tests.Integration.TeamInterviewsFactoryTests
@@ -30,7 +31,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             reader = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
-            return new TeamInterviewsFactory(reader);
+            return Create.Service.TeamInterviewsFactory(reader);
         }
         
         protected static void ExecuteInCommandTransaction(Action action)
