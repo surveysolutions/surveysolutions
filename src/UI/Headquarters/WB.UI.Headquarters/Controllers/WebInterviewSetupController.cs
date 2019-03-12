@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SendInvitations(string id)
         {
             var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
-            if (!config.Started) return RedirectToAction("Start", new {id = id});
+            if (!config.Started) return RedirectToAction("Settings", new {id = id});
 
             var status = this.invitationService.GetEmailDistributionStatus();
 
@@ -109,7 +109,6 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.HttpNotFound();
             }
-
             
             if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
             {
