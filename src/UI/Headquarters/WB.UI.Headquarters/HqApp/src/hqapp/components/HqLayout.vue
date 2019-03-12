@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main :class="mainClass">
         <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" > 
             <div class="row">
                 <slot name="filters" />
@@ -52,7 +52,8 @@ export default {
             default() { return false; }
         },
         topicButton: String,
-        topicButtonRef: String
+        topicButtonRef: String,
+        mainClass: String
     },
     watch: {
         showProgress: function (value) {
