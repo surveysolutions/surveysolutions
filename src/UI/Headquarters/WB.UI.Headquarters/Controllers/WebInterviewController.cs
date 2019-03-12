@@ -137,16 +137,30 @@ namespace WB.UI.Headquarters.Controllers
             return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
         }
 
-
         public ActionResult Start(string id)
         {
             var invitation = invitationService.GetInvitationByToken(id);
+            Assignment assignment = null;
             if (invitation == null)
             {
-                return this.HttpNotFound();
+                if (int.TryParse(id, out int assignmentId))
+                {
+                    assignment = this.assignments.GetById(assignmentId);
+                    if (assignment == null)
+                    {
+                        return this.HttpNotFound();
+                    }
+                }
+                else
+                {
+                    return this.HttpNotFound();
+                }
+            }
+            else
+            {
+                assignment = invitation.Assignment;
             }
 
-            var assignment = invitation.Assignment;
             if (assignment.Archived || assignment.IsCompleted)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -156,32 +170,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if (invitation.InterviewId!=null)
+            if (invitation?.InterviewId!=null)
             {
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
-
-            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
-            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
-            return this.View(model);
-        }
-
-        public ActionResult Start(int id)
-        {
-            var assignment = this.assignments.GetById(id);
-            if (assignment == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            if (assignment.Archived || assignment.IsCompleted)
-            {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
-            }
-
-            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
-            if (!webInterviewConfig.Started)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
