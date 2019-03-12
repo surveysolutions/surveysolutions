@@ -19,7 +19,7 @@ namespace WB.Services.Export.Interview
 
             if (parentGroup.IsInsideRoster)
             {
-                result.AppendFormat(", data.{0} as data__roster_vector", InterviewDatabaseConstants.RosterVector);
+                result.AppendFormat(", data.{0} as data__{0}", InterviewDatabaseConstants.RosterVector);
             }
 
             result.AppendFormat("{1} from \"{0}\" data {1}", parentGroup.TableName, Environment.NewLine);
@@ -41,10 +41,10 @@ namespace WB.Services.Export.Interview
             StringBuilder query = new StringBuilder($"select ");// data.{InterviewDatabaseConstants.InterviewId} as data__interview_id ");
             if (group.DoesSupportDataTable)
             {
-                query.AppendFormat("data.{0} as data__interview_id ", InterviewDatabaseConstants.InterviewId);
+                query.AppendFormat("data.{0} as data__{0} ", InterviewDatabaseConstants.InterviewId);
                 if (group.IsInsideRoster)
                 {
-                    query.AppendFormat(", data.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
+                    query.AppendFormat(", data.{0} as data__{0} ", InterviewDatabaseConstants.RosterVector);
                 }
 
                 if (group.HasAnyExportableQuestions)
@@ -62,10 +62,10 @@ namespace WB.Services.Export.Interview
                 }
                 else
                 {
-                    query.AppendFormat(" enablement.{0} as data__interview_id, ", InterviewDatabaseConstants.InterviewId);
+                    query.AppendFormat(" enablement.{0} as data__{0}, ", InterviewDatabaseConstants.InterviewId);
                     if (group.IsInsideRoster)
                     {
-                        query.AppendFormat(" enablement.{0} as data__roster_vector, ", InterviewDatabaseConstants.RosterVector);
+                        query.AppendFormat(" enablement.{0} as data__{0}, ", InterviewDatabaseConstants.RosterVector);
                     }
                 }
 
@@ -89,10 +89,10 @@ namespace WB.Services.Export.Interview
                 }
                 else
                 {
-                    query.AppendFormat(" validity.{0} as data__interview_id ", InterviewDatabaseConstants.InterviewId);
+                    query.AppendFormat(" validity.{0} as data__{0} ", InterviewDatabaseConstants.InterviewId);
                     if (group.IsInsideRoster)
                     {
-                        query.AppendFormat(", validity.{0} as data__roster_vector ", InterviewDatabaseConstants.RosterVector);
+                        query.AppendFormat(", validity.{0} as data__{0} ", InterviewDatabaseConstants.RosterVector);
                     }
                 }
 
