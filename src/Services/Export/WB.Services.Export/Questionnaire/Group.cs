@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Questionnaire
@@ -157,7 +158,7 @@ namespace WB.Services.Export.Questionnaire
             {
                 if (columnName != null) return columnName;
                 columnName = !string.IsNullOrWhiteSpace(this.VariableName)
-                                ? this.VariableName.ToLower() 
+                                ? PostgresSystemColumns.Escape(this.VariableName.ToLower())
                                 : PublicKey.ToString().ToLower();
                 if (string.IsNullOrEmpty(columnName))
                     throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}, Questionnaire: {Root.QuestionnaireId.Id}");

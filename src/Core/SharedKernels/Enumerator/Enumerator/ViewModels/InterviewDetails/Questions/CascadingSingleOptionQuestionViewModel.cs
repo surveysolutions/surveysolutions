@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await base.SaveAnswerAsync(optionValue);
         }
 
-        public async void Handle(SingleOptionQuestionAnswered @event)
+        public void Handle(SingleOptionQuestionAnswered @event)
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
@@ -102,15 +102,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
             this.filteredOptionsViewModel.ParentValue = this.answerOnParentQuestion;
 
-            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(async () =>
-                {
-                    await this.RaisePropertyChanged(() => RenderAsComboBox);
-                    UpdateOptions();
-                    await this.RaisePropertyChanged(() => Options);
-                    await this.RaisePropertyChanged(() => Children);
-                });
-            
+            this.RaisePropertyChanged(() => RenderAsComboBox);
+            this.UpdateOptions();
+
+            this.RaisePropertyChanged(() => Options);
+            this.RaisePropertyChanged(() => Children);
         }
+
         public bool RenderAsComboBox
         {
             get {

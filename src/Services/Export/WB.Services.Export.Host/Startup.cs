@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Scheduler;
 using WB.Services.Scheduler.Storage;
@@ -61,7 +63,9 @@ namespace WB.Services.Export.Host
 
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
-            services.AddDbContext<TenantDbContext>();
+            services.AddDbContext<TenantDbContext>(builder => {
+                builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
+            });
             services.AddTransient<IOnDemandCollector, AppVersionCollector>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
@@ -104,7 +108,6 @@ namespace WB.Services.Export.Host
             }
 
             app.StartScheduler();
-            app.UseApplicationVersion("/.version");
             app.UseHealthChecks("/.hc");
             app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
             app.UseMvc();

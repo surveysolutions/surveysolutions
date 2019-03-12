@@ -353,6 +353,7 @@
     <Compile Include="CustomBindings\TextViewHtmlWithLinksBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateModeBinding.cs" />
     <Compile Include="CustomBindings\WebViewPdfFilePathBinding.cs" />
+    <Compile Include="CustomControls\FixedMvxFilteringAdapter.cs" />
     <Compile Include="CustomControls\PdfViewFragment.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
     <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />

@@ -168,7 +168,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
 
-            combo.FilterText.Should().BeNull();
+            combo.FilterText.Should().BeNullOrEmpty();
             combo.AutoCompleteSuggestions.Should().NotBeEmpty();
             combo.AutoCompleteSuggestions.Count.Should().Be(3);
             combo.AutoCompleteSuggestions.Select(x => x.Title).Should().BeEquivalentTo(OptionsIfParentAnswerIs1.Select(x => x.Title));
@@ -256,7 +256,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);
 
             var combo = cascadingModel.Children[1] as CategoricalComboboxAutocompleteViewModel;
-            combo.FilterText.Should().BeNull();
+            combo.FilterText.Should().BeNullOrEmpty();
             combo.AutoCompleteSuggestions.Should().BeEmpty();
         }
 
@@ -623,7 +623,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
-            combo.FilterText.Should().BeNull();
+            combo.FilterText.Should().BeNullOrEmpty();
         }
     }
 }

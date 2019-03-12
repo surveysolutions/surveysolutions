@@ -83,11 +83,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.InvokeOnMainThread(()=>this.UpdateViewModelsByAnsweredOptions(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray()));
+            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.SelectedValues?.Select(Convert.ToInt32)?.ToArray());
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => this.InvokeOnMainThread(this.UpdateViewModels);
+            => this.UpdateViewModelsInMainThread();
 
         public override void Dispose()
         {
