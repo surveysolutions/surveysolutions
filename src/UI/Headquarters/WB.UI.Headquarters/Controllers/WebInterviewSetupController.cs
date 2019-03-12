@@ -110,10 +110,10 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
             }
 
-            var baseUrl = this.Url.Content("~/WebInterview");
+            
             if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
             {
-                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, baseUrl, questionnaire.Title);
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, questionnaire.Title);
             }
 
             sendInvitationsTask.Run();

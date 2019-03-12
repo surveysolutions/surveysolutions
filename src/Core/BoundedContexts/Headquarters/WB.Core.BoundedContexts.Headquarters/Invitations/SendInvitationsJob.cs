@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -15,20 +18,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IWebInterviewEmailRenderer emailRenderer;
+        private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
 
         public SendInvitationsJob(
             ILogger logger, 
             IInvitationService invitationService, 
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IWebInterviewEmailRenderer emailRenderer)
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.emailRenderer = emailRenderer;
+            this.emailParamsStorage = emailParamsStorage;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -71,14 +74,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                     var password = invitation.Assignment.Password;
                     var address = invitation.Assignment.Email;
+                    var link = $"{webInterviewConfig.BaseUrl}/{invitation.Token}/Start";
 
-                    var link = $"{status.BaseUrl}/{invitation.Token}/Start";
+                    var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
+                    var emailParams = new EmailParameters
+                    {
+                        AssignmentId = invitation.AssignmentId,
+                        InvitationId = invitation.Id,
+                        Subject = emailTemplate.Subject
+                            .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
+                        LinkText = emailTemplate.LinkText,
+                        MainText = emailTemplate.MainText
+                            .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
+                        PasswordDescription = emailTemplate.PasswordDescription,
+                        Password = password,
+                        Address = senderInfo.Address,
+                        SurveyName = surveyName,
+                        SenderName = senderInfo.SenderName,
+                        Link = link
+                    };
+                    emailParamsStorage.Store(emailParams, emailParamsId);
 
-                    var email = emailRenderer.RenderEmail(emailTemplate, password, link, surveyName, senderInfo.Address, senderInfo.SenderName);
-                    
+                    var client = new HttpClient{};
+                    var htmlMessage = client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}").Result ?? string.Empty;
+                    var textMessage = client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Text/{emailParamsId}/").Result ?? string.Empty;
+
                     try
                     {
-                        var emailId = emailService.SendEmailAsync(address, email.Subject, email.MessageHtml, email.MessageText).Result;
+                        var emailId = emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim()).Result;
                         invitationService.MarkInvitationAsSent(invitationId, emailId);
                     }
                     catch (EmailServiceException e)
