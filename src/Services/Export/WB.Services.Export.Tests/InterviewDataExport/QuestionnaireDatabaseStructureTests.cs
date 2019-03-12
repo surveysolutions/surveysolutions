@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
@@ -116,6 +117,33 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Assert.That(questionnaire.Find<Question>(id8).ColumnName, Is.EqualTo("cmax__1"));
             Assert.That(questionnaire.Find<Variable>(id9).ColumnName, Is.EqualTo("ctid__1"));
             Assert.That(questionnaire.Find<Question>(id10).ColumnName, Is.EqualTo("normal_name"));
+        }
+
+        [Test]
+        public void should_return_correct_table_name_for_large_sections()
+        {
+            List<IQuestionnaireEntity> childrenInGroup1 = new List<IQuestionnaireEntity>();
+            List<IQuestionnaireEntity> childrenInGroup2 = new List<IQuestionnaireEntity>();
+            for (int i = 0; i < 1000; i++)
+            {
+                childrenInGroup1.Add(Create.NumericIntegerQuestion(Guid.NewGuid(), variable: "num_group_1_" + i));
+                childrenInGroup2.Add(Create.NumericIntegerQuestion(Guid.NewGuid(), variable: "num_group_2_" + i));
+            }
+
+            var questionnaire = Create.QuestionnaireDocument(id: Id.gA, version: 5, variableName: "questionnaire",
+                children: new[]
+                {
+                    Create.Group(Id.g1, variable: "group_1", children: childrenInGroup1.ToArray()),
+                    Create.Group(Id.g2, variable: "group_2", children: childrenInGroup2.ToArray())
+                });
+
+            // Act 
+            var group = questionnaire.GetGroup(Id.g2);
+
+            // Assert
+            Assert.That(group.TableName, Is.EqualTo("questionnaire$5$1"));
+            Assert.That(group.EnablementTableName, Is.EqualTo("questionnaire$5$1-e"));
+            Assert.That(group.ValidityTableName, Is.EqualTo("questionnaire$5$1-v"));
         }
     }
 }
