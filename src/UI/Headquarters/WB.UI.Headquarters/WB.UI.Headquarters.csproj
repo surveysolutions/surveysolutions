@@ -1980,6 +1980,7 @@
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
+    <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
