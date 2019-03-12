@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -20,20 +23,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IWebInterviewEmailRenderer emailRenderer;
+        private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
 
         public SendRemindersJob(
             ILogger logger, 
             IInvitationService invitationService, 
             IEmailService emailService,
-            IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IWebInterviewEmailRenderer emailRenderer)
+            IWebInterviewConfigProvider webInterviewConfigProvider,
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.emailRenderer = emailRenderer;
+            this.emailParamsStorage = emailParamsStorage;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -58,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
                     WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
                     var baseUrl = webInterviewConfig.BaseUrl;
+                    
                     SendNoResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
 
                     SendPartialResponseReminder(questionnaireIdentity, questionnaire.Title, webInterviewConfig, baseUrl, senderInfo);
@@ -112,11 +116,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 var link = $"{baseUrl}/{invitation.Token}/Start";
 
-                var email = emailRenderer.RenderEmail(emailTemplate, password, link, surveyName, senderInfo.Address, senderInfo.SenderName);
+
+                var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
+                var emailParams = new EmailParameters
+                {
+                    AssignmentId = invitation.AssignmentId,
+                    InvitationId = invitation.Id,
+                    Subject = emailTemplate.Subject
+                        .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
+                    LinkText = emailTemplate.LinkText,
+                    MainText = emailTemplate.MainText
+                        .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
+                    PasswordDescription = emailTemplate.PasswordDescription,
+                    Password = password,
+                    Address = senderInfo.Address,
+                    SurveyName = surveyName,
+                    SenderName = senderInfo.SenderName,
+                    Link = link
+                };
+                emailParamsStorage.Store(emailParams, emailParamsId);
+
+                var client = new HttpClient{};
+                var htmlMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Html/{emailParamsId}").Result ?? string.Empty;
+                var textMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Text/{emailParamsId}/").Result ?? string.Empty;
 
                 try
                 {
-                    var sendEmailTask = emailService.SendEmailAsync(address, email.Subject, email.MessageHtml, email.MessageText);
+                    var sendEmailTask = emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage, textMessage);
 
                     var emailId = sendEmailTask.Result;
 

@@ -156,9 +156,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if (invitation.InterviewId.HasValue)
+            if (invitation.InterviewId!=null)
             {
-                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId.Value.FormatGuid()));
+                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);

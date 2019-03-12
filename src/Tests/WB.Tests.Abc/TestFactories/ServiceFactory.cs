@@ -1039,11 +1039,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public SendRemindersJob SendRemindersJob(
             ILogger logger = null, 
-            IInvitationService invitationService = null,  
+            IInvitationService invitationService = null, 
             IEmailService emailService = null,
-            IWebInterviewConfigProvider webInterviewConfigProvider = null, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null,
-            IWebInterviewEmailRenderer emailRenderer = null)
+            IWebInterviewConfigProvider webInterviewConfigProvider = null,
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null)
         {
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
@@ -1057,8 +1056,8 @@ namespace WB.Tests.Abc.TestFactories
                 logger ?? Mock.Of<ILogger>(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
-                webInterviewConfigProvider ?? settingsMock.Object,
-                emailRenderer ?? Mock.Of<IWebInterviewEmailRenderer>());
+                webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
+                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>());
         }
     }
 

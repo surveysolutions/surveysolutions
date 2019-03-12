@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual int AssignmentId { get; protected set; }
 
-        public virtual Guid? InterviewId { get; protected set; }
+        public virtual string InterviewId { get; protected set; }
 
         public virtual string Token { get; protected set; }
 

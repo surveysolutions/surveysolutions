@@ -14,7 +14,7 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             Create.Table(invitations)
                 .WithColumn("id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("assignmentid").AsInt32().NotNullable()
-                .WithColumn("interviewid").AsGuid().Nullable()
+                .WithColumn("interviewid").AsString().Nullable()
                 .WithColumn("token").AsString().Nullable()
                 .WithColumn("resumepassword").AsString().Nullable()
                 .WithColumn("sentonutc").AsDateTime().Nullable()
