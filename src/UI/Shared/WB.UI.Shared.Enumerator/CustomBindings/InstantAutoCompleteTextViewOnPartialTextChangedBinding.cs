@@ -25,8 +25,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.command = value;
         }
 
-        private void AutoCompleteOnPartialTextChanged(object sender, EventArgs eventArgs)
-            => command?.Execute(this.Target.PartialText);
+        private void AutoCompleteOnPartialTextChanged(object sender, string partialText)
+            => command?.Execute(partialText);
 
         public override void SubscribeToEvents()
         {
@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (autoComplete == null)
                 return;
 
-            this.subscription = autoComplete.WeakSubscribe(
+            this.subscription = autoComplete.WeakSubscribe<InstantAutoCompleteTextView, string>(
                 nameof(autoComplete.PartialTextChanged),
                 AutoCompleteOnPartialTextChanged);
         }
