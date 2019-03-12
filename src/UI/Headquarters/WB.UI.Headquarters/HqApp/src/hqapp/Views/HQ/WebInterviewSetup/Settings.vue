@@ -782,9 +782,9 @@ export default {
         self.$store.dispatch("showProgress");
         await this.$hq.WebInterviewSettings.updateAdditionalSettings(this.questionnaireId, this.spamProtectionIsEnabled, this.reminderAfterDaysIfNoResponse, this.reminderAfterDaysIfPartialResponse)
         .then(function (response) {
-            self.cancelSpamProtectionIsEnabled = this.spamProtectionIsEnabled;
-            self.cancelReminderAfterDaysIfNoResponse = this.reminderAfterDaysIfNoResponse;
-            self.cancelReminderAfterDaysIfPartialResponse = this.reminderAfterDaysIfPartialResponse;
+            self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled;
+            self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse;
+            self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse;
         })
         .catch(function (error) {
             Vue.config.errorHandler(error, self);
