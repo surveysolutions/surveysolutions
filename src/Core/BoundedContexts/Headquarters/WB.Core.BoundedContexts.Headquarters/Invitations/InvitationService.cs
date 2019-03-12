@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.Ajax.Utilities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -134,15 +132,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitationStorage.Store(invitation, invitationId);
         }
 
-        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
-            string baseUrl, string questionnaireTitle)
+        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle)
         {
             var status = new InvitationDistributionStatus
             {
                 QuestionnaireIdentity = questionnaireIdentity,
                 ResponsibleName = identityName,
                 Status = InvitationProcessStatus.Queued,
-                BaseUrl = baseUrl,
                 QuestionnaireTitle = questionnaireTitle
             };
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
@@ -238,6 +234,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _.Select(x => x.Assignment.Questionnaire).Distinct().ToList());
         }
 
+        public Invitation GetInvitationByToken(string token)
+        {
+            return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == token));
+        }
+
         public Invitation GetInvitation(int invitationId)
         {
             return invitationStorage.GetById(invitationId);
@@ -275,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void MarkInvitationAsSent(int invitationId, string emailId);
         void MarkInvitationAsReminded(int invitationId, string emailId);
 
-        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string baseUrl, string questionnaireTitle);
+        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
         void StartEmailDistribution();
         void CompleteEmailDistribution();
         void EmailDistributionFailed();
@@ -287,5 +288,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message);
         List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
         IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
+        Invitation GetInvitationByToken(string token);
     }
 }

@@ -23,6 +23,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -50,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
         private readonly IPauseResumeQueue pauseResumeQueue;
+        private readonly IInvitationService invitationService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
@@ -85,7 +87,8 @@ namespace WB.UI.Headquarters.Controllers
             IPlainStorageAccessor<Assignment> assignments, 
             IAudioFileStorage audioFileStorage,
             IAudioProcessingService audioProcessingService,
-            IPauseResumeQueue pauseResumeQueue)
+            IPauseResumeQueue pauseResumeQueue, 
+            IInvitationService invitationService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -104,6 +107,7 @@ namespace WB.UI.Headquarters.Controllers
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
             this.pauseResumeQueue = pauseResumeQueue;
+            this.invitationService = invitationService;
         }
 
         [WebInterviewAuthorize]
@@ -131,6 +135,35 @@ namespace WB.UI.Headquarters.Controllers
         public string GenerateUrl(string action, string interviewId, string sectionId = null)
         {
             return $@"~/WebInterview/{interviewId}/{action}" + (string.IsNullOrWhiteSpace(sectionId) ? "" : $@"/{sectionId}");
+        }
+
+
+        public ActionResult Start(string id)
+        {
+            var invitation = invitationService.GetInvitationByToken(id);
+            if (invitation == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var assignment = invitation.Assignment;
+            if (assignment.Archived || assignment.IsCompleted)
+            {
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
+
+            var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
+            if (!webInterviewConfig.Started)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
+            if (invitation.InterviewId.HasValue)
+            {
+                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId.Value.FormatGuid()));
+            }
+
+            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+            model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+            return this.View(model);
         }
 
         public ActionResult Start(int id)

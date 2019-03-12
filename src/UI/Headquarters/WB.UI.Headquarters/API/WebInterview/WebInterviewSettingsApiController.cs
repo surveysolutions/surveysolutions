@@ -186,7 +186,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return Ok();
 
             config.Started = true;
-            config.BaseUrl = this.Url.Content("~/WebInterview");
+            config.BaseUrl = $"{Request.RequestUri.Scheme}://{Request.RequestUri.Authority}{this.Url.Content("~")}";
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();

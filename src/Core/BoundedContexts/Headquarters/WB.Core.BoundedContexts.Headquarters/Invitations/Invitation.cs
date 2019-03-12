@@ -71,7 +71,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public long TotalCount { get; set; }
         public InvitationProcessStatus Status { get; set; }
         public List<InvitationSendError> Errors { get; set; } = new List<InvitationSendError>();
-        public string BaseUrl { get; set; }
         public string QuestionnaireTitle { get; set; }
     }
 

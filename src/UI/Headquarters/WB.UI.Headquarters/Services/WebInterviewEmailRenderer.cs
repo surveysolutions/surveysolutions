@@ -3,7 +3,6 @@ using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -16,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public PersonalizedWebInterviewEmail RenderEmail(WebInterviewEmailTemplate emailTemplate, string password, string link,
             string surveyName, string address, string senderName)
         {
-            var model = new EmailModel
+            var model = new EmailParams
             {
                 Subject = emailTemplate.Subject
                     .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
@@ -33,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Link = link
             };
 
-            var renderer = new ViewRenderer();
+            var context = ViewRenderer.CreateController<EmptyController>().ControllerContext;
+            var renderer = new ViewRenderer(context);
             string html = renderer.RenderViewToString("~/Views/WebEmails/EmailHtml.cshtml", model);
             string text = renderer.RenderViewToString("~/Views/WebEmails/EmailText.cshtml", model);
 
