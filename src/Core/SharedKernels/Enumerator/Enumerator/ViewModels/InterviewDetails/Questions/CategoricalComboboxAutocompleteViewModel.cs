@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public virtual event EventHandler<int> OnItemSelected;
         public virtual event EventHandler OnAnswerRemoved;
+        public virtual event EventHandler OnShowErrorIfNoAnswer;
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly bool displaySelectedValue;
 
@@ -59,6 +60,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ShowErrorIfNoAnswer()
         {
+            this.OnShowErrorIfNoAnswer?.Invoke(this, EventArgs.Empty);
+
             if (string.IsNullOrEmpty(this.FilterText)) return;
 
             var selectedOption = this.filteredOptionsViewModel.GetOptions(this.FilterText).FirstOrDefault(x => !this.excludedOptions.Contains(x.Value));

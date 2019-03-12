@@ -39,17 +39,6 @@ Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, respon
     self.TeamId = ko.observable();
 
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
-        prefilledQuestions.forEach(function(prefilledQuestion) {
-            var questionType = prefilledQuestion.Type();
-            if (questionType == /*DateTime*/5) {
-                prefilledQuestion.Answer(moment(prefilledQuestion.Answer()).format('M/D/YYYY'));
-            } else if (questionType == /*Numeric*/4) {
-                if (prefilledQuestion.Settings().UseFormating()) {
-                    prefilledQuestion.Answer(ko.bindingHandlers.numericformatter.format(prefilledQuestion.Answer()));
-                }
-            }
-        });
-
         return prefilledQuestions;
     };
     
