@@ -493,7 +493,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if ((columnName == ServiceColumns.ResponsibleColumnName ||
                  columnName == ServiceColumns.AssignmentsCountColumnName ||
                  columnName == ServiceColumns.EmailColumnName ||
-                 columnName == ServiceColumns.PasswordColumnName) && 
+                 columnName == ServiceColumns.PasswordColumnName ||
+                 columnName == ServiceColumns.WebModeColumnName) && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
