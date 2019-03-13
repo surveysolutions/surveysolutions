@@ -28,6 +28,7 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
