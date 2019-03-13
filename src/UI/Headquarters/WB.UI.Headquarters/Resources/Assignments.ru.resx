@@ -220,7 +220,7 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
-  <data name="SizeNoChandeInWebMode" xml:space="preserve">
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
     <value>Количество не может быть изменено для назначения в веб режиме.</value>
   </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
