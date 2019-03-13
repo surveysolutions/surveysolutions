@@ -50,6 +50,57 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         }
 
         [Test]
+        public void when_HasAnyGpsAnswerForInterviewer_and_user_has_interview_with_answered_gps_question_should_be_true()
+        {
+            //arrange
+            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var answers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    ResponsibleId = interviewerId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(answers);
+
+            //act
+            var hasAnswers = factory.HasAnyGpsAnswerForInterviewer(interviewerId);
+
+            //assert
+            Assert.That(hasAnswers, Is.True);
+        }
+
+        [Test]
+        public void when_HasAnyGpsAnswerForInterviewer_and_user_hasnt_interviews_with_answered_gps_questions_should_be_false()
+        {
+            //arrange
+            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var answers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(answers);
+
+            //act
+            var hasAnswers = factory.HasAnyGpsAnswerForInterviewer(interviewerId);
+
+            //assert
+            Assert.That(hasAnswers, Is.False);
+        }
+
+        [Test]
         public void when_getting_gps_answers_by_questionnaire_all_versions()
         { 
             //arrange
@@ -465,6 +516,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             public bool IsEnabled { get; set; } = true;
             public Guid InterviewId { get; set; }
             public Guid? TeamLeadId { get; set; }
+            public Guid? ResponsibleId { get; set; }
             public QuestionnaireIdentity QuestionnaireId { get; set; }
             public Identity QuestionId { get; set; }
             public GeoPosition Answer { get; set; }
@@ -488,7 +540,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         ReceivedByInterviewer = false,
                         QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
                         QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
-                        QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version
+                        QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
+                        ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid()
                     }, gpsAnswer.InterviewId.FormatGuid());
                     factory.SaveGeoLocation(gpsAnswer.InterviewId, gpsAnswer.QuestionId, gpsAnswer.Answer.Latitude,
                         gpsAnswer.Answer.Longitude, gpsAnswer.Answer.Timestamp);

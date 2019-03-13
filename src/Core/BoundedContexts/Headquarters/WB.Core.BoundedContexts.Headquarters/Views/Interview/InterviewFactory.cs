@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId) =>
-            sessionProvider.Session.Connection.Execute(
+            sessionProvider.Session.Connection.Query<int>(
                 @"select 1
                    from
                        readside.interview_geo_answers i
@@ -197,11 +197,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                    where
                        i.isenabled
                        and s.responsibleid = @interviewerId
-                       and e.question_scope = 0;",
+                       and e.question_scope = 0",
                 new
                 {
                     interviewerId
-                }) > 0;
+                }).Any();
 
         public void SaveGeoLocation(Guid interviewId, Identity questionIdentity, double latitude, double longitude,
             DateTimeOffset timestamp)
