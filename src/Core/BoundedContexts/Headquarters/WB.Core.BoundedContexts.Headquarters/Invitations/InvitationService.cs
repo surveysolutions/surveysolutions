@@ -26,21 +26,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void CreateInvitationForWebInterview(Assignment assignment)
         {
+            if (!(assignment.WebMode ?? false))
+            {
+                return;
+            }
+
             var hasEmail = !string.IsNullOrWhiteSpace(assignment.Email);
-            var hasPassword = !string.IsNullOrWhiteSpace(assignment.Password);
             var isPrivateAssignment = (assignment.Quantity ?? 1) == 1;
-
-            /*
-            Quantity  Password 	    Email 	    
-            1         empty 	    empty      -
-           -1 	      empty 	    not empty  -
-           -1 	      not empty 	not empty  -
-           */
-            if (isPrivateAssignment && !hasEmail && !hasPassword)
-                return;
-
-            if (!isPrivateAssignment && hasEmail)
-                return;
 
             var assignmentId = assignment.Id;
             var invitation = new Invitation(assignmentId);
@@ -61,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 /*
                 Quantity  Password 	    Email 	    
                 1 	      not empty 	empty      Public link, unique passwords. Token should be unique for all assignments
-                1          empty 	    not empty  Private link, no password
+                1         empty 	    not empty  Private link, no password
                 1 	      not empty 	not empty  Private link, with password
                 */
                 if (!hasEmail)
@@ -71,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 }
                 else
                 {
-                    var hash = questionnaireHash + assignment.Email.GetHashCode() + assignmentId;
+                    var hash = questionnaireHash * (1 + assignment.Email.GetHashCode()) + assignmentId;
                     var token = TokenGenerator.Instance.Generate(hash);
                     invitation.SetToken(token);
                 }
@@ -266,6 +258,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == token));
         }
 
+        public void InterviewWasCreated(int invitationId, string interviewId)
+        {
+            var invitation = this.GetInvitation(invitationId);
+            invitation.InterviewWasCreated(interviewId);
+            invitationStorage.Store(invitation, invitationId);
+        }
+
         public Invitation GetInvitation(int invitationId)
         {
             return invitationStorage.GetById(invitationId);
@@ -316,5 +315,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
         IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
         Invitation GetInvitationByToken(string token);
+        void InterviewWasCreated(int invitationId, string interviewId);
     }
 }
