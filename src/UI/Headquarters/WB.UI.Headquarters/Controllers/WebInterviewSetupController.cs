@@ -156,7 +156,7 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
             model.QuestionnaireIdentity = questionnaireIdentity;
             model.HasLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
-            model.LogoUrl = Url.Action("ThumbnailOrDefault", "CompanyLogo", new { httproute = "DefaultApi" });
+            model.LogoUrl = Url.Action("Thumbnail", "CompanyLogo", new { httproute = "DefaultApi" });
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
