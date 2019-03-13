@@ -24,19 +24,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly IEmailService emailService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IHttpStatistician httpStatistician;
 
         public SendRemindersJob(
             ILogger logger, 
             IInvitationService invitationService, 
             IEmailService emailService,
             IWebInterviewConfigProvider webInterviewConfigProvider,
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage, 
+            IHttpClientFactory httpClientFactory, 
+            IHttpStatistician httpStatistician)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.emailParamsStorage = emailParamsStorage;
+            this.httpClientFactory = httpClientFactory;
+            this.httpStatistician = httpStatistician;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -136,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 };
                 emailParamsStorage.Store(emailParams, emailParamsId);
 
-                var client = new HttpClient{};
+                var client = httpClientFactory.CreateClient(httpStatistician);
                 var htmlMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Html/{emailParamsId}").Result ?? string.Empty;
                 var textMessage = client.GetStringAsync($"{baseUrl}/WebEmails/Text/{emailParamsId}/").Result ?? string.Empty;
 
