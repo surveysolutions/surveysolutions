@@ -169,6 +169,7 @@
                                 break;
                             case 'Instructions':
                                 focusId = 'edit-question-instructions';
+                                break;
                             default:
                                 break;
                         }
@@ -197,7 +198,7 @@
                     });
 
                     modalInstance.result.then(function(selectedClassification) {
-                            if (selectedClassification == null)
+                            if (selectedClassification === null)
                                 return;
 
                             var questionTitle = $scope.activeQuestion.title || $i18next.t('UntitledQuestion');
@@ -209,12 +210,15 @@
                                 if ($scope.activeQuestion.optionsCount > $scope.MAX_OPTIONS_COUNT) {
                                     if ($scope.activeQuestion.type !== "SingleOption") {
 
-                                        var modalInstance =confirmService.open(utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle, $scope.MAX_OPTIONS_COUNT));
+                                        var modalInstance = confirmService.open(
+                                            utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle,
+                                                $scope.MAX_OPTIONS_COUNT));
 
                                         modalInstance.result.then(function(confirmResult) {
                                             if (confirmResult === 'ok') {
                                                 $scope.activeQuestion.options = selectedClassification.categories;
-                                                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                                                $scope.activeQuestion.optionsCount =
+                                                    $scope.activeQuestion.options.length;
                                             }
                                         });
                                     } else {
@@ -238,7 +242,7 @@
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
 
                                 }
-                            }
+                            };
 
                             if ($scope.activeQuestion.options.length > 0) {
                                 var modalInstance = confirmService.open(utilityService.replaceOptionsConfirmationPopup(questionTitle));
