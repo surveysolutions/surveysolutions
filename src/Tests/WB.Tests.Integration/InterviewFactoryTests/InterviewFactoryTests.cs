@@ -494,7 +494,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  new InterviewEntity{EntityType = EntityType.Question, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
                  new InterviewEntity{EntityType = EntityType.Question, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
                  new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
-                 new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
                  new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
                  new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 3, 1, 1, "1:1", 1)},
                  new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
@@ -537,7 +536,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     AsDatetime = x.AsDateTime,
                     AsIntArray = x.AsIntArray,
                     AsAudio = x.AsAudio,
-                    AsGps = x.AsGps,
                     AsArea = x.AsArea,
                     AsList = x.AsList,
                     AsIntMatrix = x.AsIntMatrix,
@@ -550,7 +548,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
 
-            Assert.That(interviewEntities.Length, Is.EqualTo(16));
+            Assert.That(interviewEntities.Length, Is.EqualTo(15));
 
             foreach (var expectedQuestion in questions)
             {
@@ -567,7 +565,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Assert.That(actualQuestion.AsLong, Is.EqualTo(expectedQuestion.AsLong));
 
                 Assert.That(JsonConvert.SerializeObject(actualQuestion.AsArea), Is.EqualTo(JsonConvert.SerializeObject(expectedQuestion.AsArea)));
-                Assert.That(JsonConvert.SerializeObject(actualQuestion.AsGps), Is.EqualTo(JsonConvert.SerializeObject(expectedQuestion.AsGps)));
                 Assert.That(JsonConvert.SerializeObject(actualQuestion.AsIntMatrix), Is.EqualTo(JsonConvert.SerializeObject(expectedQuestion.AsIntMatrix)));
                 Assert.That(JsonConvert.SerializeObject(actualQuestion.AsList), Is.EqualTo(JsonConvert.SerializeObject(expectedQuestion.AsList)));
                 Assert.That(JsonConvert.SerializeObject(actualQuestion.AsYesNo), Is.EqualTo(JsonConvert.SerializeObject(expectedQuestion.AsYesNo)));
@@ -589,7 +586,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  new InterviewEntity{EntityType = EntityType.Question, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
                  new InterviewEntity{EntityType = EntityType.Question, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
                  new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
-                 new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
                  new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
                  new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 3, 1, 1, "1:1", 1)},
                  new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
@@ -631,7 +627,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     AsDatetime = x.AsDateTime,
                     AsIntArray = x.AsIntArray,
                     AsAudio = x.AsAudio,
-                    AsGps = x.AsGps,
                     AsArea = x.AsArea,
                     AsList = x.AsList,
                     AsIntMatrix = x.AsIntMatrix,
@@ -651,7 +646,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
 
-            Assert.That(interviewEntities.Length, Is.EqualTo(16));
+            Assert.That(interviewEntities.Length, Is.EqualTo(15));
             foreach (var interviewEntity in interviewEntities)
             {
                 Assert.That(interviewEntity.AsInt, Is.Null);
@@ -660,7 +655,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Assert.That(interviewEntity.AsIntMatrix, Is.Null);
                 Assert.That(interviewEntity.AsList, Is.Null);
                 Assert.That(interviewEntity.AsYesNo, Is.Null);
-                Assert.That(interviewEntity.AsGps, Is.Null);
                 Assert.That(interviewEntity.AsAudio, Is.Null);
                 Assert.That(interviewEntity.AsArea, Is.Null);
                 Assert.That(interviewEntity.AsDateTime, Is.Null);

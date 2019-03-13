@@ -24,5 +24,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void Save(InterviewState interviewState);
         InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);
+
+        void SaveGeoLocation(Guid interviewId, Identity questionIdentity, double latitude, double longitude,
+            DateTimeOffset timestamp);
+        void RemoveGeoLocations(Guid interviewId, Identity[] identities);
+        void EnableGeoLocationAnswers(Guid interviewId, Identity[] identities, bool isEnabled);
     }
 }
