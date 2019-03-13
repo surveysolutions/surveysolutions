@@ -1042,7 +1042,8 @@ namespace WB.Tests.Abc.TestFactories
             IInvitationService invitationService = null, 
             IEmailService emailService = null,
             IWebInterviewConfigProvider webInterviewConfigProvider = null,
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null)
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null, 
+            HttpMessageHandler messageHandler = null)
         {
             var emailServiceMock = new Mock<IEmailService>();
             emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
@@ -1052,12 +1053,18 @@ namespace WB.Tests.Abc.TestFactories
                 => _.ReminderAfterDaysIfNoResponse == 2
                 && _.ReminderAfterDaysIfPartialResponse == 2));
 
+            var testMessageHandler = new TestMessageHandler();
+            var httpClient = new HttpClient(messageHandler ?? testMessageHandler);
+            IHttpClientFactory httpClientFactory = Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
             return new SendRemindersJob(
                 logger ?? Mock.Of<ILogger>(),
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
                 webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
-                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>());
+                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
+                httpClientFactory,
+                Mock.Of<IHttpStatistician>());
         }
     }
 

@@ -1,17 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using Moq;
+using MvvmCross.Binding.Extensions;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Implementation;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
+using WB.Tests.Abc.TestFactories;
+using WB.Tests.Unit.GenericSubdomains.Utils;
 using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {
-    [Ignore("Temp")]
     [TestOf(typeof(SendRemindersJob))]
     public class SendRemindersJobTests
     {
@@ -61,24 +69,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 10);
 
             List<SentEmailForTests> sentEmails = new List<SentEmailForTests>();
-            List<EmailModel> emailModels = new List<EmailModel>();
+            var emailParameters = new TestInMemoryKeyValueStorage<EmailParameters>();
 
             var emailService = CreateEmailService()
                 .WithSenderInfo()
                 .CollectSentEmails(sentEmails, new [] {"email_id_1", "email_id_2"});
-
-            var emailRendererMock = new Mock<IWebInterviewEmailRenderer>();
-            emailRendererMock
-                .Setup(x => x.RenderEmail(It.IsAny<WebInterviewEmailTemplate>(), It.IsAny<string>(), It.IsAny<string>(),
-                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Callback<WebInterviewEmailTemplate, string, string, string, string, string>((t, p, l, s, a, n) =>
-                {
-                    emailModels.Add(new EmailModel
-                    {
-                        Subject = t.Subject, LinkText = t.LinkText, MainText = t.MainText, PasswordDescription = t.PasswordDescription, Password = p, Address = a, SurveyName = s, SenderName = n, Link = l
-                    });
-                })
-                .Returns(Create.Entity.PersonalizedEmail());
 
             var invitationServiceMock = CreateInvitationService()
                 .WithQuestionnaires(Create.Entity.QuestionnaireBrowseItem(Id.g1, 10, title: "Web Survey"))
@@ -89,31 +84,38 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             
             var settingsMock = new Mock<IWebInterviewConfigProvider>();
             var settings = Mock.Of<WebInterviewConfig>(_ => 
-                _.BaseUrl == "baseUrl" &&
+                _.BaseUrl == "http://localhost" &&
                 _.ReminderAfterDaysIfPartialResponse == 2 &&
                 _.GetEmailTemplate(EmailTextTemplateType.Reminder_PartialResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
+            var testMessageHandler = new TestMessageHandler();
 
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
-                emailService: emailService.Object);
+                emailService: emailService.Object,
+                emailParamsStorage: emailParameters,
+                messageHandler: testMessageHandler);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
 
             //assert
             Assert.That(sentEmails.Count, Is.EqualTo(2));
+            Assert.That(testMessageHandler.ExecutedRequests.Count, Is.EqualTo(4));
+            
             Assert.That(sentEmails[0].Email, Is.EqualTo("one@email.com"));
-            Assert.That(emailModels[0].Password, Is.EqualTo("AAAAAAAA"));
-            Assert.That(emailModels[0].SurveyName, Is.EqualTo("Web Survey"));
-            Assert.That(emailModels[0].Link, Is.EqualTo("baseUrl/token1/Start"));
+            var paramsId = testMessageHandler.ExecutedRequests[0].RequestUri.Segments.Last();
+            Assert.That(emailParameters.GetById(paramsId).Password, Is.EqualTo("AAAAAAAA"));
+            Assert.That(emailParameters.GetById(paramsId).SurveyName, Is.EqualTo("Web Survey"));
+            Assert.That(emailParameters.GetById(paramsId).Link, Is.EqualTo("http://localhost/WebInterview/token1/Start"));
 
             Assert.That(sentEmails[1].Email, Is.EqualTo("two@email.com"));
-            Assert.That(emailModels[1].Password, Is.EqualTo("BBBBBBBB"));
-            Assert.That(emailModels[1].SurveyName, Is.EqualTo("Web Survey"));
-            Assert.That(emailModels[1].Link, Is.EqualTo("baseUrl/token2/Start"));
+            paramsId = testMessageHandler.ExecutedRequests[2].RequestUri.Segments.Last();
+            Assert.That(emailParameters.GetById(paramsId).Password, Is.EqualTo("BBBBBBBB"));
+            Assert.That(emailParameters.GetById(paramsId).SurveyName, Is.EqualTo("Web Survey"));
+            Assert.That(emailParameters.GetById(paramsId).Link, Is.EqualTo("http://localhost/WebInterview/token2/Start"));
            
             invitationServiceMock.Verify(x => x.MarkInvitationAsReminded(2, "email_id_1"), Times.Once);
             invitationServiceMock.Verify(x => x.MarkInvitationAsReminded(4, "email_id_2"), Times.Once);
@@ -126,7 +128,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
 
             List<SentEmailForTests> sentEmails = new List<SentEmailForTests>();
-            List<EmailModel> emailModels = new List<EmailModel>();
 
             var emailService = CreateEmailService()
                 .WithSenderInfo()
@@ -137,31 +138,24 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
                 .WithNoResponseInvitations(questionnaireIdentity, 1)
                 .WithInvitations(Create.Entity.Invitation(1, Create.Entity.Assignment(email: "some@email.com", password: "AAAAAAAA"), token: "token"));
             
-            var emailRendererMock = new Mock<IWebInterviewEmailRenderer>();
-            emailRendererMock
-                .Setup(x => x.RenderEmail(It.IsAny<WebInterviewEmailTemplate>(), It.IsAny<string>(), It.IsAny<string>(),
-                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Callback<WebInterviewEmailTemplate, string, string, string, string, string>((t, p, l, s, a, n) =>
-                {
-                    emailModels.Add(new EmailModel
-                    {
-                        Subject = t.Subject, LinkText = t.LinkText, MainText = t.MainText, PasswordDescription = t.PasswordDescription, Password = p, Address = a, SurveyName = s, SenderName = n, Link = l
-                    });
-                })
-                .Returns(Create.Entity.PersonalizedEmail());
+            var emailParameters = new TestInMemoryKeyValueStorage<EmailParameters>();
 
             var settingsMock = new Mock<IWebInterviewConfigProvider>();
             var settings = Mock.Of<WebInterviewConfig>(_ => 
-                _.BaseUrl == "baseUrl" &&
+                _.BaseUrl == "http://localhost" &&
                 _.ReminderAfterDaysIfNoResponse == 2 && 
                 _.GetEmailTemplate(EmailTextTemplateType.Reminder_NoResponse) == Create.Entity.EmailTemplate("Subject: %SURVEYNAME%", "%SURVEYNAME% %PASSWORD% %SURVEYLINK%", "", ""));
 
             settingsMock.Setup(x => x.Get(questionnaireIdentity)).Returns(settings);
 
+            var testMessageHandler = new TestMessageHandler();
+
             var job = Create.Service.SendRemindersJob(
                 invitationService: invitationServiceMock.Object, 
                 webInterviewConfigProvider: settingsMock.Object,
-                emailService: emailService.Object);
+                emailService: emailService.Object,
+                emailParamsStorage: emailParameters,
+                messageHandler: testMessageHandler);
 
             //act
             job.Execute(Mock.Of<IJobExecutionContext>());
@@ -169,9 +163,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
             //assert
             Assert.That(sentEmails.Count, Is.EqualTo(1));
             Assert.That(sentEmails[0].Email, Is.EqualTo("some@email.com"));
-            Assert.That(emailModels[0].Password, Is.EqualTo("AAAAAAAA"));
-            Assert.That(emailModels[0].SurveyName, Is.EqualTo("Web Survey"));
-            Assert.That(emailModels[0].Link, Is.EqualTo("baseUrl/token/Start"));
+            Assert.That(emailParameters.ValueAt(0).Password, Is.EqualTo("AAAAAAAA"));
+            Assert.That(emailParameters.ValueAt(0).SurveyName, Is.EqualTo("Web Survey"));
+            Assert.That(emailParameters.ValueAt(0).Link, Is.EqualTo("http://localhost/WebInterview/token/Start"));
            
             invitationServiceMock.Verify(x => x.MarkInvitationAsReminded(1, "email_id_1"), Times.Once);
         }
