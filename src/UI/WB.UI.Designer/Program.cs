@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
+using WB.UI.Designer.Migrations.PlainStore;
 
 namespace WB.UI.Designer1
 {
@@ -14,15 +14,18 @@ namespace WB.UI.Designer1
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-            
-            // Put the database update into a scope to ensure
-            // that all resources will be disposed.
-            using (var scope = serviceProvider.CreateScope())
-            {
-                UpdateDatabase(scope.ServiceProvider);
-            }
+            var webHost = CreateWebHostBuilder(args).Build();
 
+            using (var scope = webHost.Services.CreateScope())
+            {
+                var configuration = scope.ServiceProvider.GetService<IConfiguration>();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                var migrationsType = typeof(M001_Init);
+                var dbUpgradeSettings = new DbUpgradeSettings(migrationsType.Assembly, migrationsType.Namespace);
+                DbMigrationsRunner.MigrateToLatest(connectionString, "plainstore", dbUpgradeSettings);
+            }
+            webHost.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
