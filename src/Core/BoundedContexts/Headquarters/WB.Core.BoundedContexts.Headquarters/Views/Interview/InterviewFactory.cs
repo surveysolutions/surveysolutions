@@ -83,6 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     WHERE i.{Column.InterviewId} = s.id AND s.{Column.InterviewId} = @InterviewId",
             new { InterviewId = interviewId });
 
+            conn.Execute($@"DELETE FROM {Table.InterviewsGeolocationAnswers} i WHERE i.{Column.InterviewId} = @InterviewId",
+                new { InterviewId = interviewId });
+
             conn.Execute($@"DELETE FROM {Table.InterviewsId} i WHERE i.{Column.InterviewId} = @InterviewId",
                 new { InterviewId = interviewId });
 
@@ -124,80 +127,56 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswer>(
-                $@"
-                with gpsQuestions 
-                        as (
-                            select id from readside.questionnaire_entities 
-                            where questionnaireidentity like @Questionnaire and stata_export_caption = @question),
-                interviews as(
-                    select teamleadid, interviewid, rostervector, latitude, longitude
-                    from
-                        (
-                            select
-                                s.teamleadid,
-                                s.interviewid,
-                                i.rostervector,
-                                (i.asgps ->> 'Latitude')::float8 as latitude,
-                                (i.asgps ->> 'Longitude')::float8 as longitude
-                            from readside.interviews i
-                            join readside.interviews_id id     on id.id = i.interviewid
-                            join readside.interviewsummaries s on s.interviewid = id.interviewid
-                            where
-                                i.asgps is not null
-                                and (@supervisorId is null OR s.status not in({DisabledForGpsStatuses}))                                
-                                and i.entityid in (select id from gpsQuestions)
-                                and i.isenabled = true
-                        ) as q
-                    where latitude > @south and latitude < @north
-                        and longitude > @west {(bounds.East >= bounds.West ? "AND" : "OR")} 
-                            longitude < @east
-                ) 
-                select interviewid, latitude, longitude
-                from interviews" 
-                + (supervisorId.HasValue ? " where teamleadid = @supervisorId" : "")
-                + (maxAnswersCount.HasValue ? " limit @MaxCount" : ""),
-                new
-                {
-                    supervisorId,
-                    Questionnaire = $"{questionnaireId.FormatGuid()}${questionnaireVersion?.ToString() ?? "%"}",
-                    question = gpsQuestionVariableName,
-                    MaxCount = maxAnswersCount,
-                    bounds.South, bounds.North, bounds.East, bounds.West
-                })
-            .ToArray();
+                    $@"select i.interviewid,
+                              i.latitude,
+                              i.longitude
+                       from readside.interview_geo_answers i
+                       join readside.interviewsummaries s on s.interviewid = i.interviewid
+                       join readside.questionnaire_entities q on q.questionnaireidentity = s.questionnaireidentity and q.entityid = i.questionid 
+                       where
+                           i.isenabled = true 
+                           and q.stata_export_caption = @Question 
+                           and s.questionnaireid = @QuestionnaireId 
+                           and (@QuestionnaireVersion is null or s.questionnaireversion = @QuestionnaireVersion) 
+                           and (@supervisorId is null or (s.teamleadid = @supervisorId and s.status not in({DisabledForGpsStatuses}))) 
+                           and i.latitude > @South and i.latitude < @North 
+                           and i.longitude > @West 
+                           {(bounds.East >= bounds.West ? "AND" : "OR")} i.longitude < @East 
+                           {(maxAnswersCount.HasValue ? " limit @MaxCount" : "")}",
+                    new
+                    {
+                        supervisorId,
+                        QuestionnaireId = questionnaireId,
+                        QuestionnaireVersion = questionnaireVersion,
+                        Question = gpsQuestionVariableName,
+                        MaxCount = maxAnswersCount,
+                        bounds.South, bounds.North, bounds.East, bounds.West
+                    })
+                .ToArray();
             return result;
         }
 
         public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId)
         {
             var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswerWithTimeStamp>(
-                $@"with interviews as(
-                    select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
-                    from
-                        (
-                            select
-                                i.entityid,
-                                s.interviewid,
-                                s.status,
-                                e.featured as idenifying,
-                                (i.asgps ->> 'Latitude')::float8 as latitude,
-                                (i.asgps ->> 'Longitude')::float8 as longitude,
-                                (i.asgps ->> 'Timestamp') as timestamp
-                            from
-                                readside.interviews_view i
-                            join readside.interviewsummaries s on
-                                s.interviewid = i.interviewid
-                            join readside.questionnaire_entities e on
-                                e.entityid = i.entityid
-                            where
-                                i.asgps is not null
-                                and s.responsibleid = @interviewerId
-                                and i.isenabled = true
-                                and e.question_scope = 0
-                        ) as q
-                ) 
-                select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
-                from   interviews;",
+                @"select
+                       i.questionid,
+                       i.interviewid,
+                       s.status,
+                       e.featured as idenifying,
+                       i.latitude,
+                       i.longitude,
+                       i.timestamp
+                   from
+                       readside.interview_geo_answers i
+                   join readside.interviewsummaries s on
+                       s.interviewid = i.interviewid
+                   join readside.questionnaire_entities e on
+                       e.entityid = i.questionid and e.questionnaireidentity = s.questionnaireidentity
+                   where
+                       i.isenabled
+                       and s.responsibleid = @interviewerId
+                       and e.question_scope = 0",
                 new
                 {
                     interviewerId
@@ -206,27 +185,62 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
-        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId)
-        {
-            var result = sessionProvider.Session.Connection.Query<int>(
-                $@"         select 1
-                            from
-                                readside.interviews_view i
-                            join readside.interviewsummaries s on
-                                s.interviewid = i.interviewid
-                            join readside.questionnaire_entities e on
-                                e.entityid = i.entityid
-                            where
-                                i.asgps is not null
-                                and s.responsibleid = @interviewerId
-                                and i.isenabled = true
-                                and e.question_scope = 0;",
+        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId) =>
+            sessionProvider.Session.Connection.Execute(
+                @"select 1
+                   from
+                       readside.interview_geo_answers i
+                   join readside.interviewsummaries s on
+                       s.interviewid = i.interviewid
+                   join readside.questionnaire_entities e on
+                       e.entityid = i.questionid and e.questionnaireidentity = s.questionnaireidentity
+                   where
+                       i.isenabled
+                       and s.responsibleid = @interviewerId
+                       and e.question_scope = 0;",
                 new
                 {
                     interviewerId
-                })
-            .ToArray();
-            return result.Length > 0;
+                }) > 0;
+
+        public void SaveGeoLocation(Guid interviewId, Identity questionIdentity, double latitude, double longitude,
+            DateTimeOffset timestamp)
+        {
+            this.sessionProvider.Session.Connection.Execute(
+                $"INSERT INTO {Table.InterviewsGeolocationAnswers}" + 
+                "(interviewid, questionid, rostervector, latitude, longitude, timestamp, isenabled) " +
+                "VALUES(@interviewid, @questionid, @rostervector, @latitude, @longitude, @timestamp, true) " +
+                "ON CONFLICT ON CONSTRAINT pk_interview_geo_answers " +
+                "DO NOTHING", new
+                {
+                    interviewId = interviewId,
+                    questionId = questionIdentity.Id,
+                    rosterVector = questionIdentity.RosterVector?.ToString()?.Trim('_'),
+                    latitude = latitude,
+                    longitude = longitude,
+                    timestamp = timestamp
+                });
+        }
+
+        public void RemoveGeoLocations(Guid interviewId, Identity[] identities)
+        {
+            if (!identities.Any()) return;
+
+            this.sessionProvider.Session.Connection.Execute(
+                $@"delete from {Table.InterviewsGeolocationAnswers} " +
+                $@"where {Column.InterviewId} = '{interviewId}' and " +
+                $@"{string.Join("or", identities.Select(x => $"questionid ='{x.Id}' and rostervector='{x.RosterVector?.ToString()?.Trim('_')}'"))}");
+        }
+
+        public void EnableGeoLocationAnswers(Guid interviewId, Identity[] identities, bool isEnabled)
+        {
+            if (!identities.Any()) return;
+
+            this.sessionProvider.Session.Connection.Execute(
+                $@"update {Table.InterviewsGeolocationAnswers} " +
+                $@"set isenabled = {isEnabled.ToString().ToLower()} " +
+                $@"where {Column.InterviewId} = '{interviewId}' and " +
+                $@"{string.Join("or", identities.Select(x => $"questionid ='{x.Id}' and rostervector='{x.RosterVector?.ToString()?.Trim('_')}'"))}");
         }
 
         public void Save(InterviewState state)
@@ -276,7 +290,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsList = answer.AsList;
                 entity.AsIntArray = answer.AsIntArray;
                 entity.AsIntMatrix = answer.AsIntMatrix;
-                entity.AsGps = answer.AsGps;
                 entity.AsBool = answer.AsBool;
                 entity.AsYesNo = answer.AsYesNo;
                 entity.AsAudio = answer.AsAudio;
@@ -350,7 +363,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             using (var importer = npgConnection.BeginBinaryImport(@"copy 
                 readside.interviews (
                     interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint, aslong, 
-                    asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag 
+                    asdouble, asdatetime, aslist, asintarray, asintmatrix, asbool, asyesno, asaudio, asarea 
                 ) 
                 from stdin (format binary)"))
             {
@@ -372,12 +385,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     WriteJson(item.AsList);
                     Write(item.AsIntArray);
                     WriteJson(item.AsIntMatrix);
-                    WriteJson(item.AsGps);
                     if (item.AsBool != null) importer.Write(item.AsBool.Value); else importer.WriteNull();
                     WriteJson(item.AsYesNo);
                     WriteJson(item.AsAudio);
                     WriteJson(item.AsArea);
-                    Write(item.HasFlag);
 
                     void Write<T>(T value)
                     {
@@ -412,7 +423,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $@"SELECT interviewid, entityid, rostervector, isenabled, 
                          isreadonly, invalidvalidations, warnings, asstring, asint,
                          aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
-                         asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType 
+                         asbool, asyesno, asaudio, asarea, entity_type as EntityType 
                          from {Table.InterviewsView} ";
 
             var query = queryBase + $" where {Column.InterviewId} in ({ids})";
@@ -444,11 +455,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsDateTime = result.AsDateTime;
                 entity.AsIntArray = result.AsIntArray;
                 entity.AsBool = result.AsBool;
-                entity.HasFlag = result.HasFlag;
 
                 entity.AsList = Deserialize<InterviewTextListAnswer[]>(result.AsList);
                 entity.AsIntMatrix = Deserialize<int[][]>(result.AsIntMatrix);
-                entity.AsGps = Deserialize<GeoPosition>(result.AsGps);
                 entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>(result.AsYesNo);
                 entity.AsAudio = Deserialize<AudioAnswer>(result.AsAudio);
                 entity.AsArea = Deserialize<Area>(result.AsArea);
@@ -486,7 +495,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             public const string InterviewId = "interviewid";
             public const string EntityId = "entityid";
             public const string RosterVector = "rostervector";
-            public const string HasFlag = "hasflag";
             public const string IsEnabled = "isenabled";
             public const string AsString = "asstring";
             public const string AsAudio = "asaudio";
@@ -497,6 +505,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             public const string Interviews = "readside.interviews";
             public const string InterviewsId = "readside.interviews_id";
+            public const string InterviewsGeolocationAnswers = "readside.interview_geo_answers";
             public const string InterviewSummaries = "readside.interviewsummaries";
             public const string QuestionnaireEntities = "readside.questionnaire_entities";
             public const string InterviewsView = "readside.interviews_view";
