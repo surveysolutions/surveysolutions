@@ -36,7 +36,7 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
         public void AddChildren(Group group)
         {
             if (group.Children.Count() > ColumnsLimit)
-                throw new ArgumentException("Group can't contains more then limit");
+                throw new ArgumentException($"Group {group.PublicKey} ({group.Children.Count()} children) fail to insert in table with {Entities.Count} entities. Max allowed {ColumnsLimit}");
 
             Entities.Add(group);
 
