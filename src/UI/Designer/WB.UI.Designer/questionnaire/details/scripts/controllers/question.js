@@ -198,16 +198,15 @@
                     });
 
                     modalInstance.result.then(function(selectedClassification) {
-                            if (selectedClassification === null)
+                            if (_.isNull(selectedClassification) || _.isUndefined(selectedClassification))
                                 return;
 
                             var questionTitle = $scope.activeQuestion.title || $i18next.t('UntitledQuestion');
                             var replaceOptions = function() {
+                                
+                                var optionsToInsertCount = selectedClassification.categoriesCount;
 
-                                //commandService.replaceOptionsWithClassification
-                                $scope.activeQuestion.optionsCount = selectedClassification.categoriesCount;
-
-                                if ($scope.activeQuestion.optionsCount > $scope.MAX_OPTIONS_COUNT) {
+                                if (optionsToInsertCount > $scope.MAX_OPTIONS_COUNT) {
                                     if ($scope.activeQuestion.type !== "SingleOption") {
 
                                         var modalInstance = confirmService.open(
@@ -217,8 +216,7 @@
                                         modalInstance.result.then(function(confirmResult) {
                                             if (confirmResult === 'ok') {
                                                 $scope.activeQuestion.options = selectedClassification.categories;
-                                                $scope.activeQuestion.optionsCount =
-                                                    $scope.activeQuestion.options.length;
+                                                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                                             }
                                         });
                                     } else {
