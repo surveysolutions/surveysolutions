@@ -342,4 +342,10 @@
   <data name="PasswordInstructions" xml:space="preserve">
     <value>Use single symbol '?' to generate password</value>
   </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Enter Email</value>
+  </data>
 </root>
