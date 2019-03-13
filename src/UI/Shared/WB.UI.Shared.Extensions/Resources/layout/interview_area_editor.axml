@@ -188,7 +188,7 @@
                 android:gravity="left"
                 android:duplicateParentState="true"
                 android:id="@+id/areaEditor_GeometryLength"
-                local:MvxBind="Text GeometryLengthLabel) ; Visibility Visibility(IsGeometryLengthVisible);" />
+                local:MvxBind="Text GeometryLengthLabel; Visibility Visibility(IsGeometryLengthVisible);" />
         </LinearLayout>
         <LinearLayout
             android:layout_gravity="left"

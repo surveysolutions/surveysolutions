@@ -29,7 +29,7 @@ namespace WB.Services.Export.Services
 
             var questionnaireIdString = questionnaireIdentity.ToString();
             var queryable = this.dbContext.InterviewReferences
-                    .Where(x => x.QuestionnaireId == questionnaireIdString);
+                    .Where(x => x.QuestionnaireId == questionnaireIdString && x.DeletedAtUtc == null);
 
             if (status.HasValue)
             {

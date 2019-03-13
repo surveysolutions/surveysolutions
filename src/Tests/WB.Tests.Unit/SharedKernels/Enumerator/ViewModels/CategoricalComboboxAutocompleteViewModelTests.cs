@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             // assert
             mockOfOnAddEvent.Verify(x => x(vm, 2), Times.Once);
-            Assert.That(vm.FilterText, Is.EqualTo(string.Empty));
+            Assert.That(vm.FilterText, Is.Null);
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(3));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] {1, 2, 3}));
         }
