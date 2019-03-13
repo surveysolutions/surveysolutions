@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         }
 
         [Test]
-        public void should_execute_all_2_commands()
+        public async Task should_execute_all_2_commands()
         {
             // arrange 
             CommandRegistry
@@ -54,14 +54,13 @@ namespace WB.Tests.Integration.CommandServiceTests
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var t1 = commandService.ExecuteAsync(new SaveNameFor5Seconds("first"), null, cancellationTokenSource.Token);
-                Task.Delay(5).Wait();
+                await Task.Delay(5);
                 var t2 = commandService.ExecuteAsync(new SaveNameFor5Seconds("second"), null, cancellationTokenSource.Token);
-                Task.Delay(5).Wait();
 
-                Task.Delay(1000).Wait();
+                await Task.Delay(1000);
                 cancellationTokenSource.Cancel();
 
-                Task.WaitAll(t1, t2);
+                await Task.WhenAll(t1, t2);
             }
             catch (AggregateException) { }
 

@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs e)
-            => this.InvokeOnMainThread(this.UpdateViewModels);
+            => this.UpdateViewModelsInMainThread();
 
         protected override void SaveAnsweredOptionsForThrottling(IOrderedEnumerable<CategoricalMultiOptionViewModel<decimal>> answeredViewModels) 
             => this.selectedOptionsToSave = answeredViewModels.Select(x => new AnsweredYesNoOption(x.Value, x.Checked)).ToArray();
@@ -89,8 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(YesNoQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
-
-            this.InvokeOnMainThread(()=>this.UpdateViewModelsByAnsweredOptions(@event.AnsweredOptions));
+            this.UpdateViewModelsByAnsweredOptionsInMainThread(@event.AnsweredOptions);
         }
 
         public override void Dispose()

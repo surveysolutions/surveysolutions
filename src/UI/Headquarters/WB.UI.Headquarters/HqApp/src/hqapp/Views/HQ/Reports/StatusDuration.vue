@@ -26,7 +26,7 @@
                     :fetch-url="questionnaireVersionFetchUrl"
                     :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
-            <FilterBlock :title="$t('Strings.Teams')">
+            <FilterBlock :title="$t('Strings.Teams')" v-if="!$config.model.isSupervisorMode">
                  <Typeahead control-id="teams"
                         :placeholder="$t('Strings.AllTeams')"
                         :value="supervisorId"

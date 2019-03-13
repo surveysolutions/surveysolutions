@@ -42,7 +42,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                     (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
                 .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
 
+            this.CreateMap<AssignmentIdentifyingQuestionRow, AssignmentIdentifyingDataItem>()
+                .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.Answer))
+                .ForMember(x => x.Variable, opts => opts.ResolveUsing(
+                    (answer, dest, value, ctx) => GetVariableName(ctx, answer.Identity.Id)))
+                .ForMember(x => x.Identity, opts => opts.MapFrom(x => x.Identity.ToString()));
+
             this.CreateMap<AssignmentRow, AssignmentViewItem>()
+                .BeforeMap((assignment, details, ctx) => this.PrepareQuestionnaire(ctx, assignment.QuestionnaireId))
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
                 .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId))
                 .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
@@ -51,7 +58,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 .ForMember(x => x.ResponsibleName, opts => opts.MapFrom(x => x.Responsible))
                 .ForMember(x => x.CreatedAtUtc, opts => opts.MapFrom(x => x.CreatedAtUtc))
                 .ForMember(x => x.UpdatedAtUtc, opts => opts.MapFrom(x => x.UpdatedAtUtc))
-                .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived));
+                .ForMember(x => x.Archived, opts => opts.MapFrom(x => x.Archived))
+                .ForMember(x => x.IdentifyingQuestions, opts => opts.MapFrom(x => x.IdentifyingQuestions));
         }
 
         private void PrepareQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)

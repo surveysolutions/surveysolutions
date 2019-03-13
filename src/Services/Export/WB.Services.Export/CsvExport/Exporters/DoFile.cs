@@ -49,7 +49,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 if (decimal.TryParse(label.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal value) && value < limitValue && (value % 1) == 0)
                 {
-                    localBuilder.Append($"{value:N0} `\"{this.RemoveNotAllowedCharsAndDecode(label.Label)}\"' ");
+                    localBuilder.Append($"{value:F0} `\"{this.RemoveNotAllowedCharsAndDecode(label.Label)}\"' ");
                     hasValidValue = true;
                 }
                 else

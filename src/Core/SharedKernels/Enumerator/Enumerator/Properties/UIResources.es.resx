@@ -451,7 +451,7 @@
     <value>Pregunta con comentarios del supervisor:</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
-    <value>Cubrir</value>
+    <value>Portada</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
     <value>Nota del supervisor:</value>

@@ -49,25 +49,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answeredOptions = this.GetAnsweredOptionsFromInterview(interview);
 
-            this.UpdateCombobox(answeredOptions);
+            this.UpdateComboboxInMainThread(answeredOptions);
         }
 
-        private void UpdateCombobox(int[] answeredOptions)
+        private void UpdateComboboxInMainThread(int[] answeredOptions)
         {
-            answeredOptions = answeredOptions ?? Array.Empty<int>();
+            this.InvokeOnMainThread(() =>
+            {
+                answeredOptions = answeredOptions ?? Array.Empty<int>();
 
-            this.comboboxViewModel.ExcludeOptions(answeredOptions);
+                this.comboboxViewModel.ExcludeOptions(answeredOptions);
 
-            var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
-                                         answeredOptions.Length == this.filteredOptionsViewModel.GetOptions().Count;
+                var hasNoOptionsForAnswers = answeredOptions.Length == this.maxAllowedAnswers ||
+                                             answeredOptions.Length == this.filteredOptionsViewModel.GetOptions().Count;
 
-            if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
-                this.comboboxCollection.Remove(this.comboboxViewModel);
+                if (hasNoOptionsForAnswers && this.comboboxCollection.Contains(this.comboboxViewModel))
+                    this.comboboxCollection.Remove(this.comboboxViewModel);
 
-            else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
-                this.comboboxCollection.Add(this.comboboxViewModel);
+                else if (!hasNoOptionsForAnswers && !this.comboboxCollection.Contains(this.comboboxViewModel))
+                    this.comboboxCollection.Add(this.comboboxViewModel);
 
-            comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+                comboboxViewModel.UpdateFilter(comboboxViewModel.FilterText);
+            });
         }
 
         private async void ComboboxInstantViewModel_OnItemSelected(object sender, int selectedOptionCode)
@@ -109,22 +112,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector))) return;
 
-            this.InvokeOnMainThread(() =>
-            {
-                this.UpdateCombobox(null);
-                this.UpdateViewModels();
-            });
+            this.UpdateComboboxInMainThread(null);
+            this.UpdateViewModelsInMainThread();
         }
 
         public override void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (@event.QuestionId != this.Identity.Id || !@event.RosterVector.Identical(this.Identity.RosterVector)) return;
 
-            this.InvokeOnMainThread(() =>
-            {
-                this.UpdateCombobox(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
-                this.UpdateViewModels();
-            });
+            this.UpdateComboboxInMainThread(@event.SelectedValues.Select(Convert.ToInt32).ToArray());
+            this.UpdateViewModelsInMainThread();
         }
 
         public override void Dispose()
