@@ -115,6 +115,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        /// </summary>
+        public static string AssignmentSizeInWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentSizeInWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Assignment selected.
         /// </summary>
         public static string AssignmentsSelected {
@@ -471,15 +480,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string SizeExplanation {
             get {
                 return ResourceManager.GetString("SizeExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
-        /// </summary>
-        public static string SizeNoChandeInWebMode {
-            get {
-                return ResourceManager.GetString("SizeNoChandeInWebMode", resourceCulture);
             }
         }
         
