@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Web.Hosting;
-using System.Web.Http;
-using Autofac;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.WebApi;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -23,8 +18,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Modularity;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -35,7 +28,6 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Persistence.Headquarters.Migrations.Events;
 using WB.Persistence.Headquarters.Migrations.PlainStore;
-using WB.Persistence.Headquarters.Migrations.ReadSide;
 using WB.Persistence.Headquarters.Migrations.Users;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -85,7 +77,8 @@ namespace WB.UI.Headquarters
 
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
 
-            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", 
+                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
@@ -107,7 +100,7 @@ namespace WB.UI.Headquarters
                 SchemaName = "events"
             };
 
-            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings, 
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             var autofacKernel = new AutofacWebKernel();
