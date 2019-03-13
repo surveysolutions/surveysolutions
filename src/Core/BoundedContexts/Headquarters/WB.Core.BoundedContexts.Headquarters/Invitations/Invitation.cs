@@ -59,6 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.LastReminderSentOnUtc = DateTime.UtcNow;
             this.NumberOfRemindersSent++;
         }
+
+        public virtual void InterviewWasCreated(string interviewId)
+        {
+            this.InterviewId = interviewId;
+        }
     }
 
     public class InvitationDistributionStatus : AppSetting

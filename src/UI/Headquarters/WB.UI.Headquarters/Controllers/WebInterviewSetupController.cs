@@ -30,11 +30,8 @@ namespace WB.UI.Headquarters.Controllers
     public class WebInterviewSetupController : BaseController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IWebInterviewConfigurator configurator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IAssignmentsService assignmentsService;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IInvitationService invitationService;
         private readonly SendInvitationsTask sendInvitationsTask;
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
@@ -55,11 +52,8 @@ namespace WB.UI.Headquarters.Controllers
                   logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.configurator = configurator;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.assignments = assignments;
             this.assignmentsService = assignmentsService;
-            this.webInterviewNotificationService = webInterviewNotificationService;
             this.invitationService = invitationService;
             this.sendInvitationsTask = sendInvitationsTask;
             this.appSettingsStorage = appSettingsStorage;
@@ -69,9 +63,6 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult SendInvitations(string id)
         {
-            var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
-            if (!config.Started) return RedirectToAction("Settings", new {id = id});
-
             var status = this.invitationService.GetEmailDistributionStatus();
 
             if ((status?.Status ?? InvitationProcessStatus.Queued) == InvitationProcessStatus.InProgress)
@@ -90,7 +81,9 @@ namespace WB.UI.Headquarters.Controllers
                 Api = new
                 {
                     InvitationsInfo = Url.HttpRouteUrl("DefaultApiWithAction", new {controller = "WebInterviewSetupApi", action = "InvitationsInfo", id = id }),
-                    SurveySetupUrl = Url.Action("Index", "SurveySetup")
+                    SurveySetupUrl = Url.Action("Index", "SurveySetup"),
+                    EmaiProvidersUrl = Url.Action("EmailProviders","Settings"),
+                    WebSettingsUrl = Url.Action("Settings", "WebInterviewSetup", new { id = id })
                 }
             };
 

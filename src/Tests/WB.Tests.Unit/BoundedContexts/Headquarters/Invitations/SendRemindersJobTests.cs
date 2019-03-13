@@ -1,22 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using Moq;
-using MvvmCross.Binding.Extensions;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Abc.TestFactories;
-using WB.Tests.Unit.GenericSubdomains.Utils;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
 {

@@ -22,8 +22,8 @@
                     <div class="validation-summary-errors">
                         <ul class="list-unstyled">
                             <li>Invitations can't be sent.</li>
-                            <li v-if="emailProviderIsNotSetUp">Email provider is not set up. Admin user can change settings on <a href="#">Email Providers</a> page</li>
-                            <li v-if="!started">Web survey is not started. Start web interview to send invitations.</li>
+                            <li v-if="emailProviderIsNotSetUp">Email provider is not set up. Admin user can change settings on <a :href="emailProviderUrl">Email Providers</a> page</li>
+                            <li v-if="!started">Web survey is not started. <a :href="webSettingsUrl">Start web</a> interview to send invitations.</li>
                         </ul>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
             <form method="post">
                 <input type="hidden" :value="questionnaireId" name="questionnaireId"/>
                 <div class="col-sm-7 col-xs-12 action-buttons">
-                    <button type="submit" :disabled="notSentInvitationsCount == 0"  class="btn btn-success ">Send <span v-if="notSentInvitationsCount > 0">{{notSentInvitationsCount}}</span> invitations</button>
+                    <button type="submit" :disabled="hasSetupError || notSentInvitationsCount == 0"  class="btn btn-success ">Send <span v-if="notSentInvitationsCount > 0">{{notSentInvitationsCount}}</span> invitations</button>
                     <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
                 </div>
             </form>
@@ -101,6 +101,12 @@ export default {
         },
         hasSetupError(){
             return this.emailProviderIsNotSetUp || this.started == false;
+        },
+        emailProviderUrl(){
+            return this.$config.model.api.emaiProvidersUrl;
+        },
+        webSettingsUrl(){
+            return this.$config.model.api.webSettingsUrl;
         }
     },
     methods: {
