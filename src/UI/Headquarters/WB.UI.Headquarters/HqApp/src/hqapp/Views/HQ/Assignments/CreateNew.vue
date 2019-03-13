@@ -106,6 +106,7 @@
                                         <div class="field answered">
                                             <input v-model="emailQuestion.answer" 
                                                 :title="this.$t('Assignments.EmailExplanation')"
+                                                :placeholder="$t('Assignments.EnterEmail')"
                                                 v-validate="'email'" name="email"
                                                 type="text" autocomplete="off" class="field-to-fill"/>
                                         </div>
@@ -130,7 +131,8 @@
                                 <div class="options-group">
                                     <div class="form-group">
                                         <div class="field answered">
-                                            <input v-model="passwordQuestion.answer" 
+                                            <input v-model="passwordQuestion.answer"
+                                                :placeholder="$t('Assignments.EnterPassword')" 
                                                 :title="this.$t('Assignments.PasswordExplanation')"                                                
                                                 name="password"
                                                 type="text" autocomplete="off" class="field-to-fill"/>

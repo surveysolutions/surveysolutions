@@ -337,4 +337,10 @@
   <data name="PasswordInstructions" xml:space="preserve">
     <value>Используйте один символ '?' чтобы сгенерировать пароль</value>
   </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введите пароль</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Введите электронную почту</value>
+  </data>
 </root>
