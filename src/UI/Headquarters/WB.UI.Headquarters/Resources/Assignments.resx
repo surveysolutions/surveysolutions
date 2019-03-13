@@ -225,7 +225,7 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>The Size field must be -1 or more.</value>
   </data>
-  <data name="SizeNoChandeInWebMode" xml:space="preserve">
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
     <value>The Size cannot be changed for Web mode Assignment.</value>
   </data>
   <data name="SelectQuestionnaire" xml:space="preserve">

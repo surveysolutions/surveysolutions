@@ -138,7 +138,7 @@
         <ModalFrame ref="editQuantityModal"
                     :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
-            <p v-if="!canEditQuantity"><b >{{ $t("Assignments.SizeNoChandeInWebMode")}}</b></p>
+            <p v-if="!canEditQuantity"><b >{{ $t("Assignments.AssignmentSizeInWebMode")}}</b></p>
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
