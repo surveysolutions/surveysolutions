@@ -580,6 +580,9 @@ namespace WB.Services.Export.Questionnaire
             if (!commonIndex.HasValue)
                 return rosterVectorReferencedQuestion;
 
+            if (rosterVectorReferencedQuestion.Length == commonIndex.Value + 1)
+                return rosterVectorReferencedQuestion;
+
             return new ValueVector<Guid>(rosterVectorReferencedQuestion.Skip(commonIndex.Value + 1));
         }
 
