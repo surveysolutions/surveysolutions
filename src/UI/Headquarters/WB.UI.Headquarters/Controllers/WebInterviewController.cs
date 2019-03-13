@@ -161,21 +161,53 @@ namespace WB.UI.Headquarters.Controllers
                 assignment = invitation.Assignment;
             }
 
-            if (assignment.Archived || assignment.IsCompleted)
+            if (assignment.Archived)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+            }
+
+            if (!(assignment.WebMode ?? false))
+            {
+                // Compatibility issue. Every time users will use link, they will create a new interview. All links will be bounced back
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if (invitation?.InterviewId!=null)
+            if ((assignment.Quantity ?? 1) == 1)
             {
-                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
+                // personal link
+                if (webInterviewConfig.UseCaptcha || !string.IsNullOrWhiteSpace(assignment.Password))
+                {
+                    // page should be shown
+                }
+                else
+                {
+                    if (invitation?.InterviewId != null)
+                    {
+                        if (invitation.Interview.Status >= InterviewStatus.Completed)
+                            throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                        return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
+                    }
+
+                    var interviewId = this.CreateInterview(assignment);
+                    if (invitation != null)
+                    {
+                        invitationService.InterviewWasCreated(invitation.Id, interviewId);
+                    }
+
+                    return this.Redirect(GenerateUrl("Cover", interviewId));
+                }
+            }
+            else
+            {
+                // public mode
+
             }
 
-            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+            var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
             return this.View(model);
         }
@@ -183,7 +215,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public ActionResult StartPost(int id)
+        public ActionResult StartPost(int id, string password)
         {
             var assignment = this.assignments.GetById(id);
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
@@ -192,7 +224,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.connectionLimiter.CanConnect())
             {
-                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
                 model.ServerUnderLoad = true;
                 return this.View(model);
             }
@@ -201,8 +233,18 @@ namespace WB.UI.Headquarters.Controllers
             {
                 if (!this.captchaProvider.IsCaptchaValid(this))
                 {
-                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
+                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
                     this.ModelState.AddModelError("InvalidCaptcha", Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha);
+                    return this.View(model);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(assignment.Password))
+            {
+                if (!assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
+                    this.ModelState.AddModelError("InvalidPassword", "Wrong password");
                     return this.View(model);
                 }
             }
@@ -394,8 +436,10 @@ namespace WB.UI.Headquarters.Controllers
             };
         }
 
-        private StartWebInterview GetStartModel(QuestionnaireIdentity questionnaireIdentity,
-            WebInterviewConfig webInterviewConfig)
+        private StartWebInterview GetStartModel(
+            QuestionnaireIdentity questionnaireIdentity,
+            WebInterviewConfig webInterviewConfig, 
+            Assignment assignment)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
@@ -408,7 +452,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
-                CustomMessages = webInterviewConfig.CustomMessages
+                CustomMessages = webInterviewConfig.CustomMessages,
+                HasPassword = !string.IsNullOrWhiteSpace(assignment.Password)
             };
 
             return view;

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {

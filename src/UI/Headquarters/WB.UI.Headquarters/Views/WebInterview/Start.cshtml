@@ -39,6 +39,14 @@
         </div>
     }
 
+    if (Model.HasPassword)
+    {
+        <div class="form-group">
+            <label>This link is protected with password, that was distributed with the link. Please enter it here</label>
+            <input class="form-control" type="text" placeholder="Enter the password"/>
+        </div>
+    }
+
     if (Model.ServerUnderLoad)
     {
         <div class="form-actions">
