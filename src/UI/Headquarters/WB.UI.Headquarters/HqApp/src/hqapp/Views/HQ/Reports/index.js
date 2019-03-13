@@ -27,6 +27,10 @@ export default class ReportComponent {
                 component: StatusDuration
             },
             {
+                path: "/Reports/TeamStatusDuration",
+                component: StatusDuration
+            },
+            {
                 path: "/Reports/SupervisorsAndStatuses",
                 component: TeamsAndStatuses
             },

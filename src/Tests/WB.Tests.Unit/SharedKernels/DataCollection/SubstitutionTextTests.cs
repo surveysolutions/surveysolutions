@@ -299,5 +299,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             // assert
             Assert.That(substitutionText.Text, Is.EqualTo(markdownTextWithListItem));
         }
+
+        [Test]
+        public void when_create_substitution_text_with_spec_symbols_then_it_symbols_should_be_encoded_but_not_removed()
+        {
+            // arrange
+            var specSymbolsForMarkdownEngine = "<>&\"";
+            var markdownText = "0.1,2/3'4;5|6]7[8=9-012?3}4{5+6_7)8(9*01^2%3$4#5@6!7~8`";
+
+            // act
+            var substitutionText = CreateSubstitutionText(Id.Identity1, markdownText + specSymbolsForMarkdownEngine);
+
+            // assert
+            Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
+        }
     }
 }

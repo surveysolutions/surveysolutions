@@ -14,5 +14,7 @@ namespace WB.UI.Headquarters.Models.Reports
         public string QuestionnairesUrl { get; set; }
 
         public string QuestionnaireByIdUrl { get; set; }
+
+        public bool IsSupervisorMode { set; get; }
     }
 }

@@ -25,8 +25,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.command = value;
         }
 
-        private void AutoCompleteOnSelectedObjectChanged(object sender, EventArgs eventArgs) 
-            => command?.Execute(this.Target.SelectedObject);
+        private void AutoCompleteOnSelectedObjectChanged(object sender, object selectedItem) 
+            => command?.Execute(selectedItem);
 
         public override void SubscribeToEvents()
         {
@@ -35,7 +35,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (autoComplete == null)
                 return;
 
-            this.subscription = autoComplete.WeakSubscribe(
+            this.subscription = autoComplete.WeakSubscribe<InstantAutoCompleteTextView, object>(
                 nameof(autoComplete.SelectedObjectChanged),
                 AutoCompleteOnSelectedObjectChanged);
         }

@@ -126,14 +126,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             using (var writer = new StringWriter())
             {
-                var renderer = new HtmlRenderer(writer) { EnableHtmlEscape = false, EnableHtmlForBlock = false};
+                var renderer = new HtmlRenderer(writer) { EnableHtmlForBlock = false};
 
                 var builder = new MarkdownPipelineBuilder();
 
                 builder.BlockParsers.Clear();
                 builder.InlineParsers.Clear();
 
+                builder.BlockParsers.AddIfNotAlready<HtmlBlockParser>();
                 builder.BlockParsers.AddIfNotAlready<ParagraphBlockParser>();
+                builder.InlineParsers.AddIfNotAlready<HtmlEntityParser>();
                 builder.InlineParsers.AddIfNotAlready<LinkInlineParser>();
                 builder.InlineParsers.AddIfNotAlready<AutolineInlineParser>();
 

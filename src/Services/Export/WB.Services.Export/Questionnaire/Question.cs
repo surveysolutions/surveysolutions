@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -57,7 +58,7 @@ namespace WB.Services.Export.Questionnaire
             get
             {
                 if (columnName != null) return columnName;
-                columnName = this.VariableName?.ToLower();
+                columnName = PostgresSystemColumns.Escape(this.VariableName?.ToLower());
                 if (string.IsNullOrEmpty(columnName))
                     throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}");
                 return columnName;
