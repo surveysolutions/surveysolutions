@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Helpers;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
@@ -110,6 +111,8 @@ namespace WB.UI.Designer.App_Start
 
             // init
             var initTask = kernel.InitAsync();
+
+            AntiForgeryConfig.RequireSsl = CoreSettings.IsHttpsRequired;
 
             if (CoreSettings.IsDevelopmentEnvironment)
                 initTask.Wait();
