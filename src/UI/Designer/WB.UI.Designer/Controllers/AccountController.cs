@@ -238,68 +238,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(model);
         }
 
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return this.View(new RegisterModel());
-        }
-
-        // POST: /Account/Register
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public async Task<ActionResult> Register(RegisterModel model)
-        {
-            var isUserRegisterSuccessfully = false;
-            if (AppSettings.Instance.IsReCaptchaEnabled && !this.captchaProvider.IsCaptchaValid(this))
-            {
-                this.Error(ErrorMessages.You_did_not_type_the_verification_word_correctly);
-            }
-            else
-            {
-                if (this.ModelState.IsValid)
-                {
-                    // Attempt to register the user
-                    try
-                    {
-                        Guid providerUserKey = Guid.NewGuid();
-
-                        string userName = model.UserName.ToLower();
-                        string confirmationToken = WebSecurity.CreateUserAndAccount(
-                            userName, model.Password, new { Email = model.Email, FullName = model.FullName, ProviderUserKey = providerUserKey }, true);
-
-                        if (!string.IsNullOrEmpty(confirmationToken))
-                        {
-                            Roles.Provider.AddUsersToRoles(new[] { providerUserKey.ToString() }, new[] { this.UserHelper.USERROLENAME });
-
-                            isUserRegisterSuccessfully = true;
-
-                            await this.mailer.ConfirmationEmail(
-                                new EmailConfirmationModel()
-                                    {
-                                        Email = model.Email.ToWBEmailAddress(),
-                                        UserName = model.FullName ?? userName,
-                                        ConfirmationToken = confirmationToken
-                                    }).SendAsync();
-                        }
-                    }
-                    catch (MembershipCreateUserException e)
-                    {
-                        this.Error(e.StatusCode.ToErrorCode());
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error("Register user error", e);
-                        this.Error(ErrorMessages.Unexpected_error_occurred_Please_try_again_later);
-                    }
-                }
-            }
-
-            return isUserRegisterSuccessfully ? this.RegisterStepTwo() : this.View(model);
-        }
-
         private bool ShouldShowCaptchaByUserName(string userName)
         {
             return this.authenticationService.ShouldShowCaptcha() ||
