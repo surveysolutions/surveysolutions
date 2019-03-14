@@ -364,6 +364,9 @@
     <value>Upload a file with identifying data to create new assignments.
 Specify usernames for supervisors or interviewers to make batch assignments.</value>
   </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Save file in UTF8 format for support language specific texts.</value>
+  </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Upload .tab file</value>
   </data>
