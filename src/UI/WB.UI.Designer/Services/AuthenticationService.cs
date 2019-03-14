@@ -2,8 +2,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Captcha;
 
 namespace WB.UI.Designer.Implementation.Services
 {

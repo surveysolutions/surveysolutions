@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using WB.UI.Designer.Models;
 
-namespace WB.UI.Shared.Web.Captcha
+namespace WB.UI.Designer.CommonWeb
 {
     public interface ICaptchaService
     {

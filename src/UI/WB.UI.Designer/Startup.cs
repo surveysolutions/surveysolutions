@@ -9,9 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
-using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Designer1

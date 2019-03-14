@@ -12,5 +12,6 @@
         public int CountOfFailedLoginAttemptsBeforeCaptcha { get; set; }
         public string RecaptchaPrivateKey { get; set; }
         public string RecaptchaPublicKey { get; set; }
+        public bool IsReCaptchaEnabled { get; set; }
     }
 }
