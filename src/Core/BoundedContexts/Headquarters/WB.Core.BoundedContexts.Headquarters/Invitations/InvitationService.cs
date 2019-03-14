@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .Count(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Email != null && x.Assignment.Email != string.Empty && 
+                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
                     x.Assignment.Archived == false &&
                     x.SentOnUtc == null));
         }
@@ -124,7 +124,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitationStorage.Store(invitation, invitationId);
         }
 
-        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle)
+        public void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
+            string questionnaireTitle)
         {
             var status = new InvitationDistributionStatus
             {
@@ -180,7 +181,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return cancellationTokenSource.Token;
         }
 
-        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
+        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity,
+            int thresholdDays)
         {
             var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
             var partialResponseInvitations = invitationStorage.Query(_ => _
@@ -188,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
                     x.InterviewId != null &&
-                    x.SentOnUtc !=null  &&
+                    x.SentOnUtc != null &&
                     x.SentOnUtc < thresholdDate &&
                     x.Interview.Status < InterviewStatus.Completed)
                 .Select(x => x.Id)
@@ -217,7 +219,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
                     x.InterviewId == null &&
                     x.LastReminderSentOnUtc == null &&
-                    x.SentOnUtc !=null  &&
+                    x.SentOnUtc != null &&
                     x.SentOnUtc < thresholdDate)
                 .Select(x => x.Id)
                 .ToList());
@@ -255,7 +257,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public Invitation GetInvitationByToken(string token)
         {
-            return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == token));
+            var uppercaseToken = token.ToUpper();
+            return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == uppercaseToken));
+        }
+
+        public Invitation GetInvitationByTokenAndPassword(string token, string password)
+        {
+            var uppercaseToken = token.ToUpper();
+            var uppercasePassword = password.ToUpper();
+            return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == uppercaseToken && x.Assignment.Password == uppercasePassword));
         }
 
         public void InterviewWasCreated(int invitationId, string interviewId)
@@ -263,6 +273,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var invitation = this.GetInvitation(invitationId);
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, invitationId);
+        }
+
+        public bool IsValidTokenAndPassword(string token, string password)
+        {
+            var uppercaseToken = token.ToUpper();
+            var uppercasePassword = password.ToUpper();
+            return invitationStorage.Query(_ => _.Any(x => x.Token == uppercaseToken && x.Assignment.Password == uppercasePassword));
         }
 
         public Invitation GetInvitation(int invitationId)
@@ -302,7 +319,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void MarkInvitationAsSent(int invitationId, string emailId);
         void MarkInvitationAsReminded(int invitationId, string emailId);
 
-        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
+        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
+            string questionnaireTitle);
+
         void StartEmailDistribution();
         void CompleteEmailDistribution();
         void EmailDistributionFailed();
@@ -315,6 +334,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity);
         IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
         Invitation GetInvitationByToken(string token);
+        Invitation GetInvitationByTokenAndPassword(string token, string password);
         void InterviewWasCreated(int invitationId, string interviewId);
+        bool IsValidTokenAndPassword(string token, string password);
     }
 }
