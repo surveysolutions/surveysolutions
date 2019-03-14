@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
@@ -43,8 +44,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             // that all resources will be disposed.
             using (var scope = serviceProvider.CreateScope())
             {
+                
                 // Instantiate the runner
                 var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+
+                
 
                 // Execute the migrations
                 runner.MigrateUp();
