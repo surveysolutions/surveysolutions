@@ -205,10 +205,10 @@
     <value>Additional settings</value>
   </data>
   <data name="SendWithNoResponse" xml:space="preserve">
-    <value>Send to people with no response</value>
+    <value>Send remainder to people with no response</value>
   </data>
   <data name="SendWithPartialResponse" xml:space="preserve">
-    <value>Send to people with a partial response</value>
+    <value>Send remainder to people with a partial response</value>
   </data>
   <data name="DoNotSend" xml:space="preserve">
     <value>Do not send</value>
