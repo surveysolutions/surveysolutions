@@ -28,7 +28,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['welcomeText'].text }">
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['welcomeText'].text" 
                                                         v-validate="'required'"
@@ -38,7 +38,7 @@
                                                         class="form-control js-elasticArea h2" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['welcomeText'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block" v-if="errors.first('welcomePage.welcomeTextTitle')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -48,7 +48,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('welcomePage.welcomeTextDescription') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['invitation'].text }">
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['invitation'].text" 
                                                         v-validate="'required'"
@@ -58,7 +58,7 @@
                                                         class="form-control js-elasticArea font-bold" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['invitation'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block" v-if="errors.first('welcomePage.welcomeTextDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -134,7 +134,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeWelcome') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['resumeWelcome'].text }">
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['resumeWelcome'].text"  
                                                         v-validate="'required'"
@@ -144,7 +144,7 @@
                                                         class="form-control js-elasticArea h2" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['resumeWelcome'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block"  v-if="errors.first('resumePage.resumeWelcome')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -154,7 +154,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeInvitation') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['resumeInvitation'].text }">
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['resumeInvitation'].text" 
                                                         v-validate="'required'"
@@ -164,7 +164,7 @@
                                                         class="form-control js-elasticArea font-bold" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['resumeInvitation'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block" v-if="errors.first('resumePage.resumeInvitation')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -238,7 +238,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Title')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
                                                     <textarea-autosize  
                                                         v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                                         v-validate="'required'"
@@ -248,7 +248,7 @@
                                                         class="form-control js-elasticArea h2" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['webSurveyHeader'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block" v-if="errors.first('finishPage.webSurveyHeader')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -258,7 +258,7 @@
                                         <div class="row-element mb-30">
                                             <div class="h5">{{$t('WebInterviewSettings.Description')}}</div>
                                             <div class="form-group" :class="{ 'has-error': errors.has('finishPage.finishInterview') }">
-                                                <div class="field">
+                                                <div class="field" :class="{ 'answered': webInterviewPageMessages['finishInterview'].text }">
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['finishInterview'].text"
                                                         v-validate="'required'"
@@ -268,7 +268,7 @@
                                                         class="form-control js-elasticArea font-bold" 
                                                         placeholder="Please enter the main text">
                                                     </textarea-autosize>
-                                                    <button type="button" class="btn btn-link btn-clear">
+                                                    <button type="button" @click="webInterviewPageMessages['finishInterview'].text=''" class="btn btn-link btn-clear">
                                                         <span></span>
                                                     </button>
                                                     <span class="help-block" v-if="errors.first('finishPage.finishInterview')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -357,7 +357,7 @@
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
                                                 <div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.subject') }">
-                                                    <div class="field">
+                                                    <div class="field" :class="{ 'answered': emailTemplate.subject }">
                                                         <input type="text" v-model="emailTemplate.subject"
                                                             data-vv-as="Please enter the subject"
                                                             v-validate="'required'"
@@ -365,17 +365,17 @@
                                                             maxlength="200"
                                                             class="form-control with-clear-btn" 
                                                             placeholder="Please enter the subject">
-                                                        <button type="button" class="btn btn-link btn-clear">
+                                                        <button type="button" @click="emailTemplate.subject=null" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
-                                                        <span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.subject')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.subject')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.MainText')}}</div>
                                                 <div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }">
-                                                    <div class="field">
+                                                    <div class="field" :class="{ 'answered': emailTemplate.message }">
                                                         <textarea-autosize v-model="emailTemplate.message"
                                                             data-vv-as="Please enter the main text"
                                                             v-validate="'required'" 
@@ -385,10 +385,10 @@
                                                             class="form-control js-elasticArea" 
                                                             placeholder="Please enter the main text">
                                                         </textarea-autosize>
-                                                        <button type="button" class="btn btn-link btn-clear">
+                                                        <button type="button" @click="emailTemplate.message=null" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
-                                                        <span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.message')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.message')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -396,7 +396,7 @@
                                                 <div class="h5 mb-0">{{$t('WebInterviewSettings.DescriptionForPassword')}}</div>
                                                 <div class="gray-text mb-1">{{$t('WebInterviewSettings.ShownPasswordIsRequired')}}</div>
                                                 <div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription') }">
-                                                    <div class="field">
+                                                    <div class="field" :class="{ 'answered': emailTemplate.passwordDescription }">
                                                         <input type="text" 
                                                             v-model="emailTemplate.passwordDescription" 
                                                             data-vv-name="passwordDescription"
@@ -405,17 +405,17 @@
                                                             maxlength="500"
                                                             class="form-control with-clear-btn" 
                                                             placeholder="Please enter password description">
-                                                        <button type="button" class="btn btn-link btn-clear">
+                                                        <button type="button" @click="emailTemplate.passwordDescription=null" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
-                                                        <span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.passwordDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.StartInterviewButton')}}</div>
                                                 <div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }">
-                                                    <div class="field">
+                                                    <div class="field" :class="{ 'answered': emailTemplate.linkText }">
                                                         <input type="text" 
                                                             v-model="emailTemplate.linkText" 
                                                             v-validate="'required'" 
@@ -423,7 +423,7 @@
                                                             maxlength="200"
                                                             class="form-control with-clear-btn width-dynamic" 
                                                             placeholder="Please enter the text" />
-                                                        <span class="help-block" v-if="errors.has('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -526,7 +526,7 @@
         <hr />
         <div class="row mb-05">
             <div class="col-md-12">
-                <form v-on:submit.prevent="dummy">
+                <form v-on:submit.prevent="dummy" :data-vv-scope="'additionalSettings'">
                     <h3>{{$t('WebInterviewSettings.AdditionalSettings')}}</h3>
                     <div class="form-group mb-20">
                         <input class="checkbox-filter" id="Captcha" type="checkbox" v-model="spamProtectionIsEnabled">
@@ -563,8 +563,8 @@
                         </select>
                     </div>
                     <div class="">
-                        <button type="submit" @click="saveAdditionalSettings()" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                        <button type="submit" @click="cancelAdditionalSettings()" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                        <button type="submit" :disabled="!isDirty(this.form)" @click="saveAdditionalSettings()" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                        <button type="submit" :disabled="!isDirty(this.form)" @click="cancelAdditionalSettings()" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                     </div>
                 </form>
             </div>
@@ -725,9 +725,11 @@ export default {
             });
         }
     },
-    cancelPageTextEditMode(type) {
-        var editText = this.webInterviewPageMessages[type];
-        editText.text = editText.cancelText;
+    cancelPageTextEditMode(titleType, messageType) {
+        var editTitleText = this.webInterviewPageMessages[titleType];
+        var editDescriptionText = this.webInterviewPageMessages[messageType];
+        editTitleText.text = editTitleText.cancelText;
+        editDescriptionText.text = editDescriptionText.cancelText;
     },
     async startWebInterview() {
         var self = this;
@@ -779,11 +781,16 @@ export default {
         this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
     },
     previewText(text) {
+        if (text == null)
+            return ''
         return text
             .replace(/%surveyname%/ig, this.questionnaireTitle)
             .replace(/%QUESTIONNAIRE%/ig, this.questionnaireTitle);
     },
     dummy() {
+        return false;
+    },
+    isDirty(form) {
         return false;
     }
   },
