@@ -475,6 +475,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save file in UTF8 format for support language specific texts..
+        /// </summary>
+        internal static string FileTypeDescription {
+            get {
+                return ResourceManager.GetString("FileTypeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finished.
         /// </summary>
         internal static string Finished {

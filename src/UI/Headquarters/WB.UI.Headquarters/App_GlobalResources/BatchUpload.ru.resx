@@ -606,4 +606,8 @@
     <value>Идентифицирующие вопросы </value>
     <comment>Идентифицирующие вопросы </comment>
   </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+      <value>Сохраните файл в UTF8 формате для поддержки мультиязычнвх текстов</value>
+      <comment>Сохраните файл в UTF8 формате для поддержки мультиязычнвх текстов</comment>
+  </data>
 </root>
