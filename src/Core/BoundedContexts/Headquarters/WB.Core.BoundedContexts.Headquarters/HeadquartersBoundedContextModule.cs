@@ -227,6 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            registry.RegisterDenormalizer<InterviewGeoLocationAnswersDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 

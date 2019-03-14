@@ -1191,34 +1191,34 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(command.QuestionId);
+            var categoricalQuestion = this.innerDocument.Find<ICategoricalQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(command.QuestionId,
-                categoricalOneAnswerQuestion.QuestionType,
-                categoricalOneAnswerQuestion.QuestionScope,
-                categoricalOneAnswerQuestion.QuestionText,
-                categoricalOneAnswerQuestion.StataExportCaption,
-                categoricalOneAnswerQuestion.VariableLabel,
-                categoricalOneAnswerQuestion.ConditionExpression,
-                categoricalOneAnswerQuestion.HideIfDisabled,
+                categoricalQuestion.QuestionType,
+                categoricalQuestion.QuestionScope,
+                categoricalQuestion.QuestionText,
+                categoricalQuestion.StataExportCaption,
+                categoricalQuestion.VariableLabel,
+                categoricalQuestion.ConditionExpression,
+                categoricalQuestion.HideIfDisabled,
                 null,
-                categoricalOneAnswerQuestion.Featured,
-                categoricalOneAnswerQuestion.Instructions,
-                categoricalOneAnswerQuestion.Properties,
+                categoricalQuestion.Featured,
+                categoricalQuestion.Instructions,
+                categoricalQuestion.Properties,
                 null,
                 ConvertOptionsToAnswers(command.Options),
-                categoricalOneAnswerQuestion.LinkedToQuestionId,
-                categoricalOneAnswerQuestion.LinkedToRosterId,
+                categoricalQuestion.LinkedToQuestionId,
+                categoricalQuestion.LinkedToRosterId,
                 null, null, null, null, null,
                 true,
                 null/*categoricalOneAnswerQuestion.CascadeFromQuestionId*/,
                 null,
-                categoricalOneAnswerQuestion.ValidationConditions,
+                categoricalQuestion.ValidationConditions,
                 null,
                 false,
                 null,
                 null);
 
-            this.innerDocument.ReplaceEntity(categoricalOneAnswerQuestion, newQuestion);
+            this.innerDocument.ReplaceEntity(categoricalQuestion, newQuestion);
         }
 
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, QuestionnaireCategoricalOption[] options)
