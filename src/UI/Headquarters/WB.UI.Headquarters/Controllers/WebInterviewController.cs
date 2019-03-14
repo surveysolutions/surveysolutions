@@ -139,27 +139,13 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Start(string id)
         {
-            var invitation = invitationService.GetInvitationByToken(id);
-            Assignment assignment = null;
-            if (invitation == null)
-            {
-                if (int.TryParse(id, out int assignmentId))
-                {
-                    assignment = this.assignments.GetById(assignmentId);
-                    if (assignment == null)
-                    {
-                        return this.HttpNotFound();
-                    }
-                }
-                else
-                {
-                    return this.HttpNotFound();
-                }
-            }
-            else
-            {
-                assignment = invitation.Assignment;
-            }
+            var invitationInfo = GetInvitationInfoByToken(id);
+
+            if (invitationInfo.Assignment == null)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+
+            var assignment = invitationInfo.Assignment;
+            var invitation = invitationInfo.Invitation;
 
             if (assignment.Archived)
             {
@@ -179,16 +165,13 @@ namespace WB.UI.Headquarters.Controllers
             if ((assignment.Quantity ?? 1) == 1)
             {
                 // personal link
-                if (webInterviewConfig.UseCaptcha || !string.IsNullOrWhiteSpace(assignment.Password))
-                {
-                    // page should be shown
-                }
-                else
+                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
                     if (invitation?.InterviewId != null)
                     {
                         if (invitation.Interview.Status >= InterviewStatus.Completed)
-                            throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
+                            throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
+                                Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
                         return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
                     }
 
@@ -199,6 +182,10 @@ namespace WB.UI.Headquarters.Controllers
                     }
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
+                }
+                else
+                {
+                    // page should be shown
                 }
             }
             else
@@ -212,21 +199,70 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
+        private InvitationInfo GetInvitationInfoByToken(string id)
+        {
+            var invitation = invitationService.GetInvitationByToken(id);
+            Assignment assignment = null;
+            if (invitation == null)
+            {
+                if (int.TryParse(id, out int assignmentId))
+                {
+                    assignment = this.assignments.GetById(assignmentId);
+                }
+            }
+            else
+            {
+                assignment = invitation.Assignment;
+            }
+
+            return new InvitationInfo
+            {
+                Assignment = assignment,
+                Invitation = invitation,
+                HasMoreThanOneInvitation = id.StartsWith("Q", StringComparison.InvariantCultureIgnoreCase)
+            };
+        }
+
+        private class InvitationInfo
+        {
+            public Invitation Invitation { get; set; }
+            public bool HasMoreThanOneInvitation { get; set; }
+            public Assignment Assignment { get; set; }
+        }
+
         [HttpPost]
         [ActionName("Start")]
         [ValidateAntiForgeryToken]
-        public ActionResult StartPost(int id, string password)
+        public ActionResult StartPost(string id, string password)
         {
-            var assignment = this.assignments.GetById(id);
+            var invitationInfo = GetInvitationInfoByToken(id);
+
+            var assignment = invitationInfo.Assignment;
+            var invitation = invitationInfo.Invitation;
+           
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
-                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
+                var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, null);
                 model.ServerUnderLoad = true;
                 return this.View(model);
+            }
+
+            if (!string.IsNullOrWhiteSpace(assignment.Password))
+            {
+                bool isValidPassword = invitationInfo.HasMoreThanOneInvitation
+                    ? invitationService.IsValidTokenAndPassword(id, password)
+                    : assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
+                
+                if (!isValidPassword)
+                {
+                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
+                    this.ModelState.AddModelError("InvalidPassword", "Wrong password");
+                    return this.View(model);
+                }
             }
 
             if (webInterviewConfig.UseCaptcha)
@@ -239,17 +275,23 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(assignment.Password))
+            if (invitationInfo.HasMoreThanOneInvitation)
             {
-                if (!assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
-                    this.ModelState.AddModelError("InvalidPassword", "Wrong password");
-                    return this.View(model);
-                }
+                invitation = invitationService.GetInvitationByTokenAndPassword(id, password);
+                assignment = invitation.Assignment;
             }
 
-            var interviewId = this.CreateInterview(assignment);
+            if (invitation?.InterviewId != null)
+            {
+                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId ));
+            }
+
+            var interviewId =  this.CreateInterview(assignment);
+
+            if (invitation != null)
+            {
+                invitationService.InterviewWasCreated(invitation.Id, interviewId);
+            }
 
             RememberCapchaFilled(interviewId);
             TempData[LastCreatedInterviewIdKey] = interviewId;
@@ -453,7 +495,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
                 CustomMessages = webInterviewConfig.CustomMessages,
-                HasPassword = !string.IsNullOrWhiteSpace(assignment.Password)
+                HasPassword = !string.IsNullOrWhiteSpace(assignment?.Password ?? String.Empty)
             };
 
             return view;
