@@ -364,7 +364,6 @@
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
-    <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
@@ -375,7 +374,6 @@
     <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\UpdateAccountModel.cs" />
     <Compile Include="Models\ManageAccountModel.cs" />
-    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
     <Compile Include="Pdf\PdfConvertEnvironment.cs" />
@@ -715,11 +713,7 @@
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
-    <Content Include="Views\SystemMailer\TargetPersonShareNotification.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
-    <Content Include="Views\SystemMailer\TargetPersonStopShareNotification.cshtml" />
-    <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
-    <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
     <Content Include="Views\ControlPanel\Versions.cshtml" />
     <Content Include="Views\Admin\RestoreQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
@@ -787,9 +781,6 @@
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
-    <Content Include="Views\SystemMailer\_Layout.cshtml" />
-    <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
-    <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="questionnaire\content\css-reset.css.less" />

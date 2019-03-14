@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WB.UI.Shared.Web.Captcha;
 
 namespace WB.UI.Designer.Extensions
 {

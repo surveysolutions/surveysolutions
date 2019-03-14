@@ -1,5 +1,4 @@
 ﻿using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.UI.Designer.Models
 {
@@ -13,8 +12,6 @@ namespace WB.UI.Designer.Models
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_required")]
-        [PasswordStringLength(100, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_be_at_least_characters_long")]
-        [PasswordRegularExpression(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
         public string Password { get; set; }
