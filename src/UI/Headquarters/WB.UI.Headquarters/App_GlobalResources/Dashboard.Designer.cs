@@ -356,5 +356,14 @@ namespace Resources {
                 return ResourceManager.GetString("WebInterviewSetup", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web mode.
+        /// </summary>
+        internal static string WebMode {
+            get {
+                return ResourceManager.GetString("WebMode", resourceCulture);
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@
                 return [
                     {
                         data: "title",
-                        name: "Title", // case-sensitive!
+                        name: "Title", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "title",
                         render: function(data, type, row) {
                             return (row.allowCensusMode === true ? "<span class='census-icon'></span>" : "") + data;
@@ -59,12 +59,12 @@
                     },
                     {
                         data: "version",
-                        name: "Version",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name: "Version",// case-sensitive! 
                         "class": "parameters"
                     },
                     {
                         data: "importDate",
-                        name: "ImportDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name: "ImportDate",// case-sensitive! 
                         "class": "date",
                         render: function (data, type, row) {
                             return model.toLocalDate(data);
@@ -84,6 +84,15 @@
                         "class": "date",
                         render: function (data, type, row) {
                             return model.toLocalDate(data);
+                        }
+                    },
+                    {
+                        data: "webModeEnabled",
+                        name: "WebModeEnabled",// case-sensitive! 
+                        "class": "parameters",
+                        "orderable": false,
+                        render: function (data, type, row) {
+                            return (data === true ? '@Common.Yes' : '@Common.No');
                         }
                     }
                 ];
@@ -239,13 +248,14 @@
             <table id="data_holder" class="table table-striped table-bordered table-hover table-ordered"
                    data-order="[[ 2, &quot;desc&quot; ]]" data-searching="true">
                 <thead>
-                <tr>
-                    <th>@Dashboard.Questionnaire</th>
-                    <th>@Dashboard.Version</th>
-                    <th>@Dashboard.ImportDate</th>
-                    <th>@Dashboard.LastEntryDate</th>
-                    <th>@Dashboard.CreationDate</th>
-                </tr>
+                    <tr>
+                        <th>@Dashboard.Questionnaire</th>
+                        <th>@Dashboard.Version</th>
+                        <th>@Dashboard.ImportDate</th>
+                        <th>@Dashboard.LastEntryDate</th>
+                        <th>@Dashboard.CreationDate</th>
+                        <th class="sorting_disabled">@Dashboard.WebMode</th>
+                    </tr>
                 </thead>
             </table>
         </div>

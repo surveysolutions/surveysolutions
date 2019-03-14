@@ -219,4 +219,7 @@
   <data name="DownloadLinks" xml:space="preserve">
     <value>Загрузить web ссылки</value>
   </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Веб режим</value>
+  </data>
 </root>
