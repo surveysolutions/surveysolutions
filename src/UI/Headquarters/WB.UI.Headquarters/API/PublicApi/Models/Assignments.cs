@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string ResponsibleName { get; set; }
 
         /// <summary>
-        /// Questionarire Id to filter by
+        /// Questionnaire Id to filter by
         /// </summary>
         [DataMember]
         public string QuestionnaireId { get; set; }
@@ -78,6 +78,24 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public DateTime UpdatedAtUtc { get; set; }
+
+        /// <summary>
+        /// Email to communicate with respondent
+        /// </summary>
+        [DataMember]
+        public string Email { get; set; }
+        /// <summary>
+        /// Password to protect assignment
+        /// </summary>
+        [DataMember]
+        public string Password { get; set; }
+        
+        /// <summary>
+        ///This assignment was created in web mode
+        /// </summary>
+        [DataMember]
+        public bool? WebMode { get; set; }
+
     }
 
     public class AssignmentAssignRequest

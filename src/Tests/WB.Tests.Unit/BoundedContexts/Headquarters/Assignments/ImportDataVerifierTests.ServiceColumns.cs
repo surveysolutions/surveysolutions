@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_verify_answers_and_email_is_valid_not_empty_and_quantity_is_3_should_return_PL0057_error()
+        public void when_verify_answers_and_email_is_not_empty_and_quantity_is_3_should_return_PL0057_error()
         {
             // arrange
             var fileName = "mainfile.tab";
@@ -70,7 +70,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
                 quantity: Create.Entity.AssignmentQuantity(invalidQuantity, Int32.Parse(invalidQuantity)),
-                assignmentEmail: Create.Entity.AssignmentEmail(validEmail));
+                assignmentEmail: Create.Entity.AssignmentEmail(validEmail),
+                assignmentWebMode: Create.Entity.AssignmentWebMode(true));
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
@@ -80,6 +81,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0057"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(invalidQuantity));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_answers_and_email_is_not_empty_and_web_mode_not_set_should_return_PL0057_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var validEmail = "email@example.com";
+            var quantity = "1";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.TextQuestion()}));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                quantity: Create.Entity.AssignmentQuantity(quantity, Int32.Parse(quantity)),
+                assignmentEmail: Create.Entity.AssignmentEmail(validEmail));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0058"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(validEmail));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
     }

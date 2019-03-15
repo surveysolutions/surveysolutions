@@ -238,4 +238,7 @@
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
     <value>For assignments with provided email allowed quantity is 1</value>
   </data>
+  <data name="PL0058_IncosistentWebmodeAndEmailOrPassword" xml:space="preserve">
+    <value>For assignments having Email or Password Web Mode should be activated</value>
+  </data>
 </root>
