@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
-                    Mock.Of<IAuditLog>(),
+                    Mock.Of<ISystemLog>(),
                     questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                     Mock.Of<IAssignmetnsDeletionService>(),
                     lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),

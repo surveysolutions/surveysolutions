@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IMapper mapper;
         private readonly HqUserManager userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             HqUserManager userManager,
             ILogger logger,
             IQuestionnaireStorage questionnaireStorage,
-            IAuditLog auditLog,
+            ISystemLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator,

@@ -3,8 +3,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Headquarters.API
@@ -12,6 +14,8 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : ApiController
     {
+        private readonly ISystemLogViewFactory systemLogViewFactory;
+
         public class GlobalNoticeModel
         {
             public string GlobalNotice { get; set; }
@@ -27,10 +31,12 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
         public AdminSettingsController(IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
-            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
+            ISystemLogViewFactory systemLogViewFactory)
         {
             this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
             this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
+            this.systemLogViewFactory = systemLogViewFactory ?? throw new ArgumentNullException(nameof(systemLogViewFactory));
         }
 
         [HttpGet]
@@ -81,5 +87,9 @@ namespace WB.UI.Headquarters.API
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});
         }
+
+        [HttpPost]
+        public SystemLog GetSystemLog(SystemLogFilter filter) => this.systemLogViewFactory.GetLog(filter);
+
     }
 }

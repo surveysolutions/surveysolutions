@@ -332,6 +332,17 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/importquestionaires").Include(
                 "~/Scripts/viewmodels/pages/importquestionaires.js"));
+
+            bundles.Add(new ScriptBundle("~/js/syslog").Include(
+                "~/Scripts/bootstrap-datepicker.js",
+                "~/Scripts/ko.datepicker.js",
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js",
+                "~/Scripts/viewmodels/pages/controlpanel/systemlog.js"
+            ));
         }
     }
 }

@@ -18,12 +18,12 @@ namespace WB.UI.Headquarters.API
     {
         private readonly ILogger logger;
         private readonly IExportSettings exportSettings;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IExportServiceApi exportServiceApi;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
-            IAuditLog auditLog,
+            ISystemLog auditLog,
             IExportServiceApi exportServiceApi)
         {
             this.exportSettings = exportSettings;
@@ -53,7 +53,7 @@ namespace WB.UI.Headquarters.API
                 await this.ClearExportData();
             }
 
-            this.auditLog.ExportEncriptionChanged(changeSettingsState.EnableState);
+            this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return Request.CreateResponse(newExportSettingsModel);
         }

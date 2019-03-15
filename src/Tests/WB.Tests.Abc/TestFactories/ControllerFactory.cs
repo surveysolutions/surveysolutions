@@ -92,7 +92,7 @@ namespace WB.Tests.Abc.TestFactories
             IMapper mapper = null,
             HqUserManager userManager = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IAuditLog auditLog = null,
+            ISystemLog auditLog = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
             IPreloadedDataVerifier verifier = null,
             ICommandTransformator commandTransformator = null

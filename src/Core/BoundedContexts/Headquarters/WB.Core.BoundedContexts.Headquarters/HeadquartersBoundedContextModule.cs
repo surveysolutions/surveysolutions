@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<IAuditLog, Services.Internal.AuditLog>();
+            registry.Bind<ISystemLog, Services.Internal.SystemLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
@@ -289,6 +289,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
+
+            registry.Bind<ISystemLogViewFactory, SystemLogViewFactory>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

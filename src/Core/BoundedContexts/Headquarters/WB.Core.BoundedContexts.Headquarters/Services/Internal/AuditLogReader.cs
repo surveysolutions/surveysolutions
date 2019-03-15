@@ -27,5 +27,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             var filePath = fileTarget.FileName.Render(new LogEventInfo());
             return Path.GetFullPath(filePath);
         }
+
+        public bool LogExists()
+        {
+            var filePath = GetServerFilePath();
+
+            return File.Exists(filePath);
+        }
     }
 }

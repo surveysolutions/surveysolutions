@@ -1782,6 +1782,7 @@
     <Content Include="Scripts\viewmodels\pagebase.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\brokeninterviewpackages.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\readside.js" />
+    <Content Include="Scripts\viewmodels\pages\controlpanel\systemlog.js" />
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Content Include="Scripts\viewmodels\pages\mapusers.js" />
