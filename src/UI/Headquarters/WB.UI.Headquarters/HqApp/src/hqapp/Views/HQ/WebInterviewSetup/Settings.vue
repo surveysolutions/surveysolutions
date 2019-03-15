@@ -543,7 +543,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithNoResponse')}}
                         </div>
-                        <select class="selectpicker" v-validate="'required'" tabindex="-98" data-vv-name="reminderAfterDaysIfNoResponse" v-model="reminderAfterDaysIfNoResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" ref="reminderAfterDaysIfNoResponse" data-vv-name="reminderAfterDaysIfNoResponse" v-model="reminderAfterDaysIfNoResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -557,7 +557,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithPartialResponse')}}
                         </div>
-                        <select class="selectpicker" v-validate="'required'" tabindex="-98" data-vv-name="reminderAfterDaysIfPartialResponse" v-model="reminderAfterDaysIfPartialResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" ref="reminderAfterDaysIfPartialResponse" data-vv-name="reminderAfterDaysIfPartialResponse" v-model="reminderAfterDaysIfPartialResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -813,6 +813,20 @@ export default {
         const form = this.fields[formName];
         const keys = Object.keys((this.fields || {})[formName] || {});
         return keys.some(key => form[key].dirty || form[key].changed);
+    }
+  },
+  watch: {
+    reminderAfterDaysIfNoResponse: function (val) {
+        if (this.$refs.reminderAfterDaysIfNoResponse.value != val ) {
+            this.$refs.reminderAfterDaysIfNoResponse.value = val;
+            $(this.$refs.reminderAfterDaysIfNoResponse).selectpicker("refresh");
+        }
+    },
+    reminderAfterDaysIfPartialResponse: function (val) {
+        if (this.$refs.reminderAfterDaysIfPartialResponse.value != val ) {
+            this.$refs.reminderAfterDaysIfPartialResponse.value = val;
+            $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker("refresh");
+        }
     }
   },
   computed: {
