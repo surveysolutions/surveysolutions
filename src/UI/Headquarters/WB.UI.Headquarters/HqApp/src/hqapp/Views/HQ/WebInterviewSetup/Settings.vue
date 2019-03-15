@@ -66,8 +66,8 @@
                                             </div>
                                         </div>
                                         <div class="">
-                                            <button type="submit" @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                                            <button type="submit" @click="cancelPageTextEditMode('welcomeText', 'invitation')"  class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$welcomePage')" @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$welcomePage')" @click="cancelPageTextEditMode('welcomePage', 'welcomeText', 'invitation')"  class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                                         </div>
                                     </div>
                                     <div class="preview">
@@ -172,8 +172,8 @@
                                             </div>
                                         </div>
                                         <div class="">
-                                            <button type="submit" @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                                            <button type="submit" @click="cancelPageTextEditMode('resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$resumePage')" @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$resumePage')" @click="cancelPageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                                         </div>
                                     </div>
                                     <div class="preview">
@@ -276,8 +276,8 @@
                                             </div>
                                         </div>
                                         <div class="">
-                                            <button type="submit" @click="savePageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                                            <button type="submit" @click="cancelPageTextEditMode('webSurveyHeader', 'finishInterview')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$finishPage')" @click="savePageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                                            <button type="submit" :disabled="!isDirty('$finishPage')" @click="cancelPageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                                         </div>
                                     </div>
                                     <div class="preview">
@@ -416,20 +416,25 @@
                                                 <div class="h5">{{$t('WebInterviewSettings.StartInterviewButton')}}</div>
                                                 <div class="form-group mb-30" :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }">
                                                     <div class="field" :class="{ 'answered': emailTemplate.linkText }">
-                                                        <input type="text" 
-                                                            v-model="emailTemplate.linkText" 
-                                                            v-validate="'required'" 
-                                                            data-vv-name="linkText"
-                                                            maxlength="200"
-                                                            class="form-control with-clear-btn width-dynamic" 
-                                                            placeholder="Please enter the text" />
-                                                        <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        <span class="wrapper-dynamic">
+                                                            <input type="text" 
+                                                                v-model="emailTemplate.linkText" 
+                                                                v-validate="'required'" 
+                                                                data-vv-name="linkText"
+                                                                maxlength="200"
+                                                                class="form-control with-clear-btn width-dynamic" 
+                                                                placeholder="Please enter the text" />
+                                                            <button type="button" @click="emailTemplate.linkText=null" class="btn btn-link btn-clear">
+                                                                <span></span>
+                                                            </button>    
+                                                            <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="">
-                                                <button type="submit" @click="saveEmailTemplate(emailTemplate)" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                                                <button type="button" @click="cancelEditEmailTemplate(emailTemplate)" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                                                <button type="submit" :disabled="!isDirty('$emailTemplateData' + emailTemplate.value)" @click="saveEmailTemplate(emailTemplate)" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                                                <button type="button" :disabled="!isDirty('$emailTemplateData' + emailTemplate.value)" @click="cancelEditEmailTemplate(emailTemplate)" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -529,7 +534,7 @@
                 <form v-on:submit.prevent="dummy" :data-vv-scope="'additionalSettings'">
                     <h3>{{$t('WebInterviewSettings.AdditionalSettings')}}</h3>
                     <div class="form-group mb-20">
-                        <input class="checkbox-filter" id="Captcha" type="checkbox" v-model="spamProtectionIsEnabled">
+                        <input class="checkbox-filter" v-validate="''" data-vv-name="spamProtectionIsEnabled" id="Captcha" type="checkbox" v-model="spamProtectionIsEnabled">
                         <label for="Captcha">
                             <span class="tick"></span>{{$t('WebInterviewSetup.UseCaptcha')}}
                         </label>
@@ -538,7 +543,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithNoResponse')}}
                         </div>
-                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfNoResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" v-model="reminderAfterDaysIfNoResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -552,7 +557,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithPartialResponse')}}
                         </div>
-                        <select class="selectpicker" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -563,8 +568,8 @@
                         </select>
                     </div>
                     <div class="">
-                        <button type="submit" :disabled="!isDirty(this.form)" @click="saveAdditionalSettings()" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
-                        <button type="submit" :disabled="!isDirty(this.form)" @click="cancelAdditionalSettings()" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
+                        <button type="submit" :disabled="!isDirty('$additionalSettings')" @click="saveAdditionalSettings()" class="btn btn-md btn-success">{{$t('WebInterviewSettings.Save')}}</button>
+                        <button type="submit" :disabled="!isDirty('$additionalSettings')" @click="cancelAdditionalSettings()" class="btn btn-md btn-link">{{$t('WebInterviewSettings.Cancel')}}</button>
                     </div>
                 </form>
             </div>
@@ -637,6 +642,10 @@ export default {
       }
     );
 
+    _.map(this.emailTemplates, emailTemplate => {
+        self.$validator.reset('emailTemplateData' + emailTemplate.value);
+    });
+
     this.webInterviewPageMessages = _.map(
       this.$config.model.defaultTexts,
       (value, key) => {
@@ -654,6 +663,10 @@ export default {
         map[obj.value] = obj;
         return map;
     }, {});
+
+    self.$validator.reset('$welcomePage');
+    self.$validator.reset('$resumePage');
+    self.$validator.reset('$finishPage');
   },
   methods: {
     setActive(emailTemplate) {
@@ -669,6 +682,7 @@ export default {
         emailTemplate.subject = custom == undefined || _.isNil(custom.subject) || custom.subject === "" ? defaultEmailTemplate.subject : custom.subject;
         emailTemplate.passwordDescription = custom == undefined || _.isNil(custom.passwordDescription) || custom.passwordDescription === "" ? defaultEmailTemplate.passwordDescription : custom.passwordDescription;
         emailTemplate.linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText;
+        this.$validator.reset('emailTemplateData' + emailTemplate.value);
     },
     async saveEmailTemplate(emailTemplate) {
         var self = this;
@@ -686,6 +700,8 @@ export default {
                 userTemplate.message = emailTemplate.message
                 userTemplate.passwordDescription = emailTemplate.passwordDescription
                 userTemplate.linkText = emailTemplate.linkText;
+
+                self.$validator.reset('emailTemplateData' + emailTemplate.value);
             })
             .catch(function (error) {
                 Vue.config.errorHandler(error, self);
@@ -716,6 +732,7 @@ export default {
             .then(function (response) {
                 editTitleText.cancelText = editTitleText.text;
                 editDescriptionText.cancelText = editDescriptionText.text;
+                self.$validator.reset(scope);
             })
             .catch(function (error) {
                 Vue.config.errorHandler(error, self);
@@ -725,11 +742,12 @@ export default {
             });
         }
     },
-    cancelPageTextEditMode(titleType, messageType) {
+    cancelPageTextEditMode(scope, titleType, messageType) {
         var editTitleText = this.webInterviewPageMessages[titleType];
         var editDescriptionText = this.webInterviewPageMessages[messageType];
         editTitleText.text = editTitleText.cancelText;
         editDescriptionText.text = editDescriptionText.cancelText;
+        this.$validator.reset(scope);
     },
     async startWebInterview() {
         var self = this;
@@ -767,6 +785,7 @@ export default {
             self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled;
             self.cancelReminderAfterDaysIfNoResponse = self.reminderAfterDaysIfNoResponse;
             self.cancelReminderAfterDaysIfPartialResponse = self.reminderAfterDaysIfPartialResponse;
+            self.$validator.reset('additionalSettings');
         })
         .catch(function (error) {
             Vue.config.errorHandler(error, self);
@@ -779,6 +798,7 @@ export default {
         this.spamProtectionIsEnabled = this.cancelSpamProtectionIsEnabled;
         this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
         this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
+        this.$validator.reset('additionalSettings');
     },
     previewText(text) {
         if (text == null)
@@ -790,12 +810,14 @@ export default {
     dummy() {
         return false;
     },
-    isDirty(form) {
-        return false;
+    isDirty(formName) {
+        const form = this.fields[formName];
+        const keys = Object.keys((this.fields || {})[formName] || {});
+        return keys.some(key => form[key].dirty || form[key].changed);
     }
   },
   computed: {
-      
+
   }
 };
 </script>
