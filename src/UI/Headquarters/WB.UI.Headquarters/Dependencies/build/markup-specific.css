@@ -616,6 +616,9 @@ main .flex-row {
 .welcome-page .browser-mockup .h2, .welcome-page .browser-mockup p {
   white-space: pre-line; }
 
+.interview-setup .btn + .btn {
+  margin-left: 4px; }
+
 .interview-setup .help-block {
   font-style: italic;
   font-size: 14px;
@@ -685,6 +688,10 @@ main .flex-row {
     resize: none; }
   .interview-setup .row-element .form-control {
     padding: 10px 30px 10px 18px; }
+  .interview-setup .row-element .wrapper-dynamic {
+    display: inline-block;
+    width: auto;
+    position: relative; }
   .interview-setup .row-element .width-dynamic {
     font: 12px/14px "TrebuchetMSBold";
     text-transform: uppercase;

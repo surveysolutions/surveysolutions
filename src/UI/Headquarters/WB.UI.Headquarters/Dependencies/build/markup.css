@@ -5839,7 +5839,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 793px 18px; } }
 
-.combo-box input:checked ~ .btn-clear, .answered > .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu {
+.combo-box input:checked ~ .btn-clear, .answered > .btn-clear, .answered .wrapper-dynamic .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu {
   visibility: visible;
   opacity: 1;
   filter: alpha(opacity=100); }
@@ -5976,6 +5976,9 @@ a.disabled {
   .btn-link::hover, .btn-link::focus {
     text-decoration: none;
     color: #1d598c; }
+  .btn-link:disabled, .btn-link.disabled {
+    border: transparent;
+    background: none; }
 
 .foldback-button {
   display: none;

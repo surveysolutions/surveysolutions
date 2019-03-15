@@ -52,6 +52,9 @@
 	}
 }
 .interview-setup{
+	.btn + .btn{
+		margin-left: 4px;
+	}
 	.help-block{
 		font-style: italic;
 		font-size: 14px;
@@ -121,6 +124,11 @@
 		.form-control{
 			padding: 10px 30px 10px 18px;
 		}  
+		.wrapper-dynamic{
+			display: inline-block;
+			width: auto;
+			position: relative;
+		}
 		.width-dynamic{
 			font: 12px/14px "TrebuchetMSBold";
     	text-transform: uppercase;
