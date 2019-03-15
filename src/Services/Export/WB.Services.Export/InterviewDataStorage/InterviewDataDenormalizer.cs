@@ -227,7 +227,7 @@ namespace WB.Services.Export.InterviewDataStorage
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                value: @event.Event.Answer,
+                value: @event.Event.OriginDate?.DateTime ?? @event.Event.Answer,
                 valueType: NpgsqlDbType.Timestamp,
                 token: token);
         }

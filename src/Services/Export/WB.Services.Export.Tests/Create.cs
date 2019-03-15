@@ -703,6 +703,17 @@ namespace WB.Services.Export.Tests
                 }
             }, interviewId);
         }
+
+        public Event DateTimeQuestionAnswered(Guid interviewId, Identity identity, DateTimeOffset? originDate = null, DateTime? answer = null)
+        {
+            return Event(new DateTimeQuestionAnswered
+            {
+                Answer = answer ?? DateTime.Now,
+                OriginDate = originDate,
+                QuestionId = identity.Id,
+                RosterVector = identity.RosterVector
+            }, interviewId);
+        }
     }
 
     public class EntityFactory
