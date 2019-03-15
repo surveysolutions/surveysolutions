@@ -34,6 +34,10 @@ a.disabled{
 		text-decoration: none;
 		color: darken($blue, 15%);
 	}
+	&:disabled, &.disabled{
+		border: transparent;
+		background: none;
+	}
 }
 .foldback-button{
 	display: none;
@@ -225,6 +229,11 @@ a.disabled{
 .answered{
 	& > .btn-clear{
 		@extend %visibility-visible;
+	}
+	.wrapper-dynamic{
+		.btn-clear{
+			@extend %visibility-visible;
+		}
 	}
 }
 .btn-action-questionnaire{
