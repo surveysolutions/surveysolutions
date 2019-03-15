@@ -4,5 +4,7 @@
     {
         string[] Read();
         string GetServerFilePath();
+
+        bool LogExists();
     }
 }

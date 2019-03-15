@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API
         private readonly IExportServiceApi exportServiceApi;
         private readonly IExportSettings exportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly ISerializer serializer;
         private readonly ExternalStoragesSettings externalStoragesSettings;
 
@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
             IExportFileNameService exportFileNameService,
             IExportServiceApi exportServiceApi,
-            IAuditLog auditLog, ExternalStoragesSettings externalStoragesSettings)
+            ISystemLog auditLog, ExternalStoragesSettings externalStoragesSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;

@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
         private readonly IAssignmentsImportService importService;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             ILogger logger, 
             ITranslationManagementService translations,
             IAssignmentsImportService importService,
-            IAuditLog auditLog,
+            ISystemLog auditLog,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader,
             IAssignmetnsDeletionService assignmetnsDeletionService,
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,

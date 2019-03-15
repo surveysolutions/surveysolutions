@@ -31,7 +31,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.API
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IAuditLog auditLog,
+            ISystemLog auditLog,
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
