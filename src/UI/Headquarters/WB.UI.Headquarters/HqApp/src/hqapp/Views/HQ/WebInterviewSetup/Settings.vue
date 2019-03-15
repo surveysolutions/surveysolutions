@@ -222,7 +222,7 @@
                                                     </div>
                                                     <div class="row-element">
                                                         <a href="javascript:void(0);" class="btn btn-success btn-lg mb-1">Start New interview</a>
-                                                        <a href="javascript:void(0);" style="margin-right: 5px;" class="btn btn-primary btn-lg mb-1">Restore interview</a>
+                                                        <a href="javascript:void(0);" class="btn btn-primary btn-lg mb-1">Restore interview</a>
                                                     </div>
                                                 </div>            
                                             </div>
@@ -543,7 +543,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithNoResponse')}}
                         </div>
-                        <select class="selectpicker" v-validate="'required'" tabindex="-98" v-model="reminderAfterDaysIfNoResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" data-vv-name="reminderAfterDaysIfNoResponse" v-model="reminderAfterDaysIfNoResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -557,7 +557,7 @@
                         <div class="mb-1">
                             {{$t('WebInterviewSettings.SendWithPartialResponse')}}
                         </div>
-                        <select class="selectpicker" v-validate="'required'" tabindex="-98" v-model="reminderAfterDaysIfPartialResponse">
+                        <select class="selectpicker" v-validate="'required'" tabindex="-98" data-vv-name="reminderAfterDaysIfPartialResponse" v-model="reminderAfterDaysIfPartialResponse">
                             <option value="null">{{$t('WebInterviewSettings.DoNotSend')}}</option>
                             <option value="1">{{$t('WebInterviewSettings.AfterXDay', {count: 1})}}</option>
                             <option value="2">{{$t('WebInterviewSettings.AfterXDay', {count: 2})}}</option>
@@ -579,9 +579,9 @@
             <div class="col-md-12">
                 <div class="">
                     <a href="javascript:void(0);" @click="startWebInterview" v-if="!started" class="btn btn-lg btn-success mb-1" role="button">{{$t('WebInterviewSetup.Start')}}</a>
-                    <a href="javascript:void(0);" @click="stopWebInterview" v-if="started" style="margin-right: 5px;" class="btn btn-lg btn-danger mb-1" role="button">{{$t('WebInterviewSetup.StopWebInterview')}}</a>
-                    <a :href="this.$config.model.downloadAssignmentsUrl" style="margin-right: 5px;" class="btn btn-lg btn-primary mb-1" role="button">{{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}</a>
-                    <a :href="this.$config.model.surveySetupUrl" style="margin-right: 5px;" class="btn btn-lg back-link mb-1" role="button">{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>
+                    <a href="javascript:void(0);" @click="stopWebInterview" v-if="started" class="btn btn-lg btn-danger mb-1" role="button">{{$t('WebInterviewSetup.StopWebInterview')}}</a>
+                    <a :href="this.$config.model.downloadAssignmentsUrl" class="btn btn-lg btn-primary mb-1" role="button">{{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}</a>
+                    <a :href="this.$config.model.surveySetupUrl" class="btn btn-lg back-link mb-1" role="button">{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>
                 </div>
             </div>
         </div> 
@@ -599,9 +599,8 @@ export default {
       started: false,
       reminderAfterDaysIfNoResponse: 3,
       reminderAfterDaysIfPartialResponse: 3,
-      submitting: false,
-      updatedMessage: null,
-      updateFailed: false
+      logoUrl: '',
+      hasLogo: false
     };
   },
 
