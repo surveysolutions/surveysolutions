@@ -38,7 +38,7 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Of<IHashCompatibilityProvider>(),
             Mock.Of<IPasswordHasher>(),
             Mock.Of<IIdentityValidator<string>>(),
-            Mock.Of<IAuditLog>()) { }
+            Mock.Of<ISystemLog>()) { }
     }
 
     public class StorageFactory
@@ -57,12 +57,12 @@ namespace WB.Tests.Abc.TestFactories
             IHashCompatibilityProvider hashCompatibilityProvider = null,
             IPasswordHasher passwordHasher = null,
             IIdentityValidator<string> identityValidator = null,
-            IAuditLog logger = null)
+            ISystemLog logger = null)
             => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(),
                 hashCompatibilityProvider,
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 identityValidator ?? Mock.Of<IIdentityValidator<string>>(),
-                logger ?? Mock.Of<IAuditLog>());
+                logger ?? Mock.Of<ISystemLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {

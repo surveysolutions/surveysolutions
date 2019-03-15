@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
-                Mock.Of<IAuditLog>(),
+                Mock.Of<ISystemLog>(),
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<ICommandTransformator>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),

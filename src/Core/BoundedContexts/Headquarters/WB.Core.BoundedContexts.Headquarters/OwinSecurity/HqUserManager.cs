@@ -17,14 +17,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     public class HqUserManager : UserManager<HqUser, Guid>
     {
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-        private readonly IAuditLog auditLog;
+        private readonly ISystemLog auditLog;
         private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
 
         public HqUserManager(IUserStore<HqUser, Guid> store, 
             IHashCompatibilityProvider hashCompatibilityProvider, 
             IPasswordHasher passwordHasher, 
             IIdentityValidator<string> identityValidator, 
-            IAuditLog auditLog)
+            ISystemLog auditLog)
             : base(store)
         {
             this.hashCompatibilityProvider = hashCompatibilityProvider;
