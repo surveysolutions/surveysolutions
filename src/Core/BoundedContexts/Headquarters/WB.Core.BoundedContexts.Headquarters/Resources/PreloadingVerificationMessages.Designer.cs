@@ -419,5 +419,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0057_IncosistentQuantityAndEmail", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments having Email or Password Web Mode should be activated.
+        /// </summary>
+        public static string PL0058_IncosistentWebmodeAndEmailOrPassword {
+            get {
+                return ResourceManager.GetString("PL0058_IncosistentWebmodeAndEmailOrPassword", resourceCulture);
+            }
+        }
     }
 }
