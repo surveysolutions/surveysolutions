@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -111,6 +112,53 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Assert.That(stored, Has.Count.EqualTo(1));
             Assert.That(stored.First(), Has.Property(nameof(AssignmentDocument.ResponsibleId)).EqualTo(responsible));
+        }
+
+
+        [Test]
+        public void should_loadAll_by_responsible_for_assignments_count_more_1000()
+        {
+            var responsible = Id.g7;
+
+            var assignmentDocuments = Enumerable.Range(1, 1000)
+                .Select(index => Create.Entity.AssignmentDocument(index)
+                    .WithResponsible(responsible)
+                    .WithAnswer(Create.Entity.Identity(Id.g1), index.ToString())
+                    .Build())
+                .ToList();
+
+            var otherResponsibleDocuments = Enumerable.Range(2000, 1000)
+                .Select(index => Create.Entity.AssignmentDocument(index)
+                    .WithResponsible(Guid.NewGuid())
+                    .WithAnswer(Create.Entity.Identity(Id.g1), index.ToString())
+                    .Build())
+                .ToList();
+
+            this.storage.Store(assignmentDocuments);
+            this.storage.Store(otherResponsibleDocuments);
+
+            var stored = this.storage.LoadAll(responsible);
+
+            Assert.That(stored, Has.Count.EqualTo(1000));
+            Assert.That(stored.First(), Has.Property(nameof(AssignmentDocument.ResponsibleId)).EqualTo(responsible));
+        }
+
+        [Test]
+        public void should_loadAll_for_assignments_count_more_1000()
+        {
+            var assignmentDocuments = Enumerable.Range(1, 1000)
+                .Select(index => Create.Entity.AssignmentDocument(index)
+                    .WithResponsible(Guid.NewGuid())
+                    .WithAnswer(Create.Entity.Identity(Id.g1), index.ToString())
+                    .Build())
+                .ToList();
+
+
+            this.storage.Store(assignmentDocuments);
+
+            var stored = this.storage.LoadAll();
+
+            Assert.That(stored, Has.Count.EqualTo(1000));
         }
 
         [Test]
