@@ -7,7 +7,7 @@
     }
     td.editable{
         position: relative;
-        &after { 
+        &:after{ 
             content: "";
             position: absolute;
             top: 0;
@@ -18,7 +18,7 @@
             border-left: 8px solid transparent;
             border-bottom: 8px solid transparent;
             border-top: 8px solid #2a81cb;
-            }
+        }
     }
     tr{
         .without-break{
