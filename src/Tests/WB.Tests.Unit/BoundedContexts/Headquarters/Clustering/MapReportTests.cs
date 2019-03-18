@@ -51,8 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
 
             this.subject = Create.Service.MapReport(
                 authorizedUser: authorizedUser,
-                interviewFactory: interviewFactory,
-                questionnaireStorage: questionnaireStorage);
+                interviewFactory: interviewFactory);
         }
 
         [Test]

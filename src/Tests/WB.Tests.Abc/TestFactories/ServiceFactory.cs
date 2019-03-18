@@ -954,14 +954,12 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
-            IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null,
             IAuthorizedUser authorizedUser = null)
         {
             return new MapReport(
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
