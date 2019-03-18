@@ -19,7 +19,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.TextQuestion()}));
 
-            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, assignmentPassword: Create.Entity.AssignmentPassword(invalidPassword));
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, assignmentPassword: Create.Entity.AssignmentPassword(invalidPassword),
+                assignmentWebMode: Create.Entity.AssignmentWebMode(true));
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
