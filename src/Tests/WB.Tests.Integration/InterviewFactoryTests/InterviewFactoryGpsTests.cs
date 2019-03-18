@@ -4,13 +4,16 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using Supercluster;
+using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -529,6 +532,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
             {
                 var interviewSummaryRepositoryLocal = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+                var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(unitOfWork);
 
                 foreach (var gpsAnswer in answers)
                 {
@@ -543,10 +547,20 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
                         ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid()
                     }, gpsAnswer.InterviewId.FormatGuid());
-                    factory.SaveGeoLocation(gpsAnswer.InterviewId, gpsAnswer.QuestionId, gpsAnswer.Answer.Latitude,
-                        gpsAnswer.Answer.Longitude, gpsAnswer.Answer.Timestamp);
-                    factory.EnableGeoLocationAnswers(gpsAnswer.InterviewId, new[] {gpsAnswer.QuestionId},
-                        gpsAnswer.IsEnabled);
+
+                    geolocationDenormalizer.Handle(new PublishedEvent<GeoLocationQuestionAnswered>(
+                        Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
+                            Create.Event.GeoLocationQuestionAnswered(gpsAnswer.QuestionId, gpsAnswer.Answer.Latitude,
+                                gpsAnswer.Answer.Longitude))));
+
+                    if (gpsAnswer.IsEnabled)
+                        geolocationDenormalizer.Handle(new PublishedEvent<QuestionsEnabled>(
+                            Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
+                                Create.Event.QuestionsEnabled(gpsAnswer.QuestionId))));
+                    else
+                        geolocationDenormalizer.Handle(new PublishedEvent<QuestionsDisabled>(
+                            Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
+                                Create.Event.QuestionsDisabled(new[] {gpsAnswer.QuestionId}))));
                 }
                 unitOfWork.AcceptChanges();
             }
