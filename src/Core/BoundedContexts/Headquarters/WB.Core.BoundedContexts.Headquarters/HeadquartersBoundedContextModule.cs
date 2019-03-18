@@ -293,6 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
+            registry.Bind<IInvitationMailingService, InvitationMailingService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

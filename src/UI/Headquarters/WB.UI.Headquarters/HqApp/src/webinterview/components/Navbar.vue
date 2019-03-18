@@ -43,11 +43,16 @@
                             </li>
                         </ul>
                     </li>
+                    <li  v-if="showEmailPersonalLink">
+                        <button type="button" class="btn btn-default btn-link btn-icon" @click="emailPersonalLink" :title="'Email link'">
+                             <span class="glyphicon glyphicon-envelope"></span>Email link
+                        </button>
+                    </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
                             <span class="glyphicon glyphicon-sort"></span>
                         </button>
-                    </li>                    
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -57,9 +62,15 @@
 </template>
 <script lang="js">
     import modal from "./modal"
+    import axios from "axios"
 
     export default {
         name: 'navbar',
+        data() {
+            return {
+                showEmailPersonalLink: this.$config.askForEmail
+            }
+        },
         beforeMount() {
             this.$store.dispatch("getLanguageInfo")
             this.$store.dispatch("loadInterview")
@@ -119,6 +130,39 @@
             }
         },
         methods: {
+            emailPersonalLink(){
+                var self = this;
+                let prompt = modal.prompt({
+                    title: "<p>Hello</p>",
+                    inputType: 'email',
+                    callback: function(result){
+                        if (!self.validateEmail(result))
+                        {
+                            var input = $(this).find('input');
+                            self.$nextTick(function() {
+                                input.next("span").remove();
+                                input.after("<span clas='help-text text-danger'>Invalid value " + result +"</span>")
+                            });
+                            return false;
+                        }
+
+                        self.sendEmailWithPersonalLink(result);
+                    }
+                });
+            },
+            sendEmailWithPersonalLink(email){
+                var self = this;
+                axios.post(this.$config.sendLinkUri, { 
+                    interviewId:  this.$route.params.interviewId,
+                    email: email 
+                }).then(function(response){
+                    self.showEmailPersonalLink = false;
+                });
+            },
+            validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            },
             changeLanguage(language) {
 
                 this.$store.dispatch("changeLanguage", { language: language })

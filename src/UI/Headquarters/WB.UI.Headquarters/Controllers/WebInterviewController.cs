@@ -25,9 +25,12 @@ using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 
@@ -53,9 +56,12 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioProcessingService audioProcessingService;
         private readonly IPauseResumeQueue pauseResumeQueue;
         private readonly IInvitationService invitationService;
+        private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
+        private readonly IInvitationMailingService invitationMailingService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
+        public static readonly string AskForEmail = "askForEmail";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
@@ -89,7 +95,9 @@ namespace WB.UI.Headquarters.Controllers
             IAudioFileStorage audioFileStorage,
             IAudioProcessingService audioProcessingService,
             IPauseResumeQueue pauseResumeQueue, 
-            IInvitationService invitationService)
+            IInvitationService invitationService, 
+            INativeReadSideStorage<InterviewSummary> interviewSummary, 
+            IInvitationMailingService invitationMailingService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -109,6 +117,8 @@ namespace WB.UI.Headquarters.Controllers
             this.audioProcessingService = audioProcessingService;
             this.pauseResumeQueue = pauseResumeQueue;
             this.invitationService = invitationService;
+            this.interviewSummary = interviewSummary;
+            this.invitationMailingService = invitationMailingService;
         }
 
         [WebInterviewAuthorize]
@@ -212,6 +222,8 @@ namespace WB.UI.Headquarters.Controllers
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
+
+                TempData[AskForEmail] = true;
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
@@ -336,6 +348,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
+            ViewBag.AskForEmail = TempData[AskForEmail] ?? true;
 
             return View("Index");
         }

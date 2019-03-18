@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -14,6 +15,27 @@ namespace WB.UI.Headquarters.Controllers
 {
     public partial class WebInterviewController : BaseController
     {
+        [HttpPost]
+        public async Task<ActionResult> EmailLink(string interviewId, string email)
+        {
+            var assignmentId = interviewSummary.GetById(interviewId)?.AssignmentId ?? 0;
+            var assignment = assignments.GetById(assignmentId);
+
+            int invitationId = 0;
+            invitationId = invitationService.CreateInvitationForPublicLink(assignment, interviewId);
+            
+            try
+            {
+                await invitationMailingService.SendInvitationAsync(invitationId, assignment, email);
+                return this.Json("ok");
+            }
+            catch (EmailServiceException e)
+            {
+                invitationService.InvitationWasNotSent(invitationId, assignmentId, email, e.Message);
+                return this.Json("fail");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
         {
