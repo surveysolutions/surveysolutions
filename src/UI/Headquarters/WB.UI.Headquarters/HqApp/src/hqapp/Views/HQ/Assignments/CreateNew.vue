@@ -95,7 +95,8 @@
 
                         <wb-question :question="emailQuestion" 
                                      noValidation="true"
-                                     noComments="true"                                                                          
+                                     noComments="true"
+                                     :isDisabled = "!webMode.answer"                                                                           
                                      questionCssClassName="text-question">
                             <h5>
                                 {{ this.$t("Assignments.Email") }}
@@ -117,7 +118,8 @@
                         
                         <wb-question :question="passwordQuestion" 
                                      noValidation="true"
-                                     noComments="true"                                                                         
+                                     noComments="true"
+                                     :isDisabled = "!webMode.answer"                                                                         
                                      questionCssClassName="text-question">
                             <h5>
                                 {{ this.$t("Assignments.Password") }}
@@ -133,7 +135,8 @@
                                         <div class="field answered">
                                             <input v-model="passwordQuestion.answer"
                                                 :placeholder="$t('Assignments.EnterPassword')" 
-                                                :title="this.$t('Assignments.PasswordExplanation')"                                                
+                                                :title="this.$t('Assignments.PasswordExplanation')"
+                                                v-validate="passwordValidations"                                                
                                                 name="password"
                                                 type="text" autocomplete="off" class="field-to-fill"/>
                                         </div>
@@ -224,6 +227,12 @@ export default {
                 min_value: -1,
                 max_value: this.config.maxInterviewsByAssignment
             };
+        }, 
+        passwordValidations(){
+            return {
+                regex: "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
+                minLength: 6
+            };
         },        
         entities() {
             return this.$store.state.takeNew.takeNew.entities;
@@ -255,8 +264,12 @@ export default {
         async create(ev) {
             const validationResult = await this.$validator.validateAll()
            
-            this.sizeQuestion.validity.isValid = !this.errors.has('size')            
-            this.emailQuestion.validity.isValid = !this.errors.has('email')
+
+            var sizeAllowedForWeb = !webMode.answer || sizeQuestion.answer !== 1
+
+            this.sizeQuestion.validity.isValid = !this.errors.has('size')  || sizeAllowedForWeb           
+            this.emailQuestion.validity.isValid = !webMode.answer || !this.errors.has('email')
+            this.passwordQuestion.validity.isValid = !webMode.answer || !this.errors.has('password')
 
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false

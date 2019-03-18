@@ -311,7 +311,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (password.Value == ServiceColumns.PasswordSpecialValue)
                 return false;
 
-            return password.Value.Length < AssignmentConstants.PasswordLength;
+            if (password.Value.Length < AssignmentConstants.PasswordLength)
+                return false;
+
+            return AssignmentConstants.PasswordStrength.Match(password.Value).Length <= 0;
         }
 
         private bool Invalid_Email(AssignmentEmail email)
