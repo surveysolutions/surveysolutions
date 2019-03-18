@@ -39,6 +39,12 @@ namespace WB.Enumerator.Native.WebInterview
             }
         }
 
+        public void SendEmailWithPersonalLink(SendEmailWithPersonalLinkRequest request)
+        {
+            //this.GetCallerInterview().Id
+            //request.Email
+        }
+
         public void ChangeLanguage(ChangeLanguageRequest request)
         {
             this.commandService.Execute(

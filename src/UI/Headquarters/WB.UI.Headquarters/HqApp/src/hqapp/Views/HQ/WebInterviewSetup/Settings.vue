@@ -580,7 +580,6 @@
                 <div class="">
                     <a href="javascript:void(0);" @click="startWebInterview" v-if="!started" class="btn btn-lg btn-success mb-1" role="button">{{$t('WebInterviewSetup.Start')}}</a>
                     <a href="javascript:void(0);" @click="stopWebInterview" v-if="started" class="btn btn-lg btn-danger mb-1" role="button">{{$t('WebInterviewSetup.StopWebInterview')}}</a>
-                    <a :href="this.$config.model.downloadAssignmentsUrl" class="btn btn-lg btn-primary mb-1" role="button">{{$t('WebInterviewSetup.DownloadTitle',{count: $config.model.assignmentsCount})}}</a>
                     <a :href="this.$config.model.surveySetupUrl" class="btn btn-lg back-link mb-1" role="button">{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>
                 </div>
             </div>

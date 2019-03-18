@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public sealed class TokenGenerator
     {
-        private const string Encode_32_Chars = "SXVNWRCK53MTFQP7A6HUBZ4GEID921L8";
+        private const string Encode_32_Chars = "SXVNWRCK53MTFKP7A6HUBZ4GEID921L8";
 
         private static readonly ThreadLocal<char[]> _charBufferThreadLocal =
             new ThreadLocal<char[]>(() => new char[13]);
