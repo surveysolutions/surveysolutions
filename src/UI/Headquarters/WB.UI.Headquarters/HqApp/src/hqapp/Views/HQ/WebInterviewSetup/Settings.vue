@@ -365,7 +365,7 @@
                                                             maxlength="200"
                                                             class="form-control with-clear-btn" 
                                                             placeholder="Please enter the subject">
-                                                        <button type="button" @click="emailTemplate.subject=null" class="btn btn-link btn-clear">
+                                                        <button type="button" @click="clearField(emailTemplate, 'subject')" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
                                                         <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.subject')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -405,7 +405,7 @@
                                                             maxlength="500"
                                                             class="form-control with-clear-btn" 
                                                             placeholder="Please enter password description">
-                                                        <button type="button" @click="emailTemplate.passwordDescription=null" class="btn btn-link btn-clear">
+                                                        <button type="button" @click="clearField(emailTemplate, 'passwordDescription')" class="btn btn-link btn-clear">
                                                             <span></span>
                                                         </button>
                                                         <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.passwordDescription')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -424,7 +424,7 @@
                                                                 maxlength="200"
                                                                 class="form-control with-clear-btn width-dynamic" 
                                                                 placeholder="Please enter the text" />
-                                                            <button type="button" @click="emailTemplate.linkText=null" class="btn btn-link btn-clear">
+                                                            <button type="button" @click="clearField(emailTemplate, 'linkText')" class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>    
                                                             <span class="help-block" v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">{{$t('WebInterviewSettings.FieldRequired')}}</span>
@@ -798,7 +798,7 @@ export default {
         this.reminderAfterDaysIfNoResponse = this.cancelReminderAfterDaysIfNoResponse;
         this.reminderAfterDaysIfPartialResponse = this.cancelReminderAfterDaysIfPartialResponse;
         this.$validator.reset('additionalSettings');
-    },
+    }, 
     previewText(text) {
         if (text == null)
             return ''
@@ -813,6 +813,11 @@ export default {
         const form = this.fields[formName];
         const keys = Object.keys((this.fields || {})[formName] || {});
         return keys.some(key => form[key].dirty || form[key].changed);
+    },
+    async clearField(emailTemplate, fieldName) {
+        emailTemplate[fieldName] = null
+        await this.$nextTick()
+        await this.$validator.validate('emailTemplateData'+ emailTemplate.value + '.' + fieldName);
     }
   },
   watch: {
