@@ -4,6 +4,7 @@
 @model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
 @{
     Layout = "_WebInterviewLayout.cshtml";
+    bool isPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any();
 }
 
 <h2>@Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText)</h2>
@@ -41,19 +42,13 @@
 
     if (Model.HasPassword)
     {
-        if (ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any())
-        {
-            <div class="form-group has-error">
-                <p>
-                    <span class="help-block">
-                        @Html.ValidationMessage("InvalidPassword")
-                    </span>
-                </p>
-            </div>
-        }
-        <div class="form-group">
+        <div class="form-group @(isPasswordInvalid? "has-error": "")" >
             <label>This link is protected with password, that was distributed with the link. Please enter it here</label>
             <input class="form-control" type="text" name="password" placeholder="Enter the password" />
+            @if (isPasswordInvalid)
+            {
+                <span class="help-block">@Html.ValidationMessage("InvalidPassword")</span>
+            }
         </div>
     }
 
