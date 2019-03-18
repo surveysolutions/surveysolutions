@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -162,7 +163,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if ((assignment.Quantity ?? 1) == 1)
+            if (assignment.Quantity == 1)
             {
                 // personal link
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
@@ -191,7 +192,26 @@ namespace WB.UI.Headquarters.Controllers
             else
             {
                 // public mode
+                var interviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
+                if (interviewIdCookie != null)
+                {
+                    if (Guid.TryParse(interviewIdCookie.Value, out Guid interviewIdFromCookie))
+                    {
+                        return this.Redirect(GenerateUrl("Cover", interviewIdFromCookie.FormatGuid()));
+                    }
+                }
 
+                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
+                {
+                    var interviewId = this.CreateInterview(assignment);
+                    
+                    Response.Cookies.Add(new HttpCookie($"InterviewId-{assignment.Id}")
+                    {
+                        Value = interviewId, Expires = DateTime.Now.AddYears(1)
+                    });
+
+                    return this.Redirect(GenerateUrl("Cover", interviewId));
+                }
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
@@ -288,10 +308,15 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId =  this.CreateInterview(assignment);
 
-            if (invitation != null)
+            if (invitation != null && assignment.Quantity == 1)
             {
                 invitationService.InterviewWasCreated(invitation.Id, interviewId);
             }
+
+            HttpCookie interviewIdCookie = new HttpCookie($"InterviewId-{assignment.Id}");
+            interviewIdCookie.Value = interviewId;
+            interviewIdCookie.Expires = DateTime.Now.AddYears(1);
+            Response.Cookies.Add(interviewIdCookie);
 
             RememberCapchaFilled(interviewId);
             TempData[LastCreatedInterviewIdKey] = interviewId;
