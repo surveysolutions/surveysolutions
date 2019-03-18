@@ -299,12 +299,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 (assignmentRow.Quantity != null && (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1)))
                     yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
 
-            if((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode == false || (assignmentRow.WebMode == null)) //not a web mode
-               && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //or password is set
+            if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
+               && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //email is set
                 yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmailOrPassword, assignmentRow, assignmentRow.Email);
 
-            if ((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode == false || (assignmentRow.WebMode == null)) //not a web mode
-                && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //or password is set
+            if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
+                && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
                 yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmailOrPassword, assignmentRow, assignmentRow.Password);
         }
 

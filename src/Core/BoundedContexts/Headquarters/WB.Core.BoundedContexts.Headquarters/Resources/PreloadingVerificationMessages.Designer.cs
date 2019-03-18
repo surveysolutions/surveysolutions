@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password is not valid. Should be not less than 6 characters.
+        ///   Looks up a localized string similar to Password is not valid. Has to be not less than 6 characters.
         /// </summary>
         public static string PL0056_InvalidPassword {
             get {
@@ -421,7 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For assignments having Email or Password Web Mode should be activated.
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Email or Password.
         /// </summary>
         public static string PL0058_IncosistentWebmodeAndEmailOrPassword {
             get {
