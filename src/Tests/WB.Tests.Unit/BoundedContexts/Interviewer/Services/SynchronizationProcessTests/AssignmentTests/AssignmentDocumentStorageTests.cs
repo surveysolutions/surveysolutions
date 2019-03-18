@@ -26,6 +26,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>(), Mock.Of<IEncryptionService>());
         }
 
+        [SetUp]
+        public void SetupEachTest()
+        {
+            this.storage.RemoveAll();
+        }
+
         [Test]
         public void should_store_decrease_interviews_count()
         {
