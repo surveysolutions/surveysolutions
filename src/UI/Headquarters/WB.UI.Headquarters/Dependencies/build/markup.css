@@ -5943,6 +5943,20 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
   .preset-filters-container > .block-filter .input-group, .filters-container > .block-filter .field, .preset-filters-container > .block-filter .field {
     margin-left: 0 !important; }
 
+.welcome-page .logo-icon img {
+  display: block;
+  max-height: 120px;
+  width: auto; }
+
+.welcome-page .logo-icon .default-icon {
+  display: none; }
+
+.welcome-page .logo-icon.no-logo img {
+  display: none; }
+
+.welcome-page .logo-icon.no-logo .default-icon {
+  display: block; }
+
 .btn {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
@@ -9938,8 +9952,15 @@ dl dd:after {
   text-decoration: underline; }
 
 @media (min-width: 680px) {
+  .w-420 {
+    width: 420px; }
   .mw-50 {
-    max-width: 50%; } }
+    max-width: 50%; }
+  .f-sm-row {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row; } }
 
 .fade-enter-active, .fade-leave-active {
   -webkit-transition: opacity 0.5s;
@@ -10023,6 +10044,24 @@ img#placeholder {
     display: block; }
   html body main .two-columns-form .log-in .form-group .form-control {
     width: 100%; } }
+
+.welcome-page .text-example {
+  max-width: 460px;
+  margin: 45px 30px 30px 30px; }
+
+.welcome-page .icon {
+  min-height: 570px;
+  background-image: url("../img/logo.svg");
+  background-repeat: no-repeat;
+  min-width: 190px;
+  background-size: 100%; }
+
+.welcome-page .font-bold {
+  font-size: 16px;
+  line-height: 18px; }
+
+.welcome-page .browser-mockup .h2, .welcome-page .browser-mockup p {
+  white-space: pre-line; }
 
 .two-columns-form, .flex-row {
   display: -webkit-box;
