@@ -357,7 +357,7 @@ export default {
                 },
                 {
                     data: "email",
-                    name: "Emai",
+                    name: "Email",
                     title: this.$t("Assignments.Email"),
                     tooltip: this.$t("Assignments.Tooltip_Table_Email"),
                     searchable: false

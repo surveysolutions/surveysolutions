@@ -200,7 +200,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     "Invalid Email"));
 
             //verify pass
-            if (!string.IsNullOrEmpty(createItem.Password) && createItem.Password.Length < AssignmentConstants.PasswordLength)
+            if (!string.IsNullOrEmpty(createItem.Password) && (createItem.Password.Length < AssignmentConstants.PasswordLength || AssignmentConstants.PasswordStrength.Match(createItem.Password).Length <= 0))
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
                     "Invalid Password"));
 
@@ -468,9 +468,8 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new AssignmentQuantitySettings
             {
-                CanChangeQuantity = string.IsNullOrEmpty(assignment.Email) && string.IsNullOrEmpty(assignment.Password)
+                CanChangeQuantity = assignment.WebMode ?? false
             };
         }
-
     }
 }
