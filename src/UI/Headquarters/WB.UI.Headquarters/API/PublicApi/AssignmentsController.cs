@@ -194,10 +194,23 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
+            //verify email
+            if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
+                    "Invalid Email"));
+
+            //verify pass
+            if (!string.IsNullOrEmpty(createItem.Password) && createItem.Password.Length < AssignmentConstants.PasswordLength)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
+                    "Invalid Password"));
+
+            if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(createItem.Password)) && createItem.WebMode != true)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    "For assignments having Email or Password Web Mode should be activated"));
+
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity);
 
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
-
 
             List<InterviewAnswer> answers = new List<InterviewAnswer>();
 
@@ -232,7 +245,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 catch (Exception ae)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                        $"Answer '{item.Answer}' canot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
+                        $"Answer '{item.Answer}' cannot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
                         Environment.NewLine +
                         ae.Message));
                 }
