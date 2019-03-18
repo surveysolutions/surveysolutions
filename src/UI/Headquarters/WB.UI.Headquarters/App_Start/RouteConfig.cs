@@ -31,6 +31,7 @@ namespace WB.UI.Headquarters
 
             routes.MapRoute("WebInterview.ImageAnswering", "WebInterview/image", new { controller = "WebInterview", action = "Image" });
             routes.MapRoute("WebInterview.AudioAnswering", "WebInterview/audio", new { controller = "WebInterview", action = "Audio" });
+            routes.MapRoute("WebInterview.LinkSending", "WebInterview/emailLink", new { controller = "WebInterview", action = "EmailLink" });
 
             routes.MapRoute("Review", "Interview/Review/{id}", new
             {

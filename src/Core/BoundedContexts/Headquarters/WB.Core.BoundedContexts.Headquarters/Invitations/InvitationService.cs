@@ -23,6 +23,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationStorage = invitationStorage;
             this.invitationsDistributionStatusStorage = invitationsDistributionStatusStorage;
         }
+        
+        public int CreateInvitationForPublicLink(Assignment assignment, string interviewId)
+        {
+            var invitation = new Invitation(assignment.Id);
+            var hash =  assignment.QuestionnaireId.GetHashCode() * (1 + interviewId.GetHashCode()) + assignment.Id;
+            var token = TokenGenerator.Instance.Generate(hash);
+            invitation.SetToken(token);
+            invitationStorage.Store(invitation, null);
+            invitation.InterviewWasCreated(interviewId);
+            return invitation.Id;
+        }
 
         public void CreateInvitationForWebInterview(Assignment assignment)
         {
@@ -45,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 -1 	      empty 	    empty      Public link, no password
                 -1 	      not empty 	empty      Public link, with password
                 */
-                var token = TokenGenerator.Instance.Generate(questionnaireHash + 293 * assignmentId);
+                var token = TokenGenerator.Instance.Generate(questionnaireHash * 293 * assignmentId);
                 invitation.SetToken(token);
             }
             else
@@ -58,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 */
                 if (!hasEmail)
                 {
-                    var token = TokenGenerator.Instance.Generate(questionnaireHash);
+                    var token = "Q" + TokenGenerator.Instance.Generate(questionnaireHash);
                     invitation.SetToken(token);
                 }
                 else
@@ -309,6 +320,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public interface IInvitationService
     {
         void CreateInvitationForWebInterview(Assignment assignment);
+        int CreateInvitationForPublicLink(Assignment assignment, string interviewId);
+
         int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity);
         int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity);
         int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity);
