@@ -153,7 +153,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class CreateAssignmentApiRequest
     {
-        [DataMember] [Required] public string Responsible { get; set; }
+        [DataMember]
+        [Required]
+        public string Responsible { get; set; }
 
         /// <summary>
         /// Maximum number of allowed to create assignments
@@ -172,5 +174,12 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [Required]
         public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; } =
             new List<AssignmentIdentifyingDataItem>();
+
+
+        [DataMember] public string Email { get; set; }
+
+        [DataMember] public string Password { get; set; }
+
+        [DataMember] public bool? WebMode { get; set; }
     }
 }
