@@ -475,7 +475,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save file in UTF8 format for support language specific texts..
+        ///   Looks up a localized string similar to Save file in UTF8 encoding for support language specific texts..
         /// </summary>
         internal static string FileTypeDescription {
             get {
