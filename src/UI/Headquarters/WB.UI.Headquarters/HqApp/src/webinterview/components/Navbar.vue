@@ -44,9 +44,9 @@
                         </ul>
                     </li>
                     <li  v-if="showEmailPersonalLink">
-                        <button type="button" class="btn btn-default btn-link btn-icon" @click="emailPersonalLink" :title="'Email link'">
-                             <span class="glyphicon glyphicon-envelope"></span>Email link
-                        </button>
+                        <a href="#" @click="emailPersonalLink" :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">
+                            {{$t('WebInterviewUI.EmailLink_EmailResumeLink')}}
+                        </a>
                     </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
@@ -100,6 +100,11 @@
                     }
                 }
             });
+
+            if (this.$config.askForEmail)
+            {
+                this.emailPersonalLink();
+            }
         },
         updated(){
             document.title = this.$config.splashScreen ? this.$t("WebInterviewUI.LoadingQuestionnaire") : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
@@ -133,7 +138,8 @@
             emailPersonalLink(){
                 var self = this;
                 let prompt = modal.prompt({
-                    title: "<p>Hello</p>",
+                    title: this.$t("WebInterviewUI.EmailLink_Header"),
+                    
                     inputType: 'email',
                     callback: function(result){
                         if (!self.validateEmail(result))
@@ -141,7 +147,7 @@
                             var input = $(this).find('input');
                             self.$nextTick(function() {
                                 input.next("span").remove();
-                                input.after("<span clas='help-text text-danger'>Invalid value " + result +"</span>")
+                                input.after("<span class='help-text text-danger'>" + this.$t("WebInterviewUI.EmailLink_InvalidEmail", { email: result}) + "</span>")
                             });
                             return false;
                         }
@@ -149,6 +155,10 @@
                         self.sendEmailWithPersonalLink(result);
                     }
                 });
+
+                prompt.find('input').attr('placeholder', this.$t("WebInterviewUI.EmailLink_Placeholder"))
+                prompt.find('input').before("<p>" + this.$t("WebInterviewUI.EmailLink_ResumeAnyTime") + "</p>");
+                //debugger;
             },
             sendEmailWithPersonalLink(email){
                 var self = this;
@@ -157,6 +167,8 @@
                     email: email 
                 }).then(function(response){
                     self.showEmailPersonalLink = false;
+                }) .catch(function (error) {
+                    Vue.config.errorHandler(error, self);
                 });
             },
             validateEmail(email) {
