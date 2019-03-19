@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
-using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -56,7 +55,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void when_HasAnyGpsAnswerForInterviewer_and_user_has_interview_with_answered_gps_question_should_be_true()
         {
             //arrange
-            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var interviewerId = Guid.NewGuid();
             var answers = new[]
             {
                 new GpsAnswer
@@ -82,13 +81,13 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void when_HasAnyGpsAnswerForInterviewer_and_user_hasnt_interviews_with_answered_gps_questions_should_be_false()
         {
             //arrange
-            var interviewerId = Id.g1;
+            var interviewerId = Guid.NewGuid();
             var answers = new[]
             {
                 new GpsAnswer
                 {
                     InterviewId = Guid.NewGuid(),
-                    ResponsibleId = Id.g2,
+                    ResponsibleId = Guid.NewGuid(),
                     QuestionnaireId = questionnaireId,
                     QuestionId = gpsQuestionId,
                     Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
@@ -203,7 +202,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
             Assert.That(gpsAnswers, Is.EquivalentTo(answers
-                .Where(x => x.QuestionId == gpsQuestionId && x.QuestionnaireId == questionnaireId)
+                .Where(x => x.QuestionId == gpsQuestionId && x.QuestionnaireId.Id == questionnaireId.Id)
                 .Select(x => new InterviewGpsAnswer
                 {
                     InterviewId = x.InterviewId,
