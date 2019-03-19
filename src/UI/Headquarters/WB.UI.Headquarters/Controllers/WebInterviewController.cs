@@ -26,7 +26,6 @@ using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -60,12 +59,19 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationMailingService invitationMailingService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
+        private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
         public static readonly string AskForEmail = "askForEmail";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
             var passedInterviews = this.Session[CapchaCompletedKey] as List<string>;
+            return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
+        }
+
+        private bool PasswordVerificationNeededForInterview(string interviewId)
+        {
+            var passedInterviews = this.Session[PasswordVerifiedKey] as List<string>;
             return !(passedInterviews?.Contains(interviewId)).GetValueOrDefault();
         }
 
@@ -77,6 +83,16 @@ namespace WB.UI.Headquarters.Controllers
                 interviews.Add(interviewId);
             }
             this.Session[CapchaCompletedKey] = interviews;
+        }
+
+        private void RememberPasswordVerified(string interviewId)
+        {
+            var interviews = this.Session[PasswordVerifiedKey] as List<string> ?? new List<string>();
+            if (!interviews.Contains(interviewId))
+            {
+                interviews.Add(interviewId);
+            }
+            this.Session[PasswordVerifiedKey] = interviews;
         }
 
         public WebInterviewController(ICommandService commandService,
@@ -331,6 +347,10 @@ namespace WB.UI.Headquarters.Controllers
             Response.Cookies.Add(interviewIdCookie);
 
             RememberCapchaFilled(interviewId);
+            if (!string.IsNullOrWhiteSpace(assignment.Password))
+            {
+                RememberPasswordVerified(interviewId);
+            }
             TempData[LastCreatedInterviewIdKey] = interviewId;
 
             return this.Redirect(GenerateUrl("Cover", interviewId));
@@ -348,7 +368,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             LogResume(interview);
-            ViewBag.AskForEmail = TempData[AskForEmail] ?? true;
+            ViewBag.AskForEmail = TempData[AskForEmail] ?? false;
 
             return View("Index");
         }
