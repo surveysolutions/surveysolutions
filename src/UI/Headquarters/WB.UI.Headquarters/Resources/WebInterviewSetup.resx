@@ -196,4 +196,34 @@
   <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
     <value>Send invitations</value>
   </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Invitations</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} total invitations.</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>{{count}} invitations have been sent already.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>No invitations have been sent yet.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} invitation to send.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>No invitations to send as of now.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Invitations can't be sent.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Email provider is not set up.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>You can change these settings at the {{url}} page.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Tell your admin user to change these settings at the 'Email Providers' page.</value>
+  </data>
 </root>

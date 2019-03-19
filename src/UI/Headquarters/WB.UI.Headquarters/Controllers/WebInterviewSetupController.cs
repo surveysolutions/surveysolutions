@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly SendInvitationsTask sendInvitationsTask;
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
+        private readonly IAuthorizedUser authorizedUser;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -47,7 +49,8 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewNotificationService webInterviewNotificationService, 
             IInvitationService invitationService, 
             SendInvitationsTask sendInvitationsTask,
-            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
+            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
+            IAuthorizedUser authorizedUser)
             : base(commandService, 
                   logger)
         {
@@ -57,6 +60,7 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.sendInvitationsTask = sendInvitationsTask;
             this.appSettingsStorage = appSettingsStorage;
+            this.authorizedUser = authorizedUser;
         }
 
         
@@ -83,8 +87,9 @@ namespace WB.UI.Headquarters.Controllers
                     InvitationsInfo = Url.HttpRouteUrl("DefaultApiWithAction", new {controller = "WebInterviewSetupApi", action = "InvitationsInfo", id = id }),
                     SurveySetupUrl = Url.Action("Index", "SurveySetup"),
                     EmaiProvidersUrl = Url.Action("EmailProviders","Settings"),
-                    WebSettingsUrl = Url.Action("Settings", "WebInterviewSetup", new { id = id })
-                }
+                    WebSettingsUrl = Url.Action("Settings", "WebInterviewSetup", new { id = id }),
+                },
+                IsAdmin = authorizedUser.IsAdministrator
             };
 
             return View(model);
@@ -231,6 +236,7 @@ namespace WB.UI.Headquarters.Controllers
     public class SendInvitationsModel
     {
         public dynamic Api { get; set; }
+        public bool IsAdmin { get; set; }
     }
 
     public class EmailDistributionProgressModel

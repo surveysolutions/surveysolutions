@@ -426,10 +426,13 @@ Contact support for assistance.</value>
     <value>Multimedia playback is not supported by your browser. You can download it instead.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Enter your email here to get an email with resume link for the interview.</value>
+    <value>Enter your email address</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>We will send you a message with the link to resume the interview if you need to continue later.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>You can send it later by clicking on 'Email resume link' item on the top menu.</value>
+    <value>You cancel now and proceed with the interview. And you can send it later by clicking 'Email resume link' item in the top menu.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Enter email</value>

@@ -59,6 +59,10 @@
         window.location.href = $downloadLinksUrl + '/' + encodeURI(questionnaireId);
     };
     
+    self.interviewsBatchUpload = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
 
     self.recordAudio = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
@@ -92,10 +96,6 @@
         }
     };
 
-    self.interviewsBatchUpload = function (key, opt) {
-        var selectedRow = self.selectRowAndGetData(opt.$trigger);
-        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
-    };
 
     self.migrateAssignments = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
