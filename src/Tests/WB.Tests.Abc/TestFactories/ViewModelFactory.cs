@@ -567,13 +567,15 @@ namespace WB.Tests.Abc.TestFactories
         public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory viewModelFactory = null,
             ILiteEventRegistry eventRegistry = null,
-            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+            ICompositeCollectionInflationService compositeCollectionInflationService = null,
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             return new PlainRosterViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>()
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>()
                 );
         }
 
