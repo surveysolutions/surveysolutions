@@ -82,12 +82,13 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void when_HasAnyGpsAnswerForInterviewer_and_user_hasnt_interviews_with_answered_gps_questions_should_be_false()
         {
             //arrange
-            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var interviewerId = Id.g1;
             var answers = new[]
             {
                 new GpsAnswer
                 {
                     InterviewId = Guid.NewGuid(),
+                    ResponsibleId = Id.g2,
                     QuestionnaireId = questionnaireId,
                     QuestionId = gpsQuestionId,
                     Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
