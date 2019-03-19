@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var htmlMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}"))?? string.Empty;
             var textMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Text/{emailParamsId}/")) ?? string.Empty;
             
-            var emailId = emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim()).Result;
+            var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim());
             invitationService.MarkInvitationAsSent(invitationId, emailId);
         }
     }
