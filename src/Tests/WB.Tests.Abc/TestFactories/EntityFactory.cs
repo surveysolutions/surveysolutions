@@ -290,12 +290,13 @@ namespace WB.Tests.Abc.TestFactories
             => new GeoPosition(latitude ?? 1, longitude ?? 2, accuracy ?? 3, altitude ?? 4, timestamp ?? new DateTimeOffset(new DateTime(1984, 4, 18)));
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
-            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null)
+            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null, QuestionScope scope = QuestionScope.Interviewer)
             => new GpsCoordinateQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionType = QuestionType.GpsCoordinates,
+                QuestionScope = scope,
                 Featured = isPrefilled,
                 QuestionText = title,
                 ValidationExpression = validationExpression,

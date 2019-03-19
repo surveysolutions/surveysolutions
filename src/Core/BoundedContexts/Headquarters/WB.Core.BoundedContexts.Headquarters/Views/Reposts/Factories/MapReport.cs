@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private MapReportCacheLine InitializeSuperCluster(MapReportInputModel input)
         {
             var gpsAnswers = this.interviewFactory.GetGpsAnswers(
-                input.QuestionnaireId, input.QuestionnaireVersion, input.Variable, null, GeoBounds.Open,
+                input.QuestionnaireId, input.QuestionnaireVersion, input.Variable, null, 
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
 
             var cluster = new SuperCluster();

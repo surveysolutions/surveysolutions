@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 }, null);
             }
-            else if(!flagged && flag != null)
+            else if (!flagged && flag != null)
                 this.interviewFlagsStorage.Remove(flag);
         }
 
@@ -89,45 +89,57 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var interviewFlags = this.interviewFlagsStorage.Query(x => x.Where(y => y.InterviewId == interviewId));
             this.interviewFlagsStorage.Remove(interviewFlags);
         }
-        
+
+        private static InterviewStatus[] DisabledStatusesForGps =
+        {
+            InterviewStatus.ApprovedBySupervisor,
+            InterviewStatus.ApprovedByHeadquarters
+        };
+
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
-            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
+            string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId)
         {
             var gpsQuery = this.sessionProvider.Session
                 .Query<InterviewGps>()
                 .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
                     gps => gps.InterviewId,
                     interview => interview.SummaryId,
-                    (gps, interview) => new {gps, interview})
+                    (gps, interview) => new { gps, interview })
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    interview_gps => new {interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId},
-                    questionnaireItem => new {questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId},
-                    (interview_gps, questionnaireItem) => new {interview_gps, questionnaireItem})
+                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
+                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
                 .Where(x => x.interview_gps.gps.IsEnabled &&
                             x.questionnaireItem.StatExportCaption == gpsQuestionVariableName &&
-                            x.interview_gps.interview.QuestionnaireId == questionnaireId &&
-                            (questionnaireVersion == null || x.interview_gps.interview.QuestionnaireVersion == questionnaireVersion) &&
-                            (supervisorId == null || x.interview_gps.interview.TeamLeadId == supervisorId &&
-                             !new[]
-                             {
-                                 InterviewStatus.ApprovedBySupervisor,
-                                 InterviewStatus.ApprovedByHeadquarters
-                             }.Contains(x.interview_gps.interview.Status)) &&
-                            x.interview_gps.gps.Latitude > bounds.South &&
-                            x.interview_gps.gps.Latitude < bounds.North &&
-                            (bounds.East >= bounds.West && x.interview_gps.gps.Longitude > bounds.West && x.interview_gps.gps.Longitude < bounds.East ||
-                            bounds.East < bounds.West && (x.interview_gps.gps.Longitude > bounds.West || x.interview_gps.gps.Longitude < bounds.East)));
+                            x.interview_gps.interview.QuestionnaireId == questionnaireId);
 
-            if (maxAnswersCount.HasValue)
-                gpsQuery = gpsQuery.Take(maxAnswersCount.Value);
+            if (questionnaireVersion.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.interview_gps.interview.QuestionnaireVersion == questionnaireVersion.Value);
+            }
 
-            return gpsQuery.ToArray().Select(x => new InterviewGpsAnswer
+            if (supervisorId.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.interview_gps.interview.TeamLeadId == supervisorId.Value 
+                                && !DisabledStatusesForGps.Contains(x.interview_gps.interview.Status));
+            }
+
+            var result = gpsQuery.Select(x => new InterviewGpsAnswer
             {
                 InterviewId = Guid.Parse(x.interview_gps.gps.InterviewId),
                 RosterVector = x.interview_gps.gps.RosterVector,
                 Latitude = x.interview_gps.gps.Latitude,
                 Longitude = x.interview_gps.gps.Longitude
-            }).ToArray();
+            });
+
+            if (maxAnswersCount.HasValue)
+            {
+                result = result.Take(maxAnswersCount.Value);
+            }
+
+            return result.ToArray();
         }
 
         public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId) =>
@@ -136,11 +148,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
                     gps => gps.InterviewId,
                     interview => interview.SummaryId,
-                    (gps, interview) => new {gps, interview})
+                    (gps, interview) => new { gps, interview })
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    interview_gps => new {interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId},
-                    questionnaireItem => new {questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId},
-                    (interview_gps, questionnaireItem) => new {interview_gps, questionnaireItem})
+                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
+                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
                 .Where(x => x.interview_gps.gps.IsEnabled && x.interview_gps.interview.ResponsibleId == interviewerId &&
                             x.questionnaireItem.QuestionScope == QuestionScope.Interviewer)
                 .Select(x => new InterviewGpsAnswerWithTimeStamp
@@ -161,12 +173,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
                     gps => gps.InterviewId,
                     interview => interview.SummaryId,
-                    (gps, interview) => new {gps, interview})
+                    (gps, interview) => new { gps, interview })
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    interview_gps => new {interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId},
+                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
                     questionnaireItem => new
-                        {questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId},
-                    (interview_gps, questionnaireItem) => new {interview_gps, questionnaireItem})
+                    { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
                 .Count(x => x.interview_gps.gps.IsEnabled && x.interview_gps.interview.ResponsibleId == interviewerId &&
                             x.questionnaireItem.QuestionScope == QuestionScope.Interviewer) > 0;
 
@@ -202,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                 }
             }
-            
+
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
             Upsert(state.Warnings, (e, v) => e.WarningValidations = v.Validations);
@@ -341,7 +353,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var connection = sessionProvider.Session.Connection;
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
-            
+
             // for some reason Postgres decide that it's good to sequence scan whole interviews table
             // following line will ensure that Postgres will not do that
             connection.Execute("set enable_seqscan=false");
