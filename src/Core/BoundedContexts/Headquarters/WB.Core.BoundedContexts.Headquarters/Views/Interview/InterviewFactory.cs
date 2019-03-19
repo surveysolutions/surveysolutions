@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
-using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -68,7 +67,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     InterviewId = interviewId,
                     EntityId = questionIdentity.Id,
                     RosterVector = rosterVector
-
                 }, null);
             }
             else if (!flagged && flag != null)
@@ -90,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.interviewFlagsStorage.Remove(interviewFlags);
         }
 
-        private static InterviewStatus[] DisabledStatusesForGps =
+        private static readonly InterviewStatus[] DisabledStatusesForGps =
         {
             InterviewStatus.ApprovedBySupervisor,
             InterviewStatus.ApprovedByHeadquarters
@@ -99,39 +97,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
             string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId)
         {
-            var gpsQuery = this.sessionProvider.Session
-                .Query<InterviewGps>()
-                .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
-                    gps => gps.InterviewId,
-                    interview => interview.SummaryId,
-                    (gps, interview) => new { gps, interview })
-                .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
-                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
-                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
-                .Where(x => x.interview_gps.gps.IsEnabled &&
-                            x.questionnaireItem.StatExportCaption == gpsQuestionVariableName &&
-                            x.interview_gps.interview.QuestionnaireId == questionnaireId);
+            var gpsQuery = QueryGpsAnswers()
+                .Where(x => x.Answer.IsEnabled &&
+                            x.QuestionnaireItem.StatExportCaption == gpsQuestionVariableName &&
+                            x.InterviewSummary.QuestionnaireId == questionnaireId);
 
             if (questionnaireVersion.HasValue)
             {
                 gpsQuery = gpsQuery
-                    .Where(x => x.interview_gps.interview.QuestionnaireVersion == questionnaireVersion.Value);
+                    .Where(x => x.InterviewSummary.QuestionnaireVersion == questionnaireVersion.Value);
             }
 
             if (supervisorId.HasValue)
             {
                 gpsQuery = gpsQuery
-                    .Where(x => x.interview_gps.interview.TeamLeadId == supervisorId.Value 
-                                && !DisabledStatusesForGps.Contains(x.interview_gps.interview.Status));
+                    .Where(x => x.InterviewSummary.TeamLeadId == supervisorId.Value 
+                                && !DisabledStatusesForGps.Contains(x.InterviewSummary.Status));
             }
 
             var result = gpsQuery.Select(x => new InterviewGpsAnswer
             {
-                InterviewId = Guid.Parse(x.interview_gps.gps.InterviewId),
-                RosterVector = x.interview_gps.gps.RosterVector,
-                Latitude = x.interview_gps.gps.Latitude,
-                Longitude = x.interview_gps.gps.Longitude
+                InterviewId = Guid.Parse(x.Answer.InterviewId),
+                RosterVector = x.Answer.RosterVector,
+                Latitude = x.Answer.Latitude,
+                Longitude = x.Answer.Longitude
             });
 
             if (maxAnswersCount.HasValue)
@@ -141,46 +130,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             return result.ToArray();
         }
-
+        
         public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId) =>
-            this.sessionProvider.Session
-                .Query<InterviewGps>()
-                .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
-                    gps => gps.InterviewId,
-                    interview => interview.SummaryId,
-                    (gps, interview) => new { gps, interview })
-                .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
-                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
-                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
-                .Where(x => x.interview_gps.gps.IsEnabled && x.interview_gps.interview.ResponsibleId == interviewerId &&
-                            x.questionnaireItem.QuestionScope == QuestionScope.Interviewer)
+            QueryGpsAnswers()
+                .Where(x => x.Answer.IsEnabled 
+                            && x.InterviewSummary.ResponsibleId == interviewerId 
+                            && x.QuestionnaireItem.QuestionScope == QuestionScope.Interviewer)
                 .Select(x => new InterviewGpsAnswerWithTimeStamp
                 {
-                    EntityId = x.interview_gps.gps.QuestionId,
-                    InterviewId = x.interview_gps.interview.InterviewId,
-                    Latitude = x.interview_gps.gps.Latitude,
-                    Longitude = x.interview_gps.gps.Longitude,
-                    Timestamp = x.interview_gps.gps.Timestamp,
-                    Idenifying = x.questionnaireItem.Featured == true,
-                    Status = x.interview_gps.interview.Status
+                    EntityId = x.Answer.QuestionId,
+                    InterviewId = x.InterviewSummary.InterviewId,
+                    Latitude = x.Answer.Latitude,
+                    Longitude = x.Answer.Longitude,
+                    Timestamp = x.Answer.Timestamp,
+                    Idenifying = x.QuestionnaireItem.Featured == true,
+                    Status = x.InterviewSummary.Status
                 })
                 .ToArray();
 
-        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId) =>
-            this.sessionProvider.Session
+        private IQueryable<GpsAnswerQuery> QueryGpsAnswers()
+        {
+            return this.sessionProvider.Session
                 .Query<InterviewGps>()
                 .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
                     gps => gps.InterviewId,
                     interview => interview.SummaryId,
-                    (gps, interview) => new { gps, interview })
+                    (gps, interview) => new  { gps, interview})
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
                     interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
-                    questionnaireItem => new
-                    { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
-                    (interview_gps, questionnaireItem) => new { interview_gps, questionnaireItem })
-                .Count(x => x.interview_gps.gps.IsEnabled && x.interview_gps.interview.ResponsibleId == interviewerId &&
-                            x.questionnaireItem.QuestionScope == QuestionScope.Interviewer) > 0;
+                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (interview_gps, questionnaireItem) => new GpsAnswerQuery
+                    {
+                        InterviewSummary = interview_gps.interview,
+                        Answer = interview_gps.gps,
+                        QuestionnaireItem = questionnaireItem
+                    });
+        }
+
+        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId) =>
+            QueryGpsAnswers()
+                .Any(x => x.Answer.IsEnabled 
+                            && x.InterviewSummary.ResponsibleId == interviewerId 
+                            && x.QuestionnaireItem.QuestionScope == QuestionScope.Interviewer);
 
         public void Save(InterviewState state)
         {
@@ -448,6 +439,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             public const string InterviewSummaries = "readside.interviewsummaries";
             public const string QuestionnaireEntities = "readside.questionnaire_entities";
             public const string InterviewsView = "readside.interviews_view";
+        }
+
+        private class GpsAnswerQuery
+        {
+            public InterviewGps Answer { get; set; }
+            public InterviewSummary InterviewSummary { get; set; }
+            public QuestionnaireCompositeItem QuestionnaireItem { get; set; }
         }
     }
 }
