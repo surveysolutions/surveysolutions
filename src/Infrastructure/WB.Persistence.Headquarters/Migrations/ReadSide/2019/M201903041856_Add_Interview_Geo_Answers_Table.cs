@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
+using System.Data;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
@@ -37,13 +37,17 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             var primaryKeyName = "pk_interview_geo_answers";
 
             Create.Table("interview_geo_answers")
-                .WithColumn("interviewid").AsGuid().PrimaryKey(primaryKeyName)
+                .WithColumn("interviewid").AsFixedLengthString(255).PrimaryKey(primaryKeyName)
                 .WithColumn("questionid").AsGuid().PrimaryKey(primaryKeyName)
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("latitude").AsDouble()
                 .WithColumn("longitude").AsDouble()
                 .WithColumn("timestamp").AsDateTimeOffset().Nullable()
                 .WithColumn("isenabled").AsBoolean().WithDefaultValue(true);
+
+            Create.ForeignKey("fk_interviewsummary_interview_geo_answer").FromTable("interview_geo_answers")
+                .ForeignColumn("interviewid").ToTable("interviewsummaries").PrimaryColumn("summaryid")
+                .OnDelete(Rule.Cascade);
 
             Execute.WithConnection((connection, transaction) =>
             {
@@ -61,7 +65,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                     foreach (var geoAnswer in geoAnswers)
                     {
                         writer.StartRow();
-                        writer.Write(geoAnswer.InterviewId, NpgsqlDbType.Uuid);
+                        writer.Write(geoAnswer.InterviewId.ToString("N"), NpgsqlDbType.Char);
                         writer.Write(geoAnswer.EntityId, NpgsqlDbType.Uuid);
                         writer.Write(geoAnswer.RosterVector, NpgsqlDbType.Text);
 

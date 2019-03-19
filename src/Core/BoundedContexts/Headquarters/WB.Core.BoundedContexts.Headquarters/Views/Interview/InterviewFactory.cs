@@ -10,8 +10,6 @@ using System.Linq;
 using System.Runtime.Caching;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -25,52 +23,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewFactory : IInterviewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly IUnitOfWork sessionProvider;
-        private readonly IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage;
 
-        public InterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            IUnitOfWork sessionProvider,
-            IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage)
+        public InterviewFactory(IUnitOfWork sessionProvider)
         {
-            this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
-            this.interviewFlagsStorage = interviewFlagsStorage;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => this.interviewFlagsStorage.Query(x => x
-                    .Where(y => y.InterviewId == interviewId)
-                    .Select(y => new { y.EntityId, y.RosterVector }))
-                .Select(x => Identity.Create(x.EntityId, RosterVector.Parse(x.RosterVector))).ToArray();
+            => this.sessionProvider.Session.Query<InterviewFlag>()
+                .Where(y => y.InterviewId == interviewId.ToString("N"))
+                .Select(x => x.Identity).ToArray()
+                .Select(Identity.Parse).ToArray();
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
-            var interview = summaryRepository.GetById(interviewId);
+            var sInterviewId = interviewId.ToString("N");
+            var interview = this.sessionProvider.Session.Query<InterviewSummary>()
+                .Where(x => x.SummaryId == sInterviewId)
+                .Select(x => new {x.ReceivedByInterviewer, x.Status})
+                .FirstOrDefault();
 
             if (interview == null)
                 throw new InterviewException($"Interview {interviewId} not found.");
+            if (interview.ReceivedByInterviewer)
+                throw new InterviewException($"Can't modify Interview {interviewId} on server, because it received by interviewer.");
+            if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
+                throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interviewId}");
 
-            ThrowIfInterviewApprovedByHq(interview);
-            ThrowIfInterviewReceivedByInterviewer(interview);
+            var flag = this.sessionProvider.Session.Query<InterviewFlag>().FirstOrDefault(y =>
+                y.InterviewId == sInterviewId && y.Identity == questionIdentity.ToString());
 
-            var rosterVector = questionIdentity.RosterVector.ToString().Trim('_');
-
-            var flag = this.interviewFlagsStorage.Query(x => x.FirstOrDefault(y => y.InterviewId == interviewId &&
-                                                                                   y.EntityId == questionIdentity.Id &&
-                                                                                   y.RosterVector == rosterVector));
             if (flagged && flag == null)
             {
-                this.interviewFlagsStorage.Store(new InterviewFlag
+                this.sessionProvider.Session.Save(new InterviewFlag
                 {
-                    InterviewId = interviewId,
-                    EntityId = questionIdentity.Id,
-                    RosterVector = rosterVector
-                }, null);
+                    InterviewId = sInterviewId,
+                    Identity = questionIdentity.ToString()
+                });
             }
             else if (!flagged && flag != null)
-                this.interviewFlagsStorage.Remove(flag);
+                this.sessionProvider.Session.Delete(flag);
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -83,9 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             conn.Execute($@"DELETE FROM {Table.InterviewsId} i WHERE i.{Column.InterviewId} = @InterviewId",
                 new { InterviewId = interviewId });
-
-            var interviewFlags = this.interviewFlagsStorage.Query(x => x.Where(y => y.InterviewId == interviewId));
-            this.interviewFlagsStorage.Remove(interviewFlags);
         }
 
         private static readonly InterviewStatus[] DisabledStatusesForGps =
@@ -408,36 +398,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return GetInterviewEntities(new[] { interviews }).ToList();
         }
 
-        private static void ThrowIfInterviewReceivedByInterviewer(InterviewSummary interview)
-        {
-            if (interview.ReceivedByInterviewer)
-                throw new InterviewException($"Can't modify Interview {interview.InterviewId} on server, because it received by interviewer.");
-        }
-
-        private static void ThrowIfInterviewApprovedByHq(InterviewSummary interview)
-        {
-            if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
-                throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interview.InterviewId}");
-        }
-
         private static class Column
         {
             public const string InterviewId = "interviewid";
-            public const string EntityId = "entityid";
-            public const string RosterVector = "rostervector";
-            public const string IsEnabled = "isenabled";
-            public const string AsString = "asstring";
-            public const string AsAudio = "asaudio";
-            public const string QuestionnaireIdentity = "questionnaireidentity";
         }
 
         private static class Table
         {
             public const string Interviews = "readside.interviews";
             public const string InterviewsId = "readside.interviews_id";
-            public const string InterviewsGeolocationAnswers = "readside.interview_geo_answers";
-            public const string InterviewSummaries = "readside.interviewsummaries";
-            public const string QuestionnaireEntities = "readside.questionnaire_entities";
             public const string InterviewsView = "readside.interviews_view";
         }
 

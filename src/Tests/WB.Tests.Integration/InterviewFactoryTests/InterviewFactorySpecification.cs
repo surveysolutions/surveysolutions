@@ -139,10 +139,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected InterviewFactory CreateInterviewFactory()
         {
-            return new InterviewFactory(
-                summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork,
-                interviewFlagsStorage: this.interviewFlagsStorage);
+            return new InterviewFactory(sessionProvider: this.UnitOfWork);
         }
         
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
