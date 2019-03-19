@@ -468,7 +468,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             return new AssignmentQuantitySettings
             {
-                CanChangeQuantity = assignment.WebMode ?? false
+                CanChangeQuantity = assignment.WebMode != true 
             };
         }
     }
