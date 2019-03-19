@@ -947,10 +947,7 @@ namespace WB.Tests.Abc.TestFactories
             IUnitOfWork sessionProvider = null,
             IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage = null)
         {
-            return new InterviewFactory(
-                summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                interviewFlagsStorage ?? Mock.Of<IPlainStorageAccessor<InterviewFlag>>());
+            return new InterviewFactory(sessionProvider ?? Mock.Of<IUnitOfWork>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
