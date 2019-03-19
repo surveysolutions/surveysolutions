@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void RemoveInterview(Guid interviewId);
 
         InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion, 
-            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId);
+            string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId);
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);

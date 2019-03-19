@@ -1,20 +1,17 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
 {
     public class MapReportTests
     {
-        private IQuestionnaireStorage questionnaireStorage;
         private IAuthorizedUser authorizedUser;
         private QuestionnaireIdentity questionnaireId;
         private MapReport subject;
@@ -24,13 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
         public void Context()
         {
             questionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA, 1);
-
-            PlainQuestionnaire questionnaire =
-                Create.Entity.PlainQuestionnaire(
-                    Create.Entity.QuestionnaireDocument(questionnaireId.QuestionnaireId,
-                        Create.Entity.GpsCoordinateQuestion(Id.gF, "gps")));
-
-            questionnaireStorage = Mock.Of<IQuestionnaireStorage>(qs => qs.GetQuestionnaire(questionnaireId, null) == questionnaire);
+           
             authorizedUser = Mock.Of<IAuthorizedUser>(a => a.Id == Id.g2);
 
             Because();
@@ -47,7 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Clustering
             };
 
             var interviewFactory = Mock.Of<IInterviewFactory>(
-                iif => iif.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", null, It.IsAny<GeoBounds>(), null) == points);
+                iif => iif.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, 
+                           "gps", null, null) == points);
 
             this.subject = Create.Service.MapReport(
                 authorizedUser: authorizedUser,
