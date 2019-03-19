@@ -1,5 +1,5 @@
 <template>
-    <HqLayout :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
+    <HqLayout :hasRow="false" :fixedWidth="true" :title="$t('WebInterviewSetup.WebInterviewSetup_Title')" >
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -13,38 +13,43 @@
         <div class="row">
             <div class="col-sm-8">
                 <h2>{{ title }}</h2>
-
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-7 col-xs-12">
+                <div class="import-progress">
+                    <h3>{{$t('WebInterviewSetup.Invitations')}}</h3>
+                    <p>{{$t('WebInterviewSetup.Invitations_TotalInvitations', {count: totalInvitationsCount})}}</p>
+                    <p>
+                        <span v-if="sentInvitationsCount > 0">{{$t('WebInterviewSetup.Invitations_Sent', {count: sentInvitationsCount})}}</span>
+                        <span v-else>{{$t('WebInterviewSetup.Invitations_NothingSent')}}</span>
+                    </p>
+                    <p v-if="notSentInvitationsCount" class="success-text">{{$t('WebInterviewSetup.Invitations_ToSend', {count: notSentInvitationsCount})}}</p>
+                    <p v-else class="error-text">{{$t('WebInterviewSetup.Invitations_NothingToSend')}}</p>
+                </div> 
+            </div>
             <div v-if="hasSetupError" class="col-sm-7 col-xs-12">
                 <div class="alert alert-danger">
                     <div class="validation-summary-errors">
                         <ul class="list-unstyled">
-                            <li>Invitations can't be sent.</li>
-                            <li v-if="emailProviderIsNotSetUp">Email provider is not set up. Admin user can change settings on <a :href="emailProviderUrl">Email Providers</a> page</li>
-                            <li v-if="!started">Web survey is not started. <a :href="webSettingsUrl">Start web</a> interview to send invitations.</li>
+                            <li>{{$t('WebInterviewSetup.Invitations_SetupError')}}</li>
+                            <li v-if="emailProviderIsNotSetUp">SI001: {{$t('WebInterviewSetup.Invitations_EmailIsNotSetUp')}} 
+                                <span v-if="$config.model.isAdmin">{{$t('Invitations_ChangeEmailSettingsAdmin', { a_start:  '<a href="' + emailProviderUrl + '">', a_end: '</a>'})}}</span>
+                                <span v-else>{{$t('Invitations_ChangeEmailSettingsNotAdmin')}}</span>
+                            </li>
+                            <li v-if="!started">SI002: {{$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { a_start:  '<a href="' + webSettingsUrl + '">', a_end: '</a>'})}}</li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div v-else class="col-sm-7 col-xs-12 prefilled-data-info info-block">
-                <p>Web survey has been started and email provider was set up properly. The system is ready to send invitations.</p>
-            </div>
-            <div class="col-sm-7 col-xs-12">
-                <div class="import-progress">
-                    <p>{{totalAssignmentsCount}} assignments in all modes found for the questionnaire</p>
-                    <p>{{totalInvitationsCount}} invitations found for the questionnaire. <span v-if="sentInvitationsCount > 0">{{sentInvitationsCount}} invitations have been sent already.</span><span v-else>No invitations have been sent yet.</span></p>
-                    <p v-if="notSentInvitationsCount" class="success-text">{{notSentInvitationsCount}} invitation can be sent</p>
-                    <p v-else class="error-text">No invitations to send as of now</p>
-                </div> 
-                 
+            <div v-else class="col-sm-7 col-xs-12">
+                <p>{{$t('Invitations_SuccessfulSetup')}}</p>
             </div>
             <form method="post">
                 <input type="hidden" :value="questionnaireId" name="questionnaireId"/>
-                <div class="col-sm-7 col-xs-12 action-buttons">
-                    <button type="submit" :disabled="hasSetupError || notSentInvitationsCount == 0"  class="btn btn-success ">Send <span v-if="notSentInvitationsCount > 0">{{notSentInvitationsCount}}</span> invitations</button>
-                    <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
+                <div class="action-buttons">
+                    <button type="submit" :disabled="hasSetupError || notSentInvitationsCount == 0"  class="btn btn-success ">{{$t('WebInterviewSetup.Invitations_SendAction', { count:  notSentInvitationsCount > 0 ? notSentInvitationsCount: "" })}}</button>
+                    <a :href="$config.model.api.surveySetupUrl" class="back-link">{{$t('WebInterviewSetup.BackToQuestionnaires')}}</a>  
                 </div>
             </form>
         </div>

@@ -157,6 +157,7 @@
                 });
 
                 prompt.find('input').attr('placeholder', this.$t("WebInterviewUI.EmailLink_Placeholder"))
+                prompt.find('input').before("<p>" + this.$t("WebInterviewUI.EmailLink_Message") + "</p>");
                 prompt.find('input').before("<p>" + this.$t("WebInterviewUI.EmailLink_ResumeAnyTime") + "</p>");
                 //debugger;
             },

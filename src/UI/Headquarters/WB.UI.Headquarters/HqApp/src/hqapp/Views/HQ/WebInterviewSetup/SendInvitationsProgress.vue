@@ -1,5 +1,5 @@
 <template>
-    <HqLayout :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
+    <HqLayout :hasRow="false" :fixedWidth="true" :title="$t('WebInterviewSetup.WebInterviewSetup_Title')">
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
@@ -27,13 +27,13 @@
                 <div class="import-progress">
                     <p v-if="isQueued" class="default-text">Preparing</p>
                     <p v-if="isInProgress">Sending</p>
-                    <p v-if="isDone">Done</p>
-                    <p v-if="isFailed" class="error-text">The process failed. Please contact your server administrator to check email provider settings.</p>
+                    <p v-if="isDone">Finished</p>
+                    <p v-if="isFailed" class="error-text">Sending invitations has failed. Please contact your server administrator to check the email provider settings.</p>
                     <p v-if="isCanceled" class="error-text">The process was cancelled</p>
                     <p v-if="isInProgress || isQueued">{{totalCount}} invitations to send.</p>
-                    <p v-if="processedCount == 0" class="default-text">None were sent.</p>
+                    <p v-if="processedCount == 0" class="default-text">Nothing was sent.</p>
                     <p v-else class="success-text">{{processedCount}} sent successfully.</p>
-                    <p v-if="withErrorsCount == 0" class="default-text">None failed</p>
+                    <p v-if="withErrorsCount == 0" class="default-text">No errors</p>
                     <p v-else class="error-text">{{withErrorsCount}} not sent because of errors.</p>
                     <p v-if="isStopped && withErrorsCount > 0">
                         <a :href="exportErrorsLink" target="_blank">Download list of assignments with errors</a>
@@ -47,7 +47,7 @@
                     </div>
                     <button class="btn  btn-link" type="button" @click="cancel">Cancel</button>
                 </div>
-                <div class="col-sm-7 col-xs-12 action-buttons">
+                <div class="action-buttons">
                     <a :href="$config.model.api.surveySetupUrl" class="back-link">Back to survey setup</a>  
                 </div> 
             </div>

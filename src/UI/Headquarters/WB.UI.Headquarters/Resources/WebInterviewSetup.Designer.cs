@@ -115,6 +115,96 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitations.
+        /// </summary>
+        public static string Invitations {
+            get {
+                return ResourceManager.GetString("Invitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change these settings at the {{url}} page..
+        /// </summary>
+        public static string Invitations_ChangeEmailSettingsAdmin {
+            get {
+                return ResourceManager.GetString("Invitations_ChangeEmailSettingsAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tell your admin user to change these settings at the &apos;Email Providers&apos; page..
+        /// </summary>
+        public static string Invitations_ChangeEmailSettingsNotAdmin {
+            get {
+                return ResourceManager.GetString("Invitations_ChangeEmailSettingsNotAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email provider is not set up..
+        /// </summary>
+        public static string Invitations_EmailIsNotSetUp {
+            get {
+                return ResourceManager.GetString("Invitations_EmailIsNotSetUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No invitations have been sent yet..
+        /// </summary>
+        public static string Invitations_NothingSent {
+            get {
+                return ResourceManager.GetString("Invitations_NothingSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No invitations to send as of now..
+        /// </summary>
+        public static string Invitations_NothingToSend {
+            get {
+                return ResourceManager.GetString("Invitations_NothingToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} invitations have been sent already..
+        /// </summary>
+        public static string Invitations_Sent {
+            get {
+                return ResourceManager.GetString("Invitations_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitations can&apos;t be sent..
+        /// </summary>
+        public static string Invitations_SetupError {
+            get {
+                return ResourceManager.GetString("Invitations_SetupError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} invitation to send..
+        /// </summary>
+        public static string Invitations_ToSend {
+            get {
+                return ResourceManager.GetString("Invitations_ToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} total invitations..
+        /// </summary>
+        public static string Invitations_TotalInvitations {
+            get {
+                return ResourceManager.GetString("Invitations_TotalInvitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save all.
         /// </summary>
         public static string SaveAll {

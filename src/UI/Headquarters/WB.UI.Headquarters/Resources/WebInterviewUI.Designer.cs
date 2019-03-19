@@ -477,7 +477,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your email here to get an email with resume link for the interview..
+        ///   Looks up a localized string similar to Enter your email address.
         /// </summary>
         internal static string EmailLink_Header {
             get {
@@ -495,6 +495,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We will send you a message with the link to resume the interview if you need to continue later..
+        /// </summary>
+        internal static string EmailLink_Message {
+            get {
+                return ResourceManager.GetString("EmailLink_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter email.
         /// </summary>
         internal static string EmailLink_Placeholder {
@@ -504,7 +513,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can send it later by clicking on &apos;Email resume link&apos; item on the top menu..
+        ///   Looks up a localized string similar to You cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
         /// </summary>
         internal static string EmailLink_ResumeAnyTime {
             get {
