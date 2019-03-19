@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
             => this.sessionProvider.Session.Query<InterviewFlag>()
                 .Where(y => y.InterviewId == interviewId.ToString("N"))
-                .Select(x => x.Identity).ToArray()
+                .Select(x => x.QuestionIdentity).ToArray()
                 .Select(Identity.Parse).ToArray();
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
@@ -52,14 +52,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interviewId}");
 
             var flag = this.sessionProvider.Session.Query<InterviewFlag>().FirstOrDefault(y =>
-                y.InterviewId == sInterviewId && y.Identity == questionIdentity.ToString());
+                y.InterviewId == sInterviewId && y.QuestionIdentity == questionIdentity.ToString());
 
             if (flagged && flag == null)
             {
                 this.sessionProvider.Session.Save(new InterviewFlag
                 {
                     InterviewId = sInterviewId,
-                    Identity = questionIdentity.ToString()
+                    QuestionIdentity = questionIdentity.ToString()
                 });
             }
             else if (!flagged && flag != null)
