@@ -539,7 +539,7 @@
     <value>Hide if disabled</value>
   </data>
   <data name="PlainRoster" xml:space="preserve">
-    <value>Plain mode</value>
+    <value>Flat mode</value>
   </data>
   <data name="AddValidationRule" xml:space="preserve">
     <value>Add new validation rule</value>
