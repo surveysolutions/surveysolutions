@@ -340,7 +340,7 @@
     <value>Assignment was created in Web Mode</value>
   </data>
   <data name="PasswordInstructions" xml:space="preserve">
-    <value>Use single symbol '?' to generate password</value>
+    <value>Use min 6 characters on numbers and upper case letters or single symbol '?' to generate password</value>
   </data>
   <data name="EnterPassword" xml:space="preserve">
     <value>Enter password</value>
