@@ -6582,10 +6582,15 @@ a.disabled {
       text-align: center; }
       .navbar .navbar-collapse li > a.notifications {
         padding-left: 45px; }
+      .navbar .navbar-collapse li > a .glyphicon {
+        display: inline-block;
+        margin-right: 5px; }
       .navbar .navbar-collapse li > a:hover, .navbar .navbar-collapse li > a:focus {
         font-family: "RobotoBold"; }
         .navbar .navbar-collapse li > a:hover span, .navbar .navbar-collapse li > a:focus span {
           font-family: "RobotoLight"; }
+          .navbar .navbar-collapse li > a:hover span.glyphicon, .navbar .navbar-collapse li > a:focus span.glyphicon {
+            font-family: "Glyphicons Halflings"; }
         .navbar .navbar-collapse li > a:hover > .caret, .navbar .navbar-collapse li > a:focus > .caret {
           border-top-color: #fff; }
       .navbar .navbar-collapse li > a .caret {
@@ -8659,7 +8664,7 @@ body > .ui-pnotify {
     text-align: right; }
   .table td.editable {
     position: relative; }
-    .table td.editableafter {
+    .table td.editable:after {
       content: "";
       position: absolute;
       top: 0;

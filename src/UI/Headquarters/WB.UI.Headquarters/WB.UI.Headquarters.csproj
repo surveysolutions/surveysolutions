@@ -1674,6 +1674,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.ru.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
