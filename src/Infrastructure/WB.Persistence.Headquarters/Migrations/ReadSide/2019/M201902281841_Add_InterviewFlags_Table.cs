@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Persistence.Headquarters.Migrations.PlainStore
+namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
     [Migration(201902281841)]
     [Localizable(false)]
@@ -17,9 +19,12 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
             var primaryKeyName = "pk_interviewflags";
 
             Create.Table("interviewflags")
-                .WithColumn("interviewid").AsGuid().PrimaryKey(primaryKeyName)
-                .WithColumn("entityid").AsGuid().PrimaryKey(primaryKeyName)
-                .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName);
+                .WithColumn("interviewid").AsFixedLengthString(255).PrimaryKey(primaryKeyName)
+                .WithColumn("identity").AsString().Nullable().PrimaryKey(primaryKeyName);
+
+            Create.ForeignKey("fk_interviewsummary_interviewflag").FromTable("interviewflags")
+                .ForeignColumn("interviewid").ToTable("interviewsummaries").PrimaryColumn("summaryid")
+                .OnDelete(Rule.Cascade);
 
             Execute.WithConnection((connection, transaction) =>
             {
@@ -31,15 +36,14 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
                         "SELECT interviewid, entityid, rostervector FROM \"readside\".\"interviews_view\" where hasflag = true")
                     .ToArray();
 
-                var copyFromCommand = "COPY  \"plainstore\".\"interviewflags\" (interviewid, entityid, rostervector) FROM STDIN BINARY;";
+                var copyFromCommand = "COPY  \"readside\".\"interviewflags\" (interviewid, identity) FROM STDIN BINARY;";
                 using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
                 {
                     foreach (var flag in flags)
                     {
                         writer.StartRow();
-                        writer.Write(flag.interviewId, NpgsqlDbType.Uuid);
-                        writer.Write(flag.entityId, NpgsqlDbType.Uuid);
-                        writer.Write(flag.rosterVector, NpgsqlDbType.Text);
+                        writer.Write(flag.interviewId.ToString("N"), NpgsqlDbType.Char);
+                        writer.Write(Identity.Create(flag.entityId, RosterVector.Parse(flag.rosterVector)).ToString(), NpgsqlDbType.Text);
                     }
 
                     writer.Complete();
