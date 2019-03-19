@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             ComposedId(m =>
             {
                 m.Property(x => x.InterviewId);
-                m.Property(x => x.Identity, mapper => mapper.Column("identity"));
+                m.Property(x => x.QuestionIdentity);
             });
         }
     }
