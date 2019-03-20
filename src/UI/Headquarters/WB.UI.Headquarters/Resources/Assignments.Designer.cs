@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use min 6 characters on numbers and upper case letters or single symbol &apos;?&apos; to generate password.
+        ///   Looks up a localized string similar to At least 6 numbers and upper case letters or single symbol &apos;?&apos; to generate password.
         /// </summary>
         public static string PasswordInstructions {
             get {
