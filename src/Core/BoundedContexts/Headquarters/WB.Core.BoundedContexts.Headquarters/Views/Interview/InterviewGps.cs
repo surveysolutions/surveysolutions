@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string RosterVector { get; set; }
         public virtual double Latitude { get; set; }
         public virtual double Longitude { get; set; }
-        public virtual DateTime Timestamp { get; set; }
+        public virtual DateTimeOffset Timestamp { get; set; }
         public virtual bool IsEnabled { get; set; }
 
 

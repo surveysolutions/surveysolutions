@@ -42,7 +42,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("latitude").AsDouble()
                 .WithColumn("longitude").AsDouble()
-                .WithColumn("timestamp").AsDateTimeOffset().Nullable()
+                .WithColumn("timestamp").AsString().Nullable()
                 .WithColumn("isenabled").AsBoolean().WithDefaultValue(true);
 
             Create.ForeignKey("fk_interviewsummary_interview_geo_answer").FromTable("interview_geo_answers")
@@ -73,7 +73,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                         
                         writer.Write(gps.Latitude, NpgsqlDbType.Double);
                         writer.Write(gps.Longitude, NpgsqlDbType.Double);
-                        writer.Write(gps.Timestamp, NpgsqlDbType.TimestampTz);
+                        writer.Write(gps.Timestamp.ToString(), NpgsqlDbType.Text);
                         writer.Write(geoAnswer.IsEnabled, NpgsqlDbType.Boolean);
                     }
 
