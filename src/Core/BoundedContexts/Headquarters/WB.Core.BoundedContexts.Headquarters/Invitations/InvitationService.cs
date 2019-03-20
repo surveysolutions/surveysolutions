@@ -262,7 +262,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _
                 .Where(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version)
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Archived == false &&
+                    (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
                 .ToList());
         }
 
