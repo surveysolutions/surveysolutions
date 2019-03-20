@@ -130,7 +130,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
                 assignment.IdentifyingData
                           .Where(x => questionnaire.GetQuestionType(x.Identity.Id) != QuestionType.GpsCoordinates)
-                          .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
+                          .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(),
+                                    x.AnswerAsString,
+                                    x.Identity))
                           .ToList();
             return identifyingColumnText;
         }

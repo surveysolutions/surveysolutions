@@ -1,4 +1,5 @@
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -44,8 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                             {
                                 Id = a.Questionid,
                                 Answer = a.Answer,
-                                Question = a.Title,
-                                Type = a.Type
+                                Question = a.Title
                             }).ToList(),
                         InterviewId = x.InterviewId,
                         Key = x.Key,
@@ -121,6 +121,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
             if (input.AssignmentId.HasValue)
             {
                 items = items.Where(x => x.AssignmentId == input.AssignmentId);
+            }
+
+            if (input.UnactiveDateStart.HasValue || input.UnactiveDateEnd.HasValue)
+            {
+                items = from i in items
+                    let statusChangeTime = i.InterviewCommentedStatuses
+                        .Where(s =>
+                            (s.Status == InterviewExportedAction.Completed && i.Status == InterviewStatus.Completed)
+                            || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
+                            || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
+                        )
+                        .OrderByDescending(s => s.Position)
+                        .Select(s => s.Timestamp)
+                        .First()
+                    where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)
+                          && (statusChangeTime <= input.UnactiveDateEnd || input.UnactiveDateEnd == null)
+                    select i;
             }
 
             return items;

@@ -42,9 +42,9 @@ namespace WB.Services.Export.Interview
                         var groupInterviewEntity = new InterviewEntity
                         {
                             Identity = new Identity(group.PublicKey,
-                                         @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty),
+                                         @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty),
                             EntityType = EntityType.Section,
-                            InterviewId = (Guid)reader["data__interview_id"],
+                            InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
                             IsEnabled = (bool)reader[$"enablement__{group.ColumnName}"]
                         };
 
@@ -55,12 +55,12 @@ namespace WB.Services.Export.Interview
                             if (groupChild is Question question)
                             {
                                 var identity = new Identity(question.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Question,
-                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
                                     InvalidValidations = reader[$"validity__{question.ColumnName}"] is DBNull
                                         ? Array.Empty<int>()
                                         : (int[])reader[$"validity__{question.ColumnName}"],
@@ -74,12 +74,12 @@ namespace WB.Services.Export.Interview
                             else if (groupChild is Variable variable)
                             {
                                 var identity = new Identity(variable.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.Variable,
-                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
                                     IsEnabled = (bool)reader[$"enablement__{variable.ColumnName}"]
                                 };
                                 var val = reader[$"data__{variable.ColumnName}"];
@@ -89,12 +89,12 @@ namespace WB.Services.Export.Interview
                             else if (groupChild is StaticText staticText)
                             {
                                 var identity = new Identity(staticText.PublicKey,
-                                    @group.IsInsideRoster ? (int[])reader["data__roster_vector"] : RosterVector.Empty);
+                                    @group.IsInsideRoster ? (int[])reader[$"data__{InterviewDatabaseConstants.RosterVector}"] : RosterVector.Empty);
                                 var interviewEntity = new InterviewEntity
                                 {
                                     Identity = identity,
                                     EntityType = EntityType.StaticText,
-                                    InterviewId = (Guid)reader["data__interview_id"],
+                                    InterviewId = (Guid)reader[$"data__{InterviewDatabaseConstants.InterviewId}"],
                                     IsEnabled = (bool)reader[$"enablement__{staticText.ColumnName}"],
                                     InvalidValidations = reader[$"validity__{staticText.ColumnName}"] is DBNull
                                         ? Array.Empty<int>()
@@ -303,7 +303,18 @@ namespace WB.Services.Export.Interview
                         answer.Type = multimediaQuestion.QuestionType == QuestionType.Multimedia
                             ? MultimediaType.Image
                             : MultimediaType.Audio;
-                        answer.Answer = (string) reader[$"data__{multimediaQuestion.ColumnName}"];
+                        var stringAnswer = (string) reader[$"data__{multimediaQuestion.ColumnName}"];
+                        if (answer.Type == MultimediaType.Audio)
+                        {
+                            var objectAnswer = JsonConvert.DeserializeObject<AudioAnswer>(stringAnswer);
+                            answer.Answer = objectAnswer.FileName;
+                        }
+                        else if(answer.Type == MultimediaType.Image)
+                        {
+                            answer.Answer = stringAnswer;
+
+                        }
+
                         answers.Add(answer);
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.InterviewDataStorage
 {
@@ -25,9 +26,10 @@ namespace WB.Services.Export.InterviewDataStorage
             return sb.ToString();
         }
 
-        public string GenerateCreateSchema(string schemaName)
+        public string GenerateCreateSchema(TenantInfo tenant)
         {
-            return $"CREATE SCHEMA IF NOT EXISTS \"{schemaName}\";";
+            var schemaName = tenant.SchemaName();
+            return $@"CREATE SCHEMA IF NOT EXISTS ""{schemaName}""; COMMENT ON SCHEMA ""{schemaName}"" IS '{tenant.Name}';";
         }
 
         public string GenerateDropTable(string tableName)

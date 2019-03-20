@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -15,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid InterviewId { get; set; }
         public Guid EntityId { get; set; }
         public string RosterVector { get; set; }
-        public bool HasFlag { get; set; }
         public bool IsEnabled { get; set; }
         public string InvalidValidations { get; set; }
         public string Warnings { get; set; }
@@ -42,8 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual Guid InterviewId { get; set; }
         public virtual Identity Identity { get; set; }
         public virtual EntityType EntityType { get; set; }
-
-        public virtual bool HasFlag { get; set; }
         public virtual bool IsEnabled { get; set; }
         public virtual int[] InvalidValidations { get; set; }
         public virtual int[] WarningValidations { get; set; }
@@ -58,7 +54,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual InterviewTextListAnswer[] AsList { get; set; }
         public virtual AnsweredYesNoOption[] AsYesNo { get; set; }
         public virtual int[][] AsIntMatrix { get; set; }
-        public virtual GeoPosition AsGps { get; set; }
         public virtual AudioAnswer AsAudio { get; set; }
         public virtual Area AsArea { get; set; }
         

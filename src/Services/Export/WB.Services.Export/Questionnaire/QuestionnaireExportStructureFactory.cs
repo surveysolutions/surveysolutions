@@ -245,7 +245,7 @@ namespace WB.Services.Export.Questionnaire
                 }
                 else
                 {
-                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i + 1);
+                    headerColumn.Name = string.Format(GeneratedTitleExportFormat, question.VariableName, i);
                 }
 
                 if (!IsQuestionLinked(question))
@@ -471,7 +471,7 @@ namespace WB.Services.Export.Questionnaire
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question,
-                    this.GetRosterSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
+                    this.GetRostersSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -540,16 +540,50 @@ namespace WB.Services.Export.Questionnaire
             headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
         }
 
-        private int GetRosterSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,
+        private int GetRostersSizeForLinkedQuestion(Question question, QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            Guid rosterSizeQuestionId =
-                this.GetRosterSizeSourcesForEntity(GetReferencedByLinkedQuestionEntity(question, questionnaire)).Last();
+            var referencedByLinkedQuestionEntity = GetReferencedByLinkedQuestionEntity(question, questionnaire);
+            var rosterVectorReferencedQuestion = this.GetRosterSizeSourcesForEntity(referencedByLinkedQuestionEntity);
+            var rosterVectorLinkedQuestion = this.GetRosterSizeSourcesForEntity(question);
+            var linkedVectorScope = FindLinkedVectorScope(rosterVectorLinkedQuestion, rosterVectorReferencedQuestion);
 
-            if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
-                return Constants.MaxRosterRowCount;
+            var sizes = linkedVectorScope.Select(vectorValue => maxValuesForRosterSizeQuestions.ContainsKey(vectorValue)
+                                                                    ? maxValuesForRosterSizeQuestions[vectorValue]
+                                                                    : Constants.MaxRosterRowCount);
+            var size = sizes.Aggregate(1, (a, b) => a * b);
 
-            return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
+            return Math.Min(size, Constants.MaxSizeOfLinkedQuestion);
+        }
+
+        private ValueVector<Guid> FindLinkedVectorScope(ValueVector<Guid> rosterVectorLinkedQuestion, ValueVector<Guid> rosterVectorReferencedQuestion)
+        {
+            if (rosterVectorLinkedQuestion.Length == 0)
+                return rosterVectorReferencedQuestion;
+
+            if (rosterVectorLinkedQuestion.Equals(rosterVectorReferencedQuestion))
+                return new ValueVector<Guid>(rosterVectorLinkedQuestion.Skip(rosterVectorLinkedQuestion.Length - 1));
+
+            int? commonIndex = null;
+
+            for (int i = 0; i < rosterVectorReferencedQuestion.Count && i < rosterVectorLinkedQuestion.Count; i++)
+            {
+                if (rosterVectorReferencedQuestion[i] == rosterVectorLinkedQuestion[i])
+                {
+                    commonIndex = i;
+                    continue;
+                }
+
+                break;
+            }
+
+            if (!commonIndex.HasValue)
+                return rosterVectorReferencedQuestion;
+
+            if (rosterVectorReferencedQuestion.Length == commonIndex.Value + 1)
+                return rosterVectorReferencedQuestion;
+
+            return new ValueVector<Guid>(rosterVectorReferencedQuestion.Skip(commonIndex.Value + 1));
         }
 
         private IQuestionnaireEntity GetReferencedByLinkedQuestionEntity(Question question, QuestionnaireDocument questionnaire)

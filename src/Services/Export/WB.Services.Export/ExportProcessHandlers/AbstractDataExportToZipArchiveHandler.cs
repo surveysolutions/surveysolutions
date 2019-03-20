@@ -25,7 +25,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override async Task DoExportAsync(
+        public override async Task DoExportAsync(
             DataExportProcessArgs processArgs, 
             ExportSettings exportSettings, string archiveName,
             ExportProgress exportProgress, CancellationToken cancellationToken)

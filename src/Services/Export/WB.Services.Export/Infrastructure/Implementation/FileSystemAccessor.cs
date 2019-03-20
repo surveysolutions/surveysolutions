@@ -35,6 +35,8 @@ namespace WB.Services.Export.Infrastructure.Implementation
         public void DeleteDirectory(string path) => Directory.Delete(path, true);
         public void CreateDirectory(string path) => Directory.CreateDirectory(path);
         public string GetFileName(string path) => Path.GetFileName(path);
+
+        public string GetFileNameWithoutExtension(string filePath) => Path.GetFileNameWithoutExtension(filePath);
         public void DeleteFile(string path) => File.Delete(path);
 
         public void MoveFile(string fromPath, string toPath) => File.Move(fromPath, toPath);

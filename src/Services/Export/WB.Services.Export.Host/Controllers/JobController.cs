@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WB.Services.Export.Ddi;
 using WB.Services.Export.Interview;
-using WB.Services.Export.InterviewDataStorage;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
@@ -23,23 +21,17 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IExportArchiveHandleService archiveHandleService;
-        private readonly IQuestionnaireSchemaGenerator questionnaireSchemaGenerator;
-        private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly IJobService jobService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
             IExportArchiveHandleService archiveHandleService,
-            IDdiMetadataAccessor ddiDdiMetadataAccessor,
-            IJobService jobService,
-            IQuestionnaireSchemaGenerator questionnaireSchemaGenerator)
+            IJobService jobService)
         {
-            this.exportProcessesService = exportProcessesService;
-            this.jobsStatusReporting = jobsStatusReporting;
-            this.archiveHandleService = archiveHandleService;
-            this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
-            this.jobService = jobService;
-            this.questionnaireSchemaGenerator = questionnaireSchemaGenerator;
+            this.exportProcessesService = exportProcessesService ?? throw new ArgumentNullException(nameof(exportProcessesService));
+            this.jobsStatusReporting = jobsStatusReporting ?? throw new ArgumentNullException(nameof(jobsStatusReporting));
+            this.archiveHandleService = archiveHandleService ?? throw new ArgumentNullException(nameof(archiveHandleService));
+            this.jobService = jobService ?? throw new ArgumentNullException(nameof(jobService));
         }
 
         [HttpPut]
@@ -92,21 +84,7 @@ namespace WB.Services.Export.Host.Controllers
             return dataExportStatusForQuestionnaire;
         }
 
-        [HttpGet]
-        [ResponseCache(NoStore = true)]
-        [Route("api/v1/ddi")]
-        public async Task<FileStreamResult> GetDdiFile(
-            string questionnaireId,
-            string archivePassword,
-            TenantInfo tenant)
-        {
-            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant,
-                new QuestionnaireId(questionnaireId),
-                archivePassword);
-            var responseStream = System.IO.File.OpenRead(pathToFile);
-            return File(responseStream, "application/zip");
-        }
-
+  
         [HttpGet]
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/download")]
@@ -153,16 +131,6 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<ActionResult> Delete(TenantInfo tenant)
         {
             await this.archiveHandleService.ClearAllExportArchives(tenant);
-            return Ok();
-        }
-
-        [HttpDelete]
-        [Route("api/v1/deleteTenant")]
-        public async Task<ActionResult> StopTenant(string tenant)
-        {
-            if (string.IsNullOrWhiteSpace(tenant)) return BadRequest("No tenant specified");
-            
-            await this.questionnaireSchemaGenerator.DropTenantSchemaAsync(tenant);
             return Ok();
         }
 

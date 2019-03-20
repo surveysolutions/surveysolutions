@@ -135,12 +135,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     ? assignments
                     : assignments.Where(ass => ass.ResponsibleId == responsibleId);
 
-                var ids = assignments.ToList().Select(a => a.Id).ToArray();
-
-                var answersLookup = assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                    .Where(a => a.IsIdentifying && ids.Contains(a.AssignmentId))
-                    .Select(DecryptedAnswer)
-                    .ToLookup(a => a.AssignmentId);
+                // SQLite does not support join by LINQ
+                var answersLookup = assignmentTable.Connection.Query<AssignmentDocument.AssignmentAnswer>(
+                        "SELECT * " +
+                        $"FROM {nameof(AssignmentDocument)} AS ad " +
+                        $"JOIN {nameof(AssignmentDocument.AssignmentAnswer)} AS aa " +
+                        $"ON aa.{nameof(AssignmentDocument.AssignmentAnswer.AssignmentId)} == ad.{nameof(AssignmentDocument.Id)} " +
+                        $"WHERE aa.{nameof(AssignmentDocument.AssignmentAnswer.IsIdentifying)} == 1 " +
+                        (responsibleId.HasValue ? $"AND ad.{nameof(AssignmentDocument.ResponsibleId)} == @responsibleId" : ""), 
+                        responsibleId)
+                        .Select(DecryptedAnswer)
+                        .ToLookup(a => a.AssignmentId);
 
                 IEnumerable<AssignmentDocument> FillAnswers()
                 {

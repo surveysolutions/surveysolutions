@@ -8,14 +8,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
-using Supercluster;
+using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -25,86 +24,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewFactory : IInterviewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly IUnitOfWork sessionProvider;
 
-        public InterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            IUnitOfWork sessionProvider)
+        public InterviewFactory(IUnitOfWork sessionProvider)
         {
-            this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
         }
 
-        public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
-            Identity sectionId)
-        {
-            return sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
-                    $@"SELECT {Column.EntityId} as Id, {Column.RosterVector}
-                       FROM {Table.InterviewsView}
-                       WHERE {Column.InterviewId} = @InterviewId
-                        AND {Column.HasFlag} = true
-                        AND parentid = @sectionId
-                        AND {Column.RosterVector} = @RosterVector",
-                    new
-                    {
-                        InterviewId = interviewId,
-                        RosterVector = sectionId.RosterVector.ToString().Trim('_'),
-                        SectionId = sectionId.Id
-                    })
-                .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
-                .ToArray();
-        }
-
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
-                    $"SELECT {Column.EntityId}, {Column.RosterVector} " +
-                    $"FROM {Table.InterviewsView} WHERE {Column.InterviewId} = @InterviewId AND {Column.HasFlag} = true",
-                    new { InterviewId = interviewId })
-                .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
-                .ToArray();
+            => this.sessionProvider.Session.Query<InterviewFlag>()
+                .Where(y => y.InterviewId == interviewId.ToString("N"))
+                .Select(x => x.QuestionIdentity).ToArray()
+                .Select(Identity.Parse).ToArray();
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
-            var interview = summaryRepository.GetById(interviewId);
+            var sInterviewId = interviewId.ToString("N");
+            var interview = this.sessionProvider.Session.Query<InterviewSummary>()
+                .Where(x => x.SummaryId == sInterviewId)
+                .Select(x => new {x.ReceivedByInterviewer, x.Status})
+                .FirstOrDefault();
 
             if (interview == null)
                 throw new InterviewException($"Interview {interviewId} not found.");
+            if (interview.ReceivedByInterviewer)
+                throw new InterviewException($"Can't modify Interview {interviewId} on server, because it received by interviewer.");
+            if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
+                throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interviewId}");
 
-            ThrowIfInterviewApprovedByHq(interview);
-            ThrowIfInterviewReceivedByInterviewer(interview);
-
-            var interviewInfo = GetInterviewId(interviewId);
-
-            var entityMap = GetQuestionnaireEntities(interview.QuestionnaireIdentity);
-
-            var row = new
+            if (flagged)
             {
-                interviewInfo.id,
-                entityId = entityMap[questionIdentity.Id],
-                rosterVector = questionIdentity.RosterVector.ToString().Trim('_'),
-                hasFlag = flagged
-            };
-
-            var flaggedRows = sessionProvider.Session.Connection
-                .Query<(int interviewId, int entityId, string rosterVector, bool hasFlag)>
-                ($"select interviewid, entityid, rostervector, hasflag from {Table.Interviews} " +
-                 $"where interviewid = @id and entityid = @entityid and rostervector = @rostervector", row).ToList();
-
-            switch (flaggedRows.Count)
+                this.sessionProvider.Session.SaveOrUpdate(new InterviewFlag
+                {
+                    InterviewId = sInterviewId,
+                    QuestionIdentity = questionIdentity.ToString()
+                });
+            }
+            else
             {
-                // do not add new row with false value
-                case 0 when flagged == false:
-                    return;
-                case 0:
-                    sessionProvider.Session.Connection.Execute(
-                        $@"INSERT INTO {Table.Interviews} (interviewid, entityid, rostervector, isenabled, hasflag)
-                       VALUES(@id, @entityid, @rostervector, true, @hasFlag)", row);
-                    break;
-                default:
-                    sessionProvider.Session.Connection.Execute(
-                        $@"UPDATE {Table.Interviews} SET hasflag=@hasFlag where interviewid=@id and entityid=@entityid and rostervector=@rostervector", row);
-                    break;
+                this.sessionProvider.Session.Query<InterviewFlag>()
+                    .Where(y => y.InterviewId == sInterviewId && y.QuestionIdentity == questionIdentity.ToString())
+                    .Delete();
             }
         }
 
@@ -120,144 +80,90 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 new { InterviewId = interviewId });
         }
 
-        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        private static readonly InterviewStatus[] DisabledStatusesForGps =
         {
-            return sessionProvider.Session.Connection
-                .Query<InterviewStringAnswer>(
-                    $@"select i.{Column.InterviewId}, i.{Column.AsString} as answer
-                       from {Table.InterviewsView} i
-                       join {Table.InterviewSummaries} s on s.{Column.InterviewId} = i.{Column.InterviewId} 
-                            and s.{Column.QuestionnaireIdentity} = @questionnaireIdentity
-                        where i.{Column.IsEnabled} and i.{Column.AsString} is not null and i.question_type = @questionType", new
-                    {
-                        questionType = QuestionType.Multimedia,
-                        questionnaireIdentity = questionnaireIdentity.ToString()
-                    })
-                .ToArray();
-        }
-
-        public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => sessionProvider.Session.Connection.Query<InterviewStringAnswer>(
-                $"SELECT i.{Column.InterviewId}, i.{Column.AsAudio}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
-                $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
-                $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
-                $"AND {Column.AsAudio} IS NOT NULL " +
-                $"AND {Column.IsEnabled} = true").ToArray();
-
-        private static string DisabledForGpsStatuses { get; } = string.Join(",", new[]
-        {
-            (int) InterviewStatus.ApprovedBySupervisor,
-            (int) InterviewStatus.ApprovedByHeadquarters
-        });
+            InterviewStatus.ApprovedBySupervisor,
+            InterviewStatus.ApprovedByHeadquarters
+        };
 
         public InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion,
-            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
+            string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId)
         {
-            var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswer>(
-                $@"
-                with gpsQuestions 
-                        as (
-                            select id from readside.questionnaire_entities 
-                            where questionnaireidentity like @Questionnaire and stata_export_caption = @question),
-                interviews as(
-                    select teamleadid, interviewid, rostervector, latitude, longitude
-                    from
-                        (
-                            select
-                                s.teamleadid,
-                                s.interviewid,
-                                i.rostervector,
-                                (i.asgps ->> 'Latitude')::float8 as latitude,
-                                (i.asgps ->> 'Longitude')::float8 as longitude
-                            from readside.interviews i
-                            join readside.interviews_id id     on id.id = i.interviewid
-                            join readside.interviewsummaries s on s.interviewid = id.interviewid
-                            where
-                                i.asgps is not null
-                                and (@supervisorId is null OR s.status not in({DisabledForGpsStatuses}))                                
-                                and i.entityid in (select id from gpsQuestions)
-                                and i.isenabled = true
-                        ) as q
-                    where latitude > @south and latitude < @north
-                        and longitude > @west {(bounds.East >= bounds.West ? "AND" : "OR")} 
-                            longitude < @east
-                ) 
-                select interviewid, latitude, longitude
-                from interviews" 
-                + (supervisorId.HasValue ? " where teamleadid = @supervisorId" : "")
-                + (maxAnswersCount.HasValue ? " limit @MaxCount" : ""),
-                new
+            var gpsQuery = QueryGpsAnswers()
+                .Where(x => x.Answer.IsEnabled &&
+                            x.QuestionnaireItem.StatExportCaption == gpsQuestionVariableName &&
+                            x.InterviewSummary.QuestionnaireId == questionnaireId);
+
+            if (questionnaireVersion.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.InterviewSummary.QuestionnaireVersion == questionnaireVersion.Value);
+            }
+
+            if (supervisorId.HasValue)
+            {
+                gpsQuery = gpsQuery
+                    .Where(x => x.InterviewSummary.TeamLeadId == supervisorId.Value 
+                                && !DisabledStatusesForGps.Contains(x.InterviewSummary.Status));
+            }
+
+            var result = gpsQuery.Select(x => new InterviewGpsAnswer
+            {
+                InterviewId = Guid.Parse(x.Answer.InterviewId),
+                RosterVector = x.Answer.RosterVector,
+                Latitude = x.Answer.Latitude,
+                Longitude = x.Answer.Longitude
+            });
+
+            if (maxAnswersCount.HasValue)
+            {
+                result = result.Take(maxAnswersCount.Value);
+            }
+
+            return result.ToArray();
+        }
+        
+        public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId) =>
+            QueryGpsAnswers()
+                .Where(x => x.Answer.IsEnabled 
+                            && x.InterviewSummary.ResponsibleId == interviewerId 
+                            && x.QuestionnaireItem.QuestionScope == QuestionScope.Interviewer)
+                .Select(x => new InterviewGpsAnswerWithTimeStamp
                 {
-                    supervisorId,
-                    Questionnaire = $"{questionnaireId.FormatGuid()}${questionnaireVersion?.ToString() ?? "%"}",
-                    question = gpsQuestionVariableName,
-                    MaxCount = maxAnswersCount,
-                    bounds.South, bounds.North, bounds.East, bounds.West
+                    EntityId = x.Answer.QuestionId,
+                    InterviewId = x.InterviewSummary.InterviewId,
+                    Latitude = x.Answer.Latitude,
+                    Longitude = x.Answer.Longitude,
+                    Timestamp = x.Answer.Timestamp,
+                    Idenifying = x.QuestionnaireItem.Featured == true,
+                    Status = x.InterviewSummary.Status
                 })
-            .ToArray();
-            return result;
+                .ToArray();
+
+        private IQueryable<GpsAnswerQuery> QueryGpsAnswers()
+        {
+            return this.sessionProvider.Session
+                .Query<InterviewGps>()
+                .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
+                    gps => gps.InterviewId,
+                    interview => interview.SummaryId,
+                    (gps, interview) => new  { gps, interview})
+                .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
+                    interview_gps => new { interview_gps.interview.QuestionnaireIdentity, interview_gps.gps.QuestionId },
+                    questionnaireItem => new { questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId },
+                    (interview_gps, questionnaireItem) => new GpsAnswerQuery
+                    {
+                        InterviewSummary = interview_gps.interview,
+                        Answer = interview_gps.gps,
+                        QuestionnaireItem = questionnaireItem
+                    });
         }
 
-        public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId)
-        {
-            var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswerWithTimeStamp>(
-                $@"with interviews as(
-                    select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
-                    from
-                        (
-                            select
-                                i.entityid,
-                                s.interviewid,
-                                s.status,
-                                e.featured as idenifying,
-                                (i.asgps ->> 'Latitude')::float8 as latitude,
-                                (i.asgps ->> 'Longitude')::float8 as longitude,
-                                (i.asgps ->> 'Timestamp') as timestamp
-                            from
-                                readside.interviews_view i
-                            join readside.interviewsummaries s on
-                                s.interviewid = i.interviewid
-                            join readside.questionnaire_entities e on
-                                e.entityid = i.entityid
-                            where
-                                i.asgps is not null
-                                and s.responsibleid = @interviewerId
-                                and i.isenabled = true
-                                and e.question_scope = 0
-                        ) as q
-                ) 
-                select entityid, interviewid, latitude, longitude, timestamp, status, idenifying
-                from   interviews;",
-                new
-                {
-                    interviewerId
-                })
-            .ToArray();
-            return result;
-        }
-
-        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId)
-        {
-            var result = sessionProvider.Session.Connection.Query<int>(
-                $@"         select 1
-                            from
-                                readside.interviews_view i
-                            join readside.interviewsummaries s on
-                                s.interviewid = i.interviewid
-                            join readside.questionnaire_entities e on
-                                e.entityid = i.entityid
-                            where
-                                i.asgps is not null
-                                and s.responsibleid = @interviewerId
-                                and i.isenabled = true
-                                and e.question_scope = 0;",
-                new
-                {
-                    interviewerId
-                })
-            .ToArray();
-            return result.Length > 0;
-        }
+        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId) =>
+            QueryGpsAnswers()
+                .Any(x => x.Answer.IsEnabled 
+                            && x.InterviewSummary.ResponsibleId == interviewerId 
+                            && x.QuestionnaireItem.QuestionScope == QuestionScope.Interviewer);
 
         public void Save(InterviewState state)
         {
@@ -291,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                 }
             }
-            
+
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
             Upsert(state.Warnings, (e, v) => e.WarningValidations = v.Validations);
@@ -306,7 +212,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsList = answer.AsList;
                 entity.AsIntArray = answer.AsIntArray;
                 entity.AsIntMatrix = answer.AsIntMatrix;
-                entity.AsGps = answer.AsGps;
                 entity.AsBool = answer.AsBool;
                 entity.AsYesNo = answer.AsYesNo;
                 entity.AsAudio = answer.AsAudio;
@@ -380,7 +285,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             using (var importer = npgConnection.BeginBinaryImport(@"copy 
                 readside.interviews (
                     interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint, aslong, 
-                    asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag 
+                    asdouble, asdatetime, aslist, asintarray, asintmatrix, asbool, asyesno, asaudio, asarea 
                 ) 
                 from stdin (format binary)"))
             {
@@ -402,12 +307,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     WriteJson(item.AsList);
                     Write(item.AsIntArray);
                     WriteJson(item.AsIntMatrix);
-                    WriteJson(item.AsGps);
                     if (item.AsBool != null) importer.Write(item.AsBool.Value); else importer.WriteNull();
                     WriteJson(item.AsYesNo);
                     WriteJson(item.AsAudio);
                     WriteJson(item.AsArea);
-                    Write(item.HasFlag);
 
                     void Write<T>(T value)
                     {
@@ -433,7 +336,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var connection = sessionProvider.Session.Connection;
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
-            
+
             // for some reason Postgres decide that it's good to sequence scan whole interviews table
             // following line will ensure that Postgres will not do that
             connection.Execute("set enable_seqscan=false");
@@ -442,7 +345,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $@"SELECT interviewid, entityid, rostervector, isenabled, 
                          isreadonly, invalidvalidations, warnings, asstring, asint,
                          aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
-                         asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType 
+                         asbool, asyesno, asaudio, asarea, entity_type as EntityType 
                          from {Table.InterviewsView} ";
 
             var query = queryBase + $" where {Column.InterviewId} in ({ids})";
@@ -474,11 +377,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsDateTime = result.AsDateTime;
                 entity.AsIntArray = result.AsIntArray;
                 entity.AsBool = result.AsBool;
-                entity.HasFlag = result.HasFlag;
 
                 entity.AsList = Deserialize<InterviewTextListAnswer[]>(result.AsList);
                 entity.AsIntMatrix = Deserialize<int[][]>(result.AsIntMatrix);
-                entity.AsGps = Deserialize<GeoPosition>(result.AsGps);
                 entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>(result.AsYesNo);
                 entity.AsAudio = Deserialize<AudioAnswer>(result.AsAudio);
                 entity.AsArea = Deserialize<Area>(result.AsArea);
@@ -499,37 +400,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return GetInterviewEntities(new[] { interviews }).ToList();
         }
 
-        private static void ThrowIfInterviewReceivedByInterviewer(InterviewSummary interview)
-        {
-            if (interview.ReceivedByInterviewer)
-                throw new InterviewException($"Can't modify Interview {interview.InterviewId} on server, because it received by interviewer.");
-        }
-
-        private static void ThrowIfInterviewApprovedByHq(InterviewSummary interview)
-        {
-            if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
-                throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interview.InterviewId}");
-        }
-
         private static class Column
         {
             public const string InterviewId = "interviewid";
-            public const string EntityId = "entityid";
-            public const string RosterVector = "rostervector";
-            public const string HasFlag = "hasflag";
-            public const string IsEnabled = "isenabled";
-            public const string AsString = "asstring";
-            public const string AsAudio = "asaudio";
-            public const string QuestionnaireIdentity = "questionnaireidentity";
         }
 
         private static class Table
         {
             public const string Interviews = "readside.interviews";
             public const string InterviewsId = "readside.interviews_id";
-            public const string InterviewSummaries = "readside.interviewsummaries";
-            public const string QuestionnaireEntities = "readside.questionnaire_entities";
             public const string InterviewsView = "readside.interviews_view";
+        }
+
+        private class GpsAnswerQuery
+        {
+            public InterviewGps Answer { get; set; }
+            public InterviewSummary InterviewSummary { get; set; }
+            public QuestionnaireCompositeItem QuestionnaireItem { get; set; }
         }
     }
 }

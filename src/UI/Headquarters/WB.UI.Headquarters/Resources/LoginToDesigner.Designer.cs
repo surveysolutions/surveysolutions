@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server is not registered with Questionnaire Designer. Please contact support for registration..
+        ///   Looks up a localized string similar to The server is not registered with Questionnaire Designer. Please submit a request to register a self-hosted server at Survey Solutions portal https://mysurvey.solutions/NewServerRequest .
         /// </summary>
         public static string AccessForbidden {
             get {

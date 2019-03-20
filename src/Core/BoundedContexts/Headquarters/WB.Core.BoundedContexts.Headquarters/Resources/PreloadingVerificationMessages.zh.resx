@@ -223,6 +223,6 @@
     <value>列表型二维表应该有用于列出答案的列</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>数字型二维表的二维表编码不一致。二维表的序列编码应该是1,2,…一直到总的表个数</value>
+    <value>数字型二维表的二维表编码不一致。二维表的序列编码应该是0,1,…一直到总的表个数</value>
   </data>
 </root>
