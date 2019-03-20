@@ -301,4 +301,50 @@
   <data name="InterviewSizeLimitReached" xml:space="preserve">
      <value>Количество ростеров и вопросов в интервью превысило лимиты.</value>
   </data>
+    <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Приглашение на участвие в %SURVEYNAME%</value>
+  </data>
+    <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Добро пожаловать в %SURVEYNAME%!
+
+Для опрохождения опроса нахмите на ссылку: %SURVEYLINK% и введите ваш пароль: %PASSWORD%
+ 
+Спасибо за ваше сотрудничество!</value>
+  </data>
+    <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Напоминание, не забудте принять участвие в %SURVEYNAME%</value>
+  </data>
+    <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>Вы получили это напоминание потому что Вы не приняли участия в %SURVEYNAME%!
+ 
+Для опрохождения опроса нахмите на ссылку: %SURVEYLINK% и введите ваш пароль: %PASSWORD%
+ 
+Спасибо за ваше сотрудничество!</value>
+  </data>
+    <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Напоминание, пожалуйсто закончите прохождение %SURVEYNAME%</value>
+  </data>
+    <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Вы получили это напоминание потому что вы начали прохождение %SURVEYNAME%, но не закончили его.
+ 
+Для продолжения прохождения опроса нахмите на ссылку: %SURVEYLINK% и введите ваш пароль: %PASSWORD%
+ 
+Пожалуйста ответьте на все вопросы и нажмите кномку "ЗАВЕРШИТЬ" для оправки результатов.
+ 
+Спасибо за ваше сотрудничество!</value>
+  </data>
+    <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Необходимо Ваши действия в %SURVEYNAME%</value>
+  </data>
+    <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Спасибо что приняли участие в %SURVEYNAME%!
+ 
+По время обработки вашей анкеты нашими сотрудниками были найдены несколько замечаний, котрые вы просили проверить.
+ 
+Для продолжения прохождения опроса нахмите на ссылку: %SURVEYLINK% и введите ваш пароль: %PASSWORD%
+ 
+Мы будем Вам благодарны если посмотрите на замечания и нажмите кномку "ЗАВЕРШИТЬ" для оправки результатов.
+ 
+Спасибо за ваше сотрудничество!</value>
+  </data>
 </root>

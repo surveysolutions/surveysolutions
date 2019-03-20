@@ -439,6 +439,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email providers settings.
+        /// </summary>
+        public static string EmailProviders {
+            get {
+                return ResourceManager.GetString("EmailProviders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulk Email Services.
+        /// </summary>
+        public static string EmailProvidersTitle {
+            get {
+                return ResourceManager.GetString("EmailProvidersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred while processing your request..
         /// </summary>
         public static string Error_Description {

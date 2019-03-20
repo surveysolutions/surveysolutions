@@ -1,6 +1,6 @@
 ﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl,
     $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl,
-    $migrateAssignmentsUrl, $questionnairesApiEndpoint) {
+    $migrateAssignmentsUrl, $questionnairesApiEndpoint, $sendInvitationsUrl) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -47,6 +47,23 @@
         window.location.href = $webInterviewUrl + '/' + encodeURI(questionnaireId);
     };
 
+    self.sendInvitations = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $sendInvitationsUrl + '/' + encodeURI(questionnaireId);
+    };
+
+    self.downloadLinks = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        var questionnaireId = selectedRow.questionnaireId + '$' + selectedRow.version;
+        window.location.href = $downloadLinksUrl + '/' + encodeURI(questionnaireId);
+    };
+    
+    self.interviewsBatchUpload = function (key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    };
+
     self.recordAudio = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
 
@@ -79,10 +96,6 @@
         }
     };
 
-    self.interviewsBatchUpload = function (key, opt) {
-        var selectedRow = self.selectRowAndGetData(opt.$trigger);
-        window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
-    };
 
     self.migrateAssignments = function(key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);

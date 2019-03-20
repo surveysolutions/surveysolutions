@@ -731,6 +731,7 @@
     </Content>
     <Content Include="App_GlobalResources\Settings.ru.resx">
       <DependentUpon>Settings.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\Settings.zh.resx">
       <DependentUpon>Settings.resx</DependentUpon>
@@ -1278,6 +1279,15 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.ru.resx">
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WebInterviewSettings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebInterviewSettings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.ro.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
@@ -1683,6 +1693,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.ru.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -1959,6 +1970,12 @@
     <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
     <Content Include="Views\ControlPanel\ImportBrokenPackage.cshtml" />
+    <Content Include="Views\Settings\EmailProviders.cshtml" />
+    <Content Include="Views\WebInterviewSetup\Settings.cshtml" />
+    <Content Include="Views\WebInterviewSetup\SendInvitations.cshtml" />
+    <Content Include="Views\WebInterviewSetup\EmailDistributionProgress.cshtml" />
+    <Content Include="Views\WebEmails\EmailHtml.cshtml" />
+    <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
@@ -2016,6 +2033,7 @@
     <Compile Include="API\DataCollection\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\PublicApi\Models\AssignmentQuantitySettings.cs" />
     <Compile Include="API\PublicApi\Models\AssignmentAudioRecordingEnabled.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
@@ -2052,7 +2070,9 @@
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
-    <Compile Include="API\WebInterview\WebStatefullInterviewExtensions.cs" />
+    <Compile Include="API\WebInterview\WebInterviewSettingsApiController.cs" />
+    <Compile Include="API\WebInterview\WebInterviewSetupApiController.cs" />
+    <Compile Include="API\WebInterview\WebStatefulInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\Dashboard.designer.cs">
       <AutoGen>True</AutoGen>
@@ -2220,6 +2240,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\WebEmailsController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
@@ -2227,6 +2248,7 @@
     <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
+    <Compile Include="Models\Admin\EmailProviders.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
@@ -2350,6 +2372,7 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\WebInterview\EmailModel.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
@@ -2467,6 +2490,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Resources\WebInterviewSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebInterviewSettings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\WebInterviewSetup.Designer.cs">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2484,6 +2512,7 @@
     <Compile Include="Services\QuestionnaireExporter.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
+    <Compile Include="Services\WebInterviewEmailRenderer.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute.cs" />
     <Compile Include="Utils\Binding\AutofacBinderResolver.cs" />
@@ -2511,6 +2540,7 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
+    <Folder Include="Views\WebInterviewSetupApi\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">

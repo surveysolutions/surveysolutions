@@ -1,7 +1,7 @@
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -12,7 +12,6 @@ using WB.Tests.Abc;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
@@ -35,7 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IPreloadedDataVerifier>(),
                 Mock.Of<ICommandTransformator>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Create.Service.AssignmentFactory()
+                Create.Service.AssignmentFactory(),
+                Mock.Of<IInvitationService>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

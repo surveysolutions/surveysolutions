@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -31,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
@@ -39,7 +42,8 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser currentUser, 
             IPlainStorageAccessor<Assignment> assignmentsStorage, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
+            IInvitationService invitationService)
             : base(commandService, logger)
         {
             this.interviews = interviews;
@@ -48,6 +52,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaires = questionnaires;
+            this.invitationService = invitationService;
         }
         
         [Localizable(false)]
@@ -83,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
-        public ActionResult Create(string id, Guid responsibleId, int? size)
+        public ActionResult Create(string id, Guid responsibleId, int? size, string email, string password, bool? webMode)
         {
             var interview = this.interviews.Get(id);
             if (interview == null)
@@ -100,8 +105,18 @@ namespace WB.UI.Headquarters.Controllers
             assignment.UpdateQuantity(size);
             assignment.Reassign(responsibleId);
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
+            assignment.UpdateEmail(email);
+
+            var updatedPassword = password == ServiceColumns.PasswordSpecialValue
+                ? WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6)
+                : password;
+
+            assignment.UpdatePassword(updatedPassword); 
+            assignment.UpdateMode(webMode);
 
             this.assignmentsStorage.Store(assignment, null);
+
+            this.invitationService.CreateInvitationForWebInterview(assignment);
 
             return RedirectToAction("Index");
         }
