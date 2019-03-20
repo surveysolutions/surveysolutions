@@ -27,12 +27,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         internal Assignment(QuestionnaireIdentity questionnaireId,
             Guid responsibleId, 
             int? quantity,
-            bool isAudioRecordingEnabled) : this()
+            bool isAudioRecordingEnabled,
+            string email,
+            string password,
+            bool? webMode) : this()
         {
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            this.Email = email;
+            this.Password = password;
+            this.WebMode = webMode;
         }
 
         public virtual int Id { get; protected set; }
