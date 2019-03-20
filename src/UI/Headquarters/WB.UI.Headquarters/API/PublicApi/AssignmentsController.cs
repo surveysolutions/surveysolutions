@@ -200,9 +200,11 @@ namespace WB.UI.Headquarters.API.PublicApi
                     "Invalid Email"));
 
             //verify pass
-            if (!string.IsNullOrEmpty(createItem.Password) && (createItem.Password.Length < AssignmentConstants.PasswordLength || AssignmentConstants.PasswordStrength.Match(createItem.Password).Length <= 0))
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
-                    "Invalid Password"));
+            if (!string.IsNullOrEmpty(createItem.Password))
+                if((createItem.Password.Length < AssignmentConstants.PasswordLength || 
+                    AssignmentConstants.PasswordStrength.Match(createItem.Password).Length <= 0))
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
+                            "Invalid Password"));
 
             if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(createItem.Password)) && createItem.WebMode != true)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
