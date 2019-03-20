@@ -12,5 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public static readonly string InterviewerSettings = "InterviewerSettings";
         public static readonly string ExportServiceStorageKey = "ExportService.ApiKey";
         public static readonly string RsaKeysForEncryption = "Encryption.RsaKeys";
+        public static readonly string EmailProviderSettings = "EmailProviderSettings";
+        public static readonly string InvitationsDistributionStatus = "InvitationsDistributionStatus";
     }
 }

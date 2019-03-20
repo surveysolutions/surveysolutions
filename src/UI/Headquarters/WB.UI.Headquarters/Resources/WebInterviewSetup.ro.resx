@@ -159,9 +159,6 @@
   <data name="TextsUpdated" xml:space="preserve">
     <value>Textul a fost actualizat</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>Activează protecție anti-spam</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Configurarea interviului Web</value>
   </data>

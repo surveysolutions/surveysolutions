@@ -3,7 +3,7 @@
         <div slot="headers">
             <ol class="breadcrumb">
                 <li>
-                    <a :href="$config.model.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a :href="$config.model.api.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
             </ol>
             <h1 v-if="isDone">

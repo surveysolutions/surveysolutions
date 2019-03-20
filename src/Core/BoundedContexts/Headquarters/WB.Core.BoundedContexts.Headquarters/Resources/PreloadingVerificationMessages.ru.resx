@@ -232,4 +232,19 @@
     <value>Максимальное количество не может быть больше {0}.</value>
     <comment>Максимальное количество не может быть больше {0}.</comment>
   </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Некорректный электронный адрес</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Недопустимое значение пароля. Минимум 6 символов </value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Недопустимое значение для количиства, призаданном электронном адресе должно равняться 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Если задан электронный адрес, то должен быть активирован веб режим</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Если задан пароль, то должен быть активирован веб режим</value>
+  </data>
 </root>

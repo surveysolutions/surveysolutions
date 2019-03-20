@@ -17,5 +17,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             var webInterviewConfig = this.configs.GetById(identity.ToString());
             return webInterviewConfig ?? new WebInterviewConfig {QuestionnaireId = identity};
         }
+
+        public void Store(QuestionnaireIdentity identity, WebInterviewConfig config)
+        {
+            this.configs.Store(config, identity.ToString());
+        }
     }
 }

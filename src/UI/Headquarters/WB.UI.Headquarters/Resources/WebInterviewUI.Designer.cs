@@ -468,6 +468,60 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email resume link.
+        /// </summary>
+        internal static string EmailLink_EmailResumeLink {
+            get {
+                return ResourceManager.GetString("EmailLink_EmailResumeLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your email address.
+        /// </summary>
+        internal static string EmailLink_Header {
+            get {
+                return ResourceManager.GetString("EmailLink_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{email}} is invalid email address.
+        /// </summary>
+        internal static string EmailLink_InvalidEmail {
+            get {
+                return ResourceManager.GetString("EmailLink_InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We will send you a message with the link to resume the interview if you need to continue later..
+        /// </summary>
+        internal static string EmailLink_Message {
+            get {
+                return ResourceManager.GetString("EmailLink_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter email.
+        /// </summary>
+        internal static string EmailLink_Placeholder {
+            get {
+                return ResourceManager.GetString("EmailLink_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cancel now and proceed with the interview. And you can send it later by clicking &apos;Email resume link&apos; item in the top menu..
+        /// </summary>
+        internal static string EmailLink_ResumeAnyTime {
+            get {
+                return ResourceManager.GetString("EmailLink_ResumeAnyTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter date.
         /// </summary>
         internal static string EnterDate {

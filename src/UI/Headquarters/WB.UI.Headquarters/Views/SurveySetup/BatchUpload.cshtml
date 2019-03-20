@@ -217,7 +217,7 @@
                 <div class="flex-block selection-box">
                     <div class="block">
                         <h3>@BatchUpload.SimpleTitle</h3>
-                        <p>@BatchUpload.SimpleDescription</p>
+                        <p>@Html.Raw(BatchUpload.SimpleDescription)</p>
                     </div>
                     <div>
                         <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
@@ -242,7 +242,7 @@
                 <div class="flex-block selection-box">
                     <div class="block">
                         <h3>@BatchUpload.BatchTitle</h3>
-                        <p>@BatchUpload.BatchDescription</p>
+                        <p>@Html.Raw(BatchUpload.BatchDescription)</p>
                     </div>
                     <div>
                         <a href="@Url.Action("TemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
