@@ -1,4 +1,4 @@
-﻿select  enablement.interview__id as data__interview_id,  enablement."gr1" as "enablement__gr1"
+﻿select  enablement.interview__id as data__interview__id,  enablement."gr1" as "enablement__gr1"
 ,  enablement."cccccccc-cccc-cccc-cccc-cccccccccccc" as "enablement__cccccccc-cccc-cccc-cccc-cccccccccccc" ,  validity."cccccccc-cccc-cccc-cccc-cccccccccccc" as "validity__cccccccc-cccc-cccc-cccc-cccccccccccc"  from 
     "quest$6-e" enablement  INNER JOIN     "quest$6-v" validity ON enablement.interview__id = validity.interview__id
 WHERE validity.interview__id = ANY(@ids)

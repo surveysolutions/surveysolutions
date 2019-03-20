@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!@event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
                                                   this.parentRosters.Contains(x.RosterInstance.GroupId))) return;
 
-            this.UpdateViewModels();
+            this.UpdateViewModelsInMainThread();
         }
     }
 }

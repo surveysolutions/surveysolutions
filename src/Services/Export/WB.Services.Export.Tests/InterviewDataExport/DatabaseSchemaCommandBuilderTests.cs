@@ -4,6 +4,7 @@ using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using NUnit.Framework;
 using WB.Services.Export.InterviewDataStorage;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.InterviewDataExport
 {
@@ -42,7 +43,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         {
             var builder = new DatabaseSchemaCommandBuilder();
 
-            var script = builder.GenerateCreateSchema("test-schema-name");
+            var script = builder.GenerateCreateSchema(new TenantInfo(string.Empty, "tenantid", "binary"));
 
             Approvals.Verify(script);
         }

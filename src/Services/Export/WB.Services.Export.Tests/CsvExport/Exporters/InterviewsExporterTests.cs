@@ -101,7 +101,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
     internal class ExportViewFactoryTests
     {
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_0()
         {
             //arrange
             var questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
@@ -136,30 +136,30 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 CreateInterviewDataWith2PropagatedLevels(rosterSizeId, nestedRosterSizeId, questionInsideRosterGroupId), questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("1"));
-            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("0"));
+            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("1"));
 
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[0].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("0"));
 
 
-            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[1].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("0"));
 
-            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[2].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("1"));
 
 
-            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("1"));
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_0()
         {
             //arrange
             var numericRosterId = Id.g1;
@@ -207,7 +207,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var result = exporter.CreateInterviewDataExportView(questionnaireExportStructure, interviewData, questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]
@@ -518,7 +518,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         }
 
         [Test]
-        public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_1()
+        public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
         {
             // arrange
             var multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
@@ -552,11 +552,11 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
         }
 
         [Test]
-        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_1()
+        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
         {
             // arrange
             var singleOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
@@ -590,7 +590,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            Assert.That(exportedQuestion[0], Is.EqualTo("[5|1]"));
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
         }
 
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)

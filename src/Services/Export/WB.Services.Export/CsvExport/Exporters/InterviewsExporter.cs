@@ -273,17 +273,12 @@ namespace WB.Services.Export.CsvExport.Exporters
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
                 else
                 {
-                    var rosterIndexAdjustment = headerStructureForLevel.LevelScopeVector
-                        .Select(x => questionnaire.IsIntegerQuestion(x) ? 1 : 0)
-                        .ToArray();
-
-                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAdjustment.Last())
-                        .ToString(CultureInfo.InvariantCulture);
+                    recordId = dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
                     for (int i = 0; i < vectorLength - 1; i++)
                     {
-                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAdjustment[i]).ToString(CultureInfo.InvariantCulture);
+                        parentRecordIds[i + 1] = dataByLevel.RosterVector[i].ToString(CultureInfo.InvariantCulture);
                     }
 
                     parentRecordIds = parentRecordIds.ToArray();
@@ -299,7 +294,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     };
                 }
 
-                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel, questionnaire);
+                string[][] questionsForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
 
                 dataRecords.Add(new InterviewDataExportRecord(recordId,
                     referenceValues,
@@ -313,8 +308,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return dataRecords.ToArray();
         }
 
-        private string[][] GetExportValues(InterviewLevel interviewLevel,
-            HeaderStructureForLevel headerStructureForLevel, QuestionnaireDocument questionnaire)
+        private string[][] GetExportValues(InterviewLevel interviewLevel, HeaderStructureForLevel headerStructureForLevel)
         {
             var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
@@ -327,7 +321,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey)
                         ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey]
                         : null;
-                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem, questionnaire);
+                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem);
                     result.Add(exportedQuestion);
                 }
                 else if (variableHeaderItem != null)

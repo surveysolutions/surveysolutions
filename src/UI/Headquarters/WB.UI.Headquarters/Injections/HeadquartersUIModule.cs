@@ -31,6 +31,8 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Logging.Slack;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
@@ -44,6 +46,7 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Implementation.Services;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
+using WB.UI.Shared.Web.Slack;
 using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
@@ -52,6 +55,8 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
+            registry.Bind<ISlackApiClient, SlackApiClient>();
+            registry.BindAsSingleton<ISlackMessageThrottler, SlackMessageThrottler>();
             registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
             registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
             registry.Bind<IAssignmentsImportService, AssignmentsImportService>();

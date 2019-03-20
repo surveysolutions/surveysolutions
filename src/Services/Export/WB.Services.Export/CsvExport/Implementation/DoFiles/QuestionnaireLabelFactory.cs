@@ -68,13 +68,14 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             {
                 variableLabels.AddRange(
                     level.ReferencedNames.Select(
-                        name => new DataExportVariable(name, string.Empty)));
+                        name => new DataExportVariable(name, string.Empty, null, Array.Empty<VariableValueLabel>(), ExportValueType.String)));
             }
 
             for (int i = 0; i < levelRosterVector.Length; i++)
             {
                 if (i == 0)
-                    variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "InterviewId"));
+                    
+                    variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, Array.Empty<VariableValueLabel>(), ExportValueType.String));
                 else
                 {
                     var parentRosterVector = new ValueVector<Guid>(levelRosterVector.Take(i));

@@ -14,7 +14,7 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
-    internal class SpssFormatExportHandler : TabBasedFormatExportHandler
+    public class SpssFormatExportHandler : TabBasedFormatExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
@@ -39,8 +39,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
 
-            await this.CreateSpssDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
+            var exportedFiles = await this.CreateSpssDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
                 cancellationToken);
+
+            CheckFileListsAndThrow(tabFiles, exportedFiles);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
@@ -48,7 +50,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 ExportFileSettings.SpssDataFileExtension);
         }
 
-        private async Task CreateSpssDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+        private async Task<string[]> CreateSpssDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string[] tabDataFiles,
             ExportProgress progress, CancellationToken cancellationToken)
         {
@@ -56,7 +58,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent.Percent / 2), donePercent.Eta);
 
-            await tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
+            return await tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                 tenant,
                 questionnaireIdentity,
                 tabDataFiles,

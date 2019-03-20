@@ -458,11 +458,12 @@ namespace WB.Services.Export.Tests
             return dbContext;
         }
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string name = "variable")
             => new Variable()
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Type = type
+                Type = type,
+                Name = name
             };
 
         public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
@@ -611,6 +612,7 @@ namespace WB.Services.Export.Tests
             return provider;
         }
 
+        public static ValueVector<Guid> ValueVector(params Guid[] rosterIds) => new ValueVector<Guid>(rosterIds);
     }
 
     public class EventsFactory
@@ -689,6 +691,28 @@ namespace WB.Services.Export.Tests
         public Event AnswersDeclaredValid(Guid interviewId, Identity[] questions)
         {
             return Event(new AnswersDeclaredValid() { Questions = questions }, interviewId, null, null);
+        }
+
+        public Event VariablesChanged(Guid interviewId, Identity variableId, object value)
+        {
+            return Event(new VariablesChanged
+            {
+                ChangedVariables = new[]
+                {
+                    new ChangedVariable(variableId, value)
+                }
+            }, interviewId);
+        }
+
+        public Event DateTimeQuestionAnswered(Guid interviewId, Identity identity, DateTimeOffset? originDate = null, DateTime? answer = null)
+        {
+            return Event(new DateTimeQuestionAnswered
+            {
+                Answer = answer ?? DateTime.Now,
+                OriginDate = originDate,
+                QuestionId = identity.Id,
+                RosterVector = identity.RosterVector
+            }, interviewId);
         }
     }
 

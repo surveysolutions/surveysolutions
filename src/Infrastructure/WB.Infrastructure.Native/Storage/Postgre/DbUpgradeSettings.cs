@@ -15,7 +15,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public string MigrationsNamespace { get; private set; }
 
-        public static DbUpgradeSettings FromFirstMigration<T>() where T: Migration
+        public static DbUpgradeSettings FromFirstMigration<T>()
         {
             return new DbUpgradeSettings(typeof(T).Assembly, typeof(T).Namespace);
         }

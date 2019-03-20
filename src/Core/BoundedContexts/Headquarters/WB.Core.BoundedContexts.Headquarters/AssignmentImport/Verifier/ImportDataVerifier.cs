@@ -441,7 +441,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 {
                     var orderedRosterInstanceRows = rowsByInterviewAndParentRoster
                         .OrderBy(x => x.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId).Code)
-                        .Select((x, i) => (row: x, expectedCode: i + 1));
+                        .Select((x, i) => (row: x, expectedCode: i));
 
                     foreach (var rosterInstanceRow in orderedRosterInstanceRows)
                     {

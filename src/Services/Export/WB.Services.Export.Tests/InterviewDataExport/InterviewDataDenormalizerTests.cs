@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using ApprovalTests;
@@ -10,6 +12,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Npgsql;
+using NpgsqlTypes;
 using NUnit.Framework;
 using WB.Services.Export.Events;
 using WB.Services.Export.Events.Interview;
@@ -59,6 +63,55 @@ namespace WB.Services.Export.Tests.InterviewDataExport
             Assert.That(command.Parameters[0].Value, Is.EqualTo(interviewId));
 
             Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public async Task when_variable_changed_with_special_double_value_should_be_able_to_write_it_to_db()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            await denormalizer.Handle(Create.Event.VariablesChanged(interviewId,
+                    Create.Identity(doubleVariableId),
+                    Double.NegativeInfinity.ToString(CultureInfo.InvariantCulture))
+                .ToPublishedEvent<VariablesChanged>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter) command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Double));
+            Assert.That(commandParameter.Value, Is.EqualTo(Double.NegativeInfinity));
+
+            Approvals.Verify(command.CommandText);
+        }
+
+        [Test]
+        public async Task when_timestamp_question_is_answered_should_use_origin_date_as_answer()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            var originDate = new DateTimeOffset(2010, 5, 31, 10, 1, 1, TimeSpan.FromHours(-2));
+            await denormalizer.Handle(Create.Event.DateTimeQuestionAnswered(interviewId,
+                    Create.Identity(timestampQuestionId),
+                    originDate: originDate,
+                    answer: originDate.UtcDateTime // pretend that tablet was in the UTC timezone
+                    )
+                .ToPublishedEvent<DateTimeQuestionAnswered>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter) command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Timestamp));
+            Assert.That(commandParameter.Value, Is.EqualTo(originDate.DateTime));
         }
 
         [Test]
@@ -284,7 +337,9 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                     Create.Group(groupId, children: new IQuestionnaireEntity[]
                     {
                         Create.TextListQuestion(textListQuestionId, "text_list_q")
-                    })
+                    }),
+                    Create.Variable(doubleVariableId, VariableType.Double, "double_variabe"),
+                    Create.DateTimeQuestion(timestampQuestionId, variable: "timestamp", isTimestamp: true)
                 })
             );
             return questionnaireDocument;
@@ -302,5 +357,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private readonly Guid intQuestionId = Guid.Parse("31111111-1111-1111-1111-111111111111");
         private readonly Guid realQuestionId = Guid.Parse("41111111-1111-1111-1111-111111111111");
         private readonly Guid textListQuestionId = Guid.Parse("51111111-1111-1111-1111-111111111111");
+        private readonly Guid doubleVariableId = Guid.Parse("61111111-1111-1111-1111-111111111111");
+        private readonly Guid timestampQuestionId = Guid.Parse("71111111-1111-1111-1111-111111111111");
     }
 }

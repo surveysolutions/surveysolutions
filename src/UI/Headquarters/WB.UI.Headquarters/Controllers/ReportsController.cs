@@ -146,6 +146,31 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
+        [ActivePage(MenuItem.StatusDuration)]
+        [AuthorizeOr403(Roles = "Supervisor")]
+        public ActionResult TeamStatusDuration()
+        {
+            return this.View("StatusDuration", new StatusDurationModel
+            {
+                IsSupervisorMode = true,
+
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "ReportDataApi",
+                        action = "TeamStatusDuration"
+                    }),
+
+                InterviewsBaseUrl = Url.Action("Interviews", "Survey"),
+                AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" }),
+                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" })
+            });
+        }
+
         [ActivePage(MenuItem.SurveyStatistics)]
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult SurveyStatistics()

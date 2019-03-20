@@ -43,7 +43,7 @@
                             <div class="hq-apps-wrapper">
                                 <h2>@Pages.DownloadSupervisorPage_Welcome</h2>
                                 <div class="form-actions">
-                                    <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-interviewer-app">
+                                    <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-supervisor-app">
                                         <span>@Pages.GetLatestSupervisorApp</span>
                                         <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IProductVersion>())</span>
                                     </a>

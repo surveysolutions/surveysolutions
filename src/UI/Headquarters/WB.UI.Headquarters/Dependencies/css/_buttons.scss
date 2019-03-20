@@ -401,16 +401,13 @@ a.disabled{
 	    border-color: darken($gray_light, 10%);
 	}
 }
-.get-interviewer-app{
+.get-mobile-app{
 	@extend .add-transition;
     width: 248px;
-    background:  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
-    background-size: 55px;
     margin-bottom: 25px;
     @extend %uppercase-font;
     text-decoration: none;
     color: $gray_text;
-    background-position: 15px 13px;
     text-decoration: none;
     padding: 10px 27px 10px 85px;
     text-align: left;
@@ -434,7 +431,18 @@ a.disabled{
     }
 }
 
-
+.get-interviewer-app{
+    background:  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
+    background-size: 55px;
+    background-position: 15px 13px;
+    @extend .get-mobile-app;
+}
+.get-supervisor-app{
+    background:  url("#{$assetsPath}/img/HQ-login-supervisor-get-button-logo.png") no-repeat;
+    background-size: 55px;
+    background-position: 15px 13px;
+    @extend .get-mobile-app;
+}
 .btn-horizontal-hamburger {
     display: inline-block;
     position: relative;

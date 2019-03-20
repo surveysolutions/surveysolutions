@@ -286,5 +286,32 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             return text;
         }
+
+        [Test]
+        public void when_create_substitution_text_with_markdown_lists_then_lists_markup_should_not_be_converted_into_html()
+        {
+            // arrange
+            var markdownTextWithListItem = "1. List option 1";
+
+            // act
+            var substitutionText = CreateSubstitutionText(Id.Identity1, markdownTextWithListItem);
+
+            // assert
+            Assert.That(substitutionText.Text, Is.EqualTo(markdownTextWithListItem));
+        }
+
+        [Test]
+        public void when_create_substitution_text_with_spec_symbols_then_it_symbols_should_be_encoded_but_not_removed()
+        {
+            // arrange
+            var specSymbolsForMarkdownEngine = "<>&\"";
+            var markdownText = "0.1,2/3'4;5|6]7[8=9-012?3}4{5+6_7)8(9*01^2%3$4#5@6!7~8`";
+
+            // act
+            var substitutionText = CreateSubstitutionText(Id.Identity1, markdownText + specSymbolsForMarkdownEngine);
+
+            // assert
+            Assert.That(substitutionText.Text, Is.EqualTo(markdownText + HttpUtility.HtmlEncode(specSymbolsForMarkdownEngine)));
+        }
     }
 }

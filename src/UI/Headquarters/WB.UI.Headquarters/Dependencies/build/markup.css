@@ -5798,7 +5798,7 @@ button.close {
   color: #3f3f3f;
   margin-bottom: 22px; }
 
-.get-interviewer-app, .cancelable-progress .wrapper-progress > span, .table thead, .dataTables_paginate {
+.get-mobile-app, .get-interviewer-app, .get-supervisor-app, .cancelable-progress .wrapper-progress > span, .table thead, .dataTables_paginate {
   font: 12px/14px "TrebuchetMSBold";
   text-transform: uppercase;
   letter-spacing: 0.13em; }
@@ -6461,32 +6461,39 @@ a.disabled {
     background-color: #e6e6e6;
     border-color: #8c8f90; }
 
-.get-interviewer-app {
+.get-mobile-app, .get-interviewer-app, .get-supervisor-app {
   width: 248px;
-  background: url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
-  background-size: 55px;
   margin-bottom: 25px;
   text-decoration: none;
   color: #3f3f3f;
-  background-position: 15px 13px;
   text-decoration: none;
   padding: 10px 27px 10px 85px;
   text-align: left;
   border-radius: 10px;
   border: 2px solid #dbdfe2;
   display: block; }
-  .get-interviewer-app:hover, .get-interviewer-app:focus {
+  .get-mobile-app:hover, .get-interviewer-app:hover, .get-supervisor-app:hover, .get-mobile-app:focus, .get-interviewer-app:focus, .get-supervisor-app:focus {
     text-decoration: none;
     border-color: #a6a8a9;
     color: #000; }
-  .get-interviewer-app span {
+  .get-mobile-app span, .get-interviewer-app span, .get-supervisor-app span {
     display: block;
     letter-spacing: 0.05em; }
-    .get-interviewer-app span.version {
+    .get-mobile-app span.version, .get-interviewer-app span.version, .get-supervisor-app span.version {
       text-transform: none;
       font-style: italic;
       margin-top: 5px;
       color: #3f3f3f; }
+
+.get-interviewer-app {
+  background: url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
+  background-size: 55px;
+  background-position: 15px 13px; }
+
+.get-supervisor-app {
+  background: url("../img/HQ-login-supervisor-get-button-logo.png") no-repeat;
+  background-size: 55px;
+  background-position: 15px 13px; }
 
 .btn-horizontal-hamburger {
   display: inline-block;
@@ -7073,7 +7080,7 @@ a.disabled {
     position: relative; }
   .cancelable-progress .wrapper-progress {
     float: left;
-    width: 70%; }
+    width: 85%; }
     .cancelable-progress .wrapper-progress > span {
       display: block;
       margin-bottom: 7px;
@@ -9709,7 +9716,7 @@ main.hidden.display-block {
   text-overflow: ellipsis;
   overflow: hidden; }
 
-.add-transition, .foldback-button, .humburger-foldback-button, .btn-default.btn-post-comment, .input-group .input-group-btn .btn.btn-post-comment, .btn-plus:before, .btn-plus:after, .btn-strips span, .btn-strips:before, .btn-strips:after, .get-interviewer-app, .navbar .navbar-collapse li.active > a, .navbar .navbar-collapse li > a, .navbar .navbar-collapse li .dropdown-menu li a, .table tr, .table tbody tr td a, .table tfoot tr td a, .table tfoot tr th a, .dataTables_wrapper .dataTables_filter label input {
+.add-transition, .foldback-button, .humburger-foldback-button, .btn-default.btn-post-comment, .input-group .input-group-btn .btn.btn-post-comment, .btn-plus:before, .btn-plus:after, .btn-strips span, .btn-strips:before, .btn-strips:after, .get-mobile-app, .get-interviewer-app, .get-supervisor-app, .navbar .navbar-collapse li.active > a, .navbar .navbar-collapse li > a, .navbar .navbar-collapse li .dropdown-menu li a, .table tr, .table tbody tr td a, .table tfoot tr td a, .table tfoot tr th a, .dataTables_wrapper .dataTables_filter label input {
   -webkit-transition: all 0.2s linear 0s;
   transition: all 0.2s linear 0s; }
 

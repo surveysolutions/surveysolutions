@@ -75,8 +75,43 @@ namespace WB.Services.Export.Tests.Questionnaire
             var result = await filter.FilterAsync(eventFeed);
 
             // Assert
-            Assert.That(result, Has.Count.EqualTo(2));
+            Assert.That(result, Has.Count.EqualTo(2), "Both InterviewCreated and InterviewOnClientCreated should be published to denormalizers");
 
+            var storedReference = dbContext.InterviewReferences.Find(interviewId);
+            Assert.That(storedReference, Is.Not.Null, "Should store questionnaire id <-> interview id relation");
+        }
+
+        [Test]
+        public async Task should_create_interview_reference_from_InterviewFromPreloadedDataCreated()
+        {
+            var interviewId = Id.g1;
+
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                id: Id.gA,
+                children: Create.TextQuestion(Id.gB));
+            questionnaire.Id = $"{Id.gA:N}$1";
+
+            var eventFeed = new List<Event>
+            {
+                new Event
+                {
+                    EventSourceId = interviewId,
+                    Payload = new InterviewFromPreloadedDataCreated
+                    {
+                        QuestionnaireId = questionnaire.PublicKey,
+                        QuestionnaireVersion = 1
+                    }
+                }
+            };
+
+            var questionnaireStorage = Create.QuestionnaireStorage(questionnaire);
+
+            var filter = CreateFilter(questionnaireStorage: questionnaireStorage);
+
+            // Act
+            await filter.FilterAsync(eventFeed);
+
+            // Assert
             var storedReference = dbContext.InterviewReferences.Find(interviewId);
             Assert.That(storedReference, Is.Not.Null, "Should store questionnaire id <-> interview id relation");
         }
