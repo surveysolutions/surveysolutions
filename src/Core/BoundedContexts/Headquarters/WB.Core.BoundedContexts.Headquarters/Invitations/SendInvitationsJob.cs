@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net.Http;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
-using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
@@ -17,21 +14,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         private readonly ILogger logger;
         private readonly IInvitationService invitationService;
         private readonly IEmailService emailService;
-        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IPlainKeyValueStorage<EmailParameters> emailParamsStorage;
+        private readonly IInvitationMailingService invitationMailingService;
 
         public SendInvitationsJob(
             ILogger logger, 
             IInvitationService invitationService, 
-            IEmailService emailService,
-            IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IPlainKeyValueStorage<EmailParameters> emailParamsStorage)
+            IEmailService emailService, 
+            IInvitationMailingService invitationMailingService)
         {
             this.logger = logger;
             this.invitationService = invitationService;
             this.emailService = emailService;
-            this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.emailParamsStorage = emailParamsStorage;
+            this.invitationMailingService = invitationMailingService;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -51,10 +45,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 this.logger.Debug("Invitations distribution job: Started");
 
-                WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(status.QuestionnaireIdentity);
-                
-                var senderInfo = emailService.GetSenderInfo();
-
                 invitationService.StartEmailDistribution();
                 var cancellationToken = invitationService.GetCancellationToken();
                 var sw = new Stopwatch();
@@ -62,47 +52,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 var invitationIdsToSend = invitationService.GetInvitationIdsToSend(status.QuestionnaireIdentity);
 
-                var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate);
-
-                var surveyName = status.QuestionnaireTitle;
-
                 foreach (var invitationId in invitationIdsToSend)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
                     Invitation invitation = invitationService.GetInvitation(invitationId);
-
-                    var password = invitation.Assignment.Password;
                     var address = invitation.Assignment.Email;
-                    var link = $"{webInterviewConfig.BaseUrl}/WebInterview/{invitation.Token}/Start";
-
-                    var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
-                    var emailParams = new EmailParameters
-                    {
-                        AssignmentId = invitation.AssignmentId,
-                        InvitationId = invitation.Id,
-                        Subject = emailTemplate.Subject
-                            .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
-                        LinkText = emailTemplate.LinkText,
-                        MainText = emailTemplate.MainText
-                            .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
-                        PasswordDescription = emailTemplate.PasswordDescription,
-                        Password = password,
-                        Address = senderInfo.Address,
-                        SurveyName = surveyName,
-                        SenderName = senderInfo.SenderName,
-                        Link = link
-                    };
-                    emailParamsStorage.Store(emailParams, emailParamsId);
-
-                    var client = new HttpClient{};
-                    var htmlMessage = client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}").Result ?? string.Empty;
-                    var textMessage = client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Text/{emailParamsId}/").Result ?? string.Empty;
-
                     try
                     {
-                        var emailId = emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim()).Result;
-                        invitationService.MarkInvitationAsSent(invitationId, emailId);
+                        invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment).WaitAndUnwrapException();
                     }
                     catch (EmailServiceException e)
                     {

@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div v-else class="col-sm-7 col-xs-12">
-                <p>{{$t('Invitations_SuccessfulSetup')}}</p>
+                <p>{{$t('WebInterviewSetup.Invitations_SuccessfulSetup')}}</p>
             </div>
             <form method="post">
                 <input type="hidden" :value="questionnaireId" name="questionnaireId"/>
