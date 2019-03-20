@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,19 +52,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (interview.Status == InterviewStatus.ApprovedByHeadquarters)
                 throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interviewId}");
 
-            var flag = this.sessionProvider.Session.Query<InterviewFlag>().FirstOrDefault(y =>
-                y.InterviewId == sInterviewId && y.QuestionIdentity == questionIdentity.ToString());
-
-            if (flagged && flag == null)
+            if (flagged)
             {
-                this.sessionProvider.Session.Save(new InterviewFlag
+                this.sessionProvider.Session.SaveOrUpdate(new InterviewFlag
                 {
                     InterviewId = sInterviewId,
                     QuestionIdentity = questionIdentity.ToString()
                 });
             }
-            else if (!flagged && flag != null)
-                this.sessionProvider.Session.Delete(flag);
+            else
+            {
+                this.sessionProvider.Session.Query<InterviewFlag>()
+                    .Where(y => y.InterviewId == sInterviewId && y.QuestionIdentity == questionIdentity.ToString())
+                    .Delete();
+            }
         }
 
         public void RemoveInterview(Guid interviewId)
