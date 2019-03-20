@@ -1066,6 +1066,22 @@ namespace WB.Tests.Abc.TestFactories
                 httpClientFactory,
                 Mock.Of<IHttpStatistician>());
         }
+
+        public SendInvitationsJob SendInvitationsJob(
+            ILogger logger = null, 
+            IInvitationService invitationService = null, 
+            IEmailService emailService = null, 
+            IInvitationMailingService invitationMailingService = null)
+        {
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
+
+            return new SendInvitationsJob(
+                logger ?? Mock.Of<ILogger>(),
+                invitationService ?? Mock.Of<IInvitationService>(),
+                emailService ?? emailServiceMock.Object,
+                invitationMailingService ?? Mock.Of<IInvitationMailingService>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
