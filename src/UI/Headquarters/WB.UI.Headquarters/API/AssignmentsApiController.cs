@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -204,8 +206,20 @@ namespace WB.UI.Headquarters.API
                     quantity = request.Quantity;
                     break;
             }
+            
+            //verify email
+            if (!string.IsNullOrEmpty(request.Email) && AssignmentConstants.EmailRegex.Match(request.Email).Length <= 0)
+                return this.StatusCode(HttpStatusCode.BadRequest);
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity);
+            //verify pass
+            if (!string.IsNullOrEmpty(request.Password) && (request.Password.Length < AssignmentConstants.PasswordLength || AssignmentConstants.PasswordStrength.Match(request.Password).Length <= 0))
+                return this.StatusCode(HttpStatusCode.BadRequest);
+
+            if ((!string.IsNullOrEmpty(request.Email) || !string.IsNullOrEmpty(request.Password)) && request.WebMode != true)
+                return this.StatusCode(HttpStatusCode.BadRequest);
+
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity, 
+                request.Email, request.Password, request.WebMode);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 
@@ -245,6 +259,10 @@ namespace WB.UI.Headquarters.API
             public Guid ResponsibleId { get; set; }
             public string AnswersToFeaturedQuestions { get; set; }
             public int? Quantity { get; set; }
+
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public bool? WebMode { get; set; }
         }
 
         public class UpdateAssignmentRequest

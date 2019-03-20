@@ -158,7 +158,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="createItem">New assignments options</param>
         /// <response code="200">Created assignment with details</response>
-        /// <response code="400">Bad parameters provided or identifiying data incorrect. See response details for more info</response>
+        /// <response code="400">Bad parameters provided or identifying data incorrect. See response details for more info</response>
         /// <response code="404">Questionnaire or responsible user not found</response>
         /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
@@ -208,7 +208,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                     "For assignments having Email or Password Web Mode should be activated"));
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
+                createItem.Email, createItem.Password, createItem.WebMode);
 
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 

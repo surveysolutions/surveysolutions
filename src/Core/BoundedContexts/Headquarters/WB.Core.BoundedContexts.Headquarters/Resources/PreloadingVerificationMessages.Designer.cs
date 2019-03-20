@@ -421,11 +421,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Email or Password.
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Email.
         /// </summary>
-        public static string PL0058_IncosistentWebmodeAndEmailOrPassword {
+        public static string PL0058_IncosistentWebmodeAndEmail {
             get {
-                return ResourceManager.GetString("PL0058_IncosistentWebmodeAndEmailOrPassword", resourceCulture);
+                return ResourceManager.GetString("PL0058_IncosistentWebmodeAndEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Password.
+        /// </summary>
+        public static string PL0059_IncosistentWebmodeAndPassword {
+            get {
+                return ResourceManager.GetString("PL0059_IncosistentWebmodeAndPassword", resourceCulture);
             }
         }
     }
