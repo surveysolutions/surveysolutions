@@ -34,10 +34,10 @@
                         <ul class="list-unstyled">
                             <li>{{$t('WebInterviewSetup.Invitations_SetupError')}}</li>
                             <li v-if="emailProviderIsNotSetUp">SI001: {{$t('WebInterviewSetup.Invitations_EmailIsNotSetUp')}} 
-                                <span v-if="$config.model.isAdmin">{{$t('Invitations_ChangeEmailSettingsAdmin', { a_start:  '<a href="' + emailProviderUrl + '">', a_end: '</a>'})}}</span>
-                                <span v-else>{{$t('Invitations_ChangeEmailSettingsNotAdmin')}}</span>
+                                <span v-if="$config.model.isAdmin" v-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl})"></span>
+                                <span v-else>{{$t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin')}}</span>
                             </li>
-                            <li v-if="!started">SI002: {{$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { a_start:  '<a href="' + webSettingsUrl + '">', a_end: '</a>'})}}</li>
+                            <li v-if="!started">SI002: <span v-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span></li>
                         </ul>
                     </div>
                 </div>
@@ -70,7 +70,6 @@ export default {
             title: null,
             questionnaireIdentity : null,
             started: null,
-            totalAssignmentsCount: null,
             totalInvitationsCount : null,
             sentInvitationsCount : null,
             notSentInvitationsCount : null,
@@ -87,7 +86,6 @@ export default {
                 self.title = invitationsInfo.fullName,
                 self.questionnaireIdentity = invitationsInfo.questionnaireIdentity,
                 self.started = invitationsInfo.started,
-                self.totalAssignmentsCount = invitationsInfo.totalAssignmentsCount || 0,
                 self.totalInvitationsCount = invitationsInfo.totalInvitationsCount || 0,
                 self.notSentInvitationsCount = invitationsInfo.notSentInvitationsCount || 0,
                 self.sentInvitationsCount =  invitationsInfo.sentInvitationsCount || 0;

@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can change these settings at the {{url}} page..
+        ///   Looks up a localized string similar to You can change these settings at the &lt;a href=&quot;{{url}}&quot;&gt;&apos;Email Providers&apos;&lt;/a&gt; page..
         /// </summary>
         public static string Invitations_ChangeEmailSettingsAdmin {
             get {
@@ -169,6 +169,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send {{count}} invitations.
+        /// </summary>
+        public static string Invitations_SendAction {
+            get {
+                return ResourceManager.GetString("Invitations_SendAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} invitations have been sent already..
         /// </summary>
         public static string Invitations_Sent {
@@ -183,6 +192,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Invitations_SetupError {
             get {
                 return ResourceManager.GetString("Invitations_SetupError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web survey has been started and email provider was set up properly. The system is ready to send invitations..
+        /// </summary>
+        public static string Invitations_SuccessfulSetup {
+            get {
+                return ResourceManager.GetString("Invitations_SuccessfulSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web survey is not started. Setup and &lt;a href=&quot;{{url}}&quot;&gt;start web survey&lt;/a&gt; before sending invitations..
+        /// </summary>
+        public static string Invitations_SurveyIsNotStarted {
+            get {
+                return ResourceManager.GetString("Invitations_SurveyIsNotStarted", resourceCulture);
             }
         }
         

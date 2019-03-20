@@ -75,7 +75,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             var emailProviderSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             var status = this.invitationService.GetEmailDistributionStatus();
 
-            var totalAssignmentsCount = assignmentsService.GetCountOfAssignments(questionnaireIdentity);
             var totalInvitationsCount = invitationService.GetCountOfInvitations(questionnaireIdentity);
             var notSentInvitationsCount = invitationService.GetCountOfNotSentInvitations(questionnaireIdentity);
             var sentInvitationsCount = invitationService.GetCountOfSentInvitations(questionnaireIdentity);
@@ -86,7 +85,6 @@ namespace WB.UI.Headquarters.API.WebInterview
                 FullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version),
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version),
                 Started = config.Started,
-                TotalAssignmentsCount = totalAssignmentsCount,
                 TotalInvitationsCount = totalInvitationsCount,
                 NotSentInvitationsCount = notSentInvitationsCount,
                 SentInvitationsCount = sentInvitationsCount,
