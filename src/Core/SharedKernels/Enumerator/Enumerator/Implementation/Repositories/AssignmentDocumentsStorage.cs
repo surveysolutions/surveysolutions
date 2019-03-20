@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -127,25 +129,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public IReadOnlyCollection<AssignmentDocument> LoadAll(Guid? responsibleId)
         {
+            return responsibleId.HasValue
+                ? Query(assignment => assignment.ResponsibleId == responsibleId.Value).ToReadOnlyCollection()
+                : Query(assignment => true).ToReadOnlyCollection();
+        }
+
+        public IEnumerable<AssignmentDocument> Query(Expression<Func<AssignmentDocument, bool>> query)
+        {
             return RunInTransaction(assignmentTable =>
             {
                 var assignments = assignmentTable;
 
-                assignments = responsibleId == null
-                    ? assignments
-                    : assignments.Where(ass => ass.ResponsibleId == responsibleId);
+                assignments = assignments.Where(query);
 
-                // SQLite does not support join by LINQ
-                var answersLookup = assignmentTable.Connection.Query<AssignmentDocument.AssignmentAnswer>(
-                        "SELECT * " +
-                        $"FROM {nameof(AssignmentDocument)} AS ad " +
-                        $"JOIN {nameof(AssignmentDocument.AssignmentAnswer)} AS aa " +
-                        $"ON aa.{nameof(AssignmentDocument.AssignmentAnswer.AssignmentId)} == ad.{nameof(AssignmentDocument.Id)} " +
-                        $"WHERE aa.{nameof(AssignmentDocument.AssignmentAnswer.IsIdentifying)} == 1 " +
-                        (responsibleId.HasValue ? $"AND ad.{nameof(AssignmentDocument.ResponsibleId)} == @responsibleId" : ""), 
-                        responsibleId)
-                        .Select(DecryptedAnswer)
-                        .ToLookup(a => a.AssignmentId);
+                var ids = assignments.Select(a => a.Id);
+
+                var answers = new List<AssignmentDocument.AssignmentAnswer>();
+
+                foreach (var batchIds in ids.Batch(999))
+                {
+                    answers.AddRange(
+                        assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                            .Where(a => a.IsIdentifying && batchIds.Contains(a.AssignmentId))
+                            .Select(DecryptedAnswer)
+                    );
+                }
+
+                var answersLookup = answers.ToLookup(a => a.AssignmentId);
 
                 IEnumerable<AssignmentDocument> FillAnswers()
                 {
@@ -159,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     }
                 }
 
-                return FillAnswers().ToReadOnlyCollection();
+                return FillAnswers();
             });
         }
 

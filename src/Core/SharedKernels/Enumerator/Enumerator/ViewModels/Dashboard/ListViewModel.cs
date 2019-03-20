@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
             try
             {
-                var newItems = this.GetUiItems().ToList();
+                var newItems = this.GetUiItems();
                 lock (this.UiItems)
                 {
                     this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
