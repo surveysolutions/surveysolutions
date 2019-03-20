@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         if (!(await this.userInteractionService.ConfirmAsync(message)))
                         {
                             this.Answer = this.previousAnswer;
-                            this.SpecialValues.SetAnswer(this.previousAnswer);
+                            await this.SpecialValues.SetAnswerAsync(this.previousAnswer);
                             return;
                         }
                     }
@@ -269,7 +269,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         if (!await this.userInteractionService.ConfirmAsync(message))
                         {
                             this.Answer = this.previousAnswer;
-                            this.specialValues.SetAnswer(this.previousAnswer);
+                            await this.specialValues.SetAnswerAsync(this.previousAnswer);
                             return;
                         }
                     }
@@ -295,7 +295,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                 }
 
-                this.specialValues.SetAnswer(answeredOrSelectedValue);
+                await this.specialValues.SetAnswerAsync(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
