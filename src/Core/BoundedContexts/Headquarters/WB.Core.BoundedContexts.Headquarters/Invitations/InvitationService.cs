@@ -86,7 +86,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
             return invitationStorage.Query(_ => _
-                .Count(x => x.Assignment.Archived == false));
+                .Count(x =>
+                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
+                    x.Assignment.Archived == false));
         }
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
@@ -106,6 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .Count(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
+                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
                     x.Assignment.Archived == false &&
                     x.SentOnUtc != null));
         }
