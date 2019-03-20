@@ -241,7 +241,10 @@
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
     <value>Недопустимое значение для количиства, призаданном электронном адресе должно равняться 1</value>
   </data>
-  <data name="PL0058_IncosistentWebmodeAndEmailOrPassword" xml:space="preserve">
-    <value>Если заданы пароль или электронный адрес должен быть активирован веб режим</value>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Если задан электронный адрес, то должен быть активирован веб режим</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Если задан пароль, то должен быть активирован веб режим</value>
   </data>
 </root>

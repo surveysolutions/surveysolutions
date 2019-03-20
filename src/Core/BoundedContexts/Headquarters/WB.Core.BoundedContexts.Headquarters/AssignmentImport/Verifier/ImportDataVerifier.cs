@@ -296,11 +296,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
                && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //email is set
-                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmailOrPassword, assignmentRow, assignmentRow.Email);
+                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmail, assignmentRow, assignmentRow.Email);
 
             if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
                 && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
-                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmailOrPassword, assignmentRow, assignmentRow.Password);
+                yield return ToCellError("PL0059", messages.PL0059_IncosistentWebmodeAndPassword, assignmentRow, assignmentRow.Password);
         }
 
         private bool Invalid_Password(AssignmentPassword password)

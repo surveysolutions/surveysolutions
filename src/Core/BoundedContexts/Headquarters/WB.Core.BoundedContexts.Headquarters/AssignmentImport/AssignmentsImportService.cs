@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity, null, null, null);
             var identifyingAnswers = assignmentToImport.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
                     IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
