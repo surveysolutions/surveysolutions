@@ -73,7 +73,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
-            var dbAssignments = this.assignmentsRepository.LoadAll();
+            var dbAssignments = this.assignmentsRepository.Query(assignment => 
+                !assignment.Quantity.HasValue 
+                || assignment.Quantity.Value - (assignment.CreatedInterviewsCount ?? 0 ) > 0
+            ).ToList();
 
             if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {
