@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -37,6 +38,7 @@ namespace WB.UI.Headquarters.API
         private readonly ICommandTransformator commandTransformator;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -47,7 +49,8 @@ namespace WB.UI.Headquarters.API
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory, 
+            IInvitationService invitationService)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -59,6 +62,7 @@ namespace WB.UI.Headquarters.API
             this.commandTransformator = commandTransformator;
             this.questionnaires = questionnaires;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
         }
         
         [Route("")]
@@ -247,6 +251,8 @@ namespace WB.UI.Headquarters.API
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
             
+            this.invitationService.CreateInvitationForWebInterview(assignment);
+
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(request.ResponsibleId, questionnaireIdentity, assignment.Id, answers);
 
             return this.Ok(new {});
