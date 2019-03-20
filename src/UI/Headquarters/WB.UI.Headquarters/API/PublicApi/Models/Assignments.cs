@@ -93,6 +93,15 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         public List<AssignmentIdentifyingDataItem> IdentifyingQuestions { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public string Password { get; set; }
+
+        [DataMember]
+        public bool? WebMode { get; set; }
     }
 
     public class AssignmentAssignRequest
