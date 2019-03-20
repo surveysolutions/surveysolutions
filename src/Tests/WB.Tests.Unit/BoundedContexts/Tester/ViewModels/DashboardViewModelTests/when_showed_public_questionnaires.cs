@@ -17,15 +17,23 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         [Test]
         public async Task should_contain_only_public_questionnaires()
         {
+            var awaiterForQuestionnaires = new SemaphoreSlim(0);
+
             var designerApiService = new Mock<IDesignerApiService>();
             designerApiService.Setup(x => x.GetQuestionnairesAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Questionnaires);
+                .ReturnsAsync(() =>
+                {
+                    awaiterForQuestionnaires.Release();
+                    return Questionnaires;
+                });
 
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
 
             var viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService.Object);
             await viewModel.Initialize();
+
+            await awaiterForQuestionnaires.WaitAsync();
 
             viewModel.ShowPublicQuestionnairesCommand.Execute();
 
