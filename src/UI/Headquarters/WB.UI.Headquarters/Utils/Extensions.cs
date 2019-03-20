@@ -1,5 +1,7 @@
 using System;
+using System.Web;
 using System.Web.Http.Filters;
+using System.Web.Mvc;
 
 namespace WB.UI.Headquarters.Utils
 {
@@ -24,6 +26,13 @@ namespace WB.UI.Headquarters.Utils
             {
                 return defaultValue;
             }
+        }
+
+        public static string AbsoluteContent(this UrlHelper urlHelper, string contentPath)
+        {
+            var path = urlHelper.Content(contentPath);
+            var url = new Uri(HttpContext.Current.Request.Url, path);
+            return url.AbsoluteUri;
         }
     }
 }

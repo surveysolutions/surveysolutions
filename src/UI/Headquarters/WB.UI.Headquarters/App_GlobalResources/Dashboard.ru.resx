@@ -213,4 +213,13 @@
   <data name="RecordAudioTitle" xml:space="preserve">
     <value>Когда включено, приложение interviewer будет вести аудио запись интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
   </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Отправить приглашения</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Скачать web ссылки</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Веб режим</value>
+  </data>
 </root>

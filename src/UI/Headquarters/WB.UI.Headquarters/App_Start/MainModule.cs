@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -108,6 +109,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
+            registry.Bind<IWebInterviewEmailRenderer, WebInterviewEmailRenderer>();
 
             EventBusSettings eventBusSettings = settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings();
             registry.BindToConstant(() => eventBusSettings);
@@ -132,6 +134,8 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Schedule(repeatIntervalInSeconds: 10);
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            serviceLocator.GetInstance<SendInvitationsTask>().Run();
+            serviceLocator.GetInstance<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             
             InitMetrics();
             MetricsService.Start(serviceLocator);
