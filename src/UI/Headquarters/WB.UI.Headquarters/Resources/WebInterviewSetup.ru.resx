@@ -188,13 +188,52 @@
     <value>Сообщения обновлены</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-      <value>Использовать captcha перед стартом интервью</value>
-      <comment>Включить защиту от спама</comment>
+    <value>Использовать captcha перед стартом интервью</value>
+    <comment>Включить защиту от спама</comment>
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>
   </data>
   <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
     <value>Отправка приглашений</value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Приглашения</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>Всего приглашений: {{count}}.</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>Отправлено приглашений: {{count}}.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Пока не отправлено ниодно приглашение.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>Приглашений для отправки: {{count}}.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>Нет приглашений для отправки сейчас.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Приглашения не могут быть разосланы.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Службы массовой рассылки не настроены.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>Вы можете изменить эти настройки на странице &lt;a href="{{url}}"&gt;'Настроек почтовых служб'&lt;/a&gt;.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Попросите вашего администратора изменить эти настройки на странице 'Настроек почтовых служб'.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Веб режим пока не начат. Настройте и  &lt;a href="{{url}}"&gt;включите веб режим&lt;/a&gt; перед началом отправки приглашений.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Веб режим начат и службы массовой рассылки писем настроены корректно. Система готова к отправке приглашений.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Отправить {{count}} приглашений</value>
   </data>
 </root>
