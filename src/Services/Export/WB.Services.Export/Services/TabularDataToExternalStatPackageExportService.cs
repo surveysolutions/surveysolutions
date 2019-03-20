@@ -128,17 +128,13 @@ namespace WB.Services.Export.Services
                 }
                 return result.ToArray();
             }
-            catch (OperationCanceledException)
-            {
-                throw;
-            }
             catch (Exception exc)
             {
                 this.logger.Log(LogLevel.Error, exc, $"Error on data export (questionnaireId:{questionnaireId}): ");
                 this.logger.LogError(currentDataInfo);
-            }
 
-            return Array.Empty<string>();
+                throw;
+            }
         }
 
         private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)

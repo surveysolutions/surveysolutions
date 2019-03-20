@@ -13,7 +13,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         static MemoryCache memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
 
-        public PostgresKeyValueStorageWithCache(string connectionString, string schemaName, ILogger logger, IEntitySerializer<TEntity> serializer) 
+        public PostgresKeyValueStorageWithCache(string connectionString,
+            string schemaName, 
+            ILogger logger, 
+            IEntitySerializer<TEntity> serializer) 
             : base(connectionString, schemaName, logger, serializer)
         {
         }

@@ -464,15 +464,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             else
             {
                 var previousAnswer = this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().CheckedValues;
-                var exsitingAnswerOptions = previousAnswer.Where(x => options.Contains(x)).ToList();
+                var exsitingAnswerOptions = previousAnswer.Where(x => options.Contains(x)).ToArray();
 
-                if (exsitingAnswerOptions.Count == 0)
+                if (exsitingAnswerOptions.Length == 0)
                 {
                     this.InterviewQuestion.RemoveAnswer();
                     return;
                 }
 
-                if (exsitingAnswerOptions.Count < previousAnswer.Count)
+                if (exsitingAnswerOptions.Length < previousAnswer.Count)
                     this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(exsitingAnswerOptions));
             }
         }

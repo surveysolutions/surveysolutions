@@ -1438,7 +1438,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode.
+        ///   Looks up a localized string similar to Flat mode.
         /// </summary>
         public static string PlainRoster {
             get {

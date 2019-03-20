@@ -12,8 +12,15 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class InterviewApiItem
     {
-        public InterviewApiItem(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
-            string responsibleName, int errorsCount, InterviewStatus status, DateTime lastEntryDate, IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
+        public InterviewApiItem(Guid interviewId,
+            Guid questionnaireId, 
+            long questionnaireVersion, 
+            Guid responsibleId,
+            string responsibleName, 
+            int errorsCount, 
+            InterviewStatus status, 
+            DateTime lastEntryDate, 
+            IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
         {
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;

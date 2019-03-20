@@ -169,6 +169,7 @@
                                 break;
                             case 'Instructions':
                                 focusId = 'edit-question-instructions';
+                                break;
                             default:
                                 break;
                         }
@@ -197,19 +198,20 @@
                     });
 
                     modalInstance.result.then(function(selectedClassification) {
-                            if (selectedClassification == null)
+                            if (_.isNull(selectedClassification) || _.isUndefined(selectedClassification))
                                 return;
 
                             var questionTitle = $scope.activeQuestion.title || $i18next.t('UntitledQuestion');
                             var replaceOptions = function() {
+                                
+                                var optionsToInsertCount = selectedClassification.categoriesCount;
 
-                                //commandService.replaceOptionsWithClassification
-                                $scope.activeQuestion.optionsCount = selectedClassification.categoriesCount;
-
-                                if ($scope.activeQuestion.optionsCount > $scope.MAX_OPTIONS_COUNT) {
+                                if (optionsToInsertCount > $scope.MAX_OPTIONS_COUNT) {
                                     if ($scope.activeQuestion.type !== "SingleOption") {
 
-                                        var modalInstance =confirmService.open(utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle, $scope.MAX_OPTIONS_COUNT));
+                                        var modalInstance = confirmService.open(
+                                            utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle,
+                                                $scope.MAX_OPTIONS_COUNT));
 
                                         modalInstance.result.then(function(confirmResult) {
                                             if (confirmResult === 'ok') {
@@ -238,7 +240,7 @@
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
 
                                 }
-                            }
+                            };
 
                             if ($scope.activeQuestion.options.length > 0) {
                                 var modalInstance = confirmService.open(utilityService.replaceOptionsConfirmationPopup(questionTitle));

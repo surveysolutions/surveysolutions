@@ -29,7 +29,7 @@
                 </ul>
                 <p class="navbar-text pull-left">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="help-link"><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
+                    <li class="help-link"><a href="https://support.mysurvey.solutions/getting-started/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
                     <li class="dropdown language">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>

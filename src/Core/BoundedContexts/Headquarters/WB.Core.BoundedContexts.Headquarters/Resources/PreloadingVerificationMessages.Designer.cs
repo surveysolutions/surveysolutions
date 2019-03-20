@@ -376,7 +376,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances.
+        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 0, 1, ... to count of roster instances.
         /// </summary>
         public static string PL0053_InconsistentNumericRosterInstanceCodes {
             get {

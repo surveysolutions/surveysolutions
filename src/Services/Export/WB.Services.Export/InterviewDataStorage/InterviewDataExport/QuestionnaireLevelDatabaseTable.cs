@@ -35,18 +35,15 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
 
         public void AddChildren(Group group)
         {
-            if (group.IsRoster)
+            if (group.Children.Count() > ColumnsLimit)
+                throw new ArgumentException($"Group {group.PublicKey} ({group.Children.Count()} children) fail to insert in table with {Entities.Count} entities. Max allowed {ColumnsLimit}");
+
+            Entities.Add(group);
+
+            if (!(group is QuestionnaireDocument))
             {
                 EnablementColumns.Add(group);
-                Entities.Add(group);
             }
-            else if (group is QuestionnaireDocument)
-            {
-                Entities.Add(group);
-            }
-
-            if (group.Children.Count() > ColumnsLimit)
-                throw new ArgumentException("Group can't contains more then limit");
 
             foreach (var child in @group.Children)
             {
@@ -66,10 +63,6 @@ namespace WB.Services.Export.InterviewDataStorage.InterviewDataExport
                     case StaticText staticText:
                         EnablementColumns.Add(staticText);
                         ValidityColumns.Add(staticText);
-                        Entities.Add(child);
-                        break;
-                    case Group notRoster when  !notRoster.IsRoster:
-                        EnablementColumns.Add(notRoster);
                         Entities.Add(child);
                         break;
                 }

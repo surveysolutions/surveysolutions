@@ -23,7 +23,7 @@
                          :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
                                        @input="appendCompboboxItem" 
-                                      :disabled="!$me.acceptAnswer"
+                                      :disabled="!$me.acceptAnswer || allAnswersGiven"
                                       :optionsSource="optionsSource"
                                       :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
                     </div>
@@ -59,6 +59,9 @@
                         value: val
                     }
                 })
+            },
+            allAnswersGiven() {
+                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
             }
         },
         methods: {
@@ -86,8 +89,9 @@
                 if(!includes(this.$me.answer, valueToRemove)) return
 
                 const newAnswer = without(this.$me.answer, valueToRemove)
-
+                
                 if (this.$me.isRosterSize) {
+                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
                     modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })

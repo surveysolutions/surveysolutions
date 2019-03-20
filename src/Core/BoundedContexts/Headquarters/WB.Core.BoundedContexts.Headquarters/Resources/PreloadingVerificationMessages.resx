@@ -224,7 +224,7 @@
     <value>Variable has type that does not support protection.</value>
   </data>
   <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances</value>
+    <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 0, 1, ... to count of roster instances</value>
   </data>
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
     <value>Max quantity shouldn't be more than {0}.</value>

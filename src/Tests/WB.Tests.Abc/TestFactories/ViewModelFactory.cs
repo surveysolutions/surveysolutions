@@ -567,13 +567,15 @@ namespace WB.Tests.Abc.TestFactories
         public PlainRosterViewModel PlainRosterViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory viewModelFactory = null,
             ILiteEventRegistry eventRegistry = null,
-            ICompositeCollectionInflationService compositeCollectionInflationService = null)
+            ICompositeCollectionInflationService compositeCollectionInflationService = null,
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             return new PlainRosterViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelFactory?? Mock.Of<IInterviewViewModelFactory>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>()
+                compositeCollectionInflationService ?? Mock.Of<ICompositeCollectionInflationService>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>()
                 );
         }
 
@@ -594,5 +596,27 @@ namespace WB.Tests.Abc.TestFactories
             FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
             new CategoricalComboboxAutocompleteViewModel(
                 questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, false);
+
+        public FilteredSingleOptionQuestionViewModel FilteredSingleOptionQuestionViewModel(
+            Identity questionId,
+            QuestionnaireDocument questionnaire,
+            IStatefulInterview interview,
+            ILiteEventRegistry eventRegistry = null,
+            FilteredOptionsViewModel filteredOptionsViewModel = null,
+            IPrincipal principal = null,
+            QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel = null,
+            AnsweringViewModel answering = null,
+            QuestionInstructionViewModel instructionViewModel = null)
+        {
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
+            return new FilteredSingleOptionQuestionViewModel(
+                interviewRepository,
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                filteredOptionsViewModel ?? Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview),
+                principal ?? Mock.Of<IPrincipal>(),
+                questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
+                answering ?? Create.ViewModel.AnsweringViewModel(),
+                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+        }
     }
 }

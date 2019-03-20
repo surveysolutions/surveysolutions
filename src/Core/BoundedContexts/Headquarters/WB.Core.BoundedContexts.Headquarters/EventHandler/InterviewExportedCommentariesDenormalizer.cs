@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class InterviewExportedCommentariesDenormalizer:
-        BaseDenormalizer, IAtomicEventHandler,
+        BaseDenormalizer,
         IEventHandler<InterviewOnClientCreated>,
         IEventHandler<InterviewFromPreloadedDataCreated>,
         IEventHandler<InterviewRestored>,
