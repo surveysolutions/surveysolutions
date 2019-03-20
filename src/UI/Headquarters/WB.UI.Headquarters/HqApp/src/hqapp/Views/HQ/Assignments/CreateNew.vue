@@ -196,6 +196,7 @@ export default {
                 id: "email",
                 acceptAnswer: true,
                 isAnswered: false,
+                answer:null,
                 validity: {
                     isValid: true
                 }
@@ -204,6 +205,7 @@ export default {
                 id: "password",
                 acceptAnswer: true,
                 isAnswered: false,
+                answer:null,
                 validity: {
                     isValid: true
                 }
@@ -230,7 +232,7 @@ export default {
         }, 
         passwordValidations(){
             return {
-                regex: "^-?([A-Z0-9]+)$",
+                regex: "^([0-9A-Z]+)|\\?$",
                 min: 6
             };
         },        
@@ -264,12 +266,11 @@ export default {
         async create(ev) {
             const validationResult = await this.$validator.validateAll()
            
+            var wrongSizeForWeb = this.webMode.answer && this.sizeQuestion.answer !== 1 && (this.emailQuestion.answer !== null || this.passwordQuestion.answer !== null)
 
-            var sizeAllowedForWeb = !this.webMode.answer || this.sizeQuestion.answer !== 1
-
-            this.sizeQuestion.validity.isValid = !this.errors.has('size')  || sizeAllowedForWeb           
+            this.sizeQuestion.validity.isValid = !this.errors.has('size') && !wrongSizeForWeb           
             this.emailQuestion.validity.isValid = !this.webMode.answer || !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.webMode.answer || !this.errors.has('password')
+            this.passwordQuestion.validity.isValid = !this.webMode.answer || (!this.errors.has('password') || this.passwordQuestion.answer == '?')
 
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false

@@ -9,11 +9,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
     internal partial class ImportDataVerifierTests
     {
         [Test]
-        public void when_verify_answers_and_password_is_not_valid_should_return_PL0056_error()
+        public void when_verify_answers_and_password_is_too_short_should_return_PL0056_error()
         {
             // arrange
             var fileName = "mainfile.tab";
-            var invalidPassword = "qwer";
+            var invalidPassword = "AWE23";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.TextQuestion()}));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, assignmentPassword: Create.Entity.AssignmentPassword(invalidPassword),
+                assignmentWebMode: Create.Entity.AssignmentWebMode(true));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0056"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(invalidPassword));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        public void when_verify_answers_and_password_contains_incorrect_characters_should_return_PL0056_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var invalidPassword = "AWE232@";
 
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]

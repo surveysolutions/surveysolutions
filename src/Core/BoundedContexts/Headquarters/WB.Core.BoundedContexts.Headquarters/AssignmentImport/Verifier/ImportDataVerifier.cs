@@ -311,8 +311,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (password.Value == ServiceColumns.PasswordSpecialValue)
                 return false;
 
-            if (password.Value.Length >= AssignmentConstants.PasswordLength)
-                return false;
+            if (password.Value.Length < AssignmentConstants.PasswordLength)
+                return true;
 
             return AssignmentConstants.PasswordStrength.Match(password.Value).Length <= 0;
         }
