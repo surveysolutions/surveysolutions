@@ -210,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                 }
 
-                this.specialValues.SetAnswer(answeredOrSelectedValue);
+                await this.specialValues.SetAnswerAsync(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
