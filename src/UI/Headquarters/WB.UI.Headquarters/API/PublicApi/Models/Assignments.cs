@@ -90,6 +90,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public DateTime UpdatedAtUtc { get; set; }
+
+        [DataMember]
+        public List<AssignmentIdentifyingDataItem> IdentifyingQuestions { get; set; }
     }
 
     public class AssignmentAssignRequest
