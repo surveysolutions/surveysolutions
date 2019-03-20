@@ -178,8 +178,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()
         {
-            return this.assignments.LoadAll().Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId
-                                                         && x.ReceivedByInterviewerAt == null);
+            return this.assignments
+                .LoadAll(this.principal.CurrentUserIdentity.UserId)
+                .Where(x => x.ReceivedByInterviewerAt == null);
         }
 
         public bool IsWaitingForSupervisorActionInterview(Guid interviewId)
