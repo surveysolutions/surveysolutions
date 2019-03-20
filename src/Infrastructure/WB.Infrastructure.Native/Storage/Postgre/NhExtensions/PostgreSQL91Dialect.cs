@@ -1,24 +1,28 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using Humanizer.DateTimeHumanizeStrategy;
 using NHibernate;
 using NHibernate.Dialect;
 using NHibernate.Engine;
 using NHibernate.SqlTypes;
+using NHibernate.Type;
 using NHibernate.UserTypes;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
-    public class PostgreSQL91Dialect : PostgreSQL82Dialect
+    public class PostgreSQL91Dialect : PostgreSQL83Dialect
     {
         public PostgreSQL91Dialect()
         {
@@ -451,5 +455,24 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         public string TranslateMemberName(string clrName) => ToLower(clrName);
 
         private static string ToLower(string clrName) => clrName.ToLowerInvariant();
+    }
+
+    /// <summary>
+	/// Maps a <see cref="System.DateTimeOffset" /> Property to a <see cref="DateTimeOffset"/>
+	/// </summary>
+	[Serializable]
+    public class DateTimeOffsetType : NHibernate.Type.DateTimeOffsetType
+    {
+        public override object Get(DbDataReader rs, int index, ISessionImplementor session)
+        {
+            try
+            {
+                return DateTimeOffset.Parse(rs.GetString(index));
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException($"Input '{rs[index]}' was not in the correct format.", ex);
+            }
+        }
     }
 }
