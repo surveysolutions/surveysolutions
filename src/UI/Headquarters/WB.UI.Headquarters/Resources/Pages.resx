@@ -216,7 +216,7 @@
   <data name="Backup_IndexTitle" xml:space="preserve">
     <value>Index</value>
   </data>
-    <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+  <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
     <value>Approve interview</value>
   </data>
   <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
@@ -1259,5 +1259,11 @@
   <data name="Kb" xml:space="preserve">
     <value>Kb</value>
     <comment>Kilobytes</comment>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Email providers settings</value>
+  </data>
+  <data name="EmailProvidersTitle" xml:space="preserve">
+    <value>Bulk Email Services</value>
   </data>
 </root>

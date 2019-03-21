@@ -1,7 +1,7 @@
 <template>
-    <main>
-        <div class="container-fluid">
-            <div class="row">
+    <main :class="mainClass">
+        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" > 
+            <div :class="{ 'row' : hasRow }">
                 <slot name="filters" />
                 <div :class="information">
                     <div class="page-header clearfix" v-if="hasHeader">
@@ -47,8 +47,17 @@ export default {
             type: Boolean,
             default() { return false; }
         },
+        fixedWidth: {
+            type: Boolean,
+            default() { return false; }
+        },
+        hasRow: {
+            type: Boolean,
+            default: true
+        },
         topicButton: String,
-        topicButtonRef: String
+        topicButtonRef: String,
+        mainClass: String
     },
     watch: {
         showProgress: function (value) {

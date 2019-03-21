@@ -210,4 +210,13 @@
   <data name="RecordAudioTitle" xml:space="preserve">
     <value>When enabled, interviewer application will record interview process. When audio audit is on an amount of synchronization data would be significantly larger</value>
   </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Send invitations</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Download web links</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Web mode</value>
+  </data>
 </root>

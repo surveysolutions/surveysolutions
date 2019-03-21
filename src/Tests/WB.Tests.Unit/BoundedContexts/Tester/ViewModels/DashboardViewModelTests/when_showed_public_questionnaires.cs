@@ -14,27 +14,32 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 {
     internal class when_showed_public_questionnaires : DashboardViewModelTestContext
     {
-        [OneTimeSetUp]
-        public async Task Establish()
+        [Test]
+        public async Task should_contain_only_public_questionnaires()
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(
-                _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
+            var awaiterForQuestionnaires = new SemaphoreSlim(0);
+
+            var designerApiService = new Mock<IDesignerApiService>();
+            designerApiService.Setup(x => x.GetQuestionnairesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() =>
+                {
+                    awaiterForQuestionnaires.Release();
+                    return Questionnaires;
+                });
 
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
 
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
-                designerApiService: designerApiService);
+            var viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
+                designerApiService: designerApiService.Object);
             await viewModel.Initialize();
 
-            Because();
+            await awaiterForQuestionnaires.WaitAsync();
+
+            viewModel.ShowPublicQuestionnairesCommand.Execute();
+
+            viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
+            viewModel.Questionnaires.Count.Should().Be(3);
         }
-
-        public void Because() => viewModel.ShowPublicQuestionnairesCommand.Execute();
-
-        [Test] public void should_Questionnaires_have_3_questionnaires () => viewModel.Questionnaires.Count.Should().Be(3);
-        [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
-
-        private static DashboardViewModel viewModel;
 
         private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>
         {

@@ -9,8 +9,6 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Abc.Storage
 {
-
-
     public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
         IQueryableReadSideRepositoryReader<T>,
@@ -18,8 +16,10 @@ namespace WB.Tests.Abc.Storage
         where T : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();
-        
-        public TestInMemoryWriter(){}
+
+        public TestInMemoryWriter()
+        {
+        }
 
         public TestInMemoryWriter(string id, T view)
         {
@@ -66,7 +66,6 @@ namespace WB.Tests.Abc.Storage
 
         public void Flush()
         {
-            
         }
 
         public Type ViewType
@@ -103,7 +102,7 @@ namespace WB.Tests.Abc.Storage
     {
         private readonly Func<TKey, TKey> incrementFunc;
         private readonly Dictionary<TKey, T> storage = new Dictionary<TKey, T>();
-     
+
         public TestInMemoryWriter(Func<TKey, TKey> incrementFunc = null)
         {
             this.incrementFunc = incrementFunc;
@@ -132,7 +131,7 @@ namespace WB.Tests.Abc.Storage
         public void Remove(T view)
         {
             var toRemove = this.storage.FirstOrDefault(item => item.Value == view);
-  
+
             this.Remove(toRemove.Key);
         }
 
@@ -141,8 +140,9 @@ namespace WB.Tests.Abc.Storage
             if (this.incrementFunc != null)
             {
                 this.storage[this.incrementFunc(id)] = view;
-            } else 
-            this.storage[id] = view;
+            }
+            else
+                this.storage[id] = view;
         }
 
         public void BulkStore(List<Tuple<T, TKey>> bulk)
@@ -157,13 +157,11 @@ namespace WB.Tests.Abc.Storage
                 {
                     this.Store(tuple.Item1, tuple.Item2);
                 }
-                
             }
         }
 
         public void Flush()
         {
-            
         }
 
         public Type ViewType => typeof(T);

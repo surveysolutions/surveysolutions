@@ -40,8 +40,6 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void MarkFileAsReadonly(string pathToFile);
 
-        bool IsWritePermissionExists(string path);
-
         string ChangeExtension(string path1, string newExtension);
 
         void MoveFile(string pathToFile, string newPathToFile);

@@ -2,23 +2,17 @@ using System;
 using System.Collections.Generic;
 using Supercluster;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public interface IInterviewFactory
     {
-        Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity sectionId);
         Identity[] GetFlaggedQuestionIds(Guid interviewId);
         void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged);
         void RemoveInterview(Guid interviewId);
 
-        InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-
-        InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-        
         InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion, 
-            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId);
+            string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId);
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);

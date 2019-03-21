@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             x.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
+                && (assigment.WebMode == null || assigment.WebMode == false))
             .ToList());
         }
 
@@ -38,7 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 x.Where(assigment =>
                         (assigment.ResponsibleId == supervisorId || assigment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
                         && !assigment.Archived
-                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)
+                        && (assigment.WebMode == null || assigment.WebMode == false))
                     .ToList());
         }
 
@@ -106,6 +108,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return this.assignmentsAccessor.Query(_ => _.Count(ReadyForWebInterviewAssignments(questionnaireId)));
         }
 
+        public int GetCountOfAssignments(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return this.assignmentsAccessor.Query(_ => _.Count(ByQuestionnaire(questionnaireIdentity)));
+        }
+
+        private static Expression<Func<Assignment, bool>> ByQuestionnaire(QuestionnaireIdentity questionnaireId)
+        {
+            Expression<Func<Assignment, bool>> readyForWebInterviewAssignments =
+                x => x.QuestionnaireId.QuestionnaireId == questionnaireId.QuestionnaireId &&
+                     x.QuestionnaireId.Version == questionnaireId.Version &&
+                     !x.Archived &&
+                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity);
+            return readyForWebInterviewAssignments;
+        }
+
         private static Expression<Func<Assignment, bool>> ReadyForWebInterviewAssignments(QuestionnaireIdentity questionnaireId)
         {
             Expression<Func<Assignment, bool>> readyForWebInterviewAssignments =
@@ -113,7 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
-                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity);
+                     (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity) &&
+                     x.WebMode == true;
             return readyForWebInterviewAssignments;
         }
 
