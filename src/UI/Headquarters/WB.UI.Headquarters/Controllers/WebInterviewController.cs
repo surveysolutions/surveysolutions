@@ -494,8 +494,8 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
             var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
-            if (!interviewer.IsInterviewer())
-                throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
+            //if (!interviewer.IsInterviewer())
+            //    throw new InvalidOperationException($"Assignment {assignment.Id} has responsible that is not an interviewer. Interview cannot be created");
 
             var interviewId = Guid.NewGuid();
 
@@ -505,8 +505,8 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
                 assignment.ProtectedVariables,
-                interviewer.Supervisor.Id,
-                interviewer.PublicKey,
+                interviewer.Supervisor?.Id ?? interviewer.PublicKey,
+                interviewer.IsInterviewer() ? interviewer.PublicKey : (Guid?)null,
                 this.keyGenerator.Get(),
                 assignment.Id,
                 assignment.IsAudioRecordingEnabled);
