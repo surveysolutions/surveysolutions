@@ -88,62 +88,91 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             return invitationStorage.Query(_ => _
                 .Where(FilteredByQuestionnaire(questionnaireIdentity))
-                .Where(HasEmail1())
-                .Count(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
-                    x.Assignment.Archived == false));
+                .Where(HasEmail())
+                .Where(NotArchived())
+                .Count());
         }
 
-        private static Expression<Func<Invitation, bool>> HasEmail1()
-        {
-            return x => x.Assignment.Email != null && x.Assignment.Email != string.Empty;
-        }
-
-        private static Expression<Func<Invitation, bool>> FilteredByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return x =>
-                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version;
-        }
-        private static Expression<Func<Invitation, bool>> HasEmail()
-        {
-            return x => x.Assignment.Email != null && x.Assignment.Email != string.Empty;
-        }
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
             return invitationStorage.Query(_ => _
-                .Count(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
-                    x.Assignment.Archived == false &&
-                    x.SentOnUtc == null));
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasEmail())
+                .Where(NotArchived())
+                .Count(x => x.SentOnUtc == null));
         }
 
         public int GetCountOfSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
             return invitationStorage.Query(_ => _
-                .Count(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
-                    x.Assignment.Archived == false &&
-                    x.SentOnUtc != null));
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasEmail())
+                .Where(NotArchived())
+                .Count(x => x.SentOnUtc != null));
         }
 
         public List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity)
         {
             return invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
-                    x.Assignment.Archived == false &&
-                    x.SentOnUtc == null)
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasEmail())
+                .Where(NotArchived())
+                .Where(x => x.SentOnUtc == null)
                 .Select(x => x.Id)
+                .ToList());
+        }
+
+        
+        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity,
+            int thresholdDays)
+        {
+            var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
+            var partialResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasInterview())
+                .Where(NoReminderAndInvitationIsExpired(thresholdDate))
+                .Where(x => x.Interview.Status < InterviewStatus.Completed)
+                .Select(x => x.Id)
+                .ToList());
+
+            var partialResponseInvitationsWithReminders = invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasInterview())
+                .Where(LastReminderIsExpired(thresholdDate))
+                .Where(x => x.Interview.Status < InterviewStatus.Completed)
+                .Select(x => x.Id)
+                .ToList());
+
+            return partialResponseInvitationsWithoutReminders.Union(partialResponseInvitationsWithReminders).ToList();
+        }
+
+        public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
+        {
+            DateTime thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
+            var noResponseInvitationsWithoutReminders = invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasNoInterview())
+                .Where(NoReminderAndInvitationIsExpired(thresholdDate))
+                .Select(x => x.Id)
+                .ToList());
+
+            var noResponseInvitationsWithReminders = invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasNoInterview())
+                .Where(LastReminderIsExpired(thresholdDate))
+                .Select(x => x.Id)
+                .ToList());
+
+            return noResponseInvitationsWithoutReminders.Union(noResponseInvitationsWithReminders).ToList();
+        }
+
+        public List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(NotArchived())
+                .Where(x => (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
                 .ToList());
         }
 
@@ -219,75 +248,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return cancellationTokenSource.Token;
         }
 
-        public IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity questionnaireIdentity,
-            int thresholdDays)
-        {
-            var thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
-            var partialResponseInvitations = invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.InterviewId != null &&
-                    x.SentOnUtc != null &&
-                    x.SentOnUtc < thresholdDate &&
-                    x.Interview.Status < InterviewStatus.Completed)
-                .Select(x => x.Id)
-                .ToList());
-
-            var partialResponseInvitations1 = invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.InterviewId != null &&
-                    x.LastReminderSentOnUtc != null &&
-                    x.LastReminderSentOnUtc < thresholdDate &&
-                    x.Interview.Status < InterviewStatus.Completed)
-                .Select(x => x.Id)
-                .ToList());
-
-            return partialResponseInvitations.Union(partialResponseInvitations1).ToList();
-        }
-
-        public IEnumerable<int> GetNoResponseInvitations(QuestionnaireIdentity questionnaireIdentity, int thresholdDays)
-        {
-            DateTime thresholdDate = DateTime.UtcNow.AddDays(-thresholdDays);
-            var noResponseInvitations = invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.InterviewId == null &&
-                    x.LastReminderSentOnUtc == null &&
-                    x.SentOnUtc != null &&
-                    x.SentOnUtc < thresholdDate)
-                .Select(x => x.Id)
-                .ToList());
-
-            var noResponseInvitations1 = invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.InterviewId == null &&
-                    x.LastReminderSentOnUtc != null &&
-                    x.LastReminderSentOnUtc < thresholdDate)
-                .Select(x => x.Id)
-                .ToList());
-
-            return noResponseInvitations.Union(noResponseInvitations1).ToList();
-        }
-
         public void ReminderWasNotSent(int invitationId, int assignmentId, string address, string message)
         {
-        }
-
-        public List<Invitation> GetInvitationsToExport(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return invitationStorage.Query(_ => _
-                .Where(x =>
-                    x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                    x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
-                    x.Assignment.Archived == false &&
-                    (x.Assignment.Quantity ?? int.MaxValue) - x.Assignment.InterviewSummaries.Count > 0)
-                .ToList());
         }
 
         public IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations()
@@ -344,6 +306,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             status.ProcessedCount++;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
+
+        private static Expression<Func<Invitation, bool>> LastReminderIsExpired(DateTime thresholdDate)
+        {
+            return x => x.LastReminderSentOnUtc != null &&
+                        x.LastReminderSentOnUtc < thresholdDate;
+        }
+
+        private static Expression<Func<Invitation, bool>> NoReminderAndInvitationIsExpired(DateTime thresholdDate)
+        {
+            return x => x.LastReminderSentOnUtc == null &&
+                        x.SentOnUtc != null &&
+                        x.SentOnUtc < thresholdDate;
+        }
+
+        private static Expression<Func<Invitation, bool>> HasInterview()
+        {
+            return x => x.InterviewId != null;
+        }
+        
+        private static Expression<Func<Invitation, bool>> HasNoInterview()
+        {
+            return x => x.InterviewId == null;
+        }
+
+        private static Expression<Func<Invitation, bool>> NotArchived()
+        {
+            return x => x.Assignment.Archived == false;
+        }
+
+        private static Expression<Func<Invitation, bool>> HasEmail()
+        {
+            return x => x.Assignment.Email != null && x.Assignment.Email != string.Empty;
+        }
+
+        private static Expression<Func<Invitation, bool>> FilteredByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version;
+        }
+
     }
 
     public interface IInvitationService
@@ -361,8 +364,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void MarkInvitationAsSent(int invitationId, string emailId);
         void MarkInvitationAsReminded(int invitationId, string emailId);
 
-        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName,
-            string questionnaireTitle);
+        void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
 
         void StartEmailDistribution();
         void CompleteEmailDistribution();
