@@ -56,10 +56,14 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 if(!npgsqlConnection.IsTableExistsInSchema("readside", "interviews_view")) return;
 
                 var geoAnswers = npgsqlConnection.Query<InterviewGpsAnswer>(
-                        "SELECT interviewid, entityid, rostervector, asgps as answer, isenabled  FROM \"readside\".\"interviews_view\" where asgps is not null")
+                        @"SELECT interviewid, entityid, rostervector, asgps as answer, isenabled " 
+                        + @"FROM ""readside"".""interviews_view"" where asgps is not null")
                     .ToArray();
 
-                var copyFromCommand = "COPY  \"readside\".\"interview_geo_answers\" (interviewid, questionid, rostervector, latitude, longitude, timestamp, isenabled) FROM STDIN BINARY;";
+                var copyFromCommand = @"COPY  ""readside"".""interview_geo_answers"" " 
+                                      + "(interviewid, questionid, rostervector, latitude, longitude, timestamp, isenabled) " 
+                                      + "FROM STDIN BINARY;";
+
                 using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
                 {
                     foreach (var geoAnswer in geoAnswers)
@@ -79,17 +83,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
 
                     writer.Complete();
                 }
-
-                connection.Execute("DROP VIEW readside.interviews_view");
-                connection.Execute(@"create or replace view readside.interviews_view as 
-                select s.interviewid, q.entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings,
-                    asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asbool,
-                    asyesno, asaudio, asarea, q.entity_type, q.parentid, q.question_type
-                from readside.interviews i
-                join readside.interviews_id s on s.id = i.interviewid
-                join readside.questionnaire_entities q on q.id = i.entityid");
-
-                connection.Execute("ALTER TABLE \"readside\".\"interviews\" DROP COLUMN asgps");
             });
         }
 
