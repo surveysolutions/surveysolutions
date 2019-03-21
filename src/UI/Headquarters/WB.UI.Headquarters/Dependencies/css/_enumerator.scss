@@ -99,6 +99,10 @@
         @include gradient-vertical(rgba(255, 255, 255, 0), #fff, 0%, 80%);
     }
 }
+.months-wrapper{
+    display: flex;
+    flex-direction: row;
+}
 .day-unit{
     height: 100%;
     display: flex;
@@ -436,14 +440,14 @@
             text-align: right;
         }
         &:last-of-type{
-        .quarter-of-day:last-child{
-            .recent-activity, .unfinished-assignments{
-                &:after{
-                    @include gradient-vertical(rgba(255, 255, 255, 0), #fff, 0%, 60%);
+            .quarter-of-day:last-child{
+                .recent-activity, .unfinished-assignments{
+                    &:after{
+                        @include gradient-vertical(rgba(255, 255, 255, 0), #fff, 0%, 60%);
+                    }
                 }
             }
         }
-    }
     }
     .recent-activity.first-column{
         padding-left: 0;
@@ -550,6 +554,44 @@
             }
         }
     }
+    .months-wrapper{
+        margin-right: 40px;
+        width: 170px;
+        height: auto;
+        flex-direction: column;
+        float: left;
+        .t-monthly-usage{
+            flex-direction: column;
+            .t-month{
+                left: -70px;
+            }
+            .t-daily-usage{
+                height: 20px;
+                border-right: none;
+                border-bottom: 1px solid #f0f0f0;
+                .t-day{
+                    left: -18px;
+                }
+                .t-unit-wrapper{
+                    height: 100%;
+                    width: 100%;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    border-bottom: none;
+                    border-left: 2px solid #f0f0f0;
+                    .t-up,
+                    .t-down{
+                        height: 100%;
+                    }
+                }
+            }
+        }
+
+    }
+    .graphic-explanation{
+        float: left;
+    }
 }
 @media only screen and (max-width: 670px){
     .graphic-wrapper{
@@ -562,4 +604,9 @@
             float: none;
         }
     }
+    .months-wrapper{
+        margin: 0 auto 30px;
+        float: none;
+    }
+
 }

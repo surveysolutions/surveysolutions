@@ -15,6 +15,22 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             return new IonicZipArchive(outputStream, password);
         }
 
+        public byte[] CompressStream(Stream uncompressedDataStream, string entryName)
+        {
+            byte[] compressedBytes;
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.AddEntry(entryName, uncompressedDataStream);
+                    zip.Save(memoryStream);
+                }
+
+                compressedBytes = memoryStream.ToArray();
+            }
+            return compressedBytes;
+        }
+
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
             using (var zipFile = new ZipFile

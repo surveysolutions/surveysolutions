@@ -6,9 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
     public interface IWebInterviewConfigurator
     {
         void Start(QuestionnaireIdentity questionnaireId, bool useCaptcha);
-
-        void UpdateMessages(QuestionnaireIdentity questionnaireId,
-            Dictionary<WebInterviewUserMessages, string> messages);
+        void UpdateMessages(QuestionnaireIdentity questionnaireId, Dictionary<WebInterviewUserMessages, string> messages);
         void Stop(QuestionnaireIdentity questionnaireId);
+        void UpdateEmailTextTemplate(QuestionnaireIdentity questionnaireId, EmailTextTemplateType type, EmailTextTemplate emailTextTemplate);
     }
 }

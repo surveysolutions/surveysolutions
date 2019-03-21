@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateOrRemoveHandler<InterviewState, SingleOptionLinkedQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, MultipleOptionsLinkedQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, DateTimeQuestionAnswered>,
-        IUpdateOrRemoveHandler<InterviewState, GeoLocationQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, QRBarcodeQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, PictureQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, YesNoQuestionAnswered>,
@@ -204,16 +203,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
                     AsDatetime = evnt.Payload.Answer
-                });
-
-        public void Update(InterviewState state, IPublishedEvent<GeoLocationQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                new InterviewStateAnswer
-                {
-                    Id = evnt.Payload.QuestionId,
-                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsGps = new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy,
-                        evnt.Payload.Altitude, evnt.Payload.Timestamp)
                 });
 
         public void Update(InterviewState state, IPublishedEvent<QRBarcodeQuestionAnswered> evnt) =>

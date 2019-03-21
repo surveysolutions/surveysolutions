@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CsQuery.ExtensionMethods;
 using WB.Core.BoundedContexts.Designer.Verifier;
 
 namespace WB.Core.BoundedContexts.Designer.Comments
@@ -14,7 +13,8 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             var lastUnresolvedComment = comments.LastOrDefault(x => x.ResolveDate == null);
             if (lastUnresolvedComment != null)
             {
-                IndexOfLastUnresolvedComment = comments.IndexOf(lastUnresolvedComment) + 1;
+                
+                IndexOfLastUnresolvedComment = Array.IndexOf(comments, lastUnresolvedComment) + 1;
             }
         }
 

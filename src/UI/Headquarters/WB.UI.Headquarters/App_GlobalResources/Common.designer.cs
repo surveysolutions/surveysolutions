@@ -268,6 +268,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email providers.
+        /// </summary>
+        internal static string EmailProviders {
+            get {
+                return ResourceManager.GetString("EmailProviders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Errors log.
         /// </summary>
         internal static string ErrorsLog {

@@ -23,19 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     public class StatefulInterview : Interview, IStatefulInterview
     {
         public StatefulInterview(
-            //IQuestionnaireStorage questionnaireRepository,
-            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder
-            //,IQuestionOptionsRepository questionOptionsRepository
-            )
-            : base(
-                //questionnaireRepository, 
-                //expressionProcessorStatePrototypeProvider, 
-                substitutionTextFactory, 
-                treeBuilder
-                //,questionOptionsRepository
-                )
+            IInterviewTreeBuilder treeBuilder)
+            : base(substitutionTextFactory, treeBuilder)
         {
         }
 
@@ -266,9 +256,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
-
-        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiOptionLinkedToListQuestion();
-
+        
         public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAreaQuestion();
 
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
@@ -292,7 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
             if (isNeedFirePassiveEvents)
             {

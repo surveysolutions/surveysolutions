@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.isRosterSizeQuestion )
             {
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
+                var message = UIResources.Interview_Questions_RemoveRowFromRosterListMessage;
                 if (!(await this.userInteractionService.ConfirmAsync(message)))
                 {
                     return;

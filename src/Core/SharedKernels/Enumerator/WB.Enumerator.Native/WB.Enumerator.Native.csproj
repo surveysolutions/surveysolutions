@@ -26,7 +26,7 @@
     <PackageReference Include="Autofac.Owin" Version="4.2.0" />
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="CSCore" Version="1.2.1.2" />
-    <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="Dapper" Version="1.60.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.4.9.5" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.0" />
@@ -35,10 +35,9 @@
     <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Owin" Version="1.0" />
-    <PackageReference Include="StackExchange.Exceptional" Version="2.0.0-alpha3-00183" />
-    <PackageReference Include="StackExchange.Exceptional.Shared" Version="2.0.0-alpha3-00183" />
+    <PackageReference Include="StackExchange.Exceptional" Version="2.0.0" />
     <PackageReference Include="WebGrease" Version="1.6.0" />
   </ItemGroup>
   <ItemGroup>

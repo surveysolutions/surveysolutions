@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -135,6 +136,8 @@ namespace WB.UI.Headquarters
             scheduler.Start();
 
             InitializeAppShutdown(app, scheduler);
+
+            AntiForgeryConfig.RequireSsl = CoreSettings.IsHttpsRequired;
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {

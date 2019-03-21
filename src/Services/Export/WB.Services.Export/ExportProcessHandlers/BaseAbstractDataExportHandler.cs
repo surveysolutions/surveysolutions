@@ -10,10 +10,10 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessArgs>
+    public abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessArgs>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
-        protected readonly IFileBasedExportedDataAccessor FileBasedExportedDataAccessor;
+        private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         protected readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         protected readonly IDataExportProcessesService dataExportProcessesService;
 
@@ -27,7 +27,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.FileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
+            this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
@@ -71,7 +71,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
                 HandleProgress(dataExportProcessArgs, exportProgress);
 
-                var archiveName = this.FileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
+                var archiveName = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
                 
                 this.dataExportProcessesService.ChangeStatusType(dataExportProcessArgs.ProcessId, DataExportStatus.Running);
 
@@ -83,7 +83,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        protected abstract Task DoExportAsync(DataExportProcessArgs processArgs,
+        public abstract Task DoExportAsync(DataExportProcessArgs processArgs,
             ExportSettings exportSettings, string archiveName, ExportProgress exportProgress, CancellationToken cancellationToken);
 
         protected abstract DataExportFormat Format { get; }

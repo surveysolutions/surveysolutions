@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Runtime.Caching;
 using System.Threading;
-using System.Web.Caching;
 using Ncqrs.Domain.Storage;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -85,7 +84,9 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
-        private static Cache Cache => System.Web.HttpRuntime.Cache;
+
+        static MemoryCache Cache = new MemoryCache("AR memory cache");
+
         protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
@@ -95,16 +96,19 @@ namespace WB.Infrastructure.Native.Storage
             CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
 
-            Cache.Add(key, aggregateRoot, null, Cache.NoAbsoluteExpiration, Expiration, CacheItemPriority.Normal, OnUpdateCallback);
+            Cache.Add(key, aggregateRoot, new CacheItemPolicy
+            {
+                RemovedCallback = OnUpdateCallback
+            });
+        }
+
+        private void OnUpdateCallback(CacheEntryRemovedArguments arguments)
+        {
+            CacheItemRemoved(arguments.CacheItem.Key);
         }
 
         protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
         
-        private void OnUpdateCallback(string key, object value, CacheItemRemovedReason reason)
-        {
-            CacheItemRemoved(key);
-        }
-
         protected virtual void CacheItemRemoved(string key)
         {
             CacheCountTracker.TryRemove(key, out _);

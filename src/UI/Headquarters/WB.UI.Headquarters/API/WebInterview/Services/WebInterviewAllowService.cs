@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
+            InterviewStatus.SupervisorAssigned,
             InterviewStatus.InterviewerAssigned,
             InterviewStatus.Restarted,
             InterviewStatus.RejectedBySupervisor
@@ -25,6 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private static readonly List<InterviewStatus> AnonymousUserAllowedStatuses = new List<InterviewStatus>
         {
+            InterviewStatus.SupervisorAssigned,
             InterviewStatus.InterviewerAssigned
         };
 
