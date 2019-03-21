@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -105,14 +106,19 @@ namespace WB.UI.Headquarters.Controllers
             assignment.UpdateQuantity(size);
             assignment.Reassign(responsibleId);
             assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
-            assignment.UpdateEmail(email);
 
-            var updatedPassword = password == ServiceColumns.PasswordSpecialValue
-                ? WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6)
-                : password;
-
-            assignment.UpdatePassword(updatedPassword); 
             assignment.UpdateMode(webMode);
+
+            if (webMode == true)
+            {
+                assignment.UpdateEmail(email);
+
+                var updatedPassword = password == AssignmentConstants.PasswordSpecialValue
+                    ? WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6)
+                    : password;
+
+                assignment.UpdatePassword(updatedPassword);
+            }
 
             this.assignmentsStorage.Store(assignment, null);
 

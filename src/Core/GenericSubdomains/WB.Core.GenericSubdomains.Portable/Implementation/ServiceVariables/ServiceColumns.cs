@@ -37,7 +37,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string WebModeColumnName = "_webmode";
         public const string EmailColumnName = "_email";
         public const string PasswordColumnName = "_password";
-        public const string PasswordSpecialValue = "?";
 
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
