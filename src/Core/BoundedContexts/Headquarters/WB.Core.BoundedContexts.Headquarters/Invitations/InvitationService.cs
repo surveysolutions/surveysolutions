@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 */
                 if (!hasEmail)
                 {
-                    var token = "Q" + TokenGenerator.Instance.Generate(questionnaireHash);
+                    var token = "I" + TokenGenerator.Instance.Generate(questionnaireHash);
                     invitation.SetToken(token);
                 }
                 else
