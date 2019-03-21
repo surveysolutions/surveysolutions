@@ -36,23 +36,19 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public static RosterVector[] ConvertToArray(object obj)
         {
-            var answerAsRosterVector = obj as RosterVector[];
-            if (answerAsRosterVector != null)
-                return answerAsRosterVector;
-
-            var answerAsIntArrayArray = obj as int[][];
-            if(answerAsIntArrayArray != null)
-                return answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray();
-
-            var answerAsDecimalArrayArray = obj as decimal[][];
-            if (answerAsDecimalArrayArray != null)
-                return answerAsDecimalArrayArray.Select(desimalArray => (RosterVector)desimalArray).ToArray();
-
-            var readOnlyCollection = obj as IReadOnlyCollection<RosterVector>;
-            if (readOnlyCollection != null)
-                return readOnlyCollection.ToArray();
-
-            throw new ArgumentException(nameof(obj));
+            switch (obj)
+            {
+                case RosterVector[] answerAsRosterVector:
+                    return answerAsRosterVector;
+                case int[][] answerAsIntArrayArray:
+                    return answerAsIntArrayArray.Select(intArray => (RosterVector)intArray).ToArray();
+                case decimal[][] answerAsDecimalArrayArray:
+                    return answerAsDecimalArrayArray.Select(desimalArray => (RosterVector)desimalArray).ToArray();
+                case IReadOnlyCollection<RosterVector> readOnlyCollection:
+                    return readOnlyCollection.ToArray();
+                default:
+                    throw new ArgumentException(nameof(obj));
+            }
         }
 
         public RosterVector(IEnumerable<decimal> coordinates)
@@ -184,10 +180,12 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.coordinates.Take(targetLength).ToArray();
         }
 
+        public string AsString() => string.Join("-", this.coordinates.Select(c => c));
+
         public override string ToString()
         {
             if (this.coordinates.Length > 0)
-                return $"_{string.Join("-", this.coordinates.Select(c => c))}";
+                return $"_{AsString()}";
             return string.Empty;
         }
 

@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage), 
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
-                new InterviewStatusTimeSpanDenormalizer(),
+                new InterviewStatusTimeSpanDenormalizer(), Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 Mock.Of<ISpeedReportDenormalizerFunctional>(),
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }

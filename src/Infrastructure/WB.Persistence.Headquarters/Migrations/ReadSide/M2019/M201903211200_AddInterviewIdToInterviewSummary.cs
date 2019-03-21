@@ -11,6 +11,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .AddColumn("id")
                 .AsCustom("serial")
                 .NotNullable();
+
+            Create.UniqueConstraint("unq_interviewsummaries_id")
+                .OnTable("interviewsummaries").Column("id");
         }
 
         public override void Down()
