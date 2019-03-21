@@ -380,9 +380,15 @@ export default {
 
         rowsSelected(e, dt, type, ar) {
             for (var i = 0; i < ar.length; i++) {
-                var rowId = parseInt(dt.row(ar[i]).id());
-                if (!_.includes(this.selectedRows, rowId)) {
-                    this.selectedRows.push(rowId);
+                
+                var rowId = dt.row(ar[i]).id();
+                var delimiterPosition = rowId.indexOf("_");
+                if (delimiterPosition !== -1)
+                    rowId = rowId.substring(delimiterPosition+1);
+                                
+                var parsedId = parseInt(rowId);
+                if (!_.includes(this.selectedRows, parsedId)) {
+                    this.selectedRows.push(parsedId);
                 }
             }
 
@@ -391,8 +397,14 @@ export default {
 
         rowsDeselected(e, dt, type, ar) {
             for (var i = 0; i < ar.length; i++) {
+
                 var rowId = dt.row(ar[i]).id();
-                this.selectedRows = _.without(this.selectedRows, parseInt(rowId));
+                var delimiterPosition = rowId.indexOf("_");
+                if (delimiterPosition !== -1)
+                    rowId = rowId.substring(delimiterPosition+1);
+
+                var parsedId = parseInt(rowId);
+                this.selectedRows = _.without(this.selectedRows, parsedId);
             }
 
             this.$emit("selectedRowsChanged", this.selectedRows)

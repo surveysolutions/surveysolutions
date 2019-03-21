@@ -394,7 +394,7 @@ export default {
 
             var tableOptions = {
                 rowId: function(row){
-                    return `row${row.id}`
+                    return `row_${row.id}`
                 },
                 deferLoading: 0,
                 order: [[defaultSortIndex, "desc"]],
@@ -534,7 +534,7 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            const parsedRowId = rowId.replace('row', '');
+            const parsedRowId = rowId.replace('row_', '');
             if (columnName === "Quantity" && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId;
                 this.editedQuantity = cellData;
@@ -553,7 +553,7 @@ export default {
                     this.$refs.editAudioEnabledModal.modal("show");
                 });
             }
-        },
+        },        
         async updateQuantity() {
             const validationResult = await this.$validator.validateAll();
 
