@@ -232,8 +232,7 @@ export default {
         }, 
         passwordValidations(){
             return {
-                regex: "^([0-9A-Z]+)|\\?$",
-                min: 6
+                regex: "^([0-9A-Z]+)|\\?$"
             };
         },        
         entities() {
@@ -264,9 +263,12 @@ export default {
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
         async create(ev) {
-            const validationResult = await this.$validator.validateAll()
+            var validationResult = await this.$validator.validateAll()
            
-            var wrongSizeForWeb = this.webMode.answer && this.sizeQuestion.answer !== 1 && (this.emailQuestion.answer !== null || this.passwordQuestion.answer !== null)
+            var wrongSizeForWeb = this.webMode.answer && this.sizeQuestion.answer !== "1" && (this.emailQuestion.answer !== null || this.passwordQuestion.answer !== null)
+            var incorrectPassword = (this.passwordQuestion.answer !== '?' || (this.passwordQuestion.answer!== null && this.passwordQuestion.answer < 6))
+
+            validationResult = validationResult && !wrongSizeForWeb && !incorrectPassword 
 
             this.sizeQuestion.validity.isValid = !this.errors.has('size') && !wrongSizeForWeb           
             this.emailQuestion.validity.isValid = !this.webMode.answer || !this.errors.has('email')
