@@ -11,6 +11,11 @@
         <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="Migrations\ReadSide\M101-200\**" />
+      <EmbeddedResource Remove="Migrations\ReadSide\M101-200\**" />
+      <None Remove="Migrations\ReadSide\M101-200\**" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
@@ -25,8 +30,5 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
       <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Migrations\ReadSide\M101-200\" />
     </ItemGroup>
 </Project>
