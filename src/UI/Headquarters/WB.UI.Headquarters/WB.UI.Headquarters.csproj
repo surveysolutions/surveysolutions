@@ -848,10 +848,14 @@
     <Content Include="Content\img\loading.gif" />
     <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
+    <Content Include="Dependencies\img\designer-left-icons-2-3.png" />
+    <Content Include="Dependencies\img\Exprt-icons.png" />
+    <Content Include="Dependencies\img\HQ-login-supervisor-get-button-logo.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\language.png" />
+    <Content Include="Dependencies\img\logo.svg" />
     <Content Include="Dependencies\img\logo_under_constraction.jpg" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
@@ -913,7 +917,9 @@
     <Content Include="Dependencies\img\logo.png" />
     <Content Include="Dependencies\img\maps.png" />
     <Content Include="Dependencies\img\pretty-checkable-sprites.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite-old.png" />
     <Content Include="Dependencies\img\questionnaire-sprite.png" />
+    <Content Include="Dependencies\img\questionnaire-sprite2k-old.png" />
     <Content Include="Dependencies\img\questionnaire-sprite2k.png" />
     <Content Include="Dependencies\img\question_background_disabled_tile.png" />
     <Content Include="Dependencies\img\radio.png" />
