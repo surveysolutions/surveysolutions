@@ -350,9 +350,7 @@
                                     <div class="costomization-block email-block-unit">
                                         <div class="">
                                             <div class="row-element mb-30">
-                                                <p>You can use following placeholders in the text
-                                                    <br/>%SURVEYNAME% as the name of survey
-                                                </p>
+                                                <p>{{$t('WebInterviewSettings.EmailTemplateDescription')}}</p>
                                             </div>
                                             <div class="row-element">
                                                 <div class="h5">{{$t('WebInterviewSettings.EmailSubject')}}</div>
