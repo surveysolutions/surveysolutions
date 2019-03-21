@@ -50,6 +50,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
                 new SpeedReportDenormalizerFunctional(speedReportItems),
+                new InterviewStatisticsReportDenormalizer(null, null), 
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
 

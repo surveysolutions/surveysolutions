@@ -25,7 +25,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
 

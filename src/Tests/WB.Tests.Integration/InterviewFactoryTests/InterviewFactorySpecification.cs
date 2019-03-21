@@ -81,8 +81,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
+                this.questionnaireItemsRepository, this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
                 Mock.Of<ISubstitutionService>());
+
             this.interviewFlagsStorage = new PostgresPlainStorageRepository<InterviewFlag>(IntegrationCreate.UnitOfWork(IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
@@ -122,7 +123,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 
                 var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                     Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                    questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
+                    questionnaireItemsRepositoryLocal, questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
                     Mock.Of<ISubstitutionService>());
 
                 document.Id = document.PublicKey.FormatGuid();
