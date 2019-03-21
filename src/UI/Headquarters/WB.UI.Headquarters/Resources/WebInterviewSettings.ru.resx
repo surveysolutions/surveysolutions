@@ -121,161 +121,164 @@
     <value>Настроики отображаемого текста для пользователей</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-      <value>Настройка web интервью для </value>
-      <comment>Настройка web интервью для </comment>
+    <value>Настройка web интервью для </value>
+    <comment>Настройка web интервью для </comment>
   </data>
   <data name="ExampleWelcomePage" xml:space="preserve">
-      <value>Пример приветственной страницы</value>
-      <comment>Пример приветственной страницы</comment>
+    <value>Пример приветственной страницы</value>
+    <comment>Пример приветственной страницы</comment>
   </data>
   <data name="ExampleResumePage" xml:space="preserve">
-      <value>Пример страницы продолжения
+    <value>Пример страницы продолжения
 </value>
-      <comment>Пример страницы продолжения
+    <comment>Пример страницы продолжения
       </comment>
   </data>
   <data name="ExampleFinishPage" xml:space="preserve">
-      <value>Пример финальной страницы
+    <value>Пример финальной страницы
 </value>
-      <comment>Пример финальной страницы
+    <comment>Пример финальной страницы
       </comment>
   </data>
   <data name="CustomizeEmailsText" xml:space="preserve">
-      <value>Настройка текстов писем</value>
-      <comment>Настройка текстов писем</comment>
+    <value>Настройка текстов писем</value>
+    <comment>Настройка текстов писем</comment>
   </data>
   <data name="Invitation" xml:space="preserve">
-      <value>Приглашение</value>
-      <comment>Приглашение</comment>
+    <value>Приглашение</value>
+    <comment>Приглашение</comment>
   </data>
   <data name="Reminder" xml:space="preserve">
-      <value>Напоминание</value>
-      <comment>Напоминание</comment>
+    <value>Напоминание</value>
+    <comment>Напоминание</comment>
   </data>
   <data name="Reject" xml:space="preserve">
-      <value>Отклоненные</value>
-      <comment>Отклоненные</comment>
+    <value>Отклоненные</value>
+    <comment>Отклоненные</comment>
   </data>
   <data name="ExampleInvitationEmailMessage" xml:space="preserve">
-      <value>Пример текста пригласительного письма</value>
-      <comment>Пример текста пригласительного письма</comment>
+    <value>Пример текста пригласительного письма</value>
+    <comment>Пример текста пригласительного письма</comment>
   </data>
   <data name="EmailMessage" xml:space="preserve">
-      <value>Сообщение:</value>
-      <comment>Сообщение:</comment>
+    <value>Сообщение:</value>
+    <comment>Сообщение:</comment>
   </data>
   <data name="EmailSubject" xml:space="preserve">
-      <value>Заголовок:</value>
-      <comment>Заголовок:</comment>
+    <value>Заголовок:</value>
+    <comment>Заголовок:</comment>
   </data>
   <data name="ExampleReminderEmailMessage" xml:space="preserve">
-      <value>Пример текста письма напоминания</value>
-      <comment>Пример текста письма напоминания</comment>
+    <value>Пример текста письма напоминания</value>
+    <comment>Пример текста письма напоминания</comment>
   </data>
   <data name="ExampleRejectEmailMessage" xml:space="preserve">
-      <value>Пример текста письма с отклонением</value>
-      <comment>Пример текста пригласительного письма</comment>
+    <value>Пример текста письма с отклонением</value>
+    <comment>Пример текста пригласительного письма</comment>
   </data>
   <data name="ReminderSetting" xml:space="preserve">
-      <value>Настройки напоминаний</value>
-      <comment>Настройки напоминаний</comment>
+    <value>Настройки напоминаний</value>
+    <comment>Настройки напоминаний</comment>
   </data>
   <data name="WelcomePage" xml:space="preserve">
-      <value>Страница приветствия</value>
-      <comment>Страница приветствия</comment>
+    <value>Страница приветствия</value>
+    <comment>Страница приветствия</comment>
   </data>
   <data name="ResumePage" xml:space="preserve">
-      <value>Страница продолжения</value>
-      <comment>Страница продолжения</comment>
+    <value>Страница продолжения</value>
+    <comment>Страница продолжения</comment>
   </data>
   <data name="FinishPage" xml:space="preserve">
-      <value>Финишная страница</value>
-      <comment>Финишная страница</comment>
+    <value>Финишная страница</value>
+    <comment>Финишная страница</comment>
   </data>
   <data name="Save" xml:space="preserve">
-      <value>сохранить</value>
-      <comment>сохранить</comment>
+    <value>сохранить</value>
+    <comment>сохранить</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-      <value>Отменить</value>
-      <comment>Отменить</comment>
+    <value>Отменить</value>
+    <comment>Отменить</comment>
   </data>
   <data name="RejectEmailMessage" xml:space="preserve">
-      <value>Отклоненные</value>
-      <comment>Отклоненные</comment>
+    <value>Отклоненные</value>
+    <comment>Отклоненные</comment>
   </data>
   <data name="InvitationEmailMessage" xml:space="preserve">
-      <value>Приглашение</value>
-      <comment>Приглашение</comment>
+    <value>Приглашение</value>
+    <comment>Приглашение</comment>
   </data>
   <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
-      <value>Нет ответа</value>
-      <comment>Нет ответа</comment>
+    <value>Нет ответа</value>
+    <comment>Нет ответа</comment>
   </data>
   <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
-      <value>Частичный ответ</value>
-      <comment>Частичный ответ</comment>
+    <value>Частичный ответ</value>
+    <comment>Частичный ответ</comment>
   </data>
   <data name="AdditionalSettings" xml:space="preserve">
-      <value>Дополнительные настройки</value>
-      <comment>Дополнительные настройки</comment>
+    <value>Дополнительные настройки</value>
+    <comment>Дополнительные настройки</comment>
   </data>
   <data name="SendWithNoResponse" xml:space="preserve">
-      <value>Отправлять в случае отсутствия ответа</value>
-      <comment>Отправлять в случае отсутствия ответа</comment>
+    <value>Отправлять в случае отсутствия ответа</value>
+    <comment>Отправлять в случае отсутствия ответа</comment>
   </data>
   <data name="SendWithPartialResponse" xml:space="preserve">
-      <value>Отправлять в случае частичного ответа
+    <value>Отправлять в случае частичного ответа
 </value>
-      <comment>Отправлять в случае частичного ответа
+    <comment>Отправлять в случае частичного ответа
       </comment>
   </data>
   <data name="DoNotSend" xml:space="preserve">
-      <value>Не отправлять</value>
-      <comment>Не отправлять</comment>
+    <value>Не отправлять</value>
+    <comment>Не отправлять</comment>
   </data>
   <data name="AfterXDay" xml:space="preserve">
-      <value>Через {{count}} день</value>
-      <comment>Через {{count}} день</comment>
+    <value>Через {{count}} день</value>
+    <comment>Через {{count}} день</comment>
   </data>
   <data name="AfterXDay_plural" xml:space="preserve">
-      <value>Через {{count}} дня(-ей)</value>
-      <comment>Через {{count}} дня(-ей)</comment>
+    <value>Через {{count}} дня(-ей)</value>
+    <comment>Через {{count}} дня(-ей)</comment>
   </data>
   <data name="AfterXWeek" xml:space="preserve">
-      <value>Через {{count}} неделю</value>
-      <comment>Через {{count}} неделю</comment>
+    <value>Через {{count}} неделю</value>
+    <comment>Через {{count}} неделю</comment>
   </data>
   <data name="AfterXWeek_plural" xml:space="preserve">
-      <value>Через {{count}} недели</value>
-      <comment>Через {{count}} недели</comment>
+    <value>Через {{count}} недели</value>
+    <comment>Через {{count}} недели</comment>
   </data>
   <data name="MainText" xml:space="preserve">
-      <value>Основной текст:</value>
-      <comment>Основной текст:</comment>
+    <value>Основной текст:</value>
+    <comment>Основной текст:</comment>
   </data>
   <data name="DescriptionForPassword" xml:space="preserve">
-      <value>Описание для пароля:</value>
-      <comment>Описание для пароля:</comment>
+    <value>Описание для пароля:</value>
+    <comment>Описание для пароля:</comment>
   </data>
   <data name="StartInterviewButton" xml:space="preserve">
-      <value>Кнопка начала интервью</value>
-      <comment>Кнопка начала интервью</comment>
+    <value>Кнопка начала интервью</value>
+    <comment>Кнопка начала интервью</comment>
   </data>
   <data name="ShownPasswordIsRequired" xml:space="preserve">
-      <value>Показывать только если пароль необходим и установлен</value>
-      <comment>Показывать только если пароль необходим и установлен</comment>
+    <value>Показывать только если пароль необходим и установлен</value>
+    <comment>Показывать только если пароль необходим и установлен</comment>
   </data>
   <data name="Title" xml:space="preserve">
-      <value>Заголовок:</value>
-      <comment>Заголовок:</comment>
+    <value>Заголовок:</value>
+    <comment>Заголовок:</comment>
   </data>
   <data name="Description" xml:space="preserve">
-      <value>Описание:</value>
-      <comment>Описание:</comment>
+    <value>Описание:</value>
+    <comment>Описание:</comment>
   </data>
   <data name="FieldRequired" xml:space="preserve">
-      <value>Поле обязательное для заполнения.</value>
-      <comment>Поле обязательное для заполнения.</comment>
+    <value>Поле обязательное для заполнения.</value>
+    <comment>Поле обязательное для заполнения.</comment>
+  </data>
+  <data name="EmailTemplateDescription" xml:space="preserve">
+    <value>Вы можите использовать %SURVEYNAME% в тексте для подстановки имени опросника</value>
   </data>
 </root>

@@ -157,7 +157,7 @@
     <value>The interview process requires an internet connection. No additional software is needed.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>You have been invited to take part in the following survey: "%QUESTIONNAIRE%"</value>
+    <value>You have been invited to take a part in the following survey: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
@@ -302,7 +302,7 @@
     <value>Interview contains total number of roster instances and questions exceeding the system limits.</value>
   </data>
   <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
-    <value>Invitation to take part in %SURVEYNAME%</value>
+    <value>Invitation to take a part in %SURVEYNAME%</value>
   </data>
   <data name="Email_InvitationTemplate_Message" xml:space="preserve">
     <value>Welcome to %SURVEYNAME%!
@@ -312,7 +312,7 @@ To take the survey click on the following link: %SURVEYLINK% and enter your pass
 Thank you for your cooperation!</value>
   </data>
   <data name="Email_NoResponse_Subject" xml:space="preserve">
-    <value>Reminder, don’t forget to take part in %SURVEYNAME%</value>
+    <value>Reminder, don’t forget to take a part in %SURVEYNAME%</value>
   </data>
   <data name="Email_NoResponse_Message" xml:space="preserve">
     <value>You are receiving this reminder because you haven’t started responding to %SURVEYNAME%!
@@ -322,7 +322,7 @@ To take the survey click on the following link: %SURVEYLINK% and enter your pass
 Thank you for your cooperation!</value>
   </data>
   <data name="Email_PartialResponse_Subject" xml:space="preserve">
-    <value>Reminder, please finish your response to %SURVEYNAME%</value>
+    <value>Reminder, please complete your response to %SURVEYNAME%</value>
   </data>
   <data name="Email_PartialResponse_Message" xml:space="preserve">
     <value>You are receiving this reminder because you have started responding to %SURVEYNAME%, but haven’t completed the process.

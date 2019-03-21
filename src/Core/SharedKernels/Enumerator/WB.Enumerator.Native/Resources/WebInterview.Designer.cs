@@ -101,7 +101,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invitation to take part in %SURVEYNAME%.
+        ///   Looks up a localized string similar to Invitation to take a part in %SURVEYNAME%.
         /// </summary>
         public static string Email_InvitationTemplate_Subject {
             get {
@@ -123,7 +123,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reminder, don’t forget to take part in %SURVEYNAME%.
+        ///   Looks up a localized string similar to Reminder, don’t forget to take a part in %SURVEYNAME%.
         /// </summary>
         public static string Email_NoResponse_Subject {
             get {
@@ -147,7 +147,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reminder, please finish your response to %SURVEYNAME%.
+        ///   Looks up a localized string similar to Reminder, please complete your response to %SURVEYNAME%.
         /// </summary>
         public static string Email_PartialResponse_Subject {
             get {
@@ -515,7 +515,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;%QUESTIONNAIRE%&quot;.
+        ///   Looks up a localized string similar to You have been invited to take a part in the following survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string InvitationText {
             get {

@@ -178,6 +178,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can use %SURVEYNAME% placeholder in the text as a name of survey.
+        /// </summary>
+        internal static string EmailTemplateDescription {
+            get {
+                return ResourceManager.GetString("EmailTemplateDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Example of the Finish Page.
         /// </summary>
         internal static string ExampleFinishPage {
