@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.UpdateEmail(email);
 
                 var updatedPassword = password == AssignmentConstants.PasswordSpecialValue
-                    ? WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6)
+                    ? TokenGenerator.GetRandomAlphanumericString(6)
                     : password;
 
                 assignment.UpdatePassword(updatedPassword);

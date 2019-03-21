@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
@@ -121,7 +120,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var address = invitation.Assignment.Email;
 
                 var link = $"{baseUrl}/WebInterview/{invitation.Token}/Start";
-
 
                 var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
                 var emailParams = new EmailParameters

@@ -267,7 +267,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Assignment = assignment,
                 Invitation = invitation,
-                HasMoreThanOneInvitation = id.StartsWith("Q", StringComparison.InvariantCultureIgnoreCase)
+                HasMoreThanOneInvitation = id.StartsWith("I", StringComparison.InvariantCultureIgnoreCase)
             };
         }
 

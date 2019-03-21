@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -194,7 +195,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             var password = (createItem.Password == AssignmentConstants.PasswordSpecialValue) ? 
-                WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6) :
+                TokenGenerator.GetRandomAlphanumericString(6) :
                 createItem.Password;
 
             //verify email
