@@ -48,6 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
         public bool IsConfigured()
         {
             var settings = emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
+            if (settings == null)
+                return false;
+
             switch (settings.Provider)
             {
                 case EmailProvider.None: return false;
