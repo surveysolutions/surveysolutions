@@ -66,7 +66,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             var newState = (TEntity) this
                 .GetType()
                 .GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), eventType})
-                .Invoke(this, new object[] {currentState, this.CreatePublishedEvent(evt)});
+                ?.Invoke(this, new object[] {currentState, this.CreatePublishedEvent(evt)});
             return newState;
         }
 
@@ -108,15 +108,15 @@ namespace WB.Core.Infrastructure.EventHandlers
         }
 
         protected PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
-        {
-            var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+            {
+                var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
         protected virtual bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsAssignableFrom(this.GetType());
+            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsInstanceOfType(this);
         }
 
         public string Name => this.GetType().Name;
