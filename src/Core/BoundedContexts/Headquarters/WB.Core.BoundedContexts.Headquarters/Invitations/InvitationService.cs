@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -86,11 +87,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
             return invitationStorage.Query(_ => _
+                .Where(FilteredByQuestionnaire(questionnaireIdentity))
+                .Where(HasEmail1())
                 .Count(x =>
                     x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
                     x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version &&
                     x.Assignment.Email != null && x.Assignment.Email != string.Empty &&
                     x.Assignment.Archived == false));
+        }
+
+        private static Expression<Func<Invitation, bool>> HasEmail1()
+        {
+            return x => x.Assignment.Email != null && x.Assignment.Email != string.Empty;
+        }
+
+        private static Expression<Func<Invitation, bool>> FilteredByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            return x =>
+                x.Assignment.QuestionnaireId.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                x.Assignment.QuestionnaireId.Version == questionnaireIdentity.Version;
+        }
+        private static Expression<Func<Invitation, bool>> HasEmail()
+        {
+            return x => x.Assignment.Email != null && x.Assignment.Email != string.Empty;
         }
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
@@ -166,6 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public void CompleteEmailDistribution()
         {
             var status = this.GetEmailDistributionStatus();
+            if (status == null) return;
             status.Status = InvitationProcessStatus.Done;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
@@ -174,6 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public void EmailDistributionFailed()
         {
             var status = this.GetEmailDistributionStatus();
+            if (status == null) return;
             status.Status = InvitationProcessStatus.Failed;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
@@ -182,6 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public void EmailDistributionCanceled()
         {
             var status = this.GetEmailDistributionStatus();
+            if (status == null) return;
             status.Status = InvitationProcessStatus.Canceled;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
