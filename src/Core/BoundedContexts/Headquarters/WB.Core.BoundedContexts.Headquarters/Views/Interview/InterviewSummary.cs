@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public override Guid InterviewId
         {
-            get { return base.InterviewId; }
+            get => base.InterviewId;
             set
             {
                 this.SummaryId = value.FormatGuid();
@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual string Key { get; set; }
 
+        public virtual int Id { get; set; }
         public virtual string ClientKey { get; set; }
         
         public virtual string SummaryId { get; set; }

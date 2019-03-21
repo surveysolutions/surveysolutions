@@ -11,6 +11,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Table("InterviewSummaries");
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
+            Property(x => x.Id, pm=>
+            {
+                pm.Generated(PropertyGeneration.Insert);
+                pm.Update(false);
+            });
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
