@@ -18,6 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         SqlitePlainStorage<AssignmentDocument, int>,
         IAssignmentDocumentsStorage
     {
+        // sql support max 999 parameters in query
+        private const int MaxParametersInQueryCount = 999;
+
         private readonly IEncryptionService encryptionService;
 
         public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor,
@@ -146,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
                 var answers = new List<AssignmentDocument.AssignmentAnswer>();
 
-                foreach (var batchIds in ids.Batch(999))
+                foreach (var batchIds in ids.Batch(MaxParametersInQueryCount))
                 {
                     answers.AddRange(
                         assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
