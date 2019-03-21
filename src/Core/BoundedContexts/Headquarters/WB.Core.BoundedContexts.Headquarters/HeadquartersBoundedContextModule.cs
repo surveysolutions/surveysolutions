@@ -167,6 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<ISpeedReportDenormalizerFunctional, SpeedReportDenormalizerFunctional>();
+            registry.Bind<IInterviewStatisticsReportDenormalizer, InterviewStatisticsReportDenormalizer>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();

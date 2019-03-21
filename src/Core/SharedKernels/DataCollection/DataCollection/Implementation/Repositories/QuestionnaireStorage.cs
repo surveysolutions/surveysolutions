@@ -14,15 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class QuestionnaireStorage : IQuestionnaireStorage
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
+        protected readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
 
-        private static ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
-        private static ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
+        protected static readonly ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
+        private static readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
 
         private readonly IQuestionOptionsRepository questionOptionsRepository;
-        private ISubstitutionService substitutionService;
+        private readonly ISubstitutionService substitutionService;
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             plainQuestionnairesCache.Clear();
         }
 
-        public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
+        public virtual QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
             string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
 
@@ -93,7 +93,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 }
 
                 questionnaireDocumentsCache[repositoryId] = questionnaire;
-                //  ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
             return questionnaireDocumentsCache[repositoryId];
@@ -119,7 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             plainQuestionnairesCache.Clear();
         }
 
-        private static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
+        protected static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
             => questionnaireIdentity.ToString(); //$"{id.FormatGuid()}${version}";
     }
 }
