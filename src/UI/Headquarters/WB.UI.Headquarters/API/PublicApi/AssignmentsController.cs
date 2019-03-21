@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -194,24 +193,28 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
+            var password = (createItem.Password == AssignmentConstants.PasswordSpecialValue) ? 
+                WB.Core.BoundedContexts.Headquarters.Utils.GetRandomAlphanumericString(6) :
+                createItem.Password;
+
             //verify email
             if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
                     "Invalid Email"));
 
             //verify pass
-            if (!string.IsNullOrEmpty(createItem.Password))
-                if((createItem.Password.Length < AssignmentConstants.PasswordLength || 
-                    AssignmentConstants.PasswordStrength.Match(createItem.Password).Length <= 0))
-                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
-                            "Invalid Password"));
+            if (!string.IsNullOrEmpty(password))
+                if((password.Length < AssignmentConstants.PasswordLength || 
+                    AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                            "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
 
-            if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(createItem.Password)) && createItem.WebMode != true)
+            if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                     "For assignments having Email or Password Web Mode should be activated"));
 
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
-                createItem.Email, createItem.Password, createItem.WebMode);
+                createItem.Email, password, createItem.WebMode);
 
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 

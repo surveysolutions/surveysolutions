@@ -12,5 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             new Regex("^([A-Z0-9]+)$", RegexOptions.ExplicitCapture | RegexOptions.Compiled, TimeSpan.FromSeconds(2.0));
 
         public const int PasswordLength = 6;
+
+        public const string PasswordSpecialValue = "?";
     }
 }

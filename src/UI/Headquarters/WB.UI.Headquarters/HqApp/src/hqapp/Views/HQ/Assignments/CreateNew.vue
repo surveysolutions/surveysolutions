@@ -16,7 +16,6 @@
                                 noComments="true"
                                 ></component>
 
-
                         <wb-question :question="assignToQuestion" 
                                     noValidation="true" 
                                     :noComments="true"
@@ -80,6 +79,7 @@
                                     <div class="form-group">
                                         <div class="field answered">
                                             <input id="webModeId"
+                                                @change="webModeChange"
                                                 checked="checked"                                            
                                                 v-model="webMode.answer"   
                                                 data-val="true"                                                                                 
@@ -263,16 +263,24 @@ export default {
             this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
         async create(ev) {
-            var validationResult = await this.$validator.validateAll()
-           
-            var wrongSizeForWeb = this.webMode.answer && this.sizeQuestion.answer !== "1" && (this.emailQuestion.answer !== null || this.passwordQuestion.answer !== null)
-            var incorrectPassword = (this.passwordQuestion.answer !== '?' || (this.passwordQuestion.answer!== null && this.passwordQuestion.answer < 6))
+            var validationResult = await this.$validator.validateAll();
 
-            validationResult = validationResult && !wrongSizeForWeb && !incorrectPassword 
+            var sizeIsValidExtra = (!this.webMode.answer) ||            
+                this.webMode.answer &&
+                (this.sizeQuestion.answer == "1" ||
+                    (this.sizeQuestion.answer !== "1" &&                 
+                        (this.emailQuestion.answer == null || this.emailQuestion.answer == "") && 
+                        (this.passwordQuestion.answer == null || this.passwordQuestion.answer == "")) )
 
-            this.sizeQuestion.validity.isValid = !this.errors.has('size') && !wrongSizeForWeb           
-            this.emailQuestion.validity.isValid = !this.webMode.answer || !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.webMode.answer || (!this.errors.has('password') || this.passwordQuestion.answer == '?')
+            var passwordIsValidExtra = !this.webMode.answer ||
+             (this.webMode.answer && 
+                (this.passwordQuestion.answer == '?' || (this.passwordQuestion.answer !== null && this.passwordQuestion.answer.length >= 6)))
+
+            validationResult = validationResult && sizeIsValidExtra && passwordIsValidExtra 
+
+            this.sizeQuestion.validity.isValid = !this.errors.has('size') && sizeIsValidExtra           
+            this.emailQuestion.validity.isValid = !this.errors.has('email')
+            this.passwordQuestion.validity.isValid = !this.errors.has('password') && passwordIsValidExtra
 
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false
@@ -282,7 +290,16 @@ export default {
             if (submitAllowed) {
                 this.$refs.createForm.submit()
             }
+        },
+        webModeChange(){
+            if(this.webMode.answer == false){
+                this.passwordQuestion.answer = null;
+                this.emailQuestion.answer = null;
+                this.passwordQuestion.validity.isValid = true;
+                this.emailQuestion.validity.isValid = true;
+            }
         }
+
     },
 
     beforeMount() {

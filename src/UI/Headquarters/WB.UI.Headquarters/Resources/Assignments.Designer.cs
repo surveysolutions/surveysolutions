@@ -484,6 +484,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Must be a number, -1 for unlimited, 1 if email or password were specified.
+        /// </summary>
+        public static string SizeInstructions {
+            get {
+                return ResourceManager.GetString("SizeInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stop.
         /// </summary>
         public static string Stop {
