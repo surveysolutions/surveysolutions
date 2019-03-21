@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
 
                 if (assignmentToImport.Password == AssignmentConstants.PasswordSpecialValue)
-                    assignmentToImport.Password = Utils.GetRandomAlphanumericString(6);
+                    assignmentToImport.Password = TokenGenerator.GetRandomAlphanumericString(6);
 
                 return assignmentToImport;
             }

@@ -1,10 +1,14 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public sealed class TokenGenerator
     {
-        private const string Encode_32_Chars = "SXVNWRCK53MTFKP7A6HUBZ4GEID921L8";
+        private const string Encode_32_Chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
         private static readonly ThreadLocal<char[]> _charBufferThreadLocal =
             new ThreadLocal<char[]>(() => new char[13]);
@@ -42,6 +46,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             buffer[12] = Encode_32_Chars[(int) id & 31];
 
             return new string(buffer, 0, buffer.Length).Substring(4);
+        }
+
+        public static string GetRandomAlphanumericString(int length)
+        {
+            return GetRandomString(length, Encode_32_Chars);
+        }
+
+        public static string GetRandomString(int length, IEnumerable<char> characterSet)
+        {
+            if (length < 0)
+                throw new ArgumentException("length must not be negative", "length");
+            if (length > int.MaxValue / 8) 
+                throw new ArgumentException("length is too big", "length");
+            if (characterSet == null)
+                throw new ArgumentNullException("characterSet");
+            var characterArray = characterSet.Distinct().ToArray();
+            if (characterArray.Length == 0)
+                throw new ArgumentException("characterSet must not be empty", "characterSet");
+
+            var bytes = new byte[length * 8];
+            new RNGCryptoServiceProvider().GetBytes(bytes);
+            var result = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                ulong value = BitConverter.ToUInt64(bytes, i * 8);
+                result[i] = characterArray[value % (uint)characterArray.Length];
+            }
+            return new string(result);
         }
     }
 }
