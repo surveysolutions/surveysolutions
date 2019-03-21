@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -290,12 +291,13 @@ namespace WB.Tests.Abc.TestFactories
             => new GeoPosition(latitude ?? 1, longitude ?? 2, accuracy ?? 3, altitude ?? 4, timestamp ?? new DateTimeOffset(new DateTime(1984, 4, 18)));
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
-            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null)
+            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null, QuestionScope scope = QuestionScope.Interviewer)
             => new GpsCoordinateQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = variable,
                 QuestionType = QuestionType.GpsCoordinates,
+                QuestionScope = scope,
                 Featured = isPrefilled,
                 QuestionText = title,
                 ValidationExpression = validationExpression,
@@ -1764,7 +1766,10 @@ namespace WB.Tests.Abc.TestFactories
             string questionnaireTitle = null, 
             DateTime? updatedAt = null,
             Guid? responsibleId = null,
-            List<string> protectedVariables = null)
+            List<string> protectedVariables = null,
+            string email = null,
+            string password = null,
+            bool? webMode = null)
         {
             var result = new Assignment();
             
@@ -1810,6 +1815,9 @@ namespace WB.Tests.Abc.TestFactories
                 asDynamic.ResponsibleId = responsibleId.Value;
             }
             asDynamic.ProtectedVariables = protectedVariables;
+            asDynamic.Email = email;
+            asDynamic.Password = password;
+            asDynamic.WebMode = webMode;
 
             return result;
         }
@@ -2076,6 +2084,9 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
             AssignmentInterviewId interviewId = null,
             string questionnaireOrRosterName = null,
+            AssignmentEmail assignmentEmail = null,
+            AssignmentPassword assignmentPassword = null,
+            AssignmentWebMode assignmentWebMode = null,
             params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
@@ -2084,14 +2095,36 @@ namespace WB.Tests.Abc.TestFactories
             Quantity = quantity,
             RosterInstanceCodes = rosterInstanceCodes,
             InterviewIdValue = interviewId,
-            Answers = answers
-        };
+            Answers = answers,
+            Email = assignmentEmail,
+            Password = assignmentPassword,
+            WebMode = assignmentWebMode
+            };
 
         public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
         {
             Value = responsibleName,
             Column = ServiceColumns.ResponsibleColumnName,
             Responsible = userInfo
+        };
+
+        public AssignmentEmail AssignmentEmail(string email) => new AssignmentEmail
+        {
+            Value = email,
+            Column = ServiceColumns.EmailColumnName
+        };
+
+        public AssignmentWebMode AssignmentWebMode(bool webMode) => new AssignmentWebMode
+        {
+            WebMode = webMode,
+            Value = "1",
+            Column = ServiceColumns.WebModeColumnName
+        };
+
+        public AssignmentPassword AssignmentPassword(string password) => new AssignmentPassword
+        {
+            Value = password,
+            Column = ServiceColumns.PasswordColumnName
         };
 
         public AssignmentQuantity AssignmentQuantity(string quantity = null, int? parsedQuantity = null) => new AssignmentQuantity
@@ -2398,5 +2431,35 @@ namespace WB.Tests.Abc.TestFactories
             Value = value,
             Title = title
         };
+
+        public Invitation Invitation(int id, Assignment assignment, string token = null)
+        {
+            var invitation = new Invitation();
+
+            var asDynamic = invitation.AsDynamic();
+            asDynamic.Id = id;
+            asDynamic.AssignmentId = assignment.Id;
+            asDynamic.Assignment = assignment;
+            asDynamic.Token = token;
+
+            return invitation;
+        }
+
+        public WebInterviewEmailTemplate EmailTemplate(string subject = null, string message = null, string passwordDescription = null, string linkText = null)
+        {
+            return new WebInterviewEmailTemplate(subject ?? "Subject", message ?? "Message", passwordDescription ?? "Password", linkText ?? "LINK");
+        }
+
+        public PersonalizedWebInterviewEmail PersonalizedEmail(string subject = null, string message = null)
+        {
+            var email = new PersonalizedWebInterviewEmail("Subject", "Message", "password:");
+
+            var asDynamic = email.AsDynamic();
+            asDynamic.Subject = subject ?? "Subject";
+            asDynamic.MessageText = message ?? "Message text";
+            asDynamic.MessageHtml = message ?? "Message html";
+
+            return email;
+        }
     }
 }

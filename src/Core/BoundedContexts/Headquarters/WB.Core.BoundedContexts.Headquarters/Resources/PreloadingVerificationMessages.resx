@@ -229,4 +229,19 @@
   <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
     <value>Max quantity shouldn't be more than {0}.</value>
   </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Email is not valid</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Password is not valid. Has to be not less than 6 characters</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>For assignments with provided email allowed quantity is 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Web Mode has to be activated for assignments having Email</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Web Mode has to be activated for assignments having Password</value>
+  </data>
 </root>

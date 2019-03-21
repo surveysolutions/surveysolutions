@@ -17,6 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels
     internal class DashboardViewModelTest : DashboardViewModelTestContext
     {
         [Test]
+        [Ignore("Fix flaky test. KP-12644")]
         public async Task when_showed_shared_with_me_questionnaires()
         {
             // arrange

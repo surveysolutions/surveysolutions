@@ -50,18 +50,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsNeedFocus { get; set; } = true;
         public string EmptySearchText { get; private set; }
 
-        private string searchText;
+        private string searchTextField;
         public string SearchText
         {
-            get => this.searchText;
-            set => SetProperty(ref this.searchText, value);
+            get => this.searchTextField;
+            set => SetProperty(ref this.searchTextField, value);
         }
 
-        private string serchResultText;
-        public string SerchResultText 
+        private string searchResultText;
+        public string SearchResultText 
         {
-            get => this.serchResultText;
-            set => SetProperty(ref this.serchResultText, value);
+            get => this.searchResultText;
+            set => SetProperty(ref this.searchResultText, value);
         }
 
         private bool isInProgressLongOperation;
@@ -88,12 +88,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand<string> SearchCommand => new MvxCommand<string>(async text => await SearchAsync(text));
 
-        public async Task SearchAsync(string searctText)
+        public async Task SearchAsync(string searchText)
         {
             cancellationTokenSource?.Cancel();
             cancellationTokenSource = new CancellationTokenSource();
 
-            await UpdateUiItemsAsync(searctText, cancellationTokenSource.Token);
+            await UpdateUiItemsAsync(searchText, cancellationTokenSource.Token);
         }
 
         public override async Task Initialize()
@@ -107,13 +107,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private List<InterviewView> GetInterviewItems()
             => interviews ?? (interviews = this.interviewViewRepository.LoadAll().ToList());
 
-        private ILookup<Guid, PrefilledQuestionView> identifyingQuestions;
+        private ILookup<Guid, PrefilledQuestionView> identifyingQuestionsField;
         private ILookup<Guid, PrefilledQuestionView> GetIdentifyingQuestions()
-            => identifyingQuestions ?? (identifyingQuestions = this.identifyingQuestionsRepo.LoadAll().ToLookup(d => d.InterviewId));
+            => identifyingQuestionsField 
+               ?? (identifyingQuestionsField = this.identifyingQuestionsRepo.LoadAll().ToLookup(d => d.InterviewId));
 
         private IReadOnlyCollection<AssignmentDocument> assignments;
         private IReadOnlyCollection<AssignmentDocument> GetAssignmentItems()
-            => assignments ?? (assignments = this.assignmentsRepository.LoadAll());
+            => assignments 
+               ?? (assignments = this.assignmentsRepository.LoadAll()
+                       .Where(assignment =>
+                           !assignment.Quantity.HasValue 
+                           || !assignment.CreatedInterviewsCount.HasValue
+                           || assignment.Quantity.Value - assignment.CreatedInterviewsCount.Value > 0
+                       ).ToReadOnlyCollection());
 
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems
@@ -122,11 +129,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        protected async Task UpdateUiItemsAsync(string searctText, CancellationToken cancellationToken)
+        protected async Task UpdateUiItemsAsync(string searchText, CancellationToken cancellationToken)
         {
             this.IsInProgressItemsLoadingCount++;
 
-            this.SerchResultText = string.IsNullOrWhiteSpace(searctText)
+            this.SearchResultText = string.IsNullOrWhiteSpace(searchText)
                 ? InterviewerUIResources.Dashboard_NeedTextForSearch
                 : InterviewerUIResources.Dashboard_Searching;
 
@@ -134,11 +141,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(searctText))
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    items = await this.GetViewModelsAsync(searctText, cancellationToken);
+                    items = await this.GetViewModelsAsync(searchText, cancellationToken);
 
-                    this.SerchResultText = items.Count > 0
+                    this.SearchResultText = items.Count > 0
                         ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
                 }
@@ -156,12 +163,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
-        private Task<List<IDashboardItem>> GetViewModelsAsync(string searctText, CancellationToken cancellationToken) =>
+        private Task<List<IDashboardItem>> GetViewModelsAsync(string searchText, CancellationToken cancellationToken) =>
             Task.Run(() =>
             {
                 var items = new List<IDashboardItem>();
 
-                foreach (var uiItem in this.GetUiItems(searctText))
+                foreach (var uiItem in this.GetUiItems(searchText))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
@@ -192,25 +199,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             UiItems.RemoveItems(item.ToEnumerable());
 
             var countOfItems = UiItems.Count;
-            SerchResultText = countOfItems > 0
+            SearchResultText = countOfItems > 0
                 ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
                 : InterviewerUIResources.Dashboard_NotFoundSearchResult;
         }
         
-        protected IEnumerable<IDashboardItem> GetUiItems(string searctText)
+        protected IEnumerable<IDashboardItem> GetUiItems(string searchText)
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
-                if (assignmentItem.Quantity.HasValue && assignmentItem.CreatedInterviewsCount.HasValue)
-                {
-                    int count = assignmentItem.Quantity.Value - assignmentItem.CreatedInterviewsCount.Value;
-                    if (count == 0)
-                        continue;
-                }
-
-                bool isMatched = Contains(assignmentItem.Title, searctText)
-                                 || Contains(assignmentItem.Id.ToString(), searctText)
-                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searctText)) ?? false);
+                bool isMatched = Contains(assignmentItem.Title, searchText)
+                                 || Contains(assignmentItem.Id.ToString(), searchText)
+                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searchText)) ?? false);
 
                 if (isMatched)
                 {
@@ -220,25 +220,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
 
-            var preffilledQuestions = GetIdentifyingQuestions();
+            var identifyingQuestions = GetIdentifyingQuestions();
 
             foreach (var interviewView in this.GetInterviewItems())
             {
-                var details = preffilledQuestions[interviewView.InterviewId]
-                    .OrderBy(x => x.SortIndex)
-                    .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
-                    .ToList();
+                var details = identifyingQuestions[interviewView.InterviewId];
 
                 bool isMatched = 
-                                 Contains(interviewView.InterviewKey, searctText)
-                                 || Contains(interviewView.QuestionnaireTitle, searctText)
-                                 || Contains(interviewView.Assignment?.ToString(), searctText)
-                                 || Contains(interviewView.LastInterviewerOrSupervisorComment, searctText)
-                                 || details.Any(pi => Contains(pi.Answer, searctText));
+                                 Contains(interviewView.InterviewKey, searchText)
+                                 || Contains(interviewView.QuestionnaireTitle, searchText)
+                                 || Contains(interviewView.Assignment?.ToString(), searchText)
+                                 || Contains(interviewView.LastInterviewerOrSupervisorComment, searchText)
+                                 || details.Any(pi => Contains(pi.Answer, searchText));
 
                 if (isMatched)
                 {
-                    var interviewDashboardItem = this.viewModelFactory.GetDashboardInterview(interviewView, details);
+                    var interviewDashboardItem = this.viewModelFactory.GetDashboardInterview(interviewView, 
+                        details
+                            .OrderBy(x => x.SortIndex)
+                            .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
+                            .ToList());
                     yield return interviewDashboardItem;
                 }
             }
@@ -272,7 +273,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.UiItems?.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
 
             interviews = null;
-            identifyingQuestions = null;
+            identifyingQuestionsField = null;
             assignments = null;
         }
     }

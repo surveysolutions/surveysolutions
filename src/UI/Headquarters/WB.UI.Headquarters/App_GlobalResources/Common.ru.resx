@@ -323,4 +323,7 @@
   <data name="Reset" xml:space="preserve">
     <value>Сбросить</value>
   </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Настройка рассылки</value>
+  </data>
 </root>

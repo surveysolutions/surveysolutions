@@ -89,3 +89,26 @@ img#placeholder {
         }
     }    
 }
+.welcome-page{
+    @extend %logo-icon;
+	.text-example{
+		max-width: 460px;
+		margin: 45px 30px 30px 30px;
+	}
+	.icon{
+		min-height: 570px;
+		background-image: url("../img/logo.svg");
+		background-repeat: no-repeat;
+		min-width: 190px;
+		background-size: 100%;
+	}
+	.font-bold{
+		font-size: 16px;
+		line-height: 18px;
+	}
+	.browser-mockup{
+		.h2, p{
+			white-space: pre-line;
+		}
+	}
+}

@@ -220,6 +220,9 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Количество не может быть изменено для назначения в веб режиме.</value>
+  </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
     <value>Выберите опросник который следует обновить</value>
   </data>
@@ -306,5 +309,41 @@
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Новое задание</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Электронная почта будет использована для связи с получателем задания</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Пароль будет использован для защиты задания</value>
+  </data>
+    <data name="WebMode" xml:space="preserve">
+    <value>Веб режим</value>
+  </data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Задание в Веб режиме</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Активирован</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Задание создано в Веб режиме</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Используйте один символ '?' чтобы сгенерировать пароль</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введите пароль</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Введите электронную почту</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Должно быть число, -1 для неограниченного, 1 если заданы электронная почта или пароль</value>
   </data>
 </root>

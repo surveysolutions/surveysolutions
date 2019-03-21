@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -155,35 +153,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public bool IsWritePermissionExists(string path)
-        {
-            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
-                return false;
-
-            try
-            {
-                var security = Directory.GetAccessControl(path);
-                var authorizationRuleCollection = security.GetAccessRules(true, true, typeof(SecurityIdentifier));
-
-                var windowsIdentity = WindowsIdentity.GetCurrent();
-                var identityReferences = new List<IdentityReference> {windowsIdentity.User};
-                if (windowsIdentity.Groups != null)
-                    identityReferences.AddRange(windowsIdentity.Groups);
-
-                var isAllowWriteForUser = this.IsAllowWriteForIdentityReferance(authorizationRuleCollection,
-                    identityReferences);
-                return isAllowWriteForUser;
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return false;
-            }
-        }
-
         private void CopyFile(string sourcePath, string backupFolderPath, bool overrideAll, string[] fileExtentionsFilter)
         {
             var sourceFileName = this.GetFileName(sourcePath);
@@ -212,30 +181,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 if (!string.IsNullOrEmpty(pathToIntermediateDirectory))
                     yield return pathToIntermediateDirectory;
             }
-        }
-
-        private bool IsAllowWriteForIdentityReferance(
-            AuthorizationRuleCollection authorizationRuleCollection, List<IdentityReference> identityReferences)
-        {
-            var writeAllow = false;
-            var writeDeny = false;
-
-            foreach (AuthorizationRule authorizationRule in authorizationRuleCollection)
-            {
-                var isUserPermission = identityReferences.Any(ir => ir.Equals(authorizationRule.IdentityReference));
-                if (isUserPermission)
-                {
-                    var rule = (FileSystemAccessRule) authorizationRule;
-
-                    if ((rule.FileSystemRights & FileSystemRights.WriteData) == FileSystemRights.WriteData)
-                        if (rule.AccessControlType == AccessControlType.Allow)
-                            writeAllow = true;
-                        else if (rule.AccessControlType == AccessControlType.Deny)
-                            writeDeny = true;
-                }
-            }
-
-            return writeAllow && !writeDeny;
         }
 
         private string RemoveNonAscii(string s) => Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);

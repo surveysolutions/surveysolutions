@@ -5,6 +5,21 @@
     td.type-numeric{
         text-align: right;
     }
+    td.editable{
+        position: relative;
+        &:after{ 
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0; 
+            height: 0; 
+            display: block;
+            border-left: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-top: 8px solid #2a81cb;
+        }
+    }
     tr{
         .without-break{
             white-space: nowrap;
@@ -227,7 +242,7 @@
         & > tr{
             & > td, & > th{
                 border-bottom: none;
-                border-right: none;
+                border-right-color: transparent;
                 border-left: 1px solid #f8f9f9;
                 &:first-child{
                     border-left: none;

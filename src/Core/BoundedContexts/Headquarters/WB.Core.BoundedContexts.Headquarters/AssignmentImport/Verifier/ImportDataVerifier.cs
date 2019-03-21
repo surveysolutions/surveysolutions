@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
@@ -157,21 +158,27 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyAnswers(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyRowValues(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
         {
             foreach (var assignmentValue in assignmentRow.Answers)
             {
-                foreach (var error in this.AnswerVerifiers.SelectMany(x => x.Invoke(assignmentRow, assignmentValue, questionnaire)))
+                foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, assignmentValue, questionnaire)))
                     if (error != null) yield return error;
             }
 
             foreach (var serviceValue in (assignmentRow.RosterInstanceCodes ?? Array.Empty<AssignmentValue>()).Union(
-                new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity}))
+                new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity,
+                    assignmentRow.Email, assignmentRow.Password, assignmentRow.WebMode}))
             {
                 if (serviceValue == null) continue;
 
-                foreach (var error in this.AnswerVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
+                foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
+            }
+
+            foreach (var error in InconsistentAssignmentSettings(assignmentRow))
+            {
+                yield return error;
             }
         }
 
@@ -249,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed)
         };
 
-        private IEnumerable<Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> AnswerVerifiers => new[]
+        private IEnumerable<Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RowValuesVerifiers => new[]
         {
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_NoParsed, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_InvalidCode, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
@@ -277,7 +284,46 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
             Error<AssignmentQuantity>(Quantity_ExceedsMaxInterviewsCount, "PL0054", string.Format(messages.PL0054_MaxInterviewsCountByAssignmentExeeded, Constants.MaxInterviewsCountByAssignment)),
+            Error<AssignmentEmail>(Invalid_Email, "PL0055", messages.PL0055_InvalidEmail),
+            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword)
         };
+
+        private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow)
+        {
+            if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
+                (assignmentRow.Quantity != null && (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1)))
+                    yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
+
+            if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
+               && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //email is set
+                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmail, assignmentRow, assignmentRow.Email);
+
+            if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
+                && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
+                yield return ToCellError("PL0059", messages.PL0059_IncosistentWebmodeAndPassword, assignmentRow, assignmentRow.Password);
+        }
+
+        private bool Invalid_Password(AssignmentPassword password)
+        {
+            if (string.IsNullOrEmpty(password.Value))
+                return false;
+
+            if (password.Value == AssignmentConstants.PasswordSpecialValue)
+                return false;
+
+            if (password.Value.Length < AssignmentConstants.PasswordLength)
+                return true;
+
+            return AssignmentConstants.PasswordStrength.Match(password.Value).Length <= 0;
+        }
+
+        private bool Invalid_Email(AssignmentEmail email)
+        {
+            if (string.IsNullOrEmpty(email.Value))
+                return false;
+
+            return AssignmentConstants.EmailRegex.Match(email.Value).Length <= 0;
+        }
 
         private IEnumerable<InterviewImportReference> OrphanFirstLevelRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
             IQuestionnaire questionnaire)
@@ -450,7 +496,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if (columnName == ServiceColumns.InterviewId) return false;
 
-            if ((columnName == ServiceColumns.ResponsibleColumnName || columnName == ServiceColumns.AssignmentsCountColumnName) && 
+            if ((columnName == ServiceColumns.ResponsibleColumnName ||
+                 columnName == ServiceColumns.AssignmentsCountColumnName ||
+                 columnName == ServiceColumns.EmailColumnName ||
+                 columnName == ServiceColumns.PasswordColumnName ||
+                 columnName == ServiceColumns.WebModeColumnName) && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
@@ -780,7 +830,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool Quantity_ExceedsMaxInterviewsCount(AssignmentQuantity quantity)
             => quantity.Quantity.HasValue && quantity.Quantity > Constants.MaxInterviewsCountByAssignment;
-
 
         private bool Quantity_IsNotInteger(AssignmentQuantity quantity)
             => !string.IsNullOrWhiteSpace(quantity.Value) && !quantity.Quantity.HasValue;

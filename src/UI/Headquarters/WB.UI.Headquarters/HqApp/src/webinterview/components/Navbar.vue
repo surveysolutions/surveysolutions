@@ -43,11 +43,16 @@
                             </li>
                         </ul>
                     </li>
+                    <li  v-if="showEmailPersonalLink">
+                        <a href="#" @click="emailPersonalLink" :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">
+                            {{$t('WebInterviewUI.EmailLink_EmailResumeLink')}}
+                        </a>
+                    </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
                             <span class="glyphicon glyphicon-sort"></span>
                         </button>
-                    </li>                    
+                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -57,9 +62,15 @@
 </template>
 <script lang="js">
     import modal from "./modal"
+    import axios from "axios"
 
     export default {
         name: 'navbar',
+        data() {
+            return {
+                showEmailPersonalLink: this.$config.askForEmail
+            }
+        },
         beforeMount() {
             this.$store.dispatch("getLanguageInfo")
             this.$store.dispatch("loadInterview")
@@ -89,6 +100,11 @@
                     }
                 }
             });
+
+            if (this.$config.askForEmail)
+            {
+                this.emailPersonalLink();
+            }
         },
         updated(){
             document.title = this.$config.splashScreen ? this.$t("WebInterviewUI.LoadingQuestionnaire") : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
@@ -119,6 +135,47 @@
             }
         },
         methods: {
+            emailPersonalLink(){
+                var self = this;
+                let prompt = modal.prompt({
+                    title: this.$t("WebInterviewUI.EmailLink_Header"),
+                    
+                    inputType: 'email',
+                    callback: function(result){
+                        if (!self.validateEmail(result))
+                        {
+                            var input = $(this).find('input');
+                            self.$nextTick(function() {
+                                input.next("span").remove();
+                                input.after("<span class='help-text text-danger'>" + this.$t("WebInterviewUI.EmailLink_InvalidEmail", { email: result}) + "</span>")
+                            });
+                            return false;
+                        }
+
+                        self.sendEmailWithPersonalLink(result);
+                    }
+                });
+
+                prompt.find('input').attr('placeholder', this.$t("WebInterviewUI.EmailLink_Placeholder"))
+                prompt.find('input').before("<p>" + this.$t("WebInterviewUI.EmailLink_Message") + "</p>");
+                prompt.find('input').before("<p>" + this.$t("WebInterviewUI.EmailLink_ResumeAnyTime") + "</p>");
+                //debugger;
+            },
+            sendEmailWithPersonalLink(email){
+                var self = this;
+                axios.post(this.$config.sendLinkUri, { 
+                    interviewId:  this.$route.params.interviewId,
+                    email: email 
+                }).then(function(response){
+                    self.showEmailPersonalLink = false;
+                }) .catch(function (error) {
+                    Vue.config.errorHandler(error, self);
+                });
+            },
+            validateEmail(email) {
+                var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            },
             changeLanguage(language) {
 
                 this.$store.dispatch("changeLanguage", { language: language })

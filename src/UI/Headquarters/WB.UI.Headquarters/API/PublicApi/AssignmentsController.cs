@@ -10,13 +10,13 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -158,7 +158,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="createItem">New assignments options</param>
         /// <response code="200">Created assignment with details</response>
-        /// <response code="400">Bad parameters provided or identifiying data incorrect. See response details for more info</response>
+        /// <response code="400">Bad parameters provided or identifying data incorrect. See response details for more info</response>
         /// <response code="404">Questionnaire or responsible user not found</response>
         /// <response code="406">Responsible user provided in request cannot be assigned to assignment</response>
         [HttpPost]
@@ -194,10 +194,30 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity);
+            var password = (createItem.Password == AssignmentConstants.PasswordSpecialValue) ? 
+                TokenGenerator.GetRandomAlphanumericString(6) :
+                createItem.Password;
+
+            //verify email
+            if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, 
+                    "Invalid Email"));
+
+            //verify pass
+            if (!string.IsNullOrEmpty(password))
+                if((password.Length < AssignmentConstants.PasswordLength || 
+                    AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
+                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                            "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+
+            if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    "For assignments having Email or Password Web Mode should be activated"));
+
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
+                createItem.Email, password, createItem.WebMode);
 
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
-
 
             List<InterviewAnswer> answers = new List<InterviewAnswer>();
 
@@ -232,7 +252,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 catch (Exception ae)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                        $"Answer '{item.Answer}' canot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
+                        $"Answer '{item.Answer}' cannot be parsed for question with Identity '{item.Identity}' and variable '{item.Variable}'." +
                         Environment.NewLine +
                         ae.Message));
                 }
@@ -347,6 +367,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
+            if (!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable);
+
             assignment.UpdateQuantity(quantity);
             assignmentsStorage.Store(assignment, id);
             this.auditLog.AssignmentSizeChanged(id, quantity);
@@ -434,6 +457,26 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             this.assignmentsStorage.Store(assignment, assignment.Id);
             return Request.CreateResponse(HttpStatusCode.NoContent);
+        }
+
+        /// <summary>
+        /// Gets Quantity Settings for provided assignment
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <response code="200"></response>
+        /// <response code="404">Assignment not found</response>
+        [HttpGet]
+        [Route("{id:int}/assignmentQuantitySettings")]
+        [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+        public AssignmentQuantitySettings AssignmentQuantitySettings(int id)
+        {
+            var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (assignment.Archived) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return new AssignmentQuantitySettings
+            {
+                CanChangeQuantity = assignment.WebMode != true 
+            };
         }
     }
 }

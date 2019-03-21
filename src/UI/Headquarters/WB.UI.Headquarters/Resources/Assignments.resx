@@ -225,6 +225,9 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>The Size field must be -1 or more.</value>
   </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>The Size cannot be changed for Web mode Assignment.</value>
+  </data>
   <data name="SelectQuestionnaire" xml:space="preserve">
     <value>Select existing questionnaire to upgrade assignments from</value>
   </data>
@@ -311,5 +314,41 @@
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>New Assignment</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Email will be used in communication with assignment recipient</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Password will be used to protect assignment</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Web Mode</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>This Assignment will be used with Web Mode</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Activated</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Assignment was created in Web Mode</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Enter Email</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Must be a number, -1 for unlimited, 1 if email or password were specified</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -145,7 +146,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void Set_not_special_values_answer_for_unanswered_integer_question()
+        public async Task Set_not_special_values_answer_for_unanswered_integer_question()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(Id.g2, specialValues: Create.Entity.Options(1, 2)));
@@ -158,7 +159,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             // Act
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 300);
-            model.SetAnswer(300);
+            await model.SetAnswerAsync(300);
 
             //Assert
             Assert.That(model.SpecialValues.Count, Is.EqualTo(0));
@@ -166,7 +167,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void Set_special_values_for_answered_with_special_value_integer_question()
+        public async Task Set_special_values_for_answered_with_special_value_integer_question()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(Id.g2, specialValues: Create.Entity.Options(1, 2)));
@@ -177,11 +178,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 300);
-            model.SetAnswer(300);
+            await model.SetAnswerAsync(300);
 
             // Act
             interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 2);
-            model.SetAnswer(2);
+            await model.SetAnswerAsync(2);
 
             //Assert
             Assert.That(model.SpecialValues.Count, Is.EqualTo(2));

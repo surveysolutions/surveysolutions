@@ -11,6 +11,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void Store(IEnumerable<AssignmentDocument> documents);
         IReadOnlyCollection<AssignmentDocument> LoadAll();
         IReadOnlyCollection<AssignmentDocument> LoadAll(Guid? responsibleId);
+
+        IEnumerable<AssignmentDocument> Query(Expression<Func<AssignmentDocument, bool>> query);
+
         void RemoveAll();
         void Remove(int assignmentId);
         

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CsQuery.ExtensionMethods;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -293,7 +292,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var enitiesWithCondition in enitiesWithConditions)
             {
-                var entityIndex = questionnairePlainStructure.IndexOf(enitiesWithCondition.PublicKey);
+                var entityIndex = Array.IndexOf(questionnairePlainStructure, enitiesWithCondition.PublicKey);
                 var conditionExpression = ((IConditional)enitiesWithCondition).ConditionExpression;
 
                 var referencedQuestions = this.GetReferencedQuestions(conditionExpression, questionnaire);
@@ -301,7 +300,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 foreach (var referencedQuestion in referencedQuestions)
                 {
                     var indexOfReferencedQuestion =
-                        questionnairePlainStructure.IndexOf(referencedQuestion.PublicKey);
+                         Array.IndexOf(questionnairePlainStructure, referencedQuestion.PublicKey);
 
                     if (indexOfReferencedQuestion > entityIndex)
                     {
@@ -327,7 +326,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var enitiesWithValidation in enitiesWithValidations)
             {
-                var entityIndex = questionnairePlainStructure.IndexOf(enitiesWithValidation.PublicKey);
+                var entityIndex = Array.IndexOf(questionnairePlainStructure, enitiesWithValidation.PublicKey);
                 var validationIndex = 1;
                 var validationConditions = ((IValidatable)enitiesWithValidation).ValidationConditions;
                 foreach (var validationCondition in validationConditions)
@@ -336,7 +335,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     foreach (var referencedQuestion in referencedQuestions)
                     {
                         var indexOfReferencedQuestion =
-                            questionnairePlainStructure.IndexOf(referencedQuestion.PublicKey);
+                            Array.IndexOf(questionnairePlainStructure, referencedQuestion.PublicKey);
 
                         if (indexOfReferencedQuestion > entityIndex)
                         {

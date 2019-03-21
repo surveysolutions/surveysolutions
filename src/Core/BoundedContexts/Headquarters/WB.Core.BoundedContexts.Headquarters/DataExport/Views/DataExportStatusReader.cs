@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -30,8 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IExportFileNameService exportFileNameService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsService assignmentsService,
-            ISlackApiClient slackApiClient,
-            InterviewDataExportSettings exportSettings, ILoggerProvider loggerProvider)
+            ISlackApiClient slackApiClient, 
+            ILoggerProvider loggerProvider)
         {
             this.exportServiceApi = exportServiceApi;
             this.exportFileNameService = exportFileNameService;

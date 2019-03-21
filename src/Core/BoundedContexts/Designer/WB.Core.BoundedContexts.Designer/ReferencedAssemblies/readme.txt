@@ -1,4 +1,6 @@
-﻿for future the locations of assemblies 
+﻿Assemblies that are referenced during conditions assembly compilation
+
+for future the locations of assemblies 
 .nuget\packages\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll
 .nuget\packages\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll
 .nuget\packages\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll
