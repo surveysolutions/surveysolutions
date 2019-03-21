@@ -539,7 +539,7 @@ export default {
                 this.editedRowId = parsedRowId;
                 this.editedQuantity = cellData;
 
-                this.$hq.Assignments.quantitySettings(rowId).then(data => {
+                this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
                     this.canEditQuantity = data.CanChangeQuantity;
                     this.$refs.editQuantityModal.modal("show");
                 });
