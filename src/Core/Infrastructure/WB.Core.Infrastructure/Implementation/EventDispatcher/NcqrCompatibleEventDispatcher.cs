@@ -230,13 +230,18 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             stopwatch.Stop();
         }
 
+        static readonly ConcurrentDictionary<Type, List<Type>> ieventHandlersCache = new ConcurrentDictionary<Type, List<Type>>();
+
         public void Register(IEventHandler handler)
         {
             if (handlersToIgnore.Any(h => h.GetTypeInfo().IsInstanceOfType(handler)))
                 return;
 
             var inProcessBus = this.getInProcessEventBus();
-            IEnumerable<Type> ieventHandlers = handler.GetType().GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface);
+
+            var ieventHandlers = ieventHandlersCache.GetOrAdd(handler.GetType(),
+                type => type.GetTypeInfo().ImplementedInterfaces.Where(IsIEventHandlerInterface).ToList());
+            
             foreach (Type ieventHandler in ieventHandlers)
             {
                 inProcessBus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);

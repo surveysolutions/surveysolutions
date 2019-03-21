@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -38,10 +39,19 @@ namespace WB.Core.Infrastructure.EventHandlers
 
         protected bool Handles(IUncommittedEvent evt, ICompositeFunctionalPartEventHandler<TEntity, TStorage> handler)
         {
-            Type genericUpgrader = typeof(IUpdateHandler<,>);
-            var typeInfo = genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo();
-            return typeInfo.IsAssignableFrom(handler.GetType());
+            return handleCache.GetOrAdd((evt, handler), k =>
+            {
+                Type genericUpgrader = typeof(IUpdateHandler<,>);
+                var typeInfo = genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo();
+                return typeInfo.IsAssignableFrom(handler.GetType());
+            });
         }
+
+        static readonly ConcurrentDictionary<(IUncommittedEvent evnt, ICompositeFunctionalPartEventHandler<TEntity, TStorage>), bool> handleCache
+            = new ConcurrentDictionary<(IUncommittedEvent evnt, ICompositeFunctionalPartEventHandler<TEntity, TStorage>), bool>();
+
+        static readonly ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo> updateMethodsCache 
+            = new ConcurrentDictionary<(Type eventHandler, Type eventType), MethodInfo>();
 
         protected override TEntity ApplyEventOnEntity(IPublishableEvent evt, Type eventType, TEntity currentState)
         {
@@ -51,11 +61,11 @@ namespace WB.Core.Infrastructure.EventHandlers
             {
                 if (!Handles(evt, functionalEventHandler))
                     continue;
+                
+                var update = updateMethodsCache.GetOrAdd((functionalEventHandler.GetType(), eventType), k => 
+                    k.eventHandler.GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), k.eventType}));
 
-                newState = (TEntity)functionalEventHandler
-                    .GetType()
-                    .GetTypeInfo().GetMethod("Update", new[] { typeof(TEntity), eventType })
-                    .Invoke(functionalEventHandler, new object[] { newState, this.CreatePublishedEvent(evt) });
+                newState = (TEntity) update?.Invoke(functionalEventHandler, new object[] { newState, this.CreatePublishedEvent(evt) });
             }
 
             return newState;
