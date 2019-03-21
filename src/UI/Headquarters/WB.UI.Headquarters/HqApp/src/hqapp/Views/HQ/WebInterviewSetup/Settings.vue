@@ -16,9 +16,9 @@
                 <h3>{{$t('WebInterviewSettings.CustomizeDisplayedText')}}</h3>
                 <div class="welcome-page">
                     <ul class="nav nav-tabs" role="tablist" id="start-screen-example">
-                        <li role="presentation" class="active"><a href="#welcome" aria-controls="welcome" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a></li>
-                        <li role="presentation"><a href="#resume" aria-controls="resume" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a></li>
-                        <li role="presentation"><a href="#finish" aria-controls="finish" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a></li>
+                        <li role="presentation" class="active"><a href="#welcome" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')" aria-controls="welcome" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.WelcomePage')}}</a></li>
+                        <li role="presentation"><a href="#resume" @click="setPageActive('resumeWelcome', 'resumeInvitation')" aria-controls="resume" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.ResumePage')}}</a></li>
+                        <li role="presentation"><a href="#finish" @click="setPageActive('webSurveyHeader', 'finishInterview')" aria-controls="finish" role="tab" data-toggle="tab">{{$t('WebInterviewSettings.FinishPage')}}</a></li>
                     </ul>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active page-preview-block" id="welcome">
@@ -33,6 +33,7 @@
                                                         v-model="webInterviewPageMessages['welcomeText'].text" 
                                                         v-validate="'required'"
                                                         data-vv-name="welcomeTextTitle"
+                                                        ref="welcomeTextTitle"
                                                         :min-height="77"
                                                         maxlength="200"
                                                         class="form-control js-elasticArea h2" 
@@ -53,6 +54,7 @@
                                                         v-model="webInterviewPageMessages['invitation'].text" 
                                                         v-validate="'required'"
                                                         data-vv-name="welcomeTextDescription"
+                                                        ref="welcomeTextDescription"
                                                         :min-height="56"
                                                         maxlength="200"
                                                         class="form-control js-elasticArea font-bold" 
@@ -139,6 +141,7 @@
                                                         v-model="webInterviewPageMessages['resumeWelcome'].text"  
                                                         v-validate="'required'"
                                                         data-vv-name="resumeWelcome"
+                                                        ref="resumeWelcome"
                                                         :min-height="77"
                                                         maxlength="200"
                                                         class="form-control js-elasticArea h2" 
@@ -159,6 +162,7 @@
                                                         v-model="webInterviewPageMessages['resumeInvitation'].text" 
                                                         v-validate="'required'"
                                                         data-vv-name="resumeInvitation" 
+                                                        ref="resumeInvitation"
                                                         :min-height="56"   
                                                         maxlength="200"                                                        
                                                         class="form-control js-elasticArea font-bold" 
@@ -243,6 +247,7 @@
                                                         v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                                         v-validate="'required'"
                                                         data-vv-name="webSurveyHeader"   
+                                                        ref="webSurveyHeader"
                                                         :min-height="77" 
                                                         maxlength="200"                                                         
                                                         class="form-control js-elasticArea h2" 
@@ -262,7 +267,8 @@
                                                     <textarea-autosize 
                                                         v-model="webInterviewPageMessages['finishInterview'].text"
                                                         v-validate="'required'"
-                                                        data-vv-name="finishInterview"  
+                                                        data-vv-name="finishInterview" 
+                                                        ref="finishInterview" 
                                                         :min-height="56" 
                                                         maxlength="200"                                                           
                                                         class="form-control js-elasticArea font-bold" 
@@ -378,6 +384,7 @@
                                                             data-vv-as="Please enter the main text"
                                                             v-validate="'required'" 
                                                             data-vv-name="message"
+                                                            :ref="'message' + emailTemplate.value"
                                                             maxlength="1000"
                                                             :min-height="79"
                                                             class="form-control js-elasticArea" 
@@ -670,6 +677,16 @@ export default {
         option.isActive = false;
       });
       emailTemplate.isActive = true;
+
+      var self = this;
+      this.$nextTick(function() { self.$refs['message' + emailTemplate.value][0].resize() });
+    },
+    setPageActive(titleType, messageType) {
+      var self = this;
+      this.$nextTick(function() { 
+          self.$refs[titleType].resize() 
+          self.$refs[messageType].resize()
+      });
     },
     cancelEditEmailTemplate(emailTemplate) {
         var defaultEmailTemplate = this.$config.model.defaultEmailTemplates[emailTemplate.value];
