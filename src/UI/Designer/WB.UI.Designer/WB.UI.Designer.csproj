@@ -309,7 +309,6 @@
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\QuestionnaireListModel.cs" />
-    <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -362,7 +361,6 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
-    <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
@@ -697,7 +695,6 @@
     <Content Include="questionnaire\content\designer-start\font-styles.less" />
     <Content Include="questionnaire\content\designer-start\inputs.less" />
     <Content Include="questionnaire\content\designer-start\wb-variables.less" />
-    <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="questionnaire\content\designer-start\designer-start.css.map">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
@@ -764,7 +761,6 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />

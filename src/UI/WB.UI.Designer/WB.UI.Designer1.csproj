@@ -8,8 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.ank.ini" />
     <None Remove="appsettings.ini" />
     <None Remove="gulpfile.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.ank.ini">
+      <DependentUpon>appsettings.ini</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

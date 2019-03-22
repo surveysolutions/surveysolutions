@@ -1,5 +1,4 @@
 ﻿@using WB.UI.Designer.Resources
-@model WB.UI.Designer.Models.ResetPasswordConfirmationModel
 
 @{
     ViewBag.Title = AccountResources.PasswordReset;
@@ -15,7 +14,3 @@
         <a class="btn btn-success btn-lg" href="@Url.Action("Login")">@AccountResources.BackToLogin</a>
     </div>
 </form>
-
-@section Scripts {
-    @Scripts.Render("~/editform")
-}
