@@ -138,6 +138,7 @@
         <ModalFrame ref="editQuantityModal"
                     :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
+            <p v-if="!canEditQuantity"><b >{{ $t("Assignments.AssignmentSizeInWebMode")}}</b></p>
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
@@ -155,7 +156,8 @@
                            autocomplete="off"
                            @keyup.enter="updateQuantity"
                            id="newQuantity"
-                           placeholder="1">
+                           placeholder="1"
+                           :disabled="!canEditQuantity">
 
                     <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
                 </div>
@@ -163,7 +165,7 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-primary"
-                        :disabled="!showSelectors"
+                        :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{$t("Common.Save")}}</button>
                 <button type="button"
                         class="btn btn-link"
@@ -192,7 +194,8 @@ export default {
             newResponsibleId: null,
             editedRowId: null,
             editedQuantity: null,
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            canEditQuantity: null
         };
     },
 
@@ -260,7 +263,7 @@ export default {
                 {
                     data: "quantity",
                     name: "Quantity",
-                    class: "type-numeric pointer",
+                    class: "type-numeric pointer editable",
                     searchHighlight: false,
                     searchable: false,
                     title: this.$t("Assignments.Size"),
@@ -344,8 +347,33 @@ export default {
                 {
                     data: "isAudioRecordingEnabled",
                     name: "IsAudioRecordingEnabled",
+                    class: "pointer editable",
                     title: this.$t("Assignments.IsAudioRecordingEnabled"),
                     tooltip: this.$t("Assignments.Tooltip_Table_IsAudioRecordingEnabled"),
+                    searchable: false,
+                    render(data) {
+                        return data ? self.$t("Common.Yes") : self.$t("Common.No");
+                    }
+                },
+                {
+                    data: "email",
+                    name: "Email",
+                    title: this.$t("Assignments.Email"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Email"),
+                    searchable: false
+                },
+                {
+                    data: "password",
+                    name: "Password",
+                    title: this.$t("Assignments.Password"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Password"),
+                    searchable: false
+                },
+                {
+                    data: "webMode",
+                    name: "WebMode",                    
+                    title: this.$t("Assignments.WebMode"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_WebMode"),
                     searchable: false,
                     render(data) {
                         return data ? self.$t("Common.Yes") : self.$t("Common.No");
@@ -366,7 +394,7 @@ export default {
 
             var tableOptions = {
                 rowId: function(row){
-                    return `row${row.id}`
+                    return `row_${row.id}`
                 },
                 deferLoading: 0,
                 order: [[defaultSortIndex, "desc"]],
@@ -506,10 +534,16 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            const parsedRowId = rowId.replace('row', '');
+            const parsedRowId = rowId.replace('row_', '');
             if (columnName === "Quantity" && this.config.isHeadquarter && !this.showArchive.key) {
                 this.editedRowId = parsedRowId;
                 this.editedQuantity = cellData;
+
+                this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
+                    this.canEditQuantity = data.CanChangeQuantity;
+                    this.$refs.editQuantityModal.modal("show");
+                });
+
                 this.$refs.editQuantityModal.modal("show");
             }
             if (columnName === "IsAudioRecordingEnabled" && this.config.isHeadquarter && !this.showArchive.key) {
@@ -519,7 +553,7 @@ export default {
                     this.$refs.editAudioEnabledModal.modal("show");
                 });
             }
-        },
+        },        
         async updateQuantity() {
             const validationResult = await this.$validator.validateAll();
 

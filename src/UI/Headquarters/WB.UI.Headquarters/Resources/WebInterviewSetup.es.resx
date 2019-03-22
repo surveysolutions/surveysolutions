@@ -144,9 +144,6 @@
   <data name="StopWebInterview" xml:space="preserve">
     <value>Detener Entrevista Web</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>Habilitar la protección contra el spam</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Configuración de la entrevista Web</value>
   </data>

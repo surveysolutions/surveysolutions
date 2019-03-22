@@ -161,10 +161,13 @@ $width-right-menu-small: 380px;
 .badge.badge_nav{
 	background-color: #2a81cb;
 	border-radius: 100%;
-	padding: 9px;
+	padding: 9px 0;
 	@include absolute($top: 15px, $left: 5px);
-	font-size: 18px;
+	font-size: 16px;
 	line-height: 20px;
+	min-width: 38px;
+	overflow: hidden;
+    text-align: center;
 }
 .navbar-header {
 	text-align: center;

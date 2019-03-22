@@ -1,0 +1,230 @@
+@import "variables";
+@import "mixins";
+.button-wrapper{
+	margin-top: 15px;
+}
+.export-sets{
+	margin-bottom: 45px;
+	p{
+		max-width: 520px;
+	}
+}
+.no-sets{
+	font-size: 21px;
+	line-height: 23px;
+	color: $gray_light;
+}
+.gray-block{
+	background-color: $gray-highlighting;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	position: relative;
+	.close{
+		opacity: 1;
+		margin-right: 10px;
+		margin-top: 10px;
+	}
+	.wrapper-data{
+		border-radius: 5px;
+		&:first-of-type{
+			padding-bottom: 0;
+		}
+		&:last-of-type{
+			background-color: #e6e9e9;
+		}
+		&.download-block{
+			background-color: #d1dfeb;
+		}
+		&.block-contains-error{
+			background-color: $red-super-light;
+		}
+		.format-data{
+			.action-block{
+				margin-top: 15px;
+				&.wrapper-progress{
+					margin-top: 20px;
+					margin-bottom: 5px;
+				}
+			}
+		}
+	}	
+}
+.selected-data-range,
+.format-data{
+	min-height: 41px;
+	font: 14px/18px "RobotoBold";
+	position: relative;
+}
+.export-row{
+	.format-data{
+		&:before{
+			background: url("#{$assetsPath}/img/Exprt-icons.png") no-repeat;
+			background-size: 63px 240px;
+			@include image-2x("#{$assetsPath}/img/Exprt-icons.png", 63px, 240px);
+			background-position: 5px -175px;
+		}
+		&.onedrive-icon:before{
+			background-position: 5px -5px;
+		}
+		&.dropbox-icon:before{
+			background-position: 5px -63px;
+		}
+		&.ftp-icon:before{
+			background-position: 5px -120px;
+		}
+	}
+}
+
+.export {
+	.page-header{
+		margin-bottom: 30px;
+	}
+	h3{
+		margin-bottom: 15px;
+	}
+}
+.export-sets {
+	h3 + p{
+		margin-bottom: 20px;
+	}
+}
+.report {
+	font-size: 14px;
+	line-height: 18px;
+	.format-data{
+		margin-bottom: 5px;
+		padding-left: 0;
+		&:before{
+			left: -80px;
+		}
+	}
+	
+	.wrapper-data{
+		padding: 10px 40px 10px 100px;
+	}
+	.gray-text-row{
+		margin-bottom: 10px;
+	}
+	.status{
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font: 12px/14px $trebuchet_bold;
+		margin-right: 10px;
+		display: inline-block;
+	}
+	.cancelable-progress{
+		margin-top: 4px;
+		margin-bottom: 5px;
+	}
+	.allign-left{
+		float: left;
+	}
+	.download{
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
+}
+.archive-info{
+	font: 12px/18px "RobotoRegular";
+	color: #969a9a;
+	letter-spacing: 1px;
+	word-break: break-word;
+	&:only-child{
+		max-width: auto;
+	}
+}
+.structure-block{
+	margin-bottom: 30px;
+	h5{
+		margin-bottom: 15px;
+	}
+	.bootstrap-select{
+		left: -10px;
+	}
+	.form-group{
+		margin-bottom: 5px;
+	}
+	label{
+		font: 14px/16px "RobotoRegular";
+		font-weight: normal;
+		color: $gray-highlight-font;
+	}
+	input.checkbox-filter{
+		& ~ label{
+			&:hover, &:focus{
+				color: $gray_text
+			}
+	  		.tick {
+	  			left: -5px;
+	  		}
+		}
+		&:checked ~ label{
+			color: $gray_text;
+		}
+	}
+	.form-date{
+		float: left;
+		& + .form-date{
+			margin-left: 20px;
+		}
+	}
+}
+.structure-block{
+	.data-type-row {
+		margin-left: -10px;
+		position: relative;
+		background-color: #edeff0;
+		label{	
+			display: block;
+			cursor: pointer;
+			width: 100%;
+			margin-bottom: 0;
+			padding: 10px 15px;
+			height: 61px;
+		}
+		&:nth-of-type(2n){
+			background-color: #f8f9f9;
+		}
+		.format-data{
+			max-width: calc(100% - 30px);
+			float: left;
+			padding-top: 11px;
+			padding-bottom: 11px;
+		}
+		.tick{
+			float: left;
+			margin-top: 11px;
+		}
+	}
+}
+.export-row{
+	@extend .data-type-row;
+	
+}
+@media (max-width: $screen-sm-min){
+	.report{
+		.cancelable-progress{
+			width: 100%;
+		}
+		
+	}
+	.structure-block .form-date{
+		float: none;
+		& + .form-date{
+			margin-left: 0;
+		}
+	}
+}
+@media (max-width: 600px){
+	.report{
+		.archive-info{
+			float: left;
+			max-width: 100%;
+			margin-left: 0;
+			margin-top: 10px;
+		}
+		&.gray-block{
+			padding-left: 0;
+		}
+	}
+}

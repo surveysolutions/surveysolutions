@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -33,16 +34,19 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
+        private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         public QuestionnairesApiController(
             ICommandService commandService, IAuthorizedUser authorizedUser, ILogger logger,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IDeleteQuestionnaireService deleteQuestionnaireService)
+            IDeleteQuestionnaireService deleteQuestionnaireService,
+            IWebInterviewConfigProvider webInterviewConfigProvider)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.deleteQuestionnaireService = deleteQuestionnaireService;
+            this.webInterviewConfigProvider = webInterviewConfigProvider;
         }
 
         [HttpPost]
@@ -76,7 +80,8 @@ namespace WB.UI.Headquarters.Controllers
                     LastEntryDate = x.LastEntryDate,
                     ImportDate = x.ImportDate,
                     IsDisabled = x.Disabled,
-                    IsAudioRecordingEnabled = x.IsAudioRecordingEnabled
+                    IsAudioRecordingEnabled = x.IsAudioRecordingEnabled,
+                    WebModeEnabled = this.webInterviewConfigProvider.Get(new QuestionnaireIdentity(x.QuestionnaireId, x.Version))?.Started ?? false //not efficient
                 })
             };
         }

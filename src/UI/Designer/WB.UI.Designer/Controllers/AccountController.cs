@@ -21,7 +21,6 @@ using WebMatrix.WebData;
 namespace WB.UI.Designer.Controllers
 {
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-    [RequireHttps]
     public class AccountController : BaseController
     {
         private readonly ISystemMailer mailer;

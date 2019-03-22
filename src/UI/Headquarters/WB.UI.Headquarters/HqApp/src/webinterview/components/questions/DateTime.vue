@@ -102,7 +102,7 @@
                         else {
                             this.$store.dispatch('answerDateQuestion', { 
                                 identity: this.$me.id,
-                                date: moment().format(DateFormats.dateTime)
+                                date: moment().toJSON()
                             });
                         }
                     }

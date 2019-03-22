@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         
         int GetCountOfAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
 
+        int GetCountOfAssignments(QuestionnaireIdentity questionnaireId);
+        
         AssignmentApiDocument MapAssignment(Assignment assignment);
 
         void Reassign(int assignmentId, Guid responsibleId);

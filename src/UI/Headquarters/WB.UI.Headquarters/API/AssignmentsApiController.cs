@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -36,6 +38,7 @@ namespace WB.UI.Headquarters.API
         private readonly ICommandTransformator commandTransformator;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -46,7 +49,8 @@ namespace WB.UI.Headquarters.API
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory, 
+            IInvitationService invitationService)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -58,6 +62,7 @@ namespace WB.UI.Headquarters.API
             this.commandTransformator = commandTransformator;
             this.questionnaires = questionnaires;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
         }
         
         [Route("")]
@@ -170,6 +175,9 @@ namespace WB.UI.Headquarters.API
             if (request.Quantity < -1)
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
 
+            if(!string.IsNullOrEmpty(assignment.Email) || !string.IsNullOrEmpty(assignment.Password))
+                return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.WebMode);
+
             assignment.UpdateQuantity(request.Quantity);
             this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();
@@ -202,8 +210,20 @@ namespace WB.UI.Headquarters.API
                     quantity = request.Quantity;
                     break;
             }
+            
+            //verify email
+            if (!string.IsNullOrEmpty(request.Email) && AssignmentConstants.EmailRegex.Match(request.Email).Length <= 0)
+                return this.StatusCode(HttpStatusCode.BadRequest);
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity);
+            //verify pass
+            if (!string.IsNullOrEmpty(request.Password) && (request.Password.Length < AssignmentConstants.PasswordLength || AssignmentConstants.PasswordStrength.Match(request.Password).Length <= 0))
+                return this.StatusCode(HttpStatusCode.BadRequest);
+
+            if ((!string.IsNullOrEmpty(request.Email) || !string.IsNullOrEmpty(request.Password)) && request.WebMode != true)
+                return this.StatusCode(HttpStatusCode.BadRequest);
+
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, request.ResponsibleId, quantity, 
+                request.Email, request.Password, request.WebMode);
 
             var untypedQuestionAnswers = JsonConvert.DeserializeObject<List<UntypedQuestionAnswer>>(request.AnswersToFeaturedQuestions);
 
@@ -231,6 +251,8 @@ namespace WB.UI.Headquarters.API
 
             this.assignmentsStorage.Store(assignment, Guid.NewGuid());
             
+            this.invitationService.CreateInvitationForWebInterview(assignment);
+
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(request.ResponsibleId, questionnaireIdentity, assignment.Id, answers);
 
             return this.Ok(new {});
@@ -243,6 +265,10 @@ namespace WB.UI.Headquarters.API
             public Guid ResponsibleId { get; set; }
             public string AnswersToFeaturedQuestions { get; set; }
             public int? Quantity { get; set; }
+
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public bool? WebMode { get; set; }
         }
 
         public class UpdateAssignmentRequest
