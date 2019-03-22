@@ -50,6 +50,11 @@
                             <h5>
                                 {{ this.$t("Assignments.Size") }}
                             </h5>
+                            <div class="instructions-wrapper">
+                                <div class="information-block instruction">
+                                    <p>{{ this.$t("Assignments.SizeInstructions") }}</p>
+                                </div>
+                            </div>
                             <div class="question-unit">
                                 <div class="options-group">
                                     <div class="form-group">
@@ -60,10 +65,8 @@
                                                 maxlength="5"
                                                 type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" />
                                         </div>
-                                    </div>
-                                  
-                                </div>
-                                
+                                    </div>                                  
+                                </div>                                
                             </div>
                         </wb-question>
 
@@ -269,12 +272,14 @@ export default {
                 this.webMode.answer &&
                 (this.sizeQuestion.answer == "1" ||
                     (this.sizeQuestion.answer !== "1" &&                 
-                        (this.emailQuestion.answer == null || this.emailQuestion.answer == "") && 
-                        (this.passwordQuestion.answer == null || this.passwordQuestion.answer == "")) )
+                        (this.emailQuestion.answer == null || this.emailQuestion.answer == "")))
 
             var passwordIsValidExtra = !this.webMode.answer ||
              (this.webMode.answer && 
-                (this.passwordQuestion.answer == '?' || (this.passwordQuestion.answer !== null && this.passwordQuestion.answer.length >= 6)))
+                (this.passwordQuestion.answer == null ||
+                  (this.passwordQuestion.answer == '?' || 
+                   this.passwordQuestion.answer == '' || 
+                   this.passwordQuestion.answer.length >= 6)))
 
             validationResult = validationResult && sizeIsValidExtra && passwordIsValidExtra 
 

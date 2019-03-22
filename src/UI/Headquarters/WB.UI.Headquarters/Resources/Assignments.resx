@@ -349,6 +349,6 @@
     <value>Enter Email</value>
   </data>
   <data name="SizeInstructions" xml:space="preserve">
-    <value>Must be a number, -1 for unlimited, 1 if email or password were specified</value>
+    <value>Must be a number, -1 for unlimited, 1 if email is specified</value>
   </data>
 </root>
