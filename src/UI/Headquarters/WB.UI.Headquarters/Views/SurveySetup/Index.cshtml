@@ -29,7 +29,9 @@
         var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
-        var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
+        var $webInterviewUrl = '@Url.Action("Settings", "WebInterviewSetup")';
+        var $sendInvitationsUrl = '@Url.Action("SendInvitations", "WebInterviewSetup")';
+        var $downloadLinksUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "LinksExport", action = "Download"})';
         var $questionnairesApiEndpoint = '@Url.Content("~/api/v1/questionnaires")';
 
         var notifier = new Notifier();
@@ -38,7 +40,7 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
                 $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint);
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl, $questionnairesApiEndpoint, $sendInvitationsUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -49,7 +51,7 @@
                 return [
                     {
                         data: "title",
-                        name: "Title", // case-sensitive!
+                        name: "Title", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "title",
                         render: function(data, type, row) {
                             return (row.allowCensusMode === true ? "<span class='census-icon'></span>" : "") + data;
@@ -57,12 +59,12 @@
                     },
                     {
                         data: "version",
-                        name: "Version",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name: "Version",// case-sensitive! 
                         "class": "parameters"
                     },
                     {
                         data: "importDate",
-                        name: "ImportDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        name: "ImportDate",// case-sensitive! 
                         "class": "date",
                         render: function (data, type, row) {
                             return model.toLocalDate(data);
@@ -82,6 +84,15 @@
                         "class": "date",
                         render: function (data, type, row) {
                             return model.toLocalDate(data);
+                        }
+                    },
+                    {
+                        data: "webModeEnabled",
+                        name: "WebModeEnabled",// case-sensitive! 
+                        "class": "parameters",
+                        "orderable": false,
+                        render: function (data, type, row) {
+                            return (data === true ? '@Common.Yes' : '@Common.No');
                         }
                     }
                 ];
@@ -141,6 +152,18 @@
                             items["webSetup"] = {
                                 name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
+                            }
+                        }
+                        if (!selectedRow.isDisabled) {
+                            items["downloadLinks"] = {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.DownloadLinks)",
+                                callback: model.downloadLinks
+                            }
+                        }
+                        if (!selectedRow.isDisabled) {
+                            items["sendInvitations"] = {
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.SendInvitations)",
+                                callback: model.sendInvitations
                             }
                         }
                         if (!selectedRow.isDisabled) {
@@ -225,13 +248,14 @@
             <table id="data_holder" class="table table-striped table-bordered table-hover table-ordered"
                    data-order="[[ 2, &quot;desc&quot; ]]" data-searching="true">
                 <thead>
-                <tr>
-                    <th>@Dashboard.Questionnaire</th>
-                    <th>@Dashboard.Version</th>
-                    <th>@Dashboard.ImportDate</th>
-                    <th>@Dashboard.LastEntryDate</th>
-                    <th>@Dashboard.CreationDate</th>
-                </tr>
+                    <tr>
+                        <th>@Dashboard.Questionnaire</th>
+                        <th>@Dashboard.Version</th>
+                        <th>@Dashboard.ImportDate</th>
+                        <th>@Dashboard.LastEntryDate</th>
+                        <th>@Dashboard.CreationDate</th>
+                        <th class="sorting_disabled">@Dashboard.WebMode</th>
+                    </tr>
                 </thead>
             </table>
         </div>

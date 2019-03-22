@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute("WebInterview.Start", "WebInterview/{id}/Start", new { controller = "WebInterview", action = "Start" },
-                constraints: new { id = new IntRouteConstraint() });
+                constraints: new {  });
             routes.MapRoute("WebInterview.Interview", "WebInterview/Interview/{id}", new { controller = "WebInterview", action = "Interview" },
                 constraints: new { id = new GuidRouteConstraint() });
 
@@ -31,6 +31,7 @@ namespace WB.UI.Headquarters
 
             routes.MapRoute("WebInterview.ImageAnswering", "WebInterview/image", new { controller = "WebInterview", action = "Image" });
             routes.MapRoute("WebInterview.AudioAnswering", "WebInterview/audio", new { controller = "WebInterview", action = "Audio" });
+            routes.MapRoute("WebInterview.LinkSending", "WebInterview/emailLink", new { controller = "WebInterview", action = "EmailLink" });
 
             routes.MapRoute("Review", "Interview/Review/{id}", new
             {

@@ -669,5 +669,79 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(assignmentRows, Has.One.Items);
             Assert.That(assignmentRows[0].Row, Is.EqualTo(expectedRowIndex));
         }
+
+        [Test]
+        public void when_getting_assignment_row_and_file_has_email_and_password_values_should_return_row_with_quantity_preloading_value()
+        {
+            //arrange
+            var email = "test@example.com";
+            var emailColumn = "_Email";
+
+            var password = "password";
+            var passwordColumn = "_password";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(
+                rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(emailColumn, email), Create.Entity.PreloadingValue(passwordColumn, password)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            
+            //assert
+            Assert.That(assignmentRows[0].Email, Is.Not.Null);
+            Assert.That(assignmentRows[0].Email.Value, Is.EqualTo(email));
+            Assert.That(assignmentRows[0].Email.Column, Is.EqualTo(emailColumn));
+
+            Assert.That(assignmentRows[0].Password, Is.Not.Null);
+            Assert.That(assignmentRows[0].Password.Value, Is.EqualTo(password));
+            Assert.That(assignmentRows[0].Password.Column, Is.EqualTo(passwordColumn));
+        }
+
+        [Test]
+        public void when_getting_assignment_row_and_file_has_webmode_value_should_return_row_with_webmode_preloading_value()
+        {
+            //arrange
+            var columnValue = "1";
+            var column = "_webmode";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(column, columnValue)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].WebMode, Is.Not.Null);
+            Assert.That(assignmentRows[0].WebMode.Value, Is.EqualTo(columnValue));
+            Assert.That(assignmentRows[0].WebMode.WebMode, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void when_getting_assignment_row_and_file_has_webmode_empty_value_should_return_row_with_webmode_preloading_value()
+        {
+            //arrange
+            var columnValue = "";
+            var column = "_webmode";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(column, columnValue)));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].WebMode, Is.Not.Null);
+            Assert.That(assignmentRows[0].WebMode.Value, Is.EqualTo(columnValue));
+            Assert.That(assignmentRows[0].WebMode.WebMode, Is.EqualTo(null));
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
 
+        public AssignmentEmail Email { get; set; }
+        public AssignmentPassword Password { get; set; }
+
+        public AssignmentWebMode WebMode { get; set; }
+
         public override string ToString() =>
             $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
     }
@@ -149,5 +154,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     public class AssignmentQuantity : AssignmentValue
     {
         public int? Quantity { get; set; }
+    }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentEmail : AssignmentValue { }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentPassword : AssignmentValue { }
+
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentWebMode : AssignmentValue
+    {
+        public bool? WebMode { get; set; }
     }
 }

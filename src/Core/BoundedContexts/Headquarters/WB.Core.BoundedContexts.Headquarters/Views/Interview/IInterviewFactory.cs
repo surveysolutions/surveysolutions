@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Supercluster;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -12,22 +11,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged);
         void RemoveInterview(Guid interviewId);
 
-        InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-
-        InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-        
         InterviewGpsAnswer[] GetGpsAnswers(Guid questionnaireId, long? questionnaireVersion, 
-            string gpsQuestionVariableName, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId);
+            string gpsQuestionVariableName, int? maxAnswersCount, Guid? supervisorId);
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         void Save(InterviewState interviewState);
         InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);
-
-        void SaveGeoLocation(Guid interviewId, Identity questionIdentity, double latitude, double longitude,
-            DateTimeOffset timestamp);
-        void RemoveGeoLocations(Guid interviewId, Identity[] identities);
-        void EnableGeoLocationAnswers(Guid interviewId, Identity[] identities, bool isEnabled);
     }
 }

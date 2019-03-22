@@ -213,7 +213,7 @@
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
                   onSuccess(data);
             } else {
-                if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException != null) {
+                if (!Supervisor.Framework.Objects.isUndefined(data.DomainException) && data.DomainException !== null) {
                     self.ShowError(data.DomainException);
                 }
                 else

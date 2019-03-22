@@ -31,12 +31,20 @@ header > .red-line{
         }
     }
 }
-.under-construction .page-header{
-    background: url("../img/logo_under_constraction.jpg") 0 100px no-repeat;
-    padding-left: 100px;
-    padding-top: 100px;
-    p{
-        font-size: 12px;
-        line-height: 14px;
+.under-construction{
+    .page-header{
+        background: url("../img/logo_under_constraction.jpg") 0 100px no-repeat;
+        padding-left: 100px;
+        padding-top: 100px;
+        p{
+            font-size: 12px;
+            line-height: 14px;
+        }
+    }
+    @media (max-width: 1210px){
+        .navbar .navbar-header .navbar-brand .brand-name{
+            display: inline-block;
+            padding: 15px 10px;
+        }
     }
 }

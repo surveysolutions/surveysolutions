@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,6 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         SqlitePlainStorage<AssignmentDocument, int>,
         IAssignmentDocumentsStorage
     {
+        // sql support max 999 parameters in query
+        private const int MaxParametersInQueryCount = 999;
+
         private readonly IEncryptionService encryptionService;
 
         public AssignmentDocumentsStorage(ILogger logger, IFileSystemAccessor fileSystemAccessor,
@@ -127,20 +132,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public IReadOnlyCollection<AssignmentDocument> LoadAll(Guid? responsibleId)
         {
+            return responsibleId.HasValue
+                ? Query(assignment => assignment.ResponsibleId == responsibleId.Value).ToReadOnlyCollection()
+                : Query(assignment => true).ToReadOnlyCollection();
+        }
+
+        public IEnumerable<AssignmentDocument> Query(Expression<Func<AssignmentDocument, bool>> query)
+        {
             return RunInTransaction(assignmentTable =>
             {
                 var assignments = assignmentTable;
 
-                assignments = responsibleId == null
-                    ? assignments
-                    : assignments.Where(ass => ass.ResponsibleId == responsibleId);
+                assignments = assignments.Where(query);
 
-                var ids = assignments.ToList().Select(a => a.Id).ToArray();
+                var ids = assignments.Select(a => a.Id);
 
-                var answersLookup = assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                    .Where(a => a.IsIdentifying && ids.Contains(a.AssignmentId))
-                    .Select(DecryptedAnswer)
-                    .ToLookup(a => a.AssignmentId);
+                var answers = new List<AssignmentDocument.AssignmentAnswer>();
+
+                foreach (var batchIds in ids.Batch(MaxParametersInQueryCount))
+                {
+                    answers.AddRange(
+                        assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                            .Where(a => a.IsIdentifying && batchIds.Contains(a.AssignmentId))
+                            .Select(DecryptedAnswer)
+                    );
+                }
+
+                var answersLookup = answers.ToLookup(a => a.AssignmentId);
 
                 IEnumerable<AssignmentDocument> FillAnswers()
                 {
@@ -154,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     }
                 }
 
-                return FillAnswers().ToReadOnlyCollection();
+                return FillAnswers();
             });
         }
 

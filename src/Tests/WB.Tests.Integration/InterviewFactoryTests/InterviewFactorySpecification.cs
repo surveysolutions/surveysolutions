@@ -60,7 +60,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
-                    typeof(InterviewFlagMap)
+                    typeof(InterviewFlagMap),
+                    typeof(InterviewGpsMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
             Abc.SetUp.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
@@ -138,10 +139,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected InterviewFactory CreateInterviewFactory()
         {
-            return new InterviewFactory(
-                summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork,
-                interviewFlagsStorage: this.interviewFlagsStorage);
+            return new InterviewFactory(sessionProvider: this.UnitOfWork);
         }
         
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum

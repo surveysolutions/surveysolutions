@@ -32,6 +32,7 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
         return Execute-MSBuild $AndroidProject $BuildConfiguration @(
             "/p:VersionCode=$VersionCode"
             "/p:ApkOutputPath=$([System.IO.Path]::GetFullPath($OutFileName))"
+            "/restore"
 
             if(-not $NoCleanUp.IsPresent) {
                 '/t:Clean;SignAndroidPackage;MoveApkFile'
