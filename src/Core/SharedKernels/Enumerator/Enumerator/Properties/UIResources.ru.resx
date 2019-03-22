@@ -180,6 +180,9 @@
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку {0} у зависимых списков?</value>
   </data>
+  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить строку у зависимого списка?</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>Нет</value>
   </data>

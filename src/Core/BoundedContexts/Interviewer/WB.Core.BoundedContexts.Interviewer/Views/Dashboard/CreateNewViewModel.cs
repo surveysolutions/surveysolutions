@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             var dbQuestionnaires = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
             var dbAssignments = this.assignmentsRepository.LoadAll();
-
+            
             if (dbQuestionnaires.Count > 0 || dbAssignments.Count > 0)
             {
                 var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();

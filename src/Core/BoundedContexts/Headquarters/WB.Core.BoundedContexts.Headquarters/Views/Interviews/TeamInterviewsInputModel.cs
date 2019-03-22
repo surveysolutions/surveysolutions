@@ -14,5 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
         public Guid? ViewerId { get; set; }
         public string SearchBy { get; set; }
         public int? AssignmentId { get; set; }
+        public DateTime? UnactiveDateStart { get; set; }
+        public DateTime? UnactiveDateEnd { get; set; }
     }
 }

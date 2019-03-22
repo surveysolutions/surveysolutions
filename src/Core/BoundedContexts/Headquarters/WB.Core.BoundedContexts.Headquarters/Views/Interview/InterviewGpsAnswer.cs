@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public Guid EntityId { get; set; }
-        public DateTime? Timestamp { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
         public InterviewStatus Status { get; set; }
         public bool Idenifying { get; set; }
 

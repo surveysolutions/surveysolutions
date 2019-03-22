@@ -90,6 +90,56 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         }
 
         [Test]
+        public async Task when_timestamp_question_is_answered_should_use_origin_date_as_answer()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            var originDate = new DateTimeOffset(2010, 5, 31, 10, 1, 1, TimeSpan.FromHours(-2));
+            await denormalizer.Handle(Create.Event.DateTimeQuestionAnswered(interviewId,
+                    Create.Identity(timestampQuestionId),
+                    originDate: originDate,
+                    answer: originDate.UtcDateTime // pretend that tablet was in the UTC timezone
+                    )
+                .ToPublishedEvent<DateTimeQuestionAnswered>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter) command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Timestamp));
+            Assert.That(commandParameter.Value, Is.EqualTo(originDate.DateTime));
+        }
+
+        [Test]
+        public async Task when_date_question_is_answered_should_use_answer_date_as_answer()
+        {
+            DbCommand command = null;
+            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
+
+            var originDate = new DateTimeOffset(2010, 5, 31, 10, 1, 1, TimeSpan.FromHours(-2));
+            await denormalizer.Handle(Create.Event.DateTimeQuestionAnswered(interviewId,
+                    Create.Identity(dateQuestionId),
+                    originDate: originDate,
+                    answer: originDate.UtcDateTime // pretend that tablet was in the UTC timezone
+                )
+                .ToPublishedEvent<DateTimeQuestionAnswered>());
+
+            await denormalizer.SaveStateAsync(CancellationToken.None);
+
+            Assert.That(command, Is.Not.Null);
+            Assert.That(command.CommandText, Is.Not.Null);
+
+
+            NpgsqlParameter commandParameter = (NpgsqlParameter)command.Parameters[0];
+            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Timestamp));
+            Assert.That(commandParameter.Value, Is.EqualTo(originDate.UtcDateTime));
+        }
+
+        [Test]
         public async Task when_get_add_roster_on_client_event_should_raise_interview_add_command()
         {
             DbCommand command = null;
@@ -313,7 +363,9 @@ namespace WB.Services.Export.Tests.InterviewDataExport
                     {
                         Create.TextListQuestion(textListQuestionId, "text_list_q")
                     }),
-                    Create.Variable(doubleVariableId, VariableType.Double, "double_variabe")
+                    Create.Variable(doubleVariableId, VariableType.Double, "double_variabe"),
+                    Create.DateTimeQuestion(timestampQuestionId, variable: "timestamp", isTimestamp: true),
+                    Create.DateTimeQuestion(dateQuestionId, variable: "date", isTimestamp: false),
                 })
             );
             return questionnaireDocument;
@@ -332,5 +384,7 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         private readonly Guid realQuestionId = Guid.Parse("41111111-1111-1111-1111-111111111111");
         private readonly Guid textListQuestionId = Guid.Parse("51111111-1111-1111-1111-111111111111");
         private readonly Guid doubleVariableId = Guid.Parse("61111111-1111-1111-1111-111111111111");
+        private readonly Guid timestampQuestionId = Guid.Parse("71111111-1111-1111-1111-111111111111");
+        private readonly Guid dateQuestionId = Guid.Parse("81111111-1111-1111-1111-111111111111");
     }
 }

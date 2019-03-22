@@ -392,5 +392,50 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0054_MaxInterviewsCountByAssignmentExeeded", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is not valid.
+        /// </summary>
+        public static string PL0055_InvalidEmail {
+            get {
+                return ResourceManager.GetString("PL0055_InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is not valid. Has to be not less than 6 characters.
+        /// </summary>
+        public static string PL0056_InvalidPassword {
+            get {
+                return ResourceManager.GetString("PL0056_InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments with provided email allowed quantity is 1.
+        /// </summary>
+        public static string PL0057_IncosistentQuantityAndEmail {
+            get {
+                return ResourceManager.GetString("PL0057_IncosistentQuantityAndEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Email.
+        /// </summary>
+        public static string PL0058_IncosistentWebmodeAndEmail {
+            get {
+                return ResourceManager.GetString("PL0058_IncosistentWebmodeAndEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Password.
+        /// </summary>
+        public static string PL0059_IncosistentWebmodeAndPassword {
+            get {
+                return ResourceManager.GetString("PL0059_IncosistentWebmodeAndPassword", resourceCulture);
+            }
+        }
     }
 }

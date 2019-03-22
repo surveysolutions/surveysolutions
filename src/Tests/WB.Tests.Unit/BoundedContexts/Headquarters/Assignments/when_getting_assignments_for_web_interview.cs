@@ -16,8 +16,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
             Guid supervisorId = Id.g1;
 
-            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity, 1, assigneeSupervisorId: supervisorId);
-            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity, 1, assigneeSupervisorId: supervisorId);
+            var assignment1 = Create.Entity.Assignment(1, questionnaireIdentity, 1, assigneeSupervisorId: supervisorId, webMode: true);
+            var assignment2 = Create.Entity.Assignment(2, questionnaireIdentity, 1, assigneeSupervisorId: supervisorId, webMode: true);
             var assignment3 = Create.Entity.Assignment(3, questionnaireIdentity, 1, assigneeSupervisorId: null);
 
             var service = Create.Service.AssignmentService(assignment1, assignment2, assignment3);

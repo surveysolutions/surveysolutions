@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
+using System.Data;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
@@ -37,13 +37,17 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             var primaryKeyName = "pk_interview_geo_answers";
 
             Create.Table("interview_geo_answers")
-                .WithColumn("interviewid").AsGuid().PrimaryKey(primaryKeyName)
+                .WithColumn("interviewid").AsFixedLengthString(255).PrimaryKey(primaryKeyName)
                 .WithColumn("questionid").AsGuid().PrimaryKey(primaryKeyName)
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("latitude").AsDouble()
                 .WithColumn("longitude").AsDouble()
-                .WithColumn("timestamp").AsDateTimeOffset().Nullable()
+                .WithColumn("timestamp").AsString().Nullable()
                 .WithColumn("isenabled").AsBoolean().WithDefaultValue(true);
+
+            Create.ForeignKey("fk_interviewsummary_interview_geo_answer").FromTable("interview_geo_answers")
+                .ForeignColumn("interviewid").ToTable("interviewsummaries").PrimaryColumn("summaryid")
+                .OnDelete(Rule.Cascade);
 
             Execute.WithConnection((connection, transaction) =>
             {
@@ -52,16 +56,20 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 if(!npgsqlConnection.IsTableExistsInSchema("readside", "interviews_view")) return;
 
                 var geoAnswers = npgsqlConnection.Query<InterviewGpsAnswer>(
-                        "SELECT interviewid, entityid, rostervector, asgps as answer, isenabled  FROM \"readside\".\"interviews_view\" where asgps is not null")
+                        @"SELECT interviewid, entityid, rostervector, asgps as answer, isenabled " 
+                        + @"FROM ""readside"".""interviews_view"" where asgps is not null")
                     .ToArray();
 
-                var copyFromCommand = "COPY  \"readside\".\"interview_geo_answers\" (interviewid, questionid, rostervector, latitude, longitude, timestamp, isenabled) FROM STDIN BINARY;";
+                var copyFromCommand = @"COPY  ""readside"".""interview_geo_answers"" " 
+                                      + "(interviewid, questionid, rostervector, latitude, longitude, timestamp, isenabled) " 
+                                      + "FROM STDIN BINARY;";
+
                 using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
                 {
                     foreach (var geoAnswer in geoAnswers)
                     {
                         writer.StartRow();
-                        writer.Write(geoAnswer.InterviewId, NpgsqlDbType.Uuid);
+                        writer.Write(geoAnswer.InterviewId.ToString("N"), NpgsqlDbType.Char);
                         writer.Write(geoAnswer.EntityId, NpgsqlDbType.Uuid);
                         writer.Write(geoAnswer.RosterVector, NpgsqlDbType.Text);
 
@@ -69,23 +77,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                         
                         writer.Write(gps.Latitude, NpgsqlDbType.Double);
                         writer.Write(gps.Longitude, NpgsqlDbType.Double);
-                        writer.Write(gps.Timestamp, NpgsqlDbType.TimestampTz);
+                        writer.Write(gps.Timestamp.ToString(), NpgsqlDbType.Text);
                         writer.Write(geoAnswer.IsEnabled, NpgsqlDbType.Boolean);
                     }
 
                     writer.Complete();
                 }
-
-                connection.Execute("DROP VIEW readside.interviews_view");
-                connection.Execute(@"create or replace view readside.interviews_view as 
-                select s.interviewid, q.entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings,
-                    asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asbool,
-                    asyesno, asaudio, asarea, q.entity_type, q.parentid, q.question_type
-                from readside.interviews i
-                join readside.interviews_id s on s.id = i.interviewid
-                join readside.questionnaire_entities q on q.id = i.entityid");
-
-                connection.Execute("ALTER TABLE \"readside\".\"interviews\" DROP COLUMN asgps");
             });
         }
 
