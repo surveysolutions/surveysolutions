@@ -32,13 +32,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Content, Is.EqualTo(invalidPassword));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
-
-        public void when_verify_answers_and_password_contains_incorrect_characters_should_return_PL0056_error()
+        
+        [Test]
+        [TestCase("AWE232@")]
+        [TestCase("      ")]
+        public void when_verify_answers_and_password_contains_incorrect_characters_should_return_PL0056_error(string invalidPassword)
         {
             // arrange
             var fileName = "mainfile.tab";
-            var invalidPassword = "AWE232@";
-
+            
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.TextQuestion()}));
