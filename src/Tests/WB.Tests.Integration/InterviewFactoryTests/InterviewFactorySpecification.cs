@@ -128,15 +128,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                 document.Id = document.PublicKey.FormatGuid();
                 questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
+                
                 unitOfWork.AcceptChanges();
             }
         }
-
-        protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId, Guid questionnaireId, long version = 1) =>
-                factory.GetInterviewEntities(interviewId).ToArray();
-
-        protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, QuestionnaireIdentity questionnaireId, Guid interviewId) =>
-                factory.GetInterviewEntities(interviewId).ToArray();
 
         protected InterviewFactory CreateInterviewFactory()
         {

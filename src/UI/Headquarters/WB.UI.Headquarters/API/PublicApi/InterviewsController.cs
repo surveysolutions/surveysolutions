@@ -5,7 +5,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -41,7 +40,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IAuthorizedUser authorizedUser;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
-        private readonly IInterviewStateFixer interviewStateFixer;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -53,8 +51,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewDiagnosticsFactory diagnosticsFactory,
-            IInterviewStateFixer interviewStateFixer) : base(logger)
+            IInterviewDiagnosticsFactory diagnosticsFactory) : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -66,7 +63,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.authorizedUser = authorizedUser;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.diagnosticsFactory = diagnosticsFactory;
-            this.interviewStateFixer = interviewStateFixer;
         }
 
 
@@ -375,20 +371,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             
             return this.TryExecuteCommand(new DeleteInterviewCommand(id, this.authorizedUser.Id));
         }
-
-        /// <summary>
-        /// Rebuild interview by event stream
-        /// </summary>
-        /// <param name="id">Interview Id</param>
-        [HttpPost]
-        [Route("{id:Guid}/rebuild")]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public HttpResponseMessage RebuildInterviewByEventStream(Guid id)
-        {
-            this.interviewStateFixer.RefreshInterview(id);
-            return Request.CreateResponse(HttpStatusCode.NoContent);
-        }
-
+        
         #endregion
 
         private HttpResponseMessage TryExecuteCommand(InterviewCommand command)

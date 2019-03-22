@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,14 +11,10 @@ using System.Web.Mvc;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
-using Ncqrs.Eventing;
-using Newtonsoft.Json;
-using Refit;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Diag;
+
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -35,12 +29,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
@@ -260,22 +250,6 @@ namespace WB.UI.Headquarters.Controllers
 
                     return this.View(model:
                         $"Successfully repeated status for interview {interviewId.Value.FormatGuid()}");
-                }
-
-                if (this.Request.Form["refreshState"] != null)
-                {
-                    try
-                    {
-                        var fixer = this.serviceLocator.GetInstance<IInterviewStateFixer>();
-                        fixer.RefreshInterview(interviewId.Value);
-                    }
-                    catch (Exception exception)
-                    {
-                        Logger.Error($"Exception while refreshing interview state: {interviewId}", exception);
-                        return this.View(model: $"Exception while refreshing interview state {interviewId.Value.FormatGuid()}");
-                    }
-
-                    return this.View(model: $"Successfully refreshed interview status for {interviewId.Value.FormatGuid()}");
                 }
             }
 
