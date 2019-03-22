@@ -150,11 +150,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             && x.InterviewSummary.ResponsibleId == interviewerId 
                             && x.QuestionnaireItem.QuestionScope == QuestionScope.Interviewer);
 
-        private static class Column
-        {
-            public const string InterviewId = "interviewid";
-        }
-
         private class GpsAnswerQuery
         {
             public InterviewGps Answer { get; set; }

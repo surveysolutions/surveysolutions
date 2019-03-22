@@ -503,6 +503,7 @@ namespace Main.Core.Documents
             doc.Translations = new List<Translation>();
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
 
+            if(this.EntitiesIdMap != null)
             doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
             return doc;
