@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
-                new SpeedReportDenormalizerFunctional(speedReportItems));
+                new SpeedReportDenormalizerFunctional(speedReportItems),
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
     }
 }
