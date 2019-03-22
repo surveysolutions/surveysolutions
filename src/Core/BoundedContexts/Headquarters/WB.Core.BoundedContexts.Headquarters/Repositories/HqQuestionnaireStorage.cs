@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -36,12 +37,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public override void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            base.StoreQuestionnaire(id, version, questionnaireDocument);
-
-            if (questionnaireDocument.IsDeleted) return;
-
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString();
-            
+            questionnaireDocument.EntitiesIdMap = new Dictionary<Guid, int>();
+
             foreach (var composite in questionnaireDocument.Children.TreeToEnumerable(d => d.Children))
             {
                 var question = composite as IQuestion;
@@ -81,9 +79,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 }
 
                 questionnaireItemsWriter.Store(compositeItem);
+                questionnaireDocument.EntitiesIdMap.Add(compositeItem.EntityId, compositeItem.Id);
             }
+
+            base.StoreQuestionnaire(id, version, questionnaireDocument);
         }
-        
+
         public override QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);

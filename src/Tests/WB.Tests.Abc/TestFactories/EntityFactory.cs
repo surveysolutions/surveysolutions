@@ -2073,8 +2073,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
-
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
             => this.PreloadedFile(null, questionnaireOrRosterName, rows);
 
