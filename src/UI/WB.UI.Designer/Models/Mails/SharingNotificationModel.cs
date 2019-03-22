@@ -2,7 +2,7 @@
 
 namespace WB.UI.Designer.Models
 {
-    public class SharingNotificationModel : IEmailNotification
+    public class SharingNotificationModel 
     {
         public ShareChangeType ShareChangeType { get; set; }
 
