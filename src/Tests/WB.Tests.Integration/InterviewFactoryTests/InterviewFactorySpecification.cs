@@ -58,6 +58,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
+                    typeof(InterviewStatisticsReportRowMap),
                     typeof(CumulativeReportStatusChangeMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(InterviewFlagMap),

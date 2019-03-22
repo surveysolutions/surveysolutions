@@ -25,7 +25,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
         private readonly Guid sexQuestion = Id.g2;
         private readonly Guid dwellingQuestion = Id.g3;
 
-        private InterviewFactory factory;
         private SurveyStatisticsReport reporter;
         private const string teamLeadName = "teamLead";
 
@@ -46,8 +45,6 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             );
 
             PrepareQuestionnaire(questionnaire, 1);
-
-            this.factory = CreateInterviewFactory();
 
             Because();
             
