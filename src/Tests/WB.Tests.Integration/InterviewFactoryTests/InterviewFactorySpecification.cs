@@ -113,6 +113,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
                 interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
                 unitOfWork.AcceptChanges();
+                unitOfWork.Session.Clear();
+                interviewSummary.Id = unitOfWork.Session.Get<InterviewSummary>(interviewSummary.SummaryId).Id;
+
             }
         }
 

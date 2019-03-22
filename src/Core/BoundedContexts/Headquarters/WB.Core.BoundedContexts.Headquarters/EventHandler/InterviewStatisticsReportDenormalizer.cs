@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -60,14 +61,25 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
                 .ToList();
 
-            foreach (var identity in questions)
-            {
-                unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-                    .Where(s => s.InterviewId == state.Id
-                                && s.RosterVector == identity.RosterVector.AsString()
-                                && s.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-                    .Delete();
-            }
+
+            unitOfWork.Session.Connection.Execute("delete from readside.report_statistics " +
+                                                  "where interview_id = @interviewId and entity_id = @entityId " +
+                                                  "and rostervector = @rostervector",
+                questions.Select(q => new
+                {
+                    InterviewId = state.Id,
+                    EntityId = questionnaire.EntitiesIdMap[q.Id],
+                    RosterVector = q.RosterVector.AsString()
+                }));
+
+            //foreach (var identity in questions)
+            //{
+            //    unitOfWork.Session.Query<InterviewStatisticsReportRow>()
+            //        .Where(s => s.InterviewId == state.Id
+            //                    && s.RosterVector == identity.RosterVector.AsString()
+            //                    && s.EntityId == questionnaire.EntitiesIdMap[identity.Id])
+            //        .Delete();
+            //}
 
             return state;
         }
@@ -131,15 +143,44 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             if (!IsEligibleQuestion(question)) return;
 
-            this.unitOfWork.Session.SaveOrUpdate(new InterviewStatisticsReportRow
-            {
-                RosterVector = rv.AsString(),
-                EntityId = questionnaire.EntitiesIdMap[questionId],
-                InterviewId = state.Id,
-                Answer = answer.Select(a => (long)a).ToArray(),
-                Type = type,
-                IsEnabled = true
-            });
+            unitOfWork.Session.Connection.Execute(
+                @"insert into readside.report_statistics (interview_id, entity_id, rostervector, answer, ""type"")
+                    values(@interviewid,@entityId,@rostervector, @answer::int8[], @type)
+                    on conflict (interview_id, entity_id, rostervector)
+                    do update set answer = @answer::int8[]", new
+                {
+                    InterviewId = state.Id,
+                    RosterVector = rv.AsString(),
+                    EntityId = questionnaire.EntitiesIdMap[questionId],
+                    Type = type,
+                    answer
+                });
+
+            //var entity = this.unitOfWork.Session.Query<InterviewStatisticsReportRow>()
+            //    .SingleOrDefault(x => x.InterviewId == key.interviewId
+            //                          && x.RosterVector == key.rosterVector
+            //                          && x.EntityId == key.entityId);
+
+            //if (entity == null)
+            //{
+            //    entity = new InterviewStatisticsReportRow
+            //    {
+            //        InterviewId = key.interviewId,
+            //        RosterVector = key.rosterVector,
+            //        EntityId = key.entityId,
+            //        Type = type,
+            //        IsEnabled = true,
+            //        Answer = answer.Select(a => (long)a).ToArray()
+            //    };
+
+            //    this.unitOfWork.Session.Save(entity);
+            //    this.unitOfWork.Session.Flush();
+            //}
+            //else
+            //{
+            //    entity.Answer = answer.Select(a => (long) a).ToArray();
+            //    this.unitOfWork.Session.Update(entity);
+            //}
         }
 
         private void UpdateQuestionEnablement(InterviewSummary summary, bool enabled, Identity[] questionIds)
@@ -151,17 +192,29 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
                 .ToList();
 
-            foreach (var identity in questions)
-            {
-                this.unitOfWork.Session
-                    .Query<InterviewStatisticsReportRow>()
-                    .Where(x => x.InterviewId == summary.Id
-                                && x.RosterVector == identity.RosterVector.AsString()
-                                && x.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-                    .UpdateBuilder()
-                    .Set(x => x.IsEnabled, x => enabled)
-                    .Update();
-            }
+            unitOfWork.Session.Connection.Execute("update readside.report_statistics set is_enabled = @enabled " +
+                                                  "where interview_id = @interviewid " +
+                                                  "and rostervector = @rostervector and entity_id = @entityId",
+                questions.Select(identity => new
+                {
+                    RosterVector = identity.RosterVector.AsString(),
+                    EntityId = questionnaire.EntitiesIdMap[identity.Id],
+                    InterviewId = summary.Id,
+                    enabled
+                }));
+
+            //foreach (var identity in questions)
+            //{
+            //    this.unitOfWork.Session
+            //        .Query<InterviewStatisticsReportRow>()
+            //        .Where(x => x.InterviewId == summary.Id
+            //                    && x.RosterVector == identity.RosterVector.AsString()
+            //                    && x.EntityId == questionnaire.EntitiesIdMap[identity.Id])
+            //        .UpdateBuilder()
+            //        .Set(x => x.IsEnabled, enabled)
+            //        .Update();
+
+            //}
         }
     }
 }

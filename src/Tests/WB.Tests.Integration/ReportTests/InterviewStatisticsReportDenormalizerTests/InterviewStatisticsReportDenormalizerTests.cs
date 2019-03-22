@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,6 +33,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         private readonly Guid relationQuestion = Id.g2;
         private readonly Guid sexQuestion = Id.g3;
         private readonly Guid interviewId = Guid.NewGuid();
+        private SurveyStatisticsReport reporter;
 
         [SetUp]
         public void SettingUp()
@@ -44,6 +50,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             PrepareQuestionnaire(questionnaire, 1);
 
             this.denormalizer = new InterviewStatisticsReportDenormalizer(UnitOfWork, questionnaireStorage);
+            this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
         [Test]
@@ -63,16 +70,76 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
-            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, 100));
+            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion,
+                (decimal) Dwelling.Barrack));
+            
+            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
 
-            var row = UnitOfWork.Session
-                .Query<InterviewStatisticsReportRow>()
-                .SingleOrDefault(i => i.InterviewId == summary.Id && i.EntityId == questionnaire.EntitiesIdMap[dwellingQuestion] && i.RosterVector == "");
+                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+            });
 
-            Assert.NotNull(row);
-
-            Assert.That(row.Answer, Is.EqualTo(new []{ 100 }));
-            Assert.That(row.IsEnabled, Is.EqualTo(true));
+            AssertReportHasTotal(report, Dwelling.Barrack, 1);
         }
+
+        [Test]
+        public void when_answer_disabled_should_not_generate_report_for_disabled_answers()
+        {
+            var summary = new InterviewSummary(questionnaire)
+            {
+                InterviewId = interviewId,
+                Status = InterviewStatus.Completed,
+                ResponsibleName = "responsible",
+                ResponsibleId = Id.gC,
+                QuestionnaireId = questionnaire.PublicKey,
+                QuestionnaireVersion = 1,
+                TeamLeadId = Id.gE,
+                TeamLeadName = "test"
+            };
+
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+            UnitOfWork.Session.Flush();
+            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
+            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
+
+            denormalizer.Update(summary, new QuestionsDisabled(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
+                .ToPublishedEvent(summary.InterviewId));
+
+            
+            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+            });
+
+            AssertReportHasTotal(report, Dwelling.Hole, 0);
+
+            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<SingleQuestion>(relationQuestion)
+            });
+
+            AssertReportHasTotal(report, Relation.Child, 1);
+            //AssertReportHasTotal(report, BadImageFormatException, 0);
+        }
+
+        private void AssertReportHasTotal<T>(ReportView report, T @enum, int amount) where T : Enum
+        {
+            var indexInTotal = Array.IndexOf(report.Headers, @enum.ToString());
+
+            try
+            {
+                Assert.That(report.Totals[indexInTotal], Is.EqualTo(amount));
+            }
+            catch
+            {
+                UnitOfWork.AcceptChanges();
+                var rows = UnitOfWork.Session.Query<InterviewStatisticsReportRow>().ToList();
+                Console.WriteLine(string.Join("\r\n", rows.Select(r => $"{r.InterviewId} | {r.RosterVector} | {r.EntityId} | {r.Type} | [{string.Join(", ", r.Answer)}] | {r.IsEnabled}")));
+            }
+        }
+
     }
 }

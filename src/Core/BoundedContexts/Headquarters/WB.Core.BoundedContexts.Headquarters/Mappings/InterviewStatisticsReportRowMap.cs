@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 m.Property(x => x.EntityId, pm => pm.Column("entity_id"));
                 m.Property(x => x.RosterVector);
             });
-
+            
             Property(m => m.Answer, pm => pm.Type<Int64ArrayType>());
             Property(m => m.IsEnabled, pm => pm.Column("is_enabled"));
             Property(m => m.Type);
