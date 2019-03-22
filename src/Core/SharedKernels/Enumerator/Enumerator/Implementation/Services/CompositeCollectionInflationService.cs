@@ -28,18 +28,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             foreach (var interviewEntityViewModel in newGroupItems)
             {
-                var compositeQuestion = interviewEntityViewModel as ICompositeQuestion;
-                var rosterViewModel = interviewEntityViewModel as RosterViewModel;
-                var plainRosterViewModel = interviewEntityViewModel as PlainRosterViewModel;
-                if (compositeQuestion != null)
+                if (interviewEntityViewModel is ICompositeQuestion compositeQuestion)
                 {
                     InflateOneQuestion(compositeQuestion, allVisibleGroupItems);
                 }
-                else if (rosterViewModel != null)
+                else if (interviewEntityViewModel is RosterViewModel rosterViewModel)
                 {
                     allVisibleGroupItems.AddCollection(rosterViewModel.RosterInstances);
                 }
-                else if (plainRosterViewModel != null)
+                else if (interviewEntityViewModel is PlainRosterViewModel plainRosterViewModel)
                 {
                     allVisibleGroupItems.AddCollection(plainRosterViewModel.RosterInstances);
                 }
