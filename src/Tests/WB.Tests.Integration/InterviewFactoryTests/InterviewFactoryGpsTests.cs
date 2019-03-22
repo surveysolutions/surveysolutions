@@ -12,8 +12,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -482,11 +484,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
             {
                 var interviewSummaryRepositoryLocal = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-                var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(unitOfWork);
+                var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(x =>
+                    x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), null) == Mock.Of<IQuestionnaire>(y =>
+                        y.GetQuestionType(It.IsAny<Guid>()) == QuestionType.GpsCoordinates));
+
+                var geolocationDenormalizer = new InterviewGeoLocationAnswersDenormalizer(unitOfWork, questionnaireStorage);
 
                 foreach (var gpsAnswer in answers)
                 {
-                    interviewSummaryRepositoryLocal.Store(new InterviewSummary
+                    var interviewSummary = new InterviewSummary
                     {
                         Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
                         TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
@@ -496,19 +502,20 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         QuestionnaireId = gpsAnswer.QuestionnaireId.QuestionnaireId,
                         QuestionnaireVersion = gpsAnswer.QuestionnaireId.Version,
                         ResponsibleId = gpsAnswer.ResponsibleId ?? Guid.NewGuid()
-                    }, gpsAnswer.InterviewId.FormatGuid());
+                    };
+                    interviewSummaryRepositoryLocal.Store(interviewSummary, gpsAnswer.InterviewId.FormatGuid());
 
-                    geolocationDenormalizer.Handle(new PublishedEvent<GeoLocationQuestionAnswered>(
+                    geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<GeoLocationQuestionAnswered>(
                         Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
                             Create.Event.GeoLocationQuestionAnswered(gpsAnswer.QuestionId, gpsAnswer.Answer.Latitude,
                                 gpsAnswer.Answer.Longitude))));
 
                     if (gpsAnswer.IsEnabled)
-                        geolocationDenormalizer.Handle(new PublishedEvent<QuestionsEnabled>(
+                        geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<QuestionsEnabled>(
                             Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
                                 Create.Event.QuestionsEnabled(gpsAnswer.QuestionId))));
                     else
-                        geolocationDenormalizer.Handle(new PublishedEvent<QuestionsDisabled>(
+                        geolocationDenormalizer.Update(interviewSummary, new PublishedEvent<QuestionsDisabled>(
                             Create.Fake.PublishableEvent(gpsAnswer.InterviewId,
                                 Create.Event.QuestionsDisabled(new[] {gpsAnswer.QuestionId}))));
                 }

@@ -1,34 +1,40 @@
 ﻿using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal class InterviewGeoLocationAnswersDenormalizer : BaseDenormalizer,
-        IEventHandler<GeoLocationQuestionAnswered>,
-        IEventHandler<QuestionsEnabled>,
-        IEventHandler<QuestionsDisabled>,
-        IEventHandler<AnswersRemoved>,
-        IEventHandler<RosterInstancesRemoved>
+    internal class InterviewGeoLocationAnswersDenormalizer :
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+        IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, QuestionsEnabled>,
+        IUpdateHandler<InterviewSummary, QuestionsDisabled>,
+        IUpdateHandler<InterviewSummary, AnswersRemoved>,
+        IUpdateHandler<InterviewSummary, RosterInstancesRemoved>
     {
         private readonly IUnitOfWork sessionProvider;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public InterviewGeoLocationAnswersDenormalizer(IUnitOfWork sessionProvider)
+        public InterviewGeoLocationAnswersDenormalizer(IUnitOfWork sessionProvider, IQuestionnaireStorage questionnaireStorage)
         {
             this.sessionProvider = sessionProvider;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public override object[] Writers => new object[] { };
-
-        public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> @event)
-            => this.sessionProvider.Session.Save(new InterviewGps
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
+        {
+            this.sessionProvider.Session.SaveOrUpdate(new InterviewGps
             {
                 InterviewId = @event.EventSourceId.ToString("N"),
                 QuestionId = @event.Payload.QuestionId,
@@ -38,19 +44,28 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 Timestamp = @event.Payload.Timestamp.DateTime,
                 IsEnabled = true
             });
+            return state;
+        }
 
-        public void Handle(IPublishedEvent<AnswersRemoved> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersRemoved> @event)
         {
+            var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
+            if (!gpsQuestionIdentities.Any()) return state;
+
             var questionIdentities = @event.Payload.Questions.Select(x => x.Id.ToString() + x.RosterVector.ToString().Trim('_'));
             this.sessionProvider.Session
                 .Query<InterviewGps>()
                 .Where(x => x.InterviewId == @event.EventSourceId.ToString("N") && questionIdentities.Contains(x.QuestionId.ToString() + x.RosterVector))
                 .Delete();
+
+            return state;
         }
 
-
-        public void Handle(IPublishedEvent<QuestionsEnabled> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsEnabled> @event)
         {
+            var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
+            if (!gpsQuestionIdentities.Any()) return state;
+
             var questionIdentities = @event.Payload.Questions.Select(x => x.Id.ToString() + x.RosterVector.ToString().Trim('_'));
             this.sessionProvider.Session
                 .Query<InterviewGps>()
@@ -58,11 +73,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .UpdateBuilder()
                 .Set(x => x.IsEnabled, x => true)
                 .Update();
+
+            return state;
         }
             
 
-        public void Handle(IPublishedEvent<QuestionsDisabled> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QuestionsDisabled> @event)
         {
+            var gpsQuestionIdentities = GetGpsIdentities(state, @event.Payload.Questions);
+            if (!gpsQuestionIdentities.Any()) return state;
+
             var questionIdentities = @event.Payload.Questions.Select(x => x.Id.ToString() + x.RosterVector.ToString().Trim('_'));
             this.sessionProvider.Session
                 .Query<InterviewGps>()
@@ -70,9 +90,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .UpdateBuilder()
                 .Set(x => x.IsEnabled, x => false)
                 .Update();
+
+            return state;
         }
 
-        public void Handle(IPublishedEvent<RosterInstancesRemoved> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
             var interviewId = @event.EventSourceId.ToString("N");
 
@@ -82,12 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             var deletedQuestionIdentities = this.sessionProvider.Session
                 .Query<InterviewGps>()
-                .Join(this.sessionProvider.Session.Query<InterviewSummary>(),
-                    gps => gps.InterviewId,
-                    interview => interview.SummaryId,
-                    (gps, interview) => new {gps.InterviewId, gps.QuestionId, gps.RosterVector, interview.QuestionnaireIdentity})
                 .Join(this.sessionProvider.Session.Query<QuestionnaireCompositeItem>(),
-                    gps => new {gps.QuestionnaireIdentity, gps.QuestionId},
+                    gps => new {state.QuestionnaireIdentity, gps.QuestionId},
                     questionnaireItem => new {questionnaireItem.QuestionnaireIdentity, QuestionId = questionnaireItem.EntityId},
                     (gps, questionnaireItem) => new
                     {
@@ -101,6 +119,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.sessionProvider.Session.Query<InterviewGps>()
                 .Where(x => x.InterviewId == interviewId && deletedQuestionIdentities.Contains(x.QuestionId.ToString() + x.RosterVector))
                 .Delete();
+
+            return state;
+        }
+
+        private Identity[] GetGpsIdentities(InterviewSummary interview, Identity[] allQuestionIdentities)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity), null);
+
+            return allQuestionIdentities
+                .Where(x => questionnaire.GetQuestionType(x.Id) == QuestionType.GpsCoordinates)
+                .ToArray();
         }
 
     }
