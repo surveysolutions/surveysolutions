@@ -562,7 +562,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewStatusTimeSpanDenormalizer();
         }
-
+        
         public ICsvWriter CsvWriter(List<CsvData> writeTo)
         {
             var csvWriterMock = new Mock<ICsvWriter>();

@@ -111,6 +111,11 @@ namespace WB.Tests.Abc.TestFactories
             => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], originDate ?? DateTimeOffset.Now, "tttt")
                 .ToPublishedEvent(eventSourceId: interviewId);
 
+        public IPublishedEvent<SingleOptionQuestionAnswered> SingleOptionQuestionAnswered(Guid? interviewId = null, Guid? questionId = null, decimal answer = 0, string userId = null, DateTimeOffset? originDate = null)
+            => new SingleOptionQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), 
+                    new decimal[0], originDate ?? DateTimeOffset.Now, answer)
+                .ToPublishedEvent(eventSourceId: interviewId);
+
         private static Guid? ToGuid(string stringGuid)
             => string.IsNullOrEmpty(stringGuid)
                 ? null as Guid?
