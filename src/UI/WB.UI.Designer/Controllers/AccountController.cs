@@ -135,6 +135,11 @@ namespace WB.UI.Designer.Controllers
             return isUserRegisterSuccessfully ? this.RegisterStepTwo() : this.View(model);
         }
 
+        private IActionResult RegisterStepTwo()
+        {
+            return this.View();
+        }
+
         private bool IsCaptchaValid()
         {
             throw new NotImplementedException();

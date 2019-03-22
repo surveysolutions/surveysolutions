@@ -1,0 +1,60 @@
+﻿@using Microsoft.Extensions.Options
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.Resources
+@using WB.UI.Shared.Web.Extensions
+@model WB.UI.Designer.Models.RegisterModel
+@inject IOptions<CaptchaConfig> CaptchaOptions
+
+@{
+    ViewBag.Title = AccountResources.Register;
+    Layout = "~/Views/Account/Layout.Account.cshtml";
+}
+
+<form asp-action="Register" asp-controller="Account" method="post" id="start-register" autocomplete="off">
+
+    @Html.AntiForgeryToken()
+    <h1>@AccountResources.Register</h1>
+    @if (TempData.ContainsKey(Alerts.ERROR))
+    {
+        <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+    }
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginName })
+        @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.FullName, new { @class = "form-control", placeholder = AccountResources.FullName })
+        @Html.ValidationMessageFor(x => x.FullName, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @type = "email", placeholder = AccountResources.Email })
+        @Html.ValidationMessageFor(x => x.Email, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = AccountResources.PasswordWatermark })
+        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = AccountResources.RepeatPassword })
+        @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
+    </div>
+
+    @if (CaptchaOptions.Value.IsReCaptchaEnabled)
+    {
+        <div style="line-height: 0">
+            <div class="g-recaptcha" data-sitekey="@CaptchaOptions.Value.RecaptchaPublicKey"></div>
+        </div>
+    }
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Register" />
+        <a class="btn btn-link" href="@Url.Action("Login")">@AccountResources.Login</a>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset")">@AccountResources.ForgotPassword</a>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @*@Scripts.Render("~/editform")*@
+}
