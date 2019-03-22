@@ -12,14 +12,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             InterviewSummaryDenormalizer interviewSummaryDenormalizer,
             StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional,
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer,
-            ISpeedReportDenormalizerFunctional speedReportDenormalizerFunctional) : base(readSideStorage)
+            ISpeedReportDenormalizerFunctional speedReportDenormalizerFunctional,
+            InterviewGeoLocationAnswersDenormalizer geoLocationAnswersDenormalizer) : base(readSideStorage)
         {
             Handlers = new ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>[]
             {
                 interviewSummaryDenormalizer,
                 historyDenormalizerFunctional,
                 statusTimeSpanDenormalizer,
-                speedReportDenormalizerFunctional
+                speedReportDenormalizerFunctional,
+                geoLocationAnswersDenormalizer
             };
         }
 
