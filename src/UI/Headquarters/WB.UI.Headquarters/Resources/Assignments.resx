@@ -357,7 +357,7 @@
   <data name="InvalidPassword" xml:space="preserve">
     <value>Password is invalid</value>
   </data>
-  <data name="InvalidSize" xml:space="preserve">
+  <data name="InvalidSizeMessage" xml:space="preserve">
     <value>Size is invalid</value>
   </data>
   <data name="InvalidSizeWithEmail" xml:space="preserve">
