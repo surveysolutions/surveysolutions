@@ -36,7 +36,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             Execute.Sql("create index if not exists report_tabulate_data_entity_id_idx ON readside.report_tabulate_data (entity_id)");
             Execute.Sql("create unique index if not exists report_tabulate_numerical_unq_idx ON readside.report_tabulate_numerical (entity_id, rostervector, interview_id, answer)");
 
-            FillWithInitialData();
+            // FillWithInitialData();
 
             Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.update_report_table_data(_interviewid int)
                 RETURNS void

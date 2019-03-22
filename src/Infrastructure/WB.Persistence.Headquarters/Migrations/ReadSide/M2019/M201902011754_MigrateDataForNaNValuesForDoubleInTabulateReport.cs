@@ -7,12 +7,12 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql(@"SELECT ids.*, r.*
-                            FROM (SELECT distinct v.interviewid
-                                    FROM readside.interviews v
-                                   WHERE v.asdouble = 'NaN'::float
-                                 ) as ids,
-                         LATERAL readside.update_report_table_data(interviewid) r");
+            //Execute.Sql(@"SELECT ids.*, r.*
+            //                FROM (SELECT distinct v.interviewid
+            //                        FROM readside.interviews v
+            //                       WHERE v.asdouble = 'NaN'::float
+            //                     ) as ids,
+            //             LATERAL readside.update_report_table_data(interviewid) r");
         }
 
         public override void Down()
