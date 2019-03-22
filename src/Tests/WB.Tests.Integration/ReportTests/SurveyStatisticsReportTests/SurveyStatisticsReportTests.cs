@@ -208,9 +208,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyStatisticsReportTests
             };
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
-
-             // var state = Create.Entity.InterviewState(interviewId);
-
+            
             SetIntAnswer(dwellingQuestion, (int) dwelling);
 
             for (var vector = 0; vector < members.Length; vector++)

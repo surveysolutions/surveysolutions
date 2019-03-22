@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual int InterviewId { get; set; }
         public virtual int EntityId { get; set; }
         public virtual string RosterVector { get; set; }
+
         public virtual long[] Answer { get; set; }
         public virtual StatisticsReportType Type { get; set; }
         public virtual bool IsEnabled { get; set; }
