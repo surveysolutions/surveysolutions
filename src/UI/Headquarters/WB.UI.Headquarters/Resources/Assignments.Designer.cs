@@ -331,11 +331,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size is invalid.
+        ///   Looks up a localized string similar to The Size field must be -1 or more..
         /// </summary>
         public static string InvalidSize {
             get {
                 return ResourceManager.GetString("InvalidSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size is invalid.
+        /// </summary>
+        public static string InvalidSizeMessage {
+            get {
+                return ResourceManager.GetString("InvalidSizeMessage", resourceCulture);
             }
         }
         

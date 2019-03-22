@@ -69,7 +69,7 @@
                                 </div>                                
                             </div>
                             <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
-                                <p> {{ this.$t("Assignments.InvalidSize") }} </p>
+                                <p> {{ this.$t("Assignments.InvalidSizeMessage") }} </p>
                                 <p v-if="sizeQuestion.answer !== '1' && (emailQuestion.answer !== null || emailQuestion.answer !== '')"> {{ this.$t("Assignments.InvalidSizeWithEmail") }} </p>                                                             
                             </div>
                         </wb-question>
