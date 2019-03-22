@@ -313,11 +313,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Size field must be -1 or more..
+        ///   Looks up a localized string similar to Email is invalid.
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is invalid.
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size is invalid.
         /// </summary>
         public static string InvalidSize {
             get {
                 return ResourceManager.GetString("InvalidSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments with provided email allowed size is 1.
+        /// </summary>
+        public static string InvalidSizeWithEmail {
+            get {
+                return ResourceManager.GetString("InvalidSizeWithEmail", resourceCulture);
             }
         }
         

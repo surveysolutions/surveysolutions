@@ -68,6 +68,10 @@
                                     </div>                                  
                                 </div>                                
                             </div>
+                            <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
+                                <p> {{ this.$t("Assignments.InvalidSize") }} </p>
+                                <p v-if="sizeQuestion.answer !== '1' && (emailQuestion.answer !== null || emailQuestion.answer !== '')"> {{ this.$t("Assignments.InvalidSizeWithEmail") }} </p>                                                             
+                            </div>
                         </wb-question>
 
                         <wb-question :question="webMode" 
@@ -117,6 +121,9 @@
                                     </div>                                  
                                 </div>                                
                             </div>
+                            <div class="information-block text-danger" v-if="!emailQuestion.validity.isValid">
+                                <p> {{ this.$t("Assignments.InvalidEmail") }} </p>                                                             
+                            </div>
                         </wb-question>
                         
                         <wb-question :question="passwordQuestion" 
@@ -145,6 +152,9 @@
                                         </div>
                                     </div>                                  
                                 </div>                                
+                            </div>
+                            <div class="information-block text-danger" v-if="!passwordQuestion.validity.isValid">
+                                <p> {{ this.$t("Assignments.InvalidPassword") }} </p>                                                             
                             </div>
                         </wb-question>                       
 
