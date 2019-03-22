@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -71,8 +70,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
             IStatefulInterviewRepository statefulInterviewRepository = null,
             IStatefullInterviewSearcher statefullInterviewSearcher = null,
-            IQuestionnaireStorage questionnaireStorage = null,
-            IInterviewStateFixer interviewStateFixer = null)
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             var controller = new InterviewsController(
                 logger: logger ?? Mock.Of<ILogger>(),
@@ -85,8 +83,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
-                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>(),
-                interviewStateFixer: Mock.Of<IInterviewStateFixer>());
+                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>());
 
 
             controller.Request = new HttpRequestMessage(method: HttpMethod.Post, requestUri: "https://localhost");

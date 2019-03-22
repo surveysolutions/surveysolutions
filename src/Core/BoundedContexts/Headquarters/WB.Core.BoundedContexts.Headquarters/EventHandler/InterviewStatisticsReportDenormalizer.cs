@@ -22,6 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, QuestionsDisabled>,
         IUpdateHandler<InterviewSummary, QuestionsEnabled>,
+        IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, NumericRealQuestionAnswered>,
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>
     {
         private readonly IUnitOfWork unitOfWork;
@@ -35,10 +37,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
-            var payloadQuestionId = @event.Payload.QuestionId;
-            var rv = new RosterVector(@event.Payload.RosterVector);
+            var questionId = @event.Payload.QuestionId;
+            var rosterVector = new RosterVector(@event.Payload.RosterVector);
             
-            UpdateReportStatisticsAnswer(state, payloadQuestionId, rv, @event.Payload.SelectedValue);
+            UpdateReportStatisticsAnswer(state, questionId, rosterVector, StatisticsReportType.Categorical, @event.Payload.SelectedValue);
 
             return state;
         }
@@ -63,16 +65,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             UpdateReportStatisticsAnswer(state, @event.Payload.QuestionId, new RosterVector(@event.Payload.RosterVector), 
-                @event.Payload.SelectedValues );
+                StatisticsReportType.Categorical, @event.Payload.SelectedValues);
 
             return state;
         }
 
-        private void UpdateReportStatisticsAnswer(InterviewSummary state, Guid payloadQuestionId, RosterVector rv, params decimal[] answer)
+        private void UpdateReportStatisticsAnswer(InterviewSummary state, 
+            Guid questionId, RosterVector rv,StatisticsReportType type = StatisticsReportType.Categorical, params decimal[] answer)
         {
             var questionnaire = questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
 
-            var question = questionnaire.Find<IQuestion>(payloadQuestionId);
+            var question = questionnaire.Find<IQuestion>(questionId);
 
             if (!IsEligibleQuestion(question)) return;
             
@@ -82,11 +85,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     on conflict (interview_id, entity_id, rostervector)
                     do update set answer = @answer::int[]", new
                 {
-                    Type = StatisticsReportType.Categorical,
+                    type,
                     RosterVector = rv.AsString(),
-                    EntityId = questionnaire.EntitiesIdMap[payloadQuestionId],
+                    EntityId = questionnaire.EntitiesIdMap[questionId],
                     InterviewId = state.Id,
-                    Answer = answer
+                    answer
                 });
         }
 
@@ -131,6 +134,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (question.LinkedToQuestionId != null || question.LinkedToRosterId != null) return false;
             if (question.IsFilteredCombobox == true) return false;
             return true;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
+        {
+            UpdateReportStatisticsAnswer(state, @event.Payload.QuestionId, new RosterVector(@event.Payload.RosterVector),
+                StatisticsReportType.Numeric, @event.Payload.Answer);
+
+            return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
+        {
+            UpdateReportStatisticsAnswer(state, @event.Payload.QuestionId, new RosterVector(@event.Payload.RosterVector),
+                StatisticsReportType.Numeric, @event.Payload.Answer);
+
+            return state;
         }
     }
 }

@@ -62,12 +62,7 @@ AS SELECT a.interview_id AS interview_id,
    LATERAL unnest(a.answer) ans(ans)
    where a.""type"" = 1 and is_enabled = true;");
 
-            Delete.Table("report_tabulate_data");
-            Delete.Table("report_tabulate_numerical");
-            Delete.Table("interviews");
-            Delete.Table("interviews_id");
-            Execute.Sql("drop view interviews_view");
-            Execute.Sql("drop view view_report_tabulate");
+          
         }
 
         public override void Down()

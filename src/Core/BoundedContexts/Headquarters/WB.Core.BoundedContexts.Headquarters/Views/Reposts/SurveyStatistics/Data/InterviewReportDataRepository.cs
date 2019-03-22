@@ -98,8 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             rep_a as (select * from readside.report_statistics_categorical where entity_id in (select id from lookupVariable))
             {IfWithCondition(@",
             condVariable as (select id from readside.questionnaire_entities where questionnaireidentity like @questionnaireidentity 
-                and entityid = @ConditionVariable)
-            rep_b as (select * from readside.report_statistics_categorical where entity_id in (select id from condVariable)),
+                and entityid = @ConditionVariable),
+            rep_b as (select * from readside.report_statistics_categorical where entity_id in (select id from condVariable))
             ")}
             select agg.teamleadname, agg.responsiblename, agg.answer, count(interview_id)
             from (
@@ -144,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
                         qe.entityid, qe.questionnaireidentity, rd.answer
                     from readside.report_statistics_numeric rd
                     inner join readside.questionnaire_entities qe on rd.entity_id = qe.id
-                    inner join readside.interviewsummaries s on s.id = i.interview_id
+                    inner join readside.interviewsummaries s on s.id = rd.interview_id
                     where 
                         qe.entityid = @questionId and
                         (@teamleadid is null or s.teamleadid = @teamleadid) and

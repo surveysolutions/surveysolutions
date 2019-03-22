@@ -49,7 +49,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Diag;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
@@ -228,7 +227,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
@@ -290,9 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
             registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
-
-            registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
-
+            
             registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
