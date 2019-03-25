@@ -16,7 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         void RemoveAll();
         void Remove(int assignmentId);
-        
+        void Remove(params int[] assignmentIds);
+
+
         AssignmentDocument FetchPreloadedData(AssignmentDocument document);
         AssignmentDocument GetById(int assignmentId);
 

@@ -47,27 +47,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
             var localAssignments = this.assignmentsRepository.LoadAll();
 
-            var remoteIds = remoteAssignments.ToLookup(ra => ra.Id);
-            var removedAssignments = localAssignments.Where(x => !remoteIds.Contains(x.Id));
-            var localIds = localAssignments.Except(removedAssignments).ToLookup(x => x.Id);
+            var remoteIds = remoteAssignments.Select(ra => ra.Id).ToHashSet();
+            var removedIds = localAssignments.Select(x => x.Id).Where(x => !remoteIds.Contains(x)).ToArray();
+            var localIds = localAssignments.Where(x => !removedIds.Contains(x.Id)).ToDictionary(x => x.Id, assignment => assignment);
             
             var processedAssignmentsCount = 0;
             var transferProgress = progress.AsTransferReport();
 
             // removing local assignments if needed
-            foreach (var assignment in removedAssignments)
+            this.assignmentsRepository.Remove(removedIds);
+            statistics.RemovedAssignmentsCount += removedIds.Length;
+
+            // download questionnaires
+            foreach (var questionnaireIdentity in remoteAssignments.Select(x => x.QuestionnaireId).Distinct())
             {
-                statistics.RemovedAssignmentsCount += 1;
-                this.assignmentsRepository.Remove(assignment.Id);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(questionnaireIdentity, statistics,
+                    transferProgress, cancellationToken);
             }
 
             // adding new, updating quantity for existing
             foreach (var remoteItem in remoteAssignments)
             {
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, statistics,
-                    transferProgress, cancellationToken);
-
-                var local = localIds[remoteItem.Id].FirstOrDefault();
+                var local = localIds[remoteItem.Id];
                 if (local != null)
                     this.UpdateAssignment(local, remoteItem);
                 else
@@ -96,8 +97,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var remoteAssignment = await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
 
-            var localAssignment = this.assignmentDocumentFromDtoBuilder.GetAssignmentDocument(remoteAssignment, questionnaire);
-            this.assignmentsRepository.Store(localAssignment);
+            var newAssignment = this.assignmentDocumentFromDtoBuilder.GetAssignmentDocument(remoteAssignment, questionnaire);
+            this.assignmentsRepository.Store(newAssignment);
 
             await this.synchronizationService.LogAssignmentAsHandledAsync(remoteItem.Id, cancellationToken);
 
