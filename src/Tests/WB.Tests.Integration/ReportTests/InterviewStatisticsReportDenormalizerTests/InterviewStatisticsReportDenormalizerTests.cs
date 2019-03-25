@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -11,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -122,7 +119,6 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             });
 
             AssertReportHasTotal(report, Relation.Child, 1);
-            //AssertReportHasTotal(report, BadImageFormatException, 0);
         }
 
         private void AssertReportHasTotal<T>(ReportView report, T @enum, int amount) where T : Enum
