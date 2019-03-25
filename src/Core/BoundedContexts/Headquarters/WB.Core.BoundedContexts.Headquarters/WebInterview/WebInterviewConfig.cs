@@ -40,8 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) }
         };
 
-        public int? ReminderAfterDaysIfNoResponse { get; set; }
-        public int? ReminderAfterDaysIfPartialResponse { get; set; }
+        public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
+        public int? ReminderAfterDaysIfPartialResponse { get; set; } = 3;
         public string BaseUrl { get; set; }
 
         public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
