@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var remoteIds = remoteAssignments.Select(ra => ra.Id).ToHashSet();
             var removedIds = localAssignments.Select(x => x.Id).Where(x => !remoteIds.Contains(x)).ToArray();
-            var localIds = localAssignments.Where(x => !removedIds.Contains(x.Id)).ToDictionary(x => x.Id, assignment => assignment);
+            var localIds = localAssignments.Where(x => !removedIds.Contains(x.Id)).ToLookup(x => x.Id);
             
             var processedAssignmentsCount = 0;
             var transferProgress = progress.AsTransferReport();
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             // adding new, updating quantity for existing
             foreach (var remoteItem in remoteAssignments)
             {
-                var local = localIds[remoteItem.Id];
+                var local = localIds[remoteItem.Id].FirstOrDefault();
                 if (local != null)
                     this.UpdateAssignment(local, remoteItem);
                 else
