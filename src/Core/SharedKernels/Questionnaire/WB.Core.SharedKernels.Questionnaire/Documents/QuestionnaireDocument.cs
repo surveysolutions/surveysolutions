@@ -137,6 +137,8 @@ namespace Main.Core.Documents
 
         public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
         public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
+
+        // Map of question id to database stored 'questionnaire_entities'.id
         public Dictionary<Guid, int> EntitiesIdMap { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
