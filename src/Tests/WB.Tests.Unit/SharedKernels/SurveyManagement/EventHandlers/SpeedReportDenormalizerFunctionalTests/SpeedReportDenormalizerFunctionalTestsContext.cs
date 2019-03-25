@@ -24,8 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.SpeedReport
                 interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(),
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
-                new InterviewStatusTimeSpanDenormalizer(), Mock.Of<IInterviewStatisticsReportDenormalizer>(),
+                new InterviewStatusTimeSpanDenormalizer(),
                 new SpeedReportDenormalizerFunctional(speedReportItems),
+                Mock.Of<IInterviewStatisticsReportDenormalizer>(),
                 new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
     }
