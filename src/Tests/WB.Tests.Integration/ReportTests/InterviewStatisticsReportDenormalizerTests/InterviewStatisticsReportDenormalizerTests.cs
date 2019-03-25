@@ -29,6 +29,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         private readonly Guid dwellingQuestion = Id.g1;
         private readonly Guid relationQuestion = Id.g2;
         private readonly Guid sexQuestion = Id.g3;
+        private readonly Guid numericIntQuestion = Id.g4;
+        private readonly Guid numericRealQuestion = Id.g5;
         private readonly Guid interviewId = Guid.NewGuid();
         private SurveyStatisticsReport reporter;
 
@@ -36,6 +38,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         public void SettingUp()
         {
             this.questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(numericIntQuestion),
+                Create.Entity.NumericRealQuestion(numericRealQuestion),
                 Create.Entity.SingleOptionQuestion(dwellingQuestion, "dwelling", answers: GetAnswersFromEnum<Dwelling>()),
                 Create.Entity.Roster(Id.gA, variable: "hh_member", children: new[]
                 {
@@ -102,7 +106,6 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             denormalizer.Update(summary, new QuestionsDisabled(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
                 .ToPublishedEvent(summary.InterviewId));
-
             
             var report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
@@ -121,9 +124,102 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             AssertReportHasTotal(report, Relation.Child, 1);
         }
 
+        [Test]
+        public void when_answer_removed_should_not_generate_report_for_removed_answers()
+        {
+            var summary = new InterviewSummary(questionnaire)
+            {
+                InterviewId = interviewId,
+                Status = InterviewStatus.Completed,
+                ResponsibleName = "responsible",
+                ResponsibleId = Id.gC,
+                QuestionnaireId = questionnaire.PublicKey,
+                QuestionnaireVersion = 1,
+                TeamLeadId = Id.gE,
+                TeamLeadName = "test"
+            };
+
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+            UnitOfWork.Session.Flush();
+            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
+            denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
+
+            denormalizer.Update(summary, new AnswersRemoved(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
+                .ToPublishedEvent(summary.InterviewId));
+            
+            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<SingleQuestion>(dwellingQuestion)
+            });
+
+            AssertReportHasTotal(report, Dwelling.Hole, 0);
+
+            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<SingleQuestion>(relationQuestion)
+            });
+
+            AssertReportHasTotal(report, Relation.Child, 1);
+        }
+
+        [Test]
+        public void when_numeric_answers_applied()
+        {
+            var summary = new InterviewSummary(questionnaire)
+            {
+                InterviewId = interviewId,
+                Status = InterviewStatus.Completed,
+                ResponsibleName = "responsible",
+                ResponsibleId = Id.gC,
+                QuestionnaireId = questionnaire.PublicKey,
+                QuestionnaireVersion = 1,
+                TeamLeadId = Id.gE,
+                TeamLeadName = "test"
+            };
+
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+            UnitOfWork.Session.Flush();
+
+            denormalizer.Update(summary,
+                new NumericIntegerQuestionAnswered(Guid.NewGuid(), numericIntQuestion, Array.Empty<decimal>(),
+                        DateTimeOffset.UtcNow, 10)
+                    .ToPublishedEvent(summary.InterviewId));
+
+            denormalizer.Update(summary,
+                new NumericRealQuestionAnswered(Guid.NewGuid(), numericRealQuestion, Array.Empty<decimal>(),
+                        DateTimeOffset.UtcNow, 44)
+                    .ToPublishedEvent(summary.InterviewId));
+            
+            var report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<NumericQuestion>(numericIntQuestion)
+            });
+
+            AssertReportHasTotal(report, "Count", 1);
+            AssertReportHasTotal(report, "Max", 10);
+
+            report = reporter.GetReport(new SurveyStatisticsReportInputModel
+            {
+                QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
+                Question = questionnaire.Find<NumericQuestion>(numericRealQuestion)
+            });
+
+
+            AssertReportHasTotal(report, "Count", 1);
+            AssertReportHasTotal(report, "Max", 44);
+        }
+
         private void AssertReportHasTotal<T>(ReportView report, T @enum, int amount) where T : Enum
         {
-            var indexInTotal = Array.IndexOf(report.Headers, @enum.ToString());
+            AssertReportHasTotal(report, @enum.ToString(), amount);
+        }
+
+        private void AssertReportHasTotal(ReportView report, string header, int amount) 
+        {
+            var indexInTotal = Array.IndexOf(report.Headers, header);
 
             try
             {
@@ -136,6 +232,5 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 Console.WriteLine(string.Join("\r\n", rows.Select(r => $"{r.InterviewId} | {r.RosterVector} | {r.EntityId} | {r.Type} | [{string.Join(", ", r.Answer)}] | {r.IsEnabled}")));
             }
         }
-
     }
 }
