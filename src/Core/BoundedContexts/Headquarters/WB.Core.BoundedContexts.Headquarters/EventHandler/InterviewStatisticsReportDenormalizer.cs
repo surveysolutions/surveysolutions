@@ -5,7 +5,6 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -72,6 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     RosterVector = q.RosterVector.AsString()
                 }));
 
+            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
             //foreach (var identity in questions)
             //{
             //    unitOfWork.Session.Query<InterviewStatisticsReportRow>()
@@ -156,6 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     answer
                 });
 
+            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
             //var entity = this.unitOfWork.Session.Query<InterviewStatisticsReportRow>()
             //    .SingleOrDefault(x => x.InterviewId == key.interviewId
             //                          && x.RosterVector == key.rosterVector
@@ -182,6 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             //    this.unitOfWork.Session.Update(entity);
             //}
         }
+        
 
         private void UpdateQuestionEnablement(InterviewSummary summary, bool enabled, Identity[] questionIds)
         {
@@ -203,6 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     enabled
                 }));
 
+            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
             //foreach (var identity in questions)
             //{
             //    this.unitOfWork.Session
