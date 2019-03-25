@@ -51,6 +51,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             });
         }
 
+        public void Remove(params int[] assignmentIds)
+        {
+            if (!assignmentIds?.Any() ?? false) return;
+
+            RunInTransaction(table =>
+            {
+                table.Connection.Table<AssignmentDocument>().Delete(x => assignmentIds.Contains(x.Id));
+
+                table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                    .Delete(aa => assignmentIds.Contains(aa.AssignmentId));
+            });
+        }
+
+
         public override AssignmentDocument GetById(int id)
         {
             return RunInTransaction(query =>
