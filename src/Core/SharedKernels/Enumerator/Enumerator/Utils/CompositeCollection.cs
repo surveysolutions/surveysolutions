@@ -225,7 +225,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
                 var addedCollectionCount = collection.Count;
                 this.Count += addedCollectionCount;
-                this.NotifyItemsAdded(collection, offset);
+
+                if (addedCollectionCount > 0)
+                    this.NotifyItemsAdded(collection, offset);
             }
             finally
             {
@@ -251,7 +253,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
                 var collectionCount = collection.Count;
                 this.Count -= collectionCount;
-                this.NotifyItemsRemoved(collection, offset);
+                
+                if (collectionCount > 0)
+                    this.NotifyItemsRemoved(collection, offset);
 
                 return removeResult;
             }
