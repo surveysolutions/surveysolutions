@@ -268,10 +268,8 @@ namespace WB.Services.Export.Interview
                     if (roster.IsEnabled)
                         return false;
                 }
-                else
-                {
-                    return false;
-                }
+                //if instance of roster was not found no questions are saved
+                //it is treated as disabled and do not produce empty records
             }
 
             return true;
