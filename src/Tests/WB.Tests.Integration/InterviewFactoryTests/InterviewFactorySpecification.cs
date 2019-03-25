@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -43,11 +42,12 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         protected IUnitOfWork UnitOfWork;
         protected ISessionFactory sessionFactory;
 
-
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             SetUp.MockedServiceLocator();
+            //NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug);
+            //NpgsqlLogManager.IsParameterLoggingEnabled = true;
 
             this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
 
@@ -115,7 +115,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 unitOfWork.AcceptChanges();
                 unitOfWork.Session.Clear();
                 interviewSummary.Id = unitOfWork.Session.Get<InterviewSummary>(interviewSummary.SummaryId).Id;
-
             }
         }
 
