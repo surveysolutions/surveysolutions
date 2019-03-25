@@ -50,7 +50,7 @@ namespace ASP
         {
             if (string.IsNullOrWhiteSpace(template)) return MvcHtmlString.Empty;
 
-            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName));
+            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName).Replace("%SURVEYNAME%", questionnaireName));
         }
 
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(

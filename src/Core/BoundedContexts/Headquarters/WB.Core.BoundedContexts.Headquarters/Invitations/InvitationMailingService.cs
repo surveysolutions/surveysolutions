@@ -35,7 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(assignment.QuestionnaireId);
 
             var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate);
-
             var questionnaireTitle = assignment.Questionnaire.Title;
 
             var senderInfo = emailService.GetSenderInfo();
@@ -44,17 +43,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var address = email ?? assignment.Email;
             var link = $"{webInterviewConfig.BaseUrl}/WebInterview/{invitation.Token}/Start";
 
+            var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
+
             var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
             var emailParams = new EmailParameters
             {
                 AssignmentId = invitation.AssignmentId,
                 InvitationId = invitation.Id,
-                Subject = emailTemplate.Subject
-                    .Replace(WebInterviewEmailTemplate.SurveyName, questionnaireTitle),
-                LinkText = emailTemplate.LinkText,
-                MainText = emailTemplate.MainText
-                    .Replace(WebInterviewEmailTemplate.SurveyName, questionnaireTitle),
-                PasswordDescription = emailTemplate.PasswordDescription,
+                Subject = emailContent.Subject,
+                LinkText = emailContent.LinkText,
+                MainText = emailContent.MainText,
+                PasswordDescription = emailContent.PasswordDescription,
                 Password = password,
                 Address = senderInfo.Address,
                 SurveyName = questionnaireTitle,

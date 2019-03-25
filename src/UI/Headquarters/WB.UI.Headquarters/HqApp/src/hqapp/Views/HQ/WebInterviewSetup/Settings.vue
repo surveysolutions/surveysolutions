@@ -817,8 +817,8 @@ export default {
         if (text == null)
             return ''
         return text
-            .replace(/%surveyname%/ig, this.questionnaireTitle)
-            .replace(/%QUESTIONNAIRE%/ig, this.questionnaireTitle);
+            .replace(/%SURVEYNAME%/g, this.questionnaireTitle)
+            .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle);
     },
     dummy() {
         return false;
