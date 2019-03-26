@@ -64,6 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             this.InterviewId = interviewId;
         }
+
+        public virtual void UpdateAssignmentId(int assignmentId)
+        {
+            this.AssignmentId = assignmentId;
+        }
     }
 
     public class InvitationDistributionStatus : AppSetting
