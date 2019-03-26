@@ -7,7 +7,7 @@
     bool isPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any();
 }
 
-<h2>@Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText)</h2>
+<h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
 <p>
     @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(), Model.QuestionnaireTitle)
 </p>

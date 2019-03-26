@@ -10,7 +10,7 @@
     <div class="additional-info-block">
         <ul class="list-unstyled">
             <li>
-                @Model.CustomMessages.GetText(WebInterviewUserMessages.FinishInterview)
+                @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.FinishInterview).ToString(), Model.QuestionnaireTitle)
             </li>
             <li>
                 @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(), Model.QuestionnaireTitle)
