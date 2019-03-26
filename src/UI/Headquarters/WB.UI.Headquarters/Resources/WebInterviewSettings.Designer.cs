@@ -358,7 +358,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send remainder to people with no response.
+        ///   Looks up a localized string similar to Send reminder to people with no response.
         /// </summary>
         internal static string SendWithNoResponse {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send remainder to people with a partial response.
+        ///   Looks up a localized string similar to Send reminder to people with a partial response.
         /// </summary>
         internal static string SendWithPartialResponse {
             get {
