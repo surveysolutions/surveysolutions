@@ -369,9 +369,6 @@
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>MAPA ACTIVO:</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Área:</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>MAPAS DISPONIBLES EN EL DISPOSITIVO</value>
   </data>
@@ -383,9 +380,6 @@
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Editar</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Perímetro:</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>Ubicación</value>
