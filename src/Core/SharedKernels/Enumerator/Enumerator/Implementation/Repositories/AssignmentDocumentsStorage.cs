@@ -57,10 +57,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
             RunInTransaction(table =>
             {
-                table.Connection.Table<AssignmentDocument>().Delete(x => assignmentIds.Contains(x.Id));
+                foreach (var batchIds in assignmentIds.Batch(MaxParametersInQueryCount))
+                {
+                    table.Connection.Table<AssignmentDocument>().Delete(x => batchIds.Contains(x.Id));
 
-                table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                    .Delete(aa => assignmentIds.Contains(aa.AssignmentId));
+                    table.Connection.Table<AssignmentDocument.AssignmentAnswer>()
+                        .Delete(aa => batchIds.Contains(aa.AssignmentId));
+                }
             });
         }
 
