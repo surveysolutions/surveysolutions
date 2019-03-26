@@ -1,6 +1,8 @@
-﻿namespace WB.UI.Designer.Models
+﻿using reCAPTCHA.AspNetCore;
+
+namespace WB.UI.Designer.Models
 {
-    public class CaptchaConfig
+    public class CaptchaConfig : RecaptchaSettings
     {
         public CaptchaConfig()
         {
@@ -10,8 +12,6 @@
 
         public int TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt { get; set; }
         public int CountOfFailedLoginAttemptsBeforeCaptcha { get; set; }
-        public string RecaptchaPrivateKey { get; set; }
-        public string RecaptchaPublicKey { get; set; }
         public bool IsReCaptchaEnabled { get; set; }
     }
 }
