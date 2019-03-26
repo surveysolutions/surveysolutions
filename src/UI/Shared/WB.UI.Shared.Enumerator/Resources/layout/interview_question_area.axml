@@ -2,37 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
+    <LinearLayout style="@style/Interview_Question_Answer"
+                  local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
-    <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
-      <TableLayout android:layout_width="wrap_content"
-                   android:layout_height="wrap_content" 
-                   android:stretchColumns="0">
+        <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+            <TableLayout android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:stretchColumns="0"
+                         local:MvxBind="Visible QuestionState.IsAnswered">
 
-        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
-              <TextView style="@style/Interview_Question_RecordedAnswer"
-                        local:MvxBind="Text Format('Points: {0}', Answer.NumberOfPoints); Tag Format('Answer_{0}', Identity); " />
-              <include layout="@layout/interview_question__remove_button_recorded" />
-        </TableRow>
+                <TableRow>
+                    <TextView style="@style/Interview_Question_RecordedAnswer"
+                              local:MvxBind="Text PointsText; Tag Format('Answer_{0}', Identity); " />
+                    <include layout="@layout/interview_question__remove_button_recorded" />
+                </TableRow>
 
-        <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, Answer.AreaSize > 0)">
-            <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Format('Area: {0:0.00} m2', Answer.AreaSize); Tag Format('Answer_{0}', Identity); " />
-        </TableRow>
+                <TableRow>
+                    <TextView style="@style/Interview_Question_RecordedAnswer"
+                            local:MvxBind="Text AreaText; Tag Format('Answer_{0}', Identity); Visible HasArea" />
+                </TableRow>
+                <TableRow>
+                    <TextView style="@style/Interview_Question_RecordedAnswer"
+                              local:MvxBind="Text LengthText; Tag Format('Answer_{0}', Identity); Visible HasLength" />
+                </TableRow>
 
-        <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, Answer.Length > 0)">
-            <TextView style="@style/Interview_Question_RecordedAnswer"
-                    local:MvxBind="Text Format('Length: {0:0.00} m', Answer.Length); Tag Format('Answer_{0}', Identity); Visible QuestionState.IsAnswered" />
-        </TableRow>
-      
-          </TableLayout>
-      <Button style="@style/Interview_Question_InputButton"
-              local:MvxBind="HideKeyboardOnClick .; 
+            </TableLayout>
+            <Button style="@style/Interview_Question_InputButton"
+                    local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
                            Tag Format('btnAnswer_{0}', Identity);
                            Text Localization('Interview_Questions_Area_SaveAnswer'); 
                            BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));" />
+        </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
 </LinearLayout>
