@@ -46,8 +46,7 @@ namespace WB.UI.Designer.Implementation.Services
             return true;
         }
 
-        private bool IsCaptchaEnabled => !string.IsNullOrWhiteSpace(captchaOptions.Value.RecaptchaPrivateKey)
-                                         && !string.IsNullOrEmpty(captchaOptions.Value.RecaptchaPublicKey);
+        private bool IsCaptchaEnabled => this.captchaOptions.Value.IsReCaptchaEnabled;
 
         public bool ShouldShowCaptcha()
         {

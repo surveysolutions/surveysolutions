@@ -1,11 +1,9 @@
 ﻿@page
-@using Microsoft.Extensions.Options
-@using WB.UI.Designer.Models
+@using reCAPTCHA.AspNetCore
 @model RegisterModel
 @{
     ViewData["Title"] = AccountResources.Register;
 }
-@inject IOptions<CaptchaConfig> CaptchaConfig
 
 <form method="post" id="start-register" autocomplete="off" asp-route-returnUrl="@Model.ReturnUrl">
     @Html.AntiForgeryToken()
@@ -15,73 +13,43 @@
     {
         <p class="note has-error">@Html.Raw(Model.ErrorMessage)</p>
     }
-        <div class="form-group">
-            <input asp-for="Input.Login" class="form-control" placeholder="@AccountResources.LoginName" />
-            <span asp-validation-for="Input.Login" class="text-danger help-inline"></span>
-        </div>
-        <div class="form-group">
-            <input asp-for="Input.FullName" class="form-control" placeholder="@AccountResources.FullName" />
-            <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
-        </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="form-group">
-        @Html.TextBoxFor(x => x.Input.Email, new { @class = "form-control", @type = "email", placeholder = AccountResources.Email })
-        @Html.ValidationMessageFor(x => x.Input.Email, null, new { @class = "help-inline" })
+        <input asp-for="Input.Login" class="form-control" placeholder="@AccountResources.LoginName" />
+        <span asp-validation-for="Input.Login" class="text-danger help-inline"></span>
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.Input.Password, new { @class = "form-control", placeholder = AccountResources.PasswordWatermark })
-        @Html.ValidationMessageFor(x => x.Input.Password, null, new { @class = "help-inline" })
+        <input asp-for="Input.FullName" class="form-control" placeholder="@AccountResources.FullName" />
+        <span asp-validation-for="Input.FullName" class="text-danger help-inline"></span>
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.Input.ConfirmPassword, new { @class = "form-control", placeholder = AccountResources.RepeatPassword })
-        @Html.ValidationMessageFor(x => x.Input.ConfirmPassword, null, new { @class = "help-inline" })
+        <input asp-for="Input.Email" class="form-control" placeholder="@AccountResources.Email" />
+        <span asp-validation-for="Input.Email" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.Password" class="form-control" placeholder="@AccountResources.PasswordWatermark" />
+        <span asp-validation-for="Input.Password" class="text-danger help-inline"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="@AccountResources.RepeatPassword" />
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger help-inline"></span>
     </div>
 
-    @if (CaptchaConfig.Value.IsReCaptchaEnabled)
+    @if (Model.CaptchaOptions.Value.IsReCaptchaEnabled)
     {
-    <div style="line-height: 0">
-        @Html.re
-        @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
-    </div>
+        <div style="line-height: 0">
+            @Html.Recaptcha(Model.CaptchaOptions.Value)
+        </div>
     }
 
     <div class="form-actions">
         <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Register" />
-        <a class="btn btn-link" href="@Url.Action("Login")">@AccountResources.Login</a>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset")">@AccountResources.ForgotPassword</a>
+        <a class="btn btn-link" asp-page="./Login">@AccountResources.Login</a>
+        <a class="btn btn-link" asp-page="./ResetPassword">@AccountResources.ForgotPassword</a>
     </div>
 </form>
-
-
-
-
-
-@*<h1>@ViewData["Title"]</h1>
-
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <h4>Create a new account.</h4>
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Input.Email"></label>
-                    <input asp-for="Input.Email" class="form-control" />
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control" />
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Input.ConfirmPassword"></label>
-                    <input asp-for="Input.ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-        </div>
-    </div>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
