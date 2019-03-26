@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.ini" />
+    <None Remove="appsettings.magpie.ini" />
     <None Remove="gulpfile.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.magpie.ini" />
     <Content Include="appsettings.ini" />
     <Content Include="gulpfile.js" />
     <Content Include="Styles\bootstrap-custom.less" />
@@ -34,8 +36,12 @@
 
   <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core.es" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core.fr" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core.ru" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+    <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.1.3" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
     <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
   </ItemGroup>
@@ -126,7 +132,7 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
