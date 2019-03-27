@@ -227,6 +227,10 @@ namespace WB.UI.Headquarters.Controllers
                     }
                 }
 
+                if (assignment.IsCompleted)
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                        Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
                     var interviewId = this.CreateInterview(assignment);
@@ -333,6 +337,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId ));
             }
+
+            if (assignment.IsCompleted)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             var interviewId =  this.CreateInterview(assignment);
 
