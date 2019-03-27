@@ -687,7 +687,8 @@ namespace WB.Tests.Abc.TestFactories
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                Mock.Of<IInvitationService>());
         }
 
         public IAssignmentFactory AssignmentFactory()

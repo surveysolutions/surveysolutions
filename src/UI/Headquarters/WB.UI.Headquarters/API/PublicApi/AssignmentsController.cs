@@ -210,6 +210,11 @@ namespace WB.UI.Headquarters.API.PublicApi
                         throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                             "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
 
+            //assignment with email must have quantity = 1
+            if (!string.IsNullOrEmpty(createItem.Email) && createItem.Quantity != 1)
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                    "For assignments with provided email allowed quantity is 1"));
+
             if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                     "For assignments having Email or Password Web Mode should be activated"));

@@ -346,4 +346,16 @@
   <data name="SizeInstructions" xml:space="preserve">
     <value>Должно быть число, -1 для неограниченного, 1 если задан электронная почта</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Неправильный адрес электронной почты</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Неправильный пароль</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Неправильный размер</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>Для задания с указанной электронной почтой размер должен равняться 1</value>
+  </data>
 </root>

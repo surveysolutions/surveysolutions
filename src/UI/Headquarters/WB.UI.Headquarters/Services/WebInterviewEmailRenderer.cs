@@ -15,16 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public PersonalizedWebInterviewEmail RenderEmail(WebInterviewEmailTemplate emailTemplate, string password, string link,
             string surveyName, string address, string senderName)
         {
+            var emailContent = new EmailContent(emailTemplate, surveyName, link, password);
+
             var model = new EmailParams
             {
-                Subject = emailTemplate.Subject
-                    .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
-                LinkText = emailTemplate.LinkText,
-                MainText = emailTemplate.MainText
-                    .Replace(WebInterviewEmailTemplate.SurveyName, surveyName)
-                    .Replace(WebInterviewEmailTemplate.SurveyLink, link)
-                    .Replace(WebInterviewEmailTemplate.Password, password),
-                PasswordDescription = emailTemplate.PasswordDescription,
+                Subject = emailContent.Subject,
+                LinkText = emailContent.LinkText,
+                MainText = emailContent.MainText,
+                PasswordDescription = emailContent.PasswordDescription,
                 Password = password,
                 Address = address,
                 SurveyName = surveyName,

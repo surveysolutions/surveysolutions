@@ -37,7 +37,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             var primaryKeyName = "pk_interview_geo_answers";
 
             Create.Table("interview_geo_answers")
-                .WithColumn("interviewid").AsFixedLengthString(255).PrimaryKey(primaryKeyName)
+                .WithColumn("interviewid").AsString(255).PrimaryKey(primaryKeyName)
                 .WithColumn("questionid").AsGuid().PrimaryKey(primaryKeyName)
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("latitude").AsDouble()
@@ -45,9 +45,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .WithColumn("timestamp").AsString().Nullable()
                 .WithColumn("isenabled").AsBoolean().WithDefaultValue(true);
 
-            Create.ForeignKey("fk_interviewsummary_interview_geo_answer").FromTable("interview_geo_answers")
-                .ForeignColumn("interviewid").ToTable("interviewsummaries").PrimaryColumn("summaryid")
-                .OnDelete(Rule.Cascade);
+            //Create.ForeignKey("fk_interviewsummary_interview_geo_answer").FromTable("interview_geo_answers")
+            //    .ForeignColumn("interviewid").ToTable("interviewsummaries").PrimaryColumn("summaryid")
+            //    .OnDelete(Rule.Cascade);
 
             Execute.WithConnection((connection, transaction) =>
             {
