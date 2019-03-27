@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Area:.
+        ///   Looks up a localized string similar to Area: {0:0.00} m2.
         /// </summary>
         public static string AreaMap_AreaFormat {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Length:.
+        ///   Looks up a localized string similar to Length: {0:0.00} m.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -187,11 +187,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter:.
+        ///   Looks up a localized string similar to Perimeter: {0:0.00} m.
         /// </summary>
         public static string AreaMap_PerimeterFormat {
             get {
                 return ResourceManager.GetString("AreaMap_PerimeterFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points: {0}.
+        /// </summary>
+        public static string AreaMap_PointsFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_PointsFormat", resourceCulture);
             }
         }
         

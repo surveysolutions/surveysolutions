@@ -179,9 +179,9 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
-            if (!(assignment.WebMode ?? false))
+            if (assignment.WebMode == false)
             {
-                // Compatibility issue. Every time users will use link, they will create a new interview. All links will be bounced back
+                // Compatibility issue. Every time users will use link,   they will create a new interview. All links will be bounced back
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
             }
 

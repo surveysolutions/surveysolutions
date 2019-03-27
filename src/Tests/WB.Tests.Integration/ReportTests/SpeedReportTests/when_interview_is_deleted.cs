@@ -49,7 +49,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 new InterviewSummaryDenormalizer(userViewFactory, questionnaireStorage),
                 new StatusChangeHistoryDenormalizerFunctional(userViewFactory),
                 new InterviewStatusTimeSpanDenormalizer(),
-                new SpeedReportDenormalizerFunctional(speedReportItems));
+                new SpeedReportDenormalizerFunctional(speedReportItems),
+                new InterviewGeoLocationAnswersDenormalizer(null, questionnaireStorage));
         }
 
         protected void UseTransactionToSaveSummaryAndSpeedReport(InterviewSummary interviewSummary, 

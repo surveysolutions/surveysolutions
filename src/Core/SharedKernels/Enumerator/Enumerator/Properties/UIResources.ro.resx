@@ -126,9 +126,6 @@
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>HARTA ACTIVĂ:</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Zona:</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>HĂRȚI DISPONIBILE PE DISPOZITIV</value>
   </data>
@@ -140,9 +137,6 @@
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Editare</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Perimetru:</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>Localizare</value>
@@ -586,9 +580,6 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Da</value>
-  </data>
-  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Perimetru:</value>
   </data>
   <data name="Interview_Overview" xml:space="preserve">
     <value>Prezentare generală</value>
