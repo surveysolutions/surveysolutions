@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
 
             PrepareQuestionnaire(questionnaire, 1);
 
-            this.denormalizer = new InterviewStatisticsReportDenormalizer(UnitOfWork, questionnaireStorage);
+            this.denormalizer = new InterviewStatisticsReportDenormalizer(questionnaireStorage);
             this.reporter = new SurveyStatisticsReport(new InterviewReportDataRepository(UnitOfWork));
         }
 
@@ -206,8 +206,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
                 Question = questionnaire.Find<NumericQuestion>(numericRealQuestion)
             });
-
-
+            
             AssertReportHasTotal(report, "Count", 1);
             AssertReportHasTotal(report, "Max", 44);
         }
@@ -229,7 +228,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             {
                 UnitOfWork.AcceptChanges();
                 var rows = UnitOfWork.Session.Query<InterviewStatisticsReportRow>().ToList();
-                Console.WriteLine(string.Join("\r\n", rows.Select(r => $"{r.InterviewId} | {r.RosterVector} | {r.EntityId} | {r.Type} | [{string.Join(", ", r.Answer)}] | {r.IsEnabled}")));
+                Console.WriteLine(string.Join("\r\n", rows.Select(r => $" | {r.RosterVector} | {r.EntityId} | {r.Type} | [{string.Join(", ", r.Answer)}] | {r.IsEnabled}")));
             }
         }
     }
