@@ -10,15 +10,13 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Create.Table("report_statistics")
+                .WithColumn("id").AsCustom("serial").PrimaryKey()
                 .WithColumn("interview_id").AsInt32().NotNullable()
                 .WithColumn("entity_id").AsInt32().NotNullable()
                 .WithColumn("rostervector").AsString()
                 .WithColumn("answer").AsCustom("int8[]").NotNullable()
                 .WithColumn("type").AsInt16().NotNullable().WithDefaultValue(0)
                 .WithColumn("is_enabled").AsBoolean().NotNullable().WithDefaultValue(true);
-
-            this.Create.PrimaryKey().OnTable("report_statistics")
-                .Columns("interview_id", "entity_id", "rostervector");
 
             Create.Index("idx_report_statistics_entityid").OnTable("report_statistics")
                 .OnColumn("entity_id").Ascending();
