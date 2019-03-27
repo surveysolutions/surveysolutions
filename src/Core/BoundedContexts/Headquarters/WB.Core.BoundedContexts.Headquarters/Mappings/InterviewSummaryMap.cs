@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Table("InterviewSummaries");
             this.DynamicUpdate(true);
             Id(x => x.SummaryId);
-            Property(x => x.Id, pm=>
+            Property(x => x.Id, pm =>
             {
                 pm.Generated(PropertyGeneration.Insert);
                 pm.Update(false);
@@ -39,7 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.CommentedEntitiesCount, clm =>
             {
                 clm.Lazy(true);
-                clm.Formula(@"(SELECT COUNT(DISTINCT (c.interviewid, c.variable, c.rostervector)) FROM readside.commentaries c 
+                clm.Formula(
+                    @"(SELECT COUNT(DISTINCT (c.interviewid, c.variable, c.rostervector)) FROM readside.commentaries c 
                                WHERE c.interviewid = interviewid::text AND c.variable not like '@@%')");
             });
             Property(x => x.AssignmentId);
@@ -55,29 +56,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             }));
 
             Bag(x => x.AnswersToFeaturedQuestions,
-                collection => {
-                    collection.Key(c => {
-                        c.Column("InterviewSummaryId");
-                    });
-                    collection.OrderBy(x  =>  x.Position);
+                collection =>
+                {
+                    collection.Key(c => { c.Column("InterviewSummaryId"); });
+                    collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                 },
-                rel => { 
-                    rel.OneToMany();
-                });
+                rel => { rel.OneToMany(); });
 
             Bag(x => x.InterviewCommentedStatuses, listMap =>
                 {
                     listMap.Table("InterviewCommentedStatuses");
-                    
-                    listMap.Key(keyMap =>
-                    {
-                        keyMap.Column(clm =>
-                        {
-                            clm.Name("InterviewId");
-                        });
-                    });
+
+                    listMap.Key(keyMap => { keyMap.Column(clm => { clm.Name("InterviewId"); }); });
                     listMap.Lazy(CollectionLazy.Lazy);
                     listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     listMap.Inverse(true);
@@ -86,8 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 rel => rel.OneToMany()
             );
 
-            Set(x => x.TimeSpansBetweenStatuses, set => {
-                    set.Table("timespanbetweenstatuses");
+            Set(x => x.TimeSpansBetweenStatuses, set =>
+                {
                     set.Key(key =>
                     {
                         key.Column(cm =>
@@ -100,10 +92,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     set.Lazy(CollectionLazy.Lazy);
                     set.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 },
-                rel => {
-                    rel.OneToMany();
-                }
+                rel => { rel.OneToMany(); }
             );
+
+            Set(x => x.StatisticsReport, listMap =>
+            {
+                listMap.Table("report_statistics");
+
+                listMap.Key(key =>
+                {
+                    key.Column("interview_id");
+                    key.PropertyRef(p => p.Id);
+                });
+
+                listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                listMap.Lazy(CollectionLazy.Lazy);
+                listMap.Inverse(true);
+            }, rel => rel.OneToMany());
         }
     }
 
@@ -156,4 +161,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             });
         }
     }
+
 }

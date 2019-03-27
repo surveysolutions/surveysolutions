@@ -4,12 +4,12 @@ using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Npgsql;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
     public abstract class ArrayType<T> : IUserType
     {
-
         public SqlType[] SqlTypes => new SqlType[] { GetNpgSqlType() };
 
         public Type ReturnedType => typeof(T[]);
@@ -48,7 +48,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             {
                 return false;
             }
-            return ((T[])x).Equals((T[])y);
+
+            var a = (T[]) x;
+            var b = (T[]) y;
+
+            return a.SequenceEqual(b);
         }
 
         public int GetHashCode(object x)
@@ -64,14 +68,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             DbDataReader rs,
             string[] names,
             ISessionImplementor session,
-            object owner
-        )
+            object owner)
         {
             if (names.Length != 1)
             {
-                throw new InvalidOperationException(
-                    "Only expecting one column..."
-                );
+                throw new InvalidOperationException("Only expecting one column...");
             }
             return rs[names[0]] as T[];
         }
@@ -91,14 +92,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             else
             {
                 parameter.NpgsqlDbType = GetNpgSqlType().NpgDbType;
-                var arr = value as T[];
-                if (arr == null)
+
+                switch (value)
                 {
-                    throw new InvalidOperationException(
-                        $"\"{parameter.ParameterName}\" is not {typeof(T)}[]"
-                    );
+                    case T[] arr:
+                        parameter.Value = arr;
+                        break;
+                    default:
+                        throw new InvalidOperationException(
+                            $"\"{parameter.ParameterName}\" is not {typeof(T)}[]"
+                        );
                 }
-                parameter.Value = arr;
             }
         }
 

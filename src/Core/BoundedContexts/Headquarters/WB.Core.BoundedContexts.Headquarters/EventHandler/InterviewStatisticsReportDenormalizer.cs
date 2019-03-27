@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dapper;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NHibernate.Linq;
+
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
@@ -30,13 +28,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
         IUpdateHandler<InterviewSummary, RosterInstancesRemoved>
     {
-        private readonly IUnitOfWork unitOfWork;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public InterviewStatisticsReportDenormalizer(IUnitOfWork unitOfWork,
-            IQuestionnaireStorage questionnaireStorage)
+        public InterviewStatisticsReportDenormalizer(IQuestionnaireStorage questionnaireStorage)
         {
-            this.unitOfWork = unitOfWork;
             this.questionnaireStorage = questionnaireStorage;
         }
 
@@ -60,13 +55,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
                 .ToList();
 
+            List<InterviewStatisticsReportRow> delete = new List<InterviewStatisticsReportRow>();
+
             foreach (var identity in questions)
             {
-                unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-                    .Where(s => s.InterviewId == state.Id
-                                && s.RosterVector == identity.RosterVector.AsString()
-                                && s.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-                    .Delete();
+                delete.AddRange(state.StatisticsReport.Where(row => 
+                    row.RosterVector == identity.RosterVector.AsString() 
+                    && row.EntityId == questionnaire.EntitiesIdMap[identity.Id]));
+            }
+
+            foreach (var item in delete)
+            {
+                state.StatisticsReport.Remove(item);
             }
 
             return state;
@@ -76,19 +76,34 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var questionnaire = questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
 
-            foreach (var instance in @event.Payload.Instances)
+            IEnumerable<(string rv, int entityId)> ToDelete()
             {
-                var rosterVector = new RosterVector(instance.OuterRosterVector) .ExtendWithOneCoordinate((int) instance.RosterInstanceId).AsString();
-                var roster = questionnaire.Find<Group>(instance.GroupId);
-                var questions = roster.Children.OfType<IQuestion>().Where(IsEligibleQuestion).ToArray();
-
-                foreach (var question in questions)
+                foreach (var instance in @event.Payload.Instances)
                 {
-                    unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-                        .Where(s => s.InterviewId == state.Id
-                                    && s.RosterVector == rosterVector
-                                    && s.EntityId == questionnaire.EntitiesIdMap[question.PublicKey])
-                        .Delete();
+                    var rosterVector = new RosterVector(instance.OuterRosterVector).ExtendWithOneCoordinate((int)instance.RosterInstanceId).AsString();
+                    var roster = questionnaire.Find<Group>(instance.GroupId);
+                    var questions = roster.Children.OfType<IQuestion>().Where(IsEligibleQuestion).ToArray();
+
+                    foreach (var question in questions)
+                    {
+                        yield return (rosterVector, questionnaire.EntitiesIdMap[question.PublicKey]);
+                    }
+                }
+            }
+
+            var toDelete = ToDelete().ToList();
+            var entitiesToDeleteLookup = toDelete.ToLookup(d => d.entityId, d => d.rv);
+
+            foreach (var entity in state.StatisticsReport.ToList())
+            {
+                var rosterVectors = entitiesToDeleteLookup[entity.EntityId];
+
+                foreach (var rosterVector in rosterVectors)
+                {
+                    if (entity.RosterVector == rosterVector)
+                    {
+                        state.StatisticsReport.Remove(entity);
+                    }
                 }
             }
 
@@ -157,16 +172,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             (int interviewId, string rosterVector, int entityId) key =
                 (state.Id, rv.AsString(), questionnaire.EntitiesIdMap[questionId]);
 
-            var entity = this.unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-                .SingleOrDefault(x => x.InterviewId == key.interviewId
-                                      && x.RosterVector == key.rosterVector
+            var entity = state.StatisticsReport.SingleOrDefault(x =>
+                                      x.RosterVector == key.rosterVector
                                       && x.EntityId == key.entityId);
 
             if (entity == null)
             {
                 entity = new InterviewStatisticsReportRow
                 {
-                    InterviewId = key.interviewId,
+                    InterviewSummary = state,
                     RosterVector = key.rosterVector,
                     EntityId = key.entityId,
                     Type = type,
@@ -174,12 +188,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     Answer = answer.Select(a => (long)a).ToArray()
                 };
 
-                this.unitOfWork.Session.Save(entity);
+                state.StatisticsReport.Add(entity);
             }
             else
             {
                 entity.Answer = answer.Select(a => (long)a).ToArray();
-                this.unitOfWork.Session.Update(entity);
             }
         }
 
@@ -194,16 +207,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             
             foreach (var identity in questions)
             {
-                this.unitOfWork.Session
-                    .Query<InterviewStatisticsReportRow>()
-                    .Where(x => x.InterviewId == summary.Id
-                                && x.RosterVector == identity.RosterVector.AsString()
-                                && x.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-                    .UpdateBuilder()
-                    .Set(x => x.IsEnabled, enabled)
-                    .Update();
+                var entity = summary.StatisticsReport.SingleOrDefault(x =>
+                    x.RosterVector == identity.RosterVector.AsString()
+                    && x.EntityId == questionnaire.EntitiesIdMap[identity.Id]);
+
+                if(entity == null) continue;
+                
+                entity.IsEnabled = enabled;
             }
         }
-
     }
 }
