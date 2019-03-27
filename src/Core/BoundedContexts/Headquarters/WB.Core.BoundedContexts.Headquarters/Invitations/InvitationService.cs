@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
 
             var hasEmail = !string.IsNullOrWhiteSpace(assignment.Email);
-            var isPrivateAssignment = (assignment.Quantity ?? 1) == 1;
+            var isPrivateAssignment = assignment.Quantity == 1;
 
             var assignmentId = assignment.Id;
             var invitation = new Invitation(assignmentId);
