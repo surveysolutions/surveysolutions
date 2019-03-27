@@ -43,6 +43,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -55,7 +56,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator,
-            IAssignmentFactory assignmentFactory) : base(logger)
+            IAssignmentFactory assignmentFactory, 
+            IInvitationService invitationService) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -67,6 +69,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
         }
 
         /// <summary>
@@ -294,10 +297,11 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             this.assignmentsStorage.Store(assignment, null);
-            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId,
-                assignment.Id, answers);
+            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
             assignment = this.assignmentsStorage.GetById(assignment.Id);
 
+            this.invitationService.CreateInvitationForWebInterview(assignment);
+            
             return new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)
