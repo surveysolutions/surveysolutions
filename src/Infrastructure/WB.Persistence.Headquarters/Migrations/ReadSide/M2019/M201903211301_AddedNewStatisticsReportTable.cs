@@ -21,6 +21,9 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             Create.Index("idx_report_statistics_entityid").OnTable("report_statistics")
                 .OnColumn("entity_id").Ascending();
 
+            Create.Index("idx_report_statistics_interviewid").OnTable("report_statistics")
+                .OnColumn("interview_id").Ascending();
+
             Execute.Sql(@"INSERT INTO readside.report_statistics (interview_id, entity_id, rostervector, answer, ""type"", is_enabled)
       SELECT isum.id as interview_id, qe.id AS entity_id, i.rostervector,
             case 

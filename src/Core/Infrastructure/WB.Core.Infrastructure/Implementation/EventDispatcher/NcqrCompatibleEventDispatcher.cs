@@ -103,7 +103,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var functionalEventHandler in functionalHandlers)
                 {
-                var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
+                    var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
 
                     functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;

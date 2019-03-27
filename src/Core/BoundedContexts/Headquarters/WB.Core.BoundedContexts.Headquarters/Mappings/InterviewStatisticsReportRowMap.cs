@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Table("report_statistics");
             Id(x => x.Id, m => m.Generator(Generators.Identity));
 
-            Property(x => x.InterviewId, pm => pm.Column("interview_id"));
             Property(x => x.EntityId, pm => pm.Column("entity_id"));
             Property(x => x.RosterVector);
 
@@ -20,6 +19,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(m => m.IsEnabled, pm => pm.Column("is_enabled"));
             Property(m => m.Type);
 
+            ManyToOne(x => x.InterviewSummary, mto =>
+            {
+               mto.Column("interview_id");
+                mto.PropertyRef(nameof(InterviewSummary.Id));
+            });
+            
             DynamicUpdate(true);
         }
     }
