@@ -8,6 +8,7 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
@@ -89,6 +90,69 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 using (var eventContext = new EventContext())
                 {
                     interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(interviewId: interview.EventSourceId, questionId: numericQuestionId));
+
+                    return new InvokeResults
+                    {
+                        CheckResult = eventContext.AnyEvent<QuestionsEnabled>(x => x.Questions.Any(q => q.Id == geogrphyQuestionId))
+                    };
+                }
+            });
+
+            Assert.That(results.CheckResult);
+
+            appDomainContext.Dispose();
+        }
+
+        [Test]
+        public void when_using_IsSectionAnswered_of_section_containing_roster_with_Enablement_Condition()
+        {
+            AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext = AppDomainContext.Create();
+
+            InvokeResults results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Guid geogrphyQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                Guid groupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+                Guid numericQuestionId = Guid.Parse("BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+                Guid rosterId = Id.g10;
+
+                AssemblyContext.SetupServiceLocator();
+
+                var groupVariable = "group1";
+                QuestionnaireDocument questionnaireDocument =
+                    Create.Entity.QuestionnaireDocumentWithOneChapter(Guid.Parse("11111111111111111111111111111111"),
+                    new IComposite[]
+                    {
+                        Create.Entity.Group(groupId, "Group X", groupVariable, null, false, new IComposite[]
+                        {
+                            Create.Entity.Roster(rosterId, variable: "roster", fixedRosterTitles: new FixedRosterTitle[]
+                            {
+                                new FixedRosterTitle(1,"1"),
+                                new FixedRosterTitle(2, "2"), 
+                            }, children: new IComposite[]
+                            {
+                                Create.Entity.NumericIntegerQuestion(numericQuestionId, variable:"num")
+                            })
+
+                            
+                        }),
+
+                        Create.Entity.GeographyQuestion(geogrphyQuestionId,
+                            variable:"geo",enablementCondition:$"IsSectionAnswered({groupVariable})"
+                        )
+                    });
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument);
+
+                interview.AnswerNumericIntegerQuestion(
+                    Create.Command.AnswerNumericIntegerQuestionCommand(interviewId: interview.EventSourceId,
+                        questionId: numericQuestionId, rosterVector: new decimal[] { 1 }));
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(
+                        Create.Command.AnswerNumericIntegerQuestionCommand(interviewId: interview.EventSourceId,
+                            questionId: numericQuestionId, rosterVector: new decimal[] { 2 }));
 
                     return new InvokeResults
                     {
