@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -109,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
             }
 
-            this.RemoveChilds(rostersToRemove.ToList());
+            this.RemoveChildren(rostersToRemove.ToList());
             
             if (rostersToAdd.Any() || rostersToUpdate.Any())
             {
@@ -237,7 +238,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             Tree?.ProcessRemovedNodeByIdentity(identity);
         }
 
-        public void RemoveChilds(List<Identity> identities)
+        public void RemoveChildren(List<Identity> identities)
         {
             var ids = identities.ToHashSet();
             children.RemoveAll(child => ids.Contains(child.Identity));
@@ -300,6 +301,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private IEnumerable<InterviewTreeStaticText> GetEnabledStaticTexts()
             => this.Children.OfType<InterviewTreeStaticText>()
                 .Where(x => !x.IsDisabled());
+
+        private IEnumerable<InterviewTreeQuestion> GetAllNestedEnabledInterviewerQuestions()
+            => this.TreeToEnumerableDepthFirst<IInterviewTreeNode>(s => s.Children)
+                .OfType<InterviewTreeQuestion>()
+                .Where(x => !x.IsPrefilled && x.IsInterviewer && !x.IsDisabled());
+
+        public int CountNestedEnabledQuestions() => this.GetAllNestedEnabledInterviewerQuestions().Count();
+
+        public int CountNestedEnabledAnsweredQuestions() => this.GetAllNestedEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
         public int CountEnabledQuestions() => this.GetEnabledInterviewerQuestions().Count();
         public int CountEnabledAnsweredQuestions() => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
