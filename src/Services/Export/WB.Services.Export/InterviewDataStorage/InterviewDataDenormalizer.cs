@@ -221,13 +221,13 @@ namespace WB.Services.Export.InterviewDataStorage
                 valueType: NpgsqlDbType.Jsonb, token: token);
         }
 
-        public Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken token = default)
+        public async Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken token = default)
         {
-            var questionnaire = GetQuestionnaireByInterviewIdAsync(@event.EventSourceId, token).Result;
+            var questionnaire = await GetQuestionnaireByInterviewIdAsync(@event.EventSourceId, token);
             if(!(questionnaire?.Find<Question>(@event.Event.QuestionId) is DateTimeQuestion question))
-                return Task.CompletedTask;
+                return ;
 
-            return UpdateQuestionValue(
+            await UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,

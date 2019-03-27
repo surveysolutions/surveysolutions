@@ -8,7 +8,7 @@
 
 <div class="centered-box-table">
     <h2>
-        @Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome)
+        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)
     </h2>
     <p>
         @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)

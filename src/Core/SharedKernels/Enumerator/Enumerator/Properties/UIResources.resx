@@ -549,16 +549,19 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Map</value>
   </data>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Area:</value>
+    <value>Area: {0:0.00} m2</value>
+  </data>
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Points: {0}</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Length:</value>
+    <value>Length: {0:0.00} m</value>
   </data>
   <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Perimeter:</value>
+    <value>Perimeter: {0:0.00} m</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>ACTIVE MAP:</value>

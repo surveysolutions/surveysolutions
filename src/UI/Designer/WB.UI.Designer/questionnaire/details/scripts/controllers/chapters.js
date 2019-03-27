@@ -61,7 +61,8 @@
                     if (confirmResult === 'ok') {
                         commandService.deleteGroup($state.params.questionnaireId, itemIdToDelete)
                             .then(function () {
-                                var index = $scope.questionnaire.chapters.indexOf(chapter);
+                                var chapter = _.find($scope.questionnaire.chapters, { itemId: itemIdToDelete });
+                                var index = _.indexOf($scope.questionnaire.chapters, chapter);
                                 if (index > -1) {
                                     $scope.questionnaire.chapters.splice(index, 1);
                                     $rootScope.$emit('chapterDeleted');

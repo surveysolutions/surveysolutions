@@ -351,4 +351,16 @@
   <data name="SizeInstructions" xml:space="preserve">
     <value>Must be a number, -1 for unlimited, 1 if email is specified</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email is invalid</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Password is invalid</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Size is invalid</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>For assignments with provided email allowed size is 1</value>
+  </data>
 </root>

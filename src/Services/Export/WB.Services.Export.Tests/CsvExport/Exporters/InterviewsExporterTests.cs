@@ -191,6 +191,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewEntities = new List<InterviewEntity>
             {
                 Create.InterviewEntity(asInt:2, entityType: EntityType.Question, identity: Create.Identity(numericRosterSizeId)),
+                Create.InterviewEntity(entityType: EntityType.Section, identity: Create.Identity(numericRosterId, 0), isEnabled:true),
                 Create.InterviewEntity(asInt: 22, entityType: EntityType.Question, identity: Create.Identity(questionInNumericRosterId, 0))
             };
 

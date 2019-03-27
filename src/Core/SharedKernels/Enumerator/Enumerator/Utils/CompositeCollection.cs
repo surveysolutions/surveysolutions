@@ -212,6 +212,59 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             }
         }
 
+        public void InsertCollection(int index, IObservableCollection<T> collection)
+        {
+            this.itemsLock.EnterWriteLock();
+
+            try
+            {
+                int offset = this.collections.Take(index).Sum(c => c.Count);
+
+                this.collections.Insert(index, collection);
+                collection.CollectionChanged += this.HandleChildCollectionChanged;
+
+                var addedCollectionCount = collection.Count;
+                this.Count += addedCollectionCount;
+
+                if (addedCollectionCount > 0)
+                    this.NotifyItemsAdded(collection, offset);
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
+            }
+        }
+
+        public bool RemoveCollection(IObservableCollection<T> collection)
+        {
+            this.itemsLock.EnterWriteLock();
+
+            try
+            {
+                int index = this.collections.IndexOf(collection);
+
+                if (index < 0)
+                    return false;
+
+                int offset = this.collections.Take(index).Sum(c => c.Count);
+
+                collection.CollectionChanged -= this.HandleChildCollectionChanged;
+                var removeResult = this.collections.Remove(collection);
+
+                var collectionCount = collection.Count;
+                this.Count -= collectionCount;
+                
+                if (collectionCount > 0)
+                    this.NotifyItemsRemoved(collection, offset);
+
+                return removeResult;
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
+            }
+        }
+
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             int newCount = 0;
@@ -239,21 +292,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             if (this.CollectionChanged == null)
                 return;
 
-            var offset = 0;
-            this.itemsLock.EnterReadLock();
-            try
-            {
-                foreach (var coll in this.collections)
-                    if (sender == coll)
-                        break;
-                    else
-                        offset += coll.Count();
-            }
-            finally
-            {
-                this.itemsLock.ExitReadLock();
-            }
-
+            var offset = CalculateOffset(sender);
             var newIndex = e.NewStartingIndex == -1 ? -1 : e.NewStartingIndex + offset;
             var oldIndex = e.OldStartingIndex == -1 ? -1 : e.OldStartingIndex + offset;
 
@@ -281,6 +320,27 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
             }
 
             this.CollectionChanged(this, args);
+        }
+
+        private int CalculateOffset(object sender)
+        {
+            var offset = 0;
+
+            this.itemsLock.EnterReadLock();
+            try
+            {
+                foreach (var coll in this.collections)
+                    if (sender == coll)
+                        break;
+                    else
+                        offset += coll.Count();
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
+            }
+
+            return offset;
         }
 
         private void NotifyItemsAdded(IList items, int offset)

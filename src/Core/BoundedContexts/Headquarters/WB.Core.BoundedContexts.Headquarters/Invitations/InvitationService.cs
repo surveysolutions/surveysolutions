@@ -31,8 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var hash =  assignment.QuestionnaireId.GetHashCode() * (1 + interviewId.GetHashCode()) + assignment.Id;
             var token = TokenGenerator.Instance.Generate(hash);
             invitation.SetToken(token);
-            invitationStorage.Store(invitation, null);
             invitation.InterviewWasCreated(interviewId);
+            invitationStorage.Store(invitation, null);
             return invitation.Id;
         }
 
@@ -270,6 +270,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.Query(_ => _.FirstOrDefault(x => x.Token == uppercaseToken && x.Assignment.Password == uppercasePassword));
         }
 
+        public Invitation GetInvitationByAssignmentId(int assignmentId)
+        {
+            return invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == assignmentId));
+        }
+
         public void InterviewWasCreated(int invitationId, string interviewId)
         {
             var invitation = this.GetInvitation(invitationId);
@@ -282,6 +287,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             var uppercaseToken = token.ToUpper();
             var uppercasePassword = password.ToUpper();
             return invitationStorage.Query(_ => _.Any(x => x.Token == uppercaseToken && x.Assignment.Password == uppercasePassword));
+        }
+
+        public void MigrateInvitationToNewAssignment(int oldAssignmentId, int newAssignmentId)
+        {
+            var invitation = invitationStorage.Query(_ => _.SingleOrDefault(x => x.AssignmentId == oldAssignmentId && x.InterviewId == null));
+            if (invitation != null)
+            {
+                invitation.UpdateAssignmentId(newAssignmentId);
+                invitationStorage.Store(invitation, invitation.Id);
+            }
         }
 
         public Invitation GetInvitation(int invitationId)
@@ -379,7 +394,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         IEnumerable<QuestionnaireLiteViewItem> GetQuestionnairesWithInvitations();
         Invitation GetInvitationByToken(string token);
         Invitation GetInvitationByTokenAndPassword(string token, string password);
+        Invitation GetInvitationByAssignmentId(int assignmentId);
         void InterviewWasCreated(int invitationId, string interviewId);
         bool IsValidTokenAndPassword(string token, string password);
+        void MigrateInvitationToNewAssignment(int oldAssignmentId, int newAssignmentId);
     }
 }

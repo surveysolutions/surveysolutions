@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow)
         {
             if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
-                (assignmentRow.Quantity != null && (assignmentRow.Quantity.Quantity > 1 || assignmentRow.Quantity.Quantity == -1)))
+                assignmentRow.Quantity != null && assignmentRow.Quantity.Quantity != 1)
                     yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
 
             if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode

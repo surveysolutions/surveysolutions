@@ -120,18 +120,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var address = invitation.Assignment.Email;
 
                 var link = $"{baseUrl}/WebInterview/{invitation.Token}/Start";
+                var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
 
                 var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
                 var emailParams = new EmailParameters
                 {
                     AssignmentId = invitation.AssignmentId,
                     InvitationId = invitation.Id,
-                    Subject = emailTemplate.Subject
-                        .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
-                    LinkText = emailTemplate.LinkText,
-                    MainText = emailTemplate.MainText
-                        .Replace(WebInterviewEmailTemplate.SurveyName, surveyName),
-                    PasswordDescription = emailTemplate.PasswordDescription,
+                    Subject = emailContent.Subject,
+                    LinkText = emailContent.LinkText,
+                    MainText = emailContent.MainText,
+                    PasswordDescription = emailContent.PasswordDescription,
                     Password = password,
                     Address = senderInfo.Address,
                     SurveyName = surveyName,

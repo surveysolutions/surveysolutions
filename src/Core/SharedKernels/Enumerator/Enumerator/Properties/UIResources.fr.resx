@@ -371,9 +371,6 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>Carte active :</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Superficie :</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>Cartes disponibles sur l'appareil</value>
   </data>
@@ -385,9 +382,6 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Modifier</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Périmètre :</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>Emplacement</value>
