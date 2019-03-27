@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void CreateInvitationForWebInterview(Assignment assignment)
         {
-            if (assignment.WebMode != false)
+            if (assignment.WebMode == false)
             {
                 return;
             }
