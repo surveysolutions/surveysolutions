@@ -5,6 +5,7 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -16,9 +17,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public interface IInterviewStatisticsReportDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary,
-        IReadSideRepositoryWriter<InterviewSummary>>
-    {
-    }
+        IReadSideRepositoryWriter<InterviewSummary>>  { }
 
     internal class InterviewStatisticsReportDenormalizer :
         IInterviewStatisticsReportDenormalizer,
@@ -28,7 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, QuestionsEnabled>,
         IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
         IUpdateHandler<InterviewSummary, NumericRealQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>
+        IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, RosterInstancesRemoved>
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -60,26 +60,37 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
                 .ToList();
 
+            foreach (var identity in questions)
+            {
+                unitOfWork.Session.Query<InterviewStatisticsReportRow>()
+                    .Where(s => s.InterviewId == state.Id
+                                && s.RosterVector == identity.RosterVector.AsString()
+                                && s.EntityId == questionnaire.EntitiesIdMap[identity.Id])
+                    .Delete();
+            }
 
-            unitOfWork.Session.Connection.Execute("delete from readside.report_statistics " +
-                                                  "where interview_id = @interviewId and entity_id = @entityId " +
-                                                  "and rostervector = @rostervector",
-                questions.Select(q => new
+            return state;
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<RosterInstancesRemoved> @event)
+        {
+            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(state.QuestionnaireId, state.QuestionnaireVersion);
+
+            foreach (var instance in @event.Payload.Instances)
+            {
+                var rosterVector = new RosterVector(instance.OuterRosterVector) .ExtendWithOneCoordinate((int) instance.RosterInstanceId).AsString();
+                var roster = questionnaire.Find<Group>(instance.GroupId);
+                var questions = roster.Children.OfType<IQuestion>().Where(IsEligibleQuestion).ToArray();
+
+                foreach (var question in questions)
                 {
-                    InterviewId = state.Id,
-                    EntityId = questionnaire.EntitiesIdMap[q.Id],
-                    RosterVector = q.RosterVector.AsString()
-                }));
-
-            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
-            //foreach (var identity in questions)
-            //{
-            //    unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-            //        .Where(s => s.InterviewId == state.Id
-            //                    && s.RosterVector == identity.RosterVector.AsString()
-            //                    && s.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-            //        .Delete();
-            //}
+                    unitOfWork.Session.Query<InterviewStatisticsReportRow>()
+                        .Where(s => s.InterviewId == state.Id
+                                    && s.RosterVector == rosterVector
+                                    && s.EntityId == questionnaire.EntitiesIdMap[question.PublicKey])
+                        .Delete();
+                }
+            }
 
             return state;
         }
@@ -142,48 +153,35 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var question = questionnaire.Find<IQuestion>(questionId);
 
             if (!IsEligibleQuestion(question)) return;
+            
+            (int interviewId, string rosterVector, int entityId) key =
+                (state.Id, rv.AsString(), questionnaire.EntitiesIdMap[questionId]);
 
-            unitOfWork.Session.Connection.Execute(
-                @"insert into readside.report_statistics (interview_id, entity_id, rostervector, answer, ""type"")
-                    values(@interviewid,@entityId,@rostervector, @answer::int8[], @type)
-                    on conflict (interview_id, entity_id, rostervector)
-                    do update set answer = @answer::int8[]", new
+            var entity = this.unitOfWork.Session.Query<InterviewStatisticsReportRow>()
+                .SingleOrDefault(x => x.InterviewId == key.interviewId
+                                      && x.RosterVector == key.rosterVector
+                                      && x.EntityId == key.entityId);
+
+            if (entity == null)
+            {
+                entity = new InterviewStatisticsReportRow
                 {
-                    InterviewId = state.Id,
-                    RosterVector = rv.AsString(),
-                    EntityId = questionnaire.EntitiesIdMap[questionId],
+                    InterviewId = key.interviewId,
+                    RosterVector = key.rosterVector,
+                    EntityId = key.entityId,
                     Type = type,
-                    answer
-                });
+                    IsEnabled = true,
+                    Answer = answer.Select(a => (long)a).ToArray()
+                };
 
-            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
-            //var entity = this.unitOfWork.Session.Query<InterviewStatisticsReportRow>()
-            //    .SingleOrDefault(x => x.InterviewId == key.interviewId
-            //                          && x.RosterVector == key.rosterVector
-            //                          && x.EntityId == key.entityId);
-
-            //if (entity == null)
-            //{
-            //    entity = new InterviewStatisticsReportRow
-            //    {
-            //        InterviewId = key.interviewId,
-            //        RosterVector = key.rosterVector,
-            //        EntityId = key.entityId,
-            //        Type = type,
-            //        IsEnabled = true,
-            //        Answer = answer.Select(a => (long)a).ToArray()
-            //    };
-
-            //    this.unitOfWork.Session.Save(entity);
-            //    this.unitOfWork.Session.Flush();
-            //}
-            //else
-            //{
-            //    entity.Answer = answer.Select(a => (long) a).ToArray();
-            //    this.unitOfWork.Session.Update(entity);
-            //}
+                this.unitOfWork.Session.Save(entity);
+            }
+            else
+            {
+                entity.Answer = answer.Select(a => (long)a).ToArray();
+                this.unitOfWork.Session.Update(entity);
+            }
         }
-        
 
         private void UpdateQuestionEnablement(InterviewSummary summary, bool enabled, Identity[] questionIds)
         {
@@ -193,31 +191,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             List<Identity> questions = questionIds
                 .Where(q => IsEligibleQuestion(questionnaire.Find<IQuestion>(q.Id)))
                 .ToList();
-
-            unitOfWork.Session.Connection.Execute("update readside.report_statistics set is_enabled = @enabled " +
-                                                  "where interview_id = @interviewid " +
-                                                  "and rostervector = @rostervector and entity_id = @entityId",
-                questions.Select(identity => new
-                {
-                    RosterVector = identity.RosterVector.AsString(),
-                    EntityId = questionnaire.EntitiesIdMap[identity.Id],
-                    InterviewId = summary.Id,
-                    enabled
-                }));
-
-            //// TODO: Fix NH mapping and move code to NH. There is a problem with NH handling entities with composite key. Too much updates generated
-            //foreach (var identity in questions)
-            //{
-            //    this.unitOfWork.Session
-            //        .Query<InterviewStatisticsReportRow>()
-            //        .Where(x => x.InterviewId == summary.Id
-            //                    && x.RosterVector == identity.RosterVector.AsString()
-            //                    && x.EntityId == questionnaire.EntitiesIdMap[identity.Id])
-            //        .UpdateBuilder()
-            //        .Set(x => x.IsEnabled, enabled)
-            //        .Update();
-
-            //}
+            
+            foreach (var identity in questions)
+            {
+                this.unitOfWork.Session
+                    .Query<InterviewStatisticsReportRow>()
+                    .Where(x => x.InterviewId == summary.Id
+                                && x.RosterVector == identity.RosterVector.AsString()
+                                && x.EntityId == questionnaire.EntitiesIdMap[identity.Id])
+                    .UpdateBuilder()
+                    .Set(x => x.IsEnabled, enabled)
+                    .Update();
+            }
         }
+
     }
 }
