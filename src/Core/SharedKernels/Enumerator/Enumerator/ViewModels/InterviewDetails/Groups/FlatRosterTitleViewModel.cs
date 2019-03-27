@@ -6,13 +6,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     [ExcludeFromCodeCoverage] // no reason to cover it yet. Doesn't have any logic 
-    public class PlainRosterTitleViewModel : MvxNotifyPropertyChanged,
+    public class FlatRosterTitleViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel
     {
         public DynamicTextViewModel Title { get; }
         public EnablementViewModel Enablement { get; }
 
-        public PlainRosterTitleViewModel(DynamicTextViewModel title, EnablementViewModel enablement)
+        public FlatRosterTitleViewModel(DynamicTextViewModel title, EnablementViewModel enablement)
         {
             this.Title = title;
             Enablement = enablement;

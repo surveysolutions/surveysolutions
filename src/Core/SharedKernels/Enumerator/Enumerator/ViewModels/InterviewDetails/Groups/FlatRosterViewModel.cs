@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
-    public class PlainRosterViewModel : MvxNotifyPropertyChanged,
+    public class FlatRosterViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
         IInterviewEntityViewModel,
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly CompositeCollection<ICompositeEntity> rosterInstances;
         private readonly Dictionary<Identity, CompositeCollection<ICompositeEntity>> shownRosterInstances;
 
-        public PlainRosterViewModel(IStatefulInterviewRepository interviewRepository,
+        public FlatRosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory viewModelFactory,
             ILiteEventRegistry eventRegistry,
             ICompositeCollectionInflationService compositeCollectionInflationService)
@@ -97,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         
         private void InsertRosterInstance(int rosterIndex, Identity interviewRosterInstance, IStatefulInterview statefulInterview)
         {
-            var interviewEntityViewModel = this.viewModelFactory.GetNew<PlainRosterTitleViewModel>();
+            var interviewEntityViewModel = this.viewModelFactory.GetNew<FlatRosterTitleViewModel>();
             interviewEntityViewModel.Init(interviewId, interviewRosterInstance, navigationState);
             var titleCollection = new CovariantObservableCollection<ICompositeEntity>(interviewEntityViewModel.ToEnumerable());
 
