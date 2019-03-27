@@ -9,10 +9,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.PlainRosterViewModelTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FlatRosterViewModelTests
 {
-    [TestOf(typeof(PlainRosterViewModel))]
-    public class PlainRosterViewModelTestsClass : BaseMvvmCrossTest
+    [TestOf(typeof(FlatRosterViewModel))]
+    public class FlatRosterViewModelTestsClass : BaseMvvmCrossTest
     {
         [Test]
         public void should_read_plain_rosters_from_interview()
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.PlainRosterViewModel
                 Create.Entity.Roster(Id.gA, 
                     rosterSizeQuestionId: Id.g1,
                     rosterSizeSourceType: RosterSizeSourceType.Question,
-                    isPlainMode: true,
+                    isFlatMode: true,
                     children: new IComposite[]
                     {
                         Create.Entity.TextQuestion(Id.g2)
@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.PlainRosterViewModel
 
             var questionnaireStorage = Create.Storage.QuestionnaireStorage(questionnaire);
             var viewModelFactory = Substitute.For<IInterviewViewModelFactory>();
-            viewModelFactory.GetNew<PlainRosterTitleViewModel>()
-                .ReturnsForAnyArgs(Create.ViewModel.PlainRosterTitleViewModel(statefulInterviewRepository, questionnaireStorage));
+            viewModelFactory.GetNew<FlatRosterTitleViewModel>()
+                .ReturnsForAnyArgs(Create.ViewModel.FlatRosterTitleViewModel(statefulInterviewRepository, questionnaireStorage));
 
             viewModelFactory.GetEntity(null, null, null)
                 .ReturnsForAnyArgs(Create.ViewModel.TextQuestionViewModel(interviewRepository: statefulInterviewRepository,
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.PlainRosterViewModel
             inflationService.GetInflatedCompositeCollection(null)
                 .ReturnsForAnyArgs(compositeCollection);
 
-            var viewModel = Create.ViewModel.PlainRosterViewModel(statefulInterviewRepository, viewModelFactory, compositeCollectionInflationService: inflationService);
+            var viewModel = Create.ViewModel.FlatRosterViewModel(statefulInterviewRepository, viewModelFactory, compositeCollectionInflationService: inflationService);
 
             // Act
             viewModel.Init(interview.EventSourceId.FormatGuid(), Create.Identity(Id.gA, 1), 

@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
-                Create.Entity.FixedRoster(rosterId, isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(rosterId, isFlatMode: true, fixedTitles: new FixedRosterTitle[]
                 {
                     Create.Entity.FixedTitle(1, "1"),
                     Create.Entity.FixedTitle(2, "2"),
@@ -130,7 +130,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
 
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(sectionId, new IComposite[]
             {
-                Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
                 {
                     Create.Entity.FixedTitle(1, "1"),
                     Create.Entity.FixedTitle(2, "2"),
@@ -166,7 +166,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             {
                 Create.Entity.Group(groupId, children: new IComposite[]
                 {
-                    Create.Entity.FixedRoster(isPlainMode: true, fixedTitles: new FixedRosterTitle[]
+                    Create.Entity.FixedRoster(isFlatMode: true, fixedTitles: new FixedRosterTitle[]
                     {
                         Create.Entity.FixedTitle(1, "1"),
                         Create.Entity.FixedTitle(2, "2"),
