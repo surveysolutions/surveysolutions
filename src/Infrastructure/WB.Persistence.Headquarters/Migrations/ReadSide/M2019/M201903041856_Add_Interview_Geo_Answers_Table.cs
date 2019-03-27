@@ -37,7 +37,7 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
             var primaryKeyName = "pk_interview_geo_answers";
 
             Create.Table("interview_geo_answers")
-                .WithColumn("interviewid").AsFixedLengthString(255).PrimaryKey(primaryKeyName)
+                .WithColumn("interviewid").AsString(255).PrimaryKey(primaryKeyName)
                 .WithColumn("questionid").AsGuid().PrimaryKey(primaryKeyName)
                 .WithColumn("rostervector").AsString().Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("latitude").AsDouble()
