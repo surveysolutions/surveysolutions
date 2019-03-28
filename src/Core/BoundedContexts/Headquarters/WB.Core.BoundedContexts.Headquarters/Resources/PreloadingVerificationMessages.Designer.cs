@@ -437,5 +437,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0059_IncosistentWebmodeAndPassword", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have either email or password provided.
+        /// </summary>
+        public static string PL0060_WebmodeSizeOneHasNoEmailOrPassword {
+            get {
+                return ResourceManager.GetString("PL0060_WebmodeSizeOneHasNoEmailOrPassword", resourceCulture);
+            }
+        }
     }
 }
