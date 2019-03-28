@@ -256,20 +256,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsCategoricalMultiAnswersQuestion(question) && !(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        public bool IsCategoricalMultiAnswersQuestion(IQuestion question)
-        {
-            return question is MultyOptionsQuestion;
-        }
+        public bool IsCategoricalMultiAnswersQuestion(IQuestion question) => question is MultyOptionsQuestion;
 
-        public  bool IsCategoricalSingleAnswerQuestion(IQuestion question)
-        {
-            return question is SingleQuestion;
-        }
-
-        public bool IsFilteredComboboxQuestion(IQuestion question)
-        {
-            return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue && question.IsFilteredCombobox.Value;
-        }
+        public bool IsFilteredComboboxQuestion(IQuestion question) => question.IsFilteredCombobox == true;
 
         public bool IsFixedRoster(IGroup group) => group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
 

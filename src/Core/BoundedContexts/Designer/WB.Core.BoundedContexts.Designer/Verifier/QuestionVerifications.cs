@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IQuestion>("WB0090", LinkedQuestionIsInterviewersOnly, VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
             Error<IQuestion>("WB0100", (q, document) => RosterSizeQuestionMaxValueCouldBeInRange1And60(q, document,GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), string.Format(VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200,MaxRosterSizeAnswer)),
             Error<IQuestion>("WB0269", QuestionTitleEmpty, VerificationMessages.WB0269_QuestionTitleIsEmpty),
-            Error<SingleQuestion>("WB0075", FilteredComboboxContainsMoreThanMaxOptions, string.Format(VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options, MaxOptionsCountInFilteredComboboxQuestion)),
+            Error<ICategoricalQuestion>("WB0075", FilteredComboboxContainsMoreThanMaxOptions, string.Format(VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0086", CascadingQuestionReferencesMissingParent, VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0089", CascadingQuestionOptionsWithParentValuesShouldBeUnique, VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
@@ -621,17 +621,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static bool CategoricalOptionsCountMoreThanMaxOptionCount(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return ((questionnaire.Questionnaire.IsCategoricalSingleAnswerQuestion(question) && !question.CascadeFromQuestionId.HasValue &&
-                     !questionnaire.Questionnaire.IsFilteredComboboxQuestion(question)) || questionnaire.Questionnaire.IsCategoricalMultiAnswersQuestion(question))
-                   && question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
-        }
+            => !question.CascadeFromQuestionId.HasValue &&
+               !questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) &&
+               question.Answers?.Count > MaxOptionsCountInCategoricalOptionQuestion;
 
-        private static bool FilteredComboboxContainsMoreThanMaxOptions(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) && question.Answers != null &&
-                   question.Answers.Count > MaxOptionsCountInFilteredComboboxQuestion;
-        }
+        private static bool FilteredComboboxContainsMoreThanMaxOptions(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire) 
+            => questionnaire.Questionnaire.IsFilteredComboboxQuestion(question) && question.Answers?.Count > MaxOptionsCountInFilteredComboboxQuestion;
 
         private static bool CategoricalQuestionIsLinked(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
