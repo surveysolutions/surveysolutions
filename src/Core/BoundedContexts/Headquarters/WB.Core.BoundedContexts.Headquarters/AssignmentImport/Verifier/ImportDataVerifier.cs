@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IFileSystemAccessor fileSystem;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
-        private IQuestionOptionsRepository questionOptionsRepository;
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
@@ -175,11 +175,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
             }
-
-            foreach (var error in InconsistentAssignmentSettings(assignmentRow))
-            {
-                yield return error;
-            }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
@@ -285,30 +280,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
             Error<AssignmentQuantity>(Quantity_ExceedsMaxInterviewsCount, "PL0054", string.Format(messages.PL0054_MaxInterviewsCountByAssignmentExeeded, Constants.MaxInterviewsCountByAssignment)),
             Error<AssignmentEmail>(Invalid_Email, "PL0055", messages.PL0055_InvalidEmail),
-            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword)
+            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword),
+            Error<AssignmentQuantity>(IncosistentQuantityAndEmail, "PL0057", messages.PL0057_IncosistentQuantityAndEmail),
+            Error<AssignmentEmail>(IncosistentWebmodeAndEmail, "PL0058", messages.PL0058_IncosistentWebmodeAndEmail),
+            Error<AssignmentPassword>(IncosistentWebmodeAndPassword, "PL0059", messages.PL0059_IncosistentWebmodeAndPassword),
         };
 
-        private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow)
-        {
-            if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
-                assignmentRow.Quantity != null && assignmentRow.Quantity.Quantity != 1)
-                    yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
+        private bool IncosistentWebmodeAndPassword(AssignmentPassword password, PreloadingAssignmentRow assignmentRow)
+            => !string.IsNullOrEmpty(password.Value) && (assignmentRow.WebMode.WebMode == false || assignmentRow.WebMode == null);
 
-            if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
-               && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //email is set
-                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmail, assignmentRow, assignmentRow.Email);
+        private bool IncosistentWebmodeAndEmail(AssignmentEmail email, PreloadingAssignmentRow assignmentRow)
+            => !string.IsNullOrEmpty(email.Value) && (assignmentRow.WebMode?.WebMode == false || assignmentRow.WebMode == null);
 
-            if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
-                && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
-                yield return ToCellError("PL0059", messages.PL0059_IncosistentWebmodeAndPassword, assignmentRow, assignmentRow.Password);
-        
-            //web mode with quantity 1 having neither Password nor Email is not allowed
-            if((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode == true) && 
-               (assignmentRow.Quantity != null && assignmentRow.Quantity.Quantity == 1) &&
-               (assignmentRow.Password == null || string.IsNullOrEmpty(assignmentRow.Password.Value)) &&
-               (assignmentRow.Email == null || string.IsNullOrEmpty(assignmentRow.Email.Value)))
-                    yield return ToCellError("PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword, assignmentRow, assignmentRow.Quantity);
-        }
+        private bool IncosistentQuantityAndEmail(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
+            => quantity.Quantity != 1 && !string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
         private bool Invalid_Password(AssignmentPassword password)
         {
@@ -916,6 +901,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
             cell is TValue typedCell && hasError(typedCell, questionnaire) ? new []{ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
+
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
+            Func<TValue, PreloadingAssignmentRow, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
+            cell is TValue typedCell && hasError(typedCell, row) ? new[] { ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
             Errors<TValue>(Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentAnswers
