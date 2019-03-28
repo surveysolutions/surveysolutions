@@ -195,9 +195,7 @@ const sizeValidForWebMode = {
         if(value === "1") 
             return (email !== null && email !== "") || (password !== null && password !== "")
 
-        if(value !== "1") {
-            return email == null || email == ""
-        }
+        return true;
     },
     hasTarget: true
 }
