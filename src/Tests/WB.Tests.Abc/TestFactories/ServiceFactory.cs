@@ -1022,6 +1022,14 @@ namespace WB.Tests.Abc.TestFactories
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
 
+        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        {
+            var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
+                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>());
+            return service;
+        }
+
         public IInvitationService InvitationService(params Invitation[] invitations)
         {
             IPlainStorageAccessor<Invitation> accessor = new TestPlainStorage<Invitation>();
