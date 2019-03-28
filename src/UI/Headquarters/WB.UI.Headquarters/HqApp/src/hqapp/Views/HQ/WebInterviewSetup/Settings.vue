@@ -116,12 +116,6 @@
                                                     <div class="row-element mb-40">
                                                         <a href="javascript:void(0);" class="btn btn-success btn-lg">Start New interview</a>
                                                     </div>
-                                                    <div class="row-element">
-                                                        <div class="additional-info">
-                                                            If you have already started this interview, <br />
-                                                            and want to continue &mdash; <a href="javascript:void(0);" class="link-underlined">restore previous interview</a>
-                                                        </div>
-                                                    </div>
                                                 </div>            
                                             </div>
                                         </div>

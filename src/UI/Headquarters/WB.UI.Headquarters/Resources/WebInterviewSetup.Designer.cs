@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Captcha before interview start.
+        ///   Looks up a localized string similar to Use CAPTCHA before interview start.
         /// </summary>
         public static string UseCaptcha {
             get {
