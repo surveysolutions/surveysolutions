@@ -632,7 +632,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start interview.
+        ///   Looks up a localized string similar to Start new interview.
         /// </summary>
         public static string Start {
             get {
