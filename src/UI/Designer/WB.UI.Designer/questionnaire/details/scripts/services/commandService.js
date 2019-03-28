@@ -322,7 +322,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: false,
-                    isPlainMode: false,
+                    isFlatMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
@@ -342,7 +342,7 @@
                     condition: "",
                     hideIfDisabled: false,
                     isRoster: true,
-                    isPlainMode: false,
+                    isFlatMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "FixedTitles",
                     fixedRosterTitles: [{ value: 1, title: "First Title" }, { value: 2, title: "Second Title" }],
@@ -400,7 +400,7 @@
                     condition: group.enablementCondition,
                     hideIfDisabled: group.hideIfDisabled,
                     isRoster: false,
-                    isPlainMode: false,
+                    isFlatMode: false,
                     rosterSizeQuestionId: null,
                     rosterSizeSource: "Question",
                     rosterFixedTitles: null,
@@ -421,7 +421,7 @@
                     condition: incomingRoster.enablementCondition,
                     hideIfDisabled: incomingRoster.hideIfDisabled,
                     variableName: incomingRoster.variableName,
-                    isPlainMode: incomingRoster.isPlainMode,
+                    isFlatMode: incomingRoster.isFlatMode,
                     isRoster: true
                 };
 
