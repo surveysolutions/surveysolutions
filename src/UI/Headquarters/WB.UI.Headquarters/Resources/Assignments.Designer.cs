@@ -520,7 +520,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have either email or password provided.
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have email or password provided.
         /// </summary>
         public static string SizeForWebMode {
             get {
