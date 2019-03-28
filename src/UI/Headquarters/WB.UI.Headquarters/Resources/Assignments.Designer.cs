@@ -520,6 +520,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have either email or password provided.
+        /// </summary>
+        public static string SizeForWebMode {
+            get {
+                return ResourceManager.GetString("SizeForWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Must be a number, -1 for unlimited, 1 if email is specified.
         /// </summary>
         public static string SizeInstructions {
