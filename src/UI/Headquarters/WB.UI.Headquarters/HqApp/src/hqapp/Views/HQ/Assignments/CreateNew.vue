@@ -70,6 +70,7 @@
                             </div>
                             <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
                                 <p> {{ this.$t("Assignments.InvalidSizeMessage") }} </p>
+                                <p>{{ errors.first('size') }}</p>
                                 <p v-if="sizeQuestion.answer !== '1' && (emailQuestion.answer !== null || emailQuestion.answer !== '')"> {{ this.$t("Assignments.InvalidSizeWithEmail") }} </p>                                                             
                             </div>
                         </wb-question>
@@ -154,7 +155,7 @@
                                 </div>                                
                             </div>
                             <div class="information-block text-danger" v-if="!passwordQuestion.validity.isValid">
-                                <p> {{ this.$t("Assignments.InvalidPassword") }} </p>                                                             
+                                <p> {{ this.$t("Assignments.InvalidPassword") }} </p>
                             </div>
                         </wb-question>                       
 
@@ -182,6 +183,26 @@
 
 <script>
 import Vue from "vue";
+import { Validator } from 'vee-validate';
+
+const sizeValidForWebMode = {
+    getMessage(field, args) {
+        const result = Vue.$t('Assignments.SizeForWebMode')
+        return result
+    },
+    validate(value, [isWebMode, email, password]) {
+        if(!isWebMode) return true
+        if(value === "1") 
+            return (email !== null && email !== "") || (password !== null && password !== "")
+
+        if(value !== "1") {
+            return email == null || email == ""
+        }
+    },
+    hasTarget: true
+}
+
+Validator.extend('sizeValidForWebMode', sizeValidForWebMode);
 
 export default {
     data() {
@@ -240,12 +261,13 @@ export default {
             return {
                 regex: "^-?([0-9]+)$",
                 min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment
+                max_value: this.config.maxInterviewsByAssignment,
+                sizeValidForWebMode: [this.webMode.answer, this.emailQuestion.answer, this.passwordQuestion.answer]
             };
         }, 
         passwordValidations(){
             return {
-                regex: "^([0-9A-Z]+)|\\?$"
+                regex: "^([0-9A-Z]{6,})|\\?$"
             };
         },        
         entities() {
@@ -278,25 +300,9 @@ export default {
         async create(ev) {
             var validationResult = await this.$validator.validateAll();
 
-            var sizeIsValidExtra = (!this.webMode.answer) ||            
-                this.webMode.answer &&
-                (this.sizeQuestion.answer == "1" ||
-                    (this.sizeQuestion.answer !== "1" &&                 
-                        (this.emailQuestion.answer == null || this.emailQuestion.answer == "")))
-
-            var passwordIsValidExtra = !this.webMode.answer ||
-             (this.webMode.answer && 
-                (this.passwordQuestion.answer == null ||
-                  (this.passwordQuestion.answer == '?' || 
-                   this.passwordQuestion.answer == '' || 
-                   this.passwordQuestion.answer.length >= 6)))
-
-            validationResult = validationResult && sizeIsValidExtra && passwordIsValidExtra 
-
-            this.sizeQuestion.validity.isValid = !this.errors.has('size') && sizeIsValidExtra           
+            this.sizeQuestion.validity.isValid = !this.errors.has('size')            
             this.emailQuestion.validity.isValid = !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.errors.has('password') && passwordIsValidExtra
-
+            this.passwordQuestion.validity.isValid = !this.errors.has('password') 
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false
             }
