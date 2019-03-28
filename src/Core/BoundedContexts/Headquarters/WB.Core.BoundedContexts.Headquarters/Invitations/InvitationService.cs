@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 invitation.SetToken(token);
             }
 
-            invitationStorage.Store(invitation, null);
+            invitationStorage.Store(invitation, invitation.Id);
         }
 
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
