@@ -231,6 +231,8 @@ namespace WB.UI.Headquarters.Controllers
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
+                TempData[AskForEmail] = true;
+
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
                     var interviewId = this.CreateInterview(assignment);
@@ -243,8 +245,6 @@ namespace WB.UI.Headquarters.Controllers
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
-
-                TempData[AskForEmail] = true;
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
