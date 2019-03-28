@@ -145,7 +145,7 @@
     <value>Web interview for {{name}} started</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-    <value>Use Captcha before interview start</value>
+    <value>Use CAPTCHA before interview start</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
     <value>Download ({{count}})</value>
