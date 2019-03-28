@@ -244,4 +244,7 @@
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
     <value>Web Mode has to be activated for assignments having Password</value>
   </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Assignment with size 1 for web mode should have either email or password provided</value>
+  </data>
 </root>

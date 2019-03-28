@@ -301,6 +301,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
                 && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
                 yield return ToCellError("PL0059", messages.PL0059_IncosistentWebmodeAndPassword, assignmentRow, assignmentRow.Password);
+        
+            //web mode with quantity 1 having neither Password nor Email is not allowed
+            if((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode == true) && 
+               (assignmentRow.Quantity != null && assignmentRow.Quantity.Quantity == 1) &&
+               (assignmentRow.Password == null || string.IsNullOrEmpty(assignmentRow.Password.Value)) &&
+               (assignmentRow.Email == null || string.IsNullOrEmpty(assignmentRow.Email.Value)))
+                    yield return ToCellError("PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword, assignmentRow, assignmentRow.Quantity);
         }
 
         private bool Invalid_Password(AssignmentPassword password)

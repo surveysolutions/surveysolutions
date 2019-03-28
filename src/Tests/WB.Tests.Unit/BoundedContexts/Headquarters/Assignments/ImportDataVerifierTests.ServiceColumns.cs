@@ -138,5 +138,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Content, Is.EqualTo(validEmail));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
+
+        [Test]
+        public void when_verify_answers_and_web_mode_is_set_and_quantity_is_1_with_no_email_or_password_should_return_PL0060_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            var quantity = "1";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.TextQuestion()}));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                quantity: Create.Entity.AssignmentQuantity(quantity, Int32.Parse(quantity)),
+                assignmentWebMode: Create.Entity.AssignmentWebMode(true));
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0060"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(quantity));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
     }
 }
