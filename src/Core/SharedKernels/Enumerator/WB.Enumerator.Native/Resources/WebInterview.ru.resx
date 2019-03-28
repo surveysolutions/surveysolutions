@@ -220,7 +220,7 @@
     <value>Здравствуйте и Добро пожаловать в Survey Solutions Веб Опрос</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Начать интервью</value>
+      <value>Начать новое интервью</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>Интервью не было завершено</value>
