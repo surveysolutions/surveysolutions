@@ -359,6 +359,6 @@
     <value>Для задания с указанной электронной почтой размер должен равняться 1</value>
   </data>
   <data name="SizeForWebMode" xml:space="preserve">
-    <value>Задание с размером 1 для web режима должен иметь либо email либо пароль</value>
+    <value>Задание с размером 1 для web режима должно иметь либо email либо пароль</value>
   </data>
 </root>
