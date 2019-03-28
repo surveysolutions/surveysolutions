@@ -157,6 +157,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
 
+        public virtual bool InPrivateWebMode()
+        {
+            return (WebMode == null || WebMode == true) && Quantity == 1;
+        }
+
         public static Assignment PrefillFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             Assignment result = new Assignment();
