@@ -42,9 +42,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public virtual InterviewSummary Interview { get; protected set; }
 
-        public virtual void SetToken(string token)
+        public virtual bool IsWithAssignmentResolvedByPassword() => Token.Length > 0 && Token[0] == 'I';
+
+        public virtual void SetToken(string token, TokenKind? tokenKind = TokenKind.AssignmentResolvedByToken)
         {
-            this.Token = token;
+            if (tokenKind == TokenKind.AssignmentResolvedByPassword)
+            {
+                this.Token = "I" + token;
+            }
+            else
+            {
+                this.Token = token;
+            }
         }
 
         public virtual void InvitationWasSent(string emailId)
@@ -69,6 +78,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             this.AssignmentId = assignmentId;
         }
+    }
+
+    public enum TokenKind
+    {
+        AssignmentResolvedByPassword,
+        AssignmentResolvedByToken
     }
 
     public class InvitationDistributionStatus : AppSetting
