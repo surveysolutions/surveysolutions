@@ -26,7 +26,8 @@ namespace WB.UI.Headquarters.Controllers
             
             try
             {
-                await invitationMailingService.SendInvitationAsync(invitationId, assignment, email);
+                if (emailService.IsConfigured())
+                    await invitationMailingService.SendInvitationAsync(invitationId, assignment, email);
                 return this.Json("ok");
             }
             catch (EmailServiceException e)

@@ -24,6 +24,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -57,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
+        private readonly IEmailService emailService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -113,7 +115,8 @@ namespace WB.UI.Headquarters.Controllers
             IPauseResumeQueue pauseResumeQueue,
             IInvitationService invitationService,
             INativeReadSideStorage<InterviewSummary> interviewSummary,
-            IInvitationMailingService invitationMailingService)
+            IInvitationMailingService invitationMailingService,
+            IEmailService emailService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -135,6 +138,7 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
+            this.emailService = emailService;
         }
 
         [WebInterviewAuthorize]
