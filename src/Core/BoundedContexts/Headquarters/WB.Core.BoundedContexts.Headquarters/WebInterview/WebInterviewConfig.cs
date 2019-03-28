@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -40,8 +42,11 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) }
         };
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public int? ReminderAfterDaysIfPartialResponse { get; set; } = 3;
+
         public string BaseUrl { get; set; }
 
         public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
