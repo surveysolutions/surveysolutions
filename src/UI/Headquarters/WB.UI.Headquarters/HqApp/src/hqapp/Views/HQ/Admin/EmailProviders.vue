@@ -8,7 +8,7 @@
                 <p>{{$t('Settings.EmailProvider_PageDesc')}}</p>
             </div>
         </div>
-        <div class="row mb-30">
+        <div class="mb-30">
             <div class="col-md-12">
                 <form class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
