@@ -85,7 +85,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public static bool operator ==(QuestionnaireIdentity a, QuestionnaireIdentity b) => a.Equals(b);
+        public static bool operator ==(QuestionnaireIdentity a, QuestionnaireIdentity b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (((object)a == null) || ((object)b == null))
+                return false;
+
+            return a.Equals(b);
+        }
 
         public static bool operator !=(QuestionnaireIdentity a, QuestionnaireIdentity b) => !(a == b);
     }
