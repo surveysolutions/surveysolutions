@@ -64,7 +64,7 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             if (source.Length == targetLength)
             {
-                switch (source.Length)
+                switch (targetLength)
                 {
                     case 1:
                         return source[0] == target[0];
@@ -73,7 +73,7 @@ namespace WB.Core.GenericSubdomains.Portable
                     case 3:
                         return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
                     default:
-                        for (var i = 0; i < source.Length; i++)
+                        for (var i = 0; i < targetLength; i++)
                         {
                             if (target[i] == source[i]) continue;
 
@@ -91,7 +91,7 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             if (sourceLength == targetLength)
             {
-                switch (source.Length)
+                switch (sourceLength)
                 {
                     case 1:
                         return source[0] == target[0];
@@ -100,7 +100,7 @@ namespace WB.Core.GenericSubdomains.Portable
                     case 3:
                         return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
                     default:
-                        for (var i = 0; i < source.Length; i++)
+                        for (var i = 0; i < sourceLength; i++)
                         {
                             if (target[i] == source[i]) continue;
 
@@ -118,7 +118,7 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             if (sourceLength == targetLength)
             {
-                switch (source.Length)
+                switch (sourceLength)
                 {
                     case 1:
                         return source[0] == target[0];
@@ -127,7 +127,7 @@ namespace WB.Core.GenericSubdomains.Portable
                     case 3:
                         return source[0] == target[0] && source[1] == target[1] && source[2] == target[2];
                     default:
-                        for (var i = 0; i < source.Length; i++)
+                        for (var i = 0; i < sourceLength; i++)
                         {
                             if (target[i] == source[i]) continue;
 
