@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
  
 Thank you for cooperation!";
             public static string PasswordDescription => "This interview is protected. Please use following password:";
-            public static string LinkText => "START NEW INTERVIEW";
+            public static string LinkText => "TO INTERVIEW";
         }
 
         public class Reminder_NoResponse
@@ -104,7 +104,7 @@ Thank you for cooperation!";
 
 Thank you for cooperation!";
             public static string PasswordDescription => "This interview is protected. Please use following password:";
-            public static string LinkText => "START NEW INTERVIEW";
+            public static string LinkText => "TO INTERVIEW";
         }
 
         public class Reminder_PartialResponse
