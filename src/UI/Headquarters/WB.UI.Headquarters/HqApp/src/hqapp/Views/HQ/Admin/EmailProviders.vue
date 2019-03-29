@@ -134,6 +134,9 @@
                                         <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <a href="https://aws.amazon.com/ses/getting-started/" target="_blank">Docs</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,6 +162,9 @@
                                         <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <a href="https://sendgrid.com/docs/ui/account-and-settings/api-keys/" target="_blank">Docs</a>
+                                </div>                                
                             </div>
                         </div>
                     </div>
