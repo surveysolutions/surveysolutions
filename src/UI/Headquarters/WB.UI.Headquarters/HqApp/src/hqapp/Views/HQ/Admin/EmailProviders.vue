@@ -198,8 +198,11 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-default" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
-                 </div>
-                <p class="text-success" v-if="sendEmailResult">{{sendEmailResult}}</p>
+                </div>                
+                <p class="text-success" v-if="sendEmailResult">{{$t('Settings.EmailProvider_SendTestEmailResult')}}</p>
+                <div class="has-error" v-if="!sendEmailResult">
+                    <p class="help-block" v-for="error in sendingErrors" :key="error">{{error}}</p>                    
+                </div>                
             </form>
             </div>
         </div>
@@ -223,7 +226,8 @@ export default {
         sendGridApiKey: null,
         testEmailAddress: null,
         providerSettingsResult: null,
-        sendEmailResult: null
+        sendEmailResult: null,
+        sendingErrors: [] 
     };
   },
   created() {
@@ -289,17 +293,30 @@ export default {
     
     async sendTestEmail(){
         var self = this;
+        self.sendEmailResult = null;
+        
         var validationResult = await this.$validator.validateAll('testEmail');
         if (validationResult)
         {
-            self.$store.dispatch("showProgress");
+            self.$store.dispatch("showProgress");           
 
             this.$http.post(this.$config.model.api.sendTestEmail, { email: this.testEmailAddress })
                 .then(function (response) {
                     self.$validator.reset('testEmail');
-                    self.sendEmailResult = "An example of invitation email was sent succeessfully"
+
+                    if(response.data.success){
+                        self.sendEmailResult = true;                        
+                    }
+                    else{
+                        self.sendEmailResult = false;
+                        if(response.data.errors !== null)
+                            self.sendingErrors = response.data.errors;    
+                    }
+                    
                 })
                 .catch(function (error) {
+                    self.sendEmailResult = false;
+                    sendingErrors = ["General error occurred"];
                     Vue.config.errorHandler(error, self);
                 })
                 .then(function () {
