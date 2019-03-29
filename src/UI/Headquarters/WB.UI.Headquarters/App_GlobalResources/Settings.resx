@@ -231,6 +231,9 @@
   <data name="EmailProvider_SendTestEmail" xml:space="preserve">
     <value>Send email</value>
   </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>An example of invitation email was sent successfully</value>
+  </data>
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
     <value>Send test email</value>
   </data>
