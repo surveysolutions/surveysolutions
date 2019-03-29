@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
@@ -158,6 +157,31 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
+        public IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows)
+        {
+            var privatePasswordProtectedWebAssignments = assignmentRows
+                .Where(x => (x.WebMode == null || x.WebMode?.WebMode == true) && 
+                x.Quantity?.Quantity == 1 &&
+                !string.IsNullOrEmpty(x.Password?.Value) &&
+                string.IsNullOrEmpty(x.Email?.Value));
+
+            var assignmentsWithDuplicatedPassword = privatePasswordProtectedWebAssignments
+                .GroupBy(x => x.Password.Value)
+                .Where(x => x.Count() > 1)
+                .SelectMany(x => x.ToArray())
+                .ToArray();
+
+            foreach (var duplicatedPassword in assignmentsWithDuplicatedPassword)
+            {
+                yield return ToCellError("PL0061", messages.PL0061_DuplicatePasswordWithQuantity1,
+                    duplicatedPassword, duplicatedPassword.Password);
+            }
+
+            if(assignmentsWithDuplicatedPassword.Any()) yield break;
+
+
+        }
+
         public IEnumerable<PanelImportVerificationError> VerifyRowValues(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
         {
             foreach (var assignmentValue in assignmentRow.Answers)
@@ -284,7 +308,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(IncosistentQuantityAndEmail, "PL0057", messages.PL0057_IncosistentQuantityAndEmail),
             Error<AssignmentEmail>(IncosistentWebmodeAndEmail, "PL0058", messages.PL0058_IncosistentWebmodeAndEmail),
             Error<AssignmentPassword>(IncosistentWebmodeAndPassword, "PL0059", messages.PL0059_IncosistentWebmodeAndPassword),
+            Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
         };
+
+        private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
+            => quantity.Quantity == 1 &&
+               assignmentRow.WebMode?.WebMode == true &&
+               string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
+               string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
         private bool IncosistentWebmodeAndPassword(AssignmentPassword password, PreloadingAssignmentRow assignmentRow)
             => !string.IsNullOrEmpty(password.Value) && (assignmentRow.WebMode.WebMode == false || assignmentRow.WebMode == null);
