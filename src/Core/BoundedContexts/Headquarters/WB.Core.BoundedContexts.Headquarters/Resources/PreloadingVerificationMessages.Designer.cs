@@ -446,5 +446,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0060_WebmodeSizeOneHasNoEmailOrPassword", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is not unique. Password by assignment for web mode with quantity 1 should be unique.
+        /// </summary>
+        public static string PL0061_DuplicatePasswordWithQuantity1 {
+            get {
+                return ResourceManager.GetString("PL0061_DuplicatePasswordWithQuantity1", resourceCulture);
+            }
+        }
     }
 }
