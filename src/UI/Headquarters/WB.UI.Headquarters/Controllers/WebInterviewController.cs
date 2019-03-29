@@ -235,8 +235,10 @@ namespace WB.UI.Headquarters.Controllers
                 if (assignment.IsCompleted)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
-
-                TempData[AskForEmail] = true;
+                if (invitation.InterviewId == null)
+                {
+                    TempData[AskForEmail] = true;
+                }
 
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
