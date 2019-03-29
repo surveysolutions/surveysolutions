@@ -136,17 +136,18 @@ namespace WB.UI.Headquarters.API
             {
                 var template = new WebInterviewEmailTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message, EmailTemplateTexts.InvitationTemplate.PasswordDescription, EmailTemplateTexts.InvitationTemplate.LinkText);
 
-                var email = emailRenderer.RenderEmail(template, "XXXXXXXX", "#", "SURVEY NAME EXAMPLE", settings.Address, settings.SenderName);
+                var email = emailRenderer.RenderEmail(template, "XXXXXXXX", "#", 
+                    "SURVEY NAME EXAMPLE", settings.Address, settings.SenderName);
 
-                await this.emailService.SendEmailAsync(model.Email, email.Subject, email.MessageHtml, email.MessageText);
+                var sendingResult = await this.emailService.SendEmailAsync(model.Email, email.Subject, email.MessageHtml, email.MessageText);
 
-                return Request.CreateResponse(HttpStatusCode.OK, new {Sucess = true});
+                return Request.CreateResponse(HttpStatusCode.OK, new {Success = true});
             }
             catch (EmailServiceException e)
             {
                 return Request.CreateResponse(e.StatusCode, new
                 {
-                    Sucess = false,
+                    Success = false,
                     Errors = e.Errors,
                     Email = e.Email
                 });
