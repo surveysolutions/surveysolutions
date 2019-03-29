@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.EntityId, pm => pm.Column("entity_id"));
             Property(x => x.RosterVector);
 
-            Property(m => m.Answer, pm => pm.Type<Int64ArrayType>());
+            Property(m => m.Answer, pm => pm.Type<PostgresSqlArrayType<int>>());
             Property(m => m.IsEnabled, pm => pm.Column("is_enabled"));
             Property(m => m.Type);
 
