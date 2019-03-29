@@ -340,6 +340,20 @@ namespace WB.UI.Headquarters.Controllers
             return this.Redirect(GenerateUrl("Cover", interviewId));
         }
 
+        public ActionResult Continue(string id)
+        {
+            var invitation = this.invitationService.GetInvitationByToken(id);
+            if (invitation == null)
+                return HttpNotFound();
+
+            var interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+
+            if (interview == null)
+                return HttpNotFound();
+            
+            return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
+        }
+
         [WebInterviewAuthorize]
         public ActionResult Cover(string id)
         {
@@ -395,6 +409,18 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Resume(string id, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null)
+            {
+                var invitation = this.invitationService.GetInvitationByToken(id);
+                if (invitation == null)
+                    return HttpNotFound();
+
+                interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+            }
+
+            if (interview == null)
+                return HttpNotFound();
+            
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
             if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId))
