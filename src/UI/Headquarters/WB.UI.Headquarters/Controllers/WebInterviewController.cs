@@ -174,6 +174,11 @@ namespace WB.UI.Headquarters.Controllers
 
             if (invitation.Assignment == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            
+            if (invitation.InterviewId != null)
+            {
+                return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
+            }
 
             var assignment = invitation.Assignment;
 
