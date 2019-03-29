@@ -189,7 +189,7 @@ const emailOrPasswordRequired = {
         return Vue.$t('Assignments.SizeForWebMode')
     },
     validate(value, [email, password]) {
-        return email !== "" || password !== ""
+        return (email !== null && email !== "") || (password !== null && password !== "")
     },
     hasTarget: true
 }
@@ -199,7 +199,7 @@ const emailShouldBeEmpty = {
         return Vue.$t('Assignments.InvalidSizeWithEmail')
     },
     validate(value, [email]) {
-        return email === ""
+        return email === null || email === ""
     },
     hasTarget: true
 }
