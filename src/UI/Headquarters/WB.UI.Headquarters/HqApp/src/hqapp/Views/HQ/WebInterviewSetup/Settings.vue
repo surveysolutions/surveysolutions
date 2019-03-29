@@ -627,7 +627,6 @@ export default {
         var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
         return {
           value: key,
-          title: defaultEmailTemplate.title,
           buttonTitle: defaultEmailTemplate.shortTitle,
           subject: subject,
           message: message,
