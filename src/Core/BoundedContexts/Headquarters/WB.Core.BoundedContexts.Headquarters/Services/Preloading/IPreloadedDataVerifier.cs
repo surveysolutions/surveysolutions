@@ -22,6 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire);
 
-        IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows);
+        IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire);
     }
 }

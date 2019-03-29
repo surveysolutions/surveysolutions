@@ -980,7 +980,7 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneQuestion(Guid? questionId = null, Guid? questionnaireId = null)
-           => this.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
+           => this.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: Create.Entity.TextQuestion(questionId));
 
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
             => new QuestionnaireExportStructure
@@ -2114,10 +2114,10 @@ namespace WB.Tests.Abc.TestFactories
             Column = ServiceColumns.EmailColumnName
         };
 
-        public AssignmentWebMode AssignmentWebMode(bool webMode) => new AssignmentWebMode
+        public AssignmentWebMode AssignmentWebMode(bool? webMode) => new AssignmentWebMode
         {
             WebMode = webMode,
-            Value = "1",
+            Value = webMode == true ? "1" : "",
             Column = ServiceColumns.WebModeColumnName
         };
 
