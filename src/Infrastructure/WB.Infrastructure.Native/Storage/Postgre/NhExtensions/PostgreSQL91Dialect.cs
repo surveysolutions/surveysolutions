@@ -24,6 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             this.RegisterColumnType(DbType.Object, "text[]");
             this.RegisterColumnType(DbType.Object, "numeric[]");
             this.RegisterColumnType(DbType.Object, "integer[]");
+            this.RegisterColumnType(DbType.Object, "bigint[]");
         }
     }
 
@@ -157,9 +158,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 return null;
             }
 
-            T[] res = resultSet.GetValue(index) as T[];
-
-            if (res != null)
+            if (resultSet.GetValue(index) is T[] res)
             {
                 return res;
             }
@@ -220,7 +219,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         {
             { typeof(string[]), NpgsqlDbType.Array | NpgsqlDbType.Text },
             { typeof(decimal[]), NpgsqlDbType.Array | NpgsqlDbType.Numeric },
-            { typeof(int[]), NpgsqlDbType.Array | NpgsqlDbType.Integer }
+            { typeof(int[]), NpgsqlDbType.Array | NpgsqlDbType.Integer },
+            { typeof(long[]), NpgsqlDbType.Array | NpgsqlDbType.Bigint }
         };
 
         protected virtual NpgsqlTypes.NpgsqlDbType NpgSqlType
