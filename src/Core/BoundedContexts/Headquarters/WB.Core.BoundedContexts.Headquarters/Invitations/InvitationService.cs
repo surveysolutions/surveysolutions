@@ -316,8 +316,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.InvitationWasSent(emailId);
             invitationStorage.Store(invitation, invitationId);
             var status = this.GetEmailDistributionStatus();
-            status.ProcessedCount++;
-            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            if (status != null)
+            {
+                status.ProcessedCount++;
+                this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            }
         }
 
         private static Expression<Func<Invitation, bool>> LastReminderIsExpired(DateTime thresholdDate)
