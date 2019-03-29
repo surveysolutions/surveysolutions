@@ -71,7 +71,6 @@
                             <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
                                 <p> {{ this.$t("Assignments.InvalidSizeMessage") }} </p>
                                 <p>{{ errors.first('size') }}</p>
-                                <p v-if="sizeQuestion.answer !== '1' && (emailQuestion.answer !== null || emailQuestion.answer !== '')"> {{ this.$t("Assignments.InvalidSizeWithEmail") }} </p>                                                             
                             </div>
                         </wb-question>
 
@@ -185,22 +184,29 @@
 import Vue from "vue";
 import { Validator } from 'vee-validate';
 
-const sizeValidForWebMode = {
-    getMessage(field, args) {
-        const result = Vue.$t('Assignments.SizeForWebMode')
-        return result
+const emailOrPasswordRequired = {
+    getMessage() {
+        return Vue.$t('Assignments.SizeForWebMode')
     },
-    validate(value, [isWebMode, email, password]) {
-        if(!isWebMode) return true
-        if(value === "1") 
-            return (email !== null && email !== "") || (password !== null && password !== "")
-
-        return true;
+    validate(value, [email, password]) {
+        return email !== "" || password !== ""
     },
     hasTarget: true
 }
 
-Validator.extend('sizeValidForWebMode', sizeValidForWebMode);
+const emailShouldBeEmpty = {
+    getMessage() {
+        return Vue.$t('Assignments.InvalidSizeWithEmail')
+    },
+    validate(value, [email]) {
+        return email === ""
+    },
+    hasTarget: true
+}
+
+
+Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired);
+Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty);
 
 export default {
     data() {
@@ -255,13 +261,23 @@ export default {
         };
     },
     computed: {
-        sizeValidations(){
-            return {
+        sizeValidations() {
+            let validations = {
                 regex: "^-?([0-9]+)$",
                 min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment,
-                sizeValidForWebMode: [this.webMode.answer, this.emailQuestion.answer, this.passwordQuestion.answer]
+                max_value: this.config.maxInterviewsByAssignment
             };
+
+            if(this.webMode.answer) {
+                if(this.sizeQuestion.answer === "1") {
+                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer]
+                }
+                else {
+                    validations.emailShouldBeEmpty = [this.emailQuestion.answer]
+                }
+            }
+
+            return validations
         }, 
         passwordValidations(){
             return {
