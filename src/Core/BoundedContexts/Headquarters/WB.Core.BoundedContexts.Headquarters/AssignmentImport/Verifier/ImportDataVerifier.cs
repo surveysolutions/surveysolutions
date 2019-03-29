@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -12,11 +13,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -38,16 +41,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQuestionOptionsRepository questionOptionsRepository;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
             IUserViewFactory userViewFactory,
-            IQuestionOptionsRepository questionOptionsRepository)
+            IQuestionOptionsRepository questionOptionsRepository,
+            IPlainStorageAccessor<Assignment> assignmentsRepository)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.userViewFactory = userViewFactory;
             this.questionOptionsRepository = questionOptionsRepository;
+            this.assignmentsRepository = assignmentsRepository;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(string originalFileName, PreloadedFile file, IQuestionnaire questionnaire)
@@ -157,19 +163,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows)
+        public IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire)
         {
-            var privatePasswordProtectedWebAssignments = assignmentRows
-                .Where(x => (x.WebMode == null || x.WebMode?.WebMode == true) && 
-                x.Quantity?.Quantity == 1 &&
-                !string.IsNullOrEmpty(x.Password?.Value) &&
-                string.IsNullOrEmpty(x.Email?.Value));
+            bool IsPrivateWebLinkWithPassword(PreloadingAssignmentRow x) => (x.WebMode?.WebMode == null || x.WebMode?.WebMode == true) && 
+                                                                            x.Quantity?.Quantity == 1 &&
+                                                                            !string.IsNullOrEmpty(x.Password?.Value) &&
+                                                                            string.IsNullOrEmpty(x.Email?.Value);
+
+            var privatePasswordProtectedWebAssignments = assignmentRows.Where(IsPrivateWebLinkWithPassword).ToArray();
 
             var assignmentsWithDuplicatedPassword = privatePasswordProtectedWebAssignments
                 .GroupBy(x => x.Password.Value)
                 .Where(x => x.Count() > 1)
-                .SelectMany(x => x.ToArray())
-                .ToArray();
+                .SelectMany(x => x.ToArray());
 
             foreach (var duplicatedPassword in assignmentsWithDuplicatedPassword)
             {
@@ -179,7 +185,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if(assignmentsWithDuplicatedPassword.Any()) yield break;
 
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
+            foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
+            {
+                var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
+                    .Select(x => x.Password.Value).ToArray();
+
+                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x =>
+                    x.Where(y => y.Quantity == 1 && 
+                                 (y.WebMode == null || y.WebMode == true) && 
+                                 y.QuestionnaireId == questionnaireIdentity &&
+                                 y.Email == "" &&
+                                 y.Password != "" && 
+                                 expectedUniquePasswords.Contains(y.Password)).Select(y => y.Password).ToList());
+
+                if(!passwordsByWebAssignmentsInDb.Any()) continue;
+
+                foreach (var assignment in batchOfPrivatePasswordProtectedWebAssignments.Where(x => passwordsByWebAssignmentsInDb.Contains(x.Password.Value)))
+                {
+                    yield return ToCellError("PL0061", messages.PL0061_DuplicatePasswordWithQuantity1,
+                        assignment, assignment.Password);
+                }
+            }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRowValues(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)

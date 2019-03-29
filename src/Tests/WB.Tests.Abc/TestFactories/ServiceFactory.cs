@@ -672,11 +672,13 @@ namespace WB.Tests.Abc.TestFactories
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
+                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,

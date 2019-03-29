@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentRows.Add(assignmentRow);
             }
 
-            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows))
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return passwordError;
@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 yield return rosterError;
             }
 
-            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows))
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return passwordError;

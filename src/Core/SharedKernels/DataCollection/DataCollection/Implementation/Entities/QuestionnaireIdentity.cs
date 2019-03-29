@@ -79,5 +79,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new FormatException($"id value '{id}' is not in the correct format.", e);
             }
         }
+
+        public static bool operator ==(QuestionnaireIdentity a, QuestionnaireIdentity b) => a.Equals(b);
+
+        public static bool operator !=(QuestionnaireIdentity a, QuestionnaireIdentity b) => !(a == b);
     }
 }
