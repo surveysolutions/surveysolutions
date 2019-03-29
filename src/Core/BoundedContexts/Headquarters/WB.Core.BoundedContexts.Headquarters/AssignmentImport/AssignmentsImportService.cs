@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -82,6 +81,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 assignmentRows.Add(assignmentRow);
             }
 
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows))
+            {
+                hasErrors = true;
+                yield return passwordError;
+            }
+
             if (hasErrors) yield break;
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
@@ -115,12 +120,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            if (hasErrors) yield break;
-
             foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return rosterError;
+            }
+
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows))
+            {
+                hasErrors = true;
+                yield return passwordError;
             }
 
             if (hasErrors) yield break;
