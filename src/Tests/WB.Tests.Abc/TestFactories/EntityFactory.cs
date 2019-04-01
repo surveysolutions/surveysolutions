@@ -1764,6 +1764,15 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiDocument Build() => this._entity;
         }
 
+        public AssignmentToImport AssignmentToImport(int? id = null, string password = null)
+        {
+            return new AssignmentToImport
+            {
+                Id = id ?? 0,
+                Password = password
+            };
+        }
+
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             int? quantity = null,
