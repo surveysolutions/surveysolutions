@@ -30,7 +30,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IAuditLog>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
                 Mock.Of<IInvitationService>(),
-                Mock.Of<IStatefulInterviewRepository>()
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IAssignmentPasswordGenerator>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

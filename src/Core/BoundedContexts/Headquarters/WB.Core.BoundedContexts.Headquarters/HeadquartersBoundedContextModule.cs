@@ -287,6 +287,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
+            registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();

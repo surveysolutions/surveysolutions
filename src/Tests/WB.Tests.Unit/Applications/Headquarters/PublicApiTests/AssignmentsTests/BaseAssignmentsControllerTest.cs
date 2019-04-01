@@ -52,7 +52,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.interviewImportService.Object,
                 Mock.Of<ICommandTransformator>(),
                 Create.Service.AssignmentFactory(),
-                Mock.Of<IInvitationService>());
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IAssignmentPasswordGenerator>());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();
