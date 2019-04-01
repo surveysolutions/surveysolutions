@@ -195,6 +195,13 @@ namespace WB.Tests.Abc.TestFactories
         public CompositeCollection<T> CompositeCollection<T>()
             => new CompositeCollection<T>();
 
+        public CompositeCollection<T> CompositeCollection<T>(params T[] items)
+        {
+            var compositeCollection = new CompositeCollection<T>();
+            items.ForEach(item => compositeCollection.Add(item));
+            return compositeCollection;
+        }
+
         public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null, DataExportFormat? format = null)
             => new DataExportProcessDetails(
                 format ?? DataExportFormat.Tabular,
