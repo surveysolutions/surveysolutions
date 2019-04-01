@@ -1028,7 +1028,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
-                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>());
+                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1040,7 +1041,7 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(invitation, invitation.Id);
             }
 
-            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>());
+            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1088,6 +1089,14 @@ namespace WB.Tests.Abc.TestFactories
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
+        }
+
+        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        {
+            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            {
+                tokenLength = tokenLength
+            };
         }
     }
 

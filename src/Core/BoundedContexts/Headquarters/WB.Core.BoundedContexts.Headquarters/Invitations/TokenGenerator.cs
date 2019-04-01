@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
-    public sealed class TokenGenerator
+    public sealed class TokenGenerator : ITokenGenerator
     {
-        private const string Encode_32_Chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+        private readonly IPlainStorageAccessor<Invitation> invitationStorage;
+        protected internal const string Encode_32_Chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+        protected internal int tokenLength = 8;
 
-        private static readonly ThreadLocal<char[]> _charBufferThreadLocal =
-            new ThreadLocal<char[]>(() => new char[13]);
-
-        private TokenGenerator()
+        public TokenGenerator(IPlainStorageAccessor<Invitation> invitationStorage)
         {
+            this.invitationStorage = invitationStorage;
         }
 
-        /// <summary>
-        /// Returns a single instance of the <see cref="TokenGenerator"/>.
-        /// </summary>
-        public static TokenGenerator Instance { get; } = new TokenGenerator();
+        public string GenerateUnique()
+        {
+            var tokens = Enumerable.Range(1, 10).Select(_ => GetRandomAlphanumericString(tokenLength)).ToArray();
+            List<string> usedTokens = this.invitationStorage.Query(_ => _.Where(x => tokens.Contains(x.Token)).Select(x => x.Token).ToList());
+
+            var availableTokens = tokens.Except(usedTokens).ToList();
+
+            if (availableTokens.Any())
+            {
+                return availableTokens.First();
+            }
+
+            return GenerateUnique();
+        }
 
         /// <summary>
         /// Returns an ID. e.g: <c>0HLHI1F5INOFA</c>
@@ -29,6 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         private static string GenerateImpl(long id)
         {
+            var _charBufferThreadLocal = new ThreadLocal<char[]>(() => new char[13]);
+
             var buffer = _charBufferThreadLocal.Value;
 
             buffer[0] = Encode_32_Chars[(int) (id >> 60) & 31];
@@ -75,5 +88,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             }
             return new string(result);
         }
+    }
+
+    public interface ITokenGenerator
+    {
+        string GenerateUnique();
+        string Generate(long id);
     }
 }
