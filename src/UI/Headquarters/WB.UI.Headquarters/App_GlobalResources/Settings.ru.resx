@@ -244,7 +244,7 @@
     <value>Отправка пробного электронного письма</value>
   </data>
   <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
-    <value>Пробное электронне письмо успешно отправлено</value>
+    <value>Пробное электронное письмо успешно отправлено</value>
   </data>
     <data name="EmailProvider_PageDesc" xml:space="preserve">
     <value>Настройка сервиса массовой рассылки электронных писем. Конфигурация рассылки приглашений и напоминаний для онлайн обследований.</value>
@@ -284,5 +284,8 @@
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>Вы можете найти его на странице API Keys в пункте меню настроек Sendgrid</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>Произошла ошибка</value>
   </data>
 </root>

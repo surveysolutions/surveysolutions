@@ -276,4 +276,7 @@
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>You can find it on API Keys page under Sendgrid settings menu item</value>
   </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>General error occurred</value>
+  </data>
 </root>
