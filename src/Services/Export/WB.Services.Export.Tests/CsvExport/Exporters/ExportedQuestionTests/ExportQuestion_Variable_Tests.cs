@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using ApprovalUtilities.Utilities;
 using NUnit.Framework;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview;
@@ -82,6 +84,30 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             Assert.AreEqual(exportedVariable.Length, 1);
             Assert.AreEqual(exportedVariable[0], "2017-09-12T14:09:37");
+        }
+
+
+        [TestCase(double.NaN, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        [TestCase(double.PositiveInfinity, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        [TestCase(double.NegativeInfinity, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        //Culture specific, not expected to be called from code
+        [TestCase("NaN", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        [TestCase("∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        [TestCase("+∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        [TestCase("-∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
+        public void when_export_double_variable_with_special_values(object variable, VariableType variableType, string exportResult)
+        {
+            ExportedVariableHeaderItem headerItem = new ExportedVariableHeaderItem()
+            {
+                VariableType = variableType,
+            };
+
+            var exportService = new ExportQuestionService();
+
+            var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
+
+            Assert.AreEqual(exportedVariable.Length, 1);
+            Assert.AreEqual(exportedVariable[0], exportResult);
         }
     }
 }
