@@ -293,6 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
+            registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
         }
 
