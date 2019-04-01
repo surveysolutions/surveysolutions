@@ -208,10 +208,12 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             //verify pass
             if (!string.IsNullOrEmpty(password))
-                if((password.Length < AssignmentConstants.PasswordLength || 
-                    AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                            "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+            {
+                if ((password.Length < AssignmentConstants.PasswordLength ||
+                     AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+            }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(createItem.Email) && createItem.Quantity != 1)
@@ -221,6 +223,20 @@ namespace WB.UI.Headquarters.API.PublicApi
             if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                     "For assignments having Email or Password Web Mode should be activated"));
+
+            if (createItem.Quantity == 1 && (createItem.WebMode == null || createItem.WebMode == true) &&
+                string.IsNullOrEmpty(createItem.Email) && !string.IsNullOrEmpty(createItem.Password))
+            {
+                var hasPasswordInDb = this.assignmentsStorage.Query(x =>
+                    x.Any(y => y.Quantity == 1 &&
+                               (y.WebMode == null || y.WebMode == true) &&
+                               y.QuestionnaireId == questionnaireId &&
+                               y.Email == "" &&
+                               y.Password == password));
+                if (hasPasswordInDb)
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Password is not unique. Password by assignment for web mode with quantity 1 should be unique"));
+            }
 
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
                 createItem.Email, password, createItem.WebMode);
