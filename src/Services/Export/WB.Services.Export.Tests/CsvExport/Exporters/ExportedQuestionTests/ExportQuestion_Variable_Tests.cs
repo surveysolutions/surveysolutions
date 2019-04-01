@@ -90,11 +90,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
         [TestCase(double.NaN, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
         [TestCase(double.PositiveInfinity, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
         [TestCase(double.NegativeInfinity, VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
-        //Culture specific, not expected to be called from code
+        //Not expected to be called from code
         [TestCase("NaN", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
-        [TestCase("∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
-        [TestCase("+∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
-        [TestCase("-∞", VariableType.Double, ExportFormatSettings.MissingNumericQuestionValue)]
         public void when_export_double_variable_with_special_values(object variable, VariableType variableType, string exportResult)
         {
             ExportedVariableHeaderItem headerItem = new ExportedVariableHeaderItem()
