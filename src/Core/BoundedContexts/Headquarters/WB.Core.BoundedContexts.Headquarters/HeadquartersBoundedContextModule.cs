@@ -296,6 +296,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInvitationService, InvitationService>();
             registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
+            registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
