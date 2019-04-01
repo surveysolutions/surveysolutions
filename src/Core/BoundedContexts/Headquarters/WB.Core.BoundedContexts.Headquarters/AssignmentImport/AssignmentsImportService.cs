@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
@@ -49,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
-            IInvitationService invitationService)
+            IInvitationService invitationService, 
+            IAssignmentPasswordGenerator passwordGenerator)
         {
             this.userViewFactory = userViewFactory;
             this.verifier = verifier;
@@ -62,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;
+            this.passwordGenerator = passwordGenerator;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
@@ -310,8 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
 
-                if (assignmentToImport.Password == AssignmentConstants.PasswordSpecialValue)
-                    assignmentToImport.Password = TokenGenerator.GetRandomAlphanumericString(6);
+                assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
 
                 return assignmentToImport;
             }

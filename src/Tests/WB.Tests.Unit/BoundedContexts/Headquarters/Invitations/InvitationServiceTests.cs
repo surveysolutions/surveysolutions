@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.Infrastructure.Implementation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Invitations
