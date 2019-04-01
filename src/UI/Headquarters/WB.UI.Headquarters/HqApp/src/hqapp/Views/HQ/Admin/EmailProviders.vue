@@ -99,7 +99,7 @@
                         <label for="provider_amazon"><span class="tick"></span>{{ $t('Settings.EmailProvider_Amazon') }}</label>
                         <div class="extended-block" v-if="provider === 'amazon'">
                             <div class="wrapper">
-                                <p>{{ $t('Settings.EmailProvider_AmazonDescription')}}</p>
+                                <p>{{ $t('Settings.EmailProvider_AmazonDescription')}} <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-amazon-ses" target="_blank">{{$t('Settings.EmailProvider_HelpLinkText')}}</a></p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_AwsAccessKeyId')}}</label>
                                     <div class="field" :class="{ 'answered': awsAccessKeyId }">
@@ -133,10 +133,7 @@
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_AwsSecretAccessKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                     </div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="https://aws.amazon.com/ses/getting-started/" target="_blank">Docs</a>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -145,7 +142,7 @@
                         <label for="provider_sendgrid"><span class="tick"></span>{{ $t('Settings.EmailProvider_Sendgrid') }}</label>
                         <div class="extended-block" v-if="provider === 'sendgrid'">
                             <div class="wrapper">
-                                <p>{{ $t('Settings.EmailProvider_SendgridDescription')}}</p>
+                                <p>{{ $t('Settings.EmailProvider_SendgridDescription')}} <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-sendgrid" target="_blank">{{$t('Settings.EmailProvider_HelpLinkText')}}</a></p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.sendGridApiKey') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_SendGridApiKey')}}</label>
                                     <div class="field" :class="{ 'answered': sendGridApiKey }">
@@ -161,10 +158,7 @@
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_SendGridApiKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                                     </div>
-                                </div>
-                                <div class="text-right">
-                                    <a href="https://sendgrid.com/docs/ui/account-and-settings/api-keys/" target="_blank">Docs</a>
-                                </div>                                
+                                </div>                                                                
                             </div>
                         </div>
                     </div>
