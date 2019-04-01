@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IInvitationService invitationService;
         private readonly IStatefulInterviewRepository interviews;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -37,7 +38,8 @@ namespace WB.UI.Headquarters.API
             IAuditLog auditLog, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
             IInvitationService invitationService,
-            IStatefulInterviewRepository interviews)
+            IStatefulInterviewRepository interviews, 
+            IAssignmentPasswordGenerator passwordGenerator)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -47,6 +49,7 @@ namespace WB.UI.Headquarters.API
             this.questionnaires = questionnaires;
             this.invitationService = invitationService;
             this.interviews = interviews;
+            this.passwordGenerator = passwordGenerator;
         }
         
         [Route("")]
@@ -196,9 +199,7 @@ namespace WB.UI.Headquarters.API
                     break;
             }
 
-            var password = (request.Password == AssignmentConstants.PasswordSpecialValue) ?
-                TokenGenerator.GetRandomAlphanumericString(6) :
-                request.Password;
+            var password = passwordGenerator.GetPassword(request.Password);
 
             //verify email
             if (!string.IsNullOrEmpty(request.Email) && AssignmentConstants.EmailRegex.Match(request.Email).Length <= 0)

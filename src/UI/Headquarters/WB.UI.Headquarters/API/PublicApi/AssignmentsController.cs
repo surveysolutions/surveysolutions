@@ -44,6 +44,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly ICommandTransformator commandTransformator;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -57,7 +58,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator,
             IAssignmentFactory assignmentFactory, 
-            IInvitationService invitationService) : base(logger)
+            IInvitationService invitationService, 
+            IAssignmentPasswordGenerator passwordGenerator) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -70,6 +72,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.commandTransformator = commandTransformator;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;
+            this.passwordGenerator = passwordGenerator;
         }
 
         /// <summary>
@@ -197,9 +200,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
-            var password = (createItem.Password == AssignmentConstants.PasswordSpecialValue) ? 
-                TokenGenerator.GetRandomAlphanumericString(6) :
-                createItem.Password;
+            var password = passwordGenerator.GetPassword(createItem.Password);
 
             //verify email
             if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
