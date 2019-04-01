@@ -1,6 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
@@ -10,12 +11,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         {
             this.Table("InterviewSummaries");
             this.DynamicUpdate(true);
-            Id(x => x.SummaryId);
-            Property(x => x.Id, pm =>
-            {
-                pm.Generated(PropertyGeneration.Insert);
-                pm.Update(false);
-            });
+
+            Id(x => x.Id,p => p.Generator(Generators.Identity));
+
+            Property(x => x.SummaryId);
+            
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
             Property(x => x.TeamLeadId, pm => pm.Column(cm => cm.Index("InterviewSummaries_TeamLeadId")));
@@ -58,18 +58,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Bag(x => x.AnswersToFeaturedQuestions,
                 collection =>
                 {
-                    collection.Key(c => { c.Column("InterviewSummaryId"); });
+                    collection.Key(key => key.Column("interview_id"));
                     collection.OrderBy(x => x.Position);
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                 },
-                rel => { rel.OneToMany(); });
+                rel => rel.OneToMany());
 
             Bag(x => x.InterviewCommentedStatuses, listMap =>
                 {
                     listMap.Table("InterviewCommentedStatuses");
 
-                    listMap.Key(keyMap => { keyMap.Column(clm => { clm.Name("InterviewId"); }); });
+                    listMap.Key(key => key.Column("interview_id"));
                     listMap.Lazy(CollectionLazy.Lazy);
                     listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     listMap.Inverse(true);
@@ -80,17 +80,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Set(x => x.TimeSpansBetweenStatuses, set =>
                 {
-                    set.Key(key =>
-                    {
-                        key.Column(cm =>
-                        {
-                            cm.Name("InterviewId");
-                            cm.Index("InterviewSummary_InterviewStatusTimeSpans");
-                        });
-                        key.ForeignKey("FK_InterviewSummary_TimeSpansBetweenStatuses");
-                    });
+                    set.Key(key => key.Column("interview_id"));
                     set.Lazy(CollectionLazy.Lazy);
                     set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    set.Inverse(true);
                 },
                 rel => { rel.OneToMany(); }
             );
@@ -99,11 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 listMap.Table("report_statistics");
 
-                listMap.Key(key =>
-                {
-                    key.Column("interview_id");
-                    key.PropertyRef(p => p.Id);
-                });
+                listMap.Key(key => key.Column("interview_id"));
 
                 listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 listMap.Lazy(CollectionLazy.Lazy);
@@ -137,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Property(x => x.Position);
 
-            ManyToOne(x => x.InterviewSummary, mto => mto.Column("InterviewId"));
+            ManyToOne(x => x.InterviewSummary, mto => mto.Column("interview_id"));
         }
     }
 
@@ -147,6 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         {
             Id(x => x.Id, idMap => idMap.Generator(Generators.HighLow));
             this.Table("AnswersToFeaturedQuestions");
+
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
             Property(x => x.Position, col => col.Column("Position"));
@@ -154,11 +144,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 col.Column("AnswerValue");
             });
-            ManyToOne(x => x.InterviewSummary, mtm => {
-                mtm.Column("InterviewSummaryId");
-                mtm.Index("InterviewSummaries_QuestionAnswers");
-                mtm.ForeignKey("FK_InterviewSummaries_AnswersToFeaturedQuestions");
-            });
+
+            ManyToOne(x => x.InterviewSummary, mtm => mtm.Column("interview_id"));
         }
     }
 
