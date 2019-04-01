@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters
         {
             SetupNConfig();
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(@"en-US");
-            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
             //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
             //NpgsqlLogManager.IsParameterLoggingEnabled = true;
@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters
             app.UseWebApi(config);
 
             var scheduler = container.Resolve<IScheduler>();
-            scheduler.Start();
+           // scheduler.Start();
 
             InitializeAppShutdown(app, scheduler);
 

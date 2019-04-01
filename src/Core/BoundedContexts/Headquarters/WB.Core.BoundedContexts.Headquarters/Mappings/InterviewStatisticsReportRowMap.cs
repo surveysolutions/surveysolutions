@@ -15,14 +15,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.EntityId, pm => pm.Column("entity_id"));
             Property(x => x.RosterVector);
 
-            Property(m => m.Answer, pm => pm.Type<PostgresSqlArrayType<int>>());
+            Property(m => m.Answer, pm =>
+            {
+                pm.Type<PostgresSqlArrayType<long>>();
+                pm.Column(clm => clm.SqlType("bigint[]"));
+            });
             Property(m => m.IsEnabled, pm => pm.Column("is_enabled"));
             Property(m => m.Type);
 
             ManyToOne(x => x.InterviewSummary, mto =>
             {
                mto.Column("interview_id");
-                mto.PropertyRef(nameof(InterviewSummary.Id));
             });
             
             DynamicUpdate(true);

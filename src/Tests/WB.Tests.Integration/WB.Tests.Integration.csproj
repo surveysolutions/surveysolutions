@@ -75,6 +75,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="HibernatingRhinos.Profiler.Appender">
+      <HintPath>..\..\..\..\..\Users\Victo\Downloads\NHibernate.Profiler-v5.0-Build-5033\Appender\net46\HibernatingRhinos.Profiler.Appender.dll</HintPath>
+    </Reference>
     <Reference Include="MvvmCross.Tests">
       <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
     </Reference>
