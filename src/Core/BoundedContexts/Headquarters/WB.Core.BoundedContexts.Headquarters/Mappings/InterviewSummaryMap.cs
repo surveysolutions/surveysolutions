@@ -14,7 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             Id(x => x.Id,p => p.Generator(Generators.Identity));
 
-            Property(x => x.SummaryId);
+            // Property(x => x.SummaryId);
+            this.PropertyKeyAlias(x => x.SummaryId);
             
             Property(x => x.QuestionnaireTitle);
             Property(x => x.ResponsibleName);
