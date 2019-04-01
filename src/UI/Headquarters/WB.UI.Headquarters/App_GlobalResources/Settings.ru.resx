@@ -216,10 +216,10 @@
     <value>Вы не можете отправлять приглашения и напоминания для участия в онайн обследованиях Survey Solutions.</value>
   </data>
   <data name="EmailProvider_AmazonDescription" xml:space="preserve">
-    <value>Настройте параметры для доступа к Amazon SES ниже. Дополнительная информация об использовании Amazon SES с Survey Solutions доступна [здесь] (ссылка на сайт поддержки)</value>
+    <value>Настройте параметры для доступа к Amazon SES ниже. Дополнительная информация об использовании Amazon SES с Survey Solutions доступна </value>
   </data>
   <data name="EmailProvider_SendgridDescription" xml:space="preserve">
-    <value>Настройте параметры для доступа к Sendgrid ниже. Дополнительная информация об использовании Sendgrid с Survey Solutions доступна [здесь] (ссылка на сайт поддержки).</value>
+    <value>Настройте параметры для доступа к SendGrid ниже. Дополнительная информация об использовании SendGrid с Survey Solutions доступна </value>
   </data>
   <data name="EmailProvider_SenderAddress" xml:space="preserve">
     <value>Электронная почта отправителя</value>
@@ -287,5 +287,8 @@
   </data>
   <data name="EmailProvider_GeneralError" xml:space="preserve">
     <value>Произошла ошибка</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>здесь</value>
   </data>
 </root>
