@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.Infrastructure.PlainStorage;
 

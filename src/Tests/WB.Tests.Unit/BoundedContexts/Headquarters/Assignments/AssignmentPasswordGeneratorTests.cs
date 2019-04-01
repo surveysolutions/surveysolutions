@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.Infrastructure.Implementation;
 using WB.Tests.Abc;
