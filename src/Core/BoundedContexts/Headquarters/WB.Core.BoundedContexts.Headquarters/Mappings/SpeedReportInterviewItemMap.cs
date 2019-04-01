@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             ManyToOne(x => x.InterviewSummary, mto =>
             {
                 mto.Access(Accessor.ReadOnly);
-                mto.Column("InterviewId");
+                mto.Column("interview_id");
                 mto.NotFound(NotFoundMode.Ignore);
                 mto.Cascade(Cascade.None);
                 mto.Update(false);

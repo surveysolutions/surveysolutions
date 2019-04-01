@@ -44,5 +44,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual long TimeSpanLong { get; protected set; }
 
         public virtual InterviewSummary InterviewSummary { get; set; }
+
+        protected bool Equals(TimeSpanBetweenStatuses other)
+        {
+            return Id == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TimeSpanBetweenStatuses) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
     }
 }
