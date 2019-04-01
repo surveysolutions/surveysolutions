@@ -56,12 +56,12 @@ namespace WB.Tests.Abc.TestFactories
 
         [DebuggerStepThrough]
         public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid? interviewId = null, 
-            Guid? userId = null, Guid? questionId = null, int answer = 0)
+            Guid? userId = null, Guid? questionId = null, int answer = 0, decimal[] rosterVector = null)
             => new AnswerNumericIntegerQuestionCommand(
                 interviewId: interviewId ?? Guid.NewGuid(),
                 userId: userId ?? Guid.NewGuid(),
                 questionId: questionId ?? Guid.NewGuid(),
-                rosterVector: new decimal[0],
+                rosterVector: rosterVector ?? new decimal[0],
                 answer: answer);
 
         public AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, double answer = 0)

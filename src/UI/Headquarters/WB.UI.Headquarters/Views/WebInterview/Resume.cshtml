@@ -7,15 +7,16 @@
 }
 
 <div class="centered-box-table">
-    <h2>
-        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)
-    </h2>
-    <p>
-        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)
-    </p>
-
+    <div class="row-element mb-20">
+        <div class="h2">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)</div>
+    </div>
+    <div class="row-element mb-40">
+        <p class="font-bold">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)</p>
+    </div>
+    <div class="row-element mb-40">
+        <p  class="font-bold primary-text">@WebInterview.ResumeInterviewDescription</p>
+    </div>
     <div class="additional-info-block">
-        @WebInterview.Resume_InvitationSmallText
         <ul class="list-unstyled">
             @if (Model.StartedDate.HasValue)
             {
@@ -47,7 +48,7 @@
             </div>
         }
         <div class="form-actions">
-            <button class="btn btn-success btn-lg" type="submit">@WebInterview.ToInterview</button>
+            <button class="btn btn-success btn-lg" type="submit">@WebInterview.ResumeInterview</button>
         </div>
     }
 </div>

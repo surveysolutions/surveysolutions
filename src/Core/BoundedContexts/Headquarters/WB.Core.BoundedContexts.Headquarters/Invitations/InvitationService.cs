@@ -38,19 +38,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void CreateInvitationForWebInterview(Assignment assignment)
         {
-            if (!(assignment.WebMode ?? false))
+            if (assignment.WebMode == false)
             {
                 return;
             }
 
             var hasEmail = !string.IsNullOrWhiteSpace(assignment.Email);
-            var isPrivateAssignment = (assignment.Quantity ?? 1) == 1;
 
             var assignmentId = assignment.Id;
             var invitation = new Invitation(assignmentId);
             var questionnaireHash = assignment.QuestionnaireId.GetHashCode();
 
-            if (!isPrivateAssignment)
+            if (assignment.InPrivateWebMode())
+            {
+                /*
+                Quantity  Password 	    Email 	    
+                1 	      not empty 	empty      Public link, unique passwords. Token should be unique for all assignments
+                1         empty 	    not empty  Private link, no password
+                1 	      not empty 	not empty  Private link, with password
+                */
+                if (hasEmail)
+                {
+                    var hash = questionnaireHash * (1 + assignment.Email.GetHashCode()) + assignmentId;
+                    var token = TokenGenerator.Instance.Generate(hash);
+                    invitation.SetToken(token);
+                }
+                else
+                {
+                    var token = TokenGenerator.Instance.Generate(questionnaireHash);
+                    invitation.SetToken(token, TokenKind.AssignmentResolvedByPassword);
+                }
+            }
+            else
             {
                 /*
                 Quantity  Password 	    Email 	    
@@ -60,28 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 var token = TokenGenerator.Instance.Generate(questionnaireHash * 293 * assignmentId);
                 invitation.SetToken(token);
             }
-            else
-            {
-                /*
-                Quantity  Password 	    Email 	    
-                1 	      not empty 	empty      Public link, unique passwords. Token should be unique for all assignments
-                1         empty 	    not empty  Private link, no password
-                1 	      not empty 	not empty  Private link, with password
-                */
-                if (!hasEmail)
-                {
-                    var token = "I" + TokenGenerator.Instance.Generate(questionnaireHash);
-                    invitation.SetToken(token);
-                }
-                else
-                {
-                    var hash = questionnaireHash * (1 + assignment.Email.GetHashCode()) + assignmentId;
-                    var token = TokenGenerator.Instance.Generate(hash);
-                    invitation.SetToken(token);
-                }
-            }
 
-            invitationStorage.Store(invitation, null);
+            invitationStorage.Store(invitation, invitation.Id);
         }
 
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
@@ -92,7 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .Where(NotArchived())
                 .Count());
         }
-
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
@@ -318,8 +316,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.InvitationWasSent(emailId);
             invitationStorage.Store(invitation, invitationId);
             var status = this.GetEmailDistributionStatus();
-            status.ProcessedCount++;
-            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            if (status != null)
+            {
+                status.ProcessedCount++;
+                this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            }
         }
 
         private static Expression<Func<Invitation, bool>> LastReminderIsExpired(DateTime thresholdDate)

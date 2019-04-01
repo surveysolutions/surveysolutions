@@ -194,7 +194,7 @@
     <value>Interview completion date: </value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start interview</value>
+    <value>Start new interview</value>
   </data>
   <data name="StartPageTitle" xml:space="preserve">
     <value>Web Survey</value>
@@ -207,6 +207,12 @@
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>To interview</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Resume interview</value>
+  </data>
+  <data name="ResumeInterviewDescription" xml:space="preserve">
+    <value>We have noticed that you have already started this interview, but did not finish it</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
     <value>Reopen</value>
