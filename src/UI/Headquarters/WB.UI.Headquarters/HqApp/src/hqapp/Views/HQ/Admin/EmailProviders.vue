@@ -311,12 +311,11 @@ export default {
                         self.sendEmailResult = false;
                         if(response.data.errors !== null)
                             self.sendingErrors = response.data.errors;    
-                    }
-                    
+                    }                    
                 })
                 .catch(function (error) {
                     self.sendEmailResult = false;
-                    sendingErrors = ["General error occurred"];
+                    sendingErrors = [this.$t("Settings.EmailProvider_GeneralError")];
                     Vue.config.errorHandler(error, self);
                 })
                 .then(function () {

@@ -160,6 +160,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General error occurred.
+        /// </summary>
+        internal static string EmailProvider_GeneralError {
+            get {
+                return ResourceManager.GetString("EmailProvider_GeneralError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         internal static string EmailProvider_None {
