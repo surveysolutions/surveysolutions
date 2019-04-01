@@ -70,7 +70,7 @@
                             </div>
                             <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
                                 <p> {{ this.$t("Assignments.InvalidSizeMessage") }} </p>
-                                <p v-if="sizeQuestion.answer !== '1' && (emailQuestion.answer !== null || emailQuestion.answer !== '')"> {{ this.$t("Assignments.InvalidSizeWithEmail") }} </p>                                                             
+                                <p>{{ errors.first('size') }}</p>
                             </div>
                         </wb-question>
 
@@ -154,7 +154,7 @@
                                 </div>                                
                             </div>
                             <div class="information-block text-danger" v-if="!passwordQuestion.validity.isValid">
-                                <p> {{ this.$t("Assignments.InvalidPassword") }} </p>                                                             
+                                <p> {{ this.$t("Assignments.InvalidPassword") }} </p>
                             </div>
                         </wb-question>                       
 
@@ -182,6 +182,31 @@
 
 <script>
 import Vue from "vue";
+import { Validator } from 'vee-validate';
+
+const emailOrPasswordRequired = {
+    getMessage() {
+        return Vue.$t('Assignments.SizeForWebMode')
+    },
+    validate(value, [email, password]) {
+        return (email !== null && email !== "") || (password !== null && password !== "")
+    },
+    hasTarget: true
+}
+
+const emailShouldBeEmpty = {
+    getMessage() {
+        return Vue.$t('Assignments.InvalidSizeWithEmail')
+    },
+    validate(value, [email]) {
+        return email === null || email === ""
+    },
+    hasTarget: true
+}
+
+
+Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired);
+Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty);
 
 export default {
     data() {
@@ -236,16 +261,27 @@ export default {
         };
     },
     computed: {
-        sizeValidations(){
-            return {
+        sizeValidations() {
+            let validations = {
                 regex: "^-?([0-9]+)$",
                 min_value: -1,
                 max_value: this.config.maxInterviewsByAssignment
             };
+
+            if(this.webMode.answer) {
+                if(this.sizeQuestion.answer === "1") {
+                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer]
+                }
+                else {
+                    validations.emailShouldBeEmpty = [this.emailQuestion.answer]
+                }
+            }
+
+            return validations
         }, 
         passwordValidations(){
             return {
-                regex: "^([0-9A-Z]+)|\\?$"
+                regex: "^([0-9A-Z]{6,})|\\?$"
             };
         },        
         entities() {
@@ -278,25 +314,9 @@ export default {
         async create(ev) {
             var validationResult = await this.$validator.validateAll();
 
-            var sizeIsValidExtra = (!this.webMode.answer) ||            
-                this.webMode.answer &&
-                (this.sizeQuestion.answer == "1" ||
-                    (this.sizeQuestion.answer !== "1" &&                 
-                        (this.emailQuestion.answer == null || this.emailQuestion.answer == "")))
-
-            var passwordIsValidExtra = !this.webMode.answer ||
-             (this.webMode.answer && 
-                (this.passwordQuestion.answer == null ||
-                  (this.passwordQuestion.answer == '?' || 
-                   this.passwordQuestion.answer == '' || 
-                   this.passwordQuestion.answer.length >= 6)))
-
-            validationResult = validationResult && sizeIsValidExtra && passwordIsValidExtra 
-
-            this.sizeQuestion.validity.isValid = !this.errors.has('size') && sizeIsValidExtra           
+            this.sizeQuestion.validity.isValid = !this.errors.has('size')            
             this.emailQuestion.validity.isValid = !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.errors.has('password') && passwordIsValidExtra
-
+            this.passwordQuestion.validity.isValid = !this.errors.has('password') 
             if(this.newResponsibleId == null) {
                 this.assignToQuestion.validity.isValid = false
             }

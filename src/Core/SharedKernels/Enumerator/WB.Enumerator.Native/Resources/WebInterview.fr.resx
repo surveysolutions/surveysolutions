@@ -222,9 +222,6 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>Nos excuses. Trop de personnes accèdent à ce site en même temps. Nous travaillons pour réparer ce problème. Veuillez réessayer plus tard.</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>Démarrer l'entretien</value>
-  </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>Cet entretien n'a pas été achevé</value>
   </data>

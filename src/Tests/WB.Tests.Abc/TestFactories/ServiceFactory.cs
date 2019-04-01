@@ -672,11 +672,13 @@ namespace WB.Tests.Abc.TestFactories
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
+                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -1020,6 +1022,14 @@ namespace WB.Tests.Abc.TestFactories
         public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
         {
             return new EnumeratorGroupGroupStateCalculationStrategy();
+        }
+
+        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        {
+            var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
+                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>());
+            return service;
         }
 
         public IInvitationService InvitationService(params Invitation[] invitations)

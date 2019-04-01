@@ -8,7 +8,7 @@
                 <p>{{$t('Settings.EmailProvider_PageDesc')}}</p>
             </div>
         </div>
-        <div class="row mb-30">
+        <div class="mb-30">
             <div class="col-md-12">
                 <form class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
@@ -134,6 +134,9 @@
                                         <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <a href="https://aws.amazon.com/ses/getting-started/" target="_blank">Docs</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,6 +162,9 @@
                                         <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                                     </div>
                                 </div>
+                                <div class="text-right">
+                                    <a href="https://sendgrid.com/docs/ui/account-and-settings/api-keys/" target="_blank">Docs</a>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -192,8 +198,11 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-default" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
-                 </div>
-                <p class="text-success" v-if="sendEmailResult">{{sendEmailResult}}</p>
+                </div>                
+                <p class="text-success" v-if="sendEmailResult">{{$t('Settings.EmailProvider_SendTestEmailResult')}}</p>
+                <div class="has-error" v-if="!sendEmailResult">
+                    <p class="help-block" v-for="error in sendingErrors" :key="error">{{error}}</p>                    
+                </div>                
             </form>
             </div>
         </div>
@@ -217,7 +226,8 @@ export default {
         sendGridApiKey: null,
         testEmailAddress: null,
         providerSettingsResult: null,
-        sendEmailResult: null
+        sendEmailResult: null,
+        sendingErrors: [] 
     };
   },
   created() {
@@ -283,17 +293,30 @@ export default {
     
     async sendTestEmail(){
         var self = this;
+        self.sendEmailResult = null;
+        
         var validationResult = await this.$validator.validateAll('testEmail');
         if (validationResult)
         {
-            self.$store.dispatch("showProgress");
+            self.$store.dispatch("showProgress");           
 
             this.$http.post(this.$config.model.api.sendTestEmail, { email: this.testEmailAddress })
                 .then(function (response) {
                     self.$validator.reset('testEmail');
-                    self.sendEmailResult = "An example of invitation email was sent succeessfully"
+
+                    if(response.data.success){
+                        self.sendEmailResult = true;                        
+                    }
+                    else{
+                        self.sendEmailResult = false;
+                        if(response.data.errors !== null)
+                            self.sendingErrors = response.data.errors;    
+                    }
+                    
                 })
                 .catch(function (error) {
+                    self.sendEmailResult = false;
+                    sendingErrors = ["General error occurred"];
                     Vue.config.errorHandler(error, self);
                 })
                 .then(function () {

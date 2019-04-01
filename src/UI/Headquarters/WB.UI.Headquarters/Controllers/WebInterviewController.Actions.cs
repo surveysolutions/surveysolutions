@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Controllers
             
             try
             {
-                await invitationMailingService.SendInvitationAsync(invitationId, assignment, email);
+                await invitationMailingService.SendResumeAsync(invitationId, assignment, email);
                 return this.Json("ok");
             }
             catch (EmailServiceException e)

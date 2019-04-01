@@ -281,4 +281,8 @@
   <data name="EmailTemplateDescription" xml:space="preserve">
     <value>Вы можите использовать %SURVEYNAME% в тексте для подстановки имени опросника</value>
   </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+      <value>Продолжение</value>
+      <comment>Продолжение</comment>
+  </data>
 </root>
