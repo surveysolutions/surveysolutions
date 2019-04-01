@@ -1099,6 +1099,15 @@ namespace WB.Tests.Abc.TestFactories
                 tokenLength = tokenLength
             };
         }
+
+        public AssignmentPasswordGenerator AssignmentPasswordGenerator(
+            IPlainStorageAccessor<Assignment> assignments = null, 
+            IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
+        {
+            return new AssignmentPasswordGenerator(
+                assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
+                importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
+        }
     }
 
     internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
