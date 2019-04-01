@@ -8,6 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -108,7 +109,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewCreatorFromAssignment,
                 verifier,
                 commandTransformator,
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                Mock.Of<IInvitationService>());
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());
 

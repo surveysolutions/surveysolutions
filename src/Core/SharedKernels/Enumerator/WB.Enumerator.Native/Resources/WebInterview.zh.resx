@@ -219,9 +219,6 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>非常抱歉，同时访问网站的人的太多。我们正在解决这个问题。请稍后再试。</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>开始访谈</value>
-  </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>这份访谈还没有完成</value>
   </data>

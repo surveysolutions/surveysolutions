@@ -243,6 +243,9 @@
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
     <value>Отправка пробного электронного письма</value>
   </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Пробное электронне письмо успешно отправлено</value>
+  </data>
     <data name="EmailProvider_PageDesc" xml:space="preserve">
     <value>Настройка сервиса массовой рассылки электронных писем. Конфигурация рассылки приглашений и напоминаний для онлайн обследований.</value>
   </data>

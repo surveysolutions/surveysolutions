@@ -304,6 +304,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An example of invitation email was sent successfully.
+        /// </summary>
+        internal static string EmailProvider_SendTestEmailResult {
+            get {
+                return ResourceManager.GetString("EmailProvider_SendTestEmailResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specify bulk email service provider.
         /// </summary>
         internal static string EmailProvider_ServiceProvideHeader {

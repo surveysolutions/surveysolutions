@@ -116,12 +116,6 @@
                                                     <div class="row-element mb-40">
                                                         <a href="javascript:void(0);" class="btn btn-success btn-lg">Start New interview</a>
                                                     </div>
-                                                    <div class="row-element">
-                                                        <div class="additional-info">
-                                                            If you have already started this interview, <br />
-                                                            and want to continue &mdash; <a href="javascript:void(0);" class="link-underlined">restore previous interview</a>
-                                                        </div>
-                                                    </div>
                                                 </div>            
                                             </div>
                                         </div>
@@ -222,11 +216,10 @@
                                                         <p  class="font-bold">{{previewText(webInterviewPageMessages['resumeInvitation'].text)}}</p>
                                                     </div>
                                                     <div class="row-element mb-40">
-                                                        <p  class="font-bold primary-text">We have noticed that you have already started this interview, but did not finished</p>
+                                                        <p  class="font-bold primary-text">{{$t('WebInterview.ResumeInterviewDescription')}}</p>
                                                     </div>
                                                     <div class="row-element">
-                                                        <a href="javascript:void(0);" class="btn btn-success btn-lg mb-1">Start New interview</a>
-                                                        <a href="javascript:void(0);" class="btn btn-primary btn-lg mb-1">Restore interview</a>
+                                                        <a href="javascript:void(0);" class="btn btn-success btn-lg mb-1">{{$t('WebInterview.ResumeInterview')}}</a>
                                                     </div>
                                                 </div>            
                                             </div>
@@ -634,7 +627,6 @@ export default {
         var linkText = custom == undefined || _.isNil(custom.linkText) || custom.linkText === "" ? defaultEmailTemplate.linkText : custom.linkText
         return {
           value: key,
-          title: defaultEmailTemplate.title,
           buttonTitle: defaultEmailTemplate.shortTitle,
           subject: subject,
           message: message,
