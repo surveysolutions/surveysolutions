@@ -5,12 +5,7 @@
     Layout = "_WebInterviewLayout.cshtml";
 }
 
-<h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
-<p>
-    @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(), Model.QuestionnaireTitle)
-</p>
-
-<div class="additional-info-block">
-    @WebInterview.Resume_InvitationSmallText
+<div class="row-element mb-20">
+    <h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
 </div>
 @Html.Partial("_StartOrResumeForm", Model)
