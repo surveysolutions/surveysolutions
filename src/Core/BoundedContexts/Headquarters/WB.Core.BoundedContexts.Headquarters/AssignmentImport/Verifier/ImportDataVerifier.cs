@@ -173,6 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var privatePasswordProtectedWebAssignments = assignmentRows.Where(IsPrivateWebLinkWithPassword).ToArray();
 
             var assignmentsWithDuplicatedPassword = privatePasswordProtectedWebAssignments
+                .Where(x => x.Password.Value != AssignmentConstants.PasswordSpecialValue)
                 .GroupBy(x => x.Password.Value)
                 .Where(x => x.Count() > 1)
                 .SelectMany(x => x.ToArray());
@@ -190,15 +191,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
             {
                 var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
-                    .Select(x => x.Password.Value).ToArray();
+                    .Select(x => x.Password.Value)
+                    .Where(x => x != AssignmentConstants.PasswordSpecialValue)
+                    .ToArray();
 
-                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x =>
-                    x.Where(y => y.Quantity == 1 && 
+                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
+                    .Where(y => y.Quantity == 1 && 
                                  (y.WebMode == null || y.WebMode == true) && 
                                  y.QuestionnaireId == questionnaireIdentity &&
-                                 y.Email == "" &&
-                                 y.Password != "" && 
-                                 expectedUniquePasswords.Contains(y.Password)).Select(y => y.Password).ToList());
+                                 (y.Email == null || y.Email == "") &&
+                                 expectedUniquePasswords.Contains(y.Password))
+                    .Select(y => y.Password).ToList());
 
                 if(!passwordsByWebAssignmentsInDb.Any()) continue;
 
