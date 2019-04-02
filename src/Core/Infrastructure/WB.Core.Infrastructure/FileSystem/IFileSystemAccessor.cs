@@ -33,6 +33,8 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
+        byte[] ReadHash(string pathToFile);
+        bool IsHashValid(byte[] fileContent, byte[] hash);
         byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null);
         string ReadAllText(string pathToFile);
 
@@ -43,6 +45,5 @@ namespace WB.Core.Infrastructure.FileSystem
         string ChangeExtension(string path1, string newExtension);
 
         void MoveFile(string pathToFile, string newPathToFile);
-
     }
 }
