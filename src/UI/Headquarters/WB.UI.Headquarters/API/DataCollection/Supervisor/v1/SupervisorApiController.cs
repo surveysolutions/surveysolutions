@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -79,7 +78,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
             Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
 
-            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", responseFileName);
+            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", 
+                responseFileName, this.fileSystemAccessor.ReadHash(pathToSupervisorApp));
         }
 
         [HttpGet]
@@ -185,7 +185,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return this.AsProgressiveDownload(fileStream, @"application/octet-stream");
+            return this.AsProgressiveDownload(fileStream, @"application/octet-stream", 
+                hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
         }
 
         [HttpGet]
