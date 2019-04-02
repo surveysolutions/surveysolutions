@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password is not valid. Has to be not less than 6 characters.
+        ///   Looks up a localized string similar to Invalid Password. At least 6 numbers and upper case letters or single symbol &apos;?&apos; to generate password.
         /// </summary>
         public static string PL0056_InvalidPassword {
             get {
