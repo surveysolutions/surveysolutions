@@ -353,7 +353,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 ProtectedVariables = protectedQuestions,
                 Email = email,
                 Password = password,
-                WebMode = webMode
+                WebMode = webMode ?? false
             };
         }
 
