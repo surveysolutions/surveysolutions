@@ -260,8 +260,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        [HttpPost]
-        [ActionName("Start")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Start")]
         [ValidateAntiForgeryToken]
         public ActionResult StartPost(string id, string password)
         {
@@ -475,8 +475,8 @@ namespace WB.UI.Headquarters.Controllers
             return View("Index");
         }
 
-        [HttpPost]
-        [ActionName("Resume")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Resume")]
         [WebInterviewAuthorize]
         public ActionResult ResumePost(string id, string returnUrl, [FromBody]string password)
         {
