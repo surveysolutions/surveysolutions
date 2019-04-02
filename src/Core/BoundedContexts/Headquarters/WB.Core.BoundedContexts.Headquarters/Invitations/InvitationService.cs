@@ -13,23 +13,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class InvitationService : IInvitationService
     {
+        private readonly ITokenGenerator tokenGenerator;
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage;
         private static CancellationTokenSource cancellationTokenSource;
 
         public InvitationService(
             IPlainStorageAccessor<Invitation> invitationStorage,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage)
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage, 
+            ITokenGenerator tokenGenerator)
         {
             this.invitationStorage = invitationStorage;
             this.invitationsDistributionStatusStorage = invitationsDistributionStatusStorage;
+            this.tokenGenerator = tokenGenerator;
         }
         
         public int CreateInvitationForPublicLink(Assignment assignment, string interviewId)
         {
             var invitation = new Invitation(assignment.Id);
-            var hash =  assignment.QuestionnaireId.GetHashCode() * (1 + interviewId.GetHashCode()) + assignment.Id;
-            var token = TokenGenerator.Instance.Generate(hash);
+            var token = tokenGenerator.GenerateUnique();
             invitation.SetToken(token);
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, null);
@@ -47,7 +49,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var assignmentId = assignment.Id;
             var invitation = new Invitation(assignmentId);
-            var questionnaireHash = assignment.QuestionnaireId.GetHashCode();
 
             if (assignment.InPrivateWebMode())
             {
@@ -59,13 +60,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 */
                 if (hasEmail)
                 {
-                    var hash = questionnaireHash * (1 + assignment.Email.GetHashCode()) + assignmentId;
-                    var token = TokenGenerator.Instance.Generate(hash);
+                    var token = tokenGenerator.GenerateUnique();
                     invitation.SetToken(token);
                 }
                 else
                 {
-                    var token = TokenGenerator.Instance.Generate(questionnaireHash);
+                    var token = tokenGenerator.Generate(assignment.QuestionnaireId.GetHashCode());
                     invitation.SetToken(token, TokenKind.AssignmentResolvedByPassword);
                 }
             }
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 -1 	      empty 	    empty      Public link, no password
                 -1 	      not empty 	empty      Public link, with password
                 */
-                var token = TokenGenerator.Instance.Generate(questionnaireHash * 293 * assignmentId);
+                var token = tokenGenerator.GenerateUnique();
                 invitation.SetToken(token);
             }
 
