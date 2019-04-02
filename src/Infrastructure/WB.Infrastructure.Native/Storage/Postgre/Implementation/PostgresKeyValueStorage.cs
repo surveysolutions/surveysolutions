@@ -37,7 +37,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual TEntity GetById(string id)
         {
-            EnshureTableExists();
+            EnsureTableExists();
 
             string queryResult;
             using (var command = new NpgsqlCommand())
@@ -64,7 +64,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         
         public virtual void Remove(string id)
         {
-            EnshureTableExists();
+            EnsureTableExists();
 
             int queryResult;
             using (var command = new NpgsqlCommand())
@@ -84,7 +84,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity view, string id)
         {
-            EnshureTableExists();
+            EnsureTableExists();
 
             bool entityExists;
             using (var existsCommand = new NpgsqlCommand())
@@ -125,7 +125,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            EnshureTableExists();
+            EnsureTableExists();
 
             try
             {
@@ -141,7 +141,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Clear()
         {
-            this.EnshureTableExists();
+            this.EnsureTableExists();
 
             using (var command = new NpgsqlCommand())
             {
@@ -158,7 +158,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            this.EnshureTableExists();
+            this.EnsureTableExists();
 
             using (var connection = new NpgsqlConnection(this.connectionString))
             {
@@ -180,7 +180,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
         {
-            EnshureTableExists();
+            EnsureTableExists();
 
             foreach (var tuple in bulk)
             {
@@ -193,7 +193,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private static bool doesExistTable = false;
 
-        protected void EnshureTableExists()
+        protected void EnsureTableExists()
         {
             if (doesExistTable) return;
 

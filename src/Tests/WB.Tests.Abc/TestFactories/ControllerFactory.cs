@@ -110,7 +110,8 @@ namespace WB.Tests.Abc.TestFactories
                 verifier,
                 commandTransformator,
                 Create.Service.AssignmentFactory(),
-                Mock.Of<IInvitationService>());
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IAssignmentPasswordGenerator>());
             result.Request = new HttpRequestMessage();
             result.Request.SetConfiguration(new HttpConfiguration());
 

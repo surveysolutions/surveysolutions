@@ -233,7 +233,7 @@
     <value>Email is not valid</value>
   </data>
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Password is not valid. Has to be not less than 6 characters</value>
+    <value>Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password</value>
   </data>
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
     <value>For assignments with provided email allowed quantity is 1</value>

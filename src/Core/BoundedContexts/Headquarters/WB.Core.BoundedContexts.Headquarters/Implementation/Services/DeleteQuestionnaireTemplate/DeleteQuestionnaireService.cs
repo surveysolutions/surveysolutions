@@ -4,6 +4,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
         private readonly IAssignmetnsDeletionService assignmetnsDeletionService;
+        private readonly IInvitationsDeletionService invitationsDeletionService;
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly DeleteQuestionnaireJobScheduler deleteQuestionnaireTask;
@@ -48,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             IAssignmetnsDeletionService assignmetnsDeletionService,
             IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
             IQuestionnaireStorage questionnaireStorage,
-            DeleteQuestionnaireJobScheduler deleteQuestionnaireTask)
+            DeleteQuestionnaireJobScheduler deleteQuestionnaireTask,
+            IInvitationsDeletionService invitationsDeletionService)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -61,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.lookupTablesStorage = lookupTablesStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.deleteQuestionnaireTask = deleteQuestionnaireTask;
+            this.invitationsDeletionService = invitationsDeletionService;
         }
 
         public void DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -108,7 +112,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 if (!isAssignmentImportIsGoing)
                 {
-                    this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+                    this.DeleteInvitations(questionnaireIdentity);
+                    this.DeleteAssignments(questionnaireIdentity);
                     this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
@@ -121,6 +126,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 DeleteInProcess.Remove(questionnaireKey);
             }
+        }
+
+        private void DeleteInvitations(QuestionnaireIdentity questionnaireIdentity)
+        {
+            invitationsDeletionService.Delete(questionnaireIdentity);
         }
 
         private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity)

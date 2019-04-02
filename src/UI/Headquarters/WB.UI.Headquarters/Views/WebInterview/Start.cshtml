@@ -1,67 +1,11 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.WebInterview
 @using WB.UI.Headquarters.Models.WebInterview
-@using WB.UI.Shared.Web.Captcha
-@model WB.UI.Headquarters.Models.WebInterview.StartWebInterview
+@model StartWebInterview
 @{
     Layout = "_WebInterviewLayout.cshtml";
-    bool isPasswordInvalid = ViewData.ModelState.ContainsKey("InvalidPassword") && ViewData.ModelState["InvalidPassword"].Errors.Any();
 }
 
-<h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
-<p>
-    @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(), Model.QuestionnaireTitle)
-</p>
-
-<div class="additional-info-block">
-    @WebInterview.Resume_InvitationSmallText
+<div class="row-element mb-20">
+    <h2>@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText).ToString(), Model.QuestionnaireTitle)</h2>
 </div>
-@if (Model.ServerUnderLoad)
-{
-    <p><strong>@Html.Raw(WebInterview.ServerUnderLoad)</strong></p>
-}
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    if (Model.UseCaptcha && !Model.ServerUnderLoad)
-    {
-        if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
-        {
-            <div class="form-group has-error">
-                <p>
-                    <span class="help-block">
-                        @Html.ValidationMessage("InvalidCaptcha")
-                    </span>
-                </p>
-            </div>
-        }
-        <div class="form-group">
-            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
-        </div>
-    }
-
-    if (Model.HasPassword)
-    {
-        <div class="form-group @(isPasswordInvalid? "has-error": "")" >
-            <label>This link is protected with password, that was distributed with the link. Please enter it here</label>
-            <input class="form-control" type="text" name="password" placeholder="Enter the password" />
-            @if (isPasswordInvalid)
-            {
-                <span class="help-block">@Html.ValidationMessage("InvalidPassword")</span>
-            }
-        </div>
-    }
-
-    if (Model.ServerUnderLoad)
-    {
-        <div class="form-actions">
-            <button class="btn btn-success btn-lg" onClick="window.location.reload();return false">@WebInterview.RefreshPage</button>
-        </div>
-    }
-    else
-    {
-        <div class="form-actions">
-            <button class="btn btn-success btn-lg" type="submit">@WebInterview.Start</button>
-        </div>
-    }
-}
+@Html.Partial("_StartOrResumeForm", Model)
