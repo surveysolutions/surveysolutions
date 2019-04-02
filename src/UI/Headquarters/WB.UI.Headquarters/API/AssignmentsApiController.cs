@@ -227,7 +227,7 @@ namespace WB.UI.Headquarters.API
                     x.Any(y => y.Quantity == 1 &&
                                (y.WebMode == null || y.WebMode == true) &&
                                y.QuestionnaireId == interview.QuestionnaireIdentity &&
-                               y.Email == "" &&
+                               (y.Email == null || y.Email == "") &&
                                y.Password == password));
 
                 if (hasPasswordInDb)
