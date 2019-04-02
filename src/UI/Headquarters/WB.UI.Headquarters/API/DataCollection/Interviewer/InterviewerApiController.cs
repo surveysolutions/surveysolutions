@@ -110,7 +110,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
             Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
 
-            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", responseFileName);
+            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", responseFileName,
+                this.fileSystemAccessor.ReadHash(pathToInterviewerApp));
         }
 
         [HttpGet]
@@ -144,7 +145,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return this.AsProgressiveDownload(fileStream, @"application/octet-stream");
+            return this.AsProgressiveDownload(fileStream, @"application/octet-stream", 
+                hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
         }
 
         [HttpGet]
