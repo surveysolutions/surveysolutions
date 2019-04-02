@@ -340,7 +340,7 @@ export default {
                         webMode: this.webMode.answer
                     })
                     .then(response => {
-                        self.$router.push({ name: "assignments" });
+                         window.location.href = self.config.assignmentsUrl
                     })
                     .catch(e => {
                         if (e.response.data.message) toastr.error(e.response.data.message);
