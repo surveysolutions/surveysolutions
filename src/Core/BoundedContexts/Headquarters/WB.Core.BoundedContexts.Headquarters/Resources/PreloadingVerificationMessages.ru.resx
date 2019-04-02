@@ -236,7 +236,7 @@
     <value>Некорректный электронный адрес</value>
   </data>
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Недопустимое значение пароля. Минимум 6 символов </value>
+    <value>Пароль должен быль не менее 6 символов(цифр и заглавных букв) или одного символа «?» для автоматической генерации пароля</value>
   </data>
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
     <value>Недопустимое значение для количиства, призаданном электронном адресе должно равняться 1</value>
