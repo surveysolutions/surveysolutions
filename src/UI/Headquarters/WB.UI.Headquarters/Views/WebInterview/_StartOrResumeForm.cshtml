@@ -34,7 +34,7 @@
     if (Model.HasPassword)
     {
         <div class="form-group @(isPasswordInvalid? "has-error": "")">
-            <label>This link is protected with password, that was distributed with the link. Please enter it here</label>
+            <label class="font-bold primary-text">This link is protected with password, that was distributed with the link. Please enter it here</label>
             <input class="form-control" type="password" name="password" placeholder="Enter the password" />
             @if (isPasswordInvalid)
             {
@@ -45,13 +45,13 @@
 
     if (Model.ServerUnderLoad)
     {
-        <div class="form-actions">
+        <div class="row-element">
             <button class="btn btn-success btn-lg" onClick="window.location.reload();return false">@WebInterview.RefreshPage</button>
         </div>
     }
     else
     {
-        <div class="form-actions">
+        <div class="row-element">
             <button class="btn btn-success btn-lg" type="submit">@(isResume ? WebInterview.ResumeInterview : WebInterview.Start)</button>
         </div>
     }
