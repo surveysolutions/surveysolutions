@@ -102,7 +102,7 @@
                         else {
                             this.$store.dispatch('answerDateQuestion', { 
                                 identity: this.$me.id,
-                                date: moment().toJSON()
+                                date: moment().format().substring(0, 19) // remove timezone information from date to prevent server conversion to server timezone
                             });
                         }
                     }

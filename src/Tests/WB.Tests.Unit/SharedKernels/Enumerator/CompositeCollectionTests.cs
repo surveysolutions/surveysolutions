@@ -202,6 +202,33 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
             Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
             Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "single" }));
             Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(0));
+        }  
+        
+
+        [Test]
+        public void when_removed_collection_from_second_level_should_raise_collection_changed_with_items_and_offset_in_args()
+        {
+            var firstLevel = Create.Entity.CompositeCollection<string>();
+
+            firstLevel.AddCollection(Create.Entity.CompositeCollection<string>("1"));
+            var secondLevel = new CompositeCollection<string>();
+            secondLevel.Add("2");
+            firstLevel.AddCollection(secondLevel);
+            firstLevel.AddCollection(Create.Entity.CompositeCollection<string>("5"));
+            var thirdLevel = new CovariantObservableCollection<string> { "3" };
+            secondLevel.AddCollection(thirdLevel);
+            secondLevel.Add("4");
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            firstLevel.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            firstLevel.RemoveCollection(secondLevel);
+
+            // assert
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+            Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "2", "3", "4" }));
+            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
         }
     }
 }

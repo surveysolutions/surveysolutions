@@ -223,15 +223,11 @@ namespace WB.Services.Export.InterviewDataStorage
 
         public async Task Handle(PublishedEvent<DateTimeQuestionAnswered> @event, CancellationToken token = default)
         {
-            var questionnaire = await GetQuestionnaireByInterviewIdAsync(@event.EventSourceId, token);
-            if(!(questionnaire?.Find<Question>(@event.Event.QuestionId) is DateTimeQuestion question))
-                return ;
-
             await UpdateQuestionValue(
                 interviewId: @event.EventSourceId,
                 entityId: @event.Event.QuestionId,
                 rosterVector: @event.Event.RosterVector,
-                value: question.IsTimestamp ? (@event.Event.OriginDate?.DateTime ?? @event.Event.Answer) : @event.Event.Answer,
+                value: @event.Event.Answer,
                 valueType: NpgsqlDbType.Timestamp,
                 token: token);
         }

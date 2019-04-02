@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -259,8 +260,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        [HttpPost]
-        [ActionName("Start")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Start")]
         [ValidateAntiForgeryToken]
         public ActionResult StartPost(string id, string password)
         {
@@ -423,7 +424,11 @@ namespace WB.UI.Headquarters.Controllers
             
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            var assignmentId = interview.GetAssignmentId();
+            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) ||
+                !string.IsNullOrEmpty(assignment?.Password))
             {
                 var model = this.GetResumeModel(id);
                 return this.View("Resume", model);
@@ -470,16 +475,48 @@ namespace WB.UI.Headquarters.Controllers
             return View("Index");
         }
 
-        [HttpPost]
-        [ActionName("Resume")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Resume")]
         [WebInterviewAuthorize]
-        public ActionResult ResumePost(string id, string returnUrl)
+        public ActionResult ResumePost(string id, string returnUrl, [FromBody]string password)
         {
-            if (!this.captchaProvider.IsCaptchaValid(this))
+            var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null)
+            {
+                var invitation = this.invitationService.GetInvitationByToken(id);
+                if (invitation == null)
+                    return HttpNotFound();
+
+                interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+            }
+
+            if (interview == null)
+                return HttpNotFound();
+
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (webInterviewConfig.UseCaptcha && !this.captchaProvider.IsCaptchaValid(this))
             {
                 var model = this.GetResumeModel(id);
                 this.ModelState.AddModelError("InvalidCaptcha", Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha);
                 return this.View(model);
+            }
+
+            var assignmentId = interview.GetAssignmentId();
+            if (assignmentId.HasValue)
+            {
+                var assignment = this.assignments.GetById(assignmentId);
+                if (!string.IsNullOrWhiteSpace(assignment?.Password))
+                {
+                    bool isValidPassword = assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
+
+                    if (!isValidPassword)
+                    {
+                        var model = this.GetResumeModel(id);
+                        this.ModelState.AddModelError("InvalidPassword", "Wrong password");
+                        return this.View(model);
+                    }
+                }
             }
 
             RememberCapchaFilled(id);
@@ -536,13 +573,18 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            var assignmentId = interview.GetAssignmentId();
+            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+
+            var model = this.GetStartModel(interview.QuestionnaireIdentity, webInterviewConfig, assignment);
 
             return new ResumeWebInterview
             {
-                QuestionnaireTitle = questionnaireBrowseItem.Title,
-                UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha,
                 StartedDate = interview.StartedDate,
-                CustomMessages = webInterviewConfig.CustomMessages
+                QuestionnaireTitle = model.QuestionnaireTitle,
+                UseCaptcha = model.UseCaptcha,
+                CustomMessages = model.CustomMessages,
+                HasPassword = model.HasPassword
             };
         }
 

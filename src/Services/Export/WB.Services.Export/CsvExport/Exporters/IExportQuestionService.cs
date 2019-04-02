@@ -43,7 +43,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case VariableType.Boolean:
                     return new string[] { (bool?)variable == true ? "1" : (bool?)variable == false ? "0" : ExportFormatSettings.MissingNumericQuestionValue };
                 case VariableType.Double:
-                    return new string[] { variable == null ? ExportFormatSettings.MissingNumericQuestionValue : Convert.ToDouble(variable).ToString(CultureInfo.InvariantCulture) };
+                    {
+                        if(variable == null)
+                            return new string[]{ ExportFormatSettings.MissingNumericQuestionValue};
+                        var val = Convert.ToDouble(variable);
+                        if(double.IsNaN(val)|| double.IsInfinity(val))
+                            return new string[] { ExportFormatSettings.MissingNumericQuestionValue };
+
+                        return new string[] {val.ToString(CultureInfo.InvariantCulture)};
+                    };
                 case VariableType.DateTime:
                     return new string[] { ((DateTime?)variable)?.ToString(ExportFormatSettings.ExportDateTimeFormat) ?? ExportFormatSettings.MissingStringQuestionValue };
 
