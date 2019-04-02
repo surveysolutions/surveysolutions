@@ -16,7 +16,7 @@ using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
-    internal class when_intervews_controller_approving_interview : ApiTestContext
+    internal class when_interviews_controller_approving_interview : ApiTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewReferences = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
