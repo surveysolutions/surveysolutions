@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                         Skipped = request.Skip,
                         Length = bytes.Length,
                         Total = content.Length,
-                        ContentMD5 = new MD5CryptoServiceProvider().ComputeHash(bytes)
+                        ContentMD5 = new MD5CryptoServiceProvider().ComputeHash(content)
                     };
 
                     CallsCount++;
