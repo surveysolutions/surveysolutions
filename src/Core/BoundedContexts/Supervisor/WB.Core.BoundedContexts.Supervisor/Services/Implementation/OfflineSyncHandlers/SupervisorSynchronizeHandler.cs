@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             var hasApks = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks) &&
                           this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks)
-                              .Count(f => f.EndsWith(".apk")) == 2;//.Length == 2;
+                              .Count(f => !f.EndsWith(".md5")) == 2;
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {
