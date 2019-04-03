@@ -76,11 +76,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var msg = new SendGridMessage
             {
                 From = new EmailAddress(settings.SenderAddress),
-                ReplyTo = new EmailAddress(settings.ReplyAddress),
                 Subject = subject,
                 PlainTextContent = textBody,
                 HtmlContent = htmlBody
             };
+
+            if(!string.IsNullOrWhiteSpace(settings.ReplyAddress))
+                msg.ReplyTo = new EmailAddress(settings.ReplyAddress);
+
             msg.AddTo(new EmailAddress(to));
             var response = await client.SendEmailAsync(msg);
             if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Accepted || response.StatusCode == HttpStatusCode.NoContent)
@@ -124,7 +127,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 var sendRequest = new SendEmailRequest
                 {
                     Source = settings.SenderAddress,
-                    ReplyToAddresses = new List<string>() { settings.ReplyAddress},
                     Destination = new Destination
                     {
                         ToAddresses = new List<string> { to }
@@ -147,6 +149,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                         }
                     }
                 };
+
+                if (!string.IsNullOrWhiteSpace(settings.ReplyAddress))
+                    sendRequest.ReplyToAddresses = new List<string>() {settings.ReplyAddress};
+
                 try
                 {
                     var response = await client.SendEmailAsync(sendRequest);
