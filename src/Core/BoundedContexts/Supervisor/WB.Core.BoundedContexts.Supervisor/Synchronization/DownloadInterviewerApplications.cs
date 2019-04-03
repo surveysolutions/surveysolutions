@@ -45,7 +45,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             if (!this.supervisorSettings.DownloadUpdatesForInterviewerApp) return;
 
             var latestVersionOfSupervisorApp = await this.supervisorSynchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
-                if(latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
+
+            if (latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
 
             Context.Progress.Report(new SyncProgressInfo
             {
@@ -98,10 +99,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 var interviewerAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.apk");
                 var interviewerWithMapsAppFilePath = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, "interviewer.maps.apk");
 
-                    var interviewerApk = await this.supervisorSynchronizationService
+                var interviewerApk = await this.supervisorSynchronizationService
                     .GetInterviewerApplicationAsync(this.fileSystemAccessor.ReadHash(interviewerAppFilePath),
-                        Context.CancellationToken, 
-                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
+                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }), Context.CancellationToken);
 
                 if (interviewerApk != null)
                 {
@@ -112,8 +112,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
                 var interviewerWithMapsApk = await this.supervisorSynchronizationService
                     .GetInterviewerApplicationWithMapsAsync(this.fileSystemAccessor.ReadHash(interviewerWithMapsAppFilePath),
-                        Context.CancellationToken,
-                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
+                        new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }),
+                        Context.CancellationToken);
 
                 if (interviewerWithMapsApk != null)
                 {

@@ -35,74 +35,75 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         {
         }
 
-        public Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<SupervisorApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken)
+        public Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken token = default)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<InterviewerFullApiView>>(
                     url: this.InterviewersController, 
                     credentials: this.restCredentials, 
-                    token: cancellationToken));
+                    token: token));
 
             return response;
         }
 
-        public Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage,
-            CancellationToken cancellationToken)
+        public Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: this.BrokenInterviewPackagesController,
                 request: brokenInterviewPackage,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
-        public Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken)
+        public Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: this.ExceptionsController,
                 request: exceptions,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
         public Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView,
-            CancellationToken cancellationToken)
+            CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: this.InterviewerTabletInfosController,
                 request: deviceInfoApiView,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
-        public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken cancellationToken)
+        public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: this.InterviewerStatisticsController,
                 request: statisticToSend,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
-        public Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken)
+        public Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<string>>(
                 url: this.GetListOfDeletedQuestionnairesController,              
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
-        public async Task<byte[]> GetInterviewerApplicationAsync(byte[] existingFileHash, CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
-            await this.TryGetRestResponseOrThrowAsync(async () =>
+        public async Task<byte[]> GetInterviewerApplicationAsync(byte[] existingFileHash, 
+            IProgress<TransferProgress> transferProgress = null, CancellationToken token = default)
+        {
+            return await this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
-                    url: string.Concat(ApplicationUrl, "/apk/interviewer"), 
+                    url: string.Concat(ApplicationUrl, "/apk/interviewer"),
                     token: token,
                     credentials: this.restCredentials,
                     transferProgress: transferProgress,
@@ -113,9 +114,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
                 return restFile.Content;
             });
+        }
 
-        public async Task<byte[]> GetInterviewerApplicationWithMapsAsync(byte[] existingFileHash,CancellationToken token, 
-            IProgress<TransferProgress> transferProgress = null) =>
+        public async Task<byte[]> GetInterviewerApplicationWithMapsAsync(byte[] existingFileHash, IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) =>
             await this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
