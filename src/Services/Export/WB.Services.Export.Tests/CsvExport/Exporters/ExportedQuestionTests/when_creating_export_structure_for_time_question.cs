@@ -14,9 +14,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
         public void BecauseOf() 
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.DateTime, new DateTime(2016, 8, 15, 12, 5, 7), QuestionSubtype.DateTime_Timestamp);
-            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTime_Timestamp);
-            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTime_Timestamp);
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.DateTime, new DateTime(2016, 8, 15, 12, 5, 7), QuestionSubtype.DateTimeTimestamp);
+            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTimeTimestamp);
+            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTimeTimestamp);
         }
 
         [NUnit.Framework.Test] public void should_return_correct_filled_answer ()

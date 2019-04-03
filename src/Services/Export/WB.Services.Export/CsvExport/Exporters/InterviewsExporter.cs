@@ -85,7 +85,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 string filePath = Path.Combine(basePath, fileName);
 
                 List<string> interviewLevelHeader = new List<string>();
-                //Interview Key in all files does first
+                //Interview Key in all files goes first
                 interviewLevelHeader.Add(ServiceColumns.InterviewKey.VariableExportColumnName);
                 //Parent Ids if exists go as second part
                 //starting from root
