@@ -20,10 +20,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 new AnsweredYesNoOption(0, false),
                 new AnsweredYesNoOption(2, true),
                 new AnsweredYesNoOption(3, false),
-            }, QuestionSubtype.MultyOption_YesNoOrdered);
+            }, QuestionSubtype.MultiOptionYesNoOrdered);
 
-            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_YesNoOrdered, columnsCount: 5);
-            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_YesNoOrdered, columnsCount: 5);
+            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultiOptionYesNoOrdered, columnsCount: 5);
+            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultiOptionYesNoOrdered, columnsCount: 5);
         }
 
         [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "0", MissingNumericQuestionValue, "2", "0", "1" });
