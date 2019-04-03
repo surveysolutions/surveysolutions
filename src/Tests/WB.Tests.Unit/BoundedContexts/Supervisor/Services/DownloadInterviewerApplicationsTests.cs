@@ -47,10 +47,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             byte[] filehash = new byte[] {1, 2, 3, 4, 5};
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
             mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(appVersion));
+
             mockOfSupervisorSynchronization.Setup(x =>
                     x.GetInterviewerApplicationAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<byte[]>(null));
 
+            mockOfSupervisorSynchronization.Setup(x =>
+                    x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<byte[]>(null));
 
             var fs = new Mock<IFileSystemAccessor>();
             fs.Setup(f => f.IsFileExists(It.IsAny<string>())).Returns(true);
