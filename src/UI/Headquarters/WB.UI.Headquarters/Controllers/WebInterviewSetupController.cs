@@ -181,7 +181,6 @@ namespace WB.UI.Headquarters.Controllers
                 new EmailTextTemplateViewModel()
                 {
                     ShortTitle = GetShortTitleForEmailTemplateGroup(t.Key),
-                    Title = GetTitleForEmailTemplateGroup(t.Key),
                     Subject = t.Value.Subject,
                     Message = t.Value.Message,
                     PasswordDescription = t.Value.PasswordDescription,
@@ -195,24 +194,12 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        private static string GetTitleForEmailTemplateGroup(EmailTextTemplateType type)
-        {
-            switch (type)
-            {
-                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.ExampleInvitationEmailMessage;
-                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
-                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ExampleReminderEmailMessage;
-                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.ExampleRejectEmailMessage;
-                default:
-                    throw new ArgumentException("Unknown email template type "+ type.ToString());
-            }
-        }
-
         private static string GetShortTitleForEmailTemplateGroup(EmailTextTemplateType type)
         {
             switch (type)
             {
                 case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.InvitationEmailMessage;
+                case EmailTextTemplateType.ResumeTemplate: return WebInterviewSettings.ResumeEmailMessage;
                 case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
                 case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
                 case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
@@ -269,7 +256,6 @@ namespace WB.UI.Headquarters.Controllers
     public class EmailTextTemplateViewModel
     {
         public string ShortTitle { get; set; }
-        public string Title { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
         public string PasswordDescription { get; set; }

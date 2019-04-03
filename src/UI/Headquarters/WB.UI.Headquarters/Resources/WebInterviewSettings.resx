@@ -195,6 +195,9 @@
   <data name="InvitationEmailMessage" xml:space="preserve">
     <value>Invitation</value>
   </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+    <value>Resume</value>
+  </data>
   <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
     <value>No Response</value>
   </data>

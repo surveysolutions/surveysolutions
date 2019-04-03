@@ -287,13 +287,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
             registry.Bind<IAssignmentFactory, AssignmentFactory>();
+            registry.Bind<IAssignmentPasswordGenerator, AssignmentPasswordGenerator>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
 
             registry.Bind<IInterviewStateFixer, InterviewStateFixer>();
 
             registry.Bind<IEmailService, EmailService>();
             registry.Bind<IInvitationService, InvitationService>();
+            registry.BindAsSingleton<ITokenGenerator,TokenGenerator>();
             registry.Bind<IInvitationMailingService, InvitationMailingService>();
+            registry.Bind<IInvitationsDeletionService, InvitationsDeletionService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

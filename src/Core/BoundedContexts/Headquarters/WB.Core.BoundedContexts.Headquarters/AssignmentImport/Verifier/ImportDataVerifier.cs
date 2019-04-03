@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -13,11 +13,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -38,17 +40,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IFileSystemAccessor fileSystem;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
-        private IQuestionOptionsRepository questionOptionsRepository;
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
             IUserViewFactory userViewFactory,
-            IQuestionOptionsRepository questionOptionsRepository)
+            IQuestionOptionsRepository questionOptionsRepository,
+            IPlainStorageAccessor<Assignment> assignmentsRepository)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.userViewFactory = userViewFactory;
             this.questionOptionsRepository = questionOptionsRepository;
+            this.assignmentsRepository = assignmentsRepository;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(string originalFileName, PreloadedFile file, IQuestionnaire questionnaire)
@@ -158,6 +163,56 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
+        public IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire)
+        {
+            bool IsPrivateWebLinkWithPassword(PreloadingAssignmentRow x) => (x.WebMode?.WebMode == null || x.WebMode?.WebMode == true) && 
+                                                                            x.Quantity?.Quantity == 1 &&
+                                                                            !string.IsNullOrEmpty(x.Password?.Value) &&
+                                                                            string.IsNullOrEmpty(x.Email?.Value);
+
+            var privatePasswordProtectedWebAssignments = assignmentRows.Where(IsPrivateWebLinkWithPassword).ToArray();
+
+            var assignmentsWithDuplicatedPassword = privatePasswordProtectedWebAssignments
+                .Where(x => x.Password.Value != AssignmentConstants.PasswordSpecialValue)
+                .GroupBy(x => x.Password.Value)
+                .Where(x => x.Count() > 1)
+                .SelectMany(x => x.ToArray());
+
+            foreach (var duplicatedPassword in assignmentsWithDuplicatedPassword)
+            {
+                yield return ToCellError("PL0061", messages.PL0061_DuplicatePasswordWithQuantity1,
+                    duplicatedPassword, duplicatedPassword.Password);
+            }
+
+            if(assignmentsWithDuplicatedPassword.Any()) yield break;
+
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
+
+            foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
+            {
+                var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
+                    .Select(x => x.Password.Value)
+                    .Where(x => x != AssignmentConstants.PasswordSpecialValue)
+                    .ToArray();
+
+                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
+                    .Where(y => y.Quantity == 1 && 
+                                 (y.WebMode == null || y.WebMode == true) && 
+                                 y.QuestionnaireId == questionnaireIdentity &&
+                                 (y.Email == null || y.Email == "") &&
+                                 expectedUniquePasswords.Contains(y.Password))
+                    .Select(y => y.Password).ToList());
+
+                if(!passwordsByWebAssignmentsInDb.Any()) continue;
+
+                foreach (var assignment in batchOfPrivatePasswordProtectedWebAssignments.Where(x => passwordsByWebAssignmentsInDb.Contains(x.Password.Value)))
+                {
+                    yield return ToCellError("PL0061", messages.PL0061_DuplicatePasswordWithQuantity1,
+                        assignment, assignment.Password);
+                }
+            }
+        }
+
         public IEnumerable<PanelImportVerificationError> VerifyRowValues(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire)
         {
             foreach (var assignmentValue in assignmentRow.Answers)
@@ -174,11 +229,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
                 foreach (var error in this.RowValuesVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
-            }
-
-            foreach (var error in InconsistentAssignmentSettings(assignmentRow))
-            {
-                yield return error;
             }
         }
 
@@ -285,23 +335,34 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
             Error<AssignmentQuantity>(Quantity_ExceedsMaxInterviewsCount, "PL0054", string.Format(messages.PL0054_MaxInterviewsCountByAssignmentExeeded, Constants.MaxInterviewsCountByAssignment)),
             Error<AssignmentEmail>(Invalid_Email, "PL0055", messages.PL0055_InvalidEmail),
-            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword)
+            Error<AssignmentPassword>(Invalid_Password, "PL0056", messages.PL0056_InvalidPassword),
+            Error<AssignmentQuantity>(IncosistentQuantityAndEmail, "PL0057", messages.PL0057_IncosistentQuantityAndEmail),
+            Error<AssignmentEmail>(IncosistentWebmodeAndEmail, "PL0058", messages.PL0058_IncosistentWebmodeAndEmail),
+            Error<AssignmentPassword>(IncosistentWebmodeAndPassword, "PL0059", messages.PL0059_IncosistentWebmodeAndPassword),
+            Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
+            Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword)
         };
 
-        private IEnumerable<PanelImportVerificationError> InconsistentAssignmentSettings(PreloadingAssignmentRow assignmentRow)
-        {
-            if (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value) &&
-                assignmentRow.Quantity != null && assignmentRow.Quantity.Quantity != 1)
-                    yield return ToCellError("PL0057", messages.PL0057_IncosistentQuantityAndEmail, assignmentRow, assignmentRow.Quantity);
+        private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
+            => assignmentRow.Quantity == null &&
+               webMode.WebMode == true &&
+               string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
+               string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
-            if(((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
-               && (assignmentRow.Email != null && !string.IsNullOrEmpty(assignmentRow.Email.Value))) //email is set
-                yield return ToCellError("PL0058", messages.PL0058_IncosistentWebmodeAndEmail, assignmentRow, assignmentRow.Email);
+        private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
+            => quantity.Quantity == 1 &&
+               assignmentRow.WebMode?.WebMode == true &&
+               string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
+               string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
-            if (((assignmentRow.WebMode != null && assignmentRow.WebMode.WebMode != true) || (assignmentRow.WebMode == null)) //not a web mode
-                && (assignmentRow.Password != null && !string.IsNullOrEmpty(assignmentRow.Password.Value))) //password is set
-                yield return ToCellError("PL0059", messages.PL0059_IncosistentWebmodeAndPassword, assignmentRow, assignmentRow.Password);
-        }
+        private bool IncosistentWebmodeAndPassword(AssignmentPassword password, PreloadingAssignmentRow assignmentRow)
+            => !string.IsNullOrEmpty(password.Value) && (assignmentRow.WebMode.WebMode == false || assignmentRow.WebMode == null);
+
+        private bool IncosistentWebmodeAndEmail(AssignmentEmail email, PreloadingAssignmentRow assignmentRow)
+            => !string.IsNullOrEmpty(email.Value) && (assignmentRow.WebMode?.WebMode == false || assignmentRow.WebMode == null);
+
+        private bool IncosistentQuantityAndEmail(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
+            => quantity.Quantity != 1 && !string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
         private bool Invalid_Password(AssignmentPassword password)
         {
@@ -909,6 +970,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
             cell is TValue typedCell && hasError(typedCell, questionnaire) ? new []{ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
+
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
+            Func<TValue, PreloadingAssignmentRow, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
+            cell is TValue typedCell && hasError(typedCell, row) ? new[] { ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
             Errors<TValue>(Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentAnswers

@@ -225,9 +225,6 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>Lo sentimos, demasiadas personas están accediendo a este sitio web al mismo tiempo. Estamos trabajando en este problema. Por favor, inténtelo de nuevo más tarde.</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>Comenzar la entrevista</value>
-  </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>Esta entrevista no ha sido completada</value>
   </data>

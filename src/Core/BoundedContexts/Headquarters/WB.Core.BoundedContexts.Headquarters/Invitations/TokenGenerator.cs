@@ -1,34 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
-    public sealed class TokenGenerator
+    public sealed class TokenGenerator : RandomStringGenerator, ITokenGenerator
     {
-        private const string Encode_32_Chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+        private readonly IPlainStorageAccessor<Invitation> invitationStorage;
+        
+        protected internal int tokenLength = 8;
 
-        private static readonly ThreadLocal<char[]> _charBufferThreadLocal =
-            new ThreadLocal<char[]>(() => new char[13]);
-
-        private TokenGenerator()
+        public TokenGenerator(IPlainStorageAccessor<Invitation> invitationStorage)
         {
+            this.invitationStorage = invitationStorage;
         }
 
-        /// <summary>
-        /// Returns a single instance of the <see cref="TokenGenerator"/>.
-        /// </summary>
-        public static TokenGenerator Instance { get; } = new TokenGenerator();
+        public string GenerateUnique()
+        {
+            var tokens = Enumerable.Range(1, 10).Select(_ => GetRandomString(tokenLength, Encode_32_Chars)).ToArray();
+            List<string> usedTokens = this.invitationStorage.Query(_ => _.Where(x => tokens.Contains(x.Token)).Select(x => x.Token).ToList());
 
-        /// <summary>
-        /// Returns an ID. e.g: <c>0HLHI1F5INOFA</c>
-        /// </summary>
+            var availableTokens = tokens.Except(usedTokens).ToList();
+
+            if (availableTokens.Any())
+            {
+                return availableTokens.First();
+            }
+
+            return GenerateUnique();
+        }
+
         public string Generate(long id) => GenerateImpl(id);
 
         private static string GenerateImpl(long id)
         {
+            var _charBufferThreadLocal = new ThreadLocal<char[]>(() => new char[13]);
+
             var buffer = _charBufferThreadLocal.Value;
 
             buffer[0] = Encode_32_Chars[(int) (id >> 60) & 31];
@@ -47,33 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             return new string(buffer, 0, buffer.Length).Substring(4);
         }
+    }
 
-        public static string GetRandomAlphanumericString(int length)
-        {
-            return GetRandomString(length, Encode_32_Chars);
-        }
-
-        public static string GetRandomString(int length, IEnumerable<char> characterSet)
-        {
-            if (length < 0)
-                throw new ArgumentException("length must not be negative", "length");
-            if (length > int.MaxValue / 8) 
-                throw new ArgumentException("length is too big", "length");
-            if (characterSet == null)
-                throw new ArgumentNullException("characterSet");
-            var characterArray = characterSet.Distinct().ToArray();
-            if (characterArray.Length == 0)
-                throw new ArgumentException("characterSet must not be empty", "characterSet");
-
-            var bytes = new byte[length * 8];
-            new RNGCryptoServiceProvider().GetBytes(bytes);
-            var result = new char[length];
-            for (int i = 0; i < length; i++)
-            {
-                ulong value = BitConverter.ToUInt64(bytes, i * 8);
-                result[i] = characterArray[value % (uint)characterArray.Length];
-            }
-            return new string(result);
-        }
+    public interface ITokenGenerator
+    {
+        string GenerateUnique();
+        string Generate(long id);
     }
 }
