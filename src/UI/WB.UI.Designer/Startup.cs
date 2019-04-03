@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
@@ -63,17 +64,20 @@ namespace WB.UI.Designer1
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
 
+            var membershipSection = this.Configuration.GetSection("Membership");
             services.Configure<IdentityOptions>(opt =>
             {
-                opt.Password.RequireDigit = true;
-                opt.Password.RequireLowercase = true;
-                opt.Password.RequireUppercase = true;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.User.RequireUniqueEmail = false;
+                opt.Password.RequireDigit = membershipSection.GetValue("RequireDigit", true);
+                opt.Password.RequireLowercase = membershipSection.GetValue("RequireLowercase", true);
+                opt.Password.RequireUppercase = membershipSection.GetValue("RequireUppercase", true);
+                opt.Password.RequireNonAlphanumeric = membershipSection.GetValue("RequireNonAlphanumeric", false);
+                opt.Password.RequiredLength = membershipSection.GetValue("RequiredLength", 6);
+                opt.User.RequireUniqueEmail = membershipSection.GetValue("RequireUniqueEmail", true);
             });
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
             services.AddScoped<IViewRenderingService, ViewRenderingService>();
+            services.AddScoped<IQuestionnaireHelper, QuestionnaireHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,10 +5,6 @@
 
     public static class GlobalHelper
     {
-        public const string EmptyString = "--//--";
-
-        public const int GridPageItemsCount = 50;
-
         public static string CurrentAction
         {
             get
