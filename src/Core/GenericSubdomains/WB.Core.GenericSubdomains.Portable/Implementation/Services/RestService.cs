@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
@@ -107,37 +106,32 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
 
+            if (forceNoCache)
+            {
+                request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+            }
+
+            if (credentials?.Token != null)
+            {
+                string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
+                request.Headers.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
+            }
+            else if (credentials?.Password != null)
+            {
+                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", value);
+            }
+
+            if (customHeaders != null)
+            {
+                foreach (var customHeader in customHeaders)
+                {
+                    request.Headers.Add(customHeader.Key, customHeader.Value);
+                }
+            }
+
             try
             {
-                if (customHeaders != null && customHeaders.TryGetValue("If-None-Match", out var etag))
-                {
-                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue($@"""{etag}"""));
-                    customHeaders.Remove("If-None-Match");
-                }
-
-                if (forceNoCache)
-                {
-                    request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
-                }
-
-                if (credentials?.Token != null)
-                {
-                    string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
-                    request.Headers.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
-                }
-                else if (credentials?.Password != null)
-                {
-                    var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", value);
-                }
-
-                if (customHeaders != null)
-                {
-                    foreach (var customHeader in customHeaders)
-                    {
-                        request.Headers.Add(customHeader.Key, customHeader.Value);
-                    }
-                }
                 var httpClient = this.httpClientFactory.CreateClient(httpStatistician);
 
                 var httpResponseMessage = await
@@ -256,11 +250,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var restResponse = await this.ReceiveBytesWithProgressAsync(response,
                         transferProgress: transferProgress, token: token ?? default(CancellationToken)).ConfigureAwait(false);
-
-            if (restResponse.StatusCode == HttpStatusCode.NotModified)
-            {
-                return new RestFile(null, string.Empty, null, null, null, restResponse.StatusCode);
-            }
 
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
 

@@ -19,7 +19,6 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Utils;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
@@ -77,17 +76,10 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             if (!this.fileSystemAccessor.IsFileExists(pathToSupervisorApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            var fileHash = this.fileSystemAccessor.ReadHash(pathToSupervisorApp);
-
-            if (this.RequestHasMatchingFileHash(fileHash))
-            {
-                return Request.CreateResponse(HttpStatusCode.NotModified);
-            }
-            
             Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
-                       
+
             return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", 
-                responseFileName, fileHash);
+                responseFileName, this.fileSystemAccessor.ReadHash(pathToSupervisorApp));
         }
 
         [HttpGet]
