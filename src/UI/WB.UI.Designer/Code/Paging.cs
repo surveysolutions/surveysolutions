@@ -30,7 +30,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 {
     public static class PaginiationHelperExtensions
     {
-        public static IHtmlContent Pager(this HtmlHelper helper,
+        public static IHtmlContent Pager(this IHtmlHelper helper,
             int currentPage, int totalPages, 
             Func<int, string> pageUrl, 
             int pageSlides,

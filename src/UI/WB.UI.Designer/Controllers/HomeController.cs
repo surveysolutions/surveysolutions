@@ -21,13 +21,8 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public ActionResult Index(int? p, string sb, int? so, string f)
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
+            => this.View(new PagedList<QuestionnaireListViewModel>(Enumerable.Empty<QuestionnaireListViewModel>(), 0 , 10));
 
         public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
         {

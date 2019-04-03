@@ -1,29 +1,22 @@
 ﻿@{
     ViewBag.Title = QuestionnaireController.MyQuestionnaires;
+    Layout = "Layout";
 }
-@section Scripts {
-    @Scripts.Render("~/list")
-}
-
-@Html.Partial("_QuestionnairesList")
+    <partial name="_QuestionnairesList" />
 
 @section Modal
 {
-
-
     <div>
-
-        @Html.Partial("_IE11Modal")
-
+        <partial name="_IE11Modal" />
     </div>
 
     <div>
-        @Html.Partial("_DeleteModalDialog")
+        <partial name="_DeleteModalDialog"/>
     </div>
     <div>
-        @Html.Partial("_ExportPdfModalDialog")
+        <partial name="_ExportPdfModalDialog" />
     </div>
     <div>
-        @Html.Partial("_ExportHtmlModalDialog")
+        <partial name="_ExportHtmlModalDialog" />
     </div>
 }
