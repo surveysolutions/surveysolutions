@@ -6,16 +6,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
-using System.Web.Mvc.Html;
-using System.Web.Routing;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using Microsoft.AspNetCore.Routing;
+using WB.UI.Designer.Models;
+using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.BootstrapSupport
 {
-    using WB.UI.Designer.Models;
-
     public static class DefaultScaffoldingExtensions
     {
         public static string GetControllerName(this Type controllerType)
@@ -28,7 +26,7 @@ namespace WB.UI.Designer.BootstrapSupport
             return ((MethodCallExpression)actionExpression.Body).Method.Name;
         }
 
-        public static PropertyInfo[] VisibleProperties(this IEnumerable Model, IMembershipUserService userHelper)
+        public static PropertyInfo[] VisibleProperties(this IEnumerable Model, ClaimsPrincipal user)
         {
 
             var elementType = Model.GetType().GetElementType() ?? Model.GetType().GetGenericArguments()[0];
@@ -39,7 +37,7 @@ namespace WB.UI.Designer.BootstrapSupport
                                info =>
                                (info.Name != elementType.IdentifierPropertyName())
                                && actionProperties.All(x => x.Name != info.Name)
-                               && (userHelper.WebUser.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
+                               && (user.IsAdmin() || info.GetAttribute<OnlyForAdminAttribute>() == null))
                            .OrderedByDisplayAttr()
                            .ToArray();
         }
@@ -116,12 +114,6 @@ namespace WB.UI.Designer.BootstrapSupport
             return "";
         }
 
-        public static string GetLabel(this PropertyInfo propertyInfo)
-        {
-            var meta = ModelMetadataProviders.Current.GetMetadataForProperty(null, propertyInfo.DeclaringType, propertyInfo.Name);
-            return meta.GetDisplayName();
-        }
-
         public static string ToSeparatedWords(this string value)
         {
             return Regex.Replace(value, "([A-Z][a-z])", " $1").Trim();
@@ -182,21 +174,6 @@ namespace WB.UI.Designer.BootstrapSupport
                 elementType = Model.GetType().GetGenericArguments()[0];
             }
             return LabelFromType(elementType);
-        }
-    }
-
-    public static class HtmlHelperExtensions
-    {
-        public static MvcHtmlString TryPartial(this HtmlHelper helper, string viewName, object model)
-        {
-            try
-            {
-                return helper.Partial(viewName, model);
-            }
-            catch (Exception)
-            {
-            }
-            return MvcHtmlString.Empty;
         }
     }
 }

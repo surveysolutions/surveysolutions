@@ -5,21 +5,7 @@
 
     public static class GlobalHelper
     {
-        public static string CurrentAction
-        {
-            get
-            {
-                return (string)HttpContext.Current.Request.RequestContext.RouteData.Values["action"];
-            }
-        }
-
-        public static string CurrentController
-        {
-            get
-            {
-                return (string)HttpContext.Current.Request.RequestContext.RouteData.Values["controller"];
-            }
-        }
+    
 
         public static string GenerateUrl(string action, string controller, object routes)
         {
