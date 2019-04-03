@@ -233,7 +233,6 @@
   <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
     <value>Секретный ключ доступа</value>
   </data>
-
   <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
     <value>Электронная почта</value>
   </data>
@@ -246,7 +245,7 @@
   <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
     <value>Пробное электронное письмо успешно отправлено</value>
   </data>
-    <data name="EmailProvider_PageDesc" xml:space="preserve">
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
     <value>Настройка сервиса массовой рассылки электронных писем. Конфигурация рассылки приглашений и напоминаний для онлайн обследований.</value>
   </data>
   <data name="EmailProvider_SenderHeader" xml:space="preserve">
@@ -290,5 +289,11 @@
   </data>
   <data name="EmailProvider_HelpLinkText" xml:space="preserve">
     <value>здесь</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Отправьте себе тестовое электронное письмо для проверки работоспособности службы массовой рассылки писем и предпросмотра сообщения, которое будут получать респонденты.</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Конфигурация службы рассылки электонных писем сохранена успешно.</value>
   </data>
 </root>
