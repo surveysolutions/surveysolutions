@@ -282,4 +282,10 @@
   <data name="EmailProvider_HelpLinkText" xml:space="preserve">
     <value>here</value>
   </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive.</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Email service configuration was saved succeessfully.</value>
+  </data>
 </root>
