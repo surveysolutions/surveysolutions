@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
     {
         string SenderAddress{ get; }
         string SendGridApiKey{ get; }
+        string ReplyAddress { get; set; }
     }
 
     public interface IAmazonEmailSettings
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         string SenderAddress{ get; }
         string AwsAccessKeyId{ get; }
         string AwsSecretAccessKey{ get; }
+        string ReplyAddress { get; set; }
     }
 
     public interface ISenderInformation

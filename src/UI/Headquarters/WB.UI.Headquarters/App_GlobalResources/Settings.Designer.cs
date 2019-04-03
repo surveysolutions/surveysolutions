@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available [here](link-to-support-site)..
+        ///   Looks up a localized string similar to Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available .
         /// </summary>
         internal static string EmailProvider_AmazonDescription {
             get {
@@ -156,6 +156,24 @@ namespace Resources {
         internal static string EmailProvider_AwsSecretAccessKeyHelp {
             get {
                 return ResourceManager.GetString("EmailProvider_AwsSecretAccessKeyHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General error occurred.
+        /// </summary>
+        internal static string EmailProvider_GeneralError {
+            get {
+                return ResourceManager.GetString("EmailProvider_GeneralError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        internal static string EmailProvider_HelpLinkText {
+            get {
+                return ResourceManager.GetString("EmailProvider_HelpLinkText", resourceCulture);
             }
         }
         
@@ -277,7 +295,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure the parameters to access Sendgrid below. More information on usage of Sendgrid with Survey Solutions is available [here](link-to-support-site)..
+        ///   Looks up a localized string similar to Configure the parameters to access SendGrid below. More information on usage of SendGrid with Survey Solutions is available .
         /// </summary>
         internal static string EmailProvider_SendgridDescription {
             get {

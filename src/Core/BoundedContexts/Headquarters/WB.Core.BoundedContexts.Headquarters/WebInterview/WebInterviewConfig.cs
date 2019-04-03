@@ -43,10 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
             { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) },
         };
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
-        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
-        public int? ReminderAfterDaysIfPartialResponse { get; set; } = 3;
+        public int? ReminderAfterDaysIfNoResponse { get; set; }
+        public int? ReminderAfterDaysIfPartialResponse { get; set; }
 
         public string BaseUrl { get; set; }
 
