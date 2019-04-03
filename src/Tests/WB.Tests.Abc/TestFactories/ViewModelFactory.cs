@@ -616,5 +616,24 @@ namespace WB.Tests.Abc.TestFactories
                 answering ?? Create.ViewModel.AnsweringViewModel(),
                 instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
         }
+
+        public TimestampQuestionViewModel TimestampQuestionViewModel(
+            IStatefulInterview interview,
+            AnsweringViewModel answering = null)
+        {
+            var answeringViewModel = answering ?? Create.ViewModel.AnsweringViewModel();
+            var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+            statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.Id == Id.gA.ToString()));
+            return new TimestampQuestionViewModel(principal,
+                statefulInterviewRepository.Object,
+                Create.ViewModel.QuestionState<DateTimeQuestionAnswered>(interviewRepository: statefulInterviewRepository.Object),
+                Create.ViewModel.QuestionInstructionViewModel(),
+                answeringViewModel,
+                Create.Service.LiteEventRegistry());
+        }
     }
 }
