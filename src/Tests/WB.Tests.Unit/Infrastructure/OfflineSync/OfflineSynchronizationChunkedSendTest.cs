@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using NLog;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
-using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Infrastructure.OfflineSync
 {
@@ -37,7 +33,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             var connection = new Mock<INearbyConnection>();
             connection.Setup(c => c.RemoteEndpoints).Returns(new ObservableCollection<RemoteEndpoint>());
 
-            var offlineSync = new OfflineSyncClient(communicator, connection.Object, new FileSystemIOAccessor());
+            var offlineSync = new OfflineSyncClient(communicator, connection.Object);
 
             // Act
             var result = await offlineSync.SendChunkedAsync<Request, Response>(new Request(), CancellationToken.None);
@@ -59,7 +55,6 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             public long Skipped { get; set; }
             public int Length { get; set; }
             public long Total { get; set; }
-            public byte[] ContentMD5 { get; set; }
         }
 
         private class FakeCommunicator : INearbyCommunicator
@@ -89,8 +84,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                         Content = bytes,
                         Skipped = request.Skip,
                         Length = bytes.Length,
-                        Total = content.Length,
-                        ContentMD5 = new MD5CryptoServiceProvider().ComputeHash(bytes)
+                        Total = content.Length
                     };
 
                     CallsCount++;

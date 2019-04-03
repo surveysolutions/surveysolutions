@@ -1,14 +1,34 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 {
-    internal class FileSystemService : FileSystemAccessorBase, IFileSystemAccessor
+    internal class FileSystemService : IFileSystemAccessor
     {
+        public string CombinePath(string path1, string path2)
+        {
+            return Path.Combine(path1, path2);
+        }
+
+        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
+
+        public string GetFileName(string filePath)
+        {
+            return Path.GetFileName(filePath);
+        }
+
+        public string GetFileNameWithoutExtension(string filePath)
+        {
+            return Path.GetFileNameWithoutExtension(filePath);
+        }
+
+        public string GetFileExtension(string filePath)
+        {
+            return Path.GetExtension(filePath);
+        }
 
         public long GetFileSize(string filePath)
         {
@@ -113,7 +133,34 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
         {
             return Directory.GetFiles(pathToDirectory, pattern).ToArray();
         }
-        
+
+        public void WriteAllText(string pathToFile, string content)
+        {
+            File.WriteAllText(pathToFile, content);
+        }
+
+        public void WriteAllBytes(string pathToFile, byte[] content)
+        {
+            File.WriteAllBytes(pathToFile, content);
+        }
+
+        public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null)
+        {
+            if (start != null)
+            {
+                using (var reader = File.OpenRead(pathToFile))
+                {
+                    return reader.ReadExactly(start.Value, length);
+                }
+            }
+            else return File.ReadAllBytes(pathToFile);
+        }
+
+        public string ReadAllText(string fileName)
+        {
+            return File.ReadAllText(fileName);
+        }
+
         public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null)
         {
             CopyFileOrDirectoryInt(sourceDir, targetDir, targetDir, overrideAll, fileExtentionsFilter);
@@ -137,7 +184,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
                 foreach (var directory in dirList)
                 {
-                    if (!Path.GetFullPath(directory).Equals(Path.GetFullPath(targetGlobalDir)))
+                    if(!Path.GetFullPath(directory).Equals(Path.GetFullPath(targetGlobalDir)))
                         this.CopyFileOrDirectory(directory, destDir, overrideAll, fileExtentionsFilter);
                 }
 
@@ -173,8 +220,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
 
             if (fileExtensionsFilter != null)
             {
-                if (!fileExtensionsFilter.Contains(Path.GetExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
-                    return;
+                if(!fileExtensionsFilter.Contains(Path.GetExtension(sourcePath), StringComparer.InvariantCultureIgnoreCase))
+                    return;                
             }
 
             File.Copy(sourcePath, this.CombinePath(backupFolderPath, sourceFileName), overrideAll);

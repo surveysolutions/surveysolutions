@@ -48,8 +48,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
             return this.AsProgressiveDownload(this.fileSystemAccessor.ReadFile(pathToInterviewerApp),
                 @"application/vnd.android.package-archive",
-                RESPONSEAPPLICATIONFILENAME, 
-                this.fileSystemAccessor.ReadHash(pathToInterviewerApp));
+                RESPONSEAPPLICATIONFILENAME);
         }
 
         [HttpGet]
