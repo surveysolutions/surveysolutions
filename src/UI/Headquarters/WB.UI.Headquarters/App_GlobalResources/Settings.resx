@@ -208,10 +208,10 @@
     <value>Invitation messages for web interviews are not sent to the respondents by Survey Solutions.</value>
   </data>
   <data name="EmailProvider_AmazonDescription" xml:space="preserve">
-    <value>Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available [here](link-to-support-site).</value>
+    <value>Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available </value>
   </data>
   <data name="EmailProvider_SendgridDescription" xml:space="preserve">
-    <value>Configure the parameters to access Sendgrid below. More information on usage of Sendgrid with Survey Solutions is available [here](link-to-support-site).</value>
+    <value>Configure the parameters to access SendGrid below. More information on usage of SendGrid with Survey Solutions is available </value>
   </data>
   <data name="EmailProvider_SenderAddress" xml:space="preserve">
     <value>Sender email address</value>
@@ -230,6 +230,9 @@
   </data>
   <data name="EmailProvider_SendTestEmail" xml:space="preserve">
     <value>Send email</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>An example of invitation email was sent successfully</value>
   </data>
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
     <value>Send test email</value>
@@ -272,5 +275,11 @@
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>You can find it on API Keys page under Sendgrid settings menu item</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>General error occurred</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>here</value>
   </data>
 </root>

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -35,13 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         new Dictionary<EmailTextTemplateType, EmailTextTemplate>()
         {
             { EmailTextTemplateType.InvitationTemplate, new EmailTextTemplate(EmailTemplateTexts.InvitationTemplate.Subject, EmailTemplateTexts.InvitationTemplate.Message, EmailTemplateTexts.InvitationTemplate.PasswordDescription, EmailTemplateTexts.InvitationTemplate.LinkText) },
+            { EmailTextTemplateType.ResumeTemplate, new EmailTextTemplate(EmailTemplateTexts.ResumeTemplate.Subject, EmailTemplateTexts.ResumeTemplate.Message, EmailTemplateTexts.ResumeTemplate.PasswordDescription, EmailTemplateTexts.ResumeTemplate.LinkText) },
             { EmailTextTemplateType.Reminder_NoResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_NoResponse.Subject, EmailTemplateTexts.Reminder_NoResponse.Message, EmailTemplateTexts.Reminder_NoResponse.PasswordDescription, EmailTemplateTexts.Reminder_NoResponse.LinkText) },
             { EmailTextTemplateType.Reminder_PartialResponse, new EmailTextTemplate(EmailTemplateTexts.Reminder_PartialResponse.Subject, EmailTemplateTexts.Reminder_PartialResponse.Message, EmailTemplateTexts.Reminder_PartialResponse.PasswordDescription, EmailTemplateTexts.Reminder_PartialResponse.LinkText) },
-            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) }
+            { EmailTextTemplateType.RejectEmail, new EmailTextTemplate(EmailTemplateTexts.RejectEmail.Subject, EmailTemplateTexts.RejectEmail.Message, EmailTemplateTexts.RejectEmail.PasswordDescription, EmailTemplateTexts.RejectEmail.LinkText) },
         };
 
-        public int? ReminderAfterDaysIfNoResponse { get; set; } = 3;
-        public int? ReminderAfterDaysIfPartialResponse { get; set; } = 3;
+        public int? ReminderAfterDaysIfNoResponse { get; set; }
+        public int? ReminderAfterDaysIfPartialResponse { get; set; }
+
         public string BaseUrl { get; set; }
 
         public virtual WebInterviewEmailTemplate GetEmailTemplate(EmailTextTemplateType type)
@@ -78,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
         Reminder_NoResponse,
         Reminder_PartialResponse,
         RejectEmail,
+        ResumeTemplate,
     }
 
     public class EmailTemplateTexts
@@ -90,6 +95,16 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 Thank you for cooperation!";
             public static string PasswordDescription => "This interview is protected. Please use following password:";
             public static string LinkText => "START NEW INTERVIEW";
+        }
+
+        public class ResumeTemplate
+        {
+            public static string Subject => "Invitation to take a part in %SURVEYNAME%";
+            public static string Message => @"Welcome to %SURVEYNAME%!
+ 
+Thank you for cooperation!";
+            public static string PasswordDescription => "This interview is protected. Please use following password:";
+            public static string LinkText => "CONTINUE INTERVIEW";
         }
 
         public class Reminder_NoResponse

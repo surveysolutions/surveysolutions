@@ -206,7 +206,12 @@ export default {
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
+                            if (self.$config.model.isSupervisorMode){
+                                const formatedNumber = formatNumber(data);
+                                return `<span>${formatedNumber}</span>`;
+                            }
+                            else
+                                return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
                     }
                 ],

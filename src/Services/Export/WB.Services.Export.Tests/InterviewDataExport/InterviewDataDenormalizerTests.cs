@@ -90,31 +90,6 @@ namespace WB.Services.Export.Tests.InterviewDataExport
         }
 
         [Test]
-        public async Task when_timestamp_question_is_answered_should_use_origin_date_as_answer()
-        {
-            DbCommand command = null;
-            var denormalizer = CreateInterviewDataDenormalizer(c => command = c);
-
-            var originDate = new DateTimeOffset(2010, 5, 31, 10, 1, 1, TimeSpan.FromHours(-2));
-            await denormalizer.Handle(Create.Event.DateTimeQuestionAnswered(interviewId,
-                    Create.Identity(timestampQuestionId),
-                    originDate: originDate,
-                    answer: originDate.UtcDateTime // pretend that tablet was in the UTC timezone
-                    )
-                .ToPublishedEvent<DateTimeQuestionAnswered>());
-
-            await denormalizer.SaveStateAsync(CancellationToken.None);
-
-            Assert.That(command, Is.Not.Null);
-            Assert.That(command.CommandText, Is.Not.Null);
-
-
-            NpgsqlParameter commandParameter = (NpgsqlParameter) command.Parameters[0];
-            Assert.That(commandParameter.NpgsqlDbType, Is.EqualTo(NpgsqlDbType.Timestamp));
-            Assert.That(commandParameter.Value, Is.EqualTo(originDate.DateTime));
-        }
-
-        [Test]
         public async Task when_date_question_is_answered_should_use_answer_date_as_answer()
         {
             DbCommand command = null;

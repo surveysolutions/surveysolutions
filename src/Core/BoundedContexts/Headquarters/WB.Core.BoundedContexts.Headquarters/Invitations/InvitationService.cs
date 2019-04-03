@@ -13,23 +13,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public class InvitationService : IInvitationService
     {
+        private readonly ITokenGenerator tokenGenerator;
         private readonly IPlainStorageAccessor<Invitation> invitationStorage;
         private readonly IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage;
         private static CancellationTokenSource cancellationTokenSource;
 
         public InvitationService(
             IPlainStorageAccessor<Invitation> invitationStorage,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage)
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationsDistributionStatusStorage, 
+            ITokenGenerator tokenGenerator)
         {
             this.invitationStorage = invitationStorage;
             this.invitationsDistributionStatusStorage = invitationsDistributionStatusStorage;
+            this.tokenGenerator = tokenGenerator;
         }
         
         public int CreateInvitationForPublicLink(Assignment assignment, string interviewId)
         {
             var invitation = new Invitation(assignment.Id);
-            var hash =  assignment.QuestionnaireId.GetHashCode() * (1 + interviewId.GetHashCode()) + assignment.Id;
-            var token = TokenGenerator.Instance.Generate(hash);
+            var token = tokenGenerator.GenerateUnique();
             invitation.SetToken(token);
             invitation.InterviewWasCreated(interviewId);
             invitationStorage.Store(invitation, null);
@@ -38,29 +40,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public void CreateInvitationForWebInterview(Assignment assignment)
         {
-            if (!(assignment.WebMode ?? false))
+            if (assignment.WebMode == false)
             {
                 return;
             }
 
             var hasEmail = !string.IsNullOrWhiteSpace(assignment.Email);
-            var isPrivateAssignment = (assignment.Quantity ?? 1) == 1;
 
             var assignmentId = assignment.Id;
             var invitation = new Invitation(assignmentId);
-            var questionnaireHash = assignment.QuestionnaireId.GetHashCode();
 
-            if (!isPrivateAssignment)
-            {
-                /*
-                Quantity  Password 	    Email 	    
-                -1 	      empty 	    empty      Public link, no password
-                -1 	      not empty 	empty      Public link, with password
-                */
-                var token = TokenGenerator.Instance.Generate(questionnaireHash * 293 * assignmentId);
-                invitation.SetToken(token);
-            }
-            else
+            if (assignment.InPrivateWebMode())
             {
                 /*
                 Quantity  Password 	    Email 	    
@@ -68,20 +58,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 1         empty 	    not empty  Private link, no password
                 1 	      not empty 	not empty  Private link, with password
                 */
-                if (!hasEmail)
+                if (hasEmail)
                 {
-                    var token = "I" + TokenGenerator.Instance.Generate(questionnaireHash);
+                    var token = tokenGenerator.GenerateUnique();
                     invitation.SetToken(token);
                 }
                 else
                 {
-                    var hash = questionnaireHash * (1 + assignment.Email.GetHashCode()) + assignmentId;
-                    var token = TokenGenerator.Instance.Generate(hash);
-                    invitation.SetToken(token);
+                    var token = tokenGenerator.Generate(assignment.QuestionnaireId.GetHashCode());
+                    invitation.SetToken(token, TokenKind.AssignmentResolvedByPassword);
                 }
             }
+            else
+            {
+                /*
+                Quantity  Password 	    Email 	    
+                -1 	      empty 	    empty      Public link, no password
+                -1 	      not empty 	empty      Public link, with password
+                */
+                var token = tokenGenerator.GenerateUnique();
+                invitation.SetToken(token);
+            }
 
-            invitationStorage.Store(invitation, null);
+            invitationStorage.Store(invitation, invitation.Id);
         }
 
         public int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity)
@@ -92,7 +91,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 .Where(NotArchived())
                 .Count());
         }
-
 
         public int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity)
         {
@@ -318,8 +316,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             invitation.InvitationWasSent(emailId);
             invitationStorage.Store(invitation, invitationId);
             var status = this.GetEmailDistributionStatus();
-            status.ProcessedCount++;
-            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            if (status != null)
+            {
+                status.ProcessedCount++;
+                this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            }
         }
 
         private static Expression<Func<Invitation, bool>> LastReminderIsExpired(DateTime thresholdDate)

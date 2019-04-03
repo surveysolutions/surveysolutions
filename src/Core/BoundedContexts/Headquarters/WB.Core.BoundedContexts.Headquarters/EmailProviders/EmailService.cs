@@ -76,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             var msg = new SendGridMessage
             {
                 From = new EmailAddress(settings.SenderAddress),
+                ReplyTo = new EmailAddress(settings.ReplyAddress),
                 Subject = subject,
                 PlainTextContent = textBody,
                 HtmlContent = htmlBody
@@ -123,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                 var sendRequest = new SendEmailRequest
                 {
                     Source = settings.SenderAddress,
-                    
+                    ReplyToAddresses = new List<string>() { settings.ReplyAddress},
                     Destination = new Destination
                     {
                         ToAddresses = new List<string> { to }

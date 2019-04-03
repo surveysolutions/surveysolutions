@@ -322,10 +322,10 @@
   <data name="PasswordExplanation" xml:space="preserve">
     <value>Пароль будет использован для защиты задания</value>
   </data>
-    <data name="WebMode" xml:space="preserve">
+  <data name="WebMode" xml:space="preserve">
     <value>Веб режим</value>
   </data>
-    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
     <value>Задание в Веб режиме</value>
   </data>
   <data name="Activated" xml:space="preserve">
@@ -357,5 +357,12 @@
   </data>
   <data name="InvalidSizeWithEmail" xml:space="preserve">
     <value>Для задания с указанной электронной почтой размер должен равняться 1</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Задание с размером 1 для web режима должно иметь либо электронную почту либо пароль</value>
+  </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
+    <comment>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</comment>
   </data>
 </root>

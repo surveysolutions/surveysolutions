@@ -236,7 +236,7 @@
     <value>Некорректный электронный адрес</value>
   </data>
   <data name="PL0056_InvalidPassword" xml:space="preserve">
-    <value>Недопустимое значение пароля. Минимум 6 символов </value>
+    <value>Пароль должен быль не менее 6 символов(цифр и заглавных букв) или одного символа «?» для автоматической генерации пароля</value>
   </data>
   <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
     <value>Недопустимое значение для количиства, призаданном электронном адресе должно равняться 1</value>
@@ -246,5 +246,13 @@
   </data>
   <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
     <value>Если задан пароль, то должен быть активирован веб режим</value>
+  </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</value>
+    <comment>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</comment>
+  </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Пароль не уникален. Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
+    <comment></comment>
   </data>
 </root>

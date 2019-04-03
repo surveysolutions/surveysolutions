@@ -216,10 +216,10 @@
     <value>Вы не можете отправлять приглашения и напоминания для участия в онайн обследованиях Survey Solutions.</value>
   </data>
   <data name="EmailProvider_AmazonDescription" xml:space="preserve">
-    <value>Настройте параметры для доступа к Amazon SES ниже. Дополнительная информация об использовании Amazon SES с Survey Solutions доступна [здесь] (ссылка на сайт поддержки)</value>
+    <value>Настройте параметры для доступа к Amazon SES ниже. Дополнительная информация об использовании Amazon SES с Survey Solutions доступна </value>
   </data>
   <data name="EmailProvider_SendgridDescription" xml:space="preserve">
-    <value>Настройте параметры для доступа к Sendgrid ниже. Дополнительная информация об использовании Sendgrid с Survey Solutions доступна [здесь] (ссылка на сайт поддержки).</value>
+    <value>Настройте параметры для доступа к SendGrid ниже. Дополнительная информация об использовании SendGrid с Survey Solutions доступна </value>
   </data>
   <data name="EmailProvider_SenderAddress" xml:space="preserve">
     <value>Электронная почта отправителя</value>
@@ -242,6 +242,9 @@
   </data>
   <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
     <value>Отправка пробного электронного письма</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Пробное электронное письмо успешно отправлено</value>
   </data>
     <data name="EmailProvider_PageDesc" xml:space="preserve">
     <value>Настройка сервиса массовой рассылки электронных писем. Конфигурация рассылки приглашений и напоминаний для онлайн обследований.</value>
@@ -281,5 +284,11 @@
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>Вы можете найти его на странице API Keys в пункте меню настроек Sendgrid</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>Произошла ошибка</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>здесь</value>
   </data>
 </root>

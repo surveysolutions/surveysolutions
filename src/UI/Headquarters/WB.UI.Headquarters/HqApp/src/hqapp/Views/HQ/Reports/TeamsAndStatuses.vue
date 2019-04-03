@@ -294,10 +294,15 @@ export default {
                         data: "approvedByHeadquartersCount",
                         name: "ApprovedByHeadquartersCount",
                         render(data, type, row) {
-                            return self.getLinkToInterviews(
-                                data,
-                                row,
-                                "ApprovedByHeadquarters"
+                            if (self.$config.model.isSupervisorMode){
+                                const formatedNumber = formatNumber(data);
+                                return `<span>${formatedNumber}</span>`;
+                            }
+                            else
+                                return self.getLinkToInterviews(
+                                    data,
+                                    row,
+                                    "ApprovedByHeadquarters"
                             )
                         },
                         title: this.$t("Reports.ApprovedByHQ")

@@ -141,7 +141,9 @@
                     title: this.$t("WebInterviewUI.EmailLink_Header"),
                     
                     inputType: 'email',
-                    callback: function(result){
+                    callback: function(result) {
+                        if(result === null || result === undefined) return;
+
                         if (!self.validateEmail(result))
                         {
                             var input = $(this).find('input');

@@ -363,4 +363,10 @@
   <data name="InvalidSizeWithEmail" xml:space="preserve">
     <value>For assignments with provided email allowed size is 1</value>
   </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Assignment with size 1 for web mode should have email or password provided</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Password by assignment for web mode with quantity 1 should be unique</value>
+  </data>
 </root>

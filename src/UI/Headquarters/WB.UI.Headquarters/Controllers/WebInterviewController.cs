@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -24,6 +25,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Captcha;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -57,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummary;
         private readonly IInvitationMailingService invitationMailingService;
+        private readonly IEmailService emailService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
@@ -107,13 +110,14 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger, IUserViewFactory usersRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ICaptchaProvider captchaProvider,
-            IPlainStorageAccessor<Assignment> assignments, 
+            IPlainStorageAccessor<Assignment> assignments,
             IAudioFileStorage audioFileStorage,
             IAudioProcessingService audioProcessingService,
-            IPauseResumeQueue pauseResumeQueue, 
-            IInvitationService invitationService, 
-            INativeReadSideStorage<InterviewSummary> interviewSummary, 
-            IInvitationMailingService invitationMailingService)
+            IPauseResumeQueue pauseResumeQueue,
+            IInvitationService invitationService,
+            INativeReadSideStorage<InterviewSummary> interviewSummary,
+            IInvitationMailingService invitationMailingService,
+            IEmailService emailService)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -135,6 +139,7 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
+            this.emailService = emailService;
         }
 
         [WebInterviewAuthorize]
@@ -166,13 +171,17 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Start(string id)
         {
-            var invitationInfo = GetInvitationInfoByToken(id);
+            var invitation = this.invitationService.GetInvitationByToken(id);
 
-            if (invitationInfo.Assignment == null)
+            if (invitation.Assignment == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+            
+            if (invitation.InterviewId != null)
+            {
+                return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
+            }
 
-            var assignment = invitationInfo.Assignment;
-            var invitation = invitationInfo.Invitation;
+            var assignment = invitation.Assignment;
 
             if (assignment.Archived)
             {
@@ -194,7 +203,7 @@ namespace WB.UI.Headquarters.Controllers
                 // personal link
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
-                    if (invitation?.InterviewId != null)
+                    if (invitation.InterviewId != null)
                     {
                         if (invitation.Interview.Status >= InterviewStatus.Completed)
                             throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
@@ -203,10 +212,7 @@ namespace WB.UI.Headquarters.Controllers
                     }
 
                     var interviewId = this.CreateInterview(assignment);
-                    if (invitation != null)
-                    {
-                        invitationService.InterviewWasCreated(invitation.Id, interviewId);
-                    }
+                    invitationService.InterviewWasCreated(invitation.Id, interviewId);
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
@@ -227,19 +233,26 @@ namespace WB.UI.Headquarters.Controllers
                     }
                 }
 
+                if (assignment.IsCompleted)
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                        Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+                if (invitation.InterviewId == null)
+                {
+                    TempData[AskForEmail] = true;
+                }
+
                 if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
                 {
                     var interviewId = this.CreateInterview(assignment);
-                    
+
                     Response.Cookies.Add(new HttpCookie($"InterviewId-{assignment.Id}")
                     {
-                        Value = interviewId, Expires = DateTime.Now.AddYears(1)
+                        Value = interviewId,
+                        Expires = DateTime.Now.AddYears(1)
                     });
 
                     return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
-
-                TempData[AskForEmail] = true;
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
@@ -247,47 +260,15 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        private InvitationInfo GetInvitationInfoByToken(string id)
-        {
-            var invitation = invitationService.GetInvitationByToken(id);
-            Assignment assignment = null;
-            if (invitation == null)
-            {
-                if (int.TryParse(id, out int assignmentId))
-                {
-                    assignment = this.assignments.GetById(assignmentId);
-                }
-            }
-            else
-            {
-                assignment = invitation.Assignment;
-            }
-
-            return new InvitationInfo
-            {
-                Assignment = assignment,
-                Invitation = invitation,
-                HasMoreThanOneInvitation = id.StartsWith("I", StringComparison.InvariantCultureIgnoreCase)
-            };
-        }
-
-        private class InvitationInfo
-        {
-            public Invitation Invitation { get; set; }
-            public bool HasMoreThanOneInvitation { get; set; }
-            public Assignment Assignment { get; set; }
-        }
-
-        [HttpPost]
-        [ActionName("Start")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Start")]
         [ValidateAntiForgeryToken]
         public ActionResult StartPost(string id, string password)
         {
-            var invitationInfo = GetInvitationInfoByToken(id);
+            var invitation = this.invitationService.GetInvitationByToken(id);
 
-            var assignment = invitationInfo.Assignment;
-            var invitation = invitationInfo.Invitation;
-           
+            var assignment = invitation.Assignment;
+
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
@@ -301,10 +282,10 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {
-                bool isValidPassword = invitationInfo.HasMoreThanOneInvitation
+                bool isValidPassword = invitation.IsWithAssignmentResolvedByPassword()
                     ? invitationService.IsValidTokenAndPassword(id, password)
                     : assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
-                
+
                 if (!isValidPassword)
                 {
                     var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
@@ -323,20 +304,24 @@ namespace WB.UI.Headquarters.Controllers
                 }
             }
 
-            if (invitationInfo.HasMoreThanOneInvitation)
+            if (invitation.IsWithAssignmentResolvedByPassword())
             {
                 invitation = invitationService.GetInvitationByTokenAndPassword(id, password);
                 assignment = invitation.Assignment;
             }
 
-            if (invitation?.InterviewId != null)
+            if (invitation.InterviewId != null)
             {
-                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId ));
+                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
 
-            var interviewId =  this.CreateInterview(assignment);
+            if (assignment.IsCompleted)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-            if (invitation != null && assignment.Quantity == 1)
+            var interviewId = this.CreateInterview(assignment);
+
+            if (assignment.InPrivateWebMode())
             {
                 invitationService.InterviewWasCreated(invitation.Id, interviewId);
             }
@@ -354,6 +339,20 @@ namespace WB.UI.Headquarters.Controllers
             TempData[LastCreatedInterviewIdKey] = interviewId;
 
             return this.Redirect(GenerateUrl("Cover", interviewId));
+        }
+
+        public ActionResult Continue(string id)
+        {
+            var invitation = this.invitationService.GetInvitationByToken(id);
+            if (invitation == null)
+                return HttpNotFound();
+
+            var interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+
+            if (interview == null)
+                return HttpNotFound();
+            
+            return this.RedirectToAction("Resume", routeValues: new { id = invitation.InterviewId });
         }
 
         [WebInterviewAuthorize]
@@ -387,7 +386,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null || !interview.IsCompleted) return this.HttpNotFound();
-            
+
             if (this.IsAuthorizedUser(interview.CurrentResponsibleId))
             {
                 return RedirectToAction("Completed", "InterviewerHq");
@@ -411,9 +410,25 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Resume(string id, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null)
+            {
+                var invitation = this.invitationService.GetInvitationByToken(id);
+                if (invitation == null)
+                    return HttpNotFound();
+
+                interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+            }
+
+            if (interview == null)
+                return HttpNotFound();
+            
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            var assignmentId = interview.GetAssignmentId();
+            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+
+            if (webInterviewConfig.UseCaptcha && !this.IsAuthorizedUser(interview.CurrentResponsibleId) ||
+                !string.IsNullOrEmpty(assignment?.Password))
             {
                 var model = this.GetResumeModel(id);
                 return this.View("Resume", model);
@@ -447,7 +462,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (!webInterviewConfig.Started)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
-                if(interview.Status == InterviewStatus.Completed)
+                if (interview.Status == InterviewStatus.Completed)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
             }
 
@@ -460,16 +475,48 @@ namespace WB.UI.Headquarters.Controllers
             return View("Index");
         }
 
-        [HttpPost]
-        [ActionName("Resume")]
+        [System.Web.Mvc.HttpPost]
+        [System.Web.Mvc.ActionName("Resume")]
         [WebInterviewAuthorize]
-        public ActionResult ResumePost(string id, string returnUrl)
+        public ActionResult ResumePost(string id, string returnUrl, [FromBody]string password)
         {
-            if (!this.captchaProvider.IsCaptchaValid(this))
+            var interview = this.statefulInterviewRepository.Get(id);
+            if (interview == null)
+            {
+                var invitation = this.invitationService.GetInvitationByToken(id);
+                if (invitation == null)
+                    return HttpNotFound();
+
+                interview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+            }
+
+            if (interview == null)
+                return HttpNotFound();
+
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
+            if (webInterviewConfig.UseCaptcha && !this.captchaProvider.IsCaptchaValid(this))
             {
                 var model = this.GetResumeModel(id);
                 this.ModelState.AddModelError("InvalidCaptcha", Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha);
                 return this.View(model);
+            }
+
+            var assignmentId = interview.GetAssignmentId();
+            if (assignmentId.HasValue)
+            {
+                var assignment = this.assignments.GetById(assignmentId);
+                if (!string.IsNullOrWhiteSpace(assignment?.Password))
+                {
+                    bool isValidPassword = assignment.Password.Equals(password, StringComparison.InvariantCultureIgnoreCase);
+
+                    if (!isValidPassword)
+                    {
+                        var model = this.GetResumeModel(id);
+                        this.ModelState.AddModelError("InvalidPassword", "Wrong password");
+                        return this.View(model);
+                    }
+                }
             }
 
             RememberCapchaFilled(id);
@@ -526,19 +573,24 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+            var assignmentId = interview.GetAssignmentId();
+            var assignment = assignmentId.HasValue ? this.assignments.GetById(assignmentId.Value) : null;
+
+            var model = this.GetStartModel(interview.QuestionnaireIdentity, webInterviewConfig, assignment);
 
             return new ResumeWebInterview
             {
-                QuestionnaireTitle = questionnaireBrowseItem.Title,
-                UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha,
                 StartedDate = interview.StartedDate,
-                CustomMessages = webInterviewConfig.CustomMessages
+                QuestionnaireTitle = model.QuestionnaireTitle,
+                UseCaptcha = model.UseCaptcha,
+                CustomMessages = model.CustomMessages,
+                HasPassword = model.HasPassword
             };
         }
 
         private StartWebInterview GetStartModel(
             QuestionnaireIdentity questionnaireIdentity,
-            WebInterviewConfig webInterviewConfig, 
+            WebInterviewConfig webInterviewConfig,
             Assignment assignment)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -606,11 +658,11 @@ namespace WB.UI.Headquarters.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             var interviewException = filterContext.Exception.GetSelfOrInnerAs<InterviewException>();
-            if (interviewException != null 
+            if (interviewException != null
                 && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
             {
                 string errorMessage = WebInterview.GetUiMessageFromException(interviewException);
-                
+
                 this.HandleInterviewAccessError(filterContext, errorMessage);
                 return;
             }

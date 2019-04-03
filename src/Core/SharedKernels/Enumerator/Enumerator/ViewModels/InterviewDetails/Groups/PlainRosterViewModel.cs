@@ -70,22 +70,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
             var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
 
-            foreach (var removedRosterInstance in removedRosterInstances)
+            if (removedRosterInstances.Count == 0 && addedRosterInstances.Count == 0)
+                return;
+
+            InvokeOnMainThread(() =>
             {
-                if (!this.shownRosterInstances.ContainsKey(removedRosterInstance)) continue;
+                foreach (var removedRosterInstance in removedRosterInstances)
+                {
+                    if (!this.shownRosterInstances.ContainsKey(removedRosterInstance)) continue;
 
-                var collection = this.shownRosterInstances[removedRosterInstance];
-                collection.ForEach(viewModel => viewModel.DisposeIfDisposable());
-                this.shownRosterInstances.Remove(removedRosterInstance);
-                rosterInstances.RemoveCollection(collection);
-            }
+                    var collection = this.shownRosterInstances[removedRosterInstance];
+                    collection.ForEach(viewModel => viewModel.DisposeIfDisposable());
 
-            foreach (var addedRosterInstance in addedRosterInstances)
-            {
-                if (this.isDisposed) return;
+                    this.shownRosterInstances.Remove(removedRosterInstance);
+                    rosterInstances.RemoveCollection(collection);
+                }
 
-                InsertRosterInstance(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
-            }
+                foreach (var addedRosterInstance in addedRosterInstances)
+                {
+                    if (this.isDisposed) return;
+
+                    InsertRosterInstance(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
+                } 
+            });
         }
         
         private void InsertRosterInstance(int rosterIndex, Identity interviewRosterInstance, IStatefulInterview statefulInterview)
@@ -102,7 +109,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             inflatedChildren.InsertCollection(0, titleCollection);
 
             rosterInstances.InsertCollection(rosterIndex, inflatedChildren);
-
             shownRosterInstances.Add(interviewRosterInstance, inflatedChildren);
         }
 

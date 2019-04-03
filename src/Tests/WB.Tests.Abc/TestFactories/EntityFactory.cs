@@ -195,6 +195,13 @@ namespace WB.Tests.Abc.TestFactories
         public CompositeCollection<T> CompositeCollection<T>()
             => new CompositeCollection<T>();
 
+        public CompositeCollection<T> CompositeCollection<T>(params T[] items)
+        {
+            var compositeCollection = new CompositeCollection<T>();
+            items.ForEach(item => compositeCollection.Add(item));
+            return compositeCollection;
+        }
+
         public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null, DataExportFormat? format = null)
             => new DataExportProcessDetails(
                 format ?? DataExportFormat.Tabular,
@@ -980,7 +987,7 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneQuestion(Guid? questionId = null, Guid? questionnaireId = null)
-           => this.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId));
+           => this.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: Create.Entity.TextQuestion(questionId));
 
         public QuestionnaireExportStructure QuestionnaireExportStructure(Guid? questionnaireId = null, long? version = null)
             => new QuestionnaireExportStructure
@@ -1757,6 +1764,15 @@ namespace WB.Tests.Abc.TestFactories
             public AssignmentApiDocument Build() => this._entity;
         }
 
+        public AssignmentToImport AssignmentToImport(int? id = null, string password = null)
+        {
+            return new AssignmentToImport
+            {
+                Id = id ?? 0,
+                Password = password
+            };
+        }
+
         public Assignment Assignment(int? id = null,
             QuestionnaireIdentity questionnaireIdentity = null,
             int? quantity = null,
@@ -2114,10 +2130,10 @@ namespace WB.Tests.Abc.TestFactories
             Column = ServiceColumns.EmailColumnName
         };
 
-        public AssignmentWebMode AssignmentWebMode(bool webMode) => new AssignmentWebMode
+        public AssignmentWebMode AssignmentWebMode(bool? webMode) => new AssignmentWebMode
         {
             WebMode = webMode,
-            Value = "1",
+            Value = webMode == true ? "1" : "",
             Column = ServiceColumns.WebModeColumnName
         };
 
