@@ -1,13 +1,29 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = QuestionnaireController.MyQuestionnaires;
+}
+@section Scripts {
+    @Scripts.Render("~/list")
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@Html.Partial("_QuestionnairesList")
 
-<form asp-area="Identity" asp-page="/Account/Logout" 
-      asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-    <button type="submit" class="btn btn-primary">Logout</button>
-</form>
+@section Modal
+{
+
+
+    <div>
+
+        @Html.Partial("_IE11Modal")
+
+    </div>
+
+    <div>
+        @Html.Partial("_DeleteModalDialog")
+    </div>
+    <div>
+        @Html.Partial("_ExportPdfModalDialog")
+    </div>
+    <div>
+        @Html.Partial("_ExportHtmlModalDialog")
+    </div>
+}

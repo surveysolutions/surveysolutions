@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using WB.UI.Designer.Resources;
 
 /*
@@ -28,14 +30,14 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 {
     public static class PaginiationHelperExtensions
     {
-        public static MvcHtmlString Pager(this HtmlHelper helper,
+        public static IHtmlContent Pager(this HtmlHelper helper,
             int currentPage, int totalPages, 
             Func<int, string> pageUrl, 
             int pageSlides,
             string additionalPagerCssClass = "")
         {
             if (totalPages <= 1)
-                return MvcHtmlString.Empty;
+                return new HtmlString(string.Empty);
 
             var nav = new TagBuilder("nav");
 
@@ -97,9 +99,9 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 MakeDisabledPagingItem(htmlTitle: Paging.Last.ToUpper(), root: pager);
             }
 
-            nav.InnerHtml = pagination.ToString() + pager.ToString();
+            nav.InnerHtml.AppendHtml(pagination.ToString() + pager);
 
-            return MvcHtmlString.Create(nav.ToString());
+            return new HtmlString(nav.ToString());
         }
 
         private static void MakeDisabledPagingItem(string htmlTitle, TagBuilder root, string additionalClass = null)
@@ -112,11 +114,11 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
             var a = new TagBuilder("a");
             a.MergeAttribute("href", "#");
-            a.InnerHtml = htmlTitle;
+            a.InnerHtml.AppendHtml(htmlTitle);
             a.AddCssClass("disabledPage");
 
-            li.InnerHtml = a.ToString();
-            root.InnerHtml += li;
+            li.InnerHtml.AppendHtml(a.ToString());
+            root.InnerHtml.AppendHtml(li);
         }
 
         private static void MakePagingItem(bool isActive, string text, string htmlTitle, TagBuilder root)
@@ -128,19 +130,19 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                 li.AddCssClass("active");
                 var span = new TagBuilder("span");
                 span.AddCssClass("currentPage");
-                span.InnerHtml = htmlTitle;
+                span.InnerHtml.AppendHtml(htmlTitle);
 
-                li.InnerHtml += span;
+                li.InnerHtml.AppendHtml(span);
             }
             else
             {
                 var a = new TagBuilder("a");
                 a.MergeAttribute("href", text);
-                a.InnerHtml = htmlTitle;
-                li.InnerHtml += a;    
+                a.InnerHtml.AppendHtml(htmlTitle);
+                li.InnerHtml.AppendHtml(a);
             }
                 
-            root.InnerHtml += li;
+            root.InnerHtml.AppendHtml(li);
         }
     }
 
