@@ -1983,6 +1983,7 @@
     <Content Include="Views\WebEmails\EmailHtml.cshtml" />
     <Content Include="Views\WebEmails\EmailText.cshtml" />
     <Content Include="Views\Reports\TeamStatusDuration.cshtml" />
+    <Content Include="Views\WebInterview\_StartOrResumeForm.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

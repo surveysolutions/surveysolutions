@@ -173,6 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var privatePasswordProtectedWebAssignments = assignmentRows.Where(IsPrivateWebLinkWithPassword).ToArray();
 
             var assignmentsWithDuplicatedPassword = privatePasswordProtectedWebAssignments
+                .Where(x => x.Password.Value != AssignmentConstants.PasswordSpecialValue)
                 .GroupBy(x => x.Password.Value)
                 .Where(x => x.Count() > 1)
                 .SelectMany(x => x.ToArray());
@@ -190,15 +191,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var batchOfPrivatePasswordProtectedWebAssignments in privatePasswordProtectedWebAssignments.Batch(1000))
             {
                 var expectedUniquePasswords = batchOfPrivatePasswordProtectedWebAssignments
-                    .Select(x => x.Password.Value).ToArray();
+                    .Select(x => x.Password.Value)
+                    .Where(x => x != AssignmentConstants.PasswordSpecialValue)
+                    .ToArray();
 
-                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x =>
-                    x.Where(y => y.Quantity == 1 && 
+                var passwordsByWebAssignmentsInDb = this.assignmentsRepository.Query(x => x
+                    .Where(y => y.Quantity == 1 && 
                                  (y.WebMode == null || y.WebMode == true) && 
                                  y.QuestionnaireId == questionnaireIdentity &&
-                                 y.Email == "" &&
-                                 y.Password != "" && 
-                                 expectedUniquePasswords.Contains(y.Password)).Select(y => y.Password).ToList());
+                                 (y.Email == null || y.Email == "") &&
+                                 expectedUniquePasswords.Contains(y.Password))
+                    .Select(y => y.Password).ToList());
 
                 if(!passwordsByWebAssignmentsInDb.Any()) continue;
 
@@ -337,7 +340,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentEmail>(IncosistentWebmodeAndEmail, "PL0058", messages.PL0058_IncosistentWebmodeAndEmail),
             Error<AssignmentPassword>(IncosistentWebmodeAndPassword, "PL0059", messages.PL0059_IncosistentWebmodeAndPassword),
             Error<AssignmentQuantity>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword),
+            Error<AssignmentWebMode>(WebmodeSizeOneHasNoEmailOrPassword, "PL0060", messages.PL0060_WebmodeSizeOneHasNoEmailOrPassword)
         };
+
+        private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
+            => assignmentRow.Quantity == null &&
+               webMode.WebMode == true &&
+               string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
+               string.IsNullOrEmpty(assignmentRow.Email?.Value);
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentQuantity quantity, PreloadingAssignmentRow assignmentRow)
             => quantity.Quantity == 1 &&

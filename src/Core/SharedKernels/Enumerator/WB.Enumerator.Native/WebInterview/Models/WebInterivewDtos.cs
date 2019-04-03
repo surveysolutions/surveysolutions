@@ -14,11 +14,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Language { get; set; }
     }
 
-    public class SendEmailWithPersonalLinkRequest
-    {
-        public string Email { get; set; }
-    }
-
     public class InterviewInfo
     {
         public string QuestionnaireTitle { get; set; }

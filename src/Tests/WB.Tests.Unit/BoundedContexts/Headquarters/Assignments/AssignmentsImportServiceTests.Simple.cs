@@ -1256,5 +1256,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments[0].Interviewer, Is.Null);
             Assert.That(savedAssignments[0].Supervisor, Is.EqualTo(supervisorId));
         }
+
+        [TestCase("-1")]
+        [TestCase("1")]
+        [TestCase("7")]
+        [TestCase("999")]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_without_web_mode_flag_should_be_saved_assignemnt_with_false_flag(string quantity)
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+            var supervisorId = Guid.Parse("22222222222222222222222222222222");
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("_quantity", quantity))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].WebMode, Is.False);
+        }
     }
 }
