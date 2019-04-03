@@ -5,12 +5,9 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
-    public class ResumeWebInterview
+    public class ResumeWebInterview: StartWebInterview
     {
-        public string QuestionnaireTitle { get; set; }
-        public bool UseCaptcha { get; set; }
         public DateTime? StartedDate { get; set; }
-        public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
     }
 
     public class StartWebInterview
