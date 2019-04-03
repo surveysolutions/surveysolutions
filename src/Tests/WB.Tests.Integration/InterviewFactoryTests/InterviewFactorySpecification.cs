@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void OneTimeSetup()
         {
             SetUp.MockedServiceLocator();
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug);
             //NpgsqlLogManager.IsParameterLoggingEnabled = true;
 
