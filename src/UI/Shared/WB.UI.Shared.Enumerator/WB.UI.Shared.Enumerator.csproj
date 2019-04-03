@@ -2181,7 +2181,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_group_plain_roster_title.axml">
+    <AndroidResource Include="Resources\layout\interview_group_flat_roster_title.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
