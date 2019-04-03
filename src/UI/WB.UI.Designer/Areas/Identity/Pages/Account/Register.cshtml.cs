@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 
@@ -19,21 +20,21 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     {
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
-        private readonly SignInManager<DesignerIdentityUser> _signInManager;
         private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly IViewRenderingService viewRenderingService;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<DesignerIdentityUser> userManager,
-            SignInManager<DesignerIdentityUser> signInManager,
+            IViewRenderingService viewRenderingService,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IOptions<CaptchaConfig> captchaOptions)
         {
             CaptchaOptions = captchaOptions;
             _userManager = userManager;
-            _signInManager = signInManager;
+            this.viewRenderingService = viewRenderingService;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -86,17 +87,24 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
+
+                    var model = new EmailConfirmationModel();
+                    model.UserName = Input.Login;
+                    model.ConfirmationLink = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
+                        protocol: Request.Scheme); 
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var messageBody =
+                        await viewRenderingService.RenderToStringAsync("Emails/ConfirmationEmail",
+                            model);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                    await _emailSender.SendEmailAsync(Input.Email, 
+                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process, 
+                        messageBody);
+
+                    return RedirectToPage("RegisterStepTwo", new {returnUrl});
                 }
                 foreach (var error in result.Errors)
                 {

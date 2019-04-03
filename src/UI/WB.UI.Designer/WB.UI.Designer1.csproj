@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-WB.UI.Designer1-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
+    <UserSecretsId>WB.UI.Designer-083C0E5C-5E46-4A24-AE00-1A58F4183DE6</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>WB.UI.Designer</RootNamespace>
   </PropertyGroup>
@@ -36,9 +36,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="3.1.3" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core.es" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core.fr" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core.ru" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.1.3" />
