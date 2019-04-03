@@ -304,11 +304,9 @@
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
-    <Compile Include="Models\FolderBreadcrumbsModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
-    <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -316,24 +314,18 @@
     <Compile Include="App_Start\AutofacWebCommon.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
-    <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\MessageHandlers\BasicAuthMessageHandler.cs" />
     <Compile Include="Code\MessageHandlers\HttpsVerifier.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorFilter.cs" />
-    <Compile Include="Code\IQuestionnaireHelper.cs" />
-    <Compile Include="Code\OnlyForAdminAttribute.cs" />
-    <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="CommandDeserialization\DesignerCommandDeserializationModule.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\GlyphIcons.cs" />
-    <Compile Include="BootstrapSupport\HtmlHelpers\Paging.cs" />
     <Compile Include="BootstrapSupport\ViewHelperExtensions.cs" />
     <Compile Include="Code\AccountManageMessageId.cs" />
-    <Compile Include="Code\CustomExtensions.cs" />
     <Compile Include="Code\CustomHtmlHelper.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Code\Exceptions\DesignerPermissionException.cs" />
@@ -359,14 +351,11 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
-    <Compile Include="Models\ActionItem.cs" />
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
-    <Compile Include="Models\IActionItem.cs" />
-    <Compile Include="Models\QuestionnaireListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
     <Compile Include="Models\QuestionnaireViewModel.cs" />
@@ -680,9 +669,6 @@
     <Content Include="questionnaire\details\views\roster.html" />
     <Content Include="questionnaire\gulpfile.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="Views\Questionnaire\Index.cshtml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css.map">
       <DependentUpon>wb-question-list.css.css</DependentUpon>
     </Content>
@@ -721,7 +707,6 @@
     <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
     <Content Include="Views\Pdf\_RenderVariable.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\ExportPdfModalDialog.cshtml" />
     <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
     <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
@@ -729,7 +714,6 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
-    <Content Include="Views\Shared\QuestionnairesList.cshtml" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff" />
@@ -741,12 +725,10 @@
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
-    <Content Include="Views\Shared\ExportHtmlModalDialog.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
     <Content Include="Views\Account\_ChangePassword.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-classifications.less" />
-    <Content Include="Views\Shared\_IE11Modal.cshtml" />
     <Content Include="Views\Classifications\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
@@ -774,7 +756,6 @@
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
-    <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
