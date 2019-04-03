@@ -102,8 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.synchronizationServiceMock.Verify(x =>
                 x.SendSyncStatisticsAsync(It.Is(expression),
-                    It.IsAny<CancellationToken>(),
-                    It.IsAny<RestCredentials>()), Times.Once);
+                    It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

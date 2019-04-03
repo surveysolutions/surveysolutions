@@ -89,7 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken, onDownloadProgressChanged);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
@@ -102,7 +102,7 @@ namespace WB.UI.Shared.Enumerator.Services
             async Task GetWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (this.fileSystemAccessor.IsFileExists(pathToNewApk))

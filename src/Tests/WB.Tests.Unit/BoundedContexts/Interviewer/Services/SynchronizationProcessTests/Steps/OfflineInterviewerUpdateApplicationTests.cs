@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                                                               x.GetApplicationVersionCode() == 1);
             var mockOfSynchronizationService = new Mock<ISynchronizationService>();
             mockOfSynchronizationService.Setup(x =>
-                x.GetApplicationAsync(It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>())).Returns(Task.FromResult(new byte[] { 1, 2, 3 }));
+                x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new byte[] { 1, 2, 3 }));
             mockOfSynchronizationService.Setup(x =>
                 x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult((int?) 2));
 
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // assert
 
             permissions.Verify(x => x.AssureHasPermission(Permission.Storage), Times.Once);
-            mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Once);
+            mockOfSynchronizationService.Verify(x => x.GetApplicationAsync(It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
             fileSystemService.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
             navigationService.Verify(x => x.InstallNewApp(It.IsAny<string>()), Times.Once);
             navigationService.Verify(x => x.CloseApplication(), Times.Once);
