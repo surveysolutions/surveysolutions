@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -59,14 +57,12 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             // Assert
             Assert.That(act, Throws.InstanceOf<RestException>().And.Property(nameof(RestException.Type)).EqualTo(RestExceptionType.HostUnreachable));
         }
-        
 
         [Test]
-        public async Task when_if_add_ifnonematch_header_should_not_trhow()
+        public async Task should_pass_user_agent_from_rest_service_settings()
         {
             var testUserAgent = "SurveySolutions/11";
-            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq" 
-                                                              && x.UserAgent == testUserAgent && x.Timeout == TimeSpan.FromMinutes(1));
+            var settings = Mock.Of<IRestServiceSettings>(x => x.Endpoint == "http://localhost/hq" && x.UserAgent == testUserAgent && x.Timeout == TimeSpan.FromMinutes(1));
 
             var testMessageHandler = new TestMessageHandler();
             var httpClient = new HttpClient(testMessageHandler);
@@ -74,15 +70,8 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
                 Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
             RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory, restServiceSettings: settings);
 
-            var hash = Convert.ToBase64String(MD5.Create().ComputeHash(
-                Encoding.UTF8.GetBytes("Htest")));
-            var headers = new Dictionary<string, string>
-            {
-                ["If-None-Match"] = hash
-            };
-
             // act
-            await service.GetAsync("q", null, null, false, headers, CancellationToken.None);
+            await service.PostAsync("q", new Progress<TransferProgress>());
 
             // assert
             var httpRequestMessage = testMessageHandler.ExecutedRequests.First();
