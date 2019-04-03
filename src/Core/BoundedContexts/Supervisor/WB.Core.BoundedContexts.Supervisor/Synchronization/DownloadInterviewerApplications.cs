@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             if (!this.supervisorSettings.DownloadUpdatesForInterviewerApp) return;
 
             var latestVersionOfSupervisorApp = await this.supervisorSynchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
-                if(latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
+            if (latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
 
             Context.Progress.Report(new SyncProgressInfo
             {
@@ -104,9 +104,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                         new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
 
                     if (interviewerApk != null)
-                    {
                         this.fileSystemAccessor.WriteAllBytes(interviewerAppFilePath, interviewerApk);
-                    }
                 }
 
                 sw = null;
@@ -117,9 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                             new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
 
                     if (interviewerWithMapsApk != null)
-                    {
                         this.fileSystemAccessor.WriteAllBytes(interviewerWithMapsAppFilePath, interviewerWithMapsApk);
-                    }
                 }
             }
             catch (Exception exc)

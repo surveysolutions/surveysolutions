@@ -17,7 +17,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         public string FileName { get; }
         public HttpStatusCode StatusCode { get; }
         public string ContentHash { get; }
-        public byte[] ContentMD5 { get; set; }
         public long? ContentLength { get; }
         public string ContentType { get; }
         public byte[] Content { get; }

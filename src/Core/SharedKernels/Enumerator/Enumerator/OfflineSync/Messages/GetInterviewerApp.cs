@@ -22,6 +22,5 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public long Skipped { get; set; }
         public int Length { get; set; }
         public long Total { get; set; }
-        public byte[] ContentMD5 { get; set; }
     }
 }
