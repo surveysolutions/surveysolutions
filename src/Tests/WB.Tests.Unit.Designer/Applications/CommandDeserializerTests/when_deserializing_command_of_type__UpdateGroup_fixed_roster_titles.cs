@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             ((UpdateGroup)result).FixedRosterTitles[1].Value.Should().Be("2.0");
 
         [NUnit.Framework.Test] public void should_return_IsPlainMode_value_true() =>
-            ((UpdateGroup)result).IsPlainMode.Should().Be(true);
+            ((UpdateGroup)result).IsFlatMode.Should().Be(true);
 
 
         private static ICommand result;
