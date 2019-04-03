@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
             {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
-            {typeof (FlatRosterTitleViewModel), Resource.Layout.interview_group_plain_roster_title}
+            {typeof (FlatRosterTitleViewModel), Resource.Layout.interview_group_flat_roster_title}
         };
 
         public int GetItemViewType(object forItemObject)
