@@ -340,6 +340,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume.
+        /// </summary>
+        internal static string ResumeEmailMessage {
+            get {
+                return ResourceManager.GetString("ResumeEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resume Page.
         /// </summary>
         internal static string ResumePage {

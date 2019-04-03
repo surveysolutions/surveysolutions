@@ -8,7 +8,7 @@
                 <p>{{$t('Settings.EmailProvider_PageDesc')}}</p>
             </div>
         </div>
-        <div class="row mb-30">
+        <div class="mb-30">
             <div class="col-md-12">
                 <form class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
@@ -99,7 +99,7 @@
                         <label for="provider_amazon"><span class="tick"></span>{{ $t('Settings.EmailProvider_Amazon') }}</label>
                         <div class="extended-block" v-if="provider === 'amazon'">
                             <div class="wrapper">
-                                <p>{{ $t('Settings.EmailProvider_AmazonDescription')}}</p>
+                                <p>{{ $t('Settings.EmailProvider_AmazonDescription')}} <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-amazon-ses" target="_blank">{{$t('Settings.EmailProvider_HelpLinkText')}}</a></p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_AwsAccessKeyId')}}</label>
                                     <div class="field" :class="{ 'answered': awsAccessKeyId }">
@@ -133,7 +133,7 @@
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_AwsSecretAccessKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.awsSecretAccessKey') }}</span>
                                     </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -142,7 +142,7 @@
                         <label for="provider_sendgrid"><span class="tick"></span>{{ $t('Settings.EmailProvider_Sendgrid') }}</label>
                         <div class="extended-block" v-if="provider === 'sendgrid'">
                             <div class="wrapper">
-                                <p>{{ $t('Settings.EmailProvider_SendgridDescription')}}</p>
+                                <p>{{ $t('Settings.EmailProvider_SendgridDescription')}} <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-sendgrid" target="_blank">{{$t('Settings.EmailProvider_HelpLinkText')}}</a></p>
                                 <div class="form-group" :class="{ 'has-error': errors.has('settings.sendGridApiKey') }">
                                     <label class="h5">{{ $t('Settings.EmailProvider_SendGridApiKey')}}</label>
                                     <div class="field" :class="{ 'answered': sendGridApiKey }">
@@ -158,7 +158,7 @@
                                         <span class="gray-text help-block">{{ $t('Settings.EmailProvider_SendGridApiKeyHelp')}}</span> 
                                         <span class="help-block">{{ errors.first('settings.sendGridApiKey') }}</span>
                                     </div>
-                                </div>
+                                </div>                                                                
                             </div>
                         </div>
                     </div>
@@ -192,8 +192,11 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-default" type="button" :disabled="isFetchInProgress"  @click="sendTestEmail">{{ $t('Settings.EmailProvider_SendTestEmail')}}</button>
-                 </div>
-                <p class="text-success" v-if="sendEmailResult">{{sendEmailResult}}</p>
+                </div>                
+                <p class="text-success" v-if="sendEmailResult">{{$t('Settings.EmailProvider_SendTestEmailResult')}}</p>
+                <div class="has-error" v-if="!sendEmailResult">
+                    <p class="help-block" v-for="error in sendingErrors" :key="error">{{error}}</p>                    
+                </div>                
             </form>
             </div>
         </div>
@@ -217,7 +220,8 @@ export default {
         sendGridApiKey: null,
         testEmailAddress: null,
         providerSettingsResult: null,
-        sendEmailResult: null
+        sendEmailResult: null,
+        sendingErrors: [] 
     };
   },
   created() {
@@ -283,17 +287,29 @@ export default {
     
     async sendTestEmail(){
         var self = this;
+        self.sendEmailResult = null;
+        
         var validationResult = await this.$validator.validateAll('testEmail');
         if (validationResult)
         {
-            self.$store.dispatch("showProgress");
+            self.$store.dispatch("showProgress");           
 
             this.$http.post(this.$config.model.api.sendTestEmail, { email: this.testEmailAddress })
                 .then(function (response) {
                     self.$validator.reset('testEmail');
-                    self.sendEmailResult = "An example of invitation email was sent succeessfully"
+
+                    if(response.data.success){
+                        self.sendEmailResult = true;                        
+                    }
+                    else{
+                        self.sendEmailResult = false;
+                        if(response.data.errors !== null)
+                            self.sendingErrors = response.data.errors;    
+                    }                    
                 })
                 .catch(function (error) {
+                    self.sendEmailResult = false;
+                    sendingErrors = [this.$t("Settings.EmailProvider_GeneralError")];
                     Vue.config.errorHandler(error, self);
                 })
                 .then(function () {

@@ -65,18 +65,25 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Summary)]
         public ActionResult SupervisorsAndStatuses()
         {
-            var model = new TeamsAndStatusesModel();
-            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" });
-            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
-            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
-            model.InterviewsUrl = Url.Action("Interviews", "HQ");
-            model.AllTeamsTitle = Strings.AllTeams;
-            model.TeamTitle = Users.Supervisors;
-            model.ReportName = Reports.TeamsAndStatuses;
-            model.Subtitle = Reports.TeamsAndStatuses_HeadquartersSubtitle;
+            var model = new TeamsAndStatusesModel
+            {
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "ReportDataApi",
+                        action = "HeadquarterSupervisorsAndStatusesReport"
+                    }),
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
+                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
+                InterviewsUrl = Url.Action("Interviews", "HQ"),
+                AllTeamsTitle = Strings.AllTeams,
+                TeamTitle = Users.Supervisors,
+                ReportName = Reports.TeamsAndStatuses,
+                Subtitle = Reports.TeamsAndStatuses_HeadquartersSubtitle
+            };
             return this.View("TeamsAndStatuses", model);
         }
 
@@ -85,18 +92,26 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Summary)]
         public ActionResult TeamMembersAndStatuses()
         {
-            var model = new TeamsAndStatusesModel();
-            model.DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" });
-            model.QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions" });
-            model.QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
-                new { httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById" });
-            model.InterviewsUrl = Url.Action("Interviews", "Survey");
-            model.AllTeamsTitle = Strings.AllInterviewers;
-            model.TeamTitle = Pages.TeamMember;
-            model.ReportName = Reports.Report_Team_Members_and_Statuses;
-            model.Subtitle = Reports.TeamsAndStatuses_SupervisorSubtitle;
+            var model = new TeamsAndStatusesModel
+            {
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "ReportDataApi",
+                        action = "SupervisorTeamMembersAndStatusesReport"
+                    }),
+                QuestionnairesUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesWithVersions"}),
+                QuestionnaireByIdUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "QuestionnairesApi", action = "QuestionnairesComboboxById"}),
+                InterviewsUrl = Url.Action("Interviews", "Survey"),
+                AllTeamsTitle = Strings.AllInterviewers,
+                TeamTitle = Pages.TeamMember,
+                ReportName = Reports.Report_Team_Members_and_Statuses,
+                Subtitle = Reports.TeamsAndStatuses_SupervisorSubtitle,
+                IsSupervisorMode = true,
+            };
             return this.View(model);
         }
 

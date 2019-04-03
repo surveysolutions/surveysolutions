@@ -250,6 +250,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password by assignment for web mode with quantity 1 should be unique.
+        /// </summary>
+        public static string DuplicatePasswordByWebModeWithQuantity1 {
+            get {
+                return ResourceManager.GetString("DuplicatePasswordByWebModeWithQuantity1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -516,6 +525,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SizeExplanation {
             get {
                 return ResourceManager.GetString("SizeExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have email or password provided.
+        /// </summary>
+        public static string SizeForWebMode {
+            get {
+                return ResourceManager.GetString("SizeForWebMode", resourceCulture);
             }
         }
         

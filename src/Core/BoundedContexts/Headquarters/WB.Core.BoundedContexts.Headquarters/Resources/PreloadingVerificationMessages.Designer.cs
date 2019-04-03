@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password is not valid. Has to be not less than 6 characters.
+        ///   Looks up a localized string similar to Invalid Password. At least 6 numbers and upper case letters or single symbol &apos;?&apos; to generate password.
         /// </summary>
         public static string PL0056_InvalidPassword {
             get {
@@ -435,6 +435,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0059_IncosistentWebmodeAndPassword {
             get {
                 return ResourceManager.GetString("PL0059_IncosistentWebmodeAndPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have either email or password provided.
+        /// </summary>
+        public static string PL0060_WebmodeSizeOneHasNoEmailOrPassword {
+            get {
+                return ResourceManager.GetString("PL0060_WebmodeSizeOneHasNoEmailOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is not unique. Password by assignment for web mode with quantity 1 should be unique.
+        /// </summary>
+        public static string PL0061_DuplicatePasswordWithQuantity1 {
+            get {
+                return ResourceManager.GetString("PL0061_DuplicatePasswordWithQuantity1", resourceCulture);
             }
         }
     }

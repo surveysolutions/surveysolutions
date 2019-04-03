@@ -43,6 +43,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IPreloadedDataVerifier verifier;
         private readonly ICommandTransformator commandTransformator;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -55,7 +57,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPreloadedDataVerifier verifier,
             ICommandTransformator commandTransformator,
-            IAssignmentFactory assignmentFactory) : base(logger)
+            IAssignmentFactory assignmentFactory, 
+            IInvitationService invitationService, 
+            IAssignmentPasswordGenerator passwordGenerator) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -67,6 +71,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.verifier = verifier;
             this.commandTransformator = commandTransformator;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
+            this.passwordGenerator = passwordGenerator;
         }
 
         /// <summary>
@@ -194,9 +200,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     break;
             }
 
-            var password = (createItem.Password == AssignmentConstants.PasswordSpecialValue) ? 
-                TokenGenerator.GetRandomAlphanumericString(6) :
-                createItem.Password;
+            var password = passwordGenerator.GetPassword(createItem.Password);
 
             //verify email
             if (!string.IsNullOrEmpty(createItem.Email) && AssignmentConstants.EmailRegex.Match(createItem.Email).Length <= 0)
@@ -205,10 +209,12 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             //verify pass
             if (!string.IsNullOrEmpty(password))
-                if((password.Length < AssignmentConstants.PasswordLength || 
-                    AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
-                        throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
-                            "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+            {
+                if ((password.Length < AssignmentConstants.PasswordLength ||
+                     AssignmentConstants.PasswordStrength.Match(password).Length <= 0))
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Invalid Password. At least 6 numbers and upper case letters or single symbol '?' to generate password"));
+            }
 
             //assignment with email must have quantity = 1
             if (!string.IsNullOrEmpty(createItem.Email) && createItem.Quantity != 1)
@@ -218,6 +224,20 @@ namespace WB.UI.Headquarters.API.PublicApi
             if ((!string.IsNullOrEmpty(createItem.Email) || !string.IsNullOrEmpty(password)) && createItem.WebMode != true)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
                     "For assignments having Email or Password Web Mode should be activated"));
+
+            if (createItem.Quantity == 1 && (createItem.WebMode == null || createItem.WebMode == true) &&
+                string.IsNullOrEmpty(createItem.Email) && !string.IsNullOrEmpty(createItem.Password))
+            {
+                var hasPasswordInDb = this.assignmentsStorage.Query(x =>
+                    x.Any(y => y.Quantity == 1 &&
+                               (y.WebMode == null || y.WebMode == true) &&
+                               y.QuestionnaireId == questionnaireId &&
+                               y.Email == "" &&
+                               y.Password == password));
+                if (hasPasswordInDb)
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Password is not unique. Password by assignment for web mode with quantity 1 should be unique"));
+            }
 
             var assignment = this.assignmentFactory.CreateAssignment(questionnaireId, responsible.Id, quantity,
                 createItem.Email, password, createItem.WebMode);
@@ -294,10 +314,11 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             this.assignmentsStorage.Store(assignment, null);
-            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId,
-                assignment.Id, answers);
+            interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsible.Id, questionnaireId, assignment.Id, answers);
             assignment = this.assignmentsStorage.GetById(assignment.Id);
 
+            this.invitationService.CreateInvitationForWebInterview(assignment);
+            
             return new CreateAssignmentResult
             {
                 Assignment = mapper.Map<AssignmentDetails>(assignment)

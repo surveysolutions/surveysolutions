@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Invitations
@@ -31,21 +32,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         public async Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
         {
             Invitation invitation = invitationService.GetInvitation(invitationId);
+            var link = $"WebInterview/{invitation.Token}/Start";
+            await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.InvitationTemplate, link);
+        }
+        
+        public async Task SendResumeAsync(int invitationId, Assignment assignment, string email)
+        {
+            Invitation invitation = invitationService.GetInvitation(invitationId);
+            var link = $"/WebInterview/Continue/{invitation.Token}";
+            await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.ResumeTemplate, link);
+        }
 
+        private async Task SendEmailByTemplate(Invitation invitation, Assignment assignment, string email, 
+            EmailTextTemplateType emailTemplateType, string relativeUri)
+        {
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(assignment.QuestionnaireId);
+            var emailTemplate = webInterviewConfig.GetEmailTemplate(emailTemplateType);
 
-            var emailTemplate = webInterviewConfig.GetEmailTemplate(EmailTextTemplateType.InvitationTemplate);
             var questionnaireTitle = assignment.Questionnaire.Title;
 
             var senderInfo = emailService.GetSenderInfo();
 
             var password = assignment.Password;
             var address = email ?? assignment.Email;
-            var link = $"{webInterviewConfig.BaseUrl}/WebInterview/{invitation.Token}/Start";
 
+            var link = new Url(webInterviewConfig.BaseUrl, relativeUri, queryParams: null).ToString();
             var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
 
-            var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitationId}";
+            var emailParamsId = $"{Guid.NewGuid().FormatGuid()}-{invitation.Id}";
             var emailParams = new EmailParameters
             {
                 AssignmentId = invitation.AssignmentId,
@@ -62,17 +76,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             };
             emailParamsStorage.Store(emailParams, emailParamsId);
 
-            var client = new HttpClient{};
-            var htmlMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}"))?? string.Empty;
+            var client = new HttpClient { };
+            var htmlMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Html/{emailParamsId}")) ?? string.Empty;
             var textMessage = (await client.GetStringAsync($"{webInterviewConfig.BaseUrl}/WebEmails/Text/{emailParamsId}/")) ?? string.Empty;
-            
+
             var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, htmlMessage.Trim(), textMessage.Trim());
-            invitationService.MarkInvitationAsSent(invitationId, emailId);
+            invitationService.MarkInvitationAsSent(invitation.Id, emailId);
         }
     }
 
     public interface IInvitationMailingService
     {
         Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null);
+        Task SendResumeAsync(int invitationId, Assignment assignment, string email);
     }
 }

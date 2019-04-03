@@ -623,6 +623,24 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume interview.
+        /// </summary>
+        public static string ResumeInterview {
+            get {
+                return ResourceManager.GetString("ResumeInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We have noticed that you have already started this interview, but did not finish it.
+        /// </summary>
+        public static string ResumeInterviewDescription {
+            get {
+                return ResourceManager.GetString("ResumeInterviewDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
         /// </summary>
         public static string ServerUnderLoad {
@@ -632,7 +650,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start interview.
+        ///   Looks up a localized string similar to Start new interview.
         /// </summary>
         public static string Start {
             get {

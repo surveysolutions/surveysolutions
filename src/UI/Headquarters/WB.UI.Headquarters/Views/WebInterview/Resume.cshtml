@@ -1,21 +1,21 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.WebInterview
 @using WB.UI.Headquarters.Models.WebInterview
-@using WB.UI.Shared.Web.Captcha
 @model ResumeWebInterview
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
 
 <div class="centered-box-table">
-    <h2>
-        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)
-    </h2>
-    <p>
-        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)
-    </p>
-
+    <div class="row-element mb-20">
+        <div class="h2">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome).ToString(), Model.QuestionnaireTitle)</div>
+    </div>
+    <div class="row-element mb-40">
+        <p class="font-bold">@Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)</p>
+    </div>
+    <div class="row-element mb-40">
+        <p class="font-bold primary-text">@WebInterview.ResumeInterviewDescription</p>
+    </div>
     <div class="additional-info-block">
-        @WebInterview.Resume_InvitationSmallText
         <ul class="list-unstyled">
             @if (Model.StartedDate.HasValue)
             {
@@ -23,31 +23,5 @@
             }
         </ul>
     </div>
-    @using (Html.BeginForm())
-    {
-        <div class="form-group">
-            @Html.AntiForgeryToken()
-        </div>
-        if (Model.UseCaptcha)
-        {
-
-            if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
-            {
-                <div class="form-group has-error">
-                    <p>
-                        <span class="help-block">
-                            @Html.ValidationMessage("InvalidCaptcha")
-                        </span>
-                    </p>
-                </div>
-            }
-
-            <div class="form-group">
-                @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
-            </div>
-        }
-        <div class="form-actions">
-            <button class="btn btn-success btn-lg" type="submit">@WebInterview.ToInterview</button>
-        </div>
-    }
+    @Html.Partial("_StartOrResumeForm", Model)
 </div>

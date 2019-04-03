@@ -672,11 +672,13 @@ namespace WB.Tests.Abc.TestFactories
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
+                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -736,7 +738,8 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
                 Create.Service.AssignmentFactory(),
-                invitationService ?? Mock.Of<IInvitationService>());
+                invitationService ?? Mock.Of<IInvitationService>(),
+                Mock.Of<IAssignmentPasswordGenerator>());
         }
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
@@ -1022,6 +1025,15 @@ namespace WB.Tests.Abc.TestFactories
             return new EnumeratorGroupGroupStateCalculationStrategy();
         }
 
+        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        {
+            var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
+                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                Create.Service.TokenGenerator());
+            return service;
+        }
+
         public IInvitationService InvitationService(params Invitation[] invitations)
         {
             IPlainStorageAccessor<Invitation> accessor = new TestPlainStorage<Invitation>();
@@ -1030,7 +1042,7 @@ namespace WB.Tests.Abc.TestFactories
                 accessor.Store(invitation, invitation.Id);
             }
 
-            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>());
+            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
             return service;
         }
 
@@ -1078,6 +1090,23 @@ namespace WB.Tests.Abc.TestFactories
                 invitationService ?? Mock.Of<IInvitationService>(),
                 emailService ?? emailServiceMock.Object,
                 invitationMailingService ?? Mock.Of<IInvitationMailingService>());
+        }
+
+        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        {
+            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            {
+                tokenLength = tokenLength
+            };
+        }
+
+        public AssignmentPasswordGenerator AssignmentPasswordGenerator(
+            IPlainStorageAccessor<Assignment> assignments = null, 
+            IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
+        {
+            return new AssignmentPasswordGenerator(
+                assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
+                importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
         }
     }
 

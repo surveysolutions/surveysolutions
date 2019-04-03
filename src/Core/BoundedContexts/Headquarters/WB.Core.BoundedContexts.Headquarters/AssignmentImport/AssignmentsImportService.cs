@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -39,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
         private readonly IInvitationService invitationService;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
             IAssignmentFactory assignmentFactory,
-            IInvitationService invitationService)
+            IInvitationService invitationService, 
+            IAssignmentPasswordGenerator passwordGenerator)
         {
             this.userViewFactory = userViewFactory;
             this.verifier = verifier;
@@ -63,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
             this.assignmentFactory = assignmentFactory;
             this.invitationService = invitationService;
+            this.passwordGenerator = passwordGenerator;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
@@ -80,6 +82,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
 
                 assignmentRows.Add(assignmentRow);
+            }
+
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return passwordError;
             }
 
             if (hasErrors) yield break;
@@ -115,12 +123,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            if (hasErrors) yield break;
-
             foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return rosterError;
+            }
+
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return passwordError;
             }
 
             if (hasErrors) yield break;
@@ -301,8 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
 
-                if (assignmentToImport.Password == AssignmentConstants.PasswordSpecialValue)
-                    assignmentToImport.Password = TokenGenerator.GetRandomAlphanumericString(6);
+                assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
 
                 return assignmentToImport;
             }
@@ -342,7 +353,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 ProtectedVariables = protectedQuestions,
                 Email = email,
                 Password = password,
-                WebMode = webMode
+                WebMode = webMode ?? false
             };
         }
 
