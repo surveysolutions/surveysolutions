@@ -18,5 +18,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         protected DesignerDbContext()
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.HasDefaultSchema("plainstore");
+        }
     }
 }

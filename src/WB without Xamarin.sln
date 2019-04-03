@@ -88,7 +88,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Persistence.Headquarters
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.UI.Designer1", "UI\WB.UI.Designer\WB.UI.Designer1.csproj", "{BB5BAACB-897D-428A-8EAF-3C0F436EBC5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Persistence.Designer", "Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj", "{67827DB6-ADFE-405D-BD06-95729B76AABF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Persistence.Designer", "Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj", "{67827DB6-ADFE-405D-BD06-95729B76AABF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

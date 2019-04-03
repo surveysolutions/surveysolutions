@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<DesignerIdentityUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<DesignerIdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -36,7 +39,9 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
             }
 
-            return Page();
+            TempData[Alerts.SUCCESS] = ErrorMessages.Your_email_is_verified;
+
+            return RedirectToPage("Login");
         }
     }
 }

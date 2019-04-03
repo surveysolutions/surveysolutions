@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +69,11 @@ namespace WB.UI.Designer1
                 opt.Password.RequireLowercase = true;
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.User.RequireUniqueEmail = false;
             });
+            services.Configure<MailSettings>(Configuration.GetSection("Mail"));
+            services.AddTransient<IEmailSender, MailSender>();
+            services.AddScoped<IViewRenderingService, ViewRenderingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
