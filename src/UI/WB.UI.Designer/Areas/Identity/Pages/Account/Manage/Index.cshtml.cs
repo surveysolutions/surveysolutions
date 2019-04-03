@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 {
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly SignInManager<DesignerIdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<DesignerIdentityUser> userManager,
+            SignInManager<DesignerIdentityUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;

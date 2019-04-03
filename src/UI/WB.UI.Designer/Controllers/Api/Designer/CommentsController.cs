@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpPost]
         [Route("entity/addComment")]
-        public IActionResult PostComment(Guid id, AddCommentModel comment)
+        public IActionResult PostComment(Guid id, AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -68,12 +68,12 @@ namespace WB.UI.Designer.Api.Designer
                 });
             }
 
-            commentsService.PostComment(comment.Id, comment.QuestionnaireId, comment.EntityId, comment.Comment, loggedInUser.Login, loggedInUser.Email);
+            commentsService.PostComment(commentModel.Id, commentModel.QuestionnaireId, commentModel.EntityId, commentModel.Comment, loggedInUser.Login, loggedInUser.Email);
             return Ok();
         }
 
         [HttpPatch]
-        [Route("comment/resolve/{commentdId:Guid}")]
+        [Route("commentModel/resolve/{commentdId:Guid}")]
         public IActionResult ResolveComment(Guid id, Guid commentdId)
         {
             commentsService.ResolveComment(commentdId);
@@ -81,7 +81,7 @@ namespace WB.UI.Designer.Api.Designer
         }
 
         [HttpDelete]
-        [Route("comment/{commentId:Guid}")]
+        [Route("commentModel/{commentId:Guid}")]
         public IActionResult DeleteComment(Guid id, Guid commentId)
         {
             commentsService.DeleteComment(commentId);

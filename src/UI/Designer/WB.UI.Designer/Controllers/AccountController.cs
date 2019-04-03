@@ -333,18 +333,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult RegisterConfirmation(string token)
-        {
-            if (WebSecurity.ConfirmAccount(token))
-            {
-                this.Success(ErrorMessages.Your_email_is_verified);
-                return this.RedirectToAction("Login");
-            }
-
-            return this.RedirectToAction("ConfirmationFailure");
-        }
-
-        [AllowAnonymous]
         public async Task<ActionResult> ResendConfirmation(string id)
         {
             MembershipUser model = Membership.GetUser(id, false);
