@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
-using System.Web.Http;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -260,8 +259,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.ActionName("Start")]
+        [HttpPost]
+        [ActionName("Start")]
         [ValidateAntiForgeryToken]
         public ActionResult StartPost(string id, string password)
         {
@@ -475,10 +474,10 @@ namespace WB.UI.Headquarters.Controllers
             return View("Index");
         }
 
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.ActionName("Resume")]
+        [HttpPost]
+        [ActionName("Resume")]
         [WebInterviewAuthorize]
-        public ActionResult ResumePost(string id, string returnUrl, [FromBody]string password)
+        public ActionResult ResumePost(string id, string password, string returnUrl)
         {
             var interview = this.statefulInterviewRepository.Get(id);
             if (interview == null)
