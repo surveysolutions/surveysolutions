@@ -98,26 +98,35 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 token: cancellationToken));
         }
 
-        public Task<byte[]> GetInterviewerApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
-            this.TryGetRestResponseOrThrowAsync(async () =>
+        public async Task<byte[]> GetInterviewerApplicationAsync(byte[] existingFileHash, CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
+            await this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: string.Concat(ApplicationUrl, "/apk/interviewer"), 
                     token: token,
                     credentials: this.restCredentials,
-                    transferProgress: transferProgress);
+                    transferProgress: transferProgress,
+                    customHeaders: new Dictionary<string, string>
+                    {
+                        ["If-None-Match"] = Convert.ToBase64String(existingFileHash)
+                    });
 
                 return restFile.Content;
             });
 
-        public Task<byte[]> GetInterviewerApplicationWithMapsAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
-            this.TryGetRestResponseOrThrowAsync(async () =>
+        public async Task<byte[]> GetInterviewerApplicationWithMapsAsync(byte[] existingFileHash,CancellationToken token, 
+            IProgress<TransferProgress> transferProgress = null) =>
+            await this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: string.Concat(ApplicationUrl, "/apk/interviewer-with-maps"), 
                     token: token,
                     credentials: this.restCredentials,
-                    transferProgress: transferProgress);
+                    transferProgress: transferProgress,
+                    customHeaders: new Dictionary<string, string>
+                    {
+                        ["If-None-Match"] = Convert.ToBase64String(existingFileHash)
+                    });
 
                 return restFile.Content;
             });

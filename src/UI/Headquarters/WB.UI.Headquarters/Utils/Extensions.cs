@@ -1,5 +1,9 @@
 using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
+using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 
@@ -33,6 +37,18 @@ namespace WB.UI.Headquarters.Utils
             var path = urlHelper.Content(contentPath);
             var url = new Uri(HttpContext.Current.Request.Url, path);
             return url.AbsoluteUri;
+        }
+
+        public static bool RequestHasMatchingFileHash(this ApiController controller, byte[] hash)
+        {
+            var expectedHash = $@"""{Convert.ToBase64String(hash)}""";
+
+            if (controller.Request.Headers.IfNoneMatch.Any(tag => tag.Tag == expectedHash))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
