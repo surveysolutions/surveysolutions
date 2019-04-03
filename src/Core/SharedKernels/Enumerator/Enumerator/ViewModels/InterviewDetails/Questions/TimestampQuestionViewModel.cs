@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswer()
         {
-            var currentTime = DateTime.Now;
+            var newAnswer = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified);
             try
             {
                 var command = new AnswerDateTimeQuestionCommand(
@@ -109,11 +109,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
-                    answer: currentTime
-                    );
+                    answer: newAnswer
+                );
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.SetToView(currentTime);
+                this.SetToView(newAnswer);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
