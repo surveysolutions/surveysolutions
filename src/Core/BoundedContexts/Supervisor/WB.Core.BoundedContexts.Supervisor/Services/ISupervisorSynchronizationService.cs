@@ -11,16 +11,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
 {
     public interface ISupervisorSynchronizationService : ISynchronizationService
     {
-        Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken? token = null);
-        Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken);
-        Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken cancellationToken);
-        Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken);
-        Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView, CancellationToken cancellationToken);
-        Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend,
-            CancellationToken cancellationToken);
-
-        Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
-        Task<byte[]> GetInterviewerApplicationAsync(byte[] existingFileHash, CancellationToken token, IProgress<TransferProgress> transferProgress = null);
-        Task<byte[]> GetInterviewerApplicationWithMapsAsync(byte[] existingFileHash,  CancellationToken token, IProgress<TransferProgress> transferProgress = null);
+        Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken token = default);
+        Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken = default);
+        Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken cancellationToken = default);
+        Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken = default);
+        Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView, CancellationToken cancellationToken = default);
+        Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken cancellationToken = default);
+        Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken = default);
+        Task<byte[]> GetInterviewerApplicationAsync(byte[] existingFileHash, IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
+        Task<byte[]> GetInterviewerApplicationWithMapsAsync(byte[] existingFileHash, IProgress<TransferProgress> transferProgress = null, CancellationToken token = default);
     }
 }

@@ -48,14 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
             mockOfSupervisorSynchronization.Setup(x => x.GetLatestApplicationVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(appVersion));
             mockOfSupervisorSynchronization.Setup(x =>
-                    x.GetInterviewerApplicationAsync(filehash, It.IsAny<CancellationToken>(),
-                        It.IsAny<IProgress<TransferProgress>>()))
+                    x.GetInterviewerApplicationAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<byte[]>(null));
 
-            mockOfSupervisorSynchronization.Setup(x =>
-                    x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<CancellationToken>(),
-                        It.IsAny<IProgress<TransferProgress>>()))
-                .Returns(Task.FromResult<byte[]>(null));
 
             var fs = new Mock<IFileSystemAccessor>();
             fs.Setup(f => f.IsFileExists(It.IsAny<string>())).Returns(true);
@@ -74,11 +69,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             await step.ExecuteAsync();
 
             // assert
-            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(filehash, It.IsAny<CancellationToken>(), 
-                It.IsAny<IProgress<TransferProgress>>()), Times.Once);
-
-            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<CancellationToken>(), 
-                It.IsAny<IProgress<TransferProgress>>()), Times.Once);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(filehash, 
+                It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
+            
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(filehash, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
 
             // verify that no files are written if hash matched remote server, i.e. returned content null
             fs.Verify(f => f.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
@@ -127,8 +121,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             // act
             await step.ExecuteAsync();
             // assert
-            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(null, It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Never);
-            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(null, It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Never);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationAsync(null, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationWithMapsAsync(null, It.IsAny<IProgress<TransferProgress>>(),It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
