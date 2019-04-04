@@ -376,7 +376,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null, 
             Guid? supervisorId = null, 
             DateTime? timestamp = null, 
-            TimeSpan? timeSpanWithPreviousStatus = null)
+            TimeSpan? timeSpanWithPreviousStatus = null,
+            InterviewSummary interviewSummary = null)
             => new InterviewCommentedStatus
             {
                 Id = statusId ?? Guid.NewGuid(),
@@ -388,7 +389,8 @@ namespace WB.Tests.Abc.TestFactories
                 StatusChangeOriginatorName = originatorName,
                 InterviewerName = "inter",
                 SupervisorName = "supervisor",
-                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
+                TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus,
+                InterviewSummary = interviewSummary
             };
 
         public InterviewData InterviewData(

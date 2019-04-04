@@ -39,6 +39,7 @@ namespace WB.Tests.Integration.ReportTests
                     typeof(InterviewSummaryMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(QuestionAnswerMap),
+                    typeof(InterviewStatisticsReportRowMap),
                     typeof(InterviewCommentedStatusMap),
                     typeof(SpeedReportInterviewItemMap)
                 }, true);

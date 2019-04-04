@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 mto.NotFound(NotFoundMode.Ignore);
                 mto.Cascade(Cascade.None);
                 mto.Update(false);
-                mto.Insert(false);
+                //mto.Insert(false);
             });
         }
     }

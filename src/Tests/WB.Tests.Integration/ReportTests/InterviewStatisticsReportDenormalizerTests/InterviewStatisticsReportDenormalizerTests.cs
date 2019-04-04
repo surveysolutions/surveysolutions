@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
         private readonly Guid sexQuestion = Id.g3;
         private readonly Guid numericIntQuestion = Id.g4;
         private readonly Guid numericRealQuestion = Id.g5;
-        private readonly Guid interviewId = Guid.NewGuid();
+        private Guid interviewId;
         private SurveyStatisticsReport reporter;
 
         [SetUp]
@@ -47,6 +47,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                     Create.Entity.SingleOptionQuestion(sexQuestion, variable: "sex", answers:  GetAnswersFromEnum<Sex>())
                 })
             );
+
+            interviewId = Guid.NewGuid();
 
             PrepareQuestionnaire(questionnaire, 1);
 
@@ -74,6 +76,8 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion,
                 (decimal) Dwelling.Barrack));
             
+            UnitOfWork.Session.Flush();
+
             var report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
@@ -99,14 +103,16 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 TeamLeadName = "test"
             };
 
-            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
-            UnitOfWork.Session.Flush();
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
 
             denormalizer.Update(summary, new QuestionsDisabled(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
                 .ToPublishedEvent(summary.InterviewId));
-            
+
+            StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+
+            UnitOfWork.Session.Flush();
+
             var report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
@@ -114,6 +120,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             });
 
             AssertReportHasTotal(report, Dwelling.Hole, 0);
+            UnitOfWork.Session.Flush();
 
             report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
@@ -140,13 +147,15 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             };
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
-            UnitOfWork.Session.Flush();
+            
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, dwellingQuestion, (decimal)Dwelling.Hole));
             denormalizer.Update(summary, Create.PublishedEvent.SingleOptionQuestionAnswered(interviewId, relationQuestion, (decimal)Relation.Child));
 
             denormalizer.Update(summary, new AnswersRemoved(new[] { Create.Identity(dwellingQuestion) }, DateTimeOffset.UtcNow)
                 .ToPublishedEvent(summary.InterviewId));
-            
+
+            UnitOfWork.Session.Flush();
+
             var report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
@@ -180,8 +189,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             };
 
             StoreInterviewSummary(summary, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
-            UnitOfWork.Session.Flush();
-
+            
             denormalizer.Update(summary,
                 new NumericIntegerQuestionAnswered(Guid.NewGuid(), numericIntQuestion, Array.Empty<decimal>(),
                         DateTimeOffset.UtcNow, 10)
@@ -191,7 +199,9 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
                 new NumericRealQuestionAnswered(Guid.NewGuid(), numericRealQuestion, Array.Empty<decimal>(),
                         DateTimeOffset.UtcNow, 44)
                     .ToPublishedEvent(summary.InterviewId));
-            
+
+            UnitOfWork.Session.Flush();
+
             var report = reporter.GetReport(new SurveyStatisticsReportInputModel
             {
                 QuestionnaireId = questionnaire.PublicKey.FormatGuid(),
@@ -226,7 +236,7 @@ namespace WB.Tests.Integration.ReportTests.InterviewStatisticsReportDenormalizer
             }
             catch
             {
-                UnitOfWork.AcceptChanges();
+                UnitOfWork.Session.Flush();
                 var rows = UnitOfWork.Session.Query<InterviewStatisticsReportRow>().ToList();
                 Console.WriteLine(string.Join("\r\n", rows.Select(r => $" | {r.RosterVector} | {r.EntityId} | {r.Type} | [{string.Join(", ", r.Answer)}] | {r.IsEnabled}")));
             }

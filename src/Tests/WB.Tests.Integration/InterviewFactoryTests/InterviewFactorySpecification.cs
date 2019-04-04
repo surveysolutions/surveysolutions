@@ -46,10 +46,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         public void OneTimeSetup()
         {
             SetUp.MockedServiceLocator();
-            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
-            //NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug);
-            //NpgsqlLogManager.IsParameterLoggingEnabled = true;
-
+            
             this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
 
             sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
@@ -96,6 +93,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         [TearDown]
         public void TearDown()
         {
+
             this.UnitOfWork.Dispose();
         }
 
@@ -107,46 +105,37 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void StoreInterviewSummary(InterviewSummary interviewSummary, QuestionnaireIdentity questionnaireIdentity)
         {
-            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
-            {
-                var interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-                interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
-                interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
-                interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
-                unitOfWork.AcceptChanges();
-                unitOfWork.Session.Clear();
-                interviewSummary.Id = unitOfWork.Session.Get<InterviewSummary>(interviewSummary.SummaryId).Id;
-            }
+            var interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork,
+                Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
+            interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
+
+            interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
         }
 
         protected void PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
-            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
-            {
-                var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-                
-                var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
-                    Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                    questionnaireItemsRepositoryLocal, questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
-                    Mock.Of<ISubstitutionService>());
+            var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
-                document.Id = document.PublicKey.FormatGuid();
-                questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
-                
-                unitOfWork.AcceptChanges();
-            }
+            var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
+                Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
+                questionnaireItemsRepositoryLocal, questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
+                Mock.Of<ISubstitutionService>());
+
+            document.Id = document.PublicKey.FormatGuid();
+            questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
         }
 
         protected InterviewFactory CreateInterviewFactory()
         {
             return new InterviewFactory(sessionProvider: this.UnitOfWork);
         }
-        
+
         protected List<Answer> GetAnswersFromEnum<T>(params T[] exclude) where T : Enum
         {
             var values = Enum.GetValues(typeof(T)).Cast<object>();
             return values
-                .Where(v => exclude.All(e => (int)(object)e != (int) v))
+                .Where(v => exclude.All(e => (int)(object)e != (int)v))
                 .Select(v => Create.Entity.Answer(v.ToString(), (int)v)).ToList();
         }
     }
