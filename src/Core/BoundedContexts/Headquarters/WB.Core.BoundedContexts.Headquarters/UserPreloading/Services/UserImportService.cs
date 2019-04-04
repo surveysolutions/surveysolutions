@@ -197,6 +197,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     writer.Write(userToImport.Role, NpgsqlDbType.Text);
                     writer.Write(userToImport.Supervisor, NpgsqlDbType.Text);
                 }
+
+                writer.Complete();
             }
         }
 

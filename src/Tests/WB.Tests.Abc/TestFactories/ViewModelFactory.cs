@@ -271,12 +271,12 @@ namespace WB.Tests.Abc.TestFactories
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
-                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
+                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository));
             
             var warningsViewModel = new WarningsViewModel(
                 liteEventRegistry: liteEventRegistry,
                 interviewRepository: interviewRepository,
-                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues),
+                errorMessagesViewModel: ErrorMessagesViewModel(questionnaireRepository, interviewRepository),
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher());
 
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
@@ -589,5 +589,51 @@ namespace WB.Tests.Abc.TestFactories
 
         public CategoricalMultiOptionViewModel CategoricalMultiOptionViewModel(IUserInteractionService userInteractionService = null)
             => new CategoricalMultiOptionViewModel(userInteractionService ?? Mock.Of<IUserInteractionService>());
+
+        public CategoricalComboboxAutocompleteViewModel CategoricalComboboxAutocompleteViewModel(
+            FilteredOptionsViewModel filteredOptionsViewModel, IQuestionStateViewModel questionState = null) =>
+            new CategoricalComboboxAutocompleteViewModel(
+                questionState ?? Create.ViewModel.QuestionState<MultipleOptionsQuestionAnswered>(), filteredOptionsViewModel, false);
+
+        public FilteredSingleOptionQuestionViewModel FilteredSingleOptionQuestionViewModel(
+            Identity questionId,
+            QuestionnaireDocument questionnaire,
+            IStatefulInterview interview,
+            ILiteEventRegistry eventRegistry = null,
+            FilteredOptionsViewModel filteredOptionsViewModel = null,
+            IPrincipal principal = null,
+            QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel = null,
+            AnsweringViewModel answering = null,
+            QuestionInstructionViewModel instructionViewModel = null)
+        {
+            var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
+            return new FilteredSingleOptionQuestionViewModel(
+                interviewRepository,
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                filteredOptionsViewModel ?? Create.ViewModel.FilteredOptionsViewModel(questionId, questionnaire, interview),
+                principal ?? Mock.Of<IPrincipal>(),
+                questionStateViewModel ?? Create.ViewModel.QuestionState<SingleOptionQuestionAnswered>(interviewRepository: interviewRepository),
+                answering ?? Create.ViewModel.AnsweringViewModel(),
+                instructionViewModel ?? Create.ViewModel.QuestionInstructionViewModel());
+        }
+
+        public TimestampQuestionViewModel TimestampQuestionViewModel(
+            IStatefulInterview interview,
+            AnsweringViewModel answering = null)
+        {
+            var answeringViewModel = answering ?? Create.ViewModel.AnsweringViewModel();
+            var statefulInterviewRepository = new Mock<IStatefulInterviewRepository>();
+            statefulInterviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+
+            var principal = Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.Id == Id.gA.ToString()));
+            return new TimestampQuestionViewModel(principal,
+                statefulInterviewRepository.Object,
+                Create.ViewModel.QuestionState<DateTimeQuestionAnswered>(interviewRepository: statefulInterviewRepository.Object),
+                Create.ViewModel.QuestionInstructionViewModel(),
+                answeringViewModel,
+                Create.Service.LiteEventRegistry());
+        }
     }
 }

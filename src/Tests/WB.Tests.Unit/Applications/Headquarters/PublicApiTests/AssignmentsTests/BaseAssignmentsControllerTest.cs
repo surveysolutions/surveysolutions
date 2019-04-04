@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -50,7 +51,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 this.interviewImportService.Object,
                 Mock.Of<ICommandTransformator>(),
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IAssignmentPasswordGenerator>());
 
             this.controller.Request = new HttpRequestMessage();
             this.controller.Configuration = new HttpConfiguration();

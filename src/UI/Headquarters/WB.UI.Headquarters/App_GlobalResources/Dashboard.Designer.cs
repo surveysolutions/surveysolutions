@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download web links.
+        /// </summary>
+        internal static string DownloadLinks {
+            get {
+                return ResourceManager.GetString("DownloadLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export questionnaire.
         /// </summary>
         internal static string ExportQuestionnaire {
@@ -277,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send invitations.
+        /// </summary>
+        internal static string SendInvitations {
+            get {
+                return ResourceManager.GetString("SendInvitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click Import Questionnaire button to load a questionnaire from Designer.
         /// </summary>
         internal static string SurveySetupIntroMessage1 {
@@ -336,6 +354,15 @@ namespace Resources {
         internal static string WebInterviewSetup {
             get {
                 return ResourceManager.GetString("WebInterviewSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web mode.
+        /// </summary>
+        internal static string WebMode {
+            get {
+                return ResourceManager.GetString("WebMode", resourceCulture);
             }
         }
     }

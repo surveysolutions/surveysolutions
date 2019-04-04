@@ -1,22 +1,20 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    abstract class AbstractDataExportHandler : BaseAbstractDataExportHandler
+    public abstract class AbstractDataExportHandler : BaseAbstractDataExportHandler
     {
         private readonly IDataExportFileAccessor dataExportFileAccessor;
 
-        protected AbstractDataExportHandler(
+        public AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
@@ -24,20 +22,19 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override async Task DoExportAsync(DataExportProcessArgs processArgs,
+        public override async Task DoExportAsync(DataExportProcessArgs processArgs,
             ExportSettings exportSettings, string archiveName, 
-            IProgress<int> exportProgress, CancellationToken cancellationToken)
+            ExportProgress exportProgress, CancellationToken cancellationToken)
         {
-            await this.ExportDataIntoDirectoryAsync(exportSettings, exportProgress, cancellationToken);
+            await this.ExportDataIntoDirectory(exportSettings, exportProgress, cancellationToken);
 
             if (!this.CompressExportedData) return;
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(processArgs, 0);
+            this.dataExportProcessesService.UpdateDataExportProgress(processArgs.ProcessId, 0);
 
-            this.dataExportProcessesService.ChangeStatusType(
-                processArgs.ProcessId, DataExportStatus.Compressing);
+            this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Compressing);
 
             this.dataExportFileAccessor.RecreateExportArchive(this.ExportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);
@@ -47,8 +44,8 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected virtual bool CompressExportedData => true;
 
-        protected abstract Task ExportDataIntoDirectoryAsync(ExportSettings settings,
-            IProgress<int> progress,
+        protected abstract Task ExportDataIntoDirectory(ExportSettings settings,
+            ExportProgress progress,
             CancellationToken cancellationToken);
     }
 }

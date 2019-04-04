@@ -14,5 +14,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual List<InterviewAnswer> Answers { get; set; }
         public virtual bool Verified { get; set; }
         public virtual List<string> ProtectedVariables { get; set; }
+
+        public virtual string Email { get; set; }
+        public virtual string Password { get; set; }
+        public virtual bool? WebMode { set; get; }
     }
 }

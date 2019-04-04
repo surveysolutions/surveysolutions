@@ -353,7 +353,20 @@
         var dataReference = self.getDataReference(type, format);
         if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
             return false;
+
         return dataReference.ProgressInPercents();
+    }
+
+    self.getEstimatedTime = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null || _.isUndefined(dataReference.HasDataToExport))
+            return '';
+
+        var timeLeft = dataReference.TimeLeft();
+
+        if (timeLeft == '' || timeLeft == null) return '';
+
+        return ' (' + dataReference.TimeLeft() + ')';
     }
 
     self.isInQueue = function (type, format) {
@@ -361,6 +374,14 @@
         if (dataReference == null) return false;
 
         return dataReference.StatusOfLatestExportProcess() === 2;
+    }
+
+    self.isPreparing = function(type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+        var status = dataReference.StatusOfLatestExportProcess();
+        
+        return status === 7;
     }
 
     self.isRunning = function (type, format) {

@@ -1,6 +1,5 @@
 ﻿using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -33,6 +32,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion)
         {
             this.Append("Assignments", "Upgrade", $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}");
+        }
+
+        public void EmailProviderWasChanged(string previousProvider, string currentProvider)
+        {
+            this.Append("Email providers", "Update", $"Previous provider was {previousProvider}, current provider is {currentProvider}");
         }
 
         public void UserCreated(UserRoles role, string userName)

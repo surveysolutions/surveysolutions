@@ -20,5 +20,6 @@ namespace WB.Core.Infrastructure.FileSystem
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
+        byte[] CompressStream(Stream uncompressedDataStream, string entryName);
     }
 }

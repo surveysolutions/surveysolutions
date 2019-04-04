@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
 
@@ -21,13 +23,23 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentIdentifyingDataItem
     {
+        [DataMember]
         public string Identity { get; set; }
+
+        [DataMember]
         public string Variable { get; set; }
+
+        [DataMember]
         public string Answer { get; set; }
     }
 
     public class AssignmentViewItem
     {
+        public AssignmentViewItem()
+        {
+            IdentifyingQuestions = new List<AssignmentIdentifyingDataItem>();
+        }
+
         [DataMember] public int Id { get; set; }
 
         [DataMember] public Guid ResponsibleId { get; set; }
@@ -40,7 +52,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string ResponsibleName { get; set; }
 
         /// <summary>
-        /// Questionarire Id to filter by
+        /// Questionnaire Id 
         /// </summary>
         [DataMember]
         public string QuestionnaireId { get; set; }
@@ -78,6 +90,18 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         [DataMember]
         public DateTime UpdatedAtUtc { get; set; }
+
+        [DataMember]
+        public List<AssignmentIdentifyingDataItem> IdentifyingQuestions { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public string Password { get; set; }
+
+        [DataMember]
+        public bool? WebMode { get; set; }
     }
 
     public class AssignmentAssignRequest
@@ -105,6 +129,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         public string SearchBy { get; set; }
 
+        /// <summary>
+        /// Questionnaire Id in format of `{QuestionnaireId}${Version}`
+        /// </summary>
         public string QuestionnaireId { get; set; }
 
         /// <summary>
@@ -112,8 +139,14 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// </summary>
         public string Responsible { get; set; }
 
+        /// <summary>
+        /// Supervisor id
+        /// </summary>
         public Guid? SupervisorId { get; set; }
 
+        /// <summary>
+        /// Search for only archived assignments
+        /// </summary>
         public bool ShowArchive { get; set; }
 
         /// <summary>
@@ -135,7 +168,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class CreateAssignmentApiRequest
     {
-        [DataMember] [Required] public string Responsible { get; set; }
+        [DataMember]
+        [Required]
+        public string Responsible { get; set; }
 
         /// <summary>
         /// Maximum number of allowed to create assignments
@@ -154,5 +189,12 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         [Required]
         public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; } =
             new List<AssignmentIdentifyingDataItem>();
+
+
+        [DataMember] public string Email { get; set; }
+
+        [DataMember] public string Password { get; set; }
+
+        [DataMember] public bool? WebMode { get; set; }
     }
 }

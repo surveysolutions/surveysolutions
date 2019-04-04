@@ -8,7 +8,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public interface IAssignmentFactory
     {
-        Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity);
+        Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, 
+            int? quantity, string email, string password, bool? webMode);
     }
 
     class AssignmentFactory : IAssignmentFactory
@@ -20,13 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.questionnaires = questionnaires;
         }
 
-        public Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity)
+        public Assignment CreateAssignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, 
+            int? quantity, string email, string password, bool? webMode)
         {
             bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
                 .Where(q => q.Id == questionnaireId.ToString())
                 .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
 
-            return new Assignment(questionnaireId, responsibleId, quantity, isAudioRecordingEnabled);
+            return new Assignment(questionnaireId, responsibleId, quantity, isAudioRecordingEnabled, email, password, webMode);
         }
     }
 }

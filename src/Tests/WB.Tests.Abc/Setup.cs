@@ -211,9 +211,10 @@ namespace WB.Tests.Abc
             };
 
             Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
-            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns<string>(filter=>options.FindAll(x=>x.Title.Contains(filter)));
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns<string>(filter=>options.FindAll(x=>x.Title.Contains(filter??string.Empty)));
             filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
-
+            filteredOptionsViewModel.Setup(x => x.GetAnsweredOption(It.IsAny<int>())).Returns<int>(filter => options.Find(x => x.Value == filter ));
+            
             return filteredOptionsViewModel.Object;
         }
 

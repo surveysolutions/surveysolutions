@@ -88,6 +88,100 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Welcome to %SURVEYNAME%!
+        ///
+        ///To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_InvitationTemplate_Message {
+            get {
+                return ResourceManager.GetString("Email_InvitationTemplate_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation to take a part in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_InvitationTemplate_Subject {
+            get {
+                return ResourceManager.GetString("Email_InvitationTemplate_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are receiving this reminder because you haven’t started responding to %SURVEYNAME%!
+        /// 
+        ///To take the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_NoResponse_Message {
+            get {
+                return ResourceManager.GetString("Email_NoResponse_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reminder, don’t forget to take a part in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_NoResponse_Subject {
+            get {
+                return ResourceManager.GetString("Email_NoResponse_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are receiving this reminder because you have started responding to %SURVEYNAME%, but haven’t completed the process.
+        /// 
+        ///To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+        /// 
+        ///Please answer all applicable questions and click the ‘COMPLETE’ button to submit your responses.
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_PartialResponse_Message {
+            get {
+                return ResourceManager.GetString("Email_PartialResponse_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reminder, please complete your response to %SURVEYNAME%.
+        /// </summary>
+        public static string Email_PartialResponse_Subject {
+            get {
+                return ResourceManager.GetString("Email_PartialResponse_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for taking part in %SURVEYNAME%!
+        /// 
+        ///While processing your response our staff has found some issues, which you are hereby asked to review.
+        /// 
+        ///To continue the survey click on the following link: %SURVEYLINK% and enter your password: %PASSWORD%.
+        /// 
+        ///We would appreciate if you try addressing all issues marked in your response and click the ‘COMPLETE’ button to submit your responses.
+        /// 
+        ///Thank you for your cooperation!.
+        /// </summary>
+        public static string Email_RejectEmail_Message {
+            get {
+                return ResourceManager.GetString("Email_RejectEmail_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your action is required in %SURVEYNAME%.
+        /// </summary>
+        public static string Email_RejectEmail_Subject {
+            get {
+                return ResourceManager.GetString("Email_RejectEmail_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
@@ -421,7 +515,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;%QUESTIONNAIRE%&quot;.
+        ///   Looks up a localized string similar to You have been invited to take a part in the following survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string InvitationText {
             get {
@@ -529,6 +623,24 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume interview.
+        /// </summary>
+        public static string ResumeInterview {
+            get {
+                return ResourceManager.GetString("ResumeInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We have noticed that you have already started this interview, but did not finish it.
+        /// </summary>
+        public static string ResumeInterviewDescription {
+            get {
+                return ResourceManager.GetString("ResumeInterviewDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We&apos;re sorry, too many people are accessing this website at the same time. We&apos;re working on this problem. Please try again later..
         /// </summary>
         public static string ServerUnderLoad {
@@ -538,7 +650,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start interview.
+        ///   Looks up a localized string similar to Start new interview.
         /// </summary>
         public static string Start {
             get {

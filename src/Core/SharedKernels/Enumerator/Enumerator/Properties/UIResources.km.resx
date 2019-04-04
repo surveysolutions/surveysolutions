@@ -130,12 +130,6 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>កម្រងសំនួររបស់ខ្ញុំ</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>បង្ហាញកម្រងសំនួរ</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>កម្រងសំនួរ </value>
   </data>

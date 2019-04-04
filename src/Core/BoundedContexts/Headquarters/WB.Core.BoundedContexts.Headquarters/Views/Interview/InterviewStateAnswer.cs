@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewTextListAnswer[] AsList { get; set; }
         public AnsweredYesNoOption[] AsYesNo { get; set; }
         public int[][] AsIntMatrix { get; set; }
-        public GeoPosition AsGps { get; set; }
         public AudioAnswer AsAudio { get; set; }
         public Area AsArea { get; set; }
     }

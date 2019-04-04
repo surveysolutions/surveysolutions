@@ -14,7 +14,7 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
@@ -48,7 +48,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var questionnaireExportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport>
             {
-                new InterviewToExport(interviewId, interviewKey, 1, InterviewStatus.Completed)
+                new InterviewToExport(interviewId, interviewKey, InterviewStatus.Completed)
             };
 
             string[][] answers = { new string[1] };
@@ -61,14 +61,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewFactory = new Mock<IInterviewFactory>();
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
-            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null))
-                .Returns(Task.FromResult(new List<InterviewEntity>()));
+            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null,  null))
+                .Returns(new List<InterviewEntity>());
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
             //act
             await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
-                new Progress<int>(), CancellationToken.None);
+                new ExportProgress(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile, Has.Count.EqualTo(2));
@@ -86,7 +86,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             Assert.That(dataInCsvFile[1].Data[0][2], Is.EqualTo("0.72624326996796"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.HasAnyError));
-            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("1"));
+            Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo("0"));
 
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.InterviewStatus));
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(((int)InterviewStatus.Completed).ToString()));
@@ -101,7 +101,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
     internal class ExportViewFactoryTests
     {
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_numeric_nested_roster_should_return_roster_instance_codes_by_numeric_roster_started_from_0()
         {
             //arrange
             var questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
@@ -136,30 +136,30 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 CreateInterviewDataWith2PropagatedLevels(rosterSizeId, nestedRosterSizeId, questionInsideRosterGroupId), questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("1"));
-            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[1].Records[0].RecordId, Is.EqualTo("0"));
+            Assert.That(result.Levels[1].Records[1].RecordId, Is.EqualTo("1"));
 
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[0].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].ParentRecordIds[1], Is.EqualTo("0"));
 
 
-            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[1].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[1].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[1].ParentRecordIds[1], Is.EqualTo("0"));
 
-            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[2].RecordId, Is.EqualTo("0"));
             Assert.That(result.Levels[2].Records[2].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[2].ParentRecordIds[1], Is.EqualTo("1"));
 
 
-            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].RecordId, Is.EqualTo("1"));
             Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo(result.InterviewId.FormatGuid()));
-            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("2"));
+            Assert.That(result.Levels[2].Records[3].ParentRecordIds[1], Is.EqualTo("1"));
         }
 
         [Test]
-        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_1()
+        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_0()
         {
             //arrange
             var numericRosterId = Id.g1;
@@ -191,6 +191,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewEntities = new List<InterviewEntity>
             {
                 Create.InterviewEntity(asInt:2, entityType: EntityType.Question, identity: Create.Identity(numericRosterSizeId)),
+                Create.InterviewEntity(entityType: EntityType.Section, identity: Create.Identity(numericRosterId, 0), isEnabled:true),
                 Create.InterviewEntity(asInt: 22, entityType: EntityType.Question, identity: Create.Identity(questionInNumericRosterId, 0))
             };
 
@@ -207,7 +208,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var result = exporter.CreateInterviewDataExportView(questionnaireExportStructure, interviewData, questionnaireDocument);
 
             //assert
-            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("0"));
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]
@@ -515,6 +516,82 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             
             //assert
             GetLevel(result, new Guid[] { rosterId, rosterSizeQuestionId }).Records[0].ReferenceValues[0].Should().Be(someAnswer);
+        }
+
+        [Test]
+        public void when_interview_has_multi_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
+        {
+            // arrange
+            var multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
+            var rosterSizeQuestionId = Guid.Parse("AE111111111111111111111111111111");
+            var linkedSourceQuestionId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Roster(rosterId: Guid.NewGuid(),
+                    variable: "row",
+                    obsoleteFixedTitles: new[] { "1", "2" },
+                    children: new IQuestionnaireEntity[] {
+                        Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                        Create.Roster(rosterSizeQuestionId: rosterSizeQuestionId, children: new []
+                        {
+                            Create.TextQuestion(id: linkedSourceQuestionId, variable: "varTxt")
+                        })
+                    }),
+                Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
+                    variable: "mult",
+                    linkedToQuestionId: linkedSourceQuestionId));
+
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaireDocument);
+
+            var exporter = Create.InterviewsExporter();
+
+            var interviewData = CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(multyOptionLinkedQuestionId),
+                asIntMatrix: new[] { new[] { 5, 0 } }));
+            // act
+            var result = exporter.CreateInterviewDataExportView(exportStructure, interviewData, questionnaireDocument);
+
+            // assert
+            InterviewDataExportLevelView first = result.Levels.First();
+            var exportedQuestion = first.Records.First().GetPlainAnswers().First();
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
+        }
+
+        [Test]
+        public void when_interview_has_single_linked_question_to_question_inside_nested_roster_and_nested_roster_triggered_by_numeric_question_should_roster_codes_by_numeric_question_started_from_0()
+        {
+            // arrange
+            var singleOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
+            var rosterSizeQuestionId = Guid.Parse("AE111111111111111111111111111111");
+            var linkedSourceQuestionId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Roster(rosterId: Guid.NewGuid(),
+                    variable: "row",
+                    obsoleteFixedTitles: new[] { "1", "2" },
+                    children: new IQuestionnaireEntity[] {
+                        Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                        Create.Roster(rosterSizeQuestionId: rosterSizeQuestionId, children: new []
+                        {
+                            Create.TextQuestion(id: linkedSourceQuestionId, variable: "varTxt")
+                        })
+                    }),
+                Create.SingleOptionQuestion(id: singleOptionLinkedQuestionId,
+                    variable: "single",
+                    linkedToQuestionId: linkedSourceQuestionId));
+
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaireDocument);
+
+            var exporter = Create.InterviewsExporter();
+
+            var interviewData = CreateInterviewData(Create.InterviewEntity(identity: Create.Identity(singleOptionLinkedQuestionId),
+                asIntArray: new[] { 5, 0 }));
+            // act
+            var result = exporter.CreateInterviewDataExportView(exportStructure, interviewData, questionnaireDocument);
+
+            // assert
+            InterviewDataExportLevelView first = result.Levels.First();
+            var exportedQuestion = first.Records.First().GetPlainAnswers().First();
+            Assert.That(exportedQuestion[0], Is.EqualTo("[5|0]"));
         }
 
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)

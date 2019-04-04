@@ -220,6 +220,9 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
+  <data name="AssignmentSizeInWebMode" xml:space="preserve">
+    <value>Количество не может быть изменено для назначения в веб режиме.</value>
+  </data>
   <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
     <value>Выберите опросник который следует обновить</value>
   </data>
@@ -303,5 +306,63 @@
   </data>
   <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
     <value>Вести аудио запись во время интервью. При включении аудио аудита размер данных синхронизации значительно увеличится</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Новое задание</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>Электронная почта будет использована для связи с получателем задания</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Пароль будет использован для защиты задания</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Веб режим</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Задание в Веб режиме</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Активирован</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Задание создано в Веб режиме</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Используйте один символ '?' чтобы сгенерировать пароль</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Введите пароль</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Введите электронную почту</value>
+  </data>
+  <data name="SizeInstructions" xml:space="preserve">
+    <value>Должно быть число, -1 для неограниченного, 1 если задан электронная почта</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Неправильный адрес электронной почты</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Неправильный пароль</value>
+  </data>
+  <data name="InvalidSizeMessage" xml:space="preserve">
+    <value>Неправильный размер</value>
+  </data>
+  <data name="InvalidSizeWithEmail" xml:space="preserve">
+    <value>Для задания с указанной электронной почтой размер должен равняться 1</value>
+  </data>
+  <data name="SizeForWebMode" xml:space="preserve">
+    <value>Задание с размером 1 для web режима должно иметь либо электронную почту либо пароль</value>
+  </data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
+    <comment>Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</comment>
   </data>
 </root>

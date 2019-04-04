@@ -14,7 +14,8 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
+using WB.Services.Infrastructure.EventSourcing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
@@ -27,7 +28,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private readonly ILogger<InterviewsExporter> logger;
         private readonly ICsvWriter csvWriter;
-        private readonly IOptions<InterviewDataExportSettings> options;
+        private readonly IOptions<ExportServiceSettings> options;
         private readonly IInterviewErrorsExporter errorsExporter;
         private readonly IExportQuestionService exportQuestionService;
 
@@ -36,7 +37,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             IInterviewFactory interviewFactory,
             IInterviewErrorsExporter errorsExporter,
             ICsvWriter csvWriter,
-            IOptions<InterviewDataExportSettings> options,
+            IOptions<ExportServiceSettings> options,
             ILogger<InterviewsExporter> logger)
         {
             this.exportQuestionService = exportQuestionService;
@@ -52,7 +53,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             List<InterviewToExport> interviewsToExport,
             string basePath,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -69,7 +70,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireDocument questionnaire,
             string basePath,
             List<InterviewToExport> interviewIdsToExport,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
@@ -116,30 +117,27 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
-        private async Task ExportInterviewsAsync(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
+        private Task ExportInterviewsAsync(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             long totalInterviewsProcessed = 0;
             
             var batchOptions = new BatchOptions { Max = this.options.Value.MaxRecordsCountPerOneExportQuery };
+            var sw = Stopwatch.StartNew();
+            var progressState = new ProgressState();
 
             foreach (var batch in interviewIdsToExport.BatchInTime(batchOptions, logger))
             {
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 cancellationToken.ThrowIfCancellationRequested();
                 var interviewIds = batch.Select(b => b.Id).ToArray();
-                var trace = Stopwatch.StartNew();
-
-                var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, interviewIds);
+               
+                var interviewEntities = this.interviewFactory.GetInterviewEntities(interviewIds, questionnaire);
                 var interviewEntitiesLookup = interviewEntities.ToLookup(ie => ie.InterviewId);
-
-                logger.LogTrace("Took {elapsedMs}ms to query {batchCount} interviews {interviewEntities} rows", 
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
-                trace.Restart();
                 
                 Parallel.ForEach(batch, interviewToExport =>
                 {
@@ -155,19 +153,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                     }
 
                     var interviewsProcessed = Interlocked.Increment(ref totalInterviewsProcessed);
-                    progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
+                    progressState.Update(sw.Elapsed, interviewIdsToExport.Count, interviewsProcessed);
+                    progress.Report(progressState);
                 });
 
-                logger.LogTrace("Took {elapsedMs}ms to process {batchCount} interviews {interviewEntities} rows",
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
-                trace.Restart();
-
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-                logger.LogTrace("Took {elapsedMs}ms to write {batchCount} interviews {interviewEntities} rows",
-                    trace.ElapsedMilliseconds, batch.Count, interviewEntities.Count);
             }
 
             progress.Report(100);
+            return Task.CompletedTask;
         }
 
         private void WriteInterviewDataToCsvFile(string basePath,
@@ -221,10 +215,15 @@ namespace WB.Services.Export.CsvExport.Exporters
             exportProcessingStopwatch.Start();
             List<string[]> errors = errorsExporter.Export(exportStructure, questionnaire, interview, basePath, interviewToExport.Key);
 
+            var errorsCount = interview
+                .Where(x => x.EntityType == EntityType.Question || x.EntityType == EntityType.StaticText)
+                .Count(x => x.IsEnabled && x.InvalidValidations.Length > 0);
+
             var interviewData = new InterviewData
             {
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
-                InterviewId = interviewToExport.Id
+                InterviewId = interviewToExport.Id,
+                ErrorsCount = errorsCount
             };
             InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
@@ -251,7 +250,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 interviewDataExportLevelViews.Add(interviewDataExportLevelView);
             }
 
-            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
+            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray(), interview.ErrorsCount);
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview,
@@ -274,17 +273,12 @@ namespace WB.Services.Export.CsvExport.Exporters
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
                 else
                 {
-                    var rosterIndexAdjustment = headerStructureForLevel.LevelScopeVector
-                        .Select(x => questionnaire.IsIntegerQuestion(x) ? 1 : 0)
-                        .ToArray();
-
-                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAdjustment.Last())
-                        .ToString(CultureInfo.InvariantCulture);
+                    recordId = dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
                     for (int i = 0; i < vectorLength - 1; i++)
                     {
-                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAdjustment[i]).ToString(CultureInfo.InvariantCulture);
+                        parentRecordIds[i + 1] = dataByLevel.RosterVector[i].ToString(CultureInfo.InvariantCulture);
                     }
 
                     parentRecordIds = parentRecordIds.ToArray();
@@ -433,7 +427,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                             }
                         }
 
-                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
+                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString());
                         InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
                     }
 

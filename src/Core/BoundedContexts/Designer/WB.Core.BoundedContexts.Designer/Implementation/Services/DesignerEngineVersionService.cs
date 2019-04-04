@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                Version = 25,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -160,6 +160,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IMultyOptionsQuestion>(q => q.IsFilteredCombobox == true ).Any(),
+                        Description = "Contains multi option question with combobox kind"
+                    },
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<SingleQuestion>(q => q.ShowAsList == true ).Any(),
+                        Description = "Contains cascading question with show as list option"
+                    }
+                }
+            }
         };
 
         private bool IsNonImageAttachment(string contentId) =>

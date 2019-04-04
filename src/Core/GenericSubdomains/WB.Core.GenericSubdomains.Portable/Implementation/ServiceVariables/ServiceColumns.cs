@@ -9,9 +9,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string InterviewActions = "interview__actions";
         public static readonly string InterviewErrors = "interview__errors";
         public static readonly string InterviewComments = "interview__comments";
+        public static readonly string InterviewDiagnostics = "interview__diagnostics";
         public static readonly string ProtectedVariables = "protected__variables";
 
-        public static readonly string[] AllSystemFiles = {Readme, InterviewActions, InterviewComments, InterviewErrors};
+        public static readonly string[] AllSystemFiles = {Readme, InterviewActions, InterviewComments, InterviewDiagnostics, InterviewErrors};
     }
 
     public static class ServiceColumns
@@ -32,6 +33,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 
         public const string ResponsibleColumnName = "_responsible";
         public const string AssignmentsCountColumnName = "_quantity";
+
+        public const string WebModeColumnName = "_webmode";
+        public const string EmailColumnName = "_email";
+        public const string PasswordColumnName = "_password";
 
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>

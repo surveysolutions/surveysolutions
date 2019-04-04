@@ -14,6 +14,7 @@ namespace WB.Services.Export.Infrastructure
         void DeleteDirectory(string path);
         void CreateDirectory(string path);
         string GetFileName(string path);
+        string GetFileNameWithoutExtension(string filePath);
         void DeleteFile(string path);
         void MoveFile(string fromPath, string toPath);
         string[] GetFilesInDirectory(string directoryPath);

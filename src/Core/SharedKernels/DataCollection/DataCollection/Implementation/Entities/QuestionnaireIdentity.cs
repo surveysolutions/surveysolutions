@@ -19,6 +19,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool Equals(QuestionnaireIdentity other)
         {
+            if ((object)other == null)
+            {
+                return false;
+            }
+
             return this.Version == other.Version && this.QuestionnaireId.Equals(other.QuestionnaireId);
         }
 
@@ -41,7 +46,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             {
                 return false;
             }
-            return obj is QuestionnaireIdentity && this.Equals((QuestionnaireIdentity)obj);
+            return obj is QuestionnaireIdentity other && this.Equals(other);
         }
 
         public static bool TryParse(string questionnaireIdentity, out QuestionnaireIdentity result)
@@ -79,5 +84,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new FormatException($"id value '{id}' is not in the correct format.", e);
             }
         }
+
+        public static bool operator ==(QuestionnaireIdentity a, QuestionnaireIdentity b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (((object)a == null) || ((object)b == null))
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(QuestionnaireIdentity a, QuestionnaireIdentity b) => !(a == b);
     }
 }

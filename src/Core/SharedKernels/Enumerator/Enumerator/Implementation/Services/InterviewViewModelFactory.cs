@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -40,7 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             LinkedToRosterSingleOptionQuestionModel = 172,
             FilteredSingleOptionQuestionModel = 173,
             CascadingSingleOptionQuestionModel = 174,
-            
+
+            MultiOptionComboboxQuestionModel = 179,
             MultiOptionQuestionModel = 180,
             LinkedMultiOptionQuestionModel = 181,
             YesNoQuestionModel = 182,
@@ -111,6 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         },
                         {InterviewEntityType.DateTimeQuestionModel, Load<DateTimeQuestionViewModel>},
                         {InterviewEntityType.MultiOptionQuestionModel, Load<CategoricalMultiViewModel>},
+                        {InterviewEntityType.MultiOptionComboboxQuestionModel, Load<CategoricalMultiComboboxViewModel>},
                         {
                             InterviewEntityType.LinkedMultiOptionQuestionModel,
                             Load<CategoricalMultiLinkedToQuestionViewModel>
@@ -240,9 +241,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                     case QuestionType.MultyOption:
                         if (questionnaire.IsQuestionYesNo(entityId))
-                        {
                             return InterviewEntityType.YesNoQuestionModel;
-                        }
+
+                        if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                            return InterviewEntityType.MultiOptionComboboxQuestionModel;
+
                         if (questionnaire.IsQuestionLinked(entityId))
                         {
                             return questionnaire.IsLinkedToListQuestion(entityId)
@@ -291,16 +294,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public IInterviewEntityViewModel GetEntity(Identity identity,
-            string interviewid, 
+            string interviewId, 
             NavigationState navigationState)
         {
-            var interview = this.interviewRepository.Get(interviewid);
+            var interview = this.interviewRepository.Get(interviewId);
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             var modelType = GetEntityModelType(identity, questionnaire, interview);
 
-            return CreateInterviewEntityViewModel(identity, modelType, interviewid, navigationState);
+            return CreateInterviewEntityViewModel(identity, modelType, interviewId, navigationState);
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(

@@ -1,18 +1,15 @@
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API;
-using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
@@ -30,12 +27,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
                 Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IInterviewCreatorFromAssignment>(),
                 Mock.Of<IAuditLog>(),
-                Mock.Of<IPreloadedDataVerifier>(),
-                Mock.Of<ICommandTransformator>(),
                 new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Create.Service.AssignmentFactory()
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IAssignmentPasswordGenerator>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

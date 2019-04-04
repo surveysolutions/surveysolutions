@@ -10,8 +10,6 @@ using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Code;
 
 namespace ASP
@@ -52,7 +50,7 @@ namespace ASP
         {
             if (string.IsNullOrWhiteSpace(template)) return MvcHtmlString.Empty;
 
-            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName));
+            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName).Replace("%SURVEYNAME%", questionnaireName));
         }
 
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(

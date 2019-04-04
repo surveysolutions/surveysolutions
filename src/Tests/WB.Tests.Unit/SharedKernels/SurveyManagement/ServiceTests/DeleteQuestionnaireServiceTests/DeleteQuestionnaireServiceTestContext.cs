@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -34,13 +35,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>(),
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
-                    interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
+                    interviewImportService ??
+                    Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
                     Mock.Of<IAuditLog>(),
                     questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                     Mock.Of<IAssignmetnsDeletionService>(),
                     lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                     questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                    new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()));
+                    new DeleteQuestionnaireJobScheduler(Mock.Of<IScheduler>()),
+                    Mock.Of<IInvitationsDeletionService>());
         }
     }
 }

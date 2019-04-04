@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
 
-
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public static class DictionaryExtensions
     {
@@ -11,5 +10,16 @@ namespace WB.Services.Export.Utils
         {
             return dictionary.TryGetValue(key, out var value) ? value : null;
         }
+
+        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TValue> valueInit)
+        {
+            if (dict.TryGetValue(key, out var value))
+                return value;
+
+            value = valueInit.Invoke();
+            dict.Add(key, value);
+            return value;
+        }
     }
+
 }

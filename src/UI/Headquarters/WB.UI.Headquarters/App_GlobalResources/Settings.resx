@@ -195,4 +195,97 @@
   <data name="AutoUpdateDescription" xml:space="preserve">
     <value>If checked then only latest version of Interviewer/Supervisor application can synchronize with Headquarters</value>
   </data>
+  <data name="EmailProvider_Amazon" xml:space="preserve">
+    <value>Amazon Simple Email Service (SES)</value>
+  </data>
+  <data name="EmailProvider_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>SendGrid Email Delivery Service</value>
+  </data>
+  <data name="EmailProvider_NoneDescription" xml:space="preserve">
+    <value>Invitation messages for web interviews are not sent to the respondents by Survey Solutions.</value>
+  </data>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Configure the parameters to access Amazon SES below. More information on usage of Amazon SES with Survey Solutions is available </value>
+  </data>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Configure the parameters to access SendGrid below. More information on usage of SendGrid with Survey Solutions is available </value>
+  </data>
+  <data name="EmailProvider_SenderAddress" xml:space="preserve">
+    <value>Sender email address</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>Access key ID</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Secret access key</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Send email</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>An example of invitation email was sent successfully</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Send test email</value>
+  </data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Set up bulk email service provider. Configure how the invitations for web interviews will be sent.</value>
+  </data>
+  <data name="EmailProvider_SenderHeader" xml:space="preserve">
+    <value>Sender information</value>
+  </data>
+  <data name="EmailProvider_SenderHelp" xml:space="preserve">
+    <value>Email address of the sender that will appear in the FROM field of the incoming messages.</value>
+  </data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>Email address where the replies from the invitees may be sent (default is the sender email address.)</value>
+  </data>
+  <data name="EmailProvider_SenderName" xml:space="preserve">
+    <value>Sender name</value>
+  </data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Reply address</value>
+  </data>
+  <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+    <value>Name of the sender that will appear in the FROM field of the incoming messages.</value>
+  </data>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Sender postal address</value>
+  </data>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Current postal address of the sender.</value>
+  </data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Specify bulk email service provider</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>You can find the AWS account ID from AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Found in Security Credentials at AWS Management Console</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+    <value>You can find it on API Keys page under Sendgrid settings menu item</value>
+  </data>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>General error occurred</value>
+  </data>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>here</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+    <value>Send yourself a test email message to verify that the bulk email service is functional and to get a preview of what the respondents will receive.</value>
+  </data>
+  <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Email service configuration was saved succeessfully.</value>
+  </data>
 </root>

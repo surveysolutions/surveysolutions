@@ -28,7 +28,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 Create.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeQuestionId,
                     children: new List<IQuestionnaireEntity>
                     {
-                        Create.Group(nestedGroupId, Create.NumericIntegerQuestion(id: questionInsideNestedGroupId, variable: "q1"))
+                        Create.Group(nestedGroupId, children: Create.NumericIntegerQuestion(id: questionInsideNestedGroupId, variable: "q1"))
                     }));
 
             exporter = Create.InterviewsExporter();
@@ -91,8 +91,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static int levelCount;
         private static QuestionnaireDocument questionnaireDocument;
         private static string someAnswer = "some answer";
-        private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
-        private InterviewsExporter exporterS;
         private InterviewsExporter exporter;
     }
 }

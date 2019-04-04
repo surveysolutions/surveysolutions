@@ -107,7 +107,8 @@ class Reports {
         return this.http.post('api/ReportDataApi/ChartStatistics', {
             templateId: questionnaireId,
             templateVersion: version,
-            from, to
+            from,
+            to
         })
     }
 }
@@ -132,7 +133,68 @@ class AssignmentsApi {
 
         return this.http.patch(url,  {enabled: isEnabled})
     }
+
+    async quantitySettings(assignmentId) {
+        var url = `${this.base}/${assignmentId}/assignmentQuantitySettings`
+
+        const response = await this.http.get(url)
+        const responseData = response.data
+
+        return responseData
+    }
 }
+
+class WebInterviewSettingsApi {
+    constructor(http) {
+        this.http = http
+        this.base = "api/v1/webInterviewSettings"
+    }
+
+    /*async fetchEmailTemplates(questionnaireId) {
+        var url = `${this.base}/${questionnaireId}/emailTemplates`
+
+        const response = await this.http.get(url)
+        const responseData = response.data
+
+        return responseData
+    }*/
+
+    updateEmailTemplate(questionnaireId, type, subject, message, passwordDescription, linkText) {
+        var url = `${this.base}/${questionnaireId}/emailTemplate`;
+        return this.http.post(url, { type: type, subject: subject, message: message, passwordDescription: passwordDescription, linkText:linkText });
+    }
+
+    updatePageMessage(questionnaireId, titleType, titleText, messageType, messageText) {
+        var url = `${this.base}/${questionnaireId}/pageTemplate`;
+        return this.http.post(url, { titleType: titleType, titleText: titleText, messageType: messageType, messageText: messageText });
+    }
+
+    /*updateReminderSettings(questionnaireId, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
+        var url = `${this.base}/${questionnaireId}/reminderSettings`;
+        return this.http.post(url, { reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse });
+    }
+
+    updateSpamProtection(questionnaireId, isEnabled) {
+        var url = `${this.base}/${questionnaireId}/spamProtection`;
+        return this.http.post(url, { isEnabled: isEnabled });
+    }*/
+
+    updateAdditionalSettings(questionnaireId, isEnabledSpamProtection, reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse) {
+        var url = `${this.base}/${questionnaireId}/additionalSettings`;
+        return this.http.post(url, { spamProtection: isEnabledSpamProtection, reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse, reminderAfterDaysIfPartialResponse: reminderAfterDaysIfPartialResponse });
+    }
+
+    startWebInterview(questionnaireId) {
+        var url = `${this.base}/${questionnaireId}/start`;
+        return this.http.post(url, {});
+    }
+
+    stopWebInterview(questionnaireId) {
+        var url = `${this.base}/${questionnaireId}/stop`;
+        return this.http.post(url, {});
+    }
+}
+
 
 class HqApiClient {
     constructor(basePath) {
@@ -152,6 +214,8 @@ class HqApiClient {
     get Users() { return new Users(this.http) }
 
     get Assignments() { return new AssignmentsApi(this.http) }
+
+    get WebInterviewSettings() { return new WebInterviewSettingsApi(this.http) }
 }
 
 /*  the Plugin */

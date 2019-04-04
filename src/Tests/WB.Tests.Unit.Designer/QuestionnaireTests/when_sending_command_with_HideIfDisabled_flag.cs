@@ -56,11 +56,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, 
                 scope: QuestionScope.Interviewer, properties: Create.QuestionProperties(), isSignature: false));
 
-            questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", 
-                variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, 
-                responsibleId: responsibleId, options: new Option[] { new Option("1", "1"), new Option("2", "2"), }, 
-                linkedToEntityId: null, areAnswersOrdered: false, maxAllowedAnswers: 2, yesNoView: false,
-                validationConditions: new List<ValidationCondition>(), linkedFilterExpression: null, properties: Create.QuestionProperties());
+            questionnaire.UpdateMultiOptionQuestion(
+                Create.Command.UpdateMultiOptionQuestion(
+                    questionMultyOptionId,
+                    responsibleId,
+                    "title",
+                    "variableName5",
+                    hideIfDisabled: true));
 
             questionnaire.UpdateQRBarcodeQuestion(
                 new UpdateQRBarcodeQuestion(questionnaire.Id,questionQRBarcodeId, 
@@ -70,12 +72,33 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     HideIfDisabled = true
                 }, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>(), validationExpression:null, validationMessage:null));
 
-            questionnaire.UpdateSingleOptionQuestion(questionId: questionSingleOptionId, title: "title", variableName: "variableName7", 
-                variableLabel: "variableLabel7", isPreFilled: false, scope: QuestionScope.Interviewer, enablementCondition: null, 
-                hideIfDisabled: true, instructions: null, responsibleId: responsibleId, options: new Option[] {new Option("1", "1"),
-                    new Option("2", "2"), }, linkedToEntityId: null, isFilteredCombobox: false,
-                cascadeFromQuestionId: null, validationConditions: new List<ValidationCondition>(), linkedFilterExpression: null, 
-                properties: Create.QuestionProperties());
+            questionnaire.UpdateSingleOptionQuestion(
+                new UpdateSingleOptionQuestion(
+                    questionnaireId: questionnaire.Id,
+                    questionId: questionSingleOptionId,
+                    commonQuestionParameters: new CommonQuestionParameters()
+                    {
+                        Title = "title",
+                        VariableName = "variableName7",
+                        VariableLabel = "variableLabel7",
+                        EnablementCondition = null,
+                        Instructions = null,
+                        HideIfDisabled = true
+                    },
+
+                    isPreFilled: false,
+                    scope: QuestionScope.Interviewer,
+                    responsibleId: responsibleId,
+                    options: new Option[] {new Option("1", "1"), new Option("2", "2"), },
+                    linkedToEntityId: null,
+                    isFilteredCombobox: false,
+                    cascadeFromQuestionId: null,
+                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    linkedFilterExpression: null,
+                    validationExpression: null,
+                    validationMessage: null,
+                    showAsList: false,
+                    showAsListThreshold: null));
 
             questionnaire.UpdateTextQuestion(
                 new UpdateTextQuestion(questionnaire.Id,questionTextId, responsibleId,

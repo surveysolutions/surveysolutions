@@ -196,14 +196,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.MapName = parameter.MapName;
             this.requestedGeometryType = parameter.RequestedGeometryType;
 
-            if (!string.IsNullOrEmpty(parameter.Geometry))
-            {
-                this.Geometry = Geometry.FromJson(parameter.Geometry);
+            if (string.IsNullOrEmpty(parameter.Geometry)) return;
 
-                this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry).ToString("#.##");
-                this.GeometryLengthLabel =
-                    $"{(this.requestedGeometryType == GeometryType.Polygon ? UIResources.AreaMap_PerimeterFormat : UIResources.AreaMap_LengthFormat)} {GeometryEngine.LengthGeodetic(this.Geometry):#.##} m";
-            }
+            this.Geometry = Geometry.FromJson(parameter.Geometry);
+
+            this.UpdateLabels(this.Geometry);
         }
 
         private Geometry Geometry { set; get; }
@@ -263,7 +260,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        public IMvxCommand CancelCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(async () =>
         {
             var handler = this.OnAreaEditCompleted;
             handler?.Invoke(null);
@@ -385,9 +382,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     var geometry = args.NewGeometry;
                     try
                     {
-                        this.GeometryArea = GetGeometryArea(geometry).ToString("#.##");
-                        this.GeometryLengthLabel =
-                            $"{(this.requestedGeometryType == GeometryType.Polygon ? UIResources.AreaMap_PerimeterFormat : UIResources.AreaMap_LengthFormat)} {GetGeometryLenght(geometry):#.##} m";
+                        this.UpdateLabels(geometry);
                     }
                     catch
                     {
@@ -454,7 +449,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     MapName = this.SelectedMap,
                     Coordinates = coordinates,
                     Area = GetGeometryArea(result),
-                    Length = GetGeometryLenght(result),
+                    Length = GetGeometryLength(result),
                     DistanceToEditor = dist,
                     NumberOfPoints = GetGeometryPointsCount(result)
                 };
@@ -477,10 +472,21 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             return doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0;
         }
 
-        private double GetGeometryLenght(Geometry geometry)
+        private double GetGeometryLength(Geometry geometry)
         {
             bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportLengthCalculation(geometry);
             return doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0;
+        }
+        private void UpdateLabels(Geometry geometry)
+        {
+            var area = this.GetGeometryArea(geometry);
+            var length = this.GetGeometryLength(geometry);
+
+            this.GeometryArea = area > 0 ? string.Format(UIResources.AreaMap_AreaFormat, area.ToString("#.##")) : string.Empty;
+            this.GeometryLengthLabel = length > 0 ? string.Format(
+                this.requestedGeometryType == GeometryType.Polygon
+                    ? UIResources.AreaMap_PerimeterFormat
+                    : UIResources.AreaMap_LengthFormat, length.ToString("#.##")) : string.Empty;
         }
 
         private int GetGeometryPointsCount(Geometry geometry)
@@ -543,14 +549,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             return true;
         }
 
-        private string geometryArea = "0";
+        private string geometryArea;
         public string GeometryArea
         {
             get => this.geometryArea;
             set => this.RaiseAndSetIfChanged(ref this.geometryArea, value);
         }
 
-        private string geometryLengthLabel = "";
+        private string geometryLengthLabel;
         public string GeometryLengthLabel
         {
             get => this.geometryLengthLabel;

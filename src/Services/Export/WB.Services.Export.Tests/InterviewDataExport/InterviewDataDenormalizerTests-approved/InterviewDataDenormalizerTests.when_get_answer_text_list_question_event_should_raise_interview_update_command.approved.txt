@@ -1,0 +1,1 @@
+﻿UPDATE "questionnaireVariable$17" SET "text_list_q" = @answer1 WHERE interview__id = @interviewId1;

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -149,7 +149,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             // act
             // assert
-            Assert.DoesNotThrow(() => verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray());
+            Assert.DoesNotThrow(() => verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray());
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -192,7 +192,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -227,7 +227,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(2));
@@ -257,7 +257,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -281,7 +281,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -305,7 +305,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -342,7 +342,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(4));
@@ -384,7 +384,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -411,7 +411,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -439,7 +439,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -469,7 +469,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -499,7 +499,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -529,7 +529,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -560,7 +560,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -591,7 +591,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -622,7 +622,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -653,7 +653,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -690,7 +690,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(4));
@@ -730,7 +730,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -760,7 +760,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -790,7 +790,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -819,7 +819,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -848,7 +848,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -879,7 +879,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -912,7 +912,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -945,7 +945,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -978,7 +978,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -1015,7 +1015,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(2));
@@ -1059,7 +1059,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+            var errors = verifier.VerifyRowValues(preloadingRow, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(2));

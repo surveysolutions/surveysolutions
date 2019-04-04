@@ -11,22 +11,24 @@
         <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="Migrations\ReadSide\M101-200\**" />
+      <EmbeddedResource Remove="Migrations\ReadSide\M101-200\**" />
+      <None Remove="Migrations\ReadSide\M101-200\**" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="1.50.4" />
+      <PackageReference Include="Dapper" Version="1.60.1" />
       <PackageReference Include="FluentMigrator" Version="3.1.3" />
-      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-      <PackageReference Include="Npgsql" Version="3.2.7" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+      <PackageReference Include="Npgsql" Version="4.0.5" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
       <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Migrations\ReadSide\M101-200\" />
     </ItemGroup>
 </Project>

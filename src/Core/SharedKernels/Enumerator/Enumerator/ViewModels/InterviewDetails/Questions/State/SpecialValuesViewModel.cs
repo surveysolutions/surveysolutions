@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
             this.questionState = questionState;
 
-            this.optionsViewModel.Init(interviewId, entityIdentity, 200);
+            this.optionsViewModel.Init(interviewId, entityIdentity);
             this.UpdateSpecialValuesAsync().WaitAndUnwrapException();
 
             allSpecialValues = this.optionsViewModel.GetOptions().Select(x => x.Value).ToHashSet();
@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public async Task SetAnswer(decimal? answeredOrSelectedValue)
+        public async Task SetAnswerAsync(decimal? answeredOrSelectedValue)
         {
             IsSpecialValue = IsSpecialValueSelected(answeredOrSelectedValue);
 

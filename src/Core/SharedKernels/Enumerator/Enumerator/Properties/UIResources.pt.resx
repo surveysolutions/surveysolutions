@@ -131,12 +131,6 @@ Pode criar ou editar seus questionários em Survey Solutions Designer</value>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Meus questionários</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Questionários públicos</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Questionários</value>
   </data>

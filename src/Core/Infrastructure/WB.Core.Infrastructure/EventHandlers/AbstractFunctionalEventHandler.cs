@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,7 +10,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.EventHandlers
 {
-    public abstract class AbstractFunctionalEventHandler<TEntity, TStorage> : IFunctionalEventHandler, IAtomicEventHandler
+    public abstract class AbstractFunctionalEventHandler<TEntity, TStorage> : IFunctionalEventHandler, IEventHandler
         where TEntity : class, IReadSideRepositoryEntity
         where TStorage : class, IReadSideStorage<TEntity>
     {
@@ -125,26 +122,6 @@ namespace WB.Core.Infrastructure.EventHandlers
         public string Name => this.GetType().Name;
 
         public virtual object[] Writers => new object[] { this.readSideStorage };
-
-        public virtual void CleanWritersByEventSource(Guid eventSourceId)
-        {
-            if (this.Writers.Length > 1)
-                throw new InvalidOperationException(
-                    "default implementation on CleanWritersByEventSource can't be performed for FunctionalEvent handler which builds ore then one view. Please provide your own implementation of CleanWritersByEventSource");
-
-            if (this.Writers.Length == 0)
-                throw new InvalidOperationException(
-                  "writers to clean up are missing");
-
-            if (this.Writers[0] != this.readSideStorage)
-                throw new InvalidOperationException("mismatch of view and writer");
-
-            this.readSideStorage.Remove(eventSourceId);
-        }
-
-        public virtual object[] Readers
-        {
-            get { return new object[0]; }
-        }
+        public virtual object[] Readers => new object[0];
     }
 }

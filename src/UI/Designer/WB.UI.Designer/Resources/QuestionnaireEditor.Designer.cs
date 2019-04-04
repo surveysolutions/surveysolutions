@@ -1438,7 +1438,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plain mode.
+        ///   Looks up a localized string similar to Flat mode.
         /// </summary>
         public static string PlainRoster {
             get {
@@ -1506,6 +1506,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionCascading {
             get {
                 return ResourceManager.GetString("QuestionCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checkboxes.
+        /// </summary>
+        public static string QuestionCheckboxes {
+            get {
+                return ResourceManager.GetString("QuestionCheckboxes", resourceCulture);
             }
         }
         
@@ -1609,6 +1618,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kind.
+        /// </summary>
+        public static string QuestionKind {
+            get {
+                return ResourceManager.GetString("QuestionKind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bind to list question or question from roster group.
         /// </summary>
         public static string QuestionLinkedDescr {
@@ -1659,6 +1677,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionnaireSummary {
             get {
                 return ResourceManager.GetString("QuestionnaireSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Integers between 1 and 50 are allowed.
+        /// </summary>
+        public static string QuestionOneToFiftyAllowed {
+            get {
+                return ResourceManager.GetString("QuestionOneToFiftyAllowed", resourceCulture);
             }
         }
         
@@ -1731,6 +1758,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionScope {
             get {
                 return ResourceManager.GetString("QuestionScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If not more than.
+        /// </summary>
+        public static string QuestionShowListLimit {
+            get {
+                return ResourceManager.GetString("QuestionShowListLimit", resourceCulture);
             }
         }
         
@@ -1816,7 +1852,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes/No mode.
+        ///   Looks up a localized string similar to Yes/No buttons.
         /// </summary>
         public static string QuestionYesNoMode {
             get {
@@ -2262,6 +2298,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsWhoHasAccess {
             get {
                 return ResourceManager.GetString("SettingsWhoHasAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show as a list of categories.
+        /// </summary>
+        public static string ShowAsList {
+            get {
+                return ResourceManager.GetString("ShowAsList", resourceCulture);
             }
         }
         

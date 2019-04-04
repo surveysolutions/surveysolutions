@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using WB.Core.GenericSubdomains.Portable;
-using CommonMark;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -34,10 +32,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.webNavigationService = webNavigationService;
         }
 
-        public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
-            IStatefulInterview interview, 
-            IQuestionnaire questionnaire, 
-            string[] sectionIds, 
+        public Sidebar GetSidebarChildSectionsOf(string currentSectionId,
+            IStatefulInterview interview,
+            IQuestionnaire questionnaire,
+            string[] sectionIds,
             bool isReviewMode)
         {
             Sidebar result = new Sidebar();
@@ -115,6 +113,24 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         break;
                     case InterviewQuestionType.Cascading:
+                        var canBeShownAsList = questionnaire.ShowCascadingAsList(identity.Id);
+                        if (canBeShownAsList)
+                        {
+                            var threshold = questionnaire.GetCascadingAsListThreshold(identity.Id) ?? Constants.DefaultCascadingAsListThreshold;
+                            if (!callerInterview.DoesCascadingQuestionHaveMoreOptionsThanThreshold(identity, threshold))
+                            {
+                                var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion().GetCascadingParentQuestion();
+                                if (parentCascadingQuestion.IsAnswered())
+                                {
+                                    result = this.Map<InterviewSingleOptionQuestion>(question, res =>
+                                        {
+                                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentCascadingQuestion.GetAnswer().SelectedValue, null, threshold);
+                                        });
+                                    break;
+                                }
+                            }
+                        }
+
                         result = this.Map<InterviewFilteredQuestion>(question);
                         break;
                     case InterviewQuestionType.SingleLinkedToList:
@@ -250,7 +266,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
                         });
                         break;
-                   
+
                     case InterviewQuestionType.Multimedia:
                         result = this.Map<InterviewMultimediaQuestion>(question);
                         break;
@@ -279,7 +295,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 result.Instructions = this.webNavigationService.MakeNavigationLinks(result.Instructions, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
                 result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
-                
+
                 return result;
             }
 
@@ -410,7 +426,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             isReviewMode
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor() > 0
                 : group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
-        
+
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (isReviewMode)
@@ -452,7 +468,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             return parent;
         }
-        
+
         protected virtual string WebLinksVirtualDirectory(bool isReview) => "WebTester/Interview";
     }
 }

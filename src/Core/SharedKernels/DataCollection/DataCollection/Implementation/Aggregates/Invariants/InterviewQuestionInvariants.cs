@@ -218,6 +218,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireQuestionEnabled()
                 .RequireLinkedOptionsAreAvailable(selectedLinkedOptions)
+                .RequireMaxAnswersCountLimitForLinked(selectedLinkedOptions.Length)
                 .RequireMaxAnswersCountLimit(selectedLinkedOptions.Length);
 
         public void RequireYesNoPreloadValueAllowed(YesNoAnswer answer)
@@ -516,6 +517,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
                         {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
+
+            return this;
+        }
+
+        private InterviewQuestionInvariants RequireMaxAnswersCountLimitForLinked(int answersCount)
+        {
+            if (answersCount > Constants.MaxLinkedQuestionAnsweredOptionsCount)
+                throw new AnswerNotAcceptedException(
+                    $"Number of answers is greater than the maximum number of allowed answers for linked question")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.MaxAnswersCount, Constants.MaxLinkedQuestionAnsweredOptionsCount},
+                        {ExceptionKeys.AnswersCount, answersCount}
                     }
                 };
 

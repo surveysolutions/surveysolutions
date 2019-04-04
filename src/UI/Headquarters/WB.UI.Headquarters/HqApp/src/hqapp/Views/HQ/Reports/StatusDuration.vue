@@ -26,7 +26,7 @@
                     :fetch-url="questionnaireVersionFetchUrl"
                     :disabled="questionnaireVersionFetchUrl == null" />
             </FilterBlock>
-            <FilterBlock :title="$t('Strings.Teams')">
+            <FilterBlock :title="$t('Strings.Teams')" v-if="!$config.model.isSupervisorMode">
                  <Typeahead control-id="teams"
                         :placeholder="$t('Strings.AllTeams')"
                         :value="supervisorId"
@@ -206,7 +206,12 @@ export default {
                         title: this.$t("Strings.InterviewStatus_ApprovedByHeadquarters"),
                         orderable: false,
                         render: function(data, type, row) {
-                            return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
+                            if (self.$config.model.isSupervisorMode){
+                                const formatedNumber = formatNumber(data);
+                                return `<span>${formatedNumber}</span>`;
+                            }
+                            else
+                                return self.renderInterviewsUrl(row, data, 'ApprovedByHeadquarters');
                         }
                     }
                 ],

@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
         private static readonly Questionnaire downloadedQuestionnaire = null;
-        private static readonly QuestionnaireListItem selectedQuestionnaire = new QuestionnaireListItem() { Id = "11111111111111111111111111111111" };
+        private static readonly QuestionnaireListItemViewModel selectedQuestionnaire = new QuestionnaireListItemViewModel() { Id = "11111111111111111111111111111111" };
         private static readonly Mock<IDesignerApiService> mockOfDesignerApiService = new Mock<IDesignerApiService>();
         private static readonly Mock<IQuestionnaireImportService> mockOfQuestionnaireImportService = new Mock<IQuestionnaireImportService>();
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();

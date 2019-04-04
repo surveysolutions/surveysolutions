@@ -228,9 +228,6 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>عذراً، عدد كبير من الناس يتصلون بهذا الموقع  معاً في آنٍ واحد.  نحن نعمل على حل هذه المشكلة.  ترجى المحاولة لاحقاً.</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>ابدأ الاستجواب</value>
-  </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>هذا الاستجواب لم يكتمل</value>
   </data>

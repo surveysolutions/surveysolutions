@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
-  style="@style/Interview_QuestionWithDivider"
-  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
-  <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
-
-    <InstantAutoCompleteTextView
-      style="@style/Interview_Question_Answer_FilteredComboBox"
-      android:completionThreshold="1"
-      android:inputType="textVisiblePassword"
-      android:imeOptions="actionDone"
-      android:layout_weight="1"
-      local:MvxItemTemplate="@layout/interview_question_filtered_single_option_item"
-      local:MvxBind="ItemsSource AutoCompleteSuggestions;
-                     PartialText FilterText; 
-                     OnPartialTextChanged FilterCommand;
-                     OnItemSelected SaveAnswerBySelectedOptionCommand;
-                     OnFocusOut ShowErrorIfNoAnswerCommand;
-                     Watermark Localization('FilteredComboboxQuestion_Hint');
-                     Tag Format('Answer_{0}', Identity)" />
-    <include layout="@layout/interview_question__remove_button_input" />
-  </LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              local:MvxBind="HideKeyboardOnClick .">
 </LinearLayout>

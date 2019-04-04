@@ -134,7 +134,101 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
 
             // assert
             Assert.That(items.Count, Is.EqualTo(1));
-            
+        }
+
+        [Test]
+        public void when_insert_child_collection_should_raise_collection_changed_with_new_items_and_offset_in_args()
+        {
+            var items = Create.Entity.CompositeCollection<string>();
+
+            items.Add("zero");
+            var childCollection = new CompositeCollection<string> { "one", "three" };
+            items.AddCollection(childCollection);
+            items.Add("four");
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            childCollection.InsertCollection(1, new CovariantObservableCollection<string> { "two" });
+
+            // assert
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Add));
+            Assert.That(collectionChangedArgs.NewItems, Is.EquivalentTo(new[] { "two" }));
+            Assert.That(collectionChangedArgs.NewStartingIndex, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void when_removed_child_collection_should_raise_collection_changed_with_items_and_offset_in_args()
+        {
+            var items = Create.Entity.CompositeCollection<string>();
+
+            items.Add("zero");
+            var childCollection = new CompositeCollection<string> { "one", "three" };
+            items.AddCollection(childCollection);
+            items.Add("four");
+            var collectionToRemove = new CovariantObservableCollection<string> { "two" };
+            childCollection.InsertCollection(1, collectionToRemove);
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            childCollection.RemoveCollection(collectionToRemove);
+
+            // assert
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+            Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "two" }));
+            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(2));
+        }
+        
+        [Test]
+        public void when_removed_last_child_collection_should_raise_collection_changed_with_items_and_offset_in_args()
+        {
+            var items = Create.Entity.CompositeCollection<string>();
+
+            var childCollection = new CompositeCollection<string>();
+            items.AddCollection(childCollection);
+            var collectionToRemove = new CovariantObservableCollection<string> { "single" };
+            childCollection.AddCollection(collectionToRemove);
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            items.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            childCollection.RemoveCollection(collectionToRemove);
+
+            // assert
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+            Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "single" }));
+            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(0));
+        }  
+        
+
+        [Test]
+        public void when_removed_collection_from_second_level_should_raise_collection_changed_with_items_and_offset_in_args()
+        {
+            var firstLevel = Create.Entity.CompositeCollection<string>();
+
+            firstLevel.AddCollection(Create.Entity.CompositeCollection<string>("1"));
+            var secondLevel = new CompositeCollection<string>();
+            secondLevel.Add("2");
+            firstLevel.AddCollection(secondLevel);
+            firstLevel.AddCollection(Create.Entity.CompositeCollection<string>("5"));
+            var thirdLevel = new CovariantObservableCollection<string> { "3" };
+            secondLevel.AddCollection(thirdLevel);
+            secondLevel.Add("4");
+
+            NotifyCollectionChangedEventArgs collectionChangedArgs = null;
+            firstLevel.CollectionChanged += (sender, args) => collectionChangedArgs = args;
+
+            // act
+            firstLevel.RemoveCollection(secondLevel);
+
+            // assert
+            Assert.That(collectionChangedArgs.Action, Is.EqualTo(NotifyCollectionChangedAction.Remove));
+            Assert.That(collectionChangedArgs.OldItems, Is.EquivalentTo(new[] { "2", "3", "4" }));
+            Assert.That(collectionChangedArgs.OldStartingIndex, Is.EqualTo(1));
         }
     }
 }

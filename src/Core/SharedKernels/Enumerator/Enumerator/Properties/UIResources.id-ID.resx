@@ -131,12 +131,6 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Kuesioner saya</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Kuesioner publik</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Kuesioner</value>
   </data>
