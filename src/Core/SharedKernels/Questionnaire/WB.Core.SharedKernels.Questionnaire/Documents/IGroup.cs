@@ -22,7 +22,7 @@ namespace Main.Core.Entities.SubEntities
 
         Guid? RosterTitleQuestionId { get; }
 
-        bool IsPlainMode { get; }
+        bool IsFlatMode { get; }
 
         void ReplaceChildEntityById(Guid id, IComposite newEntity);
     }

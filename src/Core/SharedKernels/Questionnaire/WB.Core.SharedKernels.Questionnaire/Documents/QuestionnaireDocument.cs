@@ -108,7 +108,7 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
-        public bool IsPlainMode => false;
+        public bool IsFlatMode => false;
 
         public Guid? RosterSizeQuestionId => null;
 
@@ -244,7 +244,7 @@ namespace Main.Core.Documents
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);
-                @group.IsPlainMode = isFlatMode;
+                @group.IsFlatMode = isFlatMode;
             });
         }
 

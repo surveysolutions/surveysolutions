@@ -1070,7 +1070,7 @@ namespace WB.Tests.Abc.TestFactories
                 children: children);
 
             group.IsRoster = true;
-            group.IsPlainMode = isPlainMode;
+            group.IsFlatMode = isPlainMode;
             group.RosterSizeSource = RosterSizeSourceType.Question;
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
@@ -1099,7 +1099,7 @@ namespace WB.Tests.Abc.TestFactories
                 variable: variable ?? "rost_" + rostersCounter++,
                 enablementCondition: enablementCondition,
                 children: children);
-            group.IsPlainMode = isFlatMode;
+            group.IsFlatMode = isFlatMode;
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
             group.HideIfDisabled = hideIfDisabled;
