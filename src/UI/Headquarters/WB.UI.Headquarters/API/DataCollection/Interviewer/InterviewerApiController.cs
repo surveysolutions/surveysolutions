@@ -23,6 +23,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Utils;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
@@ -108,9 +109,18 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
+            var fileHash = this.fileSystemAccessor.ReadHash(pathToInterviewerApp);
+
+            if (this.RequestHasMatchingFileHash(fileHash))
+            {
+                return Request.CreateResponse(HttpStatusCode.NotModified);
+            }
+
             Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
 
-            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", responseFileName);
+            return this.AsProgressiveDownload(fileStream, 
+                @"application/vnd.android.package-archive", 
+                responseFileName, fileHash);
         }
 
         [HttpGet]
@@ -144,7 +154,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return this.AsProgressiveDownload(fileStream, @"application/octet-stream");
+            return this.AsProgressiveDownload(fileStream, @"application/octet-stream", 
+                hash: this.fileSystemAccessor.ReadHash(pathToInterviewerPatch));
         }
 
         [HttpGet]

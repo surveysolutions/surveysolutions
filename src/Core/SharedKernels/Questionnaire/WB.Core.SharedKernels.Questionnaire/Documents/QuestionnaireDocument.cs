@@ -108,7 +108,7 @@ namespace Main.Core.Documents
 
         public bool IsRoster => false;
 
-        public bool IsPlainMode => false;
+        public bool IsFlatMode => false;
 
         public Guid? RosterSizeQuestionId => null;
 
@@ -235,7 +235,7 @@ namespace Main.Core.Documents
             this.LastEntryDate = DateTime.UtcNow;
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, bool IsPlainMode)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled, bool isFlatMode)
         {
             this.UpdateGroup(groupId, group =>
             {
@@ -244,7 +244,7 @@ namespace Main.Core.Documents
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);
-                @group.IsPlainMode = IsPlainMode;
+                @group.IsFlatMode = isFlatMode;
             });
         }
 

@@ -10,7 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 {
-    public class when_getting_status_of_invalid_plain_roster_parent : WebInterviewInterviewEntityFactorySpecification
+    public class when_getting_status_of_invalid_flat_roster_parent : WebInterviewInterviewEntityFactorySpecification
     {
         public InterviewGroupOrRosterInstance entity;
         
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                         Create.Entity.FixedTitle(0, "Test"),
                         Create.Entity.FixedTitle(1, "Test2")
                     },
-                    isPlainMode:true)
+                    isFlatMode:true)
             );
         }
 

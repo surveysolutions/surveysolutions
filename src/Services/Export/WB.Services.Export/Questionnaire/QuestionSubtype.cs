@@ -2,13 +2,14 @@
 {
     public enum QuestionSubtype
     {
-        MultyOption_YesNo = 1,
-        MultyOption_Linked = 2,
-        MultyOption_Ordered = 3,
-        MultyOption_YesNoOrdered = 4,
-
-        DateTime_Timestamp = 5,
-
-        SingleOption_Linked = 6,
+        Unknown = 0,
+        MultiOptionYesNo = 1,
+        MultiOptionLinkedFirstLevel = 2,
+        MultiOptionOrdered = 3,
+        MultiOptionYesNoOrdered = 4,
+        DateTimeTimestamp = 5,
+        SingleOptionLinkedFirstLevel = 6,
+        MultiOptionLinkedNestedLevel = 7,
+        SingleOptionLinkedNestedLevel = 8
     }
 }

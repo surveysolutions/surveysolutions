@@ -53,8 +53,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup, IComposite>(QuestionsCannotBeUsedAsRosterTitle, "WB0083", VerificationMessages.WB0083_QuestionCannotBeUsedAsRosterTitle),
             Error<IGroup>(FirstChapterHasEnablingCondition, "WB0263", VerificationMessages.WB0263_FirstChapterHasEnablingCondition),
             Error<IGroup>(SectionHasMoreThanAllowedQuestions, "WB0270", string.Format(VerificationMessages.WB0270_SectionContainsTooManyQuestions, 400)),
-            Error<IGroup>(PlainModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
-            Error<IGroup>(PlainModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
+            Error<IGroup>(FlatModeGroupContainsNestedGroup, "WB0279", VerificationMessages.WB0279_PlainModeGroupContainsNestedGroup),
+            Error<IGroup>(FlatModeGroupHasMoreThanAllowedEntities, "WB0278", string.Format(VerificationMessages.WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements, MaxEntitiesInPlainModeGroup)),
             Error<IGroup>(LinksAreProhibitedOnNavigationElements, "WB0057", VerificationMessages.WB0057_LinksAreProhibitedOnNavigationElements),
 
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
@@ -180,11 +180,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool SectionHasMoreThanAllowedQuestions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.Children.OfType<IQuestion>().Count() > MaxQuestionsCountInSection;
 
-        private static bool PlainModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.IsPlainMode && group.Children.Count() > MaxEntitiesInPlainModeGroup;
+        private static bool FlatModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.IsFlatMode && group.Children.Count() > MaxEntitiesInPlainModeGroup;
 
-        private static bool PlainModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-            => group.IsPlainMode && group.Children.Any(e => ((e as IGroup)?.IsPlainMode ?? false) || ((e as IGroup)?.IsRoster ?? false));
+        private static bool FlatModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+            => group.IsFlatMode && group.Children.Any(e => ((e as IGroup)?.IsFlatMode ?? false) || ((e as IGroup)?.IsRoster ?? false));
 
         private static bool FirstChapterHasEnablingCondition(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {

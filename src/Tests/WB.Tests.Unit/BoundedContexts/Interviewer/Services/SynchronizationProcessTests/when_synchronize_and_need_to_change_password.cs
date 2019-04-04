@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             synchronizationServiceMock
                 .Setup(x => x.LoginAsync(
                     It.IsAny<LogonInfo>(),
-                    It.IsAny<RestCredentials>(), null))
+                    It.IsAny<RestCredentials>(), default))
                 .Returns(Task.FromResult("new token"));
 
             synchronizationServiceMock

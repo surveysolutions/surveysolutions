@@ -829,7 +829,7 @@ namespace WB.Tests.Unit.Designer
                 children: children);
 
             roster.IsRoster = true;
-            roster.IsPlainMode = isPlainMode;
+            roster.IsFlatMode = isPlainMode;
             roster.RosterSizeSource = RosterSizeSourceType.Question;
             roster.RosterSizeQuestionId = rosterSizeQuestionId;
             roster.RosterTitleQuestionId = rosterTitleQuestionId;
