@@ -110,7 +110,7 @@ gulp.task("styles", function(){
         relativeUrls: true
       }))
       .pipe(plugins.cssUrlAdjuster({
-        prepend: '../content/'
+        prepend: './content/'
       }))
 	    .pipe(plugins.rev())
 	    .pipe(gulp.dest('build'));
@@ -193,7 +193,7 @@ gulp.task('copyFontsNeededForBundler', function(){
   gulp.src([
     'node_modules/jquery-contextmenu/dist/font/**'
   ])
-    .pipe(gulp.dest('../Content/plugins/font'));
+    .pipe(gulp.dest('./Content/plugins/font'));
 });
 
 gulp.task('devJs', function () {
