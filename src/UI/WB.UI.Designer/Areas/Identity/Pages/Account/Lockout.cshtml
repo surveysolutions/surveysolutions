@@ -1,10 +1,15 @@
 ﻿@page
 @model LockoutModel
 @{
-    ViewData["Title"] = "Locked out";
+    ViewData["Title"] = AccountResources.LockedOut;
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<form>
+    <h1>@AccountResources.LockedOut</h1>
+    <p class="note">
+        @AccountResources.LockedOutText
+    </p>
+    <div class="form-actions">
+        <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
+    </div>
+</form>

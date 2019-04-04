@@ -20,8 +20,9 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            await _signInManager.SignOutAsync();
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
