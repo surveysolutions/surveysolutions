@@ -55,16 +55,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Email_required))]
             [EmailAddress(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.InvalidEmailAddress))]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
-            [Display(Name = "Password", Order = 2)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password", Order = 3)]
             [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
             public string ConfirmPassword { get; set; }
 

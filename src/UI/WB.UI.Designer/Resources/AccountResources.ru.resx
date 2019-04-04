@@ -301,4 +301,7 @@
   <data name="LockedOutText" xml:space="preserve">
     <value>Эта учётная запись заблокирована, пожалуйста попробуйте позже.</value>
   </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Пожалуйста, проверьте электронную почту для восстановления пароля.</value>
+  </data>
 </root>
