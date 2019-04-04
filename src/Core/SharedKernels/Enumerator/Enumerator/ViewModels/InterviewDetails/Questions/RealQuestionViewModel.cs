@@ -218,8 +218,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private bool isDisposed;
         public void Dispose()
         {
+            if (this.isDisposed) return;
+
+            this.isDisposed = true;
+
             this.liteEventRegistry.Unsubscribe(this); 
             this.QuestionState.Dispose();
 
@@ -231,6 +236,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async void Handle(AnswersRemoved @event)
         {
+            if (this.isDisposed) return;
+
             foreach (var question in @event.Questions)
             {
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))

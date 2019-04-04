@@ -5,7 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
@@ -23,7 +25,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IHttpStatistician httpStatistician;
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFastBinaryFilesHttpHandler fileDownloader;
-        
+
         public RestService(
             IRestServiceSettings restServiceSettings,
             INetworkService networkService,
@@ -105,32 +107,37 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
 
-            if (forceNoCache)
-            {
-                request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
-            }
-
-            if (credentials?.Token != null)
-            {
-                string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
-                request.Headers.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
-            }
-            else if (credentials?.Password != null)
-            {
-                var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
-                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", value);
-            }
-
-            if (customHeaders != null)
-            {
-                foreach (var customHeader in customHeaders)
-                {
-                    request.Headers.Add(customHeader.Key, customHeader.Value);
-                }
-            }
-
             try
             {
+                if (customHeaders != null && customHeaders.TryGetValue("If-None-Match", out var etag))
+                {
+                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue($@"""{etag}"""));
+                    customHeaders.Remove("If-None-Match");
+                }
+
+                if (forceNoCache)
+                {
+                    request.Headers.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+                }
+
+                if (credentials?.Token != null)
+                {
+                    string base64String = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Token}"));
+                    request.Headers.Authorization = new AuthenticationHeaderValue(ApiAuthenticationScheme.AuthToken.ToString(), base64String);
+                }
+                else if (credentials?.Password != null)
+                {
+                    var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{credentials.Login}:{credentials.Password}"));
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", value);
+                }
+
+                if (customHeaders != null)
+                {
+                    foreach (var customHeader in customHeaders)
+                    {
+                        request.Headers.Add(customHeader.Key, customHeader.Value);
+                    }
+                }
                 var httpClient = this.httpClientFactory.CreateClient(httpStatistician);
 
                 var httpResponseMessage = await
@@ -250,11 +257,32 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var restResponse = await this.ReceiveBytesWithProgressAsync(response,
                         transferProgress: transferProgress, token: token ?? default(CancellationToken)).ConfigureAwait(false);
 
+            if (restResponse.StatusCode == HttpStatusCode.NotModified)
+            {
+                return new RestFile(null, string.Empty, null, null, null, restResponse.StatusCode);
+            }
+
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
+
+            if (restResponse.ContentMD5 != null)
+            {
+                using (var crypto = MD5.Create())
+                {
+                    var hash = crypto.ComputeHash(fileContent);
+
+                    if (!hash.SequenceEqual(restResponse.ContentMD5))
+                    {
+                        throw new RestException("Downloaded file failed hash check. Please try again");
+                    }
+                }
+            }
 
             return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
                 contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName,
-                statusCode: restResponse.StatusCode);
+                statusCode: restResponse.StatusCode)
+            {
+                ContentMD5 = restResponse.ContentMD5
+            };
         }
 
         public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null,
@@ -262,7 +290,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         {
             var (_, response) = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
                 userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders);
-            
+
             var contentLength = response.Content.Headers.ContentLength;
 
             var contentCompressionType = this.GetContentCompressionType(response.Content.Headers);
@@ -337,6 +365,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             CancellationToken token)
         {
             var responseMessage = result.Response;
+
             var restResponse = new RestResponse
             {
                 ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType?.MediaType),
@@ -347,6 +376,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 FileName = responseMessage.Content?.Headers?.ContentDisposition?.FileName,
                 StatusCode = responseMessage.StatusCode
             };
+
+            if (responseMessage.Content.Headers.ContentMD5 != null)
+            {
+                restResponse.ContentMD5 = responseMessage.Content.Headers.ContentMD5;
+            }
 
             restResponse.Response = await fileDownloader.DownloadBinaryDataAsync(result.HttpClient, result.Response, transferProgress, token);
 
@@ -427,6 +461,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             public long? Length { get; set; }
             public string ETag { get; set; }
             public string FileName { get; set; }
+            public byte[] ContentMD5 { get; set; }
             public HttpStatusCode StatusCode { get; set; }
         }
 
@@ -445,7 +480,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
 
             public HttpClient HttpClient { get; }
-            public HttpResponseMessage Response { get;  }
+            public HttpResponseMessage Response { get; }
         }
 
         internal enum RestContentType { Unknown, Json }

@@ -999,7 +999,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var parent = entity.GetParent();
             bool shouldBeHiddenByParentHideIfDisabled = false;
-            if(IsPlainRoster(parent.PublicKey))
+            if(IsFlatRoster(parent.PublicKey))
             {
                 shouldBeHiddenByParentHideIfDisabled = (parent as IConditional)?.HideIfDisabled ?? false;
             }
@@ -1007,9 +1007,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return ((entity as IConditional)?.HideIfDisabled ?? false) || shouldBeHiddenByParentHideIfDisabled;
         }
 
-        public bool IsPlainRoster(Guid entityId)
+        public bool IsFlatRoster(Guid entityId)
         {
-            return this.GetGroup(entityId)?.IsPlainMode ?? false;
+            return this.GetGroup(entityId)?.IsFlatMode ?? false;
         }
 
         public bool ShowCascadingAsList(Guid questionId)

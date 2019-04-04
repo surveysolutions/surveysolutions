@@ -174,7 +174,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 groupIds.Add(elementId);
 
-                if (questionnaire.IsPlainRoster(elementId.Id))
+                if (questionnaire.IsFlatRoster(elementId.Id))
                 {
                     var groupEntitiesIds = GetGroupEntitiesIds(elementId);
                     groupIds.AddRange(groupEntitiesIds);
@@ -296,7 +296,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             var callerQuestionnaire = this.GetCallerQuestionnaire();
             ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id)
-                .Except(id => questionnaire.IsPlainRoster(id))
+                .Except(id => questionnaire.IsFlatRoster(id))
                 .ToReadOnlyCollection();
 
             var breadCrumbs = new List<Breadcrumb>();
@@ -512,7 +512,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
             {
-                if (callerQuestionnaire.IsPlainRoster(entityId))
+                if (callerQuestionnaire.IsFlatRoster(entityId))
                     return InterviewEntityType.GroupTitle;
                 return InterviewEntityType.Group;
             }

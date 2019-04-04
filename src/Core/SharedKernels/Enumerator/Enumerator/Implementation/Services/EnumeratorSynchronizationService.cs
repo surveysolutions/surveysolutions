@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         #region [User Api]
 
-        public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
+        public async Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken token = default)
         {
             try
             {
@@ -99,56 +99,56 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
-            => this.TryGetRestResponseOrThrowAsync(() =>
+        public async Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token = default)
+            => await this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<bool>(url: AutoUpdateUrl, credentials: this.restCredentials, token: token));
 
-        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken cancellationToken)
+        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.AuditLogController}",
                 request: entities,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
-        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken)
+        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<List<Guid>>(
                 url: string.Concat(InterviewsController, "/CheckObsoleteInterviews"),
                 request: checks,
                 credentials: this.restCredentials,
-                token: cancellationToken));
+                token: token));
         }
 
         #endregion
 
         #region AssignmentsApi
 
-        public Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken token = default)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<AssignmentApiView>>(
-                url: this.AssignmentsController, credentials: this.restCredentials, token: cancellationToken));
+                url: this.AssignmentsController, credentials: this.restCredentials, token: token));
 
             return response;
         }
 
-        public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
+        public Task LogAssignmentAsHandledAsync(int id, CancellationToken token = default)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: $"{this.AssignmentsController}/{id}/Received", credentials: this.restCredentials, token: cancellationToken));
+                url: $"{this.AssignmentsController}/{id}/Received", credentials: this.restCredentials, token: token));
 
             return response;
         }
 
-        public Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+        public Task<string> GetPublicKeyForEncryptionAsync(CancellationToken token = default)
             => this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
-                url: this.PublicKeyForEncryptionUrl, credentials: this.restCredentials, token: cancellationToken));
+                url: this.PublicKeyForEncryptionUrl, credentials: this.restCredentials, token: token));
 
-        public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken token = default)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
-                url: $"{this.AssignmentsController}/{id}", credentials: this.restCredentials, token: cancellationToken));
+                url: $"{this.AssignmentsController}/{id}", credentials: this.restCredentials, token: token));
 
             return response;
         }
@@ -157,13 +157,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         #region [Device Api]
 
-        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<bool>(url: string.Concat(this.UsersController, "/hasdevice"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
                 this.syncProtocolVersionProvider.GetProtocolVersion());
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         protected abstract string CanSynchronizeValidResponse { get; }
 
-        public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
+        public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.DevicesController}/info",
@@ -188,7 +188,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
+        public Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, RestCredentials credentials, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<long?>(
                 url: $"{this.DevicesController}/statistics",
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
+        public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.DevicesController}/exception",
@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.DevicesController, "/link/", this.deviceSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
@@ -219,7 +219,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
 
         public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
@@ -232,7 +232,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             var questionnaireContentVersion = this.enumeratorSettings.GetSupportedQuestionnaireContentVersion().Major;
 
@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         #region [Interview Api]
 
-        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<List<InterviewApiView>>(url: this.InterviewsController,
@@ -306,7 +306,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 credentials: this.restCredentials));
         }
 
-        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             try
             {
@@ -350,7 +350,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.InterviewsController, "/", interviewId),
@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 string.Concat(this.InterviewsController, "/", interviewId, "/image"),
@@ -374,7 +374,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.InterviewsController, "/", interviewId, "/audio"),
@@ -390,7 +390,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public Task UploadInterviewAudioAuditAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
-            IProgress<TransferProgress> transferProgress, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.InterviewsController, "/", interviewId, "/audioaudit"),
@@ -410,7 +410,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
             IProgress<TransferProgress> transferProgress,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<List<string>>(
@@ -421,7 +421,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
             IProgress<TransferProgress> transferProgress, 
-            CancellationToken token)
+            CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
@@ -444,7 +444,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) => 
+        public Task<byte[]> GetApplicationAsync(IProgress<TransferProgress> transferProgress = null, CancellationToken token = default) => 
             this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
@@ -455,7 +455,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 return restFile.Content;
             });
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress)
+        public Task<byte[]> GetApplicationPatchAsync(IProgress<TransferProgress> transferProgress, CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
@@ -470,7 +470,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
+        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token = default)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {

@@ -25,19 +25,19 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
             BecauseOf();
         }
 
-        public void BecauseOf() => questionnaaireExportStructure = QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
+        public void BecauseOf() => questionnaireExportStructure = QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
 
         [NUnit.Framework.Test] public void should_fill_yesno_question_subtype () 
         {
-            HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
+            HeaderStructureForLevel headerStructureForLevel = questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[questionId] as ExportedQuestionHeaderItem;
 
             exportedQuestionHeaderItem.ColumnValues.Length.Should().Be(2);
-            exportedQuestionHeaderItem.QuestionSubType.Should().Be(QuestionSubtype.MultyOption_YesNo);
+            exportedQuestionHeaderItem.QuestionSubType.Should().Be(QuestionSubtype.MultiOptionYesNo);
         }
 
         static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
-        static QuestionnaireExportStructure questionnaaireExportStructure;
+        static QuestionnaireExportStructure questionnaireExportStructure;
         static QuestionnaireDocument questionnaire;
         static Guid questionId;
     }

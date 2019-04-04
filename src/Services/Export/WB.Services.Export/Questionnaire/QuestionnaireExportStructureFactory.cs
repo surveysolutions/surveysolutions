@@ -123,7 +123,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, int? lengthOfRosterVectorWhichNeedToBeExported)
+        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, QuestionnaireDocument questionnaire, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = new ExportedQuestionHeaderItem();
 
@@ -133,33 +133,58 @@ namespace WB.Services.Export.Questionnaire
 
             if (question.QuestionType == QuestionType.MultyOption)
             {
-                var multioptionQuestion = (MultyOptionsQuestion)question;
-                if (multioptionQuestion.LinkedToQuestionId.HasValue || multioptionQuestion.LinkedToRosterId.HasValue)
+                var multiOptionQuestion = (MultyOptionsQuestion)question;
+                if (multiOptionQuestion.LinkedToQuestionId.HasValue)
                 {
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Linked;
+                    var sourceQuestion = questionnaire.Find<Question>(multiOptionQuestion.LinkedToQuestionId.Value);
+                    exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceQuestion).Length > 1
+                        ? QuestionSubtype.MultiOptionLinkedNestedLevel
+                        : QuestionSubtype.MultiOptionLinkedFirstLevel;
                 }
-                else if (multioptionQuestion.YesNoView)
+                else if (multiOptionQuestion.LinkedToRosterId.HasValue)
                 {
-                    exportedHeaderItem.QuestionSubType = multioptionQuestion.AreAnswersOrdered
-                        ? QuestionSubtype.MultyOption_YesNoOrdered
-                        : QuestionSubtype.MultyOption_YesNo;
+                    var sourceRoster = questionnaire.Find<Group>(multiOptionQuestion.LinkedToRosterId.Value);
+                    exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceRoster).Length > 1
+                        ? QuestionSubtype.MultiOptionLinkedNestedLevel
+                        : QuestionSubtype.MultiOptionLinkedFirstLevel;
                 }
-                else if (multioptionQuestion.AreAnswersOrdered)
+                else if (multiOptionQuestion.YesNoView)
                 {
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Ordered;
+                    exportedHeaderItem.QuestionSubType = multiOptionQuestion.AreAnswersOrdered
+                        ? QuestionSubtype.MultiOptionYesNoOrdered
+                        : QuestionSubtype.MultiOptionYesNo;
+                }
+                else if (multiOptionQuestion.AreAnswersOrdered)
+                {
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.MultiOptionOrdered;
                 }
             }
 
             if (question is DateTimeQuestion dateTimeQuestion)
             {
                 if (dateTimeQuestion.IsTimestamp)
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTime_Timestamp;
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTimeTimestamp;
             }
 
             if (question is SingleQuestion singleQuestion)
             {
-                if (singleQuestion.LinkedToQuestionId.HasValue || singleQuestion.LinkedToRosterId.HasValue)
-                    exportedHeaderItem.QuestionSubType = QuestionSubtype.SingleOption_Linked;
+                if (singleQuestion.LinkedToQuestionId.HasValue)
+                {
+                    var sourceQuestion = questionnaire.Find<Question>(singleQuestion.LinkedToQuestionId.Value);
+                    
+                    exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceQuestion).Length > 1
+                            ? QuestionSubtype.SingleOptionLinkedNestedLevel
+                            : QuestionSubtype.SingleOptionLinkedFirstLevel;
+                    
+                }
+                else if (singleQuestion.LinkedToRosterId.HasValue)
+                {
+                    var sourceRoster = questionnaire.Find<Group>(singleQuestion.LinkedToRosterId.Value);
+
+                    exportedHeaderItem.QuestionSubType = this.GetRosterSizeSourcesForEntity(sourceRoster).Length > 1
+                        ? QuestionSubtype.SingleOptionLinkedNestedLevel
+                        : QuestionSubtype.SingleOptionLinkedFirstLevel;
+                }
             }
 
             exportedHeaderItem.VariableName = question.VariableName;
@@ -205,26 +230,33 @@ namespace WB.Services.Export.Questionnaire
                 case QuestionType.Numeric:
                     return ExportValueType.Numeric;
                 case QuestionType.DateTime:
-                    {
-                        return (questionSubType != null && questionSubType == QuestionSubtype.DateTime_Timestamp) ? ExportValueType.DateTime : ExportValueType.Date;
-                    }
-
+                {
+                    return (questionSubType != null && questionSubType == QuestionSubtype.DateTimeTimestamp) 
+                        ? ExportValueType.DateTime 
+                        : ExportValueType.Date;
+                }
                 case QuestionType.MultyOption:
+                {
+                    return questionSubType == QuestionSubtype.MultiOptionLinkedNestedLevel 
+                        ? ExportValueType.String 
+                        : ExportValueType.NumericInt;
+                }
                 case QuestionType.SingleOption:
-                    {
-                        bool isLinked = questionSubType == QuestionSubtype.MultyOption_Linked ||
-                                        questionSubType == QuestionSubtype.SingleOption_Linked;
-                        return isLinked ? ExportValueType.String : ExportValueType.NumericInt;
-                    }
+                {
+                    return questionSubType == QuestionSubtype.SingleOptionLinkedNestedLevel 
+                        ? ExportValueType.String 
+                        : ExportValueType.NumericInt;
+                }
                 default:
                     return ExportValueType.Unknown;
             }
         }
 
         private ExportedQuestionHeaderItem CreateExportedQuestionHeaderForMultiColumnItem(Question question, int columnCount,
+            QuestionnaireDocument questionnaire,
             int? lengthOfRosterVectorWhichNeedToBeExported)
         {
-            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);
+            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, questionnaire, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnValues = new int[columnCount];
@@ -472,6 +504,7 @@ namespace WB.Services.Export.Questionnaire
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question,
                     this.GetRostersSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
+                    questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -480,6 +513,7 @@ namespace WB.Services.Export.Questionnaire
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderItem(question,
+                    questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -488,6 +522,7 @@ namespace WB.Services.Export.Questionnaire
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, question.Answers.Count,
+                    questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -498,6 +533,7 @@ namespace WB.Services.Export.Questionnaire
             var maxCount = textListQuestion?.MaxAnswerCount ?? Constants.MaxLongRosterRowCount;
             headerItems.Add(question.PublicKey,
                 this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
+                    questionnaire,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -511,6 +547,7 @@ namespace WB.Services.Export.Questionnaire
 
             headerItems.Add(question.PublicKey,
                  this.CreateExportedQuestionHeaderForMultiColumnItem(question, maxCount,
+                     questionnaire,
                      this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -519,6 +556,7 @@ namespace WB.Services.Export.Questionnaire
         {
             var gpsColumns = GeoPosition.PropertyNames;
             var gpsQuestionExportHeader = this.CreateExportedQuestionHeaderItem(question,
+                questionnaire,
                 this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
 
             gpsQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();

@@ -28,7 +28,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
             switch (questionType)
             {
                 case QuestionType.MultyOption:
-                    if (questionSubType == QuestionSubtype.MultyOption_YesNo || questionSubType == QuestionSubtype.MultyOption_YesNoOrdered)
+                    if (questionSubType == QuestionSubtype.MultiOptionYesNo || questionSubType == QuestionSubtype.MultiOptionYesNoOrdered)
                     {
                         interviewQuestion.AsYesNo = (AnsweredYesNoOption[]) value;
                     }

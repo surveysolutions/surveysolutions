@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -51,14 +52,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(
             GetLatestApplicationVersionRequest request)
         {
-            
             var sAppVersion = this.settings.GetApplicationVersionCode().ToString();
 
             var pathToInterviewerApks = this.fileSystemAccessor.CombinePath(
                 this.settings.InterviewerApplicationsDirectory, sAppVersion);
 
             var hasApks = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks) &&
-                          this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks).Length == 2;
+                          this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks)
+                              .Count(f => !f.EndsWith(".md5")) == 2;
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {

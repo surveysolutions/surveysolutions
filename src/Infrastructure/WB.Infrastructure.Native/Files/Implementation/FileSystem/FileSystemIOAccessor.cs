@@ -7,24 +7,16 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
-    internal class FileSystemIOAccessor : IFileSystemAccessor
+    internal class FileSystemIOAccessor : FileSystemAccessorBase, IFileSystemAccessor
     {
-        public string CombinePath(string path1, string path2) => Path.Combine(path1, path2);
-        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
-
         public string ChangeExtension(string path1, string newExtension) => Path.ChangeExtension(path1, newExtension);
         public void MoveFile(string pathToFile, string newPathToFile)
         {
-            if(File.Exists(newPathToFile))
+            if (File.Exists(newPathToFile))
                 File.Delete(newPathToFile);
             File.Move(pathToFile, newPathToFile);
         }
 
-        public string GetFileName(string filePath) => Path.GetFileName(filePath);
-
-        public string GetFileNameWithoutExtension(string filePath) => Path.GetFileNameWithoutExtension(filePath);
-
-        public string GetFileExtension(string filePath) => Path.GetExtension(filePath);
 
         public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
 
@@ -54,24 +46,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public string[] GetFilesInDirectory(string pathToDirectory, string pattern)
             => this.IsDirectoryExists(pathToDirectory) ? Directory.GetFiles(pathToDirectory, pattern) : new string[0];
-
-        public void WriteAllText(string pathToFile, string content) => File.WriteAllText(pathToFile, content);
-
-        public void WriteAllBytes(string pathToFile, byte[] content) => File.WriteAllBytes(pathToFile, content);
-
-        public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null)
-        {
-            if (start != null)
-            {
-                using (var reader = File.OpenRead(pathToFile))
-                {
-                    return reader.ReadExactly(start.Value, length);
-                }
-            }
-            else return File.ReadAllBytes(pathToFile);
-        }
-
-        public string ReadAllText(string pathToFile) => File.ReadAllText(pathToFile);
+        
 
         public void MarkFileAsReadonly(string pathToFile) => File.SetAttributes(pathToFile, FileAttributes.ReadOnly);
 
@@ -142,7 +117,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
                 foreach (var file in this.GetFilesInDirectory(sourceDir))
                     this.CopyFile(file, targetDir, overrideAll, fileExtentionsFilter);
-                
+
 
                 foreach (var directory in this.GetDirectoriesInDirectory(sourceDir))
                     this.CopyFileOrDirectory(directory, this.CombinePath(destDir, sourceDirectoryName), overrideAll);
