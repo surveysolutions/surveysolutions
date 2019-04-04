@@ -50,7 +50,14 @@ namespace Main.Core.Entities.SubEntities
 
         public bool HideIfDisabled { get; set; }
 
-        public bool IsPlainMode { get; set; }
+        public bool IsFlatMode { get; set; }
+
+        [Obsolete("Use IsFlatMode property")]
+        public bool IsPlainMode
+        {
+            //get => IsFlatMode;
+            set => IsFlatMode = value;
+        }
 
         public bool Enabled { get; set; }
 
@@ -160,7 +167,7 @@ namespace Main.Core.Entities.SubEntities
                 VariableName = this.VariableName,
                 IsRoster = this.IsRoster,
                 HideIfDisabled = this.HideIfDisabled,
-                IsPlainMode = this.IsPlainMode,
+                IsFlatMode = this.IsFlatMode,
                 RosterSizeQuestionId = this.RosterSizeQuestionId,
                 RosterSizeSource = this.RosterSizeSource,
                 RosterTitleQuestionId = this.RosterTitleQuestionId,

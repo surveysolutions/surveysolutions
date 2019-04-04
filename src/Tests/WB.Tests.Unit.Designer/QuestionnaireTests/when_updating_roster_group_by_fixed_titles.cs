@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterTitleQuestionId.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_IsPlainMode_equal_to_true() =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).IsPlainMode.Should().BeTrue();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).IsFlatMode.Should().BeTrue();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;
