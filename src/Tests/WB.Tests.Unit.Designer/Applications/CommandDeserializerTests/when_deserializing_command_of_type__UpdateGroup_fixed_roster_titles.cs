@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
                 ""propagationKind"": ""{3}"",
                 ""rosterSizeSource"":""FixedTitles"",
                 ""fixedRosterTitles"": {4},
-                ""isPlainMode"": ""{5}""
+                ""isFlatMode"": ""{5}""
             }}", questionnaireId, groupId, title, propagationKind, rosterFixedTitles, true);
 
             deserializer = CreateCommandDeserializer();
