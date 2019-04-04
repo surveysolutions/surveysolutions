@@ -18,5 +18,8 @@ export default {
     },
     dialog(options) {
         box.dialog(options)
+    },
+    prompt(options){
+        return box.prompt(options);
     }
 }

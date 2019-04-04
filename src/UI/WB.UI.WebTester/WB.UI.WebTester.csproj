@@ -52,8 +52,8 @@
     <Reference Include="AppDomainToolkit, Version=1.0.4.1, Culture=neutral, PublicKeyToken=f2fc7ab5180cf5c4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.3\lib\net\AppDomainToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.9.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Autofac.4.9.1\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
@@ -73,11 +73,11 @@
     <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\CommonMark.NET.0.15.1\lib\net45\CommonMark.dll</HintPath>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Dapper.1.60.1\lib\net451\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+    <Reference Include="Markdig, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Markdig.0.16.0\lib\net40\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -95,29 +95,32 @@
       <HintPath>..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Extensions.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.FileExtensions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Binder.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Json, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Json.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Json.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.FileExtensions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.Configuration.Json, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Configuration.Json.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.FileProviders.Physical, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.FileProviders.Physical.2.0.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Physical.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.FileSystemGlobbing.2.0.0\lib\netstandard2.0\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.FileProviders.Physical, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.FileProviders.Physical.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Physical.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.FileSystemGlobbing, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.FileSystemGlobbing.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileSystemGlobbing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -138,11 +141,11 @@
       <Private>True</Private>
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NLog.Web.4.5.3\lib\net35\NLog.Web.dll</HintPath>
@@ -157,15 +160,18 @@
       <HintPath>..\..\..\packages\protobuf-net.2.4.0\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="Refit, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Refit.4.6.58\lib\net461\Refit.dll</HintPath>
+      <HintPath>..\..\..\packages\Refit.4.6.90\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.dll</HintPath>
+      <HintPath>..\..\..\packages\StackExchange.Exceptional.2.0.0\lib\net461\StackExchange.Exceptional.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-rc1-00187\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
+      <HintPath>..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0\lib\net461\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -175,6 +181,9 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -182,17 +191,20 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive, Version=4.1.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\System.Reactive.4.1.2\lib\net46\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+      <HintPath>..\..\..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -261,6 +273,7 @@
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DiagnosticsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
@@ -433,9 +446,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\..\..\packages\Refit.4.6.58\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Refit.4.6.58\build\net461\refit.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Refit.4.6.90\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Refit.4.6.90\build\net461\refit.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\Refit.4.6.58\build\net461\refit.targets" Condition="Exists('..\..\..\packages\Refit.4.6.58\build\net461\refit.targets')" />
+  <Import Project="..\..\..\packages\Refit.4.6.90\build\net461\refit.targets" Condition="Exists('..\..\..\packages\Refit.4.6.90\build\net461\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

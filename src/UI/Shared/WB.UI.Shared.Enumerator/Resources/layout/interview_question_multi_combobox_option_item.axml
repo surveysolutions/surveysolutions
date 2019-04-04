@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              style="@style/Interview_Question_Answer_Option_Background"
+              android:orientation="horizontal"
+              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected, true));
+                             LongClick QuestionState.ShowCommentEditorCommand">
+
+    <TextView style="@style/Interview_Question_Answer_Text_Editor"
+              local:MvxBind="Text Title; Tag ItemTag" />
+
+    <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
+                 local:MvxBind="Visible Not(IsProtected); HideKeyboardOnClick .; Click RemoveAnswerCommand;"
+                 local:srcCompat="@drawable/delete_button" />
+
+    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+               local:MvxBind="Visible IsProtected"
+               local:srcCompat="@drawable/lock_icon" />
+</LinearLayout>
+

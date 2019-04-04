@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,12 +27,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         internal Assignment(QuestionnaireIdentity questionnaireId,
             Guid responsibleId, 
             int? quantity,
-            bool isAudioRecordingEnabled) : this()
+            bool isAudioRecordingEnabled,
+            string email,
+            string password,
+            bool? webMode) : this()
         {
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
             this.IsAudioRecordingEnabled = isAudioRecordingEnabled;
+            this.Email = email;
+            this.Password = password;
+            this.WebMode = webMode;
         }
 
         public virtual int Id { get; protected set; }
@@ -55,7 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public virtual bool IsAudioRecordingEnabled { get; protected set; }
-        
+
+        public virtual string Email { get; protected set; }
+        public virtual string Password { get; protected set; }
+        public virtual bool? WebMode { get; protected set; }
+
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
 
         public virtual IList<InterviewAnswer> Answers { get; protected set; }
@@ -130,6 +139,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void MarkAsReceivedByTablet()
         {
             this.ReceivedByTabletAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void UpdateEmail(string email)
+        {
+            this.Email = email;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+        public virtual void UpdatePassword(string password)
+        {
+            this.Password = password?.ToUpperInvariant();
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+        public virtual void UpdateMode(bool? mode)
+        {
+            this.WebMode = mode;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual bool InPrivateWebMode()
+        {
+            return (WebMode == null || WebMode == true) && Quantity == 1;
         }
 
         public static Assignment PrefillFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)

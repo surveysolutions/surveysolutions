@@ -89,7 +89,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         private static Guid firstQuestionId;
         private static int levelCount;
         private static QuestionnaireDocument questionnaireDocument;
-        private static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
         private InterviewsExporter exporter;
     }
 }

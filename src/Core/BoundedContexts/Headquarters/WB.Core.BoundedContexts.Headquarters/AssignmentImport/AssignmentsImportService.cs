@@ -6,6 +6,7 @@ using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -36,6 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IInvitationService invitationService;
+        private readonly IAssignmentPasswordGenerator passwordGenerator;
 
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
@@ -46,7 +49,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IAssignmentsImportFileConverter assignmentsImportFileConverter,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory,
+            IInvitationService invitationService, 
+            IAssignmentPasswordGenerator passwordGenerator)
         {
             this.userViewFactory = userViewFactory;
             this.verifier = verifier;
@@ -58,6 +63,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.assignmentsStorage = assignmentsStorage;
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
+            this.passwordGenerator = passwordGenerator;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
@@ -68,13 +75,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(file, questionnaire))
             {
-                foreach (var answerError in this.verifier.VerifyAnswers(assignmentRow, questionnaire))
+                foreach (var answerError in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
                 {
                     hasErrors = true;
                     yield return answerError;
                 }
 
                 assignmentRows.Add(assignmentRow);
+            }
+
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return passwordError;
             }
 
             if (hasErrors) yield break;
@@ -100,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(importedFile, questionnaire))
                 {
-                    foreach (var answerError in this.verifier.VerifyAnswers(assignmentRow, questionnaire))
+                    foreach (var answerError in this.verifier.VerifyRowValues(assignmentRow, questionnaire))
                     {
                         hasErrors = true;
                         yield return answerError;
@@ -110,12 +123,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            if (hasErrors) yield break;
-
             foreach (var rosterError in this.verifier.VerifyRosters(assignmentRows, questionnaire))
             {
                 hasErrors = true;
                 yield return rosterError;
+            }
+
+            foreach (var passwordError in this.verifier.VerifyWebPasswords(assignmentRows, questionnaire))
+            {
+                hasErrors = true;
+                yield return passwordError;
             }
 
             if (hasErrors) yield break;
@@ -227,7 +244,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity);
+            var assignment = this.assignmentFactory.CreateAssignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity, null, null, null);
             var identifyingAnswers = assignmentToImport.Answers
                 .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
                     IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
@@ -236,8 +253,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
             assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
+            assignment.UpdatePassword(assignmentToImport.Password);
+            assignment.UpdateEmail(assignmentToImport.Email);
+            assignment.UpdateMode(assignmentToImport.WebMode);
 
             this.assignmentsStorage.Store(assignment, null);
+
+            this.invitationService.CreateInvitationForWebInterview(assignment);
 
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
                 questionnaireIdentity, assignment.Id, assignmentToImport.Answers);
@@ -287,14 +309,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            AssignmentToImport GetAssignmentWithoutEmptyAnswers(AssignmentToImport assignmentToImport)
+            AssignmentToImport GetAssignmentWithoutEmptyAnswersAndFillPasswords(AssignmentToImport assignmentToImport)
             {
                 assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+
+                assignmentToImport.Password = passwordGenerator.GetPassword(assignmentToImport.Password);
+
                 return assignmentToImport;
             }
 
             this.importAssignmentsRepository.Store(assignments.Select(x =>
-                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswers(x), x.Id)));
+                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswersAndFillPasswords(x), x.Id)));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
@@ -314,6 +339,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var answers = assignment.SelectMany(_ => _.Answers.OfType<IAssignmentAnswer>().Select(y =>
                 ToInterviewAnswer(y, ToRosterVector(_.RosterInstanceCodes), questionnaire)));
 
+            var email = assignment.Select(_ => _.Email).FirstOrDefault(_ => _ != null)?.Value;
+            var password = assignment.Select(_ => _.Password).FirstOrDefault(_ => _ != null)?.Value;
+            var webMode = assignment.Select(_ => _.WebMode).FirstOrDefault(_ => _ != null)?.WebMode;
+
             return new AssignmentToImport
             {
                 Quantity = quantity.HasValue ? (quantity > -1 ? quantity : null) : 1,
@@ -321,7 +350,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
                 Verified = false,
-                ProtectedVariables = protectedQuestions
+                ProtectedVariables = protectedQuestions,
+                Email = email,
+                Password = password,
+                WebMode = webMode ?? false
             };
         }
 

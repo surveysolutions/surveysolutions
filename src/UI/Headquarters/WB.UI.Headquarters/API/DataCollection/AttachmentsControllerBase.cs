@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
@@ -23,21 +25,19 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (attachmentContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            var result = this.AsProgressiveDownload(attachmentContent.Content, attachmentContent.ContentType);
+
+            if (result.StatusCode != HttpStatusCode.PartialContent)
             {
-                Content = new ByteArrayContent(attachmentContent.Content)
-            };
+                result.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentHash + "\"");
+                result.Headers.CacheControl = new CacheControlHeaderValue
+                {
+                    Public = true,
+                    MaxAge = TimeSpan.FromDays(10)
+                };
+            }
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentHash + "\"");
-
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                Public = true,
-                MaxAge = TimeSpan.FromDays(10)
-            };
-
-            return response;
+            return result;
         }
     }
 }

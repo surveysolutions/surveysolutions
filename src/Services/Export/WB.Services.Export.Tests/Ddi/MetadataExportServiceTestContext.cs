@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -28,7 +29,7 @@ namespace WB.Services.Export.Tests.Ddi
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null))
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, CancellationToken.None))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();

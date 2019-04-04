@@ -570,3 +570,23 @@
     display: -webkit-flex;
     display: flex;
 }
+%logo-icon{
+    .logo-icon{
+        img{
+            display: block;
+            max-height: 120px;
+            width: auto;
+        }
+        .default-icon{
+            display: none;
+        }
+        &.no-logo{
+            img{
+                display: none;
+            }
+            .default-icon{
+                display: block;
+            }
+        }
+    }	
+}

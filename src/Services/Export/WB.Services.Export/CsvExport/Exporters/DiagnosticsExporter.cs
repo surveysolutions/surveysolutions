@@ -10,14 +10,14 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
     public class DiagnosticsExporter : IDiagnosticsExporter
     {
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
@@ -45,7 +45,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         };
 
         public DiagnosticsExporter(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)
@@ -58,7 +58,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public async Task ExportAsync(List<Guid> interviewIdsToExport, string basePath, 
-            TenantInfo tenant, IProgress<int> progress, CancellationToken cancellationToken)
+            TenantInfo tenant, ExportProgress progress, CancellationToken cancellationToken)
         {
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 

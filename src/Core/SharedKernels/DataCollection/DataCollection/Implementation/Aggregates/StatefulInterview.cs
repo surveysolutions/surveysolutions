@@ -23,19 +23,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
     public class StatefulInterview : Interview, IStatefulInterview
     {
         public StatefulInterview(
-            //IQuestionnaireStorage questionnaireRepository,
-            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder
-            //,IQuestionOptionsRepository questionOptionsRepository
-            )
-            : base(
-                //questionnaireRepository, 
-                //expressionProcessorStatePrototypeProvider, 
-                substitutionTextFactory, 
-                treeBuilder
-                //,questionOptionsRepository
-                )
+            IInterviewTreeBuilder treeBuilder)
+            : base(substitutionTextFactory, treeBuilder)
         {
         }
 
@@ -259,15 +249,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public InterviewTreeTextQuestion GetTextQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeTextQuestion();
         public InterviewTreeSingleOptionQuestion GetSingleOptionQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionQuestion();
         public InterviewTreeYesNoQuestion GetYesNoQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeYesNoQuestion();
+        public InterviewTreeCascadingQuestion GetCascadingQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeCascadingQuestion();
 
         public InterviewTreeSingleOptionLinkedToListQuestion GetSingleOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleOptionLinkedToListQuestion();
         public InterviewTreeAudioQuestion GetAudioQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAudioQuestion();
 
         public InterviewTreeQuestion GetQuestion(Identity identity) => this.Tree.GetQuestion(identity);
         public InterviewTreeStaticText GetStaticText(Identity identity) => this.Tree.GetStaticText(identity);
-
-        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiOptionLinkedToListQuestion();
-
+        
         public InterviewTreeAreaQuestion GetAreaQuestion(Identity identity) => this.Tree.GetQuestion(identity).GetAsInterviewTreeAreaQuestion();
 
         public IEnumerable<InterviewTreeSection> GetEnabledSections() => this.Tree.Sections.Where(s => !s.IsDisabled());
@@ -291,7 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
             if (isNeedFirePassiveEvents)
             {
@@ -775,6 +764,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         List<CategoricalOption> IStatefulInterview.GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize)
             => this.GetFirstTopFilteredOptionsForQuestion(question, parentQuestionValue, filter, sliceSize);
+
+        public bool DoesCascadingQuestionHaveMoreOptionsThanThreshold(Identity questionIdentity, int threshold)
+        {
+            var question = this.GetCascadingQuestion(questionIdentity);
+            if (question == null)
+                return false;
+            var parentQuestion = question.GetCascadingParentQuestion();
+            if (!parentQuestion.IsAnswered())
+                return false;
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var optionsCount =  questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestion.GetAnswer().SelectedValue, null).Take(threshold + 1).Count();
+
+            if (optionsCount > threshold)
+                return true;
+            return false;
+        }
 
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithoutFilter(Identity question, int value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithoutFilter(question, value, parentQuestionValue);

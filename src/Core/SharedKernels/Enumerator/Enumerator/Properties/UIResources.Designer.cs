@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Area:.
+        ///   Looks up a localized string similar to Area: {0:0.00} m2.
         /// </summary>
         public static string AreaMap_AreaFormat {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Length:.
+        ///   Looks up a localized string similar to Length: {0:0.00} m.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -187,11 +187,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter:.
+        ///   Looks up a localized string similar to Perimeter: {0:0.00} m.
         /// </summary>
         public static string AreaMap_PerimeterFormat {
             get {
                 return ResourceManager.GetString("AreaMap_PerimeterFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points: {0}.
+        /// </summary>
+        public static string AreaMap_PointsFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_PointsFormat", resourceCulture);
             }
         }
         
@@ -315,7 +324,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My questionnaires.
+        ///   Looks up a localized string similar to My.
         /// </summary>
         public static string Dashboard_MyQuestionnairesLinkText {
             get {
@@ -324,11 +333,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Public questionnaires.
+        ///   Looks up a localized string similar to Public.
         /// </summary>
         public static string Dashboard_PublicQuestionnairesLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_PublicQuestionnairesLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shared with me.
+        /// </summary>
+        public static string Dashboard_SharedWithMeLinkText {
+            get {
+                return ResourceManager.GetString("Dashboard_SharedWithMeLinkText", resourceCulture);
             }
         }
         
@@ -1058,6 +1076,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_QrBarcode_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_QrBarcode_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove related roster?.
+        /// </summary>
+        public static string Interview_Questions_RemoveRowFromRosterListMessage {
+            get {
+                return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterListMessage", resourceCulture);
             }
         }
         

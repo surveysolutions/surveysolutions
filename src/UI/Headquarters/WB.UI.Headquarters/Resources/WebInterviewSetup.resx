@@ -145,7 +145,7 @@
     <value>Web interview for {{name}} started</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
-    <value>Enable spam protection</value>
+    <value>Use CAPTCHA before interview start</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
     <value>Download ({{count}})</value>
@@ -192,5 +192,47 @@
   </data>
   <data name="CustomMessageTooLong" xml:space="preserve">
     <value>Custom message should not contain more than {0} characters (including html)</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Send invitations</value>
+  </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Invitations</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} total invitations.</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>{{count}} invitations have been sent already.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>No invitations have been sent yet.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} invitation to send.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>No invitations to send as of now.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>Invitations can't be sent.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>Email provider is not set up.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+    <value>You can change these settings at the &lt;a href="{{url}}"&gt;'Email Providers'&lt;/a&gt; page.</value>
+  </data>
+  <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+    <value>Tell your admin user to change these settings at the 'Email Providers' page.</value>
+  </data>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>Web survey is not started. Setup and &lt;a href="{{url}}"&gt;start web survey&lt;/a&gt; before sending invitations.</value>
+  </data>
+  <data name="Invitations_SuccessfulSetup" xml:space="preserve">
+    <value>Web survey has been started and email provider was set up properly. The system is ready to send invitations.</value>
+  </data>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Send {{count}} invitations</value>
   </data>
 </root>

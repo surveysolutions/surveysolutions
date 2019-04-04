@@ -334,7 +334,15 @@
     <value>Go to running assignment import process</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
-    <value>Upload archive with identifying tab file and collected data.</value>
+    <value>Upload a zip-archive with one or more tab separated files corresponding to the main interview level and subordinate rosters. Allows preloading variables at any level of the interview.&lt;br/&gt;
+All data files must contain variable interview__id with a unique string or numeric identifier of the interview. Links within rosters and nested rosters established the same way as in exported data.&lt;br/&gt;
+&lt;br/&gt;
+Optionally can specify the following columns in the main interview level file:&lt;br/&gt;
+_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_quantity - capacity of the assignment;&lt;br/&gt;
+_email - email of the respondent (for web-interviews only);&lt;br/&gt;
+_password - password to start an interview (for web-interviews only);&lt;br/&gt;
+_webmode - is this assignment in the web mode (value 1 should be used)</value>
   </data>
   <data name="BatchTitle" xml:space="preserve">
     <value>Identifying and collected data (archive)</value>
@@ -355,7 +363,14 @@
     <value>manual mode</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Upload tab separated file with necessary identifying data. Optionally, specify usernames of supervisors or enumerators in the _responsible column, in _quantity column you can specify capacity of assignment.</value>
+    <value>Upload tab separated file with values for questions in the interview level only. Include values for identifying questions and other questions at the main interview level. Does not allow preloading values inside rosters.&lt;br/&gt;
+&lt;br/&gt;
+Optionally can specify the following columns:&lt;br/&gt;
+_responsible - username of a supervisor or an interviewer who will be responsible for the assignment;&lt;br/&gt;
+_quantity - capacity of the assignment;&lt;br/&gt;
+_email - email of the respondent (for web-interviews only);&lt;br/&gt;
+_password - password to start an interview (for web-interviews only);&lt;br/&gt;
+_webmode - is this assignment in the web mode (value 1 should be used)</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identifying data only</value>
@@ -363,6 +378,9 @@
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
 Specify usernames for supervisors or interviewers to make batch assignments.</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Save file in UTF8 encoding for support language specific texts.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Upload .tab file</value>
@@ -581,10 +599,10 @@ Specify usernames for supervisors or interviewers to make batch assignments.</va
   <data name="Select_Responsible" xml:space="preserve">
     <value>Select default responsible (required)</value>
   </data>
-    <data name="Select_Responsible_Description" xml:space="preserve">
+  <data name="Select_Responsible_Description" xml:space="preserve">
     <value>If no responsible assigned in batch file use this supervisor/interviewer account:</value>
   </data>
-    <data name="RequiredField" xml:space="preserve">
+  <data name="RequiredField" xml:space="preserve">
     <value>This field is mandatory</value>
   </data>
 </root>

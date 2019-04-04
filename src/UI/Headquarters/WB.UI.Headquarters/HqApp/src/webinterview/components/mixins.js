@@ -77,7 +77,7 @@ export const entityDetails = {
     },
 
     destroyed() {
-        this.$store.dispatch("cleanUpEntity", this.id)
+        //this.$store.dispatch("cleanUpEntity", this.id)
     },
 
     methods: {

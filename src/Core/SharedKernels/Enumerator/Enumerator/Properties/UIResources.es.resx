@@ -129,12 +129,6 @@
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Mis cuestionarios</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Cuestionarios públicos</value>
-  </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Cuestionarios</value>
   </data>
@@ -375,9 +369,6 @@
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>MAPA ACTIVO:</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Área:</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>MAPAS DISPONIBLES EN EL DISPOSITIVO</value>
   </data>
@@ -389,9 +380,6 @@
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Editar</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Perímetro:</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>Ubicación</value>
@@ -457,7 +445,7 @@
     <value>Pregunta con comentarios del supervisor:</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
-    <value>Cubrir</value>
+    <value>Portada</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
     <value>Nota del supervisor:</value>

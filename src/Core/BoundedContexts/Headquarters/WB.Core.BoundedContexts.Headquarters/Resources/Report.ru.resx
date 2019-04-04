@@ -212,4 +212,8 @@
   <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
     <value>РАЗМЕР КОМАНДЫ</value>
   </data>
+  <data name="TimeLeft" xml:space="preserve">
+      <value>Осталось времени</value>
+      <comment>Осталось времени</comment>
+  </data>
 </root>

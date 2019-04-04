@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
@@ -28,11 +31,12 @@ namespace WB.UI.Headquarters.Controllers
     public class WebInterviewSetupController : BaseController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IWebInterviewConfigurator configurator;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
-        private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IAssignmentsService assignmentsService;
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IInvitationService invitationService;
+        private readonly SendInvitationsTask sendInvitationsTask;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
+        private readonly IAuthorizedUser authorizedUser;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -42,23 +46,61 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IPlainStorageAccessor<Assignment> assignments,
             IAssignmentsService assignmentsService,
-            IWebInterviewNotificationService webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService, 
+            IInvitationService invitationService, 
+            SendInvitationsTask sendInvitationsTask,
+            IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
+            IAuthorizedUser authorizedUser)
             : base(commandService, 
                   logger)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.configurator = configurator;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
-            this.assignments = assignments;
             this.assignmentsService = assignmentsService;
-            this.webInterviewNotificationService = webInterviewNotificationService;
+            this.invitationService = invitationService;
+            this.sendInvitationsTask = sendInvitationsTask;
+            this.appSettingsStorage = appSettingsStorage;
+            this.authorizedUser = authorizedUser;
+        }
+
+        
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult SendInvitations(string id)
+        {
+            var status = this.invitationService.GetEmailDistributionStatus();
+
+            if ((status?.Status ?? InvitationProcessStatus.Queued) == InvitationProcessStatus.InProgress)
+            {
+                return RedirectToAction(nameof(EmailDistributionProgress), new { questionnaireId = id });
+            }
+
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
+            if (questionnaire == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var model = new SendInvitationsModel
+            {
+                Api = new
+                {
+                    InvitationsInfo = Url.HttpRouteUrl("DefaultApiWithAction", new {controller = "WebInterviewSetupApi", action = "InvitationsInfo", id = id }),
+                    SurveySetupUrl = Url.Action("Index", "SurveySetup"),
+                    EmaiProvidersUrl = Url.Action("EmailProviders","Settings"),
+                    WebSettingsUrl = Url.Action("Settings", "WebInterviewSetup", new { id = id }),
+                },
+                IsAdmin = authorizedUser.IsAdministrator
+            };
+
+            return View(model);
         }
 
         [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult Start(string id)
+        [HttpPost]
+        [ActionName("SendInvitations")]
+        public ActionResult SendInvitationsPost(string id)
         {
-            var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
-            if (config.Started) return RedirectToAction("Started", new {id = id});
+            QuestionnaireIdentity questionnaireIdentity = QuestionnaireIdentity.Parse(Request["questionnaireId"]);
 
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
@@ -66,100 +108,104 @@ namespace WB.UI.Headquarters.Controllers
                 return this.HttpNotFound();
             }
             
+            if (this.invitationService.GetEmailDistributionStatus()?.Status != InvitationProcessStatus.InProgress)
+            {
+                this.invitationService.RequestEmailDistributionProcess(questionnaireIdentity, User.Identity.Name, questionnaire.Title);
+            }
+
+            sendInvitationsTask.Run();
+            return RedirectToAction("EmailDistributionProgress");
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult EmailDistributionProgress()
+        {
+            var progress = this.invitationService.GetEmailDistributionStatus();
+            if (progress == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(new EmailDistributionProgressModel { Api = new
+            {
+                StatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "EmailDistributionStatus" }),
+                CancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "CancelEmailDistribution" }),
+                ExportErrors = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "WebInterviewSetupApi", action = "ExportInvitationErrors" }),
+                SurveySetupUrl = Url.Action("Index", "SurveySetup")
+            }});
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult Settings(string id)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out QuestionnaireIdentity questionnaireIdentity))
+            {
+                return this.HttpNotFound();
+            }
+
+            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
+            if (questionnaire == null)
+            {
+                return this.HttpNotFound();
+            }
+
             var model = new SetupModel();
             model.QuestionnaireTitle = questionnaire.Title;
             model.QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version);
-            model.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
-            model.UseCaptcha = true;
+            model.QuestionnaireIdentity = questionnaireIdentity;
+            model.HasLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
+            model.LogoUrl = Url.Action("Thumbnail", "CompanyLogo", new { httproute = "DefaultApi" });
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ActionName("Start")]
-        [ValidateInput(false)]
-        [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult StartPost(string id, SetupModel model)
-        {
-            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
-            if (questionnaire == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            model.QuestionnaireTitle = questionnaire.Title;
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-
-            this.configurator.Start(questionnaireIdentity, model.UseCaptcha);
-            return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
-        }
-
-        [ActivePage(MenuItem.Questionnaires)]
-        public ActionResult Started(string id)
-        {
-            QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
-            if (questionnaire == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-
-            var model = new SetupModel
-            {
-                QuestionnaireTitle = questionnaire.Title,
-                QuestionnaireIdentity = questionnaireIdentity,
-                QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version)
-            };
-
             model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
-                new {controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString()});
-            model.UpdateTextsUrl = Url.Action("UpdateMessages", new {id = questionnaireIdentity.ToString()});
-            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
-
-            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+                new { controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString() });
 
             model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
                 .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
             model.DefaultTexts = WebInterviewConfig.DefaultMessages;
             model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
                 .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
             model.DefinedTexts = config.CustomMessages;
 
-            return this.View(model);
-        }
-
-        [HttpPost]
-        public ActionResult UpdateMessages(string id)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            Dictionary<WebInterviewUserMessages, string> customMessages = new Dictionary<WebInterviewUserMessages, string>();
-            foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
-            {
-                var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
-                var customMessage = Request.Unvalidated[fieldNameInRequest];
-                if (!string.IsNullOrWhiteSpace(customMessage))
+            model.EmailTemplates = config.EmailTemplates.ToDictionary(t => t.Key, t =>
+                new EmailTextTemplateViewModel()
                 {
-                    customMessages[(WebInterviewUserMessages) customMessageName] = customMessage;
-                }
-            }
+                    Subject = t.Value.Subject,
+                    Message = t.Value.Message,
+                    PasswordDescription = t.Value.PasswordDescription,
+                    LinkText = t.Value.LinkText
+                });
+            model.DefaultEmailTemplates = WebInterviewConfig.DefaultEmailTemplates.ToDictionary(t => t.Key, t => 
+                new EmailTextTemplateViewModel()
+                {
+                    ShortTitle = GetShortTitleForEmailTemplateGroup(t.Key),
+                    Subject = t.Value.Subject,
+                    Message = t.Value.Message,
+                    PasswordDescription = t.Value.PasswordDescription,
+                    LinkText = t.Value.LinkText
+                });
+            model.ReminderAfterDaysIfNoResponse = config.ReminderAfterDaysIfNoResponse;
+            model.ReminderAfterDaysIfPartialResponse = config.ReminderAfterDaysIfPartialResponse;
+            model.Started = config.Started;
+            model.UseCaptcha = config.UseCaptcha;
 
-            this.configurator.UpdateMessages(questionnaireIdentity, customMessages);
-
-            return new HttpStatusCodeResult(200);
+            return View(model);
         }
 
-        [HttpPost]
-        [ActionName("Started")]
-        public ActionResult StartedPost(string id)
+        private static string GetShortTitleForEmailTemplateGroup(EmailTextTemplateType type)
         {
-            var questionnaireId = QuestionnaireIdentity.Parse(id);
-            this.configurator.Stop(questionnaireId);
-            this.webInterviewNotificationService.ReloadInterviewByQuestionnaire(questionnaireId);
-
-            return RedirectToAction("Index", "SurveySetup");
+            switch (type)
+            {
+                case EmailTextTemplateType.InvitationTemplate: return WebInterviewSettings.InvitationEmailMessage;
+                case EmailTextTemplateType.ResumeTemplate: return WebInterviewSettings.ResumeEmailMessage;
+                case EmailTextTemplateType.Reminder_NoResponse: return WebInterviewSettings.ReminderNoResponseEmailMessage;
+                case EmailTextTemplateType.Reminder_PartialResponse: return WebInterviewSettings.ReminderPartialResponseEmailMessage;
+                case EmailTextTemplateType.RejectEmail: return WebInterviewSettings.RejectEmailMessage;
+                default:
+                    throw new ArgumentException("Unknown email template type "+ type.ToString());
+            }
         }
 
         private QuestionnaireBrowseItem FindQuestionnaire(string id)
@@ -174,6 +220,17 @@ namespace WB.UI.Headquarters.Controllers
         }
     }
 
+    public class SendInvitationsModel
+    {
+        public dynamic Api { get; set; }
+        public bool IsAdmin { get; set; }
+    }
+
+    public class EmailDistributionProgressModel
+    {
+        public dynamic Api { get; set; }
+    }
+
     public class SetupModel
     {
         public string QuestionnaireTitle { get; set; }
@@ -182,11 +239,26 @@ namespace WB.UI.Headquarters.Controllers
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public string QuestionnaireFullName { get; set; }
         public string SurveySetupUrl { get; set; }
+        public bool HasLogo { get; set; }
+        public string LogoUrl { get; set; }
         public KeyValuePair<string, string>[] TextOptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefinedTexts { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> EmailTemplates { get; set; }
+        public Dictionary<EmailTextTemplateType, EmailTextTemplateViewModel> DefaultEmailTemplates { get; set; }
         public string DownloadAssignmentsUrl { get; set; }
-        public string UpdateTextsUrl { get; set; }
+        public int? ReminderAfterDaysIfNoResponse { get; set; } 
+        public int? ReminderAfterDaysIfPartialResponse { get; set; }
+        public bool Started { get; set; }
+    }
+
+    public class EmailTextTemplateViewModel
+    {
+        public string ShortTitle { get; set; }
+        public string Subject { get; set; }
+        public string Message { get; set; }
+        public string PasswordDescription { get; set; }
+        public string LinkText { get; set; }
     }
 }

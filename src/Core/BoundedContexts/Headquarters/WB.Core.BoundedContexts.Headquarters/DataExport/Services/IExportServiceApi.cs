@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         [Delete("/api/v1/job")]
         Task DeleteProcess([Query] string processId);
 
-        [Delete("/api/v1/delete")]
+        [Delete("/api/v1/deleteArchives")]
         Task DeleteAll();
 
         [Get("/api/v1/ddi")]

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
-              local:MvxBind="BackgroundStyle PublicBackground(IsPublic);"
+              local:MvxBind="BackgroundStyle QuestionnaireTypeToBackground(Type);"
               style="@style/Dashboard_Questionnaire_Item">
   
   <LinearLayout style="@style/Dashboard_Questionnaire_Item_Body">
     <TextView style="@style/Dashboard_QuestionnaireListItem_Title"
-              local:MvxBind="Html Title"/>
+              local:MvxBind="Html TextWithHighlightedSearchTerm(Title, SearchTerm)"/>
     <TextView style="@style/Dashboard_QuestionnaireListItem_ModifiedDate"
               local:MvxBind="Text Format(Localization('Dashboard_LastEntryDate_Format'), LastEntryDate)"/>
   </LinearLayout>

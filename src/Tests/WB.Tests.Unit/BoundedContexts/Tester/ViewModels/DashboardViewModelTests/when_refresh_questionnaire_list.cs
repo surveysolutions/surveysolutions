@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -35,7 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         public async Task Because() => await viewModel.RefreshQuestionnairesCommand.ExecuteAsync();
 
-        [Test] public void should_stay_on_same_tab_with_public_questionnaires () => viewModel.IsPublicShowed.Should().BeTrue();
         [Test] public void should_Questionnaires_have_3_public_questionnaires () => viewModel.Questionnaires.Count.Should().Be(3);
         [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
         [Test] public void should_set_MyQuestionnairesCount_to_2 () => viewModel.MyQuestionnairesCount.Should().Be(2);

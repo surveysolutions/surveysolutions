@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
 
-        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
+        InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId);
 
         Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId);
     }
@@ -57,12 +57,13 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
             this.qRCodeHelper = qRCodeHelper;
         }
 
-        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
+        public InterviewerPoints GetInterviewerCheckInPoints(Guid interviewerId)
         {
             InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
 
-            var checkinPoints = points
-                .Where(p => HasAccessToInterview(p))
+            var checkInPoints = points
+                .Where(HasAccessToInterview)
+                .Where(p => !p.Idenifying)
                 .GroupBy(x => new { x.Latitude, x.Longitude })
                 .Select(x => new InterviewerPoint
                 {
@@ -70,17 +71,34 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                     Longitude = x.Key.Longitude,
                     Timestamp = x.Min(p => p.Timestamp),
                     InterviewIds = x.Select(point => point.InterviewId).Distinct().ToList(),
-                    Colors = x.Select(point => point.Status).Select(StatusToColor).Distinct().OrderBy(c => c).ToArray()
+                    Colors = x.Select(point => point.Status).Select(StatusToColor).Distinct().OrderBy(c => c).ToArray(),
                 })
                 .OrderBy(x => x.Timestamp)
-                .ToArray();
-
-            for (var index = 0; index < checkinPoints.Length; index++)
+                .ToList();
+            
+            for (var index = 0; index < checkInPoints.Count; index++)
             {
-                checkinPoints[index].Index = index + 1;
+                checkInPoints[index].Index = index + 1;
             }
 
-            return checkinPoints;
+            var targetLocations =  points
+                .Where(HasAccessToInterview)
+                .Where(p => p.Idenifying)
+                .Select(x => new InterviewerPoint
+                {
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    Timestamp = x.Timestamp,
+                    InterviewIds = new List<Guid> { x.InterviewId }
+                })
+                .ToList();
+
+
+            return new InterviewerPoints
+            {
+                CheckInPoints = checkInPoints,
+                TargetLocations = targetLocations
+            };
         }
 
         public async Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId)

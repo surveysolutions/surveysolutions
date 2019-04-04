@@ -174,10 +174,9 @@ namespace WB.Tests.Abc.TestFactories
                 return Task.CompletedTask;
             }
 
-            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+            public async Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
             {
-                action.Invoke();
-                return Task.CompletedTask;
+                await action.Invoke();
             }
 
             public bool IsOnMainThread => true;

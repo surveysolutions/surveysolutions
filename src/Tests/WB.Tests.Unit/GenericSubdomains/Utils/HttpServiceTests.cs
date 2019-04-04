@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils
 {
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             var testMessageHandler = new TestMessageHandler();
             var httpClient = new HttpClient(testMessageHandler);
             IHttpClientFactory httpClientFactory = 
-                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<Url>(), It.IsAny<HttpMessageHandler>(), It.IsAny<IHttpStatistician>()) == httpClient);
+                Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
             RestService service = Create.Service.RestService(httpClientFactory: httpClientFactory, restServiceSettings: settings);
 
             // act
@@ -77,18 +78,5 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
             Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Name, Is.EqualTo("SurveySolutions"));
             Assert.That(httpRequestMessage.Headers.UserAgent.First().Product.Version, Is.EqualTo("11"));
         }
-
-        class TestMessageHandler : HttpMessageHandler
-        {
-            public List<HttpRequestMessage> ExecutedRequests { get; } = new List<HttpRequestMessage>();
-
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            {
-                this.ExecutedRequests.Add(request);
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
-            }
-        }
     }
-
-
 }

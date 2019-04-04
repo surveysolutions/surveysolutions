@@ -12,7 +12,6 @@ using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.FileSystem;
@@ -79,15 +78,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
-            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
-                @"application/vnd.android.package-archive");
 
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileName = responseFileName
-            };
-
-            return response;
+            return this.AsProgressiveDownload(fileStream, @"application/vnd.android.package-archive", responseFileName);
         }
 
         [HttpGet]
@@ -193,7 +185,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
             Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
-            return new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/octet-stream");
+            return this.AsProgressiveDownload(fileStream, @"application/octet-stream");
         }
 
         [HttpGet]

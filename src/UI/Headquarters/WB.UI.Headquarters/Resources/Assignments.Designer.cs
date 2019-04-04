@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activated.
+        /// </summary>
+        public static string Activated {
+            get {
+                return ResourceManager.GetString("Activated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active.
         /// </summary>
         public static string Active {
@@ -102,6 +111,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string AssignmentsHeader {
             get {
                 return ResourceManager.GetString("AssignmentsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Size cannot be changed for Web mode Assignment..
+        /// </summary>
+        public static string AssignmentSizeInWebMode {
+            get {
+                return ResourceManager.GetString("AssignmentSizeInWebMode", resourceCulture);
             }
         }
         
@@ -196,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This Assignment will be used with Web Mode.
+        /// </summary>
+        public static string CreateAssignmentWebModeExplanation {
+            get {
+                return ResourceManager.GetString("CreateAssignmentWebModeExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created on.
         /// </summary>
         public static string CreatedAt {
@@ -219,6 +246,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string CreatingNewAssignment {
             get {
                 return ResourceManager.GetString("CreatingNewAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password by assignment for web mode with quantity 1 should be unique.
+        /// </summary>
+        public static string DuplicatePasswordByWebModeWithQuantity1 {
+            get {
+                return ResourceManager.GetString("DuplicatePasswordByWebModeWithQuantity1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email will be used in communication with assignment recipient.
+        /// </summary>
+        public static string EmailExplanation {
+            get {
+                return ResourceManager.GetString("EmailExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Email.
+        /// </summary>
+        public static string EnterEmail {
+            get {
+                return ResourceManager.GetString("EnterEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter password.
+        /// </summary>
+        public static string EnterPassword {
+            get {
+                return ResourceManager.GetString("EnterPassword", resourceCulture);
             }
         }
         
@@ -250,6 +322,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email is invalid.
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is invalid.
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The Size field must be -1 or more..
         /// </summary>
         public static string InvalidSize {
@@ -259,11 +349,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Size is invalid.
+        /// </summary>
+        public static string InvalidSizeMessage {
+            get {
+                return ResourceManager.GetString("InvalidSizeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments with provided email allowed size is 1.
+        /// </summary>
+        public static string InvalidSizeWithEmail {
+            get {
+                return ResourceManager.GetString("InvalidSizeWithEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Audio recording.
         /// </summary>
         public static string IsAudioRecordingEnabled {
             get {
                 return ResourceManager.GetString("IsAudioRecordingEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Assignment.
+        /// </summary>
+        public static string NewAssignment {
+            get {
+                return ResourceManager.GetString("NewAssignment", resourceCulture);
             }
         }
         
@@ -282,6 +399,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string NumberOfAssignmentsAffected_plural {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password will be used to protect assignment.
+        /// </summary>
+        public static string PasswordExplanation {
+            get {
+                return ResourceManager.GetString("PasswordExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least 6 numbers and upper case letters or single symbol &apos;?&apos; to generate password.
+        /// </summary>
+        public static string PasswordInstructions {
+            get {
+                return ResourceManager.GetString("PasswordInstructions", resourceCulture);
             }
         }
         
@@ -381,6 +525,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string SizeExplanation {
             get {
                 return ResourceManager.GetString("SizeExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have email or password provided.
+        /// </summary>
+        public static string SizeForWebMode {
+            get {
+                return ResourceManager.GetString("SizeForWebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a number, -1 for unlimited, 1 if email is specified.
+        /// </summary>
+        public static string SizeInstructions {
+            get {
+                return ResourceManager.GetString("SizeInstructions", resourceCulture);
             }
         }
         
@@ -511,6 +673,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment was created in Web Mode.
+        /// </summary>
+        public static string Tooltip_Table_WebMode {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_WebMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unarchive.
         /// </summary>
         public static string Unarchive {
@@ -633,6 +804,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpgradeProgressTitle {
             get {
                 return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode.
+        /// </summary>
+        public static string WebMode {
+            get {
+                return ResourceManager.GetString("WebMode", resourceCulture);
             }
         }
     }

@@ -152,6 +152,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         @event.Payload);
                     result.Add(committedEvent);
                 }
+
+                writer.Complete();
             }
 
             return result;
@@ -255,18 +257,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        private struct RawEvent
-        {
-            public Guid Id { get; set; }
-            public Guid eventSourceId { get; set; }
-            public string origin { get; set; }
-            public int eventSequence { get; set; }
-            public DateTime timeStamp { get; set; }
-            public long globalSequence { get; set; }
-            public string eventType { get; set; }
-            public string value { get; set; }
-        }
-
+      
         public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
         {
             var rawEventsData = await this.sessionProvider.Session.Connection
@@ -283,6 +274,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var events = ToCommittedEvent(rawEventsData).ToList();
             
             return new EventsFeedPage(globalSequence, events);
+        }
+
+        public IEnumerable<RawEvent> GetRawEventsFeed(long startWithGlobalSequence, int pageSize)
+        {
+            var rawEventsData = this.sessionProvider.Session.Connection
+                .Query<RawEvent>
+                ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
+                   FROM {tableNameWithSchema} 
+                   WHERE globalsequence > @minVersion 
+                   ORDER BY globalsequence 
+                   LIMIT @batchSize",
+                    new { minVersion = startWithGlobalSequence, batchSize = pageSize }, buffered: false);
+
+            return rawEventsData;
+        }
+
+        public async Task<long> GetMaximumGlobalSequence()
+        {
+            return await this.sessionProvider.Session.Connection.ExecuteScalarAsync<long?>("SELECT max(globalsequence) FROM events.events") ?? 0;
         }
 
         private IEnumerable<CommittedEvent> ToCommittedEvent(IEnumerable<RawEvent> rawEventsData)
@@ -303,22 +313,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             foreach (var raw in rawEventsData)
             {
-                if (obsoleteEvents.Contains(raw.eventType.ToLower()))
+                if (obsoleteEvents.Contains(raw.EventType.ToLower()))
                 {
                     continue;
                 }
 
-                var resolvedEventType = this.eventTypeResolver.ResolveType(raw.eventType);
-                IEvent typedEvent = Deserialize(raw.value, resolvedEventType);
+                var resolvedEventType = this.eventTypeResolver.ResolveType(raw.EventType);
+                IEvent typedEvent = Deserialize(raw.Value, resolvedEventType);
 
                 yield return new CommittedEvent(
                     Guid.Empty,
-                    raw.origin,
+                    raw.Origin,
                     raw.Id,
-                    raw.eventSourceId,
-                    raw.eventSequence,
-                    raw.timeStamp,
-                    raw.globalSequence,
+                    raw.EventSourceId,
+                    raw.EventSequence,
+                    raw.TimeStamp,
+                    raw.GlobalSequence,
                     typedEvent
                 );
             }

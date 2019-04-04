@@ -132,10 +132,10 @@
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Мої питальники</value>
+    <value>Мої</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Загальнодоступні питальники</value>
+    <value>Загальнодоступні</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>Питальники</value>
@@ -406,5 +406,9 @@
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
     <value>Непередбачена помилка під час початку запису</value>
     <comment>Непередбачена помилка під час початку запису</comment>
+  </data>
+    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Спільні зі мною</value>
+    <comment>Загальні зі мною</comment>
   </data>
 </root>

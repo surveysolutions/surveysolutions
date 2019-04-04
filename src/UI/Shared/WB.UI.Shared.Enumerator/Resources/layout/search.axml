@@ -33,7 +33,7 @@
         android:descendantFocusability="blocksDescendants">
 
         <TextView style="@style/Dashboard_Search_SearchResult" 
-        local:MvxBind="Text SerchResultText;" />
+            local:MvxBind="Text SearchResultText;" />
               
         <MvxRecyclerView
             style="@style/FullWidthWrappingLayout"

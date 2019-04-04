@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         public void Because() => viewModel.ShowMyQuestionnairesCommand.Execute();
 
-        [Test] public void should_set_IsPublicShowed_to_false () => viewModel.IsPublicShowed.Should().BeFalse();
         [Test] public void should_Questionnaires_have_2_questionnaires () => viewModel.Questionnaires.Count.Should().Be(2);
         [Test] public void should_contains_only_my_questionnaires () => viewModel.Questionnaires.All(_ => !_.IsPublic).Should().BeTrue();
 

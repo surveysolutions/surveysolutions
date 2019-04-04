@@ -15,6 +15,7 @@ using Polly;
 using Polly.Retry;
 using Refit;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Questionnaire.Services.Implementation;
 using WB.Services.Infrastructure.Logging;
 using WB.Services.Infrastructure.Tenant;
 
@@ -55,6 +56,7 @@ namespace WB.Services.Export.Host.Infra
                 {
                     JsonSerializerSettings = new JsonSerializerSettings
                     {
+                        SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
                         TypeNameHandling = TypeNameHandling.Auto
                     }
                 });
@@ -111,7 +113,10 @@ namespace WB.Services.Export.Host.Infra
                         sw.Elapsed.TotalSeconds,
                         size);
 
-                    logger.LogTrace("TenantApi executed with size {size} in {elapsed} ms", size, sw.ElapsedMilliseconds);
+                    logger.LogTrace("TenantApi executed request {uri} with size {size} in {elapsed} ms", 
+                        request.RequestUri.LocalPath,
+                        size, 
+                        sw.ElapsedMilliseconds);
 
                     return result;
                 }

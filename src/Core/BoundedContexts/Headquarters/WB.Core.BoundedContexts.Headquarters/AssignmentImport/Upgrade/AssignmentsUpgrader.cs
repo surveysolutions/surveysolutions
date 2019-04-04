@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,12 +23,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         private readonly IQuestionnaireStorage questionnaireStorage;
        private readonly IAssignmentsUpgradeService upgradeService;
        private readonly IAssignmentFactory assignmentFactory;
+       private readonly IInvitationService invitationService;
 
        public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
             IPreloadedDataVerifier importService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
-            IAssignmentFactory assignmentFactory
+            IAssignmentFactory assignmentFactory,
+            IInvitationService invitationService
            )
         {
             this.assignments = assignments ?? throw new ArgumentNullException(nameof(assignments));
@@ -35,10 +38,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.upgradeService = upgradeService;
             this.assignmentFactory = assignmentFactory;
+            this.invitationService = invitationService;
         }
 
         public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
-        {
+        { 
             var idsToMigrate = assignments.Query(_ =>
                 _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version && !x.Archived)
                     .Select(x => x.Id).ToList());
@@ -52,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                 foreach (var assignmentId in idsToMigrate)
                 {
                     cancellation.ThrowIfCancellationRequested();
+
                     var oldAssignment = assignments.GetById(assignmentId);
                     if (!oldAssignment.IsCompleted)
                     {
@@ -63,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                             oldAssignment.Archive();
 
                             var newAssignment = assignmentFactory.CreateAssignment(migrateTo, oldAssignment.ResponsibleId,
-                                oldAssignment.InterviewsNeeded);
+                                oldAssignment.InterviewsNeeded, oldAssignment.Email, oldAssignment.Password, oldAssignment.WebMode);
 
                             newAssignment.SetAnswers(oldAssignment.Answers.ToList());
                             var newIdentifyingData = new List<IdentifyingAnswer>();
@@ -79,6 +84,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                             newAssignment.SetIdentifyingData(newIdentifyingData);
                             newAssignment.SetProtectedVariables(oldAssignment.ProtectedVariables);
                             assignments.Store(newAssignment, null);
+
+                            invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
+                            oldAssignment.UpdateMode(false);
+
                             migratedSuccessfully++;
                         }
                         else

@@ -23,5 +23,6 @@ namespace WB.UI.Headquarters.Models.Template
         public virtual DateTime? ImportDate { get; set; }
 
         public virtual bool IsAudioRecordingEnabled { get; set; }
+        public bool WebModeEnabled { get; set; }
     }
 }

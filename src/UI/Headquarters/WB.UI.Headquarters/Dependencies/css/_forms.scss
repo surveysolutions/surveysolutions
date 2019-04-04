@@ -688,3 +688,57 @@ textarea.field-to-fill{
 	display: block;
 	height: 40px;
 }
+
+
+
+.form-block{
+	label{
+		font: 14px/16px "RobotoRegular";
+		font-weight: normal;
+		color: $gray-highlight-font;
+	}
+	input.checkbox-filter{
+		& ~ label{
+			&:hover, &:focus{
+				color: $gray_text
+			}
+	  		.tick {
+	  			left: -5px;
+	  		}
+		}
+		&:checked ~ label{
+			color: #3f3f3f;
+			font-weight: 700;
+		}
+	}
+}
+.form-container{
+	.form-inline{
+		.form-group{
+			vertical-align: top;
+			.field{
+				width: 250px;
+			}
+		}
+	}
+	.form-group{
+		
+		.field{
+			margin-right: 20px;
+			width: 100%;
+		}
+		// & > .field{
+		// 	width: 100%;
+		// }
+		input{
+			width: 100%;
+		}
+		.help-block{
+			font-size: 14px;
+			line-height: 16px;
+			font-style: italic;
+		}
+	}
+	
+
+}

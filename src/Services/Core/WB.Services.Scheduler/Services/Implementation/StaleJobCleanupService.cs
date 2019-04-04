@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.Services.Infrastructure.Storage;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Storage;
 

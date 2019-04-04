@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using WB.Services.Infrastructure.Tenant;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace WB.Services.Export.Questionnaire.Services
 {
     public interface IQuestionnaireStorage
     {
-        Task<QuestionnaireDocument> GetQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId);
+        Task<QuestionnaireDocument> GetQuestionnaireAsync(QuestionnaireId questionnaireId,
+            CancellationToken token = default);
     }
 }
