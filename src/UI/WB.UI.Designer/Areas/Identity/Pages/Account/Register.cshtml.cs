@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
@@ -92,6 +93,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     {
                         await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
                     }
+
+                    await userManager.AddToRoleAsync(user, SimpleRoleEnum.User.ToString());
 
                     var model = new EmailConfirmationModel();
                     model.UserName = Input.Login;
