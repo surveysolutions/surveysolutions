@@ -279,4 +279,13 @@
   <data name="ExternalLoginRemoved" xml:space="preserve">
     <value>The external login was removed.</value>
   </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>You have successfully logged out of the application.</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Locked out</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>This account has been locked out, please try again later.</value>
+  </data>
 </root>

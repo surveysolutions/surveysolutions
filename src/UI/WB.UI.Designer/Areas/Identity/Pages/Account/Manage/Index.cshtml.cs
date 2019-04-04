@@ -91,14 +91,21 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
             if (existingFullName?.Value != Input.FullName)
             {
-                if (existingFullName == null)
+                if (string.IsNullOrWhiteSpace(Input.FullName) && existingFullName != null)
                 {
-                    await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
+                    await userManager.RemoveClaimAsync(user, existingFullName);
                 }
                 else
                 {
-                    await userManager.ReplaceClaimAsync(user, existingFullName,
-                        new Claim(ClaimTypes.Name, Input.FullName));
+                    if (existingFullName == null)
+                    {
+                        await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
+                    }
+                    else
+                    {
+                        await userManager.ReplaceClaimAsync(user, existingFullName,
+                            new Claim(ClaimTypes.Name, Input.FullName));
+                    }
                 }
             }
 
