@@ -4,7 +4,12 @@
     ViewData["Title"] = "Access denied";
 }
 
-<header>
+
+<form>
     <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+    <p class="note text-danger">You do not have access to this resource.</p>
+    <div class="form-actions">
+        <a class="btn btn-success btn-lg" asp-page="./Login">@AccountResources.BackToLogin</a>
+    </div>
+</form>
+
