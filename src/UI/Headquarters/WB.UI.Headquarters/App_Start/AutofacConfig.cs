@@ -178,12 +178,12 @@ namespace WB.UI.Headquarters
 
             var fileSystemEmailServiceSettings =
                 new FileSystemEmailServiceSettings(
-                    settingsProvider.AppSettings["EmailSettings.IsEnabled"].ToBoolOrDefault(false),
-                    settingsProvider.AppSettings["EmailSettings.EmailFolder"],
-                    settingsProvider.AppSettings["EmailSettings.SenderAddress"],
-                    settingsProvider.AppSettings["EmailSettings.SenderName"],
-                    settingsProvider.AppSettings["EmailSettings.ReplyAddress"],
-                    settingsProvider.AppSettings["EmailSettings.Address"]
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.IsEnabled"].ToBoolOrDefault(false),
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.EmailFolder"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.SenderAddress"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.SenderName"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.ReplyAddress"],
+                    settingsProvider.AppSettings["EmailSettings.FileSystem.Address"]
                 );
 
             //for assembly relocation during migration
