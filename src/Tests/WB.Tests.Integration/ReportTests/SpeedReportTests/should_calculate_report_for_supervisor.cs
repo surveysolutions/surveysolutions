@@ -28,7 +28,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interviewerId = Id.g1;
             var reportEndDate = new DateTime(2010, 10, 30);
 
-            var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), supervisorId, interviewerId, reportEndDate);
+            var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), 
+                supervisorId, interviewerId, reportEndDate);
             var interviewSummaries = CreateInterviewSummaryRepository();
             var speedReportRepository = CreateSpeedReportInterviewItemsRepository();
 
@@ -36,6 +37,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             speedReportRepository.Store(CreateSpeedReportItemForInterview(interview), interview.SummaryId);
 
             var report = CreateSpeedReport(interviewSummaries, speedReportRepository);
+
+            UnitOfWork.Session.Flush();
 
             // Act
             var speedBySupervisorsReportInputModel = new SpeedBySupervisorsReportInputModel
