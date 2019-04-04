@@ -43,6 +43,8 @@ namespace WB.Core.GenericSubdomains.Portable
             return int.TryParse(value, out int result) ? result : null as int?;
         }
 
+        public static bool? ParseBoolOrNull(this string value) => bool.TryParse(value, out bool result) ? result : null as bool?;
+
         public static IEnumerable<OrderRequestItem> ParseOrderRequestString(this string value)
         {
             var result = new List<OrderRequestItem>();
