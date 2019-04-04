@@ -18,6 +18,8 @@ namespace WB.UI.Shared.Web.Extensions
 
         public static int ToIntOrDefault(this string value, int @default) => value.ParseIntOrNull() ?? @default;
 
+        public static bool ToBoolOrDefault(this string value, bool @default) => value.ParseBoolOrNull() ?? @default;
+
         public static bool IsDecimal(this string value)
         {
             decimal result;
