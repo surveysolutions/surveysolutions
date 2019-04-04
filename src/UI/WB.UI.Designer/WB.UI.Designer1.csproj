@@ -15,6 +15,7 @@
     <None Remove="appsettings.ini" />
     <None Remove="appsettings.magpie.ini" />
     <None Remove="gulpfile.js" />
+    <None Remove="Styles\designer-list.less" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,14 +24,6 @@
     <Content Include="gulpfile.js" />
     <Content Include="Styles\bootstrap-custom.less" />
     <Content Include="Styles\bootstrap-override.less" />
-    <Content Include="Styles\bootstrap-override.min.css">
-      <DependentUpon>bootstrap-override.css</DependentUpon>
-    </Content>
-    <Content Include="Styles\custom-fonts.less" />
-    <Content Include="Styles\designer-start.less" />
-    <Content Include="Styles\font-styles.less" />
-    <Content Include="Styles\inputs.less" />
-    <Content Include="Styles\wb-variables.less" />
   </ItemGroup>
 
 
@@ -258,6 +251,52 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\animations.css">
+      <DependentUpon>animations.less</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\animations.min.css">
+      <DependentUpon>animations.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-designer-editor.css.css">
+      <DependentUpon>wb-designer-editor.css.less</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-designer-editor.css.css.map">
+      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-designer-editor.css.min.css">
+      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-designer-verify-popover.css.css">
+      <DependentUpon>wb-designer-verify-popover.css.less</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-designer-verify-popover.css.min.css">
+      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-question-list.css.css">
+      <DependentUpon>wb-question-list.css.less</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-question-list.css.css.map">
+      <DependentUpon>wb-question-list.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\designer-editor\wb-question-list.css.min.css">
+      <DependentUpon>wb-question-list.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\lib\wb-vars.css.min.css">
+      <DependentUpon>wb-vars.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\markup.css.css">
+      <DependentUpon>markup.css.less</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\markup.css.css.map">
+      <DependentUpon>markup.css.css</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\questionnaire\content\markup.css.min.css">
+      <DependentUpon>markup.css.css</DependentUpon>
+    </Content>
   </ItemGroup>
 
 </Project>

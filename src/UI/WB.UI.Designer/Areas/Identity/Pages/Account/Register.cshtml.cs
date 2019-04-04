@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     {
         public IOptions<CaptchaConfig> CaptchaOptions { get; }
 
-        private readonly UserManager<DesignerIdentityUser> _userManager;
+        private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IViewRenderingService viewRenderingService;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
@@ -33,7 +34,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             IOptions<CaptchaConfig> captchaOptions)
         {
             CaptchaOptions = captchaOptions;
-            _userManager = userManager;
+            this.userManager = userManager;
             this.viewRenderingService = viewRenderingService;
             _logger = logger;
             _emailSender = emailSender;
@@ -67,6 +68,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.The_password_and_confirmation_password_do_not_match))]
             public string ConfirmPassword { get; set; }
 
+            [Display(Name = "Full name", Order = 4)]
+            [StringLength(100, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
             public string FullName { get; set; }
         }
 
@@ -81,12 +84,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new DesignerIdentityUser { UserName = Input.Login, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
 
                     var model = new EmailConfirmationModel();
                     model.UserName = Input.Login;

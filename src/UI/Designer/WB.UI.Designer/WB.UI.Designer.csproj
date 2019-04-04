@@ -412,39 +412,6 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="questionnaire\content\i\chekboxes.png" />
-    <Content Include="questionnaire\content\i\chekboxes2k.png" />
-    <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
-    <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
-    <Content Include="questionnaire\content\i\icons4.png" />
-    <Content Include="questionnaire\content\i\logo-designer.png" />
-    <Content Include="questionnaire\content\i\logo.png" />
-    <Content Include="questionnaire\details\scripts\controllers\searchForQuestion.js" />
-    <Content Include="questionnaire\details\scripts\controllers\alert.js" />
-    <Content Include="questionnaire\details\scripts\controllers\comments.js" />
-    <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
-    <Content Include="questionnaire\details\scripts\controllers\addClassification.js" />
-    <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
-    <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
-    <Content Include="questionnaire\details\scripts\controllers\translations.js" />
-    <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
-    <Content Include="questionnaire\details\scripts\modules\ng-context-menu.js" />
-    <Content Include="questionnaire\details\scripts\modules\perfect_scrollbar.js" />
-    <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
-    <Content Include="questionnaire\details\scripts\modules\ui-ace.js" />
-    <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
-    <Content Include="questionnaire\details\scripts\services\alertService.js" />
-    <Content Include="questionnaire\details\scripts\services\commentsService.js" />
-    <Content Include="questionnaire\details\scripts\services\translate.js" />
-    <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
-    <Content Include="questionnaire\details\views\search-for-question.html" />
-    <Content Include="questionnaire\details\views\alert.html" />
-    <Content Include="questionnaire\details\views\add-classification.html" />
-    <Content Include="questionnaire\details\views\find-replace.html" />
-    <Content Include="questionnaire\details\views\question-details\Area-template.html" />
-    <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
-    <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\classifications\components\CategoriesEditor.js" />
     <Content Include="Scripts\classifications\components\ClassificationEditor.js" />
@@ -460,54 +427,8 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Content\pdf.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-metadata.less" />
     <Content Include="Configuration\vgl.Designer.Web.config" />
-    <Content Include="questionnaire\details\scripts\controllers\attachments.js" />
-    <Content Include="questionnaire\details\scripts\controllers\variable.js" />
-    <Content Include="questionnaire\details\scripts\controllers\lookupTables.js" />
-    <Content Include="questionnaire\details\scripts\controllers\macros.js" />
-    <Content Include="questionnaire\details\scripts\controllers\leftMenu.js" />
-    <Content Include="questionnaire\details\scripts\extensions\ace\theme-github-extended.js" />
-    <Content Include="questionnaire\details\scripts\services\userService.js" />
-    <Content Include="questionnaire\details\scripts\ui-js.js" />
-    <Content Include="questionnaire\details\views\question-details\CascadingComboBox-template.html" />
-    <Content Include="questionnaire\details\views\question-details\DateTime-template.html" />
-    <Content Include="questionnaire\details\views\question-details\GpsCoordinates-template.html" />
-    <Content Include="questionnaire\details\views\question-details\Multimedia-template.html" />
-    <Content Include="questionnaire\details\views\question-details\MultyOption-template.html" />
-    <Content Include="questionnaire\details\views\question-details\Numeric-template.html" />
-    <Content Include="questionnaire\details\views\question-details\QRBarcode-template.html" />
-    <Content Include="questionnaire\details\views\question-details\SingleOption-template.html" />
-    <Content Include="questionnaire\details\views\question-details\Text-template.html" />
-    <Content Include="questionnaire\details\views\question-details\TextList-template.html" />
-    <Content Include="questionnaire\details\views\treevariable.html" />
-    <Content Include="questionnaire\details\views\variable.html" />
-    <Content Include="questionnaire\details\views\help-link.html" />
-    <Content Include="questionnaire\details\views\attachment-preview.html" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-override.css">
-      <DependentUpon>bootstrap-override.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-start\bootstrap-override.min.css">
-      <DependentUpon>bootstrap-override.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-start\designer-start.min.css">
-      <DependentUpon>designer-start.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\i\left-panel-shadow-small.png" />
-    <Content Include="questionnaire\content\i\macro-panel-btn.png" />
-    <Content Include="questionnaire\details\scripts\extensions\ace\mode-csharp-extended.js" />
-    <Content Include="questionnaire\details\scripts\directives\matchOptionsPattern.js" />
-    <Content Include="questionnaire\details\scripts\services\optionsService.js" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-custom.css" />
     <Content Include="Content\designer-list.css" />
-    <Content Include="questionnaire\content\designer-start\designer-start.css">
-      <DependentUpon>designer-start.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\i\logo-designer-sm.png" />
-    <Content Include="questionnaire\content\i\logo-questionnaire-designer.png" />
-    <Content Include="questionnaire\content\i\loupe.png" />
-    <Content Include="questionnaire\content\i\wb-logo.png" />
-    <Content Include="questionnaire\content\wb-options-window.css" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -528,87 +449,12 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="questionnaire\details\scripts\filters\escapeFilter.js" />
-    <Content Include="questionnaire\details\views\treegroup.html" />
-    <Content Include="questionnaire\details\views\treequestion.html" />
-    <Content Include="questionnaire\details\views\treestatictext.html" />
-    <Content Include="questionnaire\build\**\*" />
-    <Content Include="questionnaire\details\scripts\app.js" />
-    <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
-    <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
-    <Content Include="questionnaire\details\scripts\controllers\group.js" />
-    <Content Include="questionnaire\details\scripts\controllers\staticText.js" />
-    <Content Include="questionnaire\details\scripts\controllers\main.js" />
-    <Content Include="questionnaire\details\scripts\controllers\question.js" />
-    <Content Include="questionnaire\details\scripts\controllers\roster.js" />
-    <Content Include="questionnaire\details\scripts\controllers\share.js" />
-    <Content Include="questionnaire\details\scripts\controllers\tree.js" />
-    <Content Include="questionnaire\details\scripts\decorators\exceptionhandlerdecorator.js" />
-    <Content Include="questionnaire\details\scripts\directives\animations.js" />
-    <Content Include="questionnaire\details\scripts\directives\directives.js" />
-    <Content Include="questionnaire\details\scripts\directives\help.js" />
-    <Content Include="questionnaire\details\scripts\directives\itemBreadcrumbs.js" />
-    <Content Include="questionnaire\details\scripts\services\authorizationinterceptor.js" />
-    <Content Include="questionnaire\details\scripts\services\commandService.js" />
-    <Content Include="questionnaire\details\scripts\services\confirmService.js" />
-    <Content Include="questionnaire\details\scripts\services\errorReportingService.js" />
-    <Content Include="questionnaire\details\scripts\services\helpMessages.js" />
-    <Content Include="questionnaire\details\scripts\services\questionnaireService.js" />
-    <Content Include="questionnaire\details\scripts\services\shareService.js" />
-    <Content Include="questionnaire\details\scripts\services\utilityService.js" />
-    <Content Include="questionnaire\details\scripts\services\verificationService.js" />
-    <Content Include="questionnaire\details\views\confirm.html" />
-    <Content Include="questionnaire\details\views\static-text.v1.html" />
-    <Content Include="questionnaire\details\views\group.html" />
-    <Content Include="questionnaire\details\views\itemBreadcrumbs.html" />
-    <Content Include="questionnaire\details\views\share.html" />
-    <Content Include="questionnaire\details\views\tree.html" />
-    <Content Include="questionnaire\content\designer-editor\animations.css">
-      <DependentUpon>animations.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\animations.min.css">
-      <DependentUpon>animations.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.css">
-      <DependentUpon>wb-designer-editor.css.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.min.css">
-      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-designer-verify-popover.css.css">
-      <DependentUpon>wb-designer-verify-popover.css.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-designer-verify-popover.css.min.css">
-      <DependentUpon>wb-designer-verify-popover.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-question-list.css.min.css">
-      <DependentUpon>wb-question-list.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\i\btn-disabled.png" />
-    <Content Include="questionnaire\content\i\chapter-panel-btn-small.png" />
-    <Content Include="questionnaire\content\i\cross-red.png" />
-    <Content Include="questionnaire\content\i\cross.png" />
-    <Content Include="questionnaire\content\i\d-loading.gif" />
-    <Content Include="questionnaire\content\i\d-normal.gif" />
-    <Content Include="questionnaire\content\i\loading-bg.png" />
-    <Content Include="questionnaire\content\i\popover-arrow.png" />
-    <Content Include="questionnaire\content\i\section-collapse-glyph.png" />
-    <Content Include="questionnaire\content\lib\wb-vars.css.css" />
-    <Content Include="questionnaire\content\lib\wb-vars.css.min.css">
-      <DependentUpon>wb-vars.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\markup.css.min.css">
-      <DependentUpon>markup.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\animations.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-question-editor.css.less" />
-    <Content Include="questionnaire\content\markup.css.css.map">
-      <DependentUpon>markup.css.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\details\index.cshtml" />
-    <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css">
-      <DependentUpon>wb-question-list.css.less</DependentUpon>
-    </Content>
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.ar.json" />
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.en.json" />
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.es.json" />
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.fr.json" />
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.ru.json" />
+    <Content Include="questionnaire\build\resources\QuestionnaireEditor.zh.json" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
     <Content Include="Content\images\loader.gif" />
@@ -642,52 +488,9 @@
     <Content Include="Scripts\lib\Placeholders.js" />
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
-    <Content Include="questionnaire\content\i\arrow-left.png" />
-    <Content Include="questionnaire\content\i\btn-dropdown-blue.png" />
-    <Content Include="questionnaire\content\i\chapter-list-li-dots.png" />
-    <Content Include="questionnaire\content\i\chapter-panel-btn.png" />
-    <Content Include="questionnaire\content\i\designer-logo.png" />
-    <Content Include="questionnaire\content\i\dropdown-arrow.png" />
-    <Content Include="questionnaire\content\i\dropup-arrow.png" />
-    <Content Include="questionnaire\content\i\filter-glyph.png" />
-    <Content Include="questionnaire\content\i\icon-qname-block-link.png" />
-    <Content Include="questionnaire\content\i\left-panel-shadow.png" />
-    <Content Include="questionnaire\content\i\pretty-checkable-sprites-org.png" />
-    <Content Include="questionnaire\content\i\pretty-checkable-sprites.png" />
-    <Content Include="questionnaire\content\i\question-item-dots.png" />
-    <Content Include="questionnaire\content\i\search-glyph.png" />
-    <Content Include="questionnaire\content\lib\i\breadcrumb-slash.png" />
-    <Content Include="questionnaire\content\lib\i\btn-dropdown-blue.png" />
-    <Content Include="questionnaire\content\markup.css.css">
-      <DependentUpon>markup.css.less</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\details\views\main.v1.html" />
-    <Content Include="questionnaire\details\views\question.html" />
-    <Content Include="questionnaire\details\views\roster.html" />
-    <Content Include="questionnaire\gulpfile.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css.map">
-      <DependentUpon>wb-question-list.css.css</DependentUpon>
-    </Content>
     <Content Include="Views\Account\Layout.Account.cshtml" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-custom.less" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-override.less" />
-    <Content Include="questionnaire\content\designer-start\custom-fonts.less" />
-    <Content Include="Content\designer-list.less" />
-    <Content Include="questionnaire\content\designer-start\designer-start.less" />
-    <Content Include="questionnaire\content\designer-start\font-styles.less" />
-    <Content Include="questionnaire\content\designer-start\inputs.less" />
-    <Content Include="questionnaire\content\designer-start\wb-variables.less" />
-    <Content Include="questionnaire\content\designer-start\designer-start.css.map">
-      <DependentUpon>designer-start.css</DependentUpon>
-    </Content>
-    <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.css.map">
-      <DependentUpon>wb-designer-editor.css.css</DependentUpon>
-    </Content>
     <Content Include="Views\Shared\_list_search_form.cshtml" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-override.css.map">
-      <DependentUpon>bootstrap-override.css</DependentUpon>
-    </Content>
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
@@ -711,21 +514,13 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
-    <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <Content Include="Views\Questionnaire\PublicFolders.cshtml" />
     <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
     <Content Include="Views\Account\_ChangePassword.cshtml" />
-    <Content Include="questionnaire\content\designer-editor\wb-classifications.less" />
     <Content Include="Views\Classifications\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
@@ -756,35 +551,12 @@
     <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="questionnaire\content\css-reset.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-context-menu.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-custom-scrollbar.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-designer-editor.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-designer-verify-popover.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-question-list.css.less" />
-    <Content Include="questionnaire\content\lib\controls\wb-breadcrumbs.css.less" />
-    <Content Include="questionnaire\content\lib\controls\wb-buttons.css.less" />
-    <Content Include="questionnaire\content\lib\controls\wb-inputs.css.less" />
-    <Content Include="questionnaire\content\lib\controls\wb-labels.css.less" />
-    <Content Include="questionnaire\content\lib\wb-common.css.less" />
-    <Content Include="questionnaire\content\lib\wb-fontstyles.css.less" />
-    <Content Include="questionnaire\content\lib\wb-mixins.css.less" />
-    <Content Include="questionnaire\content\lib\wb-vars.css.less" />
-    <Content Include="questionnaire\content\markup.css.less" />
-    <Content Include="questionnaire\content\wb-init.css.less" />
-    <Content Include="questionnaire\.jscsrc" />
-    <Content Include="questionnaire\.jshintrc" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
-    <Content Include="questionnaire\content\lib\controls\wb-modal.css.less" />
-    <Content Include="questionnaire\content\lib\wb-customfonts.css.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-share.css.less" />
-    <Content Include="questionnaire\content\dropdown.css.less" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
-    <Content Include="questionnaire\package.json" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
     <Content Include="Content\plugins\**\*" />
   </ItemGroup>

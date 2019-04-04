@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
@@ -14,15 +13,18 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<DesignerIdentityUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
+        private readonly SignInManager<DesignerIdentityUser> signInManager;
+        private readonly UserManager<DesignerIdentityUser> userManager;
+        private readonly ILogger<LoginModel> logger;
 
         public LoginModel(SignInManager<DesignerIdentityUser> signInManager, 
+            UserManager<DesignerIdentityUser> userManager,
             ILogger<LoginModel> logger
             )
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
+            this.logger = logger;
         }
 
         [BindProperty]
@@ -70,20 +72,30 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
+                var user = await userManager.FindByNameAsync(Input.Email) ??
+                           await userManager.FindByEmailAsync(Input.Email);
+
+                if (user != null)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    var result = await signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe,
+                        lockoutOnFailure: true);
+                    if (result.Succeeded)
+                    {
+                        logger.LogInformation("User logged in.");
+                        return LocalRedirect(returnUrl);
+                    }
+
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("./LoginWith2fa",
+                            new {ReturnUrl = returnUrl, RememberMe = Input.RememberMe});
+                    }
+
+                    if (result.IsLockedOut)
+                    {
+                        logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
+                    }
                 }
                 else
                 {
