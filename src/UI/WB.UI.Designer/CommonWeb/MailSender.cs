@@ -28,6 +28,11 @@ namespace WB.UI.Designer.CommonWeb
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
+            if (string.IsNullOrWhiteSpace(settings.Value.Host))
+            {
+                return;
+            }
+
             var config = this.settings.Value;
             
             using (var client = new SmtpClient())
