@@ -14,11 +14,13 @@
   <ItemGroup>
     <None Remove="appsettings.ini" />
     <None Remove="appsettings.magpie.ini" />
+    <None Remove="appsettings.vgl.ini" />
     <None Remove="gulpfile.js" />
     <None Remove="Styles\designer-list.less" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="appsettings.vgl.ini" />
     <Content Include="appsettings.magpie.ini" />
     <Content Include="appsettings.ini" />
     <Content Include="gulpfile.js" />
@@ -101,6 +103,9 @@
     <EmbeddedResource Update="Resources\AccountResources.es.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AccountResources.ar.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\AccountResources.fr.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
@@ -113,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\AccountResources.zh.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ErrorMessages.ar.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessages.es.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
