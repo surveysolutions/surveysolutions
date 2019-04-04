@@ -12,7 +12,6 @@ namespace WB.UI.Designer.Code
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IPasswordStrategy, HashPasswordStrategy>();
             registry.BindToConstant<IPasswordPolicy>(PasswordPolicyFactory.CreatePasswordPolicy);
         }
 
