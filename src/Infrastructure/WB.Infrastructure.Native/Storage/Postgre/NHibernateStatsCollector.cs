@@ -14,13 +14,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.name = name;
         }
 
-        private Gauge sessionCloseCount;
-        private Gauge sessionOpenCount;
+
+        private readonly Gauge sessionCloseCount = new Gauge(@"nhibernate_session_close_count", @"Count of closed sessions", "source");
+        private readonly Gauge sessionOpenCount = new Gauge(@"nhibernate_session_open_count", @"Count of opened sessions", "source");
 
         public void RegisterMetrics()
         {
-            sessionCloseCount = new Gauge(@"nhibernate_session_close_count", @"Count of closed sessions", "source");
-            sessionOpenCount =new Gauge(@"nhibernate_session_open_count", @"Count of opened sessions", "source");
         }
 
         public void UpdateMetrics()

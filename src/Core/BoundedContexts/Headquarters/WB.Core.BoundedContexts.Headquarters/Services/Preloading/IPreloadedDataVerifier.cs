@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     public interface IPreloadedDataVerifier
     {
-        IEnumerable<PanelImportVerificationError> VerifyAnswers(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire);
+        IEnumerable<PanelImportVerificationError> VerifyRowValues(PreloadingAssignmentRow assignmentRow, IQuestionnaire questionnaire);
         IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire);
         IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire);
         IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire);
@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire);
 
+        IEnumerable<PanelImportVerificationError> VerifyWebPasswords(List<PreloadingAssignmentRow> assignmentRows, IQuestionnaire questionnaire);
     }
 }

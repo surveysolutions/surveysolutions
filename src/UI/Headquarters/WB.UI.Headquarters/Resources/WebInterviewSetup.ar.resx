@@ -144,9 +144,6 @@
   <data name="StopWebInterview" xml:space="preserve">
     <value>إيقاف المقابلة الإلكترونية </value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>تهيئة المقابلة الإلكترونية </value>
   </data>

@@ -115,6 +115,123 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitations.
+        /// </summary>
+        public static string Invitations {
+            get {
+                return ResourceManager.GetString("Invitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can change these settings at the &lt;a href=&quot;{{url}}&quot;&gt;&apos;Email Providers&apos;&lt;/a&gt; page..
+        /// </summary>
+        public static string Invitations_ChangeEmailSettingsAdmin {
+            get {
+                return ResourceManager.GetString("Invitations_ChangeEmailSettingsAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tell your admin user to change these settings at the &apos;Email Providers&apos; page..
+        /// </summary>
+        public static string Invitations_ChangeEmailSettingsNotAdmin {
+            get {
+                return ResourceManager.GetString("Invitations_ChangeEmailSettingsNotAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email provider is not set up..
+        /// </summary>
+        public static string Invitations_EmailIsNotSetUp {
+            get {
+                return ResourceManager.GetString("Invitations_EmailIsNotSetUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No invitations have been sent yet..
+        /// </summary>
+        public static string Invitations_NothingSent {
+            get {
+                return ResourceManager.GetString("Invitations_NothingSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No invitations to send as of now..
+        /// </summary>
+        public static string Invitations_NothingToSend {
+            get {
+                return ResourceManager.GetString("Invitations_NothingToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send {{count}} invitations.
+        /// </summary>
+        public static string Invitations_SendAction {
+            get {
+                return ResourceManager.GetString("Invitations_SendAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} invitations have been sent already..
+        /// </summary>
+        public static string Invitations_Sent {
+            get {
+                return ResourceManager.GetString("Invitations_Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitations can&apos;t be sent..
+        /// </summary>
+        public static string Invitations_SetupError {
+            get {
+                return ResourceManager.GetString("Invitations_SetupError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web survey has been started and email provider was set up properly. The system is ready to send invitations..
+        /// </summary>
+        public static string Invitations_SuccessfulSetup {
+            get {
+                return ResourceManager.GetString("Invitations_SuccessfulSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web survey is not started. Setup and &lt;a href=&quot;{{url}}&quot;&gt;start web survey&lt;/a&gt; before sending invitations..
+        /// </summary>
+        public static string Invitations_SurveyIsNotStarted {
+            get {
+                return ResourceManager.GetString("Invitations_SurveyIsNotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} invitation to send..
+        /// </summary>
+        public static string Invitations_ToSend {
+            get {
+                return ResourceManager.GetString("Invitations_ToSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} total invitations..
+        /// </summary>
+        public static string Invitations_TotalInvitations {
+            get {
+                return ResourceManager.GetString("Invitations_TotalInvitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save all.
         /// </summary>
         public static string SaveAll {
@@ -187,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable spam protection.
+        ///   Looks up a localized string similar to Use CAPTCHA before interview start.
         /// </summary>
         public static string UseCaptcha {
             get {
@@ -201,6 +318,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string WebInterviewSetup_PageHeader {
             get {
                 return ResourceManager.GetString("WebInterviewSetup_PageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send invitations.
+        /// </summary>
+        public static string WebInterviewSetup_SendInvitationsTitle {
+            get {
+                return ResourceManager.GetString("WebInterviewSetup_SendInvitationsTitle", resourceCulture);
             }
         }
         

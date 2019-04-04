@@ -11,7 +11,6 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -20,35 +19,39 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IInterviewsToExportSource interviewsToExportSource;
         private readonly ILogger logger;
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
 
         public BinaryDataSource(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IInterviewFactory interviewFactory,
             IQuestionnaireStorage questionnaireStorage,
             ITenantApi<IHeadquartersApi> tenantApi,
+            IInterviewsToExportSource interviewsToExportSource,
             ILogger<BinaryDataSource> logger)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.tenantApi = tenantApi;
+            this.interviewsToExportSource = interviewsToExportSource;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
         public async Task ForEachInterviewMultimediaAsync(ExportSettings settings, 
             Func<BinaryData, Task> binaryDataAction, 
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
 
-            var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
+            var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(
+                settings.QuestionnaireId, settings.Status, settings.FromDate, settings.ToDate);
 
             var questionnaire = await this.questionnaireStorage
-                .GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId);
+                .GetQuestionnaireAsync(settings.QuestionnaireId, token: cancellationToken);
 
             var batchSize = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
@@ -58,8 +61,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             {
                 var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
 
-                var allMultimediaAnswers = await this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
-                    settings.Tenant, questionnaire, interviewIds, cancellationToken);
+                var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaire, interviewIds, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 

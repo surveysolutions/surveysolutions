@@ -10,5 +10,6 @@
         public string TeamTitle { get; set; }
         public string ReportName { get; set; }
         public string Subtitle { get; set; }
+        public bool IsSupervisorMode { get; set; }
     }
 }

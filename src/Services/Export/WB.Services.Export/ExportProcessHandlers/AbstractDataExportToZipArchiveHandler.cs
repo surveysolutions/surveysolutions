@@ -17,7 +17,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected AbstractDataExportToZipArchiveHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
@@ -25,10 +25,10 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override async Task DoExportAsync(
+        public override async Task DoExportAsync(
             DataExportProcessArgs processArgs, 
             ExportSettings exportSettings, string archiveName,
-            IProgress<int> exportProgress, CancellationToken cancellationToken)
+            ExportProgress exportProgress, CancellationToken cancellationToken)
         {
             var tempArchivePath = this.fileSystemAccessor.CombinePath(this.ExportTempDirectoryPath, this.fileSystemAccessor.GetFileName(archiveName));
 
@@ -59,6 +59,6 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
 
         protected abstract Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings exportSettings,
-            IProgress<int> exportProgress, CancellationToken cancellationToken);
+            ExportProgress exportProgress, CancellationToken cancellationToken);
     }
 }

@@ -13,14 +13,13 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
     public class CommentsExporter : ICommentsExporter
     {
-        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
+        private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
@@ -47,7 +46,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         };
 
         public CommentsExporter(
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            IOptions<ExportServiceSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi,
@@ -64,7 +63,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             List<Guid> interviewIdsToExport,
             string basePath,
             TenantInfo tenant,
-            IProgress<int> progress,
+            ExportProgress progress,
             CancellationToken cancellationToken)
         {
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;

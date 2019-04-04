@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Questionid = featuredQuestion.PublicKey,
                     Title = featuredQuestion.QuestionText,
                     Answer = string.Empty,
-                    Type = featuredQuestion.QuestionType,
                     InterviewSummary = this,
                     Position = position
                 };

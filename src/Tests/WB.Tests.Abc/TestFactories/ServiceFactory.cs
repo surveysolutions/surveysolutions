@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -25,10 +26,12 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -45,6 +48,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -612,7 +616,8 @@ namespace WB.Tests.Abc.TestFactories
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
             IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
             IInterviewerVersionReader interviewerVersionReader = null,
-            IInterviewFactory interviewFactory = null)
+            IInterviewFactory interviewFactory = null,
+            IAuthorizedUser currentUser = null)
         {
             var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
             return new InterviewerProfileFactory(
@@ -621,7 +626,7 @@ namespace WB.Tests.Abc.TestFactories
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                Mock.Of<IAuthorizedUser>(),
+                currentUser ?? Mock.Of<IAuthorizedUser>(),
                 Mock.Of<IQRCodeHelper>());
         }
 
@@ -667,11 +672,13 @@ namespace WB.Tests.Abc.TestFactories
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IUserViewFactory userViewFactory = null,
-            IQuestionOptionsRepository optionsRepository = null)
+            IQuestionOptionsRepository optionsRepository = null,
+            IPlainStorageAccessor<Assignment> assignmentsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>(),
+                assignmentsRepository ?? Mock.Of<IPlainStorageAccessor<Assignment>>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -682,7 +689,8 @@ namespace WB.Tests.Abc.TestFactories
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                Mock.Of<IInvitationService>());
         }
 
         public IAssignmentFactory AssignmentFactory()
@@ -710,7 +718,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
             IPlainStorageAccessor<Assignment> assignmentsStorage = null,
-            IAssignmentsImportFileConverter assignmentsImportFileConverter = null)
+            IAssignmentsImportFileConverter assignmentsImportFileConverter = null,
+            IInvitationService invitationService = null)
         {
             var session = Mock.Of<ISession>(x =>
                 x.Query<AssignmentsImportProcess>() == GetNhQueryable<AssignmentsImportProcess>() &&
@@ -728,7 +737,9 @@ namespace WB.Tests.Abc.TestFactories
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory),
-                Create.Service.AssignmentFactory());
+                Create.Service.AssignmentFactory(),
+                invitationService ?? Mock.Of<IInvitationService>(),
+                Mock.Of<IAssignmentPasswordGenerator>());
         }
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
@@ -893,9 +904,7 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
-            return new InterviewsToExportViewFactory(interviewSummaries ??
-                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
-                new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
+            return new InterviewsToExportViewFactory(new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
 
         public AttachmentContentStorage AttachmentContentStorage(
@@ -945,22 +954,18 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewFactory InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
             IUnitOfWork sessionProvider = null,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
+            IPlainStorageAccessor<InterviewFlag> interviewFlagsStorage = null)
         {
-            return new InterviewFactory(
-                summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>());
+            return new InterviewFactory(sessionProvider ?? Mock.Of<IUnitOfWork>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
-            IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null,
             IAuthorizedUser authorizedUser = null)
         {
             return new MapReport(
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
@@ -1002,7 +1007,8 @@ namespace WB.Tests.Abc.TestFactories
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
                 restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                httpClientFactory ?? Mock.Of<IHttpClientFactory>()
+                httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
+                new SimpleFileHandler()
             );
         }
 
@@ -1012,6 +1018,104 @@ namespace WB.Tests.Abc.TestFactories
             mockOfVirtualPathService.Setup(x => x.GetAbsolutePath(It.IsAny<string>())).Returns<string>(x => x);
 
             return new WebNavigationService(mockOfVirtualPathService.Object);
+        }
+
+        public EnumeratorGroupGroupStateCalculationStrategy EnumeratorGroupGroupStateCalculationStrategy()
+        {
+            return new EnumeratorGroupGroupStateCalculationStrategy();
+        }
+
+        public IInvitationService InvitationService(IPlainStorageAccessor<Invitation> invitations = null,
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
+        {
+            var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
+                invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
+                Create.Service.TokenGenerator());
+            return service;
+        }
+
+        public IInvitationService InvitationService(params Invitation[] invitations)
+        {
+            IPlainStorageAccessor<Invitation> accessor = new TestPlainStorage<Invitation>();
+            foreach (var invitation in invitations)
+            {
+                accessor.Store(invitation, invitation.Id);
+            }
+
+            var service = new InvitationService(accessor, Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(), Mock.Of<ITokenGenerator>());
+            return service;
+        }
+
+        public SendRemindersJob SendRemindersJob(
+            ILogger logger = null, 
+            IInvitationService invitationService = null, 
+            IEmailService emailService = null,
+            IWebInterviewConfigProvider webInterviewConfigProvider = null,
+            IPlainKeyValueStorage<EmailParameters> emailParamsStorage = null, 
+            HttpMessageHandler messageHandler = null)
+        {
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
+
+            var settingsMock = new Mock<IWebInterviewConfigProvider>();
+            settingsMock.Setup(x => x.Get(It.IsAny<QuestionnaireIdentity>())).Returns(Mock.Of<WebInterviewConfig>(_ 
+                => _.ReminderAfterDaysIfNoResponse == 2
+                && _.ReminderAfterDaysIfPartialResponse == 2));
+
+            var testMessageHandler = new TestMessageHandler();
+            var httpClient = new HttpClient(messageHandler ?? testMessageHandler);
+            IHttpClientFactory httpClientFactory = Mock.Of<IHttpClientFactory>(x => x.CreateClient(It.IsAny<IHttpStatistician>()) == httpClient);
+
+            return new SendRemindersJob(
+                logger ?? Mock.Of<ILogger>(),
+                invitationService ?? Mock.Of<IInvitationService>(),
+                emailService ?? emailServiceMock.Object,
+                webInterviewConfigProvider ?? Mock.Of<IWebInterviewConfigProvider>(),
+                emailParamsStorage ?? Mock.Of<IPlainKeyValueStorage<EmailParameters>>(),
+                httpClientFactory,
+                Mock.Of<IHttpStatistician>());
+        }
+
+        public SendInvitationsJob SendInvitationsJob(
+            ILogger logger = null, 
+            IInvitationService invitationService = null, 
+            IEmailService emailService = null, 
+            IInvitationMailingService invitationMailingService = null)
+        {
+            var emailServiceMock = new Mock<IEmailService>();
+            emailServiceMock.Setup(x => x.IsConfigured()).Returns(true);
+
+            return new SendInvitationsJob(
+                logger ?? Mock.Of<ILogger>(),
+                invitationService ?? Mock.Of<IInvitationService>(),
+                emailService ?? emailServiceMock.Object,
+                invitationMailingService ?? Mock.Of<IInvitationMailingService>());
+        }
+
+        public TokenGenerator TokenGenerator(int tokenLength = 8, IPlainStorageAccessor<Invitation> invitationStorage = null)
+        {
+            return new TokenGenerator(invitationStorage ?? new InMemoryPlainStorageAccessor<Invitation>())
+            {
+                tokenLength = tokenLength
+            };
+        }
+
+        public AssignmentPasswordGenerator AssignmentPasswordGenerator(
+            IPlainStorageAccessor<Assignment> assignments = null, 
+            IPlainStorageAccessor<AssignmentToImport> importAssignments = null)
+        {
+            return new AssignmentPasswordGenerator(
+                assignments ?? new InMemoryPlainStorageAccessor<Assignment>(),
+                importAssignments ?? new InMemoryPlainStorageAccessor<AssignmentToImport>());
+        }
+    }
+
+    internal class SimpleFileHandler : IFastBinaryFilesHttpHandler
+    {
+        public Task<byte[]> DownloadBinaryDataAsync(HttpClient http, HttpResponseMessage response, IProgress<TransferProgress> transferProgress,
+            CancellationToken token)
+        {
+            return response.Content.ReadAsByteArrayAsync();
         }
     }
 

@@ -1,10 +1,14 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class DataExportStatusView
     {
+        public DataExportStatusView()
+        {
+            
+        }
+
         public DataExportStatusView(
             string questionnaireId,
             DataExportView[] dataExports,
@@ -19,5 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         public DataExportView[] DataExports { get; set; }
         public RunningDataExportProcessView[] RunningDataExportProcesses { get; set; }
+
+        public bool Success { get; set; }
     }
 }

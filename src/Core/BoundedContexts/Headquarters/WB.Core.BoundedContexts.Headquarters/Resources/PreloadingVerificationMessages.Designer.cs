@@ -376,7 +376,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances.
+        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 0, 1, ... to count of roster instances.
         /// </summary>
         public static string PL0053_InconsistentNumericRosterInstanceCodes {
             get {
@@ -390,6 +390,69 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0054_MaxInterviewsCountByAssignmentExeeded {
             get {
                 return ResourceManager.GetString("PL0054_MaxInterviewsCountByAssignmentExeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is not valid.
+        /// </summary>
+        public static string PL0055_InvalidEmail {
+            get {
+                return ResourceManager.GetString("PL0055_InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Password. At least 6 numbers and upper case letters or single symbol &apos;?&apos; to generate password.
+        /// </summary>
+        public static string PL0056_InvalidPassword {
+            get {
+                return ResourceManager.GetString("PL0056_InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For assignments with provided email allowed quantity is 1.
+        /// </summary>
+        public static string PL0057_IncosistentQuantityAndEmail {
+            get {
+                return ResourceManager.GetString("PL0057_IncosistentQuantityAndEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Email.
+        /// </summary>
+        public static string PL0058_IncosistentWebmodeAndEmail {
+            get {
+                return ResourceManager.GetString("PL0058_IncosistentWebmodeAndEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mode has to be activated for assignments having Password.
+        /// </summary>
+        public static string PL0059_IncosistentWebmodeAndPassword {
+            get {
+                return ResourceManager.GetString("PL0059_IncosistentWebmodeAndPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment with size 1 for web mode should have either email or password provided.
+        /// </summary>
+        public static string PL0060_WebmodeSizeOneHasNoEmailOrPassword {
+            get {
+                return ResourceManager.GetString("PL0060_WebmodeSizeOneHasNoEmailOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is not unique. Password by assignment for web mode with quantity 1 should be unique.
+        /// </summary>
+        public static string PL0061_DuplicatePasswordWithQuantity1 {
+            get {
+                return ResourceManager.GetString("PL0061_DuplicatePasswordWithQuantity1", resourceCulture);
             }
         }
     }

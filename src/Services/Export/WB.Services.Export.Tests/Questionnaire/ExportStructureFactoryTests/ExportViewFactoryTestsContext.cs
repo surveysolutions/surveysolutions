@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Infrastructure.EventSourcing;
 
 namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
 {
@@ -17,9 +17,7 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
         protected static QuestionnaireExportStructureFactory CreateExportViewFactory(
             IQuestionnaireStorage questionnaireStorage = null)
         {
-            return new QuestionnaireExportStructureFactory(
-                new MemoryCache(new MemoryCacheOptions()), 
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+            return new QuestionnaireExportStructureFactory(questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter( params IQuestionnaireEntity[] chapterChildren)

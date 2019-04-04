@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using ICSharpCode.SharpZipLib.Zip;
 using WB.Services.Infrastructure.FileSystem;
-using ZipFile = ICSharpCode.SharpZipLib.Zip.ZipFile;
 
-namespace WB.Services.Export.Utils
+namespace WB.Services.Export
 {
     public class ZipArchiveUtils : IArchiveUtils
     {

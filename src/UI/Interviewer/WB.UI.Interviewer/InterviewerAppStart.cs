@@ -18,6 +18,7 @@ namespace WB.UI.Interviewer
 {
     public class InterviewerAppStart : MvxAppStart
     {
+        private readonly ILogger logger;
         private readonly IAuditLogService auditLogService;
         private readonly IServiceLocator serviceLocator;
         private readonly IApplicationCypher applicationCypher;
@@ -26,11 +27,13 @@ namespace WB.UI.Interviewer
             IMvxNavigationService navigationService,
             IAuditLogService auditLogService,
             IServiceLocator serviceLocator,
-            IApplicationCypher applicationCypher) : base(application, navigationService)
+            IApplicationCypher applicationCypher,
+            ILogger logger) : base(application, navigationService)
         {
             this.auditLogService = auditLogService;
             this.serviceLocator = serviceLocator;
             this.applicationCypher = applicationCypher;
+            this.logger = logger;
         }
 
         public override void ResetStart()
@@ -38,6 +41,7 @@ namespace WB.UI.Interviewer
             //temp fix of KP-11583
             //
             //base.ResetStart();
+            logger.Warn("Ignored application reset start");
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
@@ -45,8 +49,7 @@ namespace WB.UI.Interviewer
             auditLogService.Write(new OpenApplicationAuditLogEntity());
             this.serviceLocator.GetInstance<InterviewDashboardEventHandler>();
 
-            var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<InterviewerAppStart>();
-            logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             applicationCypher.EncryptAppData();
 
@@ -62,7 +65,6 @@ namespace WB.UI.Interviewer
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
             var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
             InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
-
             if (currentInterviewer == null)
             {
                 await viewModelNavigationService.NavigateToFinishInstallationAsync();

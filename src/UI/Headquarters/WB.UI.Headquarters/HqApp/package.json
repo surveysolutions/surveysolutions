@@ -23,7 +23,7 @@
     "datatables.net-select": "1.2.5",
     "es6-promise": "^4.2.5",
     "filemanager-webpack-plugin": "^2.0.2",
-    "flatpickr": "^3.0.7",
+    "flatpickr": "^4.5.2",
     "fuse.js": "^3.2.0",
     "i18next": "^11.9.0",
     "jquery": "^3.2.1",

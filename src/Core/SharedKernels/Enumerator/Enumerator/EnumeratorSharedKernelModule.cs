@@ -117,6 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<CategoricalMultiLinkedToQuestionViewModel>();
             registry.Bind<CategoricalMultiLinkedToRosterTitleViewModel>();
             registry.Bind<CategoricalMultiViewModel>();
+            registry.Bind<CategoricalMultiComboboxViewModel>();
             registry.Bind<QRBarcodeQuestionViewModel>();
             registry.Bind<RealQuestionViewModel>();
             registry.Bind<IntegerQuestionViewModel>();
@@ -126,6 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<SingleOptionLinkedQuestionOptionViewModel>();
             registry.Bind<SingleOptionQuestionViewModel>();
             registry.Bind<SingleOptionRosterLinkedQuestionViewModel>();
+            registry.Bind<CategoricalComboboxAutocompleteViewModel>();
             registry.Bind<TextListAddNewItemViewModel>();
             registry.Bind<TextListQuestionViewModel>();
             registry.Bind<TextQuestionViewModel>();

@@ -57,7 +57,6 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             exportedQuestion.Should().BeEquivalentTo(new[] { "1", "0", "1", ExportFormatSettings.MissingNumericQuestionValue }); // 1 0 1
         }
 
-        static QuestionnaireExportStructureFactory QuestionnaireExportStructureFactory;
         static QuestionnaireExportStructure questionnaaireExportStructure;
         static Guid questionId;
         static InterviewData interview;

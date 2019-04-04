@@ -225,11 +225,34 @@
     <comment>Ответ на мультиселект вопрос должен быть больше или равен 1</comment>
   </data>
     <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
-    <value>Неправильный код для элемента ростера. Последовательность ростер кодов должна быть 1, 2, ... до количества ростер элементов</value>
+    <value>Неправильный код для элемента ростера. Последовательность ростер кодов должна быть 0, 1, ... до количества ростер элементов</value>
     <comment>Неправильный код для элемента ростера. Последовательность ростер кодов должна быть 1, 2, ... до количества ростер элементов</comment>
   </data>
     <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
     <value>Максимальное количество не может быть больше {0}.</value>
     <comment>Максимальное количество не может быть больше {0}.</comment>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Некорректный электронный адрес</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Пароль должен быль не менее 6 символов(цифр и заглавных букв) или одного символа «?» для автоматической генерации пароля</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Недопустимое значение для количиства, призаданном электронном адресе должно равняться 1</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Если задан электронный адрес, то должен быть активирован веб режим</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Если задан пароль, то должен быть активирован веб режим</value>
+  </data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</value>
+    <comment>Задание размером 1 в веб режиме дожно иметь пароль или электронный адрес</comment>
+  </data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Пароль не уникален. Пароль для задания в веб режиме с количеством интервью равным 1 должен быть уникален</value>
+    <comment></comment>
   </data>
 </root>

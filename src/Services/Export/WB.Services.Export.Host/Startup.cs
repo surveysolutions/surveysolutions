@@ -3,17 +3,20 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prometheus;
 using Prometheus.Advanced;
+using WB.Services.Export.Checks;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.InterviewDataStorage.EfMappings;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Infrastructure.Health;
 using WB.Services.Scheduler;
+using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Export.Host
 {
@@ -43,18 +46,27 @@ namespace WB.Services.Export.Host
                 WebConfigReader.Read(Configuration, webConfig, logger);
             }
 
+            services.AddTransient<TenantModelBinder>();
             services.AddMvcCore(ops =>
             {
                 ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+                ops.Filters.Add<TenantInfoPropagationActionFilter>();
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonFormatters();
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
 
+            services.Configure<DbConnectionSettings>(Configuration.GetSection("ConnectionStrings"));
+
             services.UseJobService(Configuration);
+
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
+            services.AddDbContext<TenantDbContext>(builder => {
+                builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
+            });
+            services.AddTransient<IOnDemandCollector, AppVersionCollector>();
 
             services.AddSingleton<ICollectorRegistry>(c =>
             {
@@ -66,8 +78,22 @@ namespace WB.Services.Export.Host
                 
                 return registry;
             });
+
+            var healthChecksBuilder = services.AddHealthChecks();
+            if (Configuration.IsS3Enabled())
+            {
+                healthChecksBuilder.AddCheck<AmazonS3Check>("Amazon s3");
+            }
+
+            healthChecksBuilder
+                .AddCheck<EfCoreHealthCheck>("EF migrations")
+                .AddDbContextCheck<JobContext>("Database");
+
+            services.Configure(Configuration);
             
-            ServicesRegistry.Configure(services, Configuration);
+            #if RANDOMSCHEMA && DEBUG
+            TenantInfoExtension.AddSchemaDebugTag(Process.GetCurrentProcess().Id.ToString() + "_");
+            #endif
 
             // Create the IServiceProvider based on the container.
             return services.BuildServiceProvider();
@@ -81,7 +107,7 @@ namespace WB.Services.Export.Host
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseApplicationVersion("/.version");
+            app.StartScheduler();
             app.UseHealthChecks("/.hc");
             app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
             app.UseMvc();

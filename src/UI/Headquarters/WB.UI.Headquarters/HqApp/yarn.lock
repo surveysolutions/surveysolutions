@@ -4408,10 +4408,10 @@ flat-cache@^1.2.1:
     rimraf "~2.6.2"
     write "^0.2.1"
 
-flatpickr@^3.0.7:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-3.1.5.tgz#32b13ac2361c5f9d01484353a4f34cf5f079bc6e"
-  integrity sha512-TvoJmb13WIgxyZ/QrdnrOC8Wn+ZbHJHGaqBBMyReVi6gjeD9fgS9mrltRlfxP3aAsrqtHEzExWOEcJqGJGxBnw==
+flatpickr@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.5.2.tgz#47c8ad472a096e5fb7e74b809b0703535383f20d"
+  integrity sha512-jDy4QYGpmiy7+Qk8QvKJ4spjDdxcx9cxMydmq1x427HkKWBw0qizLYeYM2F6tMcvvqGjU5VpJS55j4LnsaBblA==
 
 flush-write-stream@^1.0.0:
   version "1.0.3"
@@ -10539,9 +10539,9 @@ vary@~1.1.2:
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
 vee-validate@^2.0.0-rc.27:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.1.5.tgz#ced270f9c7f5eeac560b4d7ab63bda756b71761c"
-  integrity sha512-ygo3uQZrCZjFQcZ/AcFI5UZ3ouaNxtsrs+3o/u4yd3TeZveMwYBI3v6+uKbk2aHmNV6jXLl/aj5BTZTYaf73Lw==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.2.0.tgz#0dcb6251a50cde9a3a1e924c917cc3d0a543b661"
+  integrity sha512-s72VQcl1DWTNQKQyHtUDcU536dIx/GYDnCObDj4AXDZtWnqM3rXbgp7FCT3D2q9HFKw7IykW9bVrClhPBeQnrw==
 
 vendors@^1.0.0:
   version "1.0.2"

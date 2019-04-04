@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             await Because();
         }
 
-        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(new QuestionnaireListItem());
+        public Task Because() => viewModel.LoadQuestionnaireCommand.ExecuteAsync(new QuestionnaireListItemViewModel());
 
         [Test]
         public void should_not_be_loaded_new_questionnaire () => mockOfDesignerApiService.Verify(

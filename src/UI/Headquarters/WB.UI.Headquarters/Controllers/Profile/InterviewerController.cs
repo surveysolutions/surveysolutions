@@ -103,9 +103,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interviewer = await this.userManager.FindByIdAsync(userId);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
-            var points = interviewerProfileFactory.GetInterviewerCheckinPoints(userId).ToList();
+            var points = interviewerProfileFactory.GetInterviewerCheckInPoints(userId);
 
-            if (points.Count == 0) return this.HttpNotFound("No points");
+            if (points.CheckInPoints.Count == 0 && points.TargetLocations.Count == 0) return this.HttpNotFound("No points");
 
             return this.Json(points, JsonRequestBehavior.AllowGet);
         }

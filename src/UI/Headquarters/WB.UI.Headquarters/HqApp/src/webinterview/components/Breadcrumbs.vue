@@ -6,7 +6,7 @@
                 <a href="javascript:void(0)" @click="navigate(breadcrumb)">{{ breadcrumb.title}} <span v-if="breadcrumb.isRoster"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span> </a>
             </li>
         </ol>
-        <h3>{{info.title}} <span v-if="info.isRoster"> - <i>{{getRosterTitle(info.rosterTitle)}}</i></span></h3>
+        <h3 v-html="title"></h3>
     </div>
 </template>
 <script lang="js">
@@ -39,6 +39,14 @@
             entities() {
                 if (!this.info) return {}
                 return this.info.breadcrumbs
+            },
+            title(){
+                var title = this.info.title
+
+                if(this.info.isRoster)
+                    title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
+
+                return title
             }
         },
         methods: {

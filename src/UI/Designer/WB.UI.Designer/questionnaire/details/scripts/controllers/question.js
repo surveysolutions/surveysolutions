@@ -3,10 +3,16 @@
         function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, 
             hotkeys, optionsService, alertService, $uibModal) {
             $scope.currentChapterId = $state.params.chapterId;
-            var dictionnaires = {};
+            var dictionnaires = {
+                categoricalMultiKinds:
+                [
+                    { value: 1, text: $i18next.t('QuestionCheckboxes') },
+                    { value: 2, text: $i18next.t('QuestionYesNoMode') },
+                    { value: 3, text: $i18next.t('QuestionComboBox') }
+                ]
+            };
 
             var saveQuestion = 'ctrl+s';
-          
             
             if (hotkeys.get(saveQuestion) !== false) {
                 hotkeys.del(saveQuestion);
@@ -82,6 +88,7 @@
                 $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
                 $scope.activeQuestion.geometryType = question.geometryType;
                 $scope.activeQuestion.defaultDate = question.defaultDate;
+                $scope.activeQuestion.categoricalMultiKinds = dictionnaires.categoricalMultiKinds;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -109,6 +116,9 @@
                 $rootScope.updateVariableTypes($scope.activeQuestion);
                 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
+
+                $scope.activeQuestion.showAsList = question.showAsList;
+                $scope.activeQuestion.showAsListThreshold = question.showAsListThreshold;
 
                 if (!_.isNull($scope.questionForm) && !_.isUndefined($scope.questionForm)) {
                     $scope.questionForm.$setPristine();
@@ -159,6 +169,7 @@
                                 break;
                             case 'Instructions':
                                 focusId = 'edit-question-instructions';
+                                break;
                             default:
                                 break;
                         }
@@ -187,19 +198,20 @@
                     });
 
                     modalInstance.result.then(function(selectedClassification) {
-                            if (selectedClassification == null)
+                            if (_.isNull(selectedClassification) || _.isUndefined(selectedClassification))
                                 return;
 
                             var questionTitle = $scope.activeQuestion.title || $i18next.t('UntitledQuestion');
                             var replaceOptions = function() {
+                                
+                                var optionsToInsertCount = selectedClassification.categoriesCount;
 
-                                //commandService.replaceOptionsWithClassification
-                                $scope.activeQuestion.optionsCount = selectedClassification.categoriesCount;
-
-                                if ($scope.activeQuestion.optionsCount > $scope.MAX_OPTIONS_COUNT) {
+                                if (optionsToInsertCount > $scope.MAX_OPTIONS_COUNT) {
                                     if ($scope.activeQuestion.type !== "SingleOption") {
 
-                                        var modalInstance =confirmService.open(utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle, $scope.MAX_OPTIONS_COUNT));
+                                        var modalInstance = confirmService.open(
+                                            utilityService.willBeTakenOnlyFirstOptionsConfirmationPopup(questionTitle,
+                                                $scope.MAX_OPTIONS_COUNT));
 
                                         modalInstance.result.then(function(confirmResult) {
                                             if (confirmResult === 'ok') {
@@ -228,7 +240,7 @@
                                     $scope.activeQuestion.optionsCount = selectedClassification.categories.length;
 
                                 }
-                            }
+                            };
 
                             if ($scope.activeQuestion.options.length > 0) {
                                 var modalInstance = confirmService.open(utilityService.replaceOptionsConfirmationPopup(questionTitle));
@@ -564,21 +576,42 @@
                 });
             };
 
+            $scope.changeCategoricalKind = function (currentQuestion, kind) {
+                var isFilteredCombobox = kind.value === 3;
+                var yesNoView = kind.value === 2;
+
+                if (isFilteredCombobox === currentQuestion.isFilteredCombobox &&
+                    yesNoView === currentQuestion.yesNoView) return;
+
+                currentQuestion.isFilteredCombobox = isFilteredCombobox;
+                currentQuestion.yesNoView = yesNoView;
+                markFormAsChanged();
+            };
+            
+            $scope.getCategoricalKind = function (currentQuestion) {
+                if (currentQuestion.isFilteredCombobox)
+                    return dictionnaires.categoricalMultiKinds[2];
+                else if (currentQuestion.yesNoView)
+                    return dictionnaires.categoricalMultiKinds[1];
+                else
+                    return dictionnaires.categoricalMultiKinds[0];
+            };
+
             $scope.$watch('activeQuestion.isLinked', function(newValue) {
                 if (!$scope.activeQuestion) {
                     return;
                 }
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
+                    $scope.activeQuestion.isFilteredCombobox = false;
                     $scope.activeQuestion.optionsFilterExpression = null;
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;
-                }
-            });
-            $scope.$watch('activeQuestion.yesNoView', function (newValue) {
-                if (newValue && $scope.activeQuestion) {
-                    $scope.activeQuestion.isLinked = false;
+                    if ($scope.initialQuestion) {
+                        $scope.activeQuestion.yesNoView = $scope.initialQuestion.yesNoView;
+                        $scope.activeQuestion.isFilteredCombobox = $scope.initialQuestion.isFilteredCombobox;
+                    }
                 }
             });
 
@@ -652,6 +685,10 @@
 
             $scope.isIntegerChange = function () {
                 $scope.activeQuestion.countOfDecimalPlaces = null;
+            };
+
+            $scope.showAsListChange = function () {
+                $scope.activeQuestion.showAsListThreshold = null;
             };
 
             $scope.loadQuestion();

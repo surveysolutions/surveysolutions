@@ -436,7 +436,8 @@ namespace WB.Tests.Unit.Designer
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView = false,
             string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId = null, string optionsFilterExpression = null,
-            int? maxAllowedAnswers = null, string title = "test", bool featured = false)
+            int? maxAllowedAnswers = null, string title = "test", bool featured = false,
+            bool? filteredCombobox = null)
         {
             return new MultyOptionsQuestion
             {
@@ -452,6 +453,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionText = title,
                 MaxAllowedAnswers = maxAllowedAnswers,
                 Featured = featured,
+                IsFilteredCombobox = filteredCombobox,
                 Properties = new QuestionProperties(false, true)
                 {
                     OptionsFilterExpression = optionsFilterExpression
@@ -879,9 +881,12 @@ namespace WB.Tests.Unit.Designer
         }
 
 
-        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
-            Guid? linkedToRosterId = null, List<Answer> answers = null, bool isPrefilled = false, bool isComboBox = false)
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, 
+            string enablementCondition = null, string validationExpression = null,
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, 
+            decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, 
+            string linkedFilterExpression = null, Guid? linkedToRosterId = null, List<Answer> answers = null, 
+            bool isPrefilled = false, bool isComboBox = false, bool showAsList = false)
         {
             var publicKey = questionId ?? Guid.NewGuid();
             return new SingleQuestion
@@ -900,6 +905,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedFilterExpression = linkedFilterExpression,
                 Featured = isPrefilled,
                 IsFilteredCombobox = isComboBox,
+                ShowAsList = showAsList
             };
         }
 
@@ -1227,6 +1233,36 @@ namespace WB.Tests.Unit.Designer
                     IsSignature = isSignature
                 };
             }
+
+            public static UpdateMultiOptionQuestion UpdateMultiOptionQuestion(Guid questionId, Guid responsibleId, string title,
+                string variableName, string variableLabel = null, string enablementCondition = null, string instructions = null,
+                string validationExpression = null, string validationMessage = null, QuestionScope scope = QuestionScope.Interviewer, Option[] options = null,
+                Guid? linkedToQuestionId = null, bool areAnswersOrdered = false, int? maxAllowedAnswers = null, bool yesNoView = false,
+                string linkedFilterExpression = null, bool isFilteredCombobox = false, bool hideIfDisabled = false, 
+                List<ValidationCondition> validationConditions = null) => new UpdateMultiOptionQuestion(
+                Guid.NewGuid(),
+                questionId,
+                responsibleId,
+                commonQuestionParameters: new CommonQuestionParameters()
+                {
+                    Title = title,
+                    VariableName = variableName,
+                    VariableLabel = variableLabel,
+                    EnablementCondition = enablementCondition,
+                    Instructions = instructions,
+                    HideIfDisabled = hideIfDisabled
+                },
+                validationExpression,
+                validationMessage,
+                scope,
+                options ?? new[] {new Option() {Title = "1", Value = "1"}, new Option() {Title = "2", Value = "2"}},
+                linkedToQuestionId,
+                areAnswersOrdered,
+                maxAllowedAnswers,
+                yesNoView,
+                validationConditions ?? new List<ValidationCondition>(),
+                linkedFilterExpression,
+                isFilteredCombobox);
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")

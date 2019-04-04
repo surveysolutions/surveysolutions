@@ -3,7 +3,10 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
+using WB.Tests.Unit.Designer.QuestionnaireVerificationTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
 {
@@ -46,30 +49,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 cascadeFromQuestionId : null
             );
 
-            questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, oldOptions.Select(x=> Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
+            questionnaire.UpdateFilteredComboboxOptions(filteredQuestionId, responsibleId, 
+                oldOptions.Select(x=> Create.QuestionnaireCategoricalOption(int.Parse(x.Value), x.Title)).ToArray());
             BecauseOf();
         }
 
         private void BecauseOf() =>
             questionnaire.UpdateSingleOptionQuestion(
+                new UpdateSingleOptionQuestion(
+                questionnaireId: questionnaire.Id,
                 questionId: filteredQuestionId,
-                title: "title",
-                variableName: "qr_barcode_question",
-                variableLabel: null,
+                commonQuestionParameters:new CommonQuestionParameters()
+                {
+                    Title = "title",
+                    VariableName = "qr_barcode_question",
+                    VariableLabel = null,
+                    EnablementCondition = null,
+                    Instructions = "instructions",
+                },
+                
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
-                enablementCondition: null,
-                hideIfDisabled: false,
-                instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,
                 linkedToEntityId: (Guid?)null,
                 isFilteredCombobox: false,
-                cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties());
+                cascadeFromQuestionId: parentQuestionId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null,
+                validationExpression: null,
+                validationMessage: null,
+                showAsList:false,
+                showAsListThreshold: null));
 
-
-   
         [NUnit.Framework.Test] public void should_raise_QuestionChanged_event_with_answer_option_that_was_presiously_saved () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId)
                 .Answers.Count().Should().Be(oldOptions.Count());

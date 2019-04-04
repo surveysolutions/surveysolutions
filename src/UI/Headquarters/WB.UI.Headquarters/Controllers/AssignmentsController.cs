@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -25,11 +24,7 @@ namespace WB.UI.Headquarters.Controllers
     [ActivePage(MenuItem.Assignments)]
     public class AssignmentsController : BaseController
     {
-        private readonly IStatefulInterviewRepository interviews;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser currentUser;
-        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
 
         public AssignmentsController(ICommandService commandService,
@@ -39,15 +34,12 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser currentUser, 
             IPlainStorageAccessor<Assignment> assignmentsStorage, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
+            IInvitationService invitationService)
             : base(commandService, logger)
         {
-            this.interviews = interviews;
-            this.questionnaireStorage = questionnaireStorage;
             this.currentUser = currentUser;
-            this.assignmentsStorage = assignmentsStorage;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
-            this.questionnaires = questionnaires;
         }
         
         [Localizable(false)]
@@ -73,36 +65,11 @@ namespace WB.UI.Headquarters.Controllers
                     : Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
                 Assignments = Url.Content(@"~/api/Assignments"),
                 Interviews = model.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ"),
-                Profile = Url.Action("Profile", "Interviewer")
+                Profile = Url.Action("Profile", "Interviewer"),
+                SurveySetup = model.IsSupervisor ? "" : Url.Action("Index", "SurveySetup")
             };
 
             return View(model);
-        }
-
-        [HttpPost]
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        [ObserverNotAllowed]
-        public ActionResult Create(string id, Guid responsibleId, int? size)
-        {
-            var interview = this.interviews.Get(id);
-            if (interview == null)
-            {
-                return HttpNotFound();
-            }
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
-            bool isAudioRecordingEnabled = this.questionnaires.Query(_ => _
-                .Where(q => q.Id == interview.QuestionnaireIdentity.ToString())
-                .Select(q => q.IsAudioRecordingEnabled).FirstOrDefault());
-
-            var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
-            assignment.UpdateQuantity(size);
-            assignment.Reassign(responsibleId);
-            assignment.SetAudioRecordingEnabled(isAudioRecordingEnabled);
-
-            this.assignmentsStorage.Store(assignment, null);
-
-            return RedirectToAction("Index");
         }
     }
 
@@ -123,6 +90,8 @@ namespace WB.UI.Headquarters.Controllers
             public string Profile { get; set; }
             public string Interviews { get; set; }
             public string Responsible { get; set; }
+
+            public string SurveySetup { get; set; }
         }
     }
 }

@@ -114,6 +114,8 @@ namespace WB.UI.Headquarters.Controllers
                 Status = data.Status,
                 ResponsibleName = data.ResponsibleName,
                 ViewerId = this.authorizedUser.Id,
+                UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
+                UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
                 AssignmentId = data.AssignmentId
             };
 

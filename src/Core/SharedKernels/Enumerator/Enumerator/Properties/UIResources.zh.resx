@@ -120,9 +120,6 @@
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>活动的地图：</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>面积：</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>设备上已有的地图</value>
   </data>
@@ -134,9 +131,6 @@
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>编辑</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>周长：</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>位置</value>
@@ -188,12 +182,6 @@
   </data>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
-  </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>我的问卷</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>公开问卷</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>问卷</value>
@@ -584,9 +572,6 @@
   </data>
   <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
     <value>您的定位已经离开地图的边界</value>
-  </data>
-  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>参数：</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{1} 个选项中的 {0} 个已被选中</value>

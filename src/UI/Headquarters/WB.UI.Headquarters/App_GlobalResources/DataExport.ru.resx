@@ -265,4 +265,8 @@
     <value>Экспорт</value>
     <comment>Экспортировать</comment>
   </data>
+  <data name="Preparing" xml:space="preserve">
+      <value>Подготовка</value>
+      <comment>Подготовка</comment>
+  </data>
 </root>

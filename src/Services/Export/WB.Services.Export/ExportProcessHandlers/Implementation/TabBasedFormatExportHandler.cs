@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -12,13 +13,13 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
-    internal abstract class TabBasedFormatExportHandler : AbstractDataExportHandler
+    public abstract class TabBasedFormatExportHandler : AbstractDataExportHandler
     {
         private readonly ITabularFormatExportService tabularFormatExportService;
 
-        protected TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
+        public TabBasedFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor, 
-            IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
+            IOptions<ExportServiceSettings> interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService, 
             ITabularFormatExportService tabularFormatExportService,
             IDataExportFileAccessor dataExportFileAccessor)
@@ -31,14 +32,17 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, ExportProgress progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportProgress = new Progress<int>();
+            var exportProgress = new ExportProgress();
 
-            exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(donePercent / 2);
+            exportProgress.ProgressChanged += (sender, state) => progress.Report(new ProgressState
+                {
+                    Percent = state.Percent / 2,
+                    Eta = state.Eta
+                });
 
             await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(
                 exportSettings, ExportTempDirectoryPath, exportProgress, cancellationToken);
@@ -53,6 +57,20 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 cancellationToken.ThrowIfCancellationRequested();
 
                 this.fileSystemAccessor.DeleteFile(tabDataFile);
+            }
+        }
+
+        protected void CheckFileListsAndThrow(string[] listA, string[] listB)
+        {
+            var listAWithoutExtensions =
+                listA.Select(x => this.fileSystemAccessor.GetFileNameWithoutExtension(x)).ToList();
+
+            var listBWithoutExtensions =
+                listB.Select(x => this.fileSystemAccessor.GetFileNameWithoutExtension(x)).ToList();
+
+            if (listAWithoutExtensions.Except(listBWithoutExtensions, StringComparer.OrdinalIgnoreCase).Any())
+            {
+                throw new InvalidOperationException("Export result doesn't match expected result");
             }
         }
     }

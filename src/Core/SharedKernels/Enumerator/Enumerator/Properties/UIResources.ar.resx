@@ -120,9 +120,6 @@
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
     <value>الخريطة النشطة:</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>المنطقة:</value>
-  </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
     <value>الخرائط المتوفرة على الجهاز</value>
   </data>
@@ -134,9 +131,6 @@
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>تحرير</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>محيط:</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>الموقع</value>
@@ -190,12 +184,6 @@
   </data>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
-  </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>استبياناتي</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>استبيان عام</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>الاستبيانات</value>

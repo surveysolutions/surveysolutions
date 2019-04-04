@@ -32,9 +32,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var allRowsByAllFiles = new List<PreloadingAssignmentRow>
             {
                 Create.Entity.PreloadingAssignmentRow("Questionnaire", 1, "interview1"),
-                Create.Entity.PreloadingAssignmentRow(numericRoster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 1)),
-                Create.Entity.PreloadingAssignmentRow(numericRoster, 2, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 3)),
-                Create.Entity.PreloadingAssignmentRow(numericRoster, 3, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 4))
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 0)),
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 2, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 2)),
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 3, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 3))
             };
 
             var verifier = Create.Service.ImportDataVerifier();
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References, Has.Exactly(2).Items);
             Assert.That(errors[0].References.ElementAt(0).Column, Is.EqualTo(numericRosterColumn));
             Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(2));
-            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("3"));
+            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("2"));
             Assert.That(errors[0].References.ElementAt(1).Column, Is.EqualTo(numericRosterColumn));
             Assert.That(errors[0].References.ElementAt(1).Row, Is.EqualTo(3));
-            Assert.That(errors[0].References.ElementAt(1).Content, Is.EqualTo("4"));
+            Assert.That(errors[0].References.ElementAt(1).Content, Is.EqualTo("3"));
         }
 
         [Test]
@@ -243,9 +243,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.PreloadingAssignmentRow(roster, 1, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 10)),
                 Create.Entity.PreloadingAssignmentRow(roster, 2, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 20)),
                 Create.Entity.PreloadingAssignmentRow(nestedNumericRoster, 1, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 10),
-                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 1)),
+                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 0)),
                 Create.Entity.PreloadingAssignmentRow(nestedNumericRoster, 2, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 20), 
-                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 3))
+                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 2))
             };
 
             var verifier = Create.Service.ImportDataVerifier();
@@ -259,7 +259,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References, Has.One.Items);
             Assert.That(errors[0].References.ElementAt(0).Column, Is.EqualTo(numericRosterColumn));
             Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(2));
-            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("3"));
+            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("2"));
         }
     }
 }

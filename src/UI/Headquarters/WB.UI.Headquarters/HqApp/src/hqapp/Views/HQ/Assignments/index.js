@@ -11,6 +11,7 @@ export default class AssignmentsComponent {
 
     get routes() {
         return [{
+                name: "assignments",
                 path: '/Assignments/',
                 component: Assignments
             },

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Services.Export.InterviewDataStorage.InterviewDataExport;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -30,6 +31,19 @@ namespace WB.Services.Export.Questionnaire
         public string Name { get; set; }
         public string Label { get; set; }
         public string Expression { get; set; }
+
+        private string columnName;
+        public string ColumnName
+        {
+            get
+            {
+                if (columnName != null) return columnName;
+                columnName = PostgresSystemColumns.Escape(this.Name?.ToLower());
+                if (string.IsNullOrEmpty(columnName))
+                    throw new ArgumentException($"Column name cant be empty. Entity: {PublicKey}");
+                return columnName;
+            }
+        }
     }
 
     public enum VariableType

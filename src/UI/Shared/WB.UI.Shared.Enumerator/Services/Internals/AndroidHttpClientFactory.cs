@@ -17,10 +17,16 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             this.restServiceSettings = restServiceSettings;
         }
 
-        public HttpClient CreateClient(Url url, HttpMessageHandler handler, IHttpStatistician statistician)
+        public HttpClient CreateClient(IHttpStatistician statistician = null)
         {
-            var httpClient = new HttpClient(new ExtendedMessageHandler(handler, statistician));
-            return httpClient;
+            var http = new HttpClient(new ExtendedMessageHandler(CreateMessageHandler(), statistician))
+            {
+                Timeout = this.restServiceSettings.Timeout,
+                MaxResponseContentBufferSize = this.restServiceSettings.BufferSize
+            };
+
+            http.DefaultRequestHeaders.ConnectionClose = true;
+            return http;
         }
 
         public HttpMessageHandler CreateMessageHandler()
@@ -41,7 +47,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             }
             else
             {
-                var messageHandler = new Xamarin.Android.Net.AndroidClientHandler()
+                var messageHandler = new Xamarin.Android.Net.AndroidClientHandler
                 {
                     AutomaticDecompression = DecompressionMethods.None,
                     AllowAutoRedirect = true,

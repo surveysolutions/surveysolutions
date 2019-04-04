@@ -141,9 +141,6 @@
   <data name="StopWebInterview" xml:space="preserve">
     <value>停止网络访谈</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>启用垃圾保护</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>网络访谈设置</value>
   </data>

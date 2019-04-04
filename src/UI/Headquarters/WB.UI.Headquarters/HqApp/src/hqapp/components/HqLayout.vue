@@ -1,13 +1,16 @@
 <template>
-    <main>
-        <div class="container-fluid">
-            <div class="row">
+    <main :class="mainClass">
+        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" > 
+            <div :class="{ 'row' : hasRow }">
                 <slot name="filters" />
                 <div :class="information">
                     <div class="page-header clearfix" v-if="hasHeader">
                         <div :class="{'neighbor-block-to-search': hasSearch}">
                             <slot name="headers">
-                                <h1>{{title}}</h1>
+                                <div :class="{'topic-with-button': topicButtonRef}">
+                                    <h1>{{title}}</h1>
+                                    <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">{{ topicButton }} </a>
+                                </div>
                                 <i v-if="subtitle">{{ subtitle }}</i>
                             </slot>
                             <slot name="subtitle" />
@@ -43,7 +46,18 @@ export default {
         hasSearch: {
             type: Boolean,
             default() { return false; }
-        }
+        },
+        fixedWidth: {
+            type: Boolean,
+            default() { return false; }
+        },
+        hasRow: {
+            type: Boolean,
+            default: true
+        },
+        topicButton: String,
+        topicButtonRef: String,
+        mainClass: String
     },
     watch: {
         showProgress: function (value) {

@@ -15,7 +15,17 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         public WebInterviewConfig Get(QuestionnaireIdentity identity)
         {
             var webInterviewConfig = this.configs.GetById(identity.ToString());
-            return webInterviewConfig ?? new WebInterviewConfig {QuestionnaireId = identity};
+            return webInterviewConfig ?? new WebInterviewConfig
+            {
+                QuestionnaireId = identity,
+                ReminderAfterDaysIfPartialResponse = 3,
+                ReminderAfterDaysIfNoResponse = 3,
+            };
+        }
+
+        public void Store(QuestionnaireIdentity identity, WebInterviewConfig config)
+        {
+            this.configs.Store(config, identity.ToString());
         }
     }
 }

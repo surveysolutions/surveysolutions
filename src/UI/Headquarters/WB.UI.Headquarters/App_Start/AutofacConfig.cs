@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Web.Hosting;
-using System.Web.Http;
-using Autofac;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.WebApi;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -23,8 +18,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Modularity;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -85,8 +78,8 @@ namespace WB.UI.Headquarters
 
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
 
-            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
-
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", 
+                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
@@ -108,7 +101,7 @@ namespace WB.UI.Headquarters
                 SchemaName = "events"
             };
 
-            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings, 
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             var autofacKernel = new AutofacWebKernel();
@@ -151,8 +144,7 @@ namespace WB.UI.Headquarters
 
             ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
 
-            var externalStoragesSection = settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages");
-            if (externalStoragesSection != null)
+            if (settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages", out var externalStoragesSection))
             {
                 externalStoragesSettings = new ExternalStoragesSettings
                 {
@@ -192,7 +184,7 @@ namespace WB.UI.Headquarters
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
-
+            
             autofacKernel.Load(new NLogLoggingModule(),
                 
                 new OrmModule(connectionSettings),

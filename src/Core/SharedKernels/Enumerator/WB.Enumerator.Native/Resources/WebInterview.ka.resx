@@ -231,9 +231,6 @@
   <data name="ServerUnderLoad" xml:space="preserve">
     <value>ჩვენ ვწუხვართ, ძალიან ბევრი ადამიანი შედის ერთდროულად საიტზე. ჩვენ ვმუშაობთ ამ პრობლემაზე. გთხოვთ, სცადოთ მოგვიანებით.</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>ინტერვიუს დაწყება</value>
-  </data>
   <data name="StartedInterviewText" xml:space="preserve">
     <value>ეს ინტერვიუ არ დასრულებულა</value>
   </data>

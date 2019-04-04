@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
@@ -25,7 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             int? maxAllowedAnswers,
             bool yesNoView,
             List<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
+            string linkedFilterExpression,
+            bool isFilteredCombobox)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -40,7 +40,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
             this.YesNoView = yesNoView;
+            this.IsFilteredCombobox = isFilteredCombobox;
         }
+
+        public bool IsFilteredCombobox { get; set; }
 
         public QuestionScope Scope { get; set; }
 

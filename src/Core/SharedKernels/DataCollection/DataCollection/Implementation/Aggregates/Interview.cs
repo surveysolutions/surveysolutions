@@ -87,18 +87,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected InterviewKey interviewKey;
 
         public Interview(
-            //IQuestionnaireStorage questionnaireRepository,
-            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder
-            //,IQuestionOptionsRepository questionOptionsRepository
             )
         {
-            //this.questionnaireRepository = questionnaireRepository;
-            //this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
-            //this.questionOptionsRepository = questionOptionsRepository;
         }
 
         #region Apply (state restore) methods
@@ -1979,10 +1973,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isInterviewNeedToBeCreated)
             {
-                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewOnClientCreated))
+                if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewCreated))
                 {
-                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId,
-                        command.QuestionnaireVersion, null, command.OriginDate, questionnaire.IsUsingExpressionStorage()));
+                    throw new InterviewException("Create interview must be first event");
                 }
             }
             else
@@ -2450,6 +2443,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiLinkedToRosterQuestion();
+
+        public InterviewTreeMultiOptionLinkedToListQuestion GetMultiOptionLinkedToListQuestion(Identity identity) => 
+            this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiOptionLinkedToListQuestion();
 
         public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleLinkedToRosterQuestion();
