@@ -394,6 +394,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please check your email to reset your password..
+        /// </summary>
+        public static string PasswordEmailSent {
+            get {
+                return ResourceManager.GetString("PasswordEmailSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password reset.
         /// </summary>
         public static string PasswordReset {
