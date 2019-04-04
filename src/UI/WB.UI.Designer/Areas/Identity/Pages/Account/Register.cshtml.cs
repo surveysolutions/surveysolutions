@@ -90,7 +90,11 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
+
+                    if (!string.IsNullOrWhiteSpace(Input.FullName))
+                    {
+                        await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, Input.FullName));
+                    }
 
                     var model = new EmailConfirmationModel();
                     model.UserName = Input.Login;
