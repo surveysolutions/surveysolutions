@@ -73,26 +73,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (removedRosterInstances.Count == 0 && addedRosterInstances.Count == 0)
                 return;
 
-            InvokeOnMainThread(() =>
+            foreach (var removedRosterInstance in removedRosterInstances)
             {
-                foreach (var removedRosterInstance in removedRosterInstances)
+                if (!this.shownRosterInstances.ContainsKey(removedRosterInstance)) continue;
+
+                var collection = this.shownRosterInstances[removedRosterInstance];
+                collection.ForEach(viewModel => viewModel.DisposeIfDisposable());
+
+                this.shownRosterInstances.Remove(removedRosterInstance);
+                InvokeOnMainThread(() =>
                 {
-                    if (!this.shownRosterInstances.ContainsKey(removedRosterInstance)) continue;
-
-                    var collection = this.shownRosterInstances[removedRosterInstance];
-                    collection.ForEach(viewModel => viewModel.DisposeIfDisposable());
-
-                    this.shownRosterInstances.Remove(removedRosterInstance);
                     rosterInstances.RemoveCollection(collection);
-                }
+                });
+            }
 
-                foreach (var addedRosterInstance in addedRosterInstances)
-                {
-                    if (this.isDisposed) return;
+            foreach (var addedRosterInstance in addedRosterInstances)
+            {
+                if (this.isDisposed) return;
 
-                    InsertRosterInstance(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
-                } 
-            });
+                InsertRosterInstance(interviewRosterInstances.IndexOf(addedRosterInstance), addedRosterInstance, statefulInterview);
+            } 
         }
         
         private void InsertRosterInstance(int rosterIndex, Identity interviewRosterInstance, IStatefulInterview statefulInterview)
@@ -108,8 +108,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.compositeCollectionInflationService.GetInflatedCompositeCollection(underlyingInterviewerEntities);
             inflatedChildren.InsertCollection(0, titleCollection);
 
-            rosterInstances.InsertCollection(rosterIndex, inflatedChildren);
-            shownRosterInstances.Add(interviewRosterInstance, inflatedChildren);
+            InvokeOnMainThread(() =>
+            {
+                rosterInstances.InsertCollection(rosterIndex, inflatedChildren);
+            });
+
+            shownRosterInstances[interviewRosterInstance] = inflatedChildren;
         }
 
         public CompositeCollection<ICompositeEntity> RosterInstances => rosterInstances;
