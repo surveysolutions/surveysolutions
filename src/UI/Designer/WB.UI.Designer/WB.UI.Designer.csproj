@@ -488,7 +488,6 @@
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="Views\Account\Layout.Account.cshtml" />
     <Content Include="Views\Shared\_list_search_form.cshtml" />
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
@@ -509,7 +508,6 @@
     <Content Include="Views\ControlPanel\AllowesAddresses.cshtml" />
     <Content Include="Views\ControlPanel\EditAllowesAddress.cshtml" />
     <Content Include="Views\ControlPanel\AddAllowesAddress.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
@@ -518,8 +516,6 @@
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
-    <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
-    <Content Include="Views\Account\_ChangePassword.cshtml" />
     <Content Include="Views\Classifications\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
@@ -533,9 +529,7 @@
     </Content>
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Account\ConfirmationFailure.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
@@ -543,7 +537,6 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
