@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +6,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
@@ -15,11 +17,15 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
     {
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IEmailSender emailSender;
+        private readonly IViewRenderingService viewRenderingService;
 
-        public ForgotPasswordModel(UserManager<DesignerIdentityUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<DesignerIdentityUser> userManager, 
+            IEmailSender emailSender, 
+            IViewRenderingService viewRenderingService)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;
+            this.viewRenderingService = viewRenderingService;
         }
 
         [BindProperty]
@@ -54,10 +60,15 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     values: new { code },
                     protocol: Request.Scheme);
 
+                EmailConfirmationModel emailModel = new EmailConfirmationModel();
+                emailModel.ConfirmationLink = callbackUrl;
+                emailModel.UserName = user.UserName;
+                string body = await this.viewRenderingService.RenderToStringAsync("Emails/ResetPasswordEmail", emailModel);
+                
                 await emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    AccountResources.PasswordReset,
+                    body);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

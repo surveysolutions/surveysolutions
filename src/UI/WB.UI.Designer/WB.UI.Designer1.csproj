@@ -8,28 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\AccountController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="appsettings.ini" />
-    <None Remove="appsettings.magpie.ini" />
     <None Remove="appsettings.vgl.ini" />
-    <None Remove="gulpfile.js" />
-    <None Remove="Styles\designer-list.less" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="appsettings.vgl.ini" />
-    <Content Include="appsettings.magpie.ini" />
-    <Content Include="appsettings.ini" />
-    <Content Include="gulpfile.js" />
-    <Content Include="Styles\bootstrap-custom.less" />
-    <Content Include="Styles\bootstrap-override.less" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <PackageReference Include="FluentMigrator.Runner" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
@@ -43,7 +23,6 @@
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Infrastructure\WB.Persistence.Designer\WB.Persistence.Designer.csproj" />
   </ItemGroup>
-
 
   <ItemGroup>
     <Compile Update="Resources\AccountResources.Designer.cs">
