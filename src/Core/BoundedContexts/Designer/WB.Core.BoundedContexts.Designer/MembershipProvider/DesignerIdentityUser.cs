@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
     public class DesignerIdentityUser : IdentityUser
     {
-
+        public string PasswordSalt { get; set; }
     }
 
     public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser>
@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         {
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("plainstore");
+
+            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt"));
         }
     }
 }

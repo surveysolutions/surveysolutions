@@ -44,7 +44,8 @@ namespace WB.UI.Designer1
             services.AddDbContext<DesignerDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("DefaultConnection")));
-            
+
+            services.AddScoped<IPasswordHasher<DesignerIdentityUser>, PasswordHasher>();
             services.AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
