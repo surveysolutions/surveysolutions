@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
             {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
             {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner},
-            {typeof (PlainRosterTitleViewModel), Resource.Layout.interview_group_plain_roster_title}
+            {typeof (FlatRosterTitleViewModel), Resource.Layout.interview_group_flat_roster_title}
         };
 
         public int GetItemViewType(object forItemObject)
@@ -74,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 typeof(QuestionHeaderViewModel),
                 typeof(GroupViewModel),
                 typeof(StaticTextViewModel),
-                typeof(PlainRosterTitleViewModel)
+                typeof(FlatRosterTitleViewModel)
             };
 
             if (disabledViewModelTypes.Contains(typeOfViewModel))
@@ -85,7 +85,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {
                     if (enablementModel.HideIfDisabled) return UnknownViewType;
 
-                    if (typeOfViewModel == typeof(QuestionHeaderViewModel) || typeOfViewModel == typeof(PlainRosterTitleViewModel))
+                    if (typeOfViewModel == typeof(QuestionHeaderViewModel) || typeOfViewModel == typeof(FlatRosterTitleViewModel))
                         return Resource.Layout.interview_disabled_question;
 
                     if (typeOfViewModel == typeof(GroupViewModel) )
@@ -129,7 +129,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return groupViewModel.Enablement;
                 case StaticTextViewModel staticTextViewModel:
                     return staticTextViewModel.QuestionState.Enablement;
-                case PlainRosterTitleViewModel rosterTitleViewModel:
+                case FlatRosterTitleViewModel rosterTitleViewModel:
                     return rosterTitleViewModel.Enablement;
             }
 

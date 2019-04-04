@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
             {
                 var subGroupStatus = CalculateDetailedStatus(subGroup, interview, questionnaire);
 
-                if (questionnaire.IsPlainRoster(subGroup.Id) && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
+                if (questionnaire.IsFlatRoster(subGroup.Id) && (subGroupStatus == GroupStatus.StartedInvalid || subGroupStatus == GroupStatus.CompletedInvalid))
                     return GroupStatus.StartedInvalid;
 
                 switch (groupStatus)

@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         };
 
         private bool WebmodeSizeOneHasNoEmailOrPassword(AssignmentWebMode webMode, PreloadingAssignmentRow assignmentRow)
-            => assignmentRow.Quantity == null &&
+            => assignmentRow.Quantity?.Quantity == null &&
                webMode.WebMode == true &&
                string.IsNullOrEmpty(assignmentRow.Password?.Value) &&
                string.IsNullOrEmpty(assignmentRow.Email?.Value);

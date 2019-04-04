@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -92,7 +89,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken, onDownloadProgressChanged);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(onDownloadProgressChanged, cancellationToken);
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
@@ -105,7 +102,7 @@ namespace WB.UI.Shared.Enumerator.Services
             async Task GetWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(onDownloadProgressChanged, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (this.fileSystemAccessor.IsFileExists(pathToNewApk))

@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         var hqTimestamp = await this.synchronizationService.SendSyncStatisticsAsync(
                             this.ToSyncStatisticsApiView(statistics, stopwatch),
-                            cancellationToken, this.RestCredentials);
+                            this.RestCredentials, cancellationToken);
 
                         this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
 
