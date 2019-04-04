@@ -1,10 +1,11 @@
+using System.Runtime.CompilerServices;
+using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class InterviewStatisticsReportRow : IView
+    public class InterviewStatisticsReportRow : EntityBase<int>, IView
     {
-        public virtual int Id { get; set; }
         public virtual int EntityId { get; set; }
         public virtual string RosterVector { get; set; }
 
@@ -13,22 +14,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool IsEnabled { get; set; }
         public virtual InterviewSummary InterviewSummary { get; set; }
 
-        protected bool Equals(InterviewStatisticsReportRow other)
-        {
-            return Id == other.Id;
-        }
-
-        public override bool Equals(object obj)
+        protected override bool SignatureEquals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((InterviewStatisticsReportRow) obj);
+            return SignatureEquals((InterviewStatisticsReportRow) obj);
         }
 
-        public override int GetHashCode()
+        protected bool SignatureEquals(InterviewStatisticsReportRow other)
         {
-            return Id;
+            return base.Equals(other) && EntityId == other.EntityId && string.Equals(RosterVector, other.RosterVector);
+        }
+
+        protected override int GetSignatureHashCode()
+        {
+            unchecked
+            {
+                int hashCode = BaseGetHashCode();
+                hashCode = (hashCode * 397) ^ EntityId;
+                hashCode = (hashCode * 397) ^ (RosterVector?.GetHashCode() ?? 0);
+                return hashCode;
+            }
         }
     }
 }

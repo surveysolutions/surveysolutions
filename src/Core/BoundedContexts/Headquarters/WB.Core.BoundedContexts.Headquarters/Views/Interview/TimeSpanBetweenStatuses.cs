@@ -1,9 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class TimeSpanBetweenStatuses
+    public class TimeSpanBetweenStatuses : EntityBase<int>
     {
         public TimeSpanBetweenStatuses()
         {
@@ -28,7 +30,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.SupervisorName = supervisorName;
             this.InterviewerName = interviewerName;
         }
-        public virtual int Id { get; set; }
         public virtual Guid? SupervisorId { get; set; }
         public virtual string SupervisorName { get; set; }
         public virtual Guid? InterviewerId { get; set; }
@@ -44,23 +45,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual long TimeSpanLong { get; protected set; }
 
         public virtual InterviewSummary InterviewSummary { get; set; }
-
-        protected bool Equals(TimeSpanBetweenStatuses other)
+        
+        protected bool SignatureEquals(TimeSpanBetweenStatuses other)
         {
-            return Id == other.Id;
+            return base.Equals(other) && SupervisorId.Equals(other.SupervisorId) && InterviewerId.Equals(other.InterviewerId) && EndStatus == other.EndStatus && TimeSpanLong == other.TimeSpanLong;
         }
 
-        public override bool Equals(object obj)
+        protected override bool SignatureEquals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((TimeSpanBetweenStatuses) obj);
+            return SignatureEquals((TimeSpanBetweenStatuses) obj);
         }
 
-        public override int GetHashCode()
+        protected override int GetSignatureHashCode()
         {
-            return Id;
+            unchecked
+            {
+                int hashCode = BaseGetHashCode();
+                hashCode = (hashCode * 397) ^ SupervisorId.GetHashCode();
+                hashCode = (hashCode * 397) ^ InterviewerId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (int) EndStatus;
+                hashCode = (hashCode * 397) ^ TimeSpanLong.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

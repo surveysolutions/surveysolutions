@@ -131,9 +131,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             interviewPackagesService.ProcessPackage("1");
 
-            UnitOfWork.AcceptChanges();
+            UnitOfWork.Session.Flush();
         }
-            
 
         [NUnit.Framework.Test]
         public void should_broken_packages_storage_contains_specified_interview()

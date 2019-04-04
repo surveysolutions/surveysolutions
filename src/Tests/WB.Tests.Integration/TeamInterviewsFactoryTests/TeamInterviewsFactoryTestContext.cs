@@ -23,7 +23,9 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[]
             {
-                typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap)
+                typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap),
+                typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap),
+                typeof(InterviewStatisticsReportRowMap)
             }, true, schemaName: "readside");
 
             UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
@@ -43,7 +45,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            UnitOfWork.AcceptChanges();
+            
             UnitOfWork.Dispose();
             DatabaseTestInitializer.DropDb(connectionString);
         }

@@ -1,33 +1,17 @@
 using System;
+using System.Runtime.CompilerServices;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.Infrastructure.Domain;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class InterviewCommentedStatus
+    public class InterviewCommentedStatus : EntityBase<Guid>
     {
         public InterviewCommentedStatus()
         {
         }
-
-        protected bool Equals(InterviewCommentedStatus other)
-        {
-            return Id.Equals(other.Id);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((InterviewCommentedStatus) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
+        
         public InterviewCommentedStatus(Guid id,
             Guid statusChangeOriginatorId,
             Guid? supervisorId,
@@ -58,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.InterviewSummary = summary;
             this.Position = position;
         }
-        public virtual Guid Id { get; set; }
+        
         public virtual Guid? SupervisorId { get; set; }
         public virtual string SupervisorName { get; set; }
         public virtual Guid? InterviewerId { get; set; }
@@ -80,5 +64,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual string Comment { get; set; }
 
         public virtual InterviewSummary InterviewSummary { get; set; }
+
+        protected bool SignatureEquals(InterviewCommentedStatus other)
+        {
+            return base.Equals(other) && SupervisorId.Equals(other.SupervisorId) && InterviewerId.Equals(other.InterviewerId) && StatusChangeOriginatorId.Equals(other.StatusChangeOriginatorId) && Status == other.Status && Timestamp.Equals(other.Timestamp) && Position == other.Position && TimespanWithPreviousStatusLong == other.TimespanWithPreviousStatusLong;
+        }
+
+        protected override bool SignatureEquals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return SignatureEquals((InterviewCommentedStatus) obj);
+        }
+
+        protected override int GetSignatureHashCode()
+        {
+            unchecked
+            {
+                int hashCode = BaseGetHashCode();
+                hashCode = (hashCode * 397) ^ SupervisorId.GetHashCode();
+                hashCode = (hashCode * 397) ^ InterviewerId.GetHashCode();
+                hashCode = (hashCode * 397) ^ StatusChangeOriginatorId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (int) Status;
+                hashCode = (hashCode * 397) ^ Timestamp.GetHashCode();
+                hashCode = (hashCode * 397) ^ Position;
+                hashCode = (hashCode * 397) ^ TimespanWithPreviousStatusLong.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 }
