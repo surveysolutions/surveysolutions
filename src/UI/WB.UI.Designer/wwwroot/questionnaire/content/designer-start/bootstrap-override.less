@@ -1,0 +1,71 @@
+@import (reference) "wb-variables";
+@import (reference) "font-styles";
+
+.btn {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 7px 10px;
+    border-radius: 3px;
+    .trebuchet();
+    font-size: 12px;
+    line-height: 1;
+}
+
+input.form-control {
+    padding: 12px;
+    line-height: 1.1;
+    //margin-bottom: 8px;
+    height: 100%;
+}
+
+.btn-lg {
+    padding: 15px;
+}
+
+.btn-link {
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.nav-tabs {
+    .trebuchet12b();
+    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.38) 16%, rgba(252,253,253,1) 42%, rgba(246,247,248,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(16%,rgba(255,255,255,0.38)), color-stop(42%,rgba(252,253,253,1)), color-stop(100%,rgba(246,247,248,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.38) 16%,rgba(252,253,253,1) 42%,rgba(246,247,248,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.38) 16%,rgba(252,253,253,1) 42%,rgba(246,247,248,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0.38) 16%,rgba(252,253,253,1) 42%,rgba(246,247,248,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0.38) 16%,rgba(252,253,253,1) 42%,rgba(246,247,248,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#f6f7f8',GradientType=0 ); /* IE6-9 */
+    
+    li {
+        &.active {
+            a {
+                color: @btn-default-color;
+
+                &:hover {
+                    color: @btn-default-color;
+                }
+            }
+        }
+
+        &.create {
+            a {
+                color: @brand-success;
+            }
+        }
+
+        a {
+            color: @pagination-active-color;
+            border-radius: 0;
+
+            &:hover, &:focus {
+                background-color: #fff;
+                color: @dropdown-link-hover-color;
+                border-color: @table-border-color;
+            }
+        }
+    }
+}

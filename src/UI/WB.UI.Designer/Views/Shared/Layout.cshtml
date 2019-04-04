@@ -11,10 +11,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @*@Styles.Render("~/questionnaire/content/designer-start/css-list")
-    @Styles.Render("~/Content/css-list")
-
-    @Scripts.Render("~/simplepage")*@
+    <link href="~/plugins/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
+    <link href="~/css/designer-list.css" rel="stylesheet" />
+    <script src="~/plugins/jquery.min.js"></script>
+    <script src="~/plugins/bootstrap.min.js"></script>
 
     @Html.GenerateFavicon(Url.Content("~/favicon"))
 
@@ -49,7 +50,7 @@
 
             <div class="questionnaire-logo">
                 <a class="logo" href="https://mysurvey.solutions/" target="_blank">
-                    <img src="~/questionnaire/content/i/logo.png" alt="Survey Solutions" class="pull-left">
+                    @*<img src="~/questionnaire/content/i/logo.png" alt="Survey Solutions" class="pull-left">*@
                     <span class="pull-left">Survey<br>Solutions</span>
                 </a>
                 @Html.ActionLink(QuestionnaireController.Designer, "Index", "Home", null, new { @class = "navbar-text" })

@@ -186,7 +186,7 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css'
   ])
     //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
-    .pipe(gulp.dest('../Content/plugins'));
+    .pipe(gulp.dest('./wwwroot/plugins'));
 });
 
 gulp.task('copyFontsNeededForBundler', function(){
