@@ -101,3 +101,4 @@ Elmah/
 *.apk
 /src/Services/Export/WB.Services.Export.Host/.temp
 *.received.txt
+/src/UI/WB.UI.Designer/wwwroot/plugins/

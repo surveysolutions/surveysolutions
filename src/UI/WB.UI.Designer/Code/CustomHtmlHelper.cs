@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using System.IO;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code;
@@ -19,7 +20,14 @@ namespace WB.UI.Designer
             
             li.InnerHtml.AppendHtml(helper.ActionLink(title, action, controller));
 
-            return new HtmlString(li.ToString());
+            string result;
+            using (var writer = new StringWriter())
+            {
+                li.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+                result = writer.ToString();
+            }
+
+            return new HtmlString(result);
         }
     }
 }
