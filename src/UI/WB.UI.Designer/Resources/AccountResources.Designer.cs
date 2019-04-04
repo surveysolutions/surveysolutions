@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class AccountResources {
@@ -277,6 +277,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked out.
+        /// </summary>
+        public static string LockedOut {
+            get {
+                return ResourceManager.GetString("LockedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This account has been locked out, please try again later..
+        /// </summary>
+        public static string LockedOutText {
+            get {
+                return ResourceManager.GetString("LockedOutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string Login {
@@ -318,6 +336,15 @@ namespace WB.UI.Designer.Resources {
         public static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have successfully logged out of the application..
+        /// </summary>
+        public static string LogoutText {
+            get {
+                return ResourceManager.GetString("LogoutText", resourceCulture);
             }
         }
         

@@ -276,20 +276,29 @@
   <data name="InvalidRetrievalAnswer" xml:space="preserve">
     <value>Ответ на вопрос для восстановления пароля недействителен. Проверьте значение и повторите попытку.</value>
   </data>
-    <data name="FullName" xml:space="preserve">
+  <data name="FullName" xml:space="preserve">
     <value>ФИО</value>
     <comment>ФИО</comment>
   </data>
-    <data name="ManageAccount" xml:space="preserve">
+  <data name="ManageAccount" xml:space="preserve">
     <value>Управление учётной записью</value>
     <comment>Управление учётной записью</comment>
   </data>
-    <data name="EditProfile" xml:space="preserve">
+  <data name="EditProfile" xml:space="preserve">
     <value>Редактирование профиля</value>
     <comment>Редактирование профиля</comment>
   </data>
-    <data name="AccountInfoUpdated" xml:space="preserve">
+  <data name="AccountInfoUpdated" xml:space="preserve">
     <value>Сведения об учетной записи успешно обновлены</value>
     <comment>Сведения об учетной записи успешно обновлены</comment>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>Вы успешно вышли из приложения.</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Заблокирован</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Эта учётная запись заблокирована, пожалуйста попробуйте позже.</value>
   </data>
 </root>

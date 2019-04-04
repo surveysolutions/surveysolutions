@@ -93,7 +93,16 @@
                                 @AccountResources.ManageAccount
                             </a>
                         </li>
-                        <li>@Html.ActionLink(AccountResources.Logout, "LogOff", "Account")</li>
+                        <li>
+                            <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                                @AccountResources.ChangePassword
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-page="/Account/Logout"  asp-area="Identity">
+                                @AccountResources.Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
