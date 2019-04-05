@@ -38,19 +38,30 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionId = @event.Payload.QuestionId;
             var rosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_');
 
-            this.sessionProvider.Session.Query<InterviewGps>().Where(x =>
-                x.InterviewId == interviewId && x.QuestionId == @questionId && x.RosterVector == rosterVector).Delete();
+            var answer = this.sessionProvider.Session.Query<InterviewGps>().FirstOrDefault(x =>
+                x.InterviewId == interviewId && x.QuestionId == @questionId && x.RosterVector == rosterVector);
 
-            this.sessionProvider.Session.Save(new InterviewGps
+            if (answer != null)
             {
-                InterviewId = interviewId,
-                QuestionId = @event.Payload.QuestionId,
-                RosterVector = rosterVector,
-                Latitude = @event.Payload.Latitude,
-                Longitude = @event.Payload.Longitude,
-                Timestamp = @event.Payload.Timestamp.DateTime,
-                IsEnabled = true
-            });
+                answer.Latitude = @event.Payload.Latitude;
+                answer.Longitude = @event.Payload.Longitude;
+                answer.Timestamp = @event.Payload.Timestamp.DateTime;
+                answer.IsEnabled = true;
+                this.sessionProvider.Session.Update(answer);
+            }
+            else
+            {
+                this.sessionProvider.Session.Save(new InterviewGps
+                {
+                    InterviewId = interviewId,
+                    QuestionId = @event.Payload.QuestionId,
+                    RosterVector = rosterVector,
+                    Latitude = @event.Payload.Latitude,
+                    Longitude = @event.Payload.Longitude,
+                    Timestamp = @event.Payload.Timestamp.DateTime,
+                    IsEnabled = true
+                });
+            }
 
             return state;
         }
