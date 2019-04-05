@@ -35,12 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             var interviewId = @event.EventSourceId.ToString("N");
-            var questionId = @event.Payload.QuestionId.ToString("N");
+            var questionId = @event.Payload.QuestionId;
             var rosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_');
 
-            this.sessionProvider.Session.SaveOrUpdate(new InterviewGps
+            this.sessionProvider.Session.Query<InterviewGps>().Where(x =>
+                x.InterviewId == interviewId && x.QuestionId == @questionId && x.RosterVector == rosterVector).Delete();
+
+            this.sessionProvider.Session.Save(new InterviewGps
             {
-                Id = $"{interviewId}-{questionId}-{rosterVector}".TrimEnd('-'),
                 InterviewId = interviewId,
                 QuestionId = @event.Payload.QuestionId,
                 RosterVector = rosterVector,
