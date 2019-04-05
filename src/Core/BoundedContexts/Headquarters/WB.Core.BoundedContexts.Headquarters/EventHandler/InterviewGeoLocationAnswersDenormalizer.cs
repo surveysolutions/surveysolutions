@@ -41,26 +41,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 x.InterviewId == interviewId && x.QuestionId == @event.Payload.QuestionId &&
                 x.RosterVector == rosterVector);
 
-            if (answer == null)
-                this.sessionProvider.Session.Save(new InterviewGps
-                {
-                    InterviewId = interviewId,
-                    QuestionId = @event.Payload.QuestionId,
-                    RosterVector = rosterVector,
-                    Latitude = @event.Payload.Latitude,
-                    Longitude = @event.Payload.Longitude,
-                    Timestamp = @event.Payload.Timestamp.DateTime,
-                    IsEnabled = true
-                });
-            else
-            {
-                answer.IsEnabled = true;
-                answer.Latitude = @event.Payload.Latitude;
-                answer.Longitude = @event.Payload.Longitude;
-                answer.Timestamp = @event.Payload.Timestamp.DateTime;
+            if (answer != null)
+                this.sessionProvider.Session.Evict(answer);
 
-                this.sessionProvider.Session.Update(answer);
-            }
+            this.sessionProvider.Session.SaveOrUpdate(new InterviewGps
+            {
+                InterviewId = interviewId,
+                QuestionId = @event.Payload.QuestionId,
+                RosterVector = rosterVector,
+                Latitude = @event.Payload.Latitude,
+                Longitude = @event.Payload.Longitude,
+                Timestamp = @event.Payload.Timestamp.DateTime,
+                IsEnabled = true
+            });
 
             return state;
         }
