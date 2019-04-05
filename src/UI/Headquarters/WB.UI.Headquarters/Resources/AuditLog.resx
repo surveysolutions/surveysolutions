@@ -120,10 +120,22 @@
   <data name="Empty" xml:space="preserve">
     <value>Log is empty</value>
   </data>
+  <data name="EventType" xml:space="preserve">
+    <value>Event type</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Log</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Log date</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Audit log</value>
   </data>
   <data name="ServerFilePath" xml:space="preserve">
     <value>File location on server: </value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
 </root>
