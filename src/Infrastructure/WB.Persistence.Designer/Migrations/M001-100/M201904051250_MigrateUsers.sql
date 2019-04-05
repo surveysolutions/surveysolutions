@@ -14,7 +14,8 @@
 		"NormalizedUserName" ,
 		"PasswordSalt" ,
 		"CanImportOnHq" ,
-		"PhoneNumberConfirmed" ) select
+		"PhoneNumberConfirmed",
+		"CreatedAtUtc") select
 			u.id,
 			u.email,
 			upper(trim(both ' ' from u.email)),
@@ -31,7 +32,8 @@
 			upper(trim(both ' ' from u.username)) as "NormalizedUserName",
 			u.passwordsalt as "PasswordSalt",
 			canimportonhq as "CanImportOnHq",
-			false as "PhoneNumberConfirmed"
+			false as "PhoneNumberConfirmed",
+			u.createdat as "CreatedAtUtc"
 		from
 			plainstore.users u;
 

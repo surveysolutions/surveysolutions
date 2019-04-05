@@ -611,47 +611,6 @@ namespace WB.UI.Designer.Controllers
             return this.View(user);
         }
 
-        public ViewResult Index(int? p, string sb, int? so, string f)
-        {
-            int page = p ?? 1;
-
-            this.ViewBag.PageIndex = p;
-            this.ViewBag.SortBy = sb;
-            this.ViewBag.Filter = f;
-            this.ViewBag.SortOrder = so;
-
-            if (so.ToBool())
-            {
-                sb = $"{sb} Desc";
-            }
-            var users = accountListViewFactory.Load(new AccountListViewInputModel
-            {
-                Filter = f,
-                Page = page,
-                PageSize = GlobalHelper.GridPageItemsCount,
-                Order = sb ?? string.Empty,
-            });
-
-            Func<IIdentityUser, bool> editAction = (user) => !user.SimpleRoles.Contains(SimpleRoleEnum.Administrator);
-
-            IEnumerable<AccountListViewItemModel> retVal = users.Items.Select(x =>
-                         new AccountListViewItemModel
-                             {
-                                 Id = x.ProviderUserKey.AsGuid(), 
-                                 UserName = x.UserName, 
-                                 Email = x.Email, 
-                                 CreationDate = x.CreatedAt,
-                                 IsApproved = x.IsConfirmed, 
-                                 IsLockedOut = x.IsLockedOut, 
-                                 CanEdit = editAction(x), 
-                                 CanOpen = false,
-                                 CanDelete = false, 
-                                 CanPreview = editAction(x),
-                                 CanImportOnHq = x.CanImportOnHq,
-                                 FullName = x.FullName
-                             });
-
-            return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
-        }
+        
     }
 }
