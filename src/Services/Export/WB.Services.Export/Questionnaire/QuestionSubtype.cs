@@ -10,6 +10,7 @@
         DateTimeTimestamp = 5,
         SingleOptionLinkedFirstLevel = 6,
         MultiOptionLinkedNestedLevel = 7,
-        SingleOptionLinkedNestedLevel = 8
+        SingleOptionLinkedNestedLevel = 8,
+        NumericInteger = 9
     }
 }
