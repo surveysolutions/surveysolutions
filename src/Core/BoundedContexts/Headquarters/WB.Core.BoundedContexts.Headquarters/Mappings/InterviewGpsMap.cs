@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode.Conformist;
+﻿using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -9,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
         public InterviewGpsMap()
         {
             Table("interview_geo_answers");
-            Id(x => x.Id);
+            Id(x => x.Id, Idmap => Idmap.Generator(Generators.Identity));
             Property(x => x.InterviewId);
             Property(x => x.QuestionId);
             Property(x => x.RosterVector);
