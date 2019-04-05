@@ -427,8 +427,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                             }
                         }
 
-                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString());
-                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString());
+                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewDataExportView.ErrorsCount.ToString(CultureInfo.InvariantCulture));
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, ((int)interviewId.Status).ToString(CultureInfo.InvariantCulture));
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);
