@@ -1,0 +1,165 @@
+﻿@page
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Code
+@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Utils
+@model WB.UI.Designer.Areas.Admin.Pages.UsersModel
+@{
+    ViewBag.Title = "Registered users";
+}
+
+<table id="user-table-header" class="table table-header">
+    <thead>
+        <tr>
+            <th class="@(Model.SortBy =="UserName" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="UserName"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "UserName")"
+                   asp-route-f="@Model.Filter">
+                    Login
+
+                    @if (Model.SortBy =="UserName")
+                    {
+                        <span class="glyphicon glyphicon-triangle-@(Model.SortOrder.ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+                @{
+                    ViewBag.Filter = Model.Filter;
+                }
+                <partial name="_list_search_form"/>
+            </th>
+            <th class="@(Model.SortBy =="Email" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="Email"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "Email")"
+                   asp-route-f="@Model.Filter">
+                    Email
+
+                    @if (Model.SortBy =="Email")
+                    {
+                        <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            
+            <th class="@(Model.SortBy =="CreatedAtUtc" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="CreatedAtUtc"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "CreatedAtUtc")"
+                   asp-route-f="@Model.Filter">
+                    Created on
+
+                    @if (Model.SortBy =="CreatedAtUtc")
+                    {
+                        <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            <th class="@(Model.SortBy =="EmailConfirmed" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="EmailConfirmed"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "EmailConfirmed")"
+                   asp-route-f="@Model.Filter">
+                    APPROVED
+
+                    @if (Model.SortBy =="EmailConfirmed")
+                    {
+                    <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            <th class="@(Model.SortBy =="LockoutEnabled" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="LockoutEnabled"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "LockoutEnabled")"
+                   asp-route-f="@Model.Filter">
+                    LOCKED
+
+                    @if (Model.SortBy =="LockoutEnabled")
+                    {
+                    <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            <th class="@(Model.SortBy =="CanImportOnHq" ? "ordered" : "")">
+                <a asp-route-p="@Model.PageIndex"
+                   asp-route-sb="CanImportOnHq"
+                   asp-route-so="@Model.SortOrder.InvertBooleableInt(Model.SortBy == "CanImportOnHq")"
+                   asp-route-f="@Model.Filter">
+                    Can Import On HQ
+
+                    @if (Model.SortBy =="CanImportOnHq")
+                    {
+                    <span class="glyphicon glyphicon-triangle-@((Model.SortOrder).ToBool() ? "top" : "bottom")"></span>
+                    }
+                </a>
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+</table>
+<div id="table-content-holder">
+    <div class="scroller-container">
+        @if (Model.List.TotalCount == 0)
+        {
+        <p class="text-center" style="line-height: 10em">This list does not contain any records</p>
+        }
+        else
+        {
+        <table id="user-table-content" class="table table-content">
+            <tbody>
+                @foreach (var user in Model.List)
+                    {
+                <tr>
+                    <td class="search-value">
+                        <a asp-page="./Details" asp-id="user.Id">
+                            @user.UserName
+                        </a>
+                    </td>
+                    <td class="email">
+                        @{ var emailParts = user.Email.Split(new char[] {'@'}, 2); }
+                        <strong>@emailParts[0]</strong>@("@" + emailParts[1])
+                    </td>
+                    <td class="date">
+                        @user.CreationDate.ConvertToLocalAndFormatDate()
+                    </td>
+                    <td>
+                        @(user.IsApproved ? "Yes" : "No")
+                    </td>
+                    <td>
+                        @(user.IsLockedOut ? "Yes" : "No")
+                    </td>
+                    <td>
+                        @(user.CanImportOnHq ? "Yes" : "No")
+                    </td>
+                    <td>
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @{
+                                    <li>
+                                        <a asp-page="./Edit" asp-id="user.Id">
+                                            Edit
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-page="./Details" asp-id="user.Id">
+                                            Details
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                    }
+            </tbody>
+        </table>
+        @Html.Pager(Model.List.PageIndex + 1, Model.List.TotalPages, x => Url.Action(ViewContext.CurrentAction(), ViewContext.CurrentController(), new { p = x, sb = Model.SortBy, so = Model.SortOrder, f = Model.Filter }), 2)
+        }
+    </div>
+</div>

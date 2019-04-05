@@ -9,6 +9,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
         {
             Create.Column("PasswordSalt").OnTable("AspNetUsers").AsString().Nullable();
             Create.Column("CanImportOnHq").OnTable("AspNetUsers").AsBoolean().WithDefaultValue(false).NotNullable();
+            Create.Column("CreatedAtUtc").OnTable("AspNetUsers").AsDateTime().NotNullable();
         }
     }
 }

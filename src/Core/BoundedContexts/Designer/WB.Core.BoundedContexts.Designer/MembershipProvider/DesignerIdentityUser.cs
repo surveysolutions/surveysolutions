@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public string PasswordSalt { get; set; }
 
         public bool CanImportOnHq { get; set; }
+
+        public DateTime CreatedAtUtc { get; set; }
     }
 
     public class DesignerDbContext : IdentityDbContext<DesignerIdentityUser>
@@ -28,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt"));
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CanImportOnHq).HasColumnName("CanImportOnHq"));
+            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CreatedAtUtc).HasColumnName("CreatedAtUtc"));
         }
     }
 }
