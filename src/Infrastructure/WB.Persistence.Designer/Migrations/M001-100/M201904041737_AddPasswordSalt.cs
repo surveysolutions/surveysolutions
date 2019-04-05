@@ -8,6 +8,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Create.Column("PasswordSalt").OnTable("AspNetUsers").AsString().Nullable();
+            Create.Column("CanImportOnHq").OnTable("AspNetUsers").AsBoolean().WithDefaultValue(false).NotNullable();
         }
     }
 }
