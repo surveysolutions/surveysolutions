@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
     static class AccountQueries
     {
-        public static IQueryable<IdentityUser> FilterAccounts(this DesignerDbContext dbContext, AccountListViewInputModel input)
+        public static IQueryable<DesignerIdentityUser> FilterAccounts(this DesignerDbContext dbContext, AccountListViewInputModel input)
         {
             var result = from u in dbContext.Users
                         join r in dbContext.UserRoles on u.Id equals r.UserId
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             var count =
                 this.accounts.FilterAccounts(input).Count();
 
-            var sortOrder = input.Order.IsNullOrEmpty() ? "CreatedAt  Desc" : input.Order;
+            var sortOrder = input.Order.IsNullOrEmpty() ? $"{nameof(DesignerIdentityUser.CreatedAtUtc)} Desc" : input.Order;
 
             var result = this.accounts.FilterAccounts(input)
                             .OrderUsingSortExpression(sortOrder)

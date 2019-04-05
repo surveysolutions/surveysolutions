@@ -345,7 +345,6 @@
     <Compile Include="DynamicCompilerSettingsGroup.cs" />
     <Compile Include="Mailers\ISystemMailer.cs" />
     <Compile Include="Mailers\SystemMailer.cs" />
-    <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />
@@ -488,7 +487,6 @@
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="Views\Shared\_list_search_form.cshtml" />
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
@@ -531,7 +529,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />

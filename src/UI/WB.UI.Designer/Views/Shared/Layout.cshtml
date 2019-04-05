@@ -68,7 +68,12 @@
                 @if (User.IsAdmin())
                 {
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.QuestionnaireTreeFolders, "PublicFolders", "Questionnaire", "presentation")
-                    @Html.MenuActionLink(ViewContext, QuestionnaireController.ManageUsers, "Index", "Admin", "presentation")
+
+                    <li>
+                        <a asp-page="/Users" asp-area="Admin" role="presentation">
+                            @QuestionnaireController.ManageUsers
+                        </a>
+                    </li>
                 }
                 <li role="presentation" class="create">
                     @Html.ActionLink(QuestionnaireController.CreateNew, "Create", "Questionnaire", null, new { @class = "btn" })

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -81,7 +82,12 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new DesignerIdentityUser { UserName = Input.Login, Email = Input.Email };
+                var user = new DesignerIdentityUser
+                {
+                    UserName = Input.Login,
+                    Email = Input.Email,
+                    CreatedAtUtc = DateTime.UtcNow
+                };
                 var result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
