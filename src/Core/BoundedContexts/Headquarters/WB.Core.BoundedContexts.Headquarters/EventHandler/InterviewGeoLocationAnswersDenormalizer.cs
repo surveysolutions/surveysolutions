@@ -35,17 +35,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             var interviewId = @event.EventSourceId.ToString("N");
+            var questionId = @event.Payload.QuestionId.ToString("N");
             var rosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_');
-
-            var answer = this.sessionProvider.Session.Query<InterviewGps>().FirstOrDefault(x =>
-                x.InterviewId == interviewId && x.QuestionId == @event.Payload.QuestionId &&
-                x.RosterVector == rosterVector);
-
-            if (answer != null)
-                this.sessionProvider.Session.Evict(answer);
 
             this.sessionProvider.Session.SaveOrUpdate(new InterviewGps
             {
+                Id = $"{interviewId}-{questionId}-{rosterVector}".TrimEnd('-'),
                 InterviewId = interviewId,
                 QuestionId = @event.Payload.QuestionId,
                 RosterVector = rosterVector,
