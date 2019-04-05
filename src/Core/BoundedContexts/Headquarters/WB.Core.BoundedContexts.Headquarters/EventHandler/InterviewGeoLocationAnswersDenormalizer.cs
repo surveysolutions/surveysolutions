@@ -34,16 +34,34 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
-            this.sessionProvider.Session.SaveOrUpdate(new InterviewGps
+            var interviewId = @event.EventSourceId.ToString("N");
+            var rosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_');
+
+            var answer = this.sessionProvider.Session.Query<InterviewGps>().FirstOrDefault(x =>
+                x.InterviewId == interviewId && x.QuestionId == @event.Payload.QuestionId &&
+                x.RosterVector == rosterVector);
+
+            if (answer == null)
+                this.sessionProvider.Session.Save(new InterviewGps
+                {
+                    InterviewId = interviewId,
+                    QuestionId = @event.Payload.QuestionId,
+                    RosterVector = rosterVector,
+                    Latitude = @event.Payload.Latitude,
+                    Longitude = @event.Payload.Longitude,
+                    Timestamp = @event.Payload.Timestamp.DateTime,
+                    IsEnabled = true
+                });
+            else
             {
-                InterviewId = @event.EventSourceId.ToString("N"),
-                QuestionId = @event.Payload.QuestionId,
-                RosterVector = RosterVector.Convert(@event.Payload.RosterVector).ToString().Trim('_'),
-                Latitude = @event.Payload.Latitude,
-                Longitude = @event.Payload.Longitude,
-                Timestamp = @event.Payload.Timestamp.DateTime,
-                IsEnabled = true
-            });
+                answer.IsEnabled = true;
+                answer.Latitude = @event.Payload.Latitude;
+                answer.Longitude = @event.Payload.Longitude;
+                answer.Timestamp = @event.Payload.Timestamp.DateTime;
+
+                this.sessionProvider.Session.Update(answer);
+            }
+
             return state;
         }
 
