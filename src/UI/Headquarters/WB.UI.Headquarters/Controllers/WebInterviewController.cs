@@ -311,6 +311,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (invitation.InterviewId != null)
             {
+                RememberCapchaFilled(invitation.InterviewId);
                 return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
             }
 
@@ -319,6 +320,8 @@ namespace WB.UI.Headquarters.Controllers
                     Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             var interviewId = this.CreateInterview(assignment);
+
+            RememberCapchaFilled(interviewId);
 
             if (assignment.InPrivateWebMode())
             {
@@ -330,7 +333,7 @@ namespace WB.UI.Headquarters.Controllers
             interviewIdCookie.Expires = DateTime.Now.AddYears(1);
             Response.Cookies.Add(interviewIdCookie);
 
-            RememberCapchaFilled(interviewId);
+            
             if (!string.IsNullOrWhiteSpace(assignment.Password))
             {
                 RememberPasswordVerified(interviewId);
