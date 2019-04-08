@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -14,6 +15,7 @@ using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Areas.Admin.Pages
 {
+    [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
     public class UsersModel : PageModel
     {
         private readonly IAccountListViewFactory accountListViewFactory;
