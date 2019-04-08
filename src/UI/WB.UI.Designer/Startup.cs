@@ -12,7 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
+using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.Versions;
@@ -83,6 +85,7 @@ namespace WB.UI.Designer1
             services.AddScoped<IQuestionnaireHelper, QuestionnaireHelper>();
             services.AddScoped<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             services.AddScoped<IAccountListViewFactory, AccountListViewFactory>();
+            services.AddScoped<IPublicFoldersStorage, PublicFoldersStorage>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -129,6 +132,10 @@ namespace WB.UI.Designer1
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

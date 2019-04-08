@@ -243,10 +243,6 @@ namespace WB.UI.Designer.Controllers
             return this.View();
         }
 
-        [ValidateInput(false)]
-        public ActionResult PublicFolders() 
-            => this.View();
-
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
             bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);
