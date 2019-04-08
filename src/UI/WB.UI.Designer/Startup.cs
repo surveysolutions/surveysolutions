@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,16 +13,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
-using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Files;
+using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Modules;
+using WB.UI.Designer1.DependencyInjection;
 using WB.UI.Shared.Web.Versions;
 
 namespace WB.UI.Designer1
@@ -34,6 +43,8 @@ namespace WB.UI.Designer1
         }
 
         public IConfiguration Configuration { get; }
+
+        private AspCoreKernel aspCoreKernel;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -86,10 +97,36 @@ namespace WB.UI.Designer1
             services.AddScoped<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             services.AddScoped<IAccountListViewFactory, AccountListViewFactory>();
             services.AddScoped<IPublicFoldersStorage, PublicFoldersStorage>();
+
+            services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
+            services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
+            services.Configure<DeskSettings>(Configuration.GetSection("Desk"));
+            services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
+
+            aspCoreKernel = new AspCoreKernel(services);
+
+            aspCoreKernel.Load(
+                new EventFreeInfrastructureModule(),
+                new InfrastructureModule(),
+                new NcqrsModule(),
+                //new WebConfigurationModule(membershipSettings),
+                //new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
+                //new NLogLoggingModule(),
+                //new OrmModule(ormSettings),
+                //new DesignerCommandDeserializationModule(),
+                new DesignerBoundedContextModule(),
+                new QuestionnaireVerificationModule(),
+                //new MembershipModule(),
+                new FileInfrastructureModule(),
+                //new ProductVersionModule(typeof(Startup).Assembly),
+                new DesignerRegistry(),
+                new DesignerWebModule(),
+                new WebCommonModule()
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -141,7 +178,12 @@ namespace WB.UI.Designer1
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            
+            var initTask = aspCoreKernel.InitAsync(serviceProvider);
+            if (env.IsDevelopment())
+                initTask.Wait();
+            else
+                initTask.Wait(TimeSpan.FromSeconds(10));
+
         }
     }
 }
