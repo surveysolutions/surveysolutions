@@ -487,7 +487,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireOptionsExist(IReadOnlyCollection<int> values)
         {
-            IEnumerable<decimal> availableValues = this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId);
+            var availableValues = (this.Questionnaire.IsQuestionFilteredCombobox(this.QuestionId)
+                ? this.questionOptionsRepository.GetOptionsByOptionValues(this.Questionnaire, this.QuestionId, values.ToArray()).Select(x => x.Value)
+                : this.Questionnaire.GetMultiSelectAnswerOptionsAsValues(this.QuestionId)).ToArray();
 
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)

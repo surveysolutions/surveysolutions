@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private List<CategoricalOption> Options { get; set; }
         private string Filter { get; set; } = String.Empty;
-        public int Count { get; protected set; } = 200;
+        public int Count { get; protected set; } = 50;
 
         public virtual event EventHandler OptionsChanged;
 
