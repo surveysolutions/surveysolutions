@@ -355,7 +355,6 @@
     <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
     <Compile Include="Models\QuestionnaireViewModel.cs" />
-    <Compile Include="Models\UpdateAccountModel.cs" />
     <Compile Include="Models\ManageAccountModel.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
@@ -488,7 +487,6 @@
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
     <Content Include="Views\Questionnaire\Create.cshtml" />
-    <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
