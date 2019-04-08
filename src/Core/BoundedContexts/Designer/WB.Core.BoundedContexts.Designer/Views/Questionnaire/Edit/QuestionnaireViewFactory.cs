@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         QuestionnaireView Load(QuestionnaireViewInputModel input);
 
-        bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserAccessToQuestionnaire(Guid questionnaireId, string userId);
 
-        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId);
+        bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, string userId);
     }
 
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
@@ -43,13 +43,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return doc == null ? null : new QuestionnaireView(doc, sharedPersons);
         }
 
-        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserAccessToQuestionnaire(Guid questionnaireId, string userId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null || questionnaire.IsDeleted)
                 return false;
 
-            if (questionnaire.CreatedBy == userId)
+            if (questionnaire.CreatedBy.FormatGuid() == userId)
                 return true;
 
             var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
@@ -62,13 +62,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return false;
         }
 
-        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, Guid userId)
+        public bool HasUserAccessToRevertQuestionnaire(Guid questionnaireId, string userId)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null || questionnaire.IsDeleted)
                 return false;
 
-            if (questionnaire.CreatedBy == userId)
+            if (questionnaire.CreatedBy.FormatGuid() == userId)
                 return true;
 
             var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
@@ -88,9 +88,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     Email = x.Email,
                     IsOwner = x.IsOwner,
-                    Login = accountRepository.GetById(x.UserId.FormatGuid())?.UserName ?? string.Empty,
+                    Login = accountRepository.GetById(x.UserId)?.UserName ?? string.Empty,
                     ShareType = x.ShareType,
-                    UserId = x.UserId
+                    UserId = x.UserId.ParseGuid().Value
                 });
             return sharedPersons.ToList();
         }

@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Code
             this.viewFactory = viewFactory;
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(Guid viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(string viewerId, bool isAdmin, QuestionnairesType type, Guid? folderId,
             int? pageIndex = null, string sortBy = null, int? sortOrder = null, string searchFor = null)
         {
             QuestionnaireListView model = this.viewFactory.LoadFoldersAndQuestionnaires(new QuestionnaireListInputModel
@@ -70,13 +70,13 @@ namespace WB.UI.Designer.Code
             return locations.ToDictionary(k => k.PublicId, v => v.Location);
         }
 
-        public IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId = null)
+        public IPagedList<QuestionnaireListViewModel> GetMyQuestionnairesByViewerId(string viewerId, bool isAdmin, Guid? folderId = null)
             => GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.My, folderId: folderId);
 
-        public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId)
+        public IPagedList<QuestionnaireListViewModel> GetSharedQuestionnairesByViewerId(string viewerId, bool isAdmin, Guid? folderId)
             => this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, type: QuestionnairesType.Shared, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin, bool showPublic, string location)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, string viewerId, bool isAdmin, bool showPublic, string location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),

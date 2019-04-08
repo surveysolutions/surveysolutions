@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         {
             var questionnaireIdValue = questionnaireId ?? document.PublicKey;
 
-            var creatorId = createdBy ?? document.CreatedBy;
+            Guid? creatorId = createdBy ?? document.CreatedBy;
 
             var sourceQuestionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireIdValue.FormatGuid());
             var questionnaireListViewItem = sourceQuestionnaireListViewItem ?? new QuestionnaireListViewItem();
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.Title = questionnaireTitle ?? document.Title;
             questionnaireListViewItem.CreationDate = creationDate ?? document.CreationDate;
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
-            questionnaireListViewItem.CreatedBy = creatorId;
+            questionnaireListViewItem.CreatedBy = creatorId?.FormatGuid();
             questionnaireListViewItem.IsPublic = isPublic ?? document.IsPublic;
             questionnaireListViewItem.Owner = null;
             questionnaireListViewItem.CreatorName = null;
@@ -116,8 +116,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             {
                 if (creatorId.HasValue)
                 {
-                    questionnaireListViewItem.SharedPersons.Where(p => p.IsOwner && p.UserId != creatorId).ForEach(p => p.IsOwner = false);
-                    var owner = questionnaireListViewItem.SharedPersons.FirstOrDefault(p => p.UserId == creatorId);
+                    var stringCreatorId = creatorId.FormatGuid();
+                    questionnaireListViewItem.SharedPersons.Where(p => p.IsOwner && p.UserId != stringCreatorId).ForEach(p => p.IsOwner = false);
+                    var owner = questionnaireListViewItem.SharedPersons.FirstOrDefault(p => p.UserId == stringCreatorId);
                     if (owner != null)
                     {
                         owner.IsOwner = true;
@@ -137,7 +138,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 Title = command.Title,
                 CreationDate = DateTime.UtcNow,
                 LastEntryDate = DateTime.UtcNow,
-                CreatedBy = command.ResponsibleId,
+                CreatedBy = command.ResponsibleId.FormatGuid(),
                 IsPublic = command.IsPublic,
                 CreatorName = this.accountStorage.GetById(command.ResponsibleId.FormatGuid())?.UserName
             };
@@ -176,7 +177,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
         }
 
-        private void RemoveSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail)
+        private void RemoveSharedPerson(string questionnaireId, Guid responsibleId, string personId, string personEmail)
         {
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
@@ -190,11 +191,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
 
-            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
+            var questionnaireOwnerId = questionnaireListViewItem.CreatedBy.ParseGuid();
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireOwnerId, responsibleId,
                 ShareChangeType.StopShare, personEmail, questionnaireListViewItem.QuestionnaireId, ShareType.Edit);
         }
 
-        private void AddSharedPerson(string questionnaireId, Guid responsibleId, Guid personId, string personEmail, ShareType shareType)
+        private void AddSharedPerson(string questionnaireId, Guid responsibleId, string personId, string personEmail, ShareType shareType)
         {
             var questionnaireListViewItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
             if (questionnaireListViewItem == null) return;
@@ -216,7 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
             this.questionnaireListViewItemStorage.Store(questionnaireListViewItem, questionnaireId);
 
-            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy, responsibleId,
+            this.SendEmailNotifications(questionnaireListViewItem.Title, questionnaireListViewItem.CreatedBy.ParseGuid(), responsibleId,
                 ShareChangeType.Share, personEmail, questionnaireListViewItem.QuestionnaireId, shareType);
         }
 

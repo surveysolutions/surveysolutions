@@ -105,9 +105,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             var lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
             var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
             {
-                UserId = person.UserId,
-                Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
-                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
+                UserId = person.UserId.ParseGuid().Value,
+                Name = this.accountsStorage.GetById(person.UserId)?.UserName,
+                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId.FormatGuid() == person.UserId)?.Date
             });
 
             if (questionnaire.CreatedBy == requestedByUserId)
