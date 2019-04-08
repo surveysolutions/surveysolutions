@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
@@ -17,15 +19,21 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         private readonly SignInManager<DesignerIdentityUser> signInManager;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly ILogger<LoginModel> logger;
+        private readonly ICaptchaService captchaService;
+        private readonly IRecaptchaService recaptchaService;
 
         public LoginModel(SignInManager<DesignerIdentityUser> signInManager, 
             UserManager<DesignerIdentityUser> userManager,
-            ILogger<LoginModel> logger
+            ILogger<LoginModel> logger,
+            ICaptchaService captchaService,
+            IRecaptchaService recaptchaService
             )
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.logger = logger;
+            this.captchaService = captchaService;
+            this.recaptchaService = recaptchaService;
         }
 
         [BindProperty]
@@ -58,6 +66,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             }
 
             returnUrl = returnUrl ?? Url.Content("~/");
+            this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(null);
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -71,17 +80,30 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                this.ShouldShowCaptcha = this.captchaService.ShouldShowCaptcha(Input.Email);
+
+                if (this.ShouldShowCaptcha)
+                {
+                    var recaptcha = await this.recaptchaService.Validate(Request);
+                    if (!recaptcha.success)
+                    {
+                        this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                        return Page();
+                    }
+                }
+
                 var user = await userManager.FindByNameAsync(Input.Email) ??
                            await userManager.FindByEmailAsync(Input.Email);
 
                 if (user != null)
                 {
-                    var result = await signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe,
-                        lockoutOnFailure: true);
+                    var result = await signInManager.PasswordSignInAsync(user, 
+                        Input.Password,
+                        Input.RememberMe,
+                        lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
+                        this.captchaService.RegisterFailedLogin(Input.Email);
                         logger.LogInformation("User logged in.");
                         return LocalRedirect(returnUrl);
                     }
@@ -98,6 +120,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         return RedirectToPage("./Lockout");
                     }
 
+                    this.captchaService.RegisterFailedLogin(Input.Email);
                     this.ErrorMessage = AccountResources.InvalidPassword;
                 }
                 else

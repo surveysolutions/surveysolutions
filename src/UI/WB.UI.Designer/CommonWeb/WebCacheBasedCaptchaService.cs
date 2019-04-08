@@ -84,13 +84,13 @@ namespace WB.UI.Designer.CommonWeb
             var invalidAttemptsExceededLimit = existingLoginAttempts.Count >= MaxFailedLoginAttemps;
             var expire = DateTime.UtcNow + SlidingWindow;
 
-            if (invalidAttemptsExceededLimit && this.httpContextAccessor.HttpContext != null)
+            if (invalidAttemptsExceededLimit)
             {
-                this.httpContextAccessor.HttpContext.Response.Cookies.Append(ShouldShowCaptchaCookieName, "true",
+                httpContextAccessor.HttpContext?.Response.Cookies.Append(ShouldShowCaptchaCookieName, "true",
                     new CookieOptions
-                {
-                    Expires = expire
-                });
+                    {
+                        Expires = expire
+                    });
             }
             
             cache.Set(userKey,
