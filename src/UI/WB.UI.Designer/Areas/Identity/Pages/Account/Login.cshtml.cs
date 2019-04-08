@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Areas.Identity.Pages.Account
 {
@@ -39,10 +40,10 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required(ErrorMessageResourceType = typeof(Resources.ErrorMessages), ErrorMessageResourceName = "UserName_required")]
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Email_required))]
             public string Email { get; set; }
 
-            [Required(ErrorMessageResourceType = typeof(Resources.ErrorMessages), ErrorMessageResourceName = "Password_required")]
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.Password_required))]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -96,6 +97,8 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         logger.LogWarning("User account locked out.");
                         return RedirectToPage("./Lockout");
                     }
+
+                    this.ErrorMessage = AccountResources.InvalidPassword;
                 }
                 else
                 {
