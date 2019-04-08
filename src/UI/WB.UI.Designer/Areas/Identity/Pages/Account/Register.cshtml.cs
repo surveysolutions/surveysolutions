@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.UI.Designer.CommonWeb;
@@ -25,21 +26,24 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IViewRenderingService viewRenderingService;
-        private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly ILogger<RegisterModel> logger;
+        private readonly IEmailSender emailSender;
+        private readonly IRecaptchaService recaptchaService;
 
         public RegisterModel(
             UserManager<DesignerIdentityUser> userManager,
             IViewRenderingService viewRenderingService,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
+            IRecaptchaService recaptchaService,
             IOptions<CaptchaConfig> captchaOptions)
         {
             CaptchaOptions = captchaOptions;
             this.userManager = userManager;
             this.viewRenderingService = viewRenderingService;
-            _logger = logger;
-            _emailSender = emailSender;
+            this.logger = logger;
+            this.emailSender = emailSender;
+            this.recaptchaService = recaptchaService;
         }
 
         [BindProperty]
@@ -82,6 +86,13 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                var recaptcha = await this.recaptchaService.Validate(Request);
+                if (!recaptcha.success)
+                {
+                    this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                    return Page();
+                }
+
                 var user = new DesignerIdentityUser
                 {
                     UserName = Input.Login,
@@ -91,7 +102,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 var result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    logger.LogInformation("User created a new account with password.");
 
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -114,7 +125,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         await viewRenderingService.RenderToStringAsync("Emails/ConfirmationEmail",
                             model);
 
-                    await _emailSender.SendEmailAsync(Input.Email, 
+                    await emailSender.SendEmailAsync(Input.Email, 
                         NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process, 
                         messageBody);
 
