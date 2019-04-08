@@ -14,6 +14,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
     {
         string UserName { get; }
         string Email { get; }
-        Guid Id { get; }
+        string Id { get; }
     }
 }

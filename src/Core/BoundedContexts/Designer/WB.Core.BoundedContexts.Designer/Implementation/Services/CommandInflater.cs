@@ -84,7 +84,7 @@ namespace WB.UI.Designer.Code.Implementation
                     "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id ||
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.user.Id.ParseGuid() ||
                 this.user.IsAdmin)
                 return questionnaire;
 
@@ -103,7 +103,7 @@ namespace WB.UI.Designer.Code.Implementation
         {
             if (!(command is QuestionnaireCommandBase currentCommand)) return;
 
-            currentCommand.ResponsibleId = this.user.Id;
+            currentCommand.ResponsibleId = this.user.Id.ParseGuid().Value;
             currentCommand.IsResponsibleAdmin = this.user.IsAdmin;
         }
 

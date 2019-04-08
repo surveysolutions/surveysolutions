@@ -15,7 +15,9 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         {
         }
 
-        public DbSet<QuestionnaireListViewItem> Questionnaires { get; private set; }
+        public DbSet<QuestionnaireListViewItem> Questionnaires { get; set;  }
+
+        public DbSet<QuestionnaireListViewFolder> QuestionnaireFolders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +28,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CanImportOnHq).HasColumnName("CanImportOnHq"));
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CreatedAtUtc).HasColumnName("CreatedAtUtc"));
             builder.ApplyConfiguration(new QuestionnaireListViewItemTypeConfig());
+            builder.ApplyConfiguration(new QuestionnaireListViewFolderTypeConfig());
+            builder.ApplyConfiguration(new SharedPersonsTypeConfig());
         }
     }
 }

@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.CommonWeb;
@@ -80,6 +81,7 @@ namespace WB.UI.Designer1
             services.AddTransient<IEmailSender, MailSender>();
             services.AddScoped<IViewRenderingService, ViewRenderingService>();
             services.AddScoped<IQuestionnaireHelper, QuestionnaireHelper>();
+            services.AddScoped<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             services.AddScoped<IAccountListViewFactory, AccountListViewFactory>();
         }
 

@@ -92,8 +92,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .Select(x => new SharedPersonView
                 {
                     Email = x.Email,
-                    Login = this.membershipUserService.GetById(x.UserId.FormatGuid()).UserName,
-                    UserId = x.UserId,
+                    Login = this.membershipUserService.GetById(x.UserId).UserName,
+                    UserId = x.UserId.ParseGuid().Value,
                     IsOwner = x.IsOwner,
                     ShareType = x.ShareType
                 })
