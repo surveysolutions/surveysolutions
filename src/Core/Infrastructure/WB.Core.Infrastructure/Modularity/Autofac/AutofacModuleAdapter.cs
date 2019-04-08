@@ -71,16 +71,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             }
         }
 
-        public void Bind<TImplementation>(bool propertiesAutowired = false)
+        public void Bind<TImplementation>()
         {
-            if (!propertiesAutowired)
-            {
-                containerBuilder.RegisterType<TImplementation>();
-            }
-            else
-            {
-                containerBuilder.RegisterType<TImplementation>().PropertiesAutowired();
-            }
+            containerBuilder.RegisterType<TImplementation>();
         }
 
         public void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
