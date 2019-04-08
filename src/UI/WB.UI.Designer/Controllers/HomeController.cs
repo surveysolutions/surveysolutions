@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -61,7 +62,7 @@ namespace WB.UI.Designer.Controllers
                 sortOrder: sortOrder,
                 searchFor: searchFor,
                 folderId: folderId,
-                viewerId: User.GetId(),
+                viewerId: User.GetId().FormatGuid(),
                 isAdmin: User.IsAdmin(),
                 type: type);
         }

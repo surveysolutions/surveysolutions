@@ -70,11 +70,11 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public AccountViewModel Account { get; private set; }
 
-        public async Task<IActionResult> OnGetAsync(Guid id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             this.Account = new AccountViewModel();
             
-            var account = await this.users.FindByIdAsync(id.ToString("N"));
+            var account = await this.users.FindByIdAsync(id);
             if (account == null) return NotFound();
 
             var ownedQuestionnaires = this.questionnaireHelper.GetMyQuestionnairesByViewerId(viewerId: id,

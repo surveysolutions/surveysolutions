@@ -15,21 +15,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual Guid PublicId
         {
-            get { return publicId; }
-            set
-            {
-                this.QuestionnaireId = value.FormatGuid();
-                publicId = value;
-            }
+            get => this.QuestionnaireId.ParseGuid().Value;
+            set => this.QuestionnaireId = value.FormatGuid();
         }
-
-        private Guid publicId;
 
         public virtual DateTime LastEntryDate { get; set; }
 
         public virtual string Title { get; set; }
 
-        public virtual Guid? CreatedBy { get; set; }
+        public virtual string CreatedBy { get; set; }
 
         public virtual string CreatorName { get; set; }
 
@@ -37,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual bool IsPublic { get; set; }
 
-        public virtual ISet<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
+        public virtual ICollection<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
 
         public virtual string Owner { get; set; }
 
