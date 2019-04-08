@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Infrastructure.Native.Files
 {
-    public class FileInfrastructureModule : IModule
+    public class FileInfrastructureModule : IModule, IAppModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -15,6 +16,16 @@ namespace WB.Infrastructure.Native.Files
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        {
+            return Task.CompletedTask;
+        }
+
+        public void Load(IDependencyRegistry registry)
+        {
+            registry.Bind<IFileSystemAccessor, FileSystemIOAccessor>();
+        }
+
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
