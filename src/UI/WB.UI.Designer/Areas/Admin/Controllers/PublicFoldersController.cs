@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer1.Extensions;
 
-
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Areas.Admin.Controllers
 {
     [ResponseCache(NoStore = true)]
     [Authorize(Roles = "Administrator")]
-    public class PublicFoldersApiController : Controller
+    [Area("Admin")]
+    public class PublicFoldersController : Controller
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
 
-        public PublicFoldersApiController(IPublicFoldersStorage publicFoldersStorage)
+        public PublicFoldersController(IPublicFoldersStorage publicFoldersStorage)
         {
             this.publicFoldersStorage = publicFoldersStorage;
         }
@@ -28,18 +29,22 @@ namespace WB.UI.Designer.Api
             public bool folder { get; set; } = true;
         }
 
-        [HttpGet]
-        public List<TreeNode> GetFolders(Guid? parentId)
+        public IActionResult Index()
         {
-            return this.publicFoldersStorage.GetSubFolders(parentId)
-                    .Select(i => new TreeNode()
+            return View();
+        }
+
+        public async Task<List<TreeNode>> GetFolders(Guid? parentId)
+        {
+            var subFoldersAsync = await this.publicFoldersStorage.GetSubFoldersAsync(parentId);
+            return subFoldersAsync
+                    .Select(i => new TreeNode
                     {
                         key = i.PublicId.ToString(),
                         title = i.Title
                     }).ToList();
         }
 
-        [HttpGet]
         public List<TreeNode> GetRootFolders()
         {
             return this.publicFoldersStorage.GetRootFolders()
@@ -76,9 +81,10 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpPost]
-        public void RenameFolder(RenameFolderModel model)
+        public IActionResult RenameFolder(RenameFolderModel model)
         {
             this.publicFoldersStorage.RenameFolder(model.Id, model.NewTitle);
+            return Ok();
         }
 
         public class RemoveFolderModel
@@ -87,9 +93,10 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpPost]
-        public void RemoveFolder(RemoveFolderModel model)
+        public IActionResult RemoveFolder(RemoveFolderModel model)
         {
             this.publicFoldersStorage.RemoveFolder(model.Id);
+            return Ok();
         }
 
         public class AssignFolderToQuestionnaireModel
@@ -99,9 +106,10 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpPost]
-        public void AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
+        public IActionResult AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
         {
             this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);
+            return Ok();
         }
     }
 }
