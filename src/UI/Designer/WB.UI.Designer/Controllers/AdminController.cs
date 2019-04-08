@@ -565,52 +565,7 @@ namespace WB.UI.Designer.Controllers
                         });
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(UpdateAccountModel user)
-        {
-            if (this.ModelState.IsValid)
-            {
-                DesignerMembershipUser intUser = (DesignerMembershipUser)Membership.GetUser(user.Id, false);
-                if (intUser != null)
-                {
-                    try
-                    {
-                        Membership.UpdateUser(
-                            new DesignerMembershipUser(
-                                providerName: intUser.ProviderName,
-                                name: intUser.UserName,
-                                providerUserKey: intUser.ProviderUserKey,
-                                email: user.Email,
-                                passwordQuestion: intUser.PasswordQuestion,
-                                comment: null,
-                                isApproved: user.IsApproved,
-                                isLockedOut: user.IsLockedOut,
-                                creationDate: intUser.CreationDate,
-                                lastLoginDate: intUser.LastLoginDate,
-                                lastActivityDate: intUser.LastActivityDate,
-                                lastPasswordChangedDate: intUser.LastPasswordChangedDate,
-                                lastLockoutDate: intUser.LastLockoutDate,
-                                canImportOnHq: user.CanImportOnHq,
-                                fullName: user.FullName));
-
-                        return this.RedirectToAction("Index");
-                    }
-                    catch (ProviderException e)
-                    {
-                        this.Error(e.Message);
-                    }
-                    catch (Exception e)
-                    {
-                        this.logger.Error("User update exception", e);
-                        this.Error("Could not update user information. Please, try again later.");
-                    }
-                }
-            }
-
-            return this.View(user);
-        }
-
+     
         
     }
 }
