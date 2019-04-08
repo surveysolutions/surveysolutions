@@ -1,5 +1,9 @@
 ﻿@page
+@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@using WB.UI.Designer.Models
 @model LoginModel
+@inject IOptions<CaptchaConfig> CaptchaConfig;
 
 @{
     ViewData["Title"] = AccountResources.Login;
@@ -54,7 +58,7 @@
         @if (this.Model.ShouldShowCaptcha)
         {
             <div class="recaptcha">
-                <div class="g-recaptcha" data-sitekey=""></div>
+                @Html.Recaptcha(CaptchaConfig.Value)
             </div>
         }
         <div class="form-actions">
