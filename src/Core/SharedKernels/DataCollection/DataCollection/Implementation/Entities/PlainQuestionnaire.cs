@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
 
-        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<decimal>> cacheOfMultiSelectAnswerOptionsAsValues = new ConcurrentDictionary<Guid, ReadOnlyCollection<decimal>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<int>> cacheOfMultiSelectAnswerOptionsAsValues = new ConcurrentDictionary<Guid, ReadOnlyCollection<int>>();
 
         private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, CategoricalOption>> cacheOfAnswerOptions = new ConcurrentDictionary<Guid, ConcurrentDictionary<decimal, CategoricalOption>>();
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
@@ -371,17 +371,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
-        public IEnumerable<decimal> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
+        public IEnumerable<int> GetMultiSelectAnswerOptionsAsValues(Guid questionId)
              => this.cacheOfMultiSelectAnswerOptionsAsValues.GetOrAdd(questionId, x
                 => this.GetMultiSelectAnswerOptionsAsValuesImpl(questionId));
-        
+
+        public IEnumerable<int> GetCategoricalMultiOptionsByValues(Guid questionId, int[] values) =>
+            this.questionOptionsRepository.GetOptionsByOptionValues(this, questionId, values).Select(x => x.Value);
+
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string searchFor)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             //filtered and cascadings
-            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as ICategoricalQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionsForQuestion(this,
                     questionId, parentQuestionValue, searchFor, this.translation);
@@ -409,13 +412,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question.Answers.SingleOrDefault(x => x.AnswerText == optionText).ToCategoricalOption();
         }
 
-        private ReadOnlyCollection<decimal> GetMultiSelectAnswerOptionsAsValuesImpl(Guid questionId)
+        private ReadOnlyCollection<int> GetMultiSelectAnswerOptionsAsValuesImpl(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
             return AnswerUtils.GetCategoricalOptionsFromQuestion(question, null, null)
-                .Select(x => Convert.ToDecimal(x.Value)).ToReadOnlyCollection();
+                .Select(x => x.Value).ToReadOnlyCollection();
         }
 
         private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
@@ -459,7 +462,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             CheckShouldQestionProvideOptions(question, questionId);
 
-            if (question.CascadeFromQuestionId.HasValue || ((question as SingleQuestion)?.IsFilteredCombobox ?? false))
+            if (question.CascadeFromQuestionId.HasValue || ((question as ICategoricalQuestion)?.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionValue(this,
                     questionId, optionValue, this.translation);
