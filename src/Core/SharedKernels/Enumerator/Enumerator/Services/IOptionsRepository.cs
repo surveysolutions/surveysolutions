@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         CategoricalOption GetQuestionOptionByValue(QuestionnaireIdentity questionnaireId, Guid questionId, 
             decimal optionValue, Guid? translationId);
 
+        CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues);
+
         void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId);
 
         void StoreOptionsForQuestion(QuestionnaireIdentity questionnaireId, Guid questionId, 

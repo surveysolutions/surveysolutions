@@ -37,5 +37,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             return this.optionsRepository.GetQuestionOptionByValue(new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionValue, translation?.Id);
         }
+
+        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId,
+            int[] optionsValues) => this.optionsRepository.GetOptionsByValues(
+            new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), questionId, optionsValues);
     }
 }

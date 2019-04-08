@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,5 +26,8 @@ namespace WB.Enumerator.Native.Questionnaire.Impl
         {
             return questionnaire.GetOptionForQuestionByOptionValueFromStructure(questionId, optionValue);
         }
+
+        public IEnumerable<CategoricalOption> GetOptionsByOptionValues(IQuestionnaire questionnaire, Guid questionId, int[] optionsValues) => 
+            questionnaire.GetOptionsForQuestion(questionId, null, null).Where(x => optionsValues.Contains(x.Value));
     }
 }

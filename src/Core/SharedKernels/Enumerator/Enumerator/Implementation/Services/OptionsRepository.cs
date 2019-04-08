@@ -168,6 +168,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             };
         }
 
+        public CategoricalOption[] GetOptionsByValues(QuestionnaireIdentity questionnaireId, Guid questionId, int[] optionValues)
+        {
+            var questionnaireIdAsString = questionnaireId.ToString();
+            var questionIdAsString = questionId.FormatGuid();
+            var values = optionValues.Select(Convert.ToDecimal).ToArray();
+
+            return this.optionsStorage
+                .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
+                            x.QuestionId == questionIdAsString &&
+                            values.Contains(x.Value))
+                .Select(ToCategoricalOption)
+                .ToArray();
+        }
+
+        private CategoricalOption ToCategoricalOption(OptionView option) => new CategoricalOption
+        {
+            ParentValue = option.ParentValue.HasValue ? Convert.ToInt32(option.ParentValue) : (int?) null,
+            Value = Convert.ToInt32(option.Value),
+            Title = option.Title
+        };
+
         public void RemoveOptionsForQuestionnaire(QuestionnaireIdentity questionnaireId)
         {
             var questionnaireIdAsString = questionnaireId.ToString();
