@@ -34,6 +34,8 @@ namespace WB.UI.Designer.CommonWeb
 
         public bool ShouldShowCaptcha(string username)
         {
+            if (!this.captchaConfig.Value.IsReCaptchaEnabled) return false;
+
             if (httpContextAccessor.HttpContext != null)
             {
                 var requestCookieCollection = httpContextAccessor.HttpContext.Request.Cookies;
