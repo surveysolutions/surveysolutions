@@ -95,6 +95,8 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
             registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
+            registry.Bind(typeof(IPlainAggregateRootRepository), typeof(QuestionnaireRepository));
+            registry.Bind(typeof(Questionnaire), typeof(Questionnaire));
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

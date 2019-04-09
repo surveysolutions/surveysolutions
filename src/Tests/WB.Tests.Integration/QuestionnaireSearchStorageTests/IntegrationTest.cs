@@ -72,9 +72,7 @@ namespace WB.Tests.Integration.QuestionnaireSearchStorageTests
 
             var autofacKernel = new AutofacWebKernel();
             autofacKernel.Load(
-                new OrmModule(ormSettings),
-                new NLogLoggingModule(),
-                new DesignerWebModule()
+                new NLogLoggingModule()
             );
             await autofacKernel.InitAsync();
 
