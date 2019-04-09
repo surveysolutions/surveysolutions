@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -41,23 +42,25 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             TranslationType.SpecialValue
         };
         
-        private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        //private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly ITranslationsExportService translationsExportService;
         
-        public TranslationsService(IPlainStorageAccessor<TranslationInstance> translations,
+        public TranslationsService(DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             ITranslationsExportService translationsExportService)
         {
-            this.translations = translations;
+            this.dbContext = dbContext;
             this.questionnaireStorage = questionnaireStorage;
             this.translationsExportService = translationsExportService;
         }
 
         public ITranslation Get(Guid questionnaireId, Guid translationId)
         {
-            var storedTranslations = this.translations.Query(
-                _ => _.Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId).ToList())
+            var storedTranslations = this.dbContext.TranslationInstances
+                    .Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)
+                    .ToList()
                 .Cast<TranslationDto>()
                 .ToList();
 
@@ -156,10 +159,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         foreach (var translationInstance in uniqueTranslationInstances)
                         {
-                            this.translations.Store(translationInstance, translationInstance);
+                            this.dbContext.Add(translationInstance);
                         }
 
-                        this.translations.Flush();
+                        this.dbContext.SaveChanges();
                     }
                 }
                 catch (NullReferenceException e)
@@ -226,29 +229,29 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         public void CloneTranslation(Guid questionnaireId, Guid translationId, Guid newQuestionnaireId, Guid newTranslationId)
         {
-            var storedTranslations = this.translations.Query(_ => _
+            var storedTranslations = this.dbContext.TranslationInstances
                 .Where(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId)
-                .ToList());
+                .ToList();
 
             foreach (var storedTranslation in storedTranslations)
             {
                 var translationCopy = storedTranslation.Clone();
                 translationCopy.TranslationId = newTranslationId;
                 translationCopy.QuestionnaireId = newQuestionnaireId;
-                this.translations.Store(translationCopy, translationCopy);
+                this.dbContext.TranslationInstances.Add(translationCopy);
             }
         }
 
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
         {
-            var storedTranslations = this.translations.Query(_ => _
+            var storedTranslations = this.dbContext.TranslationInstances
                 .Where(x => x.QuestionnaireId == questionnaireId)
-                .ToList());
-            this.translations.Remove(storedTranslations);
+                .ToList();
+            this.dbContext.TranslationInstances.RemoveRange(storedTranslations);
         }
 
         public int Count(Guid questionnaireId, Guid translationId)
-            => this.translations.Query(_ => _.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId));
+            => this.dbContext.TranslationInstances.Count(x => x.QuestionnaireId == questionnaireId && x.TranslationId == translationId);
 
         private TranslationRow GetExcelTranslation(TranslationsWithHeaderMap worksheetWithHeadersMap, int rowNumber) => new TranslationRow
         {
