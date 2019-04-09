@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Web;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
@@ -47,9 +48,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             if (string.IsNullOrWhiteSpace(settings.EmailFolder))
                 throw new ArgumentException();
 
+            var directory = settings.EmailFolder.StartsWith("~")
+                ? HttpContext.Current.Server.MapPath(settings.EmailFolder)
+                : Path.GetFullPath(settings.EmailFolder);
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
             var guid = Guid.NewGuid();
-            File.WriteAllText(Path.Combine(settings.EmailFolder, guid + ".html"), htmlBody);
-            File.WriteAllText(Path.Combine(settings.EmailFolder, guid + ".txt"), textBody);
+            File.WriteAllText(Path.Combine(directory, guid + ".html"), htmlBody);
+            File.WriteAllText(Path.Combine(directory, guid + ".txt"), textBody);
             return Task.FromResult(guid.ToString());
         }
 
