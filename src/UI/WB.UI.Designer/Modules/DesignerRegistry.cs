@@ -20,10 +20,10 @@ namespace WB.UI.Designer.Modules
     {
         public void Load(IDependencyRegistry registry)
         {
-            registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
-            registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
-            registry.BindMvcActionFilterWhenControllerOrActionHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
-            registry.BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(/*System.Web.Http.Filters.FilterScope.Global, 1*/);
+//            registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
+//            registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
+//            registry.BindMvcActionFilterWhenControllerOrActionHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
+//            registry.BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(/*System.Web.Http.Filters.FilterScope.Global, 1*/);
 
             registry.Bind<ICommandInflater, CommandInflater>();
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();
