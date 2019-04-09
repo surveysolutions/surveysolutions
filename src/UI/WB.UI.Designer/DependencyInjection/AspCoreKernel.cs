@@ -24,6 +24,8 @@ namespace WB.UI.Designer1.DependencyInjection
         {
             this.services = services;
             this.dependencyRegistry = new DependencyRegistry(services);
+
+            this.services.AddTransient<IServiceLocator>(_ => ServiceLocator.Current);
         }
 
         protected readonly List<IAppModule> initModules = new List<IAppModule>();
@@ -39,6 +41,9 @@ namespace WB.UI.Designer1.DependencyInjection
         {
             var status = new UnderConstructionInfo();
             this.services.AddSingleton(typeof(UnderConstructionInfo), sp => status);
+
+            var serviceLocatorAdapter = new DotNetCoreServiceLocatorAdapter(serviceProvider);
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorAdapter);
 
             var initTask = Task.Run(async () => await InitModules(status, serviceProvider));
             return initTask;
