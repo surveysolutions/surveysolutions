@@ -71,7 +71,7 @@
             appendCompboboxItem(newValue) {
                 if(includes(this.$me.answer, newValue)) return
 
-                let newAnswer = this.$me.answer
+                let newAnswer = this.$me.answer.slice()
                 newAnswer.push(newValue)
                 this.$store.dispatch("answerMultiOptionQuestion", { answer: newAnswer, questionId: this.$me.id })
             },

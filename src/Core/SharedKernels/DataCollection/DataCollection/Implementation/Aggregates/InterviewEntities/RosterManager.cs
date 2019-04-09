@@ -195,7 +195,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var questionnaireDefinedOrder = new List<Identity>();
             var index = 0;
             var optionValues = this.questionnaire.IsQuestionFilteredCombobox(this.rosterSizeQuestionId)
-                ? this.questionnaire.GetCategoricalMultiOptionsByValues(this.rosterSizeQuestionId, newMultiAnswer.Select(Convert.ToInt32).ToArray())
+                ? this.questionnaire.GetCategoricalMultiOptionsByValues(this.rosterSizeQuestionId, newMultiAnswer.Select(Convert.ToInt32).ToArray()).Select(x => x.Value)
                 : this.questionnaire.GetMultiSelectAnswerOptionsAsValues(this.rosterSizeQuestionId);
 
             foreach (var optionValue in optionValues)
