@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -28,13 +29,15 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
+        private readonly DesignerDbContext dbContext;
 
         public RestoreQuestionnaireModel(ILogger<RestoreQuestionnaireModel> logger, 
             ISerializer serializer, 
             ICommandService commandService, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService, 
-            ITranslationsService translationsService)
+            ITranslationsService translationsService,
+            DesignerDbContext dbContext)
         {
             this.logger = logger;
             this.serializer = serializer;
@@ -42,30 +45,34 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationsService = translationsService;
+            this.dbContext = dbContext;
         }
 
         public void OnGet()
         {
         }
 
-        public IActionResult OnPost(IFormFile uploadFile)
+        [BindProperty]
+        public IFormFile Upload { get; set; }
+
+        public IActionResult OnPost()
         {
             try
             {
-                var areFileNameAndContentAvailable = uploadFile?.FileName != null && uploadFile.Length > 0;
+                var areFileNameAndContentAvailable = Upload?.FileName != null && Upload.Length > 0;
                 if (!areFileNameAndContentAvailable)
                 {
                     this.Error = "Uploaded file is not specified or empty.";
                     return Page();
                 }
 
-                if (uploadFile.FileName.ToLower().EndsWith(".tmpl"))
+                if (Upload.FileName.ToLower().EndsWith(".tmpl"))
                 {
                     this.Error = "You are trying to restore old format questionnaire. Please use 'Old Format Restore' option.";
                     return Page();
                 }
 
-                if (!uploadFile.FileName.ToLower().EndsWith(".zip"))
+                if (!Upload.FileName.ToLower().EndsWith(".zip"))
                 {
                     this.Error = "Only zip archives are supported. Please upload correct zip backup.";
                     return Page();
@@ -73,7 +80,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 var state = new RestoreState();
 
-                using (var zipStream = new ZipInputStream(uploadFile.OpenReadStream()))
+                var openReadStream = Upload.OpenReadStream();
+                using (var zipStream = new ZipInputStream(openReadStream))
                 {
                     ZipEntry zipEntry = zipStream.GetNextEntry();
 
@@ -233,6 +241,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 else
                 {
                 }
+
+                dbContext.SaveChanges();
             }
             catch (Exception exception)
             {
