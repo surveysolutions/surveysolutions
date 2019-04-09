@@ -1,0 +1,42 @@
+﻿@page
+@model WB.UI.Designer.Areas.Admin.Pages.RestoreQuestionnaireModel
+@{
+    ViewBag.Title = "Restore Questionnaire from Backup";
+}
+<div id="edit-form">
+
+    <h1>Restore Questionnaire from Backup</h1>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <pre class="alert alert-danger">@Html.Raw(Model.Error)</pre>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Success))
+    {
+        <pre class="alert alert-success">@Html.Raw(@TempData[Model.Success])</pre>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Error) || !string.IsNullOrEmpty(Model.Success))
+    {
+        <hr />
+        <a class="btn btn-lg btn-default" asp-page="/RestoreQuestionnaire">
+            Restore another questionnaire
+        </a>
+    }
+    else
+    {
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input class="form-control" type="file" name="myfile" placeholder=".zip file" accept=".zip" />
+            </div>
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success btn-lg" value="Upload" />
+                <a class="btn" asp-controller="Home" asp-action="Index">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    }
+
+</div>
