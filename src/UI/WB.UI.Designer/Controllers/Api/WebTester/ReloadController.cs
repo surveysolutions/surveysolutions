@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
+using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.WebTester
+namespace WB.UI.Designer.Controllers.Api.WebTester
 {
-    public class WebTesterReloadController : Controller
+    public class WebTesterReloadController : ControllerBase
     {
-        private readonly IMembershipUserService userHelper;
         private readonly WebTesterSettings webTesterSettings;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IWebTesterService webTesterService;
 
-        public WebTesterReloadController(IMembershipUserService userHelper, 
-            WebTesterSettings webTesterSettings, 
+        public WebTesterReloadController(WebTesterSettings webTesterSettings, 
             IQuestionnaireViewFactory questionnaireViewFactory,
             IWebTesterService webTesterService)
         {
-            this.userHelper = userHelper;
             this.webTesterSettings = webTesterSettings;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.webTesterService = webTesterService;
@@ -34,12 +31,12 @@ namespace WB.UI.Designer.Api.WebTester
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
             if (questionnaireView == null)
             {
-                throw new HttpException(404, string.Empty);
+                return NotFound();
             }
 
             if (!this.ValidateAccessPermissions(questionnaireView))
             {
-                throw new HttpException(401, string.Empty);
+                return NotFound();
             }
 
             var token = this.webTesterService.CreateTestQuestionnaire(questionnaireId);
@@ -49,9 +46,9 @@ namespace WB.UI.Designer.Api.WebTester
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == User.GetId() || User.IsAdmin())
                 return true;
-            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }
