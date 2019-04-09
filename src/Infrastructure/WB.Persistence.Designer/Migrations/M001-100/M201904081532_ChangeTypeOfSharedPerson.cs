@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Alter.Column("userid").OnTable("sharedpersons").AsString();
-            Create.PrimaryKey("sharedpersons_pk").OnTable("sharedpersons").Columns("questionnaireid", "userid");
+            Create.Column("id").OnTable("sharedpersons").AsInt32().Identity().PrimaryKey();
         }
     }
 }

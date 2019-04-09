@@ -31,7 +31,7 @@
 			u.username as "UserName",
 			upper(trim(both ' ' from u.username)) as "NormalizedUserName",
 			u.passwordsalt as "PasswordSalt",
-			canimportonhq as "CanImportOnHq",
+			COALESCE(canimportonhq, FALSE) as "CanImportOnHq",
 			false as "PhoneNumberConfirmed",
 			u.createdat as "CreatedAtUtc"
 		from
