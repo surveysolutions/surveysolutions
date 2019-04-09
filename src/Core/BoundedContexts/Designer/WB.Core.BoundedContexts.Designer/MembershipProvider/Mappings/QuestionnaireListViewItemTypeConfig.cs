@@ -49,9 +49,9 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
         public void Configure(EntityTypeBuilder<SharedPerson> builder)
         {
             builder.ToTable("sharedpersons", "plainstore");
-            builder.HasKey(x => x.QuestionnaireId);
-            builder.HasKey(x => x.UserId);
+            builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
             builder.Property(e => e.Email).HasColumnName("email");
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
             builder.Property(e => e.UserId).HasColumnName("userid");
