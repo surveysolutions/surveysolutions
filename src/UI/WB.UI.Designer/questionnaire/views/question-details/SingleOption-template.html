@@ -1,0 +1,59 @@
+﻿<div class="singleOption">
+    <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated"
+         ng-i18next="({count: 200})QuestionOptionsCut">
+    </div>
+    <ng-include src="'views/question-details/OptionsEditor-template.html'"
+                ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade"></ng-include>
+    <ng-include src="'categorical-filter-expression'"></ng-include>
+</div>
+<p>
+    <a ng-if="activeQuestion.isFilteredCombobox"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="editFilteredComboboxOptions()" ng-i18next="QuestionUploadOptions">
+    </a>
+    <a ng-if="activeQuestion.isFilteredCombobox"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="showAddClassificationModal()" ng-i18next="QuestionAddClassification">
+    </a>
+    <a ng-if="activeQuestion.isCascade && (activeQuestion.cascadeFromQuestionId || '') !== ''"
+       href="javascript:void(0);"
+       class="btn btn-link"
+       ng-click="editCascadingComboboxOptions()" ng-i18next="QuestionUploadOptions">
+    </a>
+</p>
+<div class="table-holder">
+    <div class="row">
+        <div class="col-xs-5" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked">
+            <div class="checkbox checkbox-in-column">
+                <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
+                <label for="cb-is-cascading"><span></span>{{'QuestionCascading' | i18next}}</label>
+            </div>
+        </div>
+        <div class="col-xs-5" ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked">
+            <div class="checkbox checkbox-in-column">
+                <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
+                <label for="cb-is-filtered-combobox"><span></span>{{'QuestionComboBox' | i18next}} <help key="combobox" /></label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-5">
+            <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
+                <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                <label for="cb-is-linked"><span></span>{{'QuestionIsLinked' | i18next}}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
+         ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}" />
+</div>
+
+<div>
+    <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
+         class="form-group" ng-include="'views/question-details/CascadingComboBox-template.html'" />
+</div>
