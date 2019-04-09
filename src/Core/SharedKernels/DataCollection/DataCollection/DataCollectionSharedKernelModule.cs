@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IStatefulInterviewRepository, StatefulInterviewRepository>();
-            registry.Bind<StatefulInterview>(true);
+            registry.Bind<StatefulInterview>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -23,33 +23,28 @@ namespace WB.UI.Designer.Modules
         public void Load(IDependencyRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-            registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
-            registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
+            //registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
+            //registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
-            registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
-            registry.BindAsSingleton<QuestionnaireChacheStorage, QuestionnaireChacheStorage>();
+            //registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            //registry.BindAsSingleton<QuestionnaireChacheStorage, QuestionnaireChacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
-            registry.Bind<IMembershipHelper, MembershipHelper>();
 
-            registry.Bind<IMembershipWebUser, MembershipWebUser>();
-            registry.Bind<IMembershipWebServiceUser, MembershipWebServiceUser>();
-            registry.Bind<IMembershipUserService, MembershipUserService>();
-
-            registry.Bind<IRecipientNotifier, MailNotifier>();
+            //registry.Bind<IRecipientNotifier, MailNotifier>();
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
 
-            registry.BindToMethod<WebTesterSettings>(() =>
-            {
-                var appSettings = System.Configuration.ConfigurationManager.AppSettings;
-                return new WebTesterSettings
-                {
-                    ExpirationAmountMinutes = appSettings["WebTester.ExpirationAmountMinutes"].AsInt(),
-                    BaseUri = appSettings["WebTester.BaseUri"]
-                };
-            });
+//            registry.BindToMethod<WebTesterSettings>(() =>
+//            {
+//                var appSettings = System.Configuration.ConfigurationManager.AppSettings;
+//                return new WebTesterSettings
+//                {
+//                    ExpirationAmountMinutes = appSettings["WebTester.ExpirationAmountMinutes"].AsInt(),
+//                    BaseUri = appSettings["WebTester.BaseUri"]
+//                };
+//            });
 
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
 

@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Modules
 {
@@ -16,12 +17,12 @@ namespace WB.UI.Designer.Modules
         {
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
-            registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
+            //registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
 
-            registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
-            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
+            //registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
+            //registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
 
-            registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
+            //registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
 
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
