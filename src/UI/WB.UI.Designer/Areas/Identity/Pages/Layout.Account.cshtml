@@ -1,4 +1,4 @@
-﻿@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Options
 @using WB.Core.Infrastructure.Versions
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
@@ -15,29 +15,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designer</title>
     @Html.GenerateFavicon(Url.Content("~/favicon"))
-    <link href="~/css/bootstrap-custom.css" rel="stylesheet" />
-    <link href="~/css/designer-start.css" rel="stylesheet" />
+    <!-- logon:css -->
+    <link rel="stylesheet" href="/css/logon.css">
+    <!-- endinject -->
+
+    @RenderSection("Styles", required: false)
+
+    <!-- simplepage:js -->
+    <script src="/js/simplepage.js"></script>
+    <!-- endinject -->
 
     <script type="text/javascript">
         function FrameCheck() {
             if (top != self)
                 top.location.replace(self.location.href);
         }
-    </script>
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
-    </environment>
-
-    @RenderSection("Styles", required: false)
+    </script>    
     @RenderSection("Scripts", required: false)
 </head>
 <body onload="FrameCheck();">

@@ -86,11 +86,14 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var recaptcha = await this.recaptchaService.Validate(Request);
-                if (!recaptcha.success)
+                if (CaptchaOptions.Value.IsReCaptchaEnabled)
                 {
-                    this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
-                    return Page();
+                    var recaptcha = await this.recaptchaService.Validate(Request);
+                    if (!recaptcha.success)
+                    {
+                        this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
+                        return Page();
+                    }
                 }
 
                 var user = new DesignerIdentityUser
@@ -119,17 +122,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme); 
+                        protocol: Request.Scheme);
 
                     var messageBody =
                         await viewRenderingService.RenderToStringAsync("Emails/ConfirmationEmail",
                             model);
 
-                    await emailSender.SendEmailAsync(Input.Email, 
-                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process, 
+                    await emailSender.SendEmailAsync(Input.Email,
+                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
                         messageBody);
 
-                    return RedirectToPage("RegisterStepTwo", new {returnUrl});
+                    return RedirectToPage("RegisterStepTwo", new { returnUrl });
                 }
                 foreach (var error in result.Errors)
                 {
