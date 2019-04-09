@@ -90,7 +90,10 @@
                        href="@UiConfig.Value.DesignerHelpUrl">@AccountResources.Help</a>
                     @if (User.IsAdmin())
                     {
-                        <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">@QuestionnaireController.RestoreQuestionnaire</a>
+                        <a class="btn btn-default"
+                           asp-page="/RestoreQuestionnaire" asp-area="Admin">
+                            @QuestionnaireController.RestoreQuestionnaire
+                        </a>
                     }
                     <div class="btn-group">
                         <a class="btn btn-default">@string.Format(QuestionnaireController.Hello, User.Identity.Name)</a>
