@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WB.Core.BoundedContexts.Designer.Implementation;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
@@ -67,7 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
     {
         public void Configure(EntityTypeBuilder<QuestionnaireListViewItem> builder)
         {
-            builder.ToTable("questionnairelistviewitems");
+            builder.ToTable("questionnairelistviewitems", "plainstore");
 
             builder.HasKey(x => x.QuestionnaireId);
 
@@ -129,6 +133,103 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             //    m.Update(false);
             //    m.Insert(false);
             //});
+        }
+    }
+
+    public class KeyValueTableTypeConfig<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : KeyValueEntity
+    {
+        private readonly string tableName;
+
+        public KeyValueTableTypeConfig(string tableName)
+        {
+            this.tableName = tableName;
+        }
+
+        public void Configure(EntityTypeBuilder<TEntity> builder)
+        {
+            builder.ToTable(tableName, "plainstore");
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
+            builder.Property(x => x.Value).HasColumnName("value");
+        }
+    }
+
+    public class TranslationInstanceTypeConfig : IEntityTypeConfiguration<TranslationInstance>
+    {
+        public void Configure(EntityTypeBuilder<TranslationInstance> builder)
+        {
+            builder.ToTable("translationinstances", "plainstore");
+
+            builder.HasKey(x => x.Id);
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+
+            builder.Property(e => e.QuestionnaireEntityId).HasColumnName("questionnaireentityid");
+
+            builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+
+            builder.Property(e => e.TranslationId).HasColumnName("translationid");
+
+            builder.Property(e => e.TranslationIndex).HasColumnName("translationindex");
+
+            builder.Property(e => e.Type).HasColumnName("type");
+
+            builder.Property(e => e.Value).HasColumnName("value");
+        }
+    }
+
+    public class AttachmentMetaTypeConfig : IEntityTypeConfiguration<AttachmentMeta>
+    {
+        public void Configure(EntityTypeBuilder<AttachmentMeta> builder)
+        {
+            builder.ToTable("attachmentmetas", "plainstore");
+
+            builder.HasKey(e => e.AttachmentId);
+
+            builder.Property(e => e.AttachmentId)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+
+            builder.Property(e => e.ContentId).HasColumnName("contentid");
+
+            builder.Property(e => e.FileName).HasColumnName("filename");
+
+            builder.Property(e => e.LastUpdateDate).HasColumnName("lastupdatedate");
+
+            builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+        }
+    }
+
+    public class AttachmentContentTypeConfig : IEntityTypeConfiguration<AttachmentContent>
+    {
+        public void Configure(EntityTypeBuilder<AttachmentContent> builder)
+        {
+            builder.ToTable("attachmentcontents", "plainstore");
+
+            builder.HasKey(x => x.ContentId);
+            builder.Property(e => e.ContentId)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+
+            builder.OwnsOne(x => x.Details, p =>
+            {
+                p.Property(e => e.Height).HasColumnName("attachmentheight");
+
+                p.Property(e => e.Width).HasColumnName("attachmentwidth");
+
+                p.Property(e => e.Thumbnail).HasColumnName("thumbnail");
+
+                p.ToTable(p.OwnedEntityType.ClrType.Name);
+            });
+            
+
+            builder.Property(e => e.Content).HasColumnName("content");
+
+            builder.Property(e => e.ContentType).HasColumnName("contenttype");
+
+            builder.Property(e => e.Size).HasColumnName("size");
         }
     }
 }
