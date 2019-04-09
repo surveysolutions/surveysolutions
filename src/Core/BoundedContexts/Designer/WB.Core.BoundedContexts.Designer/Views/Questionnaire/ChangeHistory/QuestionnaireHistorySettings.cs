@@ -2,11 +2,6 @@
 {
     public class QuestionnaireHistorySettings
     {
-        public QuestionnaireHistorySettings(int questionnaireChangeHistoryLimit)
-        {
-            this.QuestionnaireChangeHistoryLimit = questionnaireChangeHistoryLimit;
-        }
-
-        public int QuestionnaireChangeHistoryLimit { get; }
+        public int QuestionnaireChangeHistoryLimit { get; set; } = 500;
     }
 }
