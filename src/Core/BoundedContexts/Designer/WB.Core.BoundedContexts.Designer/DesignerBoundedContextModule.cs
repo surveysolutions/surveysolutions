@@ -32,6 +32,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -42,6 +43,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Designer
@@ -90,6 +92,9 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
+
+            registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(DesignerKeyValueStorage<>));
+            registry.Bind(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
