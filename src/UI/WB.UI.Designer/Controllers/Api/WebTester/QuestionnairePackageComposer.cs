@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Runtime.Caching;
-using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -13,8 +9,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Api.WebTester;
 
-namespace WB.UI.Designer.Api.WebTester
+namespace WB.UI.Designer.Controllers.Api.WebTester
 {
     public class QuestionnairePackageComposer : IQuestionnairePackageComposer
     {
@@ -25,7 +22,7 @@ namespace WB.UI.Designer.Api.WebTester
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
-        private readonly QuestionnaireChacheStorage questionnaireChacheStorage;
+        private readonly IQuestionnaireCacheStorage questionnaireCacheStorage;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
@@ -34,7 +31,7 @@ namespace WB.UI.Designer.Api.WebTester
             IDesignerEngineVersionService engineVersionService,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IQuestionnaireVerifier questionnaireVerifier,
-            QuestionnaireChacheStorage questionnaireChacheStorage)
+            IQuestionnaireCacheStorage questionnaireCacheStorage)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
@@ -43,7 +40,7 @@ namespace WB.UI.Designer.Api.WebTester
             this.engineVersionService = engineVersionService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
-            this.questionnaireChacheStorage = questionnaireChacheStorage;
+            this.questionnaireCacheStorage = questionnaireCacheStorage;
         }
 
 
@@ -51,15 +48,15 @@ namespace WB.UI.Designer.Api.WebTester
         {
             var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage
                 .Query(x => x.Where(y => y.QuestionnaireId == questionnaireId.FormatGuid()).Select(y => (int?)y.Sequence).Max());
-            
+
             var cacheKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
 
-            var cacheEntry = questionnaireChacheStorage.Get(cacheKey);
+            var cacheEntry = questionnaireCacheStorage.Get(cacheKey);
 
             if (cacheEntry == null)
             {
                 cacheEntry = new Lazy<Questionnaire>(() => ComposeQuestionnaireImpl(questionnaireId));
-                questionnaireChacheStorage.Add(cacheKey, cacheEntry);
+                questionnaireCacheStorage.Add(cacheKey, cacheEntry);
             }
 
             try
@@ -68,20 +65,18 @@ namespace WB.UI.Designer.Api.WebTester
             }
             catch
             {
-                questionnaireChacheStorage.Remove(cacheKey);
+                questionnaireCacheStorage.Remove(cacheKey);
                 throw;
             }
         }
 
         private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
-                                    ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
 
             if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                throw new ComposeException();
             }
 
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(questionnaireId)?.Version;
@@ -97,11 +92,11 @@ namespace WB.UI.Designer.Api.WebTester
                     versionToCompileAssembly,
                     out resultAssembly);
                 if (!generationResult.Success)
-                    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                    throw new ComposeException();
             }
             catch (Exception)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
+                throw new ComposeException();
             }
 
             var questionnaire = questionnaireView.Source.Clone();
@@ -123,5 +118,9 @@ namespace WB.UI.Designer.Api.WebTester
                 Assembly = resultAssembly
             };
         }
+    }
+
+    internal class ComposeException : Exception
+    {
     }
 }
