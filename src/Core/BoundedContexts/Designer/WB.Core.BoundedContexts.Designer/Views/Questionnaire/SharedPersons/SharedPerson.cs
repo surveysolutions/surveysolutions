@@ -6,6 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons
 {
     public class SharedPerson
     {
+        public int Id { get; set; }
+
         public virtual string QuestionnaireId { get; set; }
         public virtual string UserId { get; set; }
         public virtual string Email { get; set; }
