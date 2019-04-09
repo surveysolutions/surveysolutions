@@ -190,18 +190,22 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                     case InterviewQuestionType.MultiFixedOption:
                         {
-                            result = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
+                            var callerQuestionnaire = questionnaire;
+
+                            var typedResult = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
 
                             var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                            var typedResult = (InterviewMutliOptionQuestion)result;
-                            typedResult.Options = options;
-                            var callerQuestionnaire = questionnaire;
+                            var answeredOptions = questionnaire.GetCategoricalMultiOptionsByValues(question.Identity.Id, typedResult.Answer);
+
+                            typedResult.Options = options.Union(answeredOptions).Distinct().ToList();
                             typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             typedResult.ProtectedAnswer = typedResult.Answer
                                 .Where(i => question.IsAnswerProtected(i))
                                 .ToArray();
+
+                            result = typedResult;
                         }
                         break;
                     case InterviewQuestionType.MultiLinkedOption:
