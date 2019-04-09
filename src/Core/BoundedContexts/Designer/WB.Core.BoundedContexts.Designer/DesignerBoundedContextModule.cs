@@ -41,16 +41,23 @@ using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.DependencyInjection;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Designer
 {
-    public class DesignerBoundedContextModule : IAppModule
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    public class DesignerBoundedContextModule : IModule
     {
-        public void Load(IDependencyRegistry registry)
+        private readonly ICompilerSettings compilerSettings;
+
+        public DesignerBoundedContextModule(ICompilerSettings compilerSettings)
         {
-            registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>(new EventTypeResolver(typeof(DesignerBoundedContextModule).Assembly));
+            this.compilerSettings = compilerSettings;
+        }
+
+        public void Load(IIocRegistry registry)
+        {
+            registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(typeof(DesignerBoundedContextModule).Assembly));
 
             registry.Bind<IKeywordsProvider, KeywordsProvider>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
@@ -58,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IPatchGenerator, JsonPatchService>();
             registry.Bind<IPatchApplier, JsonPatchService>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
-            registry.Bind<IFindReplaceService, FindReplaceService>();
+            registry.BindToMethod<IFindReplaceService>(c => new FindReplaceService(c.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
             registry.Bind<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             registry.Bind<IPublicFoldersStorage, PublicFoldersStorage>();
@@ -77,9 +84,10 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
-            registry.BindAsScoped<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
+            registry.BindInPerLifetimeScope<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
 
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
+            registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
             registry.Bind<ILookupTableService, LookupTableService>();
             registry.Bind<IAttachmentService, AttachmentService>();
@@ -92,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
         }
 
-        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             CommandRegistry
                 .Setup<Questionnaire>()
