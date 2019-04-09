@@ -1,21 +1,19 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Services;
 
-namespace WB.UI.Designer.Api.WebTester
+namespace WB.UI.Designer.Controllers.Api.WebTester
 {
-    [RoutePrefix("api/webtester")]
-    public class WebTesterController : ApiController
+    [Route("api/webtester")]
+    public class WebTesterController : ControllerBase
     {
         private readonly IQuestionnairePackageComposer questionnairePackageComposer;
 
@@ -23,11 +21,11 @@ namespace WB.UI.Designer.Api.WebTester
         private readonly IAttachmentService attachmentService;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IWebTesterService webTesterService;
-      
+
 
         public WebTesterController(
             IQuestionnairePackageComposer questionnairePackageComposer,
-            IQuestionnaireViewFactory questionnaireViewFactory, 
+            IQuestionnaireViewFactory questionnaireViewFactory,
             IAttachmentService attachmentService,
             IPlainStorageAccessor<TranslationInstance> translations,
             IWebTesterService webTesterService)
@@ -41,14 +39,21 @@ namespace WB.UI.Designer.Api.WebTester
 
         [Route("{token:Guid}/info")]
         [HttpGet]
-        public Task<QuestionnaireLiteInfo> InfoAsync(string token)
+        public IActionResult Info(string token)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token) ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null)
+            {
+                return NotFound();
+            }
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
-                ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            if (questionnaireView == null)
+            {
+                return NotFound();
+            }
 
-            return Task.FromResult(new QuestionnaireLiteInfo
+            return Ok(new QuestionnaireLiteInfo
             {
                 Id = questionnaireView.PublicKey,
                 LastUpdateDate = questionnaireView.Source.LastEntryDate
@@ -57,31 +62,40 @@ namespace WB.UI.Designer.Api.WebTester
 
         [Route("{token:Guid}/questionnaire")]
         [HttpGet]
-        public Questionnaire QuestionnaireAsync(string token)
+        public IActionResult QuestionnaireAsync(string token)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token) 
-                                  ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null) return NotFound();
 
-            return this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId);
+            try
+            {
+                var composeQuestionnaire = this.questionnairePackageComposer.ComposeQuestionnaire(questionnaireId.Value);
+                return Ok(composeQuestionnaire);
+            }
+            catch (ComposeException )
+            {
+                return StatusCode((int) HttpStatusCode.PreconditionFailed);
+            }
         }
 
         [Route("{token:Guid}/attachment/{attachmentContentId}")]
         [HttpGet]
-        public Task<AttachmentContent> AttachmentContentAsync(string token, string attachmentContentId)
+        public IActionResult AttachmentContentAsync(string token, string attachmentContentId)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token)
-                                  ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null) return NotFound();
 
-            if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId)) == null)
+            if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value)) == null)
             {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                return NotFound();
             }
 
             var attachmentContent = this.attachmentService.GetContent(attachmentContentId);
-            
-            if (attachmentContent == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return Task.FromResult(new AttachmentContent
+            if (attachmentContent == null)
+                return NotFound();
+
+            return Ok(new AttachmentContent
             {
                 ContentType = attachmentContent.ContentType,
                 Content = attachmentContent.Content,
@@ -92,17 +106,20 @@ namespace WB.UI.Designer.Api.WebTester
 
         [Route("{token:Guid}/translations")]
         [HttpGet]
-        public Task<TranslationDto[]> TranslationsAsync(string token)
+        public IActionResult TranslationsAsync(string token)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token)
-                                  ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token);
+            if (questionnaireId == null)
+            {
+                return NotFound();
+            }
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
-                                    ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId.Value));
+            if (questionnaireView == null) return NotFound();
 
             var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
-            return Task.FromResult(this.translations
+            return Ok(this.translations
                 .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && actualTranslations.Contains(x.TranslationId)).ToList())
                 .Select(x => new TranslationDto
                 {
