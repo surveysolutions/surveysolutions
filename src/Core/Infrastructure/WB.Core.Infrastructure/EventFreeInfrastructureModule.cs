@@ -7,22 +7,23 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class EventFreeInfrastructureModule : IModule
+    public class EventFreeInfrastructureModule : IAppModule
     {
-        public void Load(IIocRegistry registry)
+        public void Load(IDependencyRegistry registry)
         {
             registry.Bind<IEventSourcedAggregateRootRepository, DummyEventSourcedAggregateRootRepository>();
             registry.Bind<ILiteEventBus, DummyEventBus>();
             registry.Bind<IEventStore, DummyEventStore>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+        public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
