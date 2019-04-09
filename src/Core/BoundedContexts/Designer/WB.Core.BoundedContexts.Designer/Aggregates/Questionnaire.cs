@@ -80,8 +80,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         newGroup.PublicKey,
                         parentId,
                         this.innerDocument.PublicKey);
-
-                    logger.Error(errorMessage);
                 }
             }
 
@@ -115,14 +113,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         public Questionnaire(
-            ILogger logger, 
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
         {
-            this.logger = logger;
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
