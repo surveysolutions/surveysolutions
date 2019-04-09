@@ -94,11 +94,8 @@ namespace WB.UI.Designer1
             });
             services.Configure<MailSettings>(Configuration.GetSection("Mail"));
             services.AddTransient<IEmailSender, MailSender>();
-            services.AddScoped<IViewRenderingService, ViewRenderingService>();
-            services.AddScoped<IQuestionnaireHelper, QuestionnaireHelper>();
-            services.AddScoped<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
-            services.AddScoped<IAccountListViewFactory, AccountListViewFactory>();
-            services.AddScoped<IPublicFoldersStorage, PublicFoldersStorage>();
+            services.AddTransient<IViewRenderingService, ViewRenderingService>();
+            services.AddTransient<IQuestionnaireHelper, QuestionnaireHelper>();
 
             services.Configure<CompilerSettings>(Configuration.GetSection("CompilerSettings"));
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));

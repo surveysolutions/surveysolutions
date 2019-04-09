@@ -8,10 +8,10 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
-using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientNotifier;
 
 namespace WB.UI.Designer.Modules
 {
@@ -28,8 +28,8 @@ namespace WB.UI.Designer.Modules
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
-            //registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
-            //registry.BindAsSingleton<QuestionnaireChacheStorage, QuestionnaireChacheStorage>();
+            registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            registry.BindAsSingleton<IQuestionnaireCacheStorage, QuestionnaireCacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
 
             //registry.Bind<IRecipientNotifier, MailNotifier>();
@@ -47,9 +47,6 @@ namespace WB.UI.Designer.Modules
 //            });
 
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
-
-            // override registration
-            registry.BindAsScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)
