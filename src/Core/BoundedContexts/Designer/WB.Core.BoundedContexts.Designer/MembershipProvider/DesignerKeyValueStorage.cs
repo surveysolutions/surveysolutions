@@ -1,4 +1,6 @@
 ﻿using System;
+using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
@@ -20,10 +22,9 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public T GetById(string id)
         {
-            StoredInAttribute storedInAttribute =
-                (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
+            var storedInAttribute = GetTypeToQuery();
 
-            var byId = (KeyValueEntity)this.dbContext.Find(storedInAttribute.StoredIn, id);
+            var byId = (KeyValueEntity)this.dbContext.Find(storedInAttribute, id);
             if (byId != null)
             {
                 return this.serializer.Deserialize(byId.Value);
@@ -31,12 +32,17 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             return null;
         }
 
+        private static Type GetTypeToQuery()
+        {
+            if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
+            StoredInAttribute storedInAttribute =
+                (StoredInAttribute) Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
+            return storedInAttribute.StoredIn;
+        }
+
         public void Remove(string id)
         {
-            StoredInAttribute storedInAttribute =
-                (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
-
-            var byId = (KeyValueEntity)this.dbContext.Find(storedInAttribute.StoredIn, id);
+            var byId = (KeyValueEntity)this.dbContext.Find(GetTypeToQuery(), id);
             if (byId != null)
             {
                 this.dbContext.Remove(byId);
@@ -48,7 +54,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             StoredInAttribute storedInAttribute =
                 (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
 
-            var byId = (KeyValueEntity)this.dbContext.Find(storedInAttribute.StoredIn, id);
+            var byId = (KeyValueEntity)this.dbContext.Find(GetTypeToQuery(), id);
             if (byId != null)
             {
                 byId.Value = this.serializer.Serialize(entity);

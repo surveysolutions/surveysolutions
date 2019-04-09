@@ -25,7 +25,6 @@ namespace WB.Core.Infrastructure
             registry.Bind<IClock, DateTimeBasedClock>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
             registry.BindAsScoped<ICommandService, CommandService>();
-            registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

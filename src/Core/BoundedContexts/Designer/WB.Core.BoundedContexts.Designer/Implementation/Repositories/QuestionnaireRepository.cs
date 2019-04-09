@@ -2,7 +2,7 @@
 using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -11,19 +11,19 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 {
-    internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>
+    internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>, IPlainAggregateRootRepository
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems;
-        private readonly IServiceLocator serviceLocator;
+        private readonly IServiceLocator locator;
+        private readonly DesignerDbContext dbContext;
 
-        public QuestionnaireRepository(IServiceLocator serviceLocator,
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListItems)
+        public QuestionnaireRepository(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
+            IServiceLocator locator,
+            DesignerDbContext dbContext)
         {
-            this.serviceLocator = serviceLocator;
             this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireListItems = questionnaireListItems;
+            this.locator = locator;
+            this.dbContext = dbContext;
         }
 
         public Questionnaire Get(Guid aggregateId)
@@ -33,9 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             if (questionnaireDocument == null)
                 return null;
 
-            var questionnaireListItem = this.questionnaireListItems.GetById(aggregateId.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Find(aggregateId.FormatGuid());
             var personsCollection = questionnaireListItem?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
-            var questionnaire = this.serviceLocator.GetInstance<Questionnaire>();
+            var questionnaire = locator.GetInstance<Questionnaire>();
             questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);
             return questionnaire;
         }
@@ -45,5 +45,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             var questionnaireDocument = aggregateRoot.QuestionnaireDocument;
             this.questionnaireStorage.Store(questionnaireDocument, questionnaireDocument.PublicKey.FormatGuid());
         }
+
+        public T Get<T>(Guid aggregateId) where T : class, IPlainAggregateRoot
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPlainAggregateRoot Get(Type aggregateRootType, Guid aggregateId)
+        {
+            if(aggregateRootType != typeof(Questionnaire))
+                throw new InvalidOperationException();
+            var questionnaire = this.Get(aggregateId);
+            return questionnaire;
+        }
+
+        public void Save(IPlainAggregateRoot aggregateRoot)
+        {
+            this.Save((Questionnaire)aggregateRoot);
+        }
     }
 }
+
