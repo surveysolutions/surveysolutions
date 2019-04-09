@@ -187,6 +187,12 @@ namespace WB.Services.Export.Questionnaire
                 }
             }
 
+            if (question is NumericQuestion numericQuestion)
+            {
+                if (numericQuestion.IsInteger)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.NumericInteger;
+            }
+
             exportedHeaderItem.VariableName = question.VariableName;
 
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>()
@@ -228,7 +234,7 @@ namespace WB.Services.Export.Questionnaire
                 case QuestionType.Multimedia:
                     return ExportValueType.String;
                 case QuestionType.Numeric:
-                    return ExportValueType.Numeric;
+                    return questionSubType == QuestionSubtype.NumericInteger ? ExportValueType.NumericInt : ExportValueType.Numeric;
                 case QuestionType.DateTime:
                 {
                     return (questionSubType != null && questionSubType == QuestionSubtype.DateTimeTimestamp) 
