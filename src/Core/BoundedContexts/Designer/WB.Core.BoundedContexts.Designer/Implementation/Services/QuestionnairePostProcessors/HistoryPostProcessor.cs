@@ -77,17 +77,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
         ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
-        private IIdentityService accountStorage
-            => ServiceLocator.Current.GetInstance<IIdentityService>();
+        private readonly DesignerDbContext dbContext;
+        private readonly IIdentityService accountStorage;
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
+        private readonly IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
 
-        private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
+        public HistoryPostProcessor(DesignerDbContext dbContext, 
+            IIdentityService accountStorage,
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage)
+        {
+            this.dbContext = dbContext;
+            this.accountStorage = accountStorage;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.questionnaireStateTrackerStorage = questionnaireStateTrackerStorage;
+        }
 
-        private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
-            => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
+        //private IIdentityService accountStorage
+        //    => ServiceLocator.Current.GetInstance<IIdentityService>();
 
-        private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
-            => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
+        //private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
+        //    => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
+
+        //private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
+        //    => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
+
+        //private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
+        //    => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
 
         #region Questionnaire
 
@@ -685,7 +701,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null)
         {
-            this.QuestionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
+            this.questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
                 responsibleId, 
                 GetUserName(responsibleId),
                 actionType,
@@ -870,7 +886,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
-            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferenceId.FormatGuid());
+            var itemToRevert = this.dbContext.QuestionnaireChangeRecords.Find(command.HistoryReferenceId.FormatGuid());
 
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,

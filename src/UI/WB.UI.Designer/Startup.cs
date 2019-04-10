@@ -15,31 +15,24 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.DependencyInjection;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
-using WB.Infrastructure.Native.Logging;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.CommonWeb;
+using WB.UI.Designer.DependencyInjection;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
-using WB.UI.Designer1.DependencyInjection;
 using WB.UI.Shared.Web.Versions;
 
-namespace WB.UI.Designer1
+namespace WB.UI.Designer
 {
     public class Startup
     {
@@ -86,6 +79,7 @@ namespace WB.UI.Designer1
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.AddTransient<IRecaptchaService, RecaptchaService>();
+            services.AddTransient<IRecipientNotifier, MailNotifier>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
 
             var membershipSection = this.Configuration.GetSection("Membership");

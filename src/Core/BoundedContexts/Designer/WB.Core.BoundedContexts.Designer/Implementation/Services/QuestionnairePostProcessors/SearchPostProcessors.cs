@@ -64,8 +64,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, UpdateVariable>,
         ICommandPostProcessor<Questionnaire, DeleteVariable>
     {
-        private IQuestionnaireSearchStorage GetSearchStorage() =>
-            ServiceLocator.Current.GetInstance<IQuestionnaireSearchStorage>();
+        private readonly IQuestionnaireSearchStorage searchStorage;
+
+        public SearchPostProcessors(IQuestionnaireSearchStorage searchStorage)
+        {
+            this.searchStorage = searchStorage;
+        }
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
         {
@@ -85,6 +89,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
             GetSearchStorage().RemoveAllEntities(aggregate.Id);
+        }
+
+        private IQuestionnaireSearchStorage GetSearchStorage()
+        {
+            return this.searchStorage;
         }
 
         public void Process(Questionnaire aggregate, AddStaticText command)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Documents;
+using Microsoft.Extensions.DependencyInjection;
+using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -14,11 +16,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     internal class QuestionnaireRepository : IPlainAggregateRootRepository<Questionnaire>, IPlainAggregateRootRepository
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IServiceLocator locator;
+        private readonly IServiceProvider locator;
         private readonly DesignerDbContext dbContext;
 
         public QuestionnaireRepository(IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IServiceLocator locator,
+            IServiceProvider locator,
             DesignerDbContext dbContext)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -35,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
             var questionnaireListItem = this.dbContext.Questionnaires.Find(aggregateId.FormatGuid());
             var personsCollection = questionnaireListItem?.SharedPersons ?? Enumerable.Empty<SharedPerson>();
-            var questionnaire = locator.GetInstance<Questionnaire>();
+            var questionnaire = locator.GetRequiredService<Questionnaire>();
             questionnaire.Initialize(aggregateId, questionnaireDocument, personsCollection);
             return questionnaire;
         }
