@@ -294,8 +294,6 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
                 p.Property(e => e.Width).HasColumnName("attachmentwidth");
 
                 p.Property(e => e.Thumbnail).HasColumnName("thumbnail");
-
-                p.ToTable(p.OwnedEntityType.ClrType.Name);
             });
             
 
