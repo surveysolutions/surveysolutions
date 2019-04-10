@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Documents;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,19 +12,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class QuestionnaireHistoryVersionsService : IQuestionnaireHistoryVersionsService
     {
-        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IEntitySerializer<QuestionnaireDocument> entitySerializer;
-        private readonly QuestionnaireHistorySettings historySettings;
+        private readonly IOptions<QuestionnaireHistorySettings> historySettings;
         private readonly IPatchApplier patchApplier;
         private readonly IPatchGenerator patchGenerator;
 
-        public QuestionnaireHistoryVersionsService(IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
+        public QuestionnaireHistoryVersionsService(DesignerDbContext dbContext,
             IEntitySerializer<QuestionnaireDocument> entitySerializer,
-            QuestionnaireHistorySettings historySettings,
+            IOptions<QuestionnaireHistorySettings> historySettings,
             IPatchApplier patchApplier,
             IPatchGenerator patchGenerator)
         {
-            this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
+            this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.entitySerializer = entitySerializer;
             this.historySettings = historySettings;
             this.patchApplier = patchApplier;
@@ -31,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId)
         {
-            var questionnaireChangeRecord = this.questionnaireChangeItemStorage.GetById(historyReferenceId.FormatGuid());
+            var questionnaireChangeRecord = this.dbContext.QuestionnaireChangeRecords.Find(historyReferenceId.FormatGuid());
             if (questionnaireChangeRecord == null)
                 return null;
 
@@ -42,17 +44,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 return questionnaireDocument;
             }
 
-            var history = this.questionnaireChangeItemStorage.Query(_ => (from h in _
-                where h.Sequence >= questionnaireChangeRecord.Sequence
-                      && h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId &&
-                      (h.Patch != null || h.ResultingQuestionnaireDocument != null)
-                orderby h.Sequence descending 
-                select new
-                {
-                    h.Sequence,
-                    h.ResultingQuestionnaireDocument,
-                    DiffWithPreviousVersion = h.Patch
-                }).ToList());
+            var history = (from h in this.dbContext.QuestionnaireChangeRecords
+                           where h.Sequence >= questionnaireChangeRecord.Sequence
+                              && h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId &&
+                              (h.Patch != null || h.ResultingQuestionnaireDocument != null)
+                        orderby h.Sequence descending 
+                        select new
+                        {
+                            h.Sequence,
+                            h.ResultingQuestionnaireDocument,
+                            DiffWithPreviousVersion = h.Patch
+                        }).ToList();
 
             var questionnaire = history.First().ResultingQuestionnaireDocument;
             foreach (var patch in history.Skip(1))
@@ -69,11 +71,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                               maxHistoryDepth + 2;
             if (minSequence < 0) return;
 
-            var oldChangeRecord = this.questionnaireChangeItemStorage.Query(_ => _
+            var oldChangeRecord = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
                                                                   && (x.ResultingQuestionnaireDocument != null || x.Patch != null))
                 .OrderBy(x => x.Sequence)
-                .ToList());
+                .ToList();
 
             foreach (var questionnaireChangeRecord in oldChangeRecord)
             {
@@ -98,14 +100,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var sQuestionnaireId = questionnaireId.FormatGuid();
 
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x
-                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max());
+            var maxSequenceByQuestionnaire = this.dbContext.QuestionnaireChangeRecords
+                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max();
 
-            var previousChange = this.questionnaireChangeItemStorage.Query(_ => (from h in _
-                where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
-                orderby h.Sequence descending 
-                select h
-                    ).FirstOrDefault());
+            var previousChange = (from h in this.dbContext.QuestionnaireChangeRecords
+                                 where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
+                                orderby h.Sequence descending 
+                                select h
+                                    ).FirstOrDefault();
 
             if (previousChange != null && questionnaireDocument != null)
             {
@@ -146,11 +148,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 questionnaireChangeItem.ResultingQuestionnaireDocument = this.entitySerializer.Serialize(questionnaireDocument);
             }
 
-            this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
+            this.dbContext.QuestionnaireChangeRecords.Add(questionnaireChangeItem);
 
             this.RemoveOldQuestionnaireHistory(sQuestionnaireId, 
                 maxSequenceByQuestionnaire, 
-                historySettings.QuestionnaireChangeHistoryLimit);
+                historySettings.Value.QuestionnaireChangeHistoryLimit);
         }
 
         public string GetDiffWithLastStoredVersion(QuestionnaireDocument questionnaire)
@@ -168,11 +170,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (questionnaireDocument == null)
                 return null;
 
-            var existingSnapshot = this.questionnaireChangeItemStorage.Query(_ => 
-                (from h in _
-                where h.QuestionnaireId == questionnaireDocument.Id
+            var existingSnapshot =  
+                (from h in this.dbContext.QuestionnaireChangeRecords
+                 where h.QuestionnaireId == questionnaireDocument.Id
                 orderby h.Sequence 
-                select h.QuestionnaireChangeRecordId).FirstOrDefault());
+                select h.QuestionnaireChangeRecordId).FirstOrDefault();
 
             if (existingSnapshot == null)
                 return null;

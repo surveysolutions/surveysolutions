@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
@@ -76,6 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.HasKey(x => x.QuestionnaireId);
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("id").ValueGeneratedNever();
+
             builder.Ignore(e => e.PublicId);
 
             builder.Property(e => e.CreatedBy).HasColumnName("createdby");
@@ -150,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.ToTable(tableName, "plainstore");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedNever();
-            builder.Property(x => x.Value).HasColumnName("value");
+            builder.Property(x => x.Value).HasColumnName("value").HasColumnType("json");
         }
     }
 
@@ -199,6 +202,77 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.LastUpdateDate).HasColumnName("lastupdatedate");
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+        }
+    }
+
+    public class QuestionnaireChangeReferenceTypeConfig : IEntityTypeConfiguration<QuestionnaireChangeReference>
+    {
+        public void Configure(EntityTypeBuilder<QuestionnaireChangeReference> builder)
+        {
+            builder.ToTable("questionnairechangereferences", "plainstore");
+
+            builder.HasKey(x => x.Id);
+
+            builder.Property(e => e.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
+
+            builder.Property(e => e.QuestionnaireChangeRecordId)
+                .HasColumnName("questionnairechangerecordid")
+                .HasMaxLength(255);
+
+            builder.Property(e => e.ReferenceId).HasColumnName("referenceid");
+
+            builder.Property(e => e.ReferenceTitle).HasColumnName("referencetitle");
+
+            builder.Property(e => e.ReferenceType).HasColumnName("referencetype");
+
+            builder.HasOne(d => d.QuestionnaireChangeRecord)
+                .WithMany(p => p.References)
+                .HasForeignKey(d => d.QuestionnaireChangeRecordId)
+                .HasConstraintName("questionnairechangereferences_questionnairechangerecordid");
+        }
+    }
+
+    public class QuestionnaireChangeRecordTypeConfig : IEntityTypeConfiguration<QuestionnaireChangeRecord>
+    {
+        public void Configure(EntityTypeBuilder<QuestionnaireChangeRecord> builder)
+        {
+            builder.ToTable("questionnairechangerecords", "plainstore");
+
+            builder.HasKey(x => x.QuestionnaireChangeRecordId);
+
+            builder.Property(e => e.QuestionnaireChangeRecordId)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+
+            builder.Property(e => e.ActionType).HasColumnName("actiontype");
+
+            builder.Property(e => e.AffectedEntriesCount).HasColumnName("affectedentriescount");
+
+            builder.Property(e => e.Patch).HasColumnName("patch");
+
+            builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+
+            builder.Property(e => e.ResultingQuestionnaireDocument).HasColumnName("resultingquestionnairedocument");
+
+            builder.Property(e => e.Sequence).HasColumnName("sequence");
+
+            builder.Property(e => e.TargetItemDateTime).HasColumnName("targetitemdatetime");
+
+            builder.Property(e => e.TargetItemId).HasColumnName("targetitemid");
+
+            builder.Property(e => e.TargetItemNewTitle).HasColumnName("targetitemnewtitle");
+
+            builder.Property(e => e.TargetItemTitle).HasColumnName("targetitemtitle");
+
+            builder.Property(e => e.TargetItemType).HasColumnName("targetitemtype");
+
+            builder.Property(e => e.Timestamp).HasColumnName("timestamp");
+
+            builder.Property(e => e.UserId).HasColumnName("userid");
+
+            builder.Property(e => e.UserName).HasColumnName("username");
         }
     }
 

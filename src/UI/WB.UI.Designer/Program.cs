@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using WB.UI.Designer.Migrations.PlainStore;
 using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer1
+namespace WB.UI.Designer
 {
     public class Program
     {

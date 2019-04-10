@@ -30,7 +30,11 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public DbSet<AttachmentContent> AttachmentContents { get; set; }
 
         public DbSet<AttachmentMeta> AttachmentMetas { get; set; }
+
         public DbSet<TranslationInstance> TranslationInstances { get; set; }
+
+        public DbSet<QuestionnaireChangeRecord> QuestionnaireChangeRecords { get; set; }
+        public DbSet<QuestionnaireChangeReference> QuestionnaireChangeReferences { get; set; }
 
         public DbSet<StoredLookupTable> LookupTableContents { get; set; }
 
@@ -53,6 +57,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new AttachmentContentTypeConfig());
             builder.ApplyConfiguration(new AttachmentMetaTypeConfig());
             builder.ApplyConfiguration(new TranslationInstanceTypeConfig());
+            builder.ApplyConfiguration(new QuestionnaireChangeRecordTypeConfig());
+            builder.ApplyConfiguration(new QuestionnaireChangeReferenceTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));
