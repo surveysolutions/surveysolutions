@@ -159,10 +159,21 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                         foreach (var translationInstance in uniqueTranslationInstances)
                         {
-                            this.dbContext.Add(translationInstance);
+                            var existing = this.dbContext.TranslationInstances.Find(translationInstance.Id);
+                            if (existing == null)
+                            {
+                                this.dbContext.TranslationInstances.Add(translationInstance);
+                            }
+                            else
+                            {
+                                existing.QuestionnaireId = translationInstance.QuestionnaireId;
+                                existing.Value = translationInstance.Value;
+                                existing.QuestionnaireEntityId = translationInstance.QuestionnaireEntityId;
+                                existing.TranslationId = translationInstance.TranslationId;
+                                existing.TranslationIndex = translationInstance.TranslationIndex;
+                                existing.Type = translationInstance.Type;
+                            }
                         }
-
-                        this.dbContext.SaveChanges();
                     }
                 }
                 catch (NullReferenceException e)
