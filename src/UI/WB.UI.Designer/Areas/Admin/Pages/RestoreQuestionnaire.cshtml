@@ -14,7 +14,7 @@
 
     @if (!string.IsNullOrEmpty(Model.Success))
     {
-        <pre class="alert alert-success">@Html.Raw(@TempData[Model.Success])</pre>
+        <pre class="alert alert-success">@Html.Raw(Model.Success)</pre>
     }
 
     @if (!string.IsNullOrEmpty(Model.Error) || !string.IsNullOrEmpty(Model.Success))
