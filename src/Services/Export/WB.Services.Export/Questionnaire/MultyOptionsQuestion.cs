@@ -4,5 +4,6 @@
     {
         public bool YesNoView { get; set; }
         public bool AreAnswersOrdered { get; set; }
+        public bool? IsFilteredCombobox { get; set; }
     }
 }

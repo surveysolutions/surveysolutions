@@ -6,6 +6,7 @@
         MultyOption_Linked = 2,
         MultyOption_Ordered = 3,
         MultyOption_YesNoOrdered = 4,
+        MultyOption_Combobox = 7,
 
         DateTime_Timestamp = 5,
 
