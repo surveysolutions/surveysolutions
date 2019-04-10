@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NHibernate.Linq;
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 answer.Latitude = @event.Payload.Latitude;
                 answer.Longitude = @event.Payload.Longitude;
-                answer.Timestamp = @event.Payload.Timestamp.DateTime;
+                answer.Timestamp = @event.Payload.Timestamp;
                 answer.IsEnabled = true;
                 this.sessionProvider.Session.Update(answer);
             }
@@ -58,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     RosterVector = rosterVector,
                     Latitude = @event.Payload.Latitude,
                     Longitude = @event.Payload.Longitude,
-                    Timestamp = @event.Payload.Timestamp.DateTime,
+                    Timestamp = @event.Payload.Timestamp,
                     IsEnabled = true
                 });
             }
