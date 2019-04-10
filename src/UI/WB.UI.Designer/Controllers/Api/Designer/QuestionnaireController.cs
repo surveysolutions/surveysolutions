@@ -57,6 +57,11 @@ namespace WB.UI.Designer.Api
             this.webTesterService = webTesterService;
         }
 
+        public IActionResult Details(string id)
+        {
+            return Ok();
+        }
+
         [HttpGet]
         public IActionResult Get(string id)
         {

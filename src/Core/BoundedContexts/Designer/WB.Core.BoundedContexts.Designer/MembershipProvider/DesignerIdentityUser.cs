@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
-    public class DesignerIdentityUser : IdentityUser
+    public class DesignerIdentityUser : IdentityUser, IIdentityUser
     {
         public string PasswordSalt { get; set; }
 

@@ -8,10 +8,9 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native;
 
-namespace WB.UI.Designer1.DependencyInjection
+namespace WB.UI.Designer.DependencyInjection
 {
     public class AspCoreKernel
     {
@@ -39,7 +38,7 @@ namespace WB.UI.Designer1.DependencyInjection
         {
             var status = new UnderConstructionInfo();
             this.services.AddSingleton(typeof(UnderConstructionInfo), sp => status);
-
+            
             var serviceLocatorAdapter = new DotNetCoreServiceLocatorAdapter(serviceProvider);
             ServiceLocator.SetLocatorProvider(() => serviceLocatorAdapter);
 
@@ -67,12 +66,12 @@ namespace WB.UI.Designer1.DependencyInjection
             }
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
-                status.Error(Modules.ErrorDuringRunningMigrations);
+                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringRunningMigrations);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(ie, "Exception during running migrations");
             }
             catch(Exception e)
             {
-                status.Error(Modules.ErrorDuringSiteInitialization);
+                status.Error(Core.Infrastructure.Resources.Modules.ErrorDuringSiteInitialization);
                 serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(e, "Exception during site initialization");
             }
         }

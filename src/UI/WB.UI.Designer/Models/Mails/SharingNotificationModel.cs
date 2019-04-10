@@ -14,5 +14,6 @@ namespace WB.UI.Designer.Models
         public string UserCallName { get; set; }
         public string ActionPersonCallName { get; set; }
         public string SharedWithPersonEmail { get; set; }
+        public string QuestionnaireLink { get; set; }
     }
 }

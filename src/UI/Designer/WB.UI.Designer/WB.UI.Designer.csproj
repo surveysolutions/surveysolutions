@@ -289,7 +289,6 @@
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
     <Compile Include="DesignerSettingsProvider.cs" />
-    <Compile Include="Code\Implementation\MailNotifier.cs" />
     <Compile Include="Filters\ShowNotesToUserFilter.cs" />
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
@@ -338,8 +337,6 @@
     </Compile>
     <Compile Include="Code\MembershipModule.cs" />
     <Compile Include="DynamicCompilerSettingsGroup.cs" />
-    <Compile Include="Mailers\ISystemMailer.cs" />
-    <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\MakeAdminViewModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\JsonAddSharedUserToQuestionnaireSuccessResult.cs" />

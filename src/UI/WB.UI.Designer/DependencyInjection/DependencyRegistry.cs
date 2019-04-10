@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.Infrastructure.DependencyInjection;
 
-namespace WB.UI.Designer1.DependencyInjection
+namespace WB.UI.Designer.DependencyInjection
 {
     public class DependencyRegistry : IDependencyRegistry
     {
