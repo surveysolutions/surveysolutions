@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Exceptions;
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Resources;
 using WB.Infrastructure.Native;
 
@@ -25,7 +23,7 @@ namespace WB.UI.Designer1.DependencyInjection
             this.services = services;
             this.dependencyRegistry = new DependencyRegistry(services);
 
-            this.services.AddTransient<IServiceLocator>(_ => ServiceLocator.Current);
+            this.services.AddTransient<IServiceLocator, DotNetCoreServiceLocatorAdapter>();
         }
 
         protected readonly List<IAppModule> initModules = new List<IAppModule>();
@@ -70,12 +68,12 @@ namespace WB.UI.Designer1.DependencyInjection
             catch (InitializationException ie)  when(ie.Subsystem == Subsystem.Database)
             {
                 status.Error(Modules.ErrorDuringRunningMigrations);
-                serviceProvider.GetService<ILogger>().Fatal("Exception during running migrations", ie);
+                serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(ie, "Exception during running migrations");
             }
             catch(Exception e)
             {
                 status.Error(Modules.ErrorDuringSiteInitialization);
-                serviceProvider.GetService<ILogger>().Fatal("Exception during site initialization", e);
+                serviceProvider.GetService<ILogger<AspCoreKernel>>().LogError(e, "Exception during site initialization");
             }
         }
     }
