@@ -197,7 +197,6 @@ namespace WB.UI.Designer
                 initTask.Wait();
             else
                 initTask.Wait(TimeSpan.FromSeconds(10));
-
         }
     }
 }

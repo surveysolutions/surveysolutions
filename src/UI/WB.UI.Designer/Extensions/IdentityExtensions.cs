@@ -13,6 +13,12 @@ namespace WB.UI.Designer1.Extensions
             return Guid.Parse(userId);
         }
 
+        public static string GetName(this ClaimsPrincipal identity)
+        {
+            var userName = identity.FindFirst(ClaimTypes.Name).Value;
+            return userName;
+        }
+
         public static bool IsAdmin(this IPrincipal identity)
         {
             return identity.IsInRole(SimpleRoleEnum.Administrator.ToString());

@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
@@ -22,6 +23,8 @@ namespace WB.UI.Designer.Modules
     {
         public void Load(IDependencyRegistry registry)
         {
+            registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
+
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             //registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
             //registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
