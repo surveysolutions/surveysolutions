@@ -22,7 +22,8 @@
   "inject": [
     "Areas/Identity/Pages/Layout.Account.cshtml",
     "Areas/Identity/Pages/_ValidationScriptsPartial.cshtml",
-    "Views/Shared/Layout.cshtml"
+    "Views/Shared/Layout.cshtml",
+    "Views/Shared/_ValidationScriptsPartial.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],

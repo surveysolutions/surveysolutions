@@ -6,6 +6,7 @@ import cleanCss from "gulp-clean-css";
 import concat from "gulp-concat";
 import filter from "gulp-filter";
 import gulpif from "gulp-if";
+import imagemin from 'gulp-imagemin'
 import postcss from "gulp-postcss";
 import rev from "gulp-rev";
 import sourcemaps from "gulp-sourcemaps";
@@ -41,6 +42,8 @@ export const bowerImages = () =>
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(config.dist, "images")));
 
-export const favicons = () => src(config.vendor.favicons).pipe(dest(config.dist));
+export const favicons = () => src(config.vendor.favicons)
+.pipe(cache(imagemin()))
+.pipe(dest(config.dist));
 
 export default parallel(bowerJs, favicons, bowerCss, bowerImages);
