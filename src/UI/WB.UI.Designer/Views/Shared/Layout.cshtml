@@ -1,5 +1,6 @@
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.Extensions.Options
+@using WB.UI.Designer.Areas.Admin.Pages
 @using WB.UI.Designer.Code
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer1.Extensions
@@ -72,15 +73,15 @@
                     @Html.MenuActionLink(ViewContext, QuestionnaireController.Classifications, "Index", "Classifications", "presentation")
                     @if (User.IsAdmin())
                     {
-                        <li role="presentation" class="@(ViewContext.CurrentController() == "PublicFolders" ? "active" : "")">
+                        <li class="@(ViewContext.CurrentController() == "PublicFolders" ? "active" : "")" role="presentation">
                             <a asp-action="Index" asp-controller="PublicFolders" asp-area="Admin" 
                                >
                                 @QuestionnaireController.QuestionnaireTreeFolders
                             </a>
                         </li>
 
-                        <li role="presentation">
-                            <a asp-page="/Users" asp-area="Admin">
+                        <li role="presentation" class="@(Model is UsersModel ? "active" : "")">
+                            <a asp-page="/Users" asp-area="Admin" >
                                 @QuestionnaireController.ManageUsers
                             </a>
                         </li>
