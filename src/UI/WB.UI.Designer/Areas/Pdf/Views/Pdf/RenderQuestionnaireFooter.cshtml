@@ -1,8 +1,8 @@
 ﻿@{
     Layout = null;
-    var pageindex = Request.Params["page"] ?? "";
-    var topage = Request.Params["topage"] ?? "";
-    var subsection = Request.Params["subsection"] ?? "";
+    var pageindex = Context.Request.Query["page"].FirstOrDefault() ?? "";
+    var topage = Context.Request.Query["topage"].FirstOrDefault() ?? "";
+    var subsection = Context.Request.Query["subsection"].FirstOrDefault() ?? "";
 }
 <!DOCTYPE html>
 <html>
