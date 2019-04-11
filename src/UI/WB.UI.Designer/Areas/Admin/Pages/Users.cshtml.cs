@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
         public async Task OnGet(int? p, string sb, int? so, string f)
         {
+            var claims = this.User.Claims.ToList();
+
             int page = p ?? 1;
 
             this.PageIndex = p;

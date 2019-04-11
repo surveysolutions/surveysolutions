@@ -223,7 +223,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("Index");
+                return this.RedirectToAction("Index", "Home");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());

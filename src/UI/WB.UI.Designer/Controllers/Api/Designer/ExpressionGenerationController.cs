@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 namespace WB.UI.Designer.Api
 {
     [Authorize]
+    [QuestionnairePermissions]
     public class ExpressionGenerationController : Controller
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;

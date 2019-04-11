@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.Infrastructure.Versions;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize(Roles = nameof(SimpleRoleEnum.Administrator))]
-    public class ControlPanelApiController : Controller
+    public class ControlPanelApiController : ControllerBase
     {
         public class VersionsInfo
         {
