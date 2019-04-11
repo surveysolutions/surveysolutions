@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -10,14 +11,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
     internal class QuestionnaireChangeHistoryFactory : IQuestionnaireChangeHistoryFactory
     {
-        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
 
         public QuestionnaireChangeHistoryFactory(
-            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage,
+            DesignerDbContext dbContext,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage)
         {
-            this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
+            this.dbContext = dbContext;
             this.questionnaireDocumentStorage = questionnaireDocumentStorage;
         }
 
@@ -30,23 +31,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var questionnaireId = id.FormatGuid();
 
-            var count = questionnaireChangeHistoryStorage.Query(_ =>
-                        _.Count(h => h.QuestionnaireId == questionnaireId));
+            var count = this.dbContext.QuestionnaireChangeRecords.Count(h => h.QuestionnaireId == questionnaireId);
 
             var questionnaireHistory =
-                questionnaireChangeHistoryStorage.Query(_ =>
-                        _.Where(h => h.QuestionnaireId == questionnaireId)
-                            .OrderByDescending(h => h.Sequence)
-                            .Skip((page - 1)*pageSize)
-                            .Take(pageSize)
-                            .ToArray());
+                this.dbContext.QuestionnaireChangeRecords.Where(h => h.QuestionnaireId == questionnaireId)
+                    .OrderByDescending(h => h.Sequence)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToArray();
             var historyItemIds = questionnaireHistory.Select(x => x.QuestionnaireChangeRecordId).ToArray();
 
-            var hasHistory = questionnaireChangeHistoryStorage
-                                 .Query(_ => _.Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) 
+            var hasHistory = this.dbContext.QuestionnaireChangeRecords
+                                            .Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) 
                                                           && (x.Patch != null || x.ResultingQuestionnaireDocument != null))
-                                              .Select(x => x.QuestionnaireChangeRecordId)
-                                              .ToList().ToHashSet());
+                                            .Select(x => x.QuestionnaireChangeRecordId)
+                                            .ToList().ToHashSet();
             
             return new QuestionnaireChangeHistory(id, questionnaire.Title,
                 questionnaireHistory.Select(h => CreateQuestionnaireChangeHistoryWebItem(questionnaire, h, hasHistory))

@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -16,20 +15,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     public class QuestionnaireInfoViewFactory : IQuestionnaireInfoViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
+        private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IAttachmentService attachmentService;
         private readonly IIdentityService membershipUserService;
 
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
+            DesignerDbContext dbContext,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
             IAttachmentService attachmentService,
             IIdentityService membershipUserService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
-            this.questionnaires = questionnaires;
+            this.dbContext = dbContext;
             this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
@@ -87,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
 
-            var listItem = this.questionnaires.GetById(questionnaireId);
+            var listItem = this.dbContext.Questionnaires.Find(questionnaireId);
             var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
                 .Select(x => new SharedPersonView
                 {

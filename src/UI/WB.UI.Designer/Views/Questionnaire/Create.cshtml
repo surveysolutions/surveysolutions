@@ -1,7 +1,6 @@
-@using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 
-@model WB.UI.Designer.Models.QuestionnaireViewModel
+@model WB.UI.Designer.Controllers.QuestionnaireController.QuestionnaireViewModel
 
 @{
     ViewBag.Title = QuestionnaireController.CreateNew;
@@ -10,15 +9,14 @@
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
     {
-        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+    <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
     }
-    @using (Html.BeginForm())
-    {
+    <form method="post">
         @Html.AntiForgeryToken()
         <h1>@QuestionnaireController.CreateNewQuestionnaire</h1>
-        if (TempData.ContainsKey(Alerts.ERROR))
+        @if (TempData.ContainsKey(Alerts.ERROR))
         {
-            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
+        <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
         }
         <div class="form-group">
             @Html.LabelFor(x => x.Title, QuestionnaireController.QuestionnaireTitle)
@@ -33,14 +31,15 @@
 
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create" id="inputSubmitQuestionnaire" />
-            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Home", null, new { @class = "btn " })
         </div>
-    }
+    </form>
 </div>
 
+
+
 @section Scripts {
-    @Styles.Render("~/editform-css")
-    @Scripts.Render("~/editform")
+    <partial name="_ValidationScriptsPartial" />
     <script>
         $(function () {
             $('#edit-form').submit(function () {

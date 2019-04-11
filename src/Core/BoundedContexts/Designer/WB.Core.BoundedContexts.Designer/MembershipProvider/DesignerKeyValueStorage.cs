@@ -54,17 +54,19 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             StoredInAttribute storedInAttribute =
                 (StoredInAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
 
-            var byId = (KeyValueEntity)this.dbContext.Find(GetTypeToQuery(), id);
+            var typeToQuery = GetTypeToQuery();
+            var byId = (KeyValueEntity)this.dbContext.Find(typeToQuery, id);
             if (byId != null)
             {
                 byId.Value = this.serializer.Serialize(entity);
             }
             else
             {
-                var store = Activator.CreateInstance<KeyValueEntity>();
+                var instance = Activator.CreateInstance(typeToQuery);
+                var store = (KeyValueEntity)instance;
                 store.Id = id;
                 store.Value = this.serializer.Serialize(entity);
-                dbContext.Add(store);
+                dbContext.Add(instance);
             }
         }
     }
