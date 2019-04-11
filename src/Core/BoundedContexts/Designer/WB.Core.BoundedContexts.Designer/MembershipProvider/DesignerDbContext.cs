@@ -1,16 +1,14 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 {
@@ -40,6 +38,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
 
         public DbSet<QuestionnaireChangeReference> QuestionnaireChangeReferences { get; set; }
 
+        public DbSet<AllowedAddress> AllowedAddress { get; set; }
+
         public DbSet<StoredLookupTable> LookupTableContents { get; set; }
 
         public DbSet<StoredQuestionnaireDocument> QuestionnaireDocuments { get; set; }
@@ -64,6 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new QuestionnaireChangeRecordTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireChangeReferenceTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireCompilationVersionTypeConfig());
+            builder.ApplyConfiguration(new AllowedAddressTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

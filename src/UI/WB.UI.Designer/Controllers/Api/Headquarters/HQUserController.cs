@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Models;
 using WB.UI.Designer1.Extensions;
 
@@ -17,15 +18,15 @@ namespace WB.UI.Designer.Api.Headquarters
         [HttpGet]
         //[ApiBasicAuth(onlyAllowedAddresses: false)]
         [Route("userdetails")]
-        public PortalUserModel UserDetails()
+        public IActionResult UserDetails()
         {
-            return new PortalUserModel
+            return Ok(new PortalUserModel
             {
-                Id = User.GetId(),
+                Id = User.GetId().FormatGuid(),
                 Login = User.Identity.Name,
                 Roles = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToArray(),
                 Email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
-            };
+            });
         }
     }
 }
