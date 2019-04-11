@@ -13,6 +13,7 @@ import terser from "gulp-terser";
 import through2 from "through2";
 import yargs from "yargs";
 import config from "./config.json";
+const rewriteCSS = require('gulp-rewrite-css');
 
 const PRODUCTION = yargs.argv.production;
 
@@ -39,7 +40,7 @@ const bundler = () => {
 
 const doInject = name =>
   gulpInject(src(config.dist + "/**/" + name + "*.*", { read: false }), {
-    name,
+    name, quiet: true,
     ignorePath: "wwwroot"
   });
 

@@ -1,11 +1,12 @@
 import { join } from "path";
 import { src, dest, parallel, series } from "gulp";
-import cache from "gulp-cache";
 import appendPrepend from "gulp-append-prepend";
+import cache from "gulp-cache";
 import concat from "gulp-concat";
 import gulpif from "gulp-if";
 import gulpInject from "gulp-inject";
 import htmlmin from "gulp-htmlmin";
+import imagemin from "gulp-imagemin";
 import less from "gulp-less";
 import ngAnnotate from "gulp-ng-annotate";
 import rename from "gulp-rename";
@@ -52,7 +53,9 @@ export const styles = () =>
     .pipe(dest(join(dist, "css")));
 
 export const staticContent = () =>
-  src(questionnaire.static, { base: "questionnaire/content" }).pipe(dest(dist));
+  src(questionnaire.static, { base: "questionnaire/content" })  
+    .pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
+    .pipe(dest(dist));
 
 export const scripts = () =>
   src(questionnaire.scripts)
@@ -69,6 +72,7 @@ export const inject = () =>
 
 export default series(
   parallel(templates, styles, scripts, staticContent, ResourcesFromResx)
+  
 );
 
 function filesToInject(mask) {
