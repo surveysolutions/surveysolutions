@@ -76,7 +76,7 @@ namespace WB.UI.Designer
             services.AddDefaultIdentity<DesignerIdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DesignerDbContext>();
-
+            services.AddRouting(options => options.LowercaseUrls = true);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddWebApiConventions()
                 .AddJsonOptions(options =>

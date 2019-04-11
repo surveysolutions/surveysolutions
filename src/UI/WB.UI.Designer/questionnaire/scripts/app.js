@@ -216,7 +216,6 @@
                           '<div class="cfp-hotkeys-close" ng-click="toggleCheatSheet()">&#215;</div>' +
                         '</div></div>';
     }]);
-
     angular.module('templates', []);
 
 })(jQuery, window);
