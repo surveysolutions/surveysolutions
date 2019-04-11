@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Models;
+using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api.Designer
 {
@@ -17,25 +21,25 @@ namespace WB.UI.Designer.Api.Designer
     public class CommentsController : Controller
     {
         private readonly ICommentsService commentsService;
-        private readonly ILoggedInUser loggedInUser;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly UserManager<DesignerIdentityUser> users;
 
         public CommentsController(
             ICommentsService commentsService, 
-            ILoggedInUser loggedInUser,
-            IQuestionnaireViewFactory questionnaireViewFactory)
+            IQuestionnaireViewFactory questionnaireViewFactory,
+            UserManager<DesignerIdentityUser> users)
         {
             this.commentsService = commentsService;
-            this.loggedInUser = loggedInUser;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.users = users;
         }
 
         [HttpGet]
         [Route("commentThreads")]
         public List<CommentThread> commentThreads(Guid id)
         {
-            bool hasAccess = this.loggedInUser.IsAdmin || 
-                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.loggedInUser.Id);
+            bool hasAccess = User.IsAdmin() || 
+                             this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.User.GetId().FormatGuid());
 
             return hasAccess ? this.commentsService.LoadCommentThreads(id) : new List<CommentThread>();
         }
@@ -44,13 +48,13 @@ namespace WB.UI.Designer.Api.Designer
         [Route("entity/{itemId:Guid}/comments")]
         public List<CommentView> Get(Guid id, Guid itemId)
         {
-            bool hasAccess = this.loggedInUser.IsAdmin|| this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.loggedInUser.Id);
+            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId().FormatGuid());
             return hasAccess ? this.commentsService.LoadCommentsForEntity(id, itemId) : new List<CommentView>();
         }
 
         [HttpPost]
         [Route("entity/addComment")]
-        public IActionResult PostComment(Guid id, AddCommentModel commentModel)
+        public async Task<IActionResult> PostComment(Guid id, AddCommentModel commentModel)
         {
             if (!ModelState.IsValid)
             {
@@ -59,7 +63,7 @@ namespace WB.UI.Designer.Api.Designer
                     Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
                 });
             }
-            bool hasAccess = this.loggedInUser.IsAdmin|| this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.loggedInUser.Id);
+            bool hasAccess = User.IsAdmin() || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, User.GetId().FormatGuid());
             if (!hasAccess)
             {
                 return Json(new
@@ -68,7 +72,14 @@ namespace WB.UI.Designer.Api.Designer
                 });
             }
 
-            commentsService.PostComment(commentModel.Id, commentModel.QuestionnaireId, commentModel.EntityId, commentModel.Comment, loggedInUser.Login, loggedInUser.Email);
+            var user = await this.users.GetUserAsync(User);
+
+            commentsService.PostComment(commentModel.Id, 
+                commentModel.QuestionnaireId,
+                commentModel.EntityId, 
+                commentModel.Comment, 
+                user.UserName,
+                user.Email);
             return Ok();
         }
 

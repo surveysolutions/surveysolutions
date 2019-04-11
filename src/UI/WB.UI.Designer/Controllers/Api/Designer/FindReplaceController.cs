@@ -4,12 +4,14 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Api;
 using WB.UI.Designer.Resources;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
-    public class FindReplaceController : Controller
+    [QuestionnairePermissions]
+    public class FindReplaceController : ControllerBase
     {
         private const int SearchForAllowedLength = 500;
         private readonly IFindReplaceService replaceService;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
@@ -27,17 +27,16 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
-    public class CommandController : Controller
+    public class CommandController : ControllerBase
     {
         public struct CommandExecutionModel
         {
@@ -46,7 +45,7 @@ namespace WB.UI.Designer.Api
         }
 
         private readonly ICommandService commandService;
-        private readonly ILogger logger;
+        private readonly ILogger<CommandController> logger;
         private readonly ICommandInflater commandInflater;
 
         private readonly ILookupTableService lookupTableService;
@@ -59,7 +58,7 @@ namespace WB.UI.Designer.Api
 
         public CommandController(
             ICommandService commandService,
-            ILogger logger,
+            ILogger<CommandController> logger,
             ICommandInflater commandPreprocessor,
             ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
@@ -124,7 +123,7 @@ namespace WB.UI.Designer.Api
             }
             catch (ArgumentException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return StatusCode((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
@@ -198,7 +197,7 @@ namespace WB.UI.Designer.Api
             }
             catch (ArgumentException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
 
@@ -214,7 +213,7 @@ namespace WB.UI.Designer.Api
             }
             catch (Exception e)
             {
-                this.logger.Error(string.Format("Error on command of type ({0}) handling ", model.Type), e);
+                this.logger.LogError(e, string.Format("Error on command of type ({0}) handling ", model.Type));
                 throw;
             }
         }
@@ -255,12 +254,12 @@ namespace WB.UI.Designer.Api
             }
             catch (ArgumentException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidExcelFileException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                this.logger.LogError(e, $"Error on command of type ({commandType}) handling ");
                 return StatusCode((int) HttpStatusCode.NotAcceptable, e.Message);
             }
 
@@ -288,7 +287,7 @@ namespace WB.UI.Designer.Api
             }
             catch (Exception e)
             {
-                logger.Error("Error on command deserialization.", e);
+                logger.LogError(e, "Error on command deserialization.");
                 throw new ArgumentException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
             }
         }
@@ -392,7 +391,7 @@ namespace WB.UI.Designer.Api
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
+                    this.logger.LogError(e, string.Format("Error on command of type ({0}) handling ", commandType));
                     throw;
                 }
 
