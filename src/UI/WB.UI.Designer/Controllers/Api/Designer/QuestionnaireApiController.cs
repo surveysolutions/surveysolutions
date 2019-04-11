@@ -12,18 +12,19 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [QuestionnairePermissions]
     [ResponseCache(NoStore = true)]
-    public class QuestionnaireController : Controller
+    public class QuestionnaireApiController : Controller
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -38,7 +39,7 @@ namespace WB.UI.Designer.Api
         private const int MaxCountOfOptionForFileredCombobox = 200;
         public const int MaxVerificationErrors = 100;
 
-        public QuestionnaireController(IChapterInfoViewFactory chapterInfoViewFactory,
+        public QuestionnaireApiController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
