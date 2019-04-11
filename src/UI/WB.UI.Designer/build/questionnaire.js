@@ -4,11 +4,12 @@ import appendPrepend from "gulp-append-prepend";
 import cache from "gulp-cache";
 import concat from "gulp-concat";
 import gulpif from "gulp-if";
-import gulpInject from "gulp-inject";
+import debug from "gulp-debug";
 import htmlmin from "gulp-htmlmin";
 import imagemin from "gulp-imagemin";
 import less from "gulp-less";
 import ngAnnotate from "gulp-ng-annotate";
+import gulpInject from "gulp-inject";
 import rename from "gulp-rename";
 import rev from "gulp-rev";
 import templateCache from "gulp-angular-templatecache";
@@ -19,6 +20,7 @@ import manifest from "./plugins/manifest";
 import resx2json from "./plugins/resx2json";
 
 import { questionnaire, dist } from "./config.json";
+import { injectSections } from "./plugins/helpers";
 
 const PRODUCTION = yargs.argv.production;
 
@@ -42,7 +44,7 @@ export const ResourcesFromResx = () =>
     )
     .pipe(rev())
     .pipe(dest(join(dist, "resx")))
-    .pipe(manifest({ base: "resx" }))
+    .pipe(manifest({ base: "/resx/" }))
     .pipe(dest("node_modules/.cache"));
 
 export const styles = () =>
@@ -53,7 +55,7 @@ export const styles = () =>
     .pipe(dest(join(dist, "css")));
 
 export const staticContent = () =>
-  src(questionnaire.static, { base: "questionnaire/content" })  
+  src(questionnaire.static, { base: "questionnaire/content" })
     .pipe(gulpif(f => f.extname == ".png", cache(imagemin())))
     .pipe(dest(dist));
 
@@ -66,15 +68,23 @@ export const scripts = () =>
     .pipe(dest(join(dist, "js")));
 
 export const inject = () =>
-  src(["questionnaire/details/index.html"]).pipe(
-    gulpInject(filesToInject("libs*.css"))
-  );
+  injectSections(src("questionnaire/index.cshtml"), dist, { quiet: true })
+  .pipe(
+    gulpInject(src("node_modules/.cache/rev-manifest.json"), {
+      name: "manifest",
+      transform(_, file) {
+        return (
+          "<script>window.localization = " +
+          file.contents.toString("utf8") +
+          "</script>"
+        );
+      }
+    })
+  )
+  .pipe(dest(f => f.base));
 
 export default series(
-  parallel(templates, styles, scripts, staticContent, ResourcesFromResx)
-  
+  parallel(templates, styles, scripts, staticContent, ResourcesFromResx),
+  inject//,
+  //inject_manifest
 );
-
-function filesToInject(mask) {
-  return src(join(dist, mask), { read: false });
-}
