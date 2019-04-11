@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Security;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 
 namespace WB.UI.Designer.Api.Portal
 {
-    [RoutePrefix("api/portal")]
-    [ApiBasicAuth(onlyAllowedAddresses: false)]
-    public class PortalController : ApiController
+    [Route("api/portal")]
+    //[ApiBasicAuth(onlyAllowedAddresses: false)]
+    public class PortalController : ControllerBase
     {
-        private readonly IAccountRepository accountRepository;
+        private readonly UserManager<DesignerIdentityUser> accountRepository;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IAllowedAddressService allowedAddressService;
 
-        public PortalController(IAccountRepository accountRepository, 
+        public PortalController(UserManager<DesignerIdentityUser> accountRepository, 
             IQuestionnaireHelper questionnaireHelper,
             IAllowedAddressService allowedAddressService)
         {
@@ -35,40 +35,42 @@ namespace WB.UI.Designer.Api.Portal
 
         [Route("user/{userId}")]
         [HttpGet]
-        public PortalUserModel GetUserInfo(string userId)
+        public async Task<IActionResult> GetUserInfo(string userId)
         {
-            if (string.IsNullOrWhiteSpace(userId)) 
-                
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest){ ReasonPhrase = $"Param {nameof(userId)} is empty or missing" });
+            if (string.IsNullOrWhiteSpace(userId))
+                return BadRequest(new {ReasonPhrase = $"Param {nameof(userId)} is empty or missing"});
 
-            IMembershipAccount account = this.accountRepository.GetByNameOrEmail(userId);
+            var user = await this.accountRepository.FindByNameAsync(userId) ??
+                       await this.accountRepository.FindByEmailAsync(userId);
 
-            if (account == null)
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            if (user == null)
+                return NotFound();
 
-            var roles = Roles.GetRolesForUser(account.UserName);
+            var roles = await this.accountRepository.GetRolesAsync(user);
 
-            
-            return new PortalUserModel
+
+            var fullName = await this.accountRepository.GetFullName(user.Id);
+            return Ok(new PortalUserModel
             {
-                Id = account.ProviderUserKey,
-                Login = account.UserName,
-                Email = account.Email,
-                Roles = roles,
-                FullName = account.FullName
-            };
+                Id = user.Id,
+                Login = user.UserName,
+                Email = user.Email,
+                Roles = roles.ToArray(),
+                FullName = fullName
+            });
         }
 
         [Route("{userId}/questionnaires")]
         [HttpGet]
-        public PagedQuestionnaireCommunicationPackage QuestionnairesForUser(string userId, string filter)
+        public async Task<IActionResult> QuestionnairesForUser(string userId, string filter)
         {
             if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentNullException(nameof(userId));
 
-            var account = this.accountRepository.GetByNameOrEmail(userId);
+            var account = await this.accountRepository.FindByNameAsync(userId) ??
+                          await this.accountRepository.FindByEmailAsync(userId);
 
             var questionnaires = questionnaireHelper.GetQuestionnaires(
-                viewerId: account.ProviderUserKey,
+                viewerId: account.Id,
                 isAdmin: false, 
                 type: QuestionnairesType.My | QuestionnairesType.Shared, 
                 folderId: null, 
@@ -77,7 +79,7 @@ namespace WB.UI.Designer.Api.Portal
                 sortOrder: null, 
                 searchFor: filter);
 
-            return new PagedQuestionnaireCommunicationPackage
+            var result = new PagedQuestionnaireCommunicationPackage
             {
                 TotalCount = questionnaires.TotalCount,
                 Items = questionnaires.Select(questionnaireListItem =>
@@ -87,29 +89,35 @@ namespace WB.UI.Designer.Api.Portal
                         Title = questionnaireListItem.Title
                     }).ToList()
             };
+            return Ok(result);
         }
 
         [Route("servers")]
         [HttpGet]
-        public IEnumerable<ServerAddress> GetServers() => this.allowedAddressService.GetAddresses().Select(ToAllowedAddress);
+        public IActionResult GetServers() => Ok(this.allowedAddressService.GetAddresses().Select(ToAllowedAddress));
 
         [Route("servers/add")]
         [HttpPost]
-        public void AddServer(string ipAddress, string description)
-            => this.allowedAddressService.Add(new AllowedAddress
+        public IActionResult AddServer(string ipAddress, string description)
+        {
+            this.allowedAddressService.Add(new AllowedAddress
             {
                 Description = description,
                 Address = IPAddress.Parse(ipAddress)
             });
 
+            return Ok();
+        }
+
         [Route("servers/delete")]
         [HttpPost]
-        public void DeleteServer(string ipAddress)
+        public IActionResult DeleteServer(string ipAddress)
         {
             var parsedAddress = IPAddress.Parse(ipAddress);
             var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, parsedAddress));
             if (address != null)
                 this.allowedAddressService.Remove(address.Id);
+            return Ok();
         }
 
         private ServerAddress ToAllowedAddress(AllowedAddress address)
