@@ -21,7 +21,7 @@ function manifest({ base }) {
 
   return through2.obj(
     ({ revOrigPath, basename }, _, cb) => {
-      content[path.basename(revOrigPath)] = path.join(base, basename);
+      content[path.basename(revOrigPath)] = base + basename;
       cb();
     },
     function(cb) {
