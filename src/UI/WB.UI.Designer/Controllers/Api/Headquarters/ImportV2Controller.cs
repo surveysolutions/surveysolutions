@@ -2,20 +2,19 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api.Attributes;
+using WB.UI.Designer.Controllers.Api.Headquarters;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
     [Obsolete("Since v5.11")]
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
-    [RoutePrefix("api/v2/import")]
+    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Route("api/v2/import")]
     public class ImportV2Controller : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
@@ -24,7 +23,6 @@ namespace WB.UI.Designer.Api.Headquarters
 
         public ImportV2Controller(
             IStringCompressor zipUtils,
-            IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
@@ -32,7 +30,7 @@ namespace WB.UI.Designer.Api.Headquarters
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer,
             IAttachmentService attachmentService)
-            : base(userHelper, viewFactory, questionnaireViewFactory, 
+            : base(viewFactory, questionnaireViewFactory, 
                 questionnaireVerifier, expressionProcessorGenerator, engineVersionService)
         {
             this.zipUtils = zipUtils;

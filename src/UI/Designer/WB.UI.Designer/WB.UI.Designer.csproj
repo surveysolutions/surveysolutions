@@ -264,7 +264,6 @@
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="Api\Designer\UsersController.cs" />
-    <Compile Include="Api\Headquarters\HQLookupController.cs" />
     <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="App_Start\AutofacWebCommonModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -275,16 +274,10 @@
     <Compile Include="Code\UrlExtensions.cs" />
     <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
-    <Compile Include="Api\Headquarters\HQAttachmentController.cs" />
-    <Compile Include="Api\Headquarters\HQTranslationsController.cs" />
-    <Compile Include="Api\Headquarters\ImportControllerBase.cs" />
-    <Compile Include="Api\Headquarters\HQQuestionnairesController.cs" />
-    <Compile Include="Api\Headquarters\HQUserController.cs" />
     <Compile Include="Api\Tester\TranslationController.cs" />
     <Compile Include="Api\Tester\AttachmentController.cs" />
     <Compile Include="Api\Tester\QuestionnairesController.cs" />
     <Compile Include="Api\Tester\UserController.cs" />
-    <Compile Include="Api\Headquarters\ImportV2Controller.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />
@@ -296,7 +289,6 @@
     <Compile Include="Implementation\Services\VideoConverter.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
-    <Compile Include="Models\DeploymentUserModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />

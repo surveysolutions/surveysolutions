@@ -69,7 +69,7 @@ namespace WB.UI.Designer.BootstrapSupport
             return v;
         }
 
-        public static object GetId(this object model)
+        private static object GetId(this object model)
         {
             return model.GetType().GetProperty(model.IdentifierPropertyName()).GetValue(model, new object[0]);
         }

@@ -3,16 +3,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Designer.Api.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
-    [RoutePrefix("api/hq/translations")]
+    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Route("api/hq/translations")]
     public class HQTranslationsController : ApiController
     {
         private readonly IPlainStorageAccessor<TranslationInstance> translations;

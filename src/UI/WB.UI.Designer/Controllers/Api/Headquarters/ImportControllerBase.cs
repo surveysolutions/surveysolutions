@@ -4,19 +4,19 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Resources;
+using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.Headquarters
+namespace WB.UI.Designer.Controllers.Api.Headquarters
 {
     public class ImportControllerBase : ApiController
     {
-        private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
@@ -24,14 +24,12 @@ namespace WB.UI.Designer.Api.Headquarters
         protected readonly IDesignerEngineVersionService engineVersionService;
 
         public ImportControllerBase(
-            IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
             IDesignerEngineVersionService engineVersionService)
         {
-            this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -137,8 +135,8 @@ namespace WB.UI.Designer.Api.Headquarters
                 new QuestionnaireListInputModel
                 {
 
-                    ViewerId = this.userHelper.WebUser.UserId,
-                    IsAdminMode = this.userHelper.WebUser.IsAdmin,
+                    ViewerId = User.GetId().FormatGuid(),
+                    IsAdminMode = User.IsAdmin(),
                     Page = request.PageIndex,
                     PageSize = request.PageSize,
                     Order = request.SortOrder,
@@ -159,11 +157,11 @@ namespace WB.UI.Designer.Api.Headquarters
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.CreatedBy == this.User.GetId())
                 return true;
 
 
-            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == this.User.GetId());
         }
     }
 }

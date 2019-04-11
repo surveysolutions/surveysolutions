@@ -1,17 +1,14 @@
 using System;
-using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Api.Attributes;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
-    [RoutePrefix("api/hq/lookup")]
-    public class HQLookupController : ApiController
+    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Route("api/hq/lookup")]
+    public class HQLookupController : ControllerBase
     {
         private readonly ILookupTableService lookupTableService;
         public HQLookupController(ILookupTableService lookupTableService)
@@ -21,19 +18,18 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id}/{tableId}")]
-        public HttpResponseMessage Get(string id, string tableId)
+        public IActionResult Get(string id, string tableId)
         {
             var lookupFile = this.lookupTableService.GetLookupTableContentFile(Guid.Parse(id), Guid.Parse(tableId));
 
-            if (lookupFile == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
+            if (lookupFile == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(lookupFile, Formatting.None, new JsonSerializerSettings
             { 
                 TypeNameHandling = TypeNameHandling.None
             });
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = new StringContent(result, Encoding.UTF8, "application/json"); 
-            return response;
+
+            return Content(result, "application/json", Encoding.UTF8);
         }
     }
 }
