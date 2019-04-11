@@ -13,7 +13,7 @@ namespace WB.UI.Designer1.Extensions
             return Guid.Parse(userId);
         }
 
-        public static string GetName(this ClaimsPrincipal identity)
+        public static string GetUserName(this ClaimsPrincipal identity)
         {
             var userName = identity.FindFirst(ClaimTypes.Name).Value;
             return userName;

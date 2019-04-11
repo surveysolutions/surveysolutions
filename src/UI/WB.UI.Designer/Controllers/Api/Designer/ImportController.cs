@@ -22,7 +22,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.Designer.Qbank;
 using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.Designer
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [ResponseCache(NoStore = true)]
     [Authorize(Roles = "Administrator")]
@@ -34,7 +34,6 @@ namespace WB.UI.Designer.Api.Designer
         private readonly ICommandService commandService;
         private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly IHostingEnvironment hostingEnvironment;
-
 
         public ImportController(IClassificationsStorage classificationsStorage, 
             ICommandService commandService, 
