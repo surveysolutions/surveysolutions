@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             IIdentityService accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             ITranslationsService translationService,
-            PdfSettings pdfSettings,
+            IOptions<PdfSettings> pdfSettings,
             IQuestionnaireTranslator questionnaireTranslator)
         {
             this.questionnaireStorage = questionnaireStorage;
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.translationService = translationService;
-            this.pdfSettings = pdfSettings;
+            this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
         }
 
