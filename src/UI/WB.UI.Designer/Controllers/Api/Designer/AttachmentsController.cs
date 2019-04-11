@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Api
 
             var requestHeaders = new RequestHeaders(this.Request.Headers);
 
-            if (requestHeaders.IfNoneMatch.Any(x => x.Tag.ToString().Trim('"') == attachment.ContentId))
+            if (requestHeaders.IfNoneMatch?.Any(x => x.Tag.ToString().Trim('"') == attachment.ContentId) ?? false)
                 return base.StatusCode((int)HttpStatusCode.NotModified);
 
             AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);

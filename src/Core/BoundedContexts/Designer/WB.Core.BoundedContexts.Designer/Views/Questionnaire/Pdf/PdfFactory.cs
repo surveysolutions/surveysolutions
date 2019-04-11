@@ -23,30 +23,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
     public class PdfFactory : IPdfFactory
     {
-        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly ITranslationsService translationService;
-        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IIdentityService accountsStorage;
         private readonly PdfSettings pdfSettings;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public PdfFactory(
-            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
+            DesignerDbContext dbContext, 
             IIdentityService accountsStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             ITranslationsService translationService,
             IOptions<PdfSettings> pdfSettings,
-            IQuestionnaireTranslator questionnaireTranslator)
+            IQuestionnaireTranslator questionnaireTranslator,
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
         {
-            this.questionnaireStorage = questionnaireStorage;
-            this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
+            this.dbContext = dbContext;
             this.accountsStorage = accountsStorage;
-            this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings.Value;
             this.questionnaireTranslator = questionnaireTranslator;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
@@ -73,10 +70,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
-            var listItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
+            var listItem = this.dbContext.Questionnaires.Find(questionnaireId);
             var sharedPersons =  listItem.SharedPersons;
 
-            var modificationStatisticsByUsers = questionnaireChangeHistoryStorage.Query(_ => _
+            var modificationStatisticsByUsers = this.dbContext.QuestionnaireChangeRecords
                 .Where(x => x.QuestionnaireId == questionnaireId)
                 .GroupBy(x => new { x.UserId, x.UserName })
                 .Select(grouping => new PdfQuestionnaireModel.ModificationStatisticsByUser
@@ -84,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     UserId = grouping.Key.UserId,
                     Date = grouping.Max(x => x.Timestamp),
                     Name = grouping.Key.UserName,
-                })).ToList();
+                }).ToList();
 
             var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
 
@@ -142,7 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string LoadQuestionnaireTitle(Guid questionnaireId)
         {
-            return this.questionnaireListViewItemStorage.GetById(questionnaireId.FormatGuid()).Title;
+            return this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid()).Title;
         }
 
         public IEnumerable<T> Find<T>(IEnumerable<IComposite> allItems, Func<T, bool> condition) where T : IComposite
