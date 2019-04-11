@@ -7,7 +7,7 @@
       "questionnaire/content/fonts/**/*",
       "questionnaire/content/i/**/*"
     ],
-    "markup": "questionnaire/content/markup.css.less",
+    "markup": "questionnaire/content/markup.less",
     "resources": [
       "./Resources/QuestionnaireEditor.resx",
       "./Resources/QuestionnaireEditor.*.resx"

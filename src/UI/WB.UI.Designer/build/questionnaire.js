@@ -49,8 +49,8 @@ export const ResourcesFromResx = () =>
 
 export const styles = () =>
   src(questionnaire.markup)
-    .pipe(appendPrepend.appendText('@icon-font-path: "/dist/fonts/";'))
-    .pipe(less({ relativeUrls: true, rootpath: "dist/" }))
+    .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
+    .pipe(less({ relativeUrls: true, rootpath: "/" }))
     .pipe(gulpif(PRODUCTION, rev()))
     .pipe(dest(join(dist, "css")));
 

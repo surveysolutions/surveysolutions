@@ -32,7 +32,7 @@ function manifest({ base }) {
 
       return getManifestFile(opts).then(
         file => {
-          const json = JSON.stringify(content);
+          const json = JSON.stringify(content, null, 4);
           const contents = Buffer.from(json);
           file.contents = contents;
           cb(null, file);
