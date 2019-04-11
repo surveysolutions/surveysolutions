@@ -23,7 +23,7 @@ namespace WB.UI.Designer.Modules
     {
         public void Load(IDependencyRegistry registry)
         {
-            registry.BindAsScoped<LocalOrDevelopmentAccessOnlyAttribute, LocalOrDevelopmentAccessOnlyAttribute>();
+            //registry.BindAsScoped<WB.UI.Designer.Code.LocalOrDevelopmentAccessOnlyAttribute, WB.UI.Designer.Code.LocalOrDevelopmentAccessOnlyAttribute>();
 
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             //registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
