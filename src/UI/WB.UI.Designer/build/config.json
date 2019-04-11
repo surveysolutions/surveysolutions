@@ -23,7 +23,9 @@
     "Areas/Identity/Pages/Layout.Account.cshtml",
     "Areas/Identity/Pages/_ValidationScriptsPartial.cshtml",
     "Views/Shared/Layout.cshtml",
-    "Views/Shared/_ValidationScriptsPartial.cshtml"
+    "Views/Shared/_ValidationScriptsPartial.cshtml",
+    "Views/Questionnaire/EditCascadingOptions.cshtml",
+    "Views/Questionnaire/EditOptions.cshtml"
   ],
   "vendor": {
     "favicons": ["Content/identity/favicon-*.png"],
@@ -99,6 +101,14 @@
     ]
   },
   "bundle": [
+    {
+      "name": "popup",
+      "inputFiles": [
+        "questionnaire/content/designer-start/bootstrap-custom.less",
+        "questionnaire/content/designer-start/bootstrap-override.less",
+        "questionnaire/content/wb-options-window.css"
+      ]
+    },
     {
       "name": "logon",
       "inputFiles": [
