@@ -274,10 +274,6 @@
     <Compile Include="Code\UrlExtensions.cs" />
     <Compile Include="Controllers\ClassificationsController.cs" />
     <Compile Include="Controllers\DeskController.cs" />
-    <Compile Include="Api\Tester\TranslationController.cs" />
-    <Compile Include="Api\Tester\AttachmentController.cs" />
-    <Compile Include="Api\Tester\QuestionnairesController.cs" />
-    <Compile Include="Api\Tester\UserController.cs" />
     <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\JsonFormatter.cs" />
     <Compile Include="BootstrapSupport\HtmlHelpers\HistoryExtensions.cs" />

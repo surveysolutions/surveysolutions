@@ -4,23 +4,23 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using WB.UI.Designer.Api.Attributes;
+using WB.UI.Designer1.Extensions;
 
-namespace WB.UI.Designer.Api.Tester
+namespace WB.UI.Designer.Controllers.Api.Tester
 {
-    [ApiBasicAuth]
-    [RoutePrefix("questionnaires")]
-    public class QuestionnairesController : ApiController
+    //[ApiBasicAuth]
+    [Route("api/questionnaires")]
+    public class QuestionnairesController : ControllerBase
     {
-        private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Api.Tester
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
-        public QuestionnairesController(IMembershipUserService userHelper,
+        public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
@@ -38,7 +38,6 @@ namespace WB.UI.Designer.Api.Tester
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
-            this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -107,16 +106,17 @@ namespace WB.UI.Designer.Api.Tester
 
         [HttpGet]
         [Route("")] 
-        public HttpResponseMessage Get(int version, [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
+        [ResponseCache(NoStore = true)]
+        public IActionResult Get(int version, [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
             if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
-            var userId = this.userHelper.WebUser.UserId;
-            var isAdmin = this.userHelper.WebUser.IsAdmin;
-            var userName = this.userHelper.WebUser.UserName;
+            var userId = User.GetId();
+            var isAdmin = User.IsAdmin();
+            var userName = User.GetUserName();
             
-            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
+            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId.FormatGuid(), isAdmin, pageIndex, pageSize);
 
             var questionnaires = questionnaireViews.Select(questionnaire => new TesterQuestionnaireListItem
             {
@@ -126,24 +126,19 @@ namespace WB.UI.Designer.Api.Tester
                 Owner = questionnaire.CreatorName,
                 IsOwner = questionnaire.CreatorName == userName,
                 IsPublic = questionnaire.IsPublic || isAdmin,
-                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId)
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson.UserId == userId.FormatGuid())
             });
 
-            var response = this.Request.CreateResponse(questionnaires);
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = true
-            };
-            return response;
+            return Ok(questionnaires);
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == User.GetId() || this.User.IsAdmin())
                 return true;
 
 
-            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }
