@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Shark.PdfConvert;
@@ -42,6 +43,8 @@ using ViewDataDictionary = Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDiction
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
+    [Area("Pdf")]
+    [Route("pdf")]
     public class PdfController : Controller
     {
         #region Subclasses
@@ -83,7 +86,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
-        private readonly ILogger logger;
+        private readonly Microsoft.Extensions.Logging.ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IRazorViewEngine razorViewEngine;
         private readonly IServiceProvider serviceProvider;
@@ -92,7 +95,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         public PdfController(
             IPdfFactory pdfFactory, 
-            ILogger logger,
+            ILogger<PdfController> logger,
             IFileSystemAccessor fileSystemAccessor,
             IRazorViewEngine razorViewEngine,
             IServiceProvider serviceProvider,
@@ -135,6 +138,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
+        [Route("printpreview/{id}")]
         public IActionResult PrintPreview(Guid id, Guid? translation)
         {
             PdfQuestionnaireModel questionnaire = this.LoadQuestionnaire(id, User.GetId(), User.GetName(), translation: translation, useDefaultTranslation: true);
@@ -258,7 +262,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Error($"Failed to generate PDF {id.FormatGuid()}", exception);
+                    this.logger.LogError(exception, $"Failed to generate PDF {id.FormatGuid()}");
                     generationProgress.Fail();
                 }
             }, TaskCreationOptions.LongRunning);
