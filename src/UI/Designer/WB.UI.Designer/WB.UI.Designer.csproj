@@ -323,7 +323,6 @@
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
-    <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -335,10 +334,8 @@
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
-    <Compile Include="Models\QuestionnaireCloneModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
-    <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\ManageAccountModel.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
@@ -469,10 +466,7 @@
     <Content Include="Scripts\lib\Placeholders.js" />
     <Content Include="Scripts\lib\sammy.js" />
     <Content Include="Scripts\lib\sammy.title.js" />
-    <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
-    <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
-    <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
     <Content Include="Views\ControlPanel\Versions.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
@@ -491,9 +485,12 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Classifications\Index.cshtml" />
+    <Content Include="Views\Questionnaire\ExpressionGeneration.cshtml" />
+    <Content Include="Views\Questionnaire\Public.cshtml" />
+    <Content Include="Views\Questionnaire\Shared.cshtml" />
+    <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -507,11 +504,9 @@
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Questionnaire\Clone.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
@@ -519,9 +514,7 @@
     <Content Include="Views\Shared\_commonFooter.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
-    <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
     <Content Include="Content\plugins\**\*" />
   </ItemGroup>

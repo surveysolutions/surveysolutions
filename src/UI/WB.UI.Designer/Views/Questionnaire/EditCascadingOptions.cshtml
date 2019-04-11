@@ -1,6 +1,6 @@
 ﻿@using System.Linq
-@using Microsoft.Security.Application
-@using WB.UI.Designer.Resources
+@using System.Web
+@using WB.UI.Designer.Extensions
 @using WB.UI.Shared.Web.Extensions
 @model IEnumerable<Main.Core.Entities.SubEntities.QuestionnaireCategoricalOption>
 @{
@@ -19,10 +19,9 @@
     <link href="~/questionnaire/content/designer-start/bootstrap-override.css" rel="stylesheet" />
     <link href="~/questionnaire/content/wb-options-window.css" rel="stylesheet" />
 
-    @Scripts.Render("~/simplepage")
     <script type="text/javascript">
         function close_window() {
-            if (confirm(@Html.Raw(Encoder.JavaScriptEncode(QuestionnaireEditor.OptionsCloseWindow)))) {
+            if (confirm('@Html.Raw(HttpUtility.JavaScriptStringEncode(QuestionnaireEditor.OptionsCloseWindow))')) {
                 close();
             }
         }
@@ -55,7 +54,7 @@
             setTimeout(function() { $('.alert.alert-danger').fadeOut(); }, 10000);
         });
     </script>
-    @this.GenerateFavicon(Url.Content("~/favicon.ico"))
+    @Html.GenerateFavicon(Url.Content("~/favicon.ico"))
 </head>
 <body>
     @using (Html.BeginForm("EditCascadingOptions", "Questionnaire", FormMethod.Post, new { enctype = "multipart/form-data" }))

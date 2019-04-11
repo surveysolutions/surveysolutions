@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -202,6 +203,21 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Mappings
             builder.Property(e => e.LastUpdateDate).HasColumnName("lastupdatedate");
 
             builder.Property(e => e.QuestionnaireId).HasColumnName("questionnaireid");
+        }
+    }
+
+
+    public class QuestionnaireCompilationVersionTypeConfig : IEntityTypeConfiguration<QuestionnaireCompilationVersion>
+    {
+        public void Configure(EntityTypeBuilder<QuestionnaireCompilationVersion> builder)
+        {
+            builder.ToTable("questionnairecompilationversions", "plainstore");
+            builder.HasKey(x => x.QuestionnaireId);
+            builder.Property(e => e.QuestionnaireId)
+                .HasColumnName("id")
+                .ValueGeneratedNever();
+            builder.Property(e => e.Description).HasColumnName("description");
+            builder.Property(e => e.Version).HasColumnName("version");
         }
     }
 

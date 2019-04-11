@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -23,16 +22,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     public class QuestionnaireViewFactory : IQuestionnaireViewFactory
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
-        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
+        private readonly DesignerDbContext dbContext;
         private readonly IIdentityService accountRepository;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
+            DesignerDbContext dbContext,
             IIdentityService accountRepository)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.listItemStorage = listItemStorage;
+            this.dbContext = dbContext;
             this.accountRepository = accountRepository;
         }
 
@@ -52,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy.FormatGuid() == userId)
                 return true;
 
-            var questionnaireListItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireListItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             if (questionnaireListItem.IsPublic)
                 return true;
 
@@ -71,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             if (questionnaire.CreatedBy.FormatGuid() == userId)
                 return true;
 
-            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var listViewItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
 
             var sharedPersons = listViewItem.SharedPersons;
             if (sharedPersons.Any(x => x.UserId == userId && x.ShareType == ShareType.Edit))
@@ -82,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
         {
-            var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
+            var listViewItem = this.dbContext.Questionnaires.Find(questionnaireId.FormatGuid());
             var sharedPersons = listViewItem.SharedPersons
                 .Select(x => new SharedPersonView
                 {

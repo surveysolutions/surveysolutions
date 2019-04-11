@@ -1,42 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions
 {
     public class QuestionnaireCompilationVersionService : IQuestionnaireCompilationVersionService
     {
-        private readonly IPlainStorageAccessor<QuestionnaireCompilationVersion> questionnaireCompilationVersionStorage;
+        private readonly DesignerDbContext dbContext;
 
-        public QuestionnaireCompilationVersionService(IPlainStorageAccessor<QuestionnaireCompilationVersion> questionnaireCompilationVersionStorage)
+        public QuestionnaireCompilationVersionService(DesignerDbContext dbContext)
         {
-            this.questionnaireCompilationVersionStorage = questionnaireCompilationVersionStorage;
+            this.dbContext = dbContext;
         }
 
         public IEnumerable<QuestionnaireCompilationVersion> GetCompilationVersions()
         {
-            return this.questionnaireCompilationVersionStorage.Query(_ => _.ToList());
+            return this.dbContext.QuestionnaireCompilationVersions.ToList();
         }
 
         public void Update(QuestionnaireCompilationVersion version)
         {
-            this.questionnaireCompilationVersionStorage.Store(version, version.QuestionnaireId);
+            this.dbContext.QuestionnaireCompilationVersions.Update(version);
         }
 
         public void Remove(Guid questionnaireId)
         {
-            this.questionnaireCompilationVersionStorage.Remove(questionnaireId);
+            var questionnaireCompilationVersion = this.dbContext.QuestionnaireCompilationVersions.Find(questionnaireId);
+            if (questionnaireCompilationVersion != null)
+            {
+                this.dbContext.Remove(questionnaireCompilationVersion);
+            }
         }
 
         public void Add(QuestionnaireCompilationVersion version)
         {
-            this.questionnaireCompilationVersionStorage.Store(version, version.QuestionnaireId);
+            this.dbContext.QuestionnaireCompilationVersions.Add(version);
         }
 
         public QuestionnaireCompilationVersion GetById(Guid id)
         {
-            return this.questionnaireCompilationVersionStorage.GetById(id);
+            return this.dbContext.QuestionnaireCompilationVersions.Find(id);
         }
     }
 }
