@@ -53,7 +53,7 @@
                     @foreach (var listViewModel in Model)
                     {
                         var routevalues = listViewModel.GetIdValue();
-                        var itemId = listViewModel.GetId();
+                        var itemId = listViewModel.Id;
                         var itemType = listViewModel.GetLabel();
                         var itemName = Uri.EscapeDataString(listViewModel.GetName());
                         var pdfDownloadUrl = Url.Action("download", "Pdf", routevalues);

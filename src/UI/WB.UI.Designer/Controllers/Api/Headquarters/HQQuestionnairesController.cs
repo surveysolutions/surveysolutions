@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -18,16 +17,15 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Resources;
+using WB.UI.Designer1.Extensions;
 
 namespace WB.UI.Designer.Api.Headquarters
 {
-    [ApiBasicAuth(onlyAllowedAddresses: true)]
-    [RoutePrefix("api/hq/v3/questionnaires")]
-    public class HQQuestionnairesController : ApiController
+    //[ApiBasicAuth(onlyAllowedAddresses: true)]
+    [Route("api/hq/v3/questionnaires")]
+    public class HQQuestionnairesController : ControllerBase
     {
-        private readonly IMembershipUserService userHelper;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
@@ -40,19 +38,18 @@ namespace WB.UI.Designer.Api.Headquarters
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
 
-        public HQQuestionnairesController(IMembershipUserService userHelper,
+        public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory, 
+            IQuestionnaireListViewFactory viewFactory,
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer,
-            IStringCompressor zipUtils, 
-            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
-            IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
+            IStringCompressor zipUtils,
+            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage,
+            IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
-            this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -67,14 +64,15 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("")]
+        [ResponseCache(NoStore = true)]
         //in next version of API rename filter to smth like SearchFor
         //to comply with Amason firewall
-        public HttpResponseMessage Get(string filter = "", string sortOrder = "", [FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
+        public IActionResult Get(string filter = "", string sortOrder = "", [FromQuery]int pageIndex = 1, [FromQuery]int pageSize = 128)
         {
             var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
             {
-                ViewerId = this.userHelper.WebUser.UserId,
-                IsAdminMode = this.userHelper.WebUser.IsAdmin,
+                ViewerId = User.GetId().FormatGuid(),
+                IsAdminMode = User.IsAdmin(),
                 Page = pageIndex,
                 PageSize = pageSize,
                 Order = sortOrder,
@@ -95,22 +93,27 @@ namespace WB.UI.Designer.Api.Headquarters
                     }).ToList()
             };
 
-            var response = this.Request.CreateResponse(questionnaires);
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = true
-            };
-            return response;
+            return Ok(questionnaires);
         }
 
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public QuestionnaireCommunicationPackage Get(Guid id, int clientQuestionnaireContentVersion, [FromUri]int? minSupportedQuestionnaireVersion = null)
+        public IActionResult Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
         {
-            var questionnaireView = this.GetQuestionnaireViewOrThrow(id);
-
-            this.CheckInvariantsAndThrowIfInvalid(clientQuestionnaireContentVersion, questionnaireView);
+            QuestionnaireView questionnaireView;
+            try
+            {
+                questionnaireView = this.GetQuestionnaireViewOrThrow(id);
+                this.CheckInvariantsAndThrowIfInvalid(clientQuestionnaireContentVersion, questionnaireView);
+            }
+            catch (HttpResponseException e)
+            {
+                return StatusCode((int)e.Response.StatusCode, new
+                {
+                    e.Response.ReasonPhrase
+                });
+            }
 
             var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
             int versionToCompileAssembly;
@@ -135,19 +138,31 @@ namespace WB.UI.Designer.Api.Headquarters
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
             questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
 
-            return new QuestionnaireCommunicationPackage
+            return Ok(new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = versionToCompileAssembly
-            };
+            });
         }
 
         [HttpGet]
         [Route("info/{id:guid}")]
-        public QuestionnaireInfo Info(Guid id)
+        public IActionResult Info(Guid id)
         {
-            var questionnaire = this.GetQuestionnaireViewOrThrow(id);
+            QuestionnaireView questionnaire;
+            try
+            {
+                questionnaire = this.GetQuestionnaireViewOrThrow(id);
+            }
+            catch (HttpResponseException e)
+            {
+                return StatusCode((int)e.Response.StatusCode, new
+                {
+                    e.Response.ReasonPhrase
+                });
+            }
+
             var listItem = this.listItemStorage.GetById(id.FormatGuid());
 
             QuestionnaireInfo result = new QuestionnaireInfo
@@ -160,8 +175,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
             foreach (var questionnaireEntry in questionnaire.Source.Children.TreeToEnumerable(x => x.Children))
             {
-                var group = questionnaireEntry as IGroup;
-                if (group != null)
+                if (questionnaireEntry is IGroup @group)
                 {
                     if (group.GetParent().PublicKey == questionnaire.PublicKey)
                     {
@@ -178,8 +192,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 }
                 else
                 {
-                    var question = questionnaireEntry as IQuestion;
-                    if (question != null)
+                    if (questionnaireEntry is IQuestion question)
                     {
                         result.QuestionsCount++;
                         if (!string.IsNullOrEmpty(question.ConditionExpression))
@@ -190,7 +203,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 }
             }
 
-            return result;
+            return Ok(result);
         }
 
         private void CheckInvariantsAndThrowIfInvalid(int clientVersion, QuestionnaireView questionnaireView)
@@ -286,10 +299,10 @@ namespace WB.UI.Designer.Api.Headquarters
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.CreatedBy == User.GetId())
                 return true;
 
-            return questionnaireView.SharedPersons.Any(x => x.UserId == this.userHelper.WebUser.UserId);
+            return questionnaireView.SharedPersons.Any(x => x.UserId == User.GetId());
         }
     }
 }

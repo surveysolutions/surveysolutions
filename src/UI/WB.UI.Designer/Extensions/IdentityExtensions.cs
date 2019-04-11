@@ -17,5 +17,11 @@ namespace WB.UI.Designer1.Extensions
         {
             return identity.IsInRole(SimpleRoleEnum.Administrator.ToString());
         }
+
+        public static Guid GetId(this IPrincipal identity)
+        {
+            return ((ClaimsPrincipal) identity).GetId();
+        }
     }
+
 }
