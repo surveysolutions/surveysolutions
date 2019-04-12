@@ -1,18 +1,12 @@
-﻿using Main.Core.Entities.SubEntities;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -20,14 +14,12 @@ using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer1.Extensions;
 
@@ -35,8 +27,38 @@ namespace WB.UI.Designer.Controllers
 {
     [Authorize]
     [ResponseCache(NoStore = true)]
-    public class QuestionnaireController : Controller
+    public partial class QuestionnaireController : Controller
     {
+        public class QuestionnaireCloneModel
+        {
+            [Key]
+            public Guid Id { get; set; }
+
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
+            [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
+            public string Title { get; set; }
+        }
+
+        public class QuestionnaireViewModel
+        {
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireTitle_required")]
+            [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
+            public string Title { get; set; }
+
+            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireVariable_required")]
+            [RegularExpression(AbstractVerifier.VariableRegularExpression, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_rules))]
+            [StringLength(AbstractVerifier.DefaultVariableLengthLimit, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
+            public string Variable { get; set; }
+
+            public bool IsPublic { get; set; }
+        }
+
+        private class ComboItem
+        {
+            public string Name { get; set; }
+            public Guid? Value { get; set; }
+        }
+
         private readonly ICommandService commandService;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
@@ -50,6 +72,8 @@ namespace WB.UI.Designer.Controllers
         private readonly DesignerDbContext dbContext;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IPublicFoldersStorage publicFoldersStorage;
+        private readonly IAttachmentService attachmentService;
+        private readonly ITranslationsService translationsService;
 
         public QuestionnaireController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -64,7 +88,9 @@ namespace WB.UI.Designer.Controllers
             ICommandService commandService,
             DesignerDbContext dbContext,
             IQuestionnaireHelper questionnaireHelper, 
-            IPublicFoldersStorage publicFoldersStorage)
+            IPublicFoldersStorage publicFoldersStorage,
+            IAttachmentService attachmentService,
+            ITranslationsService translationsService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -79,6 +105,8 @@ namespace WB.UI.Designer.Controllers
             this.dbContext = dbContext;
             this.questionnaireHelper = questionnaireHelper;
             this.publicFoldersStorage = publicFoldersStorage;
+            this.attachmentService = attachmentService;
+            this.translationsService = translationsService;
         }
 
         
@@ -223,7 +251,7 @@ namespace WB.UI.Designer.Controllers
                     this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
-            return this.RedirectToAction("My", "Home");
+            return this.RedirectToAction("My");
         }
 
         [HttpPost]
@@ -235,7 +263,7 @@ namespace WB.UI.Designer.Controllers
             if (!hasAccess)
             {
                 this.Error(Resources.QuestionnaireController.ForbiddenRevert);
-                return this.RedirectToAction("My", "Home");
+                return this.RedirectToAction("My");
             }
 
             var command = new RevertVersionQuestionnaire(id, historyReferenceId, this.User.GetId());
@@ -268,213 +296,7 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnairePublicListViewModels);
         }
 
-        #region [Edit options]
-        private const string OptionsSessionParameterName = "options";
-
-        private EditOptionsViewModel questionWithOptionsViewModel
-        {
-            get
-            {
-                var model = this.contextAccessor.HttpContext.Session.Get(OptionsSessionParameterName);
-                if (model != null)
-                {
-                    JsonConvert.DeserializeObject<EditOptionsViewModel>(Encoding.UTF8.GetString(model));
-                }
-
-                return null;
-            }
-            set
-            {
-                string data = JsonConvert.SerializeObject(value);
-
-                this.contextAccessor.HttpContext.Session.Set(OptionsSessionParameterName, Encoding.UTF8.GetBytes(data));
-            }
-        }
-
-        public IActionResult EditOptions(string id, Guid questionId)
-        {
-            this.SetupViewModel(id, questionId);
-            return this.View(this.questionWithOptionsViewModel.Options);
-        }
-
-        public IActionResult EditCascadingOptions(string id, Guid questionId) 
-            => this.EditOptions(id, questionId);
-
-        private void SetupViewModel(string id, Guid questionId)
-        {
-            var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
-
-            var options = editQuestionView?.Options.Select(
-                              option => new QuestionnaireCategoricalOption
-                              {
-                                  Value = (int)option.Value,
-                                  ParentValue = (int?)option.ParentValue,
-                                  Title = option.Title
-                              }) ??
-                          new QuestionnaireCategoricalOption[0];
-
-            this.questionWithOptionsViewModel = new EditOptionsViewModel
-            {
-                QuestionnaireId = id,
-                QuestionId = questionId,
-                QuestionTitle = editQuestionView.Title,
-                Options = options.ToArray()
-            };
-        }
-
-        public IActionResult ResetOptions()
-        {
-            return RedirectToAction("EditOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
-        }
-
-        public IActionResult ResetCascadingOptions()
-        {
-            return RedirectToAction("EditCascadingOptions",
-                new
-                {
-                    id = this.questionWithOptionsViewModel.QuestionnaireId,
-                    questionId = this.questionWithOptionsViewModel.QuestionId
-                });
-        }
-
-        [HttpPost]
-        public IActionResult EditOptions(IFormFile csvFile)
-        {
-            if (csvFile == null)
-                this.Error(Resources.QuestionnaireController.SelectTabFile);
-            else
-            {
-                try
-                {
-                    var importResult = this.categoricalOptionsImportService.ImportOptions(
-                        csvFile.OpenReadStream(),
-                        this.questionWithOptionsViewModel.QuestionnaireId,
-                        this.questionWithOptionsViewModel.QuestionId);
-
-                    if (importResult.Succeeded)
-                        this.questionWithOptionsViewModel.Options = importResult.ImportedOptions.ToArray();
-                    else
-                    {
-                        foreach (var importError in importResult.Errors)
-                            this.Error(importError, true);
-                    }
-                }
-                catch (Exception e)
-                {
-                    this.Error(Resources.QuestionnaireController.TabFilesOnly);
-                    this.logger.LogError(e, e.Message);
-                }
-            }
-
-            return this.View(this.questionWithOptionsViewModel.Options);
-        }
-
-        [HttpPost]
-        public IActionResult EditCascadingOptions(IFormFile csvFile)
-            => this.EditOptions(csvFile);
-
-        public IActionResult ApplyOptions()
-        {
-            var commandResult = this.ExecuteCommand(
-                new UpdateFilteredComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
-                        this.User.GetId(),
-                        this.questionWithOptionsViewModel.Options.ToArray()));
-
-            return Json(commandResult);
-        }
-
-        public IActionResult ApplyCascadingOptions()
-        {
-            var commandResult = this.ExecuteCommand(
-                new UpdateCascadingComboboxOptions(
-                        Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
-                        this.questionWithOptionsViewModel.QuestionId,
-                        this.User.GetId(),
-                        this.questionWithOptionsViewModel.Options.ToArray()));
-
-            return Json(commandResult);
-        }
         
-        private object ExecuteCommand(QuestionCommand command)
-        {
-            dynamic commandResult = new ExpandoObject();
-            commandResult.IsSuccess = true;
-            try
-            {
-                this.commandService.Execute(command);
-            }
-            catch (Exception e)
-            {
-                var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
-                if (domainEx == null)
-                {
-                    this.logger.LogError(e, $"Error on command of type ({command.GetType()}) handling ");
-                }
-
-                commandResult = new ExpandoObject();
-                commandResult.IsSuccess = false;
-                commandResult.HasPermissions = domainEx != null && (domainEx.ErrorType != DomainExceptionType.DoesNotHavePermissionsForEdit);
-                commandResult.Error = domainEx != null ? domainEx.Message : "Something goes wrong";
-            }
-            return commandResult;
-        }
-
-        public IActionResult ExportLookupTable(Guid id, Guid lookupTableId)
-        {
-            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
-            return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
-        }
-
-        public IActionResult ExportOptions()
-        {
-            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
-            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
-
-            return File(this.categoricalOptionsImportService.ExportOptions(
-                this.questionWithOptionsViewModel.QuestionnaireId,
-                this.questionWithOptionsViewModel.QuestionId), "text/csv", fileDownloadName);
-        }
-
-        public class EditOptionsViewModel
-        {
-            public string QuestionnaireId { get; set; }
-            public Guid QuestionId { get; set; }
-            public QuestionnaireCategoricalOption[] Options { get; set; }
-            public string QuestionTitle { get; set; }
-        }
-
-        public class QuestionnaireCloneModel
-        {
-            [Key]
-            public Guid Id { get; set; }
-
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_required))]
-            [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Title { get; set; }
-        }
-
-        public class QuestionnaireViewModel
-        {
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireTitle_required")]
-            [StringLength(AbstractVerifier.MaxTitleLength, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireTitle_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Title { get; set; }
-
-            [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireVariable_required")]
-            [RegularExpression(AbstractVerifier.VariableRegularExpression, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_rules))]
-            [StringLength(AbstractVerifier.DefaultVariableLengthLimit, ErrorMessageResourceName = nameof(ErrorMessages.QuestionnaireVariable_MaxLength), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
-            public string Variable { get; set; }
-
-            public bool IsPublic { get; set; }
-        }
-
-        #endregion
 
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
@@ -486,12 +308,6 @@ namespace WB.UI.Designer.Controllers
         {
             this.Error(Resources.QuestionnaireController.Forbidden);
             return this.RedirectToAction("My");
-        }
-
-        private class ComboItem
-        {
-            public string Name { get; set; }
-            public Guid? Value { get; set; }
         }
 
         [HttpPost]
@@ -516,65 +332,6 @@ namespace WB.UI.Designer.Controllers
 
             string referer = Request.Headers["Referer"].ToString();
             return this.Redirect(referer);
-        }
-
-        public ActionResult My(int? p, string sb, int? so, string f)
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.My, folderId: null));
-
-        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
-        {
-            var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
-                type: QuestionnairesType.Public, folderId: id);
-
-            var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
-            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel()
-            {
-                FolderId = folder.PublicId,
-                Title = folder.Title
-            }).ToArray();
-
-            var model = new QuestionnaireListModel()
-            {
-                IsSupportAssignFolders = User.IsAdmin(),
-                CurrentFolderId = id,
-                Breadcrumbs = breadcrumbs,
-                Questionnaires = questionnaires
-            };
-
-            return this.View(model);
-        }
-
-        public ActionResult Shared(int? p, string sb, int? so, string f)
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, type: QuestionnairesType.Shared, folderId: null));
-
-
-        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, QuestionnairesType type, Guid? folderId)
-        {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor, folderId: folderId);
-
-            return this.questionnaireHelper.GetQuestionnaires(
-                pageIndex: pageIndex,
-                sortBy: sortBy,
-                sortOrder: sortOrder,
-                searchFor: searchFor,
-                folderId: folderId,
-                viewerId: User.GetId().FormatGuid(),
-                isAdmin: User.IsAdmin(),
-                type: type);
-        }
-
-        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor, Guid? folderId)
-        {
-            this.ViewBag.PageIndex = pageIndex;
-            this.ViewBag.SortBy = sortBy;
-            this.ViewBag.Filter = searchFor;
-            this.ViewBag.SortOrder = sortOrder;
-            this.ViewBag.FolderId = folderId;
-
-            if (sortOrder.ToBool())
-            {
-                sortBy = $"{sortBy} Desc";
-            }
         }
     }
 }
