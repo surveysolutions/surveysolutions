@@ -18,12 +18,17 @@ namespace WB.UI.Designer
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .ConfigureAppConfiguration(c =>
+                .ConfigureAppConfiguration((hostingContext, c) =>
                 {
                     c.AddIniFile("appsettings.ini", false, true);
                     c.AddIniFile($"appsettings.{Environment.MachineName}.ini", true);
                     c.AddIniFile($"appsettings.Production.ini", true);
                     c.AddCommandLine(args);
+
+                    if(hostingContext.HostingEnvironment.IsDevelopment())
+                    {
+                        c.AddUserSecrets<Startup>();
+                    }
                 });
         }
     }
