@@ -13,6 +13,24 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="ReferencedAssemblies\System.Collections.dll" />
+    <None Remove="ReferencedAssemblies\System.Linq.dll" />
+    <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
+    <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Extensions.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Numerics.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.187" />

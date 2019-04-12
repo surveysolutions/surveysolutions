@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.UI.Designer.Api
+namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Route("translations")]
     public class TranslationsController : Controller
@@ -31,8 +31,9 @@ namespace WB.UI.Designer.Api
         public IActionResult Get(Guid id, Guid translationId )
         {
             var translationFile = this.translationsService.GetAsExcelFile(id, translationId);
-            
-            return this.GetTranslation(translationFile, "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            var actionResult = this.GetTranslation(translationFile, "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return actionResult;
         }
 
         private IActionResult GetTranslation(TranslationFile translationFile, string fileExtension, string mediaType)
