@@ -17,15 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.InterviewerName);
             Property(x => x.SupervisorId);
             Property(x => x.SupervisorName);
-
-            ManyToOne(x => x.InterviewSummary, mto =>
+            
+            OneToOne(x=> x.InterviewSummary, m =>
             {
-                mto.Access(Accessor.ReadOnly);
-                mto.Column("interview_id");
-                mto.NotFound(NotFoundMode.Ignore);
-                mto.Cascade(Cascade.None);
-                mto.Update(false);
-                //mto.Insert(false);
+                m.PropertyReference(r => r.SummaryId);
+                m.Access(Accessor.ReadOnly);
             });
         }
     }

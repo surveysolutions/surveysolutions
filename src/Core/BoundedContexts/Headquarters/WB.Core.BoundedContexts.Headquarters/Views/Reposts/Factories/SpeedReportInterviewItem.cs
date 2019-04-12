@@ -6,6 +6,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
 {
     public class SpeedReportInterviewItem : IReadSideRepositoryEntity
     {
+        protected SpeedReportInterviewItem()
+        {
+            
+        }
+
+        public SpeedReportInterviewItem(InterviewSummary interviewSummary)
+        {
+            InterviewSummary = interviewSummary;
+        }
+
         public virtual string InterviewId { get; set; }
         public virtual Guid QuestionnaireId { get; set; }
         public virtual long QuestionnaireVersion { get; set; }

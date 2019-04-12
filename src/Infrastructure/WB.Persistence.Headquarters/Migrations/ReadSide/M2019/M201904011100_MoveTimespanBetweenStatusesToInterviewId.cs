@@ -2,6 +2,7 @@
 
 namespace WB.Persistence.Headquarters.Migrations.ReadSide
 {
+    [Migration(201904011100)]
     public class M201904011100_MoveTimespanBetweenStatusesToInterviewId : Migration
     {
         public override void Up()
