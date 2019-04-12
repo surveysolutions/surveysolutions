@@ -9,13 +9,6 @@
     bool isSupportAssignFolders = Model.IsSupportAssignFolders;
 }
 @section Scripts {
-    <!-- list:css -->
-    <link rel="stylesheet" href="/css/list.css">
-    <!-- endinject -->
-    <!-- list:js -->
-    <script src="/js/list.js"></script>
-    <!-- endinject -->
-
     @if (isSupportAssignFolders)
     {
         <!-- folders:css -->
@@ -44,22 +37,22 @@
 <ol class="breadcrumb public-questionnaires-breadcrumb">
     @foreach (var folder in Model.Breadcrumbs)
     {
-        if (folder.FolderId.HasValue && folder.FolderId != Guid.Empty)
+        if (folder.FolderId == Model.CurrentFolderId)
         {
-    <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new {id = folder.FolderId}, null)</li>
+            <li class="active">@folder.Title</li>
         }
-        else if (folder.FolderId == Model.CurrentFolderId)
+        else if (folder.FolderId == Guid.Empty)
         {
-    <li class="active">@folder.Title</li>
+            <li><a href="@Url.Action("Public", new {id = (Guid?) null})">@folder.Title</a></li>
         }
-        else
+        else if (folder.FolderId.HasValue)
         {
-    <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new { }, null)</li>
+            <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new {id = folder.FolderId})</li>
         }
     }
 </ol>
 
-@Html.Partial("_QuestionnairesList", Model.Questionnaires)
+<partial name="_QuestionnairesList" model="Model.Questionnaires"/>
 
 @section Modal
 {
@@ -79,7 +72,7 @@
     @if (isSupportAssignFolders)
     {
     <div>
-        <partial name="AssignFolderDialog" />
+        <partial name="_AssignFolderDialog" />
     </div>
     }
 }

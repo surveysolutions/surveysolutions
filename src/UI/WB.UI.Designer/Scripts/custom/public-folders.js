@@ -119,22 +119,7 @@
     });
 
     self.postRequest = function(url, params, callback) {
-        $.post({
-            url: url,
-            data: params,
-            success: callback,
-            dataType: 'json'
-        });
-    }
-
-    self.getSelectedFolderId = function() {
-        return element.fancytree('getTree').getSelectedNodes();
-    }
-
-    self.setSelectedFolderId = function(folderId) {
-        var tree = element.fancytree('getTree');
-        var node = tree.getNodeByKey(folderId);
-        node.setSelected(true);
-    }
+        $.post(url, params).done(callback);
+    };
 }
 
