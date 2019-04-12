@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
@@ -34,6 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public DbSet<TranslationInstance> TranslationInstances { get; set; }
 
         public DbSet<CommentInstance> CommentInstances { get; set; }
+
+        public DbSet<ClassificationEntity> ClassificationEntities { get; set; }
 
         public DbSet<QuestionnaireChangeRecord> QuestionnaireChangeRecords { get; set; }
 
@@ -69,6 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
             builder.ApplyConfiguration(new QuestionnaireCompilationVersionTypeConfig());
             builder.ApplyConfiguration(new AllowedAddressTypeConfig());
             builder.ApplyConfiguration(new CommentInstanceTypeConfig());
+            builder.ApplyConfiguration(new ClassificationEntityTypeConfig());
 
             // Key value
             builder.ApplyConfiguration(new KeyValueTableTypeConfig<StoredLookupTable>("lookuptablecontents"));

@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [Authorize]
     public class CommandController : ControllerBase
     {
-        public struct CommandExecutionModel
+        public class CommandExecutionModel
         {
             public string Type { get; set; }
             public string Command { get; set; }
@@ -204,6 +204,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return this.ProcessCommand(updateLookupTableCommand, commandType).Response;
         }
 
+        [Route("~/api/command")]
         public IActionResult Post(CommandExecutionModel model)
         {
             try

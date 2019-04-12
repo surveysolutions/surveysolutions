@@ -7,6 +7,5 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         string Id { get; }
         string Login { get; }
         bool IsAdmin { get; }
-        string Email { get; }
     }
 }
